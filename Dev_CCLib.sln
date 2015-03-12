@@ -5,6 +5,10 @@ VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Nodal", "P:\DevelopGrav\Dev_CCLib\Nodal\Nodal.vcxproj", "{9986CF02-116E-4753-8F4C-58DD10CBE74F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test", "Test\Test.vcxproj", "{CAE77CCE-F1ED-4596-913A-975EA3C7BCB8}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Classes", "Classes\Classes.vcxproj", "{4C88B861-6D03-41D4-96D0-59E218B62002}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -15,6 +19,14 @@ Global
 		{9986CF02-116E-4753-8F4C-58DD10CBE74F}.Debug|Win32.Build.0 = Debug|Win32
 		{9986CF02-116E-4753-8F4C-58DD10CBE74F}.Release|Win32.ActiveCfg = Release|Win32
 		{9986CF02-116E-4753-8F4C-58DD10CBE74F}.Release|Win32.Build.0 = Release|Win32
+		{CAE77CCE-F1ED-4596-913A-975EA3C7BCB8}.Debug|Win32.ActiveCfg = Debug|Win32
+		{CAE77CCE-F1ED-4596-913A-975EA3C7BCB8}.Debug|Win32.Build.0 = Debug|Win32
+		{CAE77CCE-F1ED-4596-913A-975EA3C7BCB8}.Release|Win32.ActiveCfg = Release|Win32
+		{CAE77CCE-F1ED-4596-913A-975EA3C7BCB8}.Release|Win32.Build.0 = Release|Win32
+		{4C88B861-6D03-41D4-96D0-59E218B62002}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4C88B861-6D03-41D4-96D0-59E218B62002}.Debug|Win32.Build.0 = Debug|Win32
+		{4C88B861-6D03-41D4-96D0-59E218B62002}.Release|Win32.ActiveCfg = Release|Win32
+		{4C88B861-6D03-41D4-96D0-59E218B62002}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
