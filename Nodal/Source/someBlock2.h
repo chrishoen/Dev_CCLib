@@ -25,7 +25,6 @@ public:
   ~Block2A();
 
    static void* operator new    (size_t sz);
-   static void* operator new    (size_t sz,void* ptr);
    static void  operator delete (void* ptr);
 
    static CC::LongTermBlockPool mLongTermBlockPool;

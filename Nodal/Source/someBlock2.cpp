@@ -55,19 +55,15 @@ void* Block2A::operator new(size_t sz)
    else if (mMemoryType == 1)
    {
       Block2A* tPointer = (Block2A*)mLongTermBlockPool.get();
-      return new(tPointer) Block2A;
+      return ::operator new(sz,tPointer);
    }
    return 0;
 }
 
-void* Block2A::operator new(size_t sz,void* ptr)
-{
-      return new (ptr) Block2A;
-}
-  
 void Block2A::operator delete(void* ptr)
 {
    Prn::print(0, 0, "Block2A::delete");
+   Prn::print(0, 0, "LINE101");
 
    if (mMemoryType == 0)
    {
@@ -75,6 +71,7 @@ void Block2A::operator delete(void* ptr)
    }
    else if (mMemoryType == 1)
    {
+      return;
       Block2A* tPointer = (Block2A*)mLongTermBlockPool.get();
       tPointer->~Block2A();
       mLongTermBlockPool.put(ptr);
