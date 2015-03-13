@@ -11,12 +11,14 @@
 #include "ccLabelledTreeNode.h"
 #include "ccLabelledTreeNodeVisitor.h"
 #include "someBlock1.h"
+#include "someBlock2.h"
 
 #include "CmdLineExec.h"
 
 //******************************************************************************
 CmdLineExec::CmdLineExec()
 {
+   Some::Block2A::initializeMemory(1000);
 }
 //******************************************************************************
 void CmdLineExec::reset()
@@ -28,6 +30,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("RESET"  ))  reset();
    if(aCmd->isCmd("GO1"    ))  executeGo1(aCmd);
    if(aCmd->isCmd("GO2"    ))  executeGo2(aCmd);
+   if(aCmd->isCmd("GO3"    ))  executeGo3(aCmd);
 }
 
 //******************************************************************************
@@ -108,5 +111,29 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
    Prn::print(0, 0, "delete Block1B");
    delete t1B;
+   Prn::print(0, 0, "");
+}
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
+{
+   Prn::print(0, 0, "");
+
+   Prn::print(0, 0, "new Block2A");
+   Some::Block2A* t2A = new Some::Block2A;
+   Prn::print(0, 0, "");
+
+   Prn::print(0, 0, "new Block2B");
+   Some::Block2B* t2B = new Some::Block2B;
+   Prn::print(0, 0, "");
+
+   Prn::print(0, 0, "delete Block2A");
+   delete t2A;
+   Prn::print(0, 0, "");
+
+   Prn::print(0, 0, "delete Block2B");
+   delete t2B;
    Prn::print(0, 0, "");
 }

@@ -11,7 +11,7 @@ Description:
 #include <math.h>
 #include <string.h>
 
-#include "ccPersistentBlockPool.h"
+#include "ccLongTermBlockPool.h"
 
 namespace CC
 {
@@ -19,11 +19,11 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 
-PersistentBlockPool::PersistentBlockPool()
+LongTermBlockPool::LongTermBlockPool()
 {
 }
 
-PersistentBlockPool::~PersistentBlockPool()
+LongTermBlockPool::~LongTermBlockPool()
 {
 }
 
@@ -32,7 +32,7 @@ PersistentBlockPool::~PersistentBlockPool()
 //******************************************************************************
 // Store member variables and dynamically allocate memory for the block array.
 
-void PersistentBlockPool::initialize(int aAllocate, int aBlockSize)
+void LongTermBlockPool::initialize(int aAllocate, int aBlockSize)
 {
    // Allocate memory for the block array
    mBlocks.initialize(aAllocate,aBlockSize);
@@ -49,7 +49,7 @@ void PersistentBlockPool::initialize(int aAllocate, int aBlockSize)
 //******************************************************************************
 // Get a block from the pool, allocate
 
-void* PersistentBlockPool::get()
+void* LongTermBlockPool::get()
 {
    return mPointerStack.pop();
 }
@@ -58,7 +58,7 @@ void* PersistentBlockPool::get()
 //******************************************************************************
 //******************************************************************************
 // Put a block back to the pool, free
-void PersistentBlockPool::put(void* aBlockPointer)
+void LongTermBlockPool::put(void* aBlockPointer)
 {
    mPointerStack.push(aBlockPointer);
 }

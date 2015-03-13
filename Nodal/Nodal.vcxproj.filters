@@ -40,10 +40,13 @@
     <ClCompile Include="Source\ccPointerCircular.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ccPersistentBlockPool.cpp">
+    <ClCompile Include="Source\someBlock1.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\someBlock1.cpp">
+    <ClCompile Include="Source\ccLongTermBlockPool.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\someBlock2.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -87,10 +90,13 @@
     <ClInclude Include="Source\ccPointerCircular.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccPersistentBlockPool.h">
+    <ClInclude Include="Source\someBlock1.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\someBlock1.h">
+    <ClInclude Include="Source\ccLongTermBlockPool.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\someBlock2.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

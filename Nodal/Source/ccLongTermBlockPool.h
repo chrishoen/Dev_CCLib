@@ -1,5 +1,5 @@
-#ifndef _PERSISTENTBLOCKPOOL_H_
-#define _PERSISTENTBLOCKPOOL_H_
+#ifndef _LongTermBlockPOOL_H_
+#define _LongTermBlockPOOL_H_
 /*==============================================================================
 
 This defines an array of memory blocks that are dynamically allocated.
@@ -24,15 +24,15 @@ namespace CC
 // popped from the stack. To free a block, a pointer is pushed back onto the
 // stack.
 
-class PersistentBlockPool
+class LongTermBlockPool
 {
 public:
    //---------------------------------------------------------------------------
    // Methods
 
    // Constructor
-   PersistentBlockPool();
-  ~PersistentBlockPool();
+   LongTermBlockPool();
+  ~LongTermBlockPool();
 
    // Allocate memory for the block array and initialize the pointer stack.
    void initialize(int aAllocate,int aBlockSize);

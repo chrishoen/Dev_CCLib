@@ -97,7 +97,7 @@
     <ClCompile Include="Source\ccBlockArray.cpp" />
     <ClCompile Include="Source\ccLabelledTreeNode.cpp" />
     <ClCompile Include="Source\ccLabelledTreeNodeVisitor.cpp" />
-    <ClCompile Include="Source\ccPersistentBlockPool.cpp" />
+    <ClCompile Include="Source\ccLongTermBlockPool.cpp" />
     <ClCompile Include="Source\ccPointerCircular.cpp" />
     <ClCompile Include="Source\ccPointerStack.cpp" />
     <ClCompile Include="Source\ccTreeNode.cpp" />
@@ -107,6 +107,7 @@
     <ClCompile Include="Source\CmdLineExec.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\someBlock1.cpp" />
+    <ClCompile Include="Source\someBlock2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\ccBlockArray.h" />
@@ -115,7 +116,7 @@
     <ClInclude Include="Source\ccContainers2.h" />
     <ClInclude Include="Source\ccLabelledTreeNode.h" />
     <ClInclude Include="Source\ccLabelledTreeNodeVisitor.h" />
-    <ClInclude Include="Source\ccPersistentBlockPool.h" />
+    <ClInclude Include="Source\ccLongTermBlockPool.h" />
     <ClInclude Include="Source\ccPointerCircular.h" />
     <ClInclude Include="Source\ccPointerStack.h" />
     <ClInclude Include="Source\ccTreeNode.h" />
@@ -124,6 +125,7 @@
     <ClInclude Include="Source\ccTreeNodeVisitor.h" />
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\someBlock1.h" />
+    <ClInclude Include="Source\someBlock2.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
