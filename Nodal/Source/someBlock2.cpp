@@ -46,15 +46,15 @@ Block2A::~Block2A()
 void* Block2A::operator new(size_t sz)
 {
    Prn::print(0, 0, "Block2A::new");
-   return mLongTermBlockPool.get();
-// return ::operator new(sz);
+// return mLongTermBlockPool.get();
+   return ::operator new(sz);
 }
   
 void Block2A::operator delete(void* ptr)
 {
    Prn::print(0, 0, "Block2A::delete");
-   mLongTermBlockPool.put(ptr);
-// ::operator delete(ptr);
+// mLongTermBlockPool.put(ptr);
+   ::operator delete(ptr);
 }
 
 //******************************************************************************
