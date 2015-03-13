@@ -62,13 +62,30 @@ Block2A::~Block2A()
 //******************************************************************************
 Block2A* Block2A::create(int aMemoryType)
 {
-   // Allocate a block from the block pool
-   Block2A* tPointer = (Block2A*)Block2A::mBlockUniverse.mLongTermBlockPool.get();
+   // Block pointer
+   Block2A* tPointer = 0;
+
+   // Allocate memory for the block
+   switch (aMemoryType)
+   {
+   case CC::MemoryType_System :
+      // Allocate a block from system memory
+      tPointer = (Block2A*)malloc(sizeof(Block2A));
+      break;
+   case CC::MemoryType_ShortTerm :
+      // Allocate a block from the short term block pool
+      tPointer = (Block2A*)Block2A::mBlockUniverse.mShortTermBlockPool.get();
+      break;
+   case CC::MemoryType_LongTerm :
+      // Allocate a block from the long term block pool
+      tPointer = (Block2A*)Block2A::mBlockUniverse.mLongTermBlockPool.get();
+      break;
+   }
 
    // Call the constructor on the allocated block using placement new
    tPointer = new(tPointer)Block2A;
 
-   // Store memory type
+   // Store block memory type
    tPointer->mMemoryType = aMemoryType;
 
    // Return the allocated block
@@ -83,8 +100,21 @@ void Block2A::destroy()
    // Call the block's destructor
    this->~Block2A();
 
-   // Deallocate the block back to the block pool
-   Block2A::mBlockUniverse.mLongTermBlockPool.put(this);
+   // Deallocate memory for the block
+   switch (this->mMemoryType)
+   {
+   case CC::MemoryType_System :
+      // Deallocate the block back to system memory
+      free(this);
+      break;
+   case CC::MemoryType_ShortTerm :
+      // Deallocate the block back to the short term block pool
+      break;
+   case CC::MemoryType_LongTerm :
+      // Deallocate the block back to the long term block pool
+      Block2A::mBlockUniverse.mLongTermBlockPool.put(this);
+      break;
+   }
 }
 
 //******************************************************************************
