@@ -45,6 +45,12 @@ public:
    Block2B();
   ~Block2B();
 
+   static  Block2B*  create(int aMemoryType=0);
+   virtual void      destroy();
+
+   static CC::LongTermBlockPool mLongTermBlockPool;
+
+   static void initializeMemory(int aAllocate);
 };
 
 //******************************************************************************

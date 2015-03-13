@@ -19,6 +19,7 @@
 CmdLineExec::CmdLineExec()
 {
    Some::Block2A::initializeMemory(1000);
+   Some::Block2B::initializeMemory(1000);
 }
 //******************************************************************************
 void CmdLineExec::reset()
@@ -31,6 +32,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("GO1"    ))  executeGo1(aCmd);
    if(aCmd->isCmd("GO2"    ))  executeGo2(aCmd);
    if(aCmd->isCmd("GO3"    ))  executeGo3(aCmd);
+   if(aCmd->isCmd("GO4"    ))  executeGo4(aCmd);
 }
 
 //******************************************************************************
@@ -113,6 +115,7 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
    delete t1B;
    Prn::print(0, 0, "");
 }
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -126,4 +129,19 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
    Prn::print(0, 0, "destroy Block2A");
    t2A->destroy();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
+{
+   Prn::print(0, 0, "");
+
+   Prn::print(0, 0, "create  Block2B");
+   Some::Block2B* t2B = Some::Block2B::create(CC::MemoryType_LongTerm);
+
+   Prn::print(0, 0, "destroy Block2B");
+   t2B->destroy();
 }
