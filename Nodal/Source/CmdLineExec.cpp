@@ -10,6 +10,7 @@
 #include "ccTreeNodeVisitor.h"
 #include "ccLabelledTreeNode.h"
 #include "ccLabelledTreeNodeVisitor.h"
+#include "someBlock1.h"
 
 #include "CmdLineExec.h"
 
@@ -26,6 +27,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
    if(aCmd->isCmd("RESET"  ))  reset();
    if(aCmd->isCmd("GO1"    ))  executeGo1(aCmd);
+   if(aCmd->isCmd("GO2"    ))  executeGo2(aCmd);
 }
 
 //******************************************************************************
@@ -84,3 +86,27 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
    }
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
+{
+   Prn::print(0, 0, "");
+
+   Prn::print(0, 0, "new Block1A");
+   Some::Block1A* t1A = new Some::Block1A;
+   Prn::print(0, 0, "");
+
+   Prn::print(0, 0, "new Block1B");
+   Some::Block1B* t1B = new Some::Block1B;
+   Prn::print(0, 0, "");
+
+   Prn::print(0, 0, "delete Block1A");
+   delete t1A;
+   Prn::print(0, 0, "");
+
+   Prn::print(0, 0, "delete Block1B");
+   delete t1B;
+   Prn::print(0, 0, "");
+}

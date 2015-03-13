@@ -43,6 +43,9 @@
     <ClCompile Include="Source\ccPersistentBlockPool.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\someBlock1.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h">
@@ -85,6 +88,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccPersistentBlockPool.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\someBlock1.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
