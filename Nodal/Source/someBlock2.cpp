@@ -45,7 +45,11 @@ Block2A::~Block2A()
 //******************************************************************************
 Block2A* Block2A::create()
 {
+   // Allocate a block from the block pool
    Block2A* tPointer = (Block2A*)mLongTermBlockPool.get();
+   // Call the constructor on the allocated block using placement new
+   tPointer = new(tPointer)Block2A;
+   // Return the allocated block
    return tPointer;
 }
 
@@ -54,6 +58,9 @@ Block2A* Block2A::create()
 //******************************************************************************
 void Block2A::destroy(Block2A* aPointer)
 {
+   // Call the block's destructor
+   aPointer->~Block2A();
+   // Deallocate the block from the block pool
    mLongTermBlockPool.put(aPointer);
 }
 

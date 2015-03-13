@@ -24,8 +24,8 @@ public:
    Block2A();
   ~Block2A();
 
-   static Block2A* create();
-   static void destroy(Block2A* aPointer);
+   static Block2A*  create();
+   static void      destroy(Block2A* aPointer);
 
    static CC::LongTermBlockPool mLongTermBlockPool;
 
