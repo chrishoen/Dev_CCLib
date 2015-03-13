@@ -63,7 +63,6 @@ void* Block2A::operator new(size_t sz)
 void Block2A::operator delete(void* ptr)
 {
    Prn::print(0, 0, "Block2A::delete");
-   Prn::print(0, 0, "LINE101");
 
    if (mMemoryType == 0)
    {
@@ -71,9 +70,7 @@ void Block2A::operator delete(void* ptr)
    }
    else if (mMemoryType == 1)
    {
-      return;
       Block2A* tPointer = (Block2A*)mLongTermBlockPool.get();
-      tPointer->~Block2A();
       mLongTermBlockPool.put(ptr);
    }
 }
