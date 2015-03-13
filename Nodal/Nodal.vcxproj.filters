@@ -49,6 +49,12 @@
     <ClCompile Include="Source\someBlock2.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\ccShortTermBlockPool.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ccBlockUniverse.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h">
@@ -100,6 +106,12 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccDefs.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ccShortTermBlockPool.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ccBlockUniverse.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,64 +1,48 @@
-#ifndef _SOMEBLOCK2_H_
-#define _SOMEBLOCK2_H_
-
 /*==============================================================================
+Description:
 ==============================================================================*/
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-#include "ccDefs.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <math.h>
+#include <string.h>
+
 #include "ccBlockUniverse.h"
 
-namespace Some
+namespace CC
 {
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-class  Block2A
+BlockUniverse::BlockUniverse()
 {
-public:
+}
 
-   Block2A();
-  ~Block2A();
+BlockUniverse::~BlockUniverse()
+{
+}
 
-   static  Block2A*  create(int aMemoryType=0);
-   virtual void      destroy();
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Store member variables and dynamically allocate memory for the block array.
 
-   static CC::BlockUniverse mBlockUniverse;
-
-   static void initializeBlockUniverse(
+void BlockUniverse::initialize(
       int aAllocateShortTermBlocks,
-      int aAllocateLongTermBlocks);
-
-   int mMemoryType;
-};
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-class  Block2B : public Block2A
+      int aAllocateLongTermBlocks,
+      int aBlockSize)
 {
-public:
+   // Initialize the short term block pool
+   mShortTermBlockPool.initialize(aAllocateShortTermBlocks,aBlockSize);
 
-   Block2B();
-  ~Block2B();
+   // Initialize the long term block pool
+   mLongTermBlockPool.initialize(aAllocateLongTermBlocks,aBlockSize);
 
-   static  Block2B*  create(int aMemoryType=0);
-   virtual void      destroy();
+}
 
-   static CC::BlockUniverse mBlockUniverse;
-
-   static void initializeBlockUniverse(
-      int aAllocateShortTermBlocks,
-      int aAllocateLongTermBlocks);
-};
-
-//******************************************************************************
 }//namespace
-
-#endif
-

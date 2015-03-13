@@ -54,6 +54,25 @@ void PointerCircular::initialize(int aAllocate)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Push an element onto the stack. Return false if stack is full.
+
+bool PointerCircular::put (void* aPointer)
+{
+   // Guard
+   if (mIndex == mAllocate) return false;
+
+   //Copy the source element to the element at the stack index
+   mArray[mIndex] = aPointer;
+   // Increment the index
+   ++mIndex;
+
+   // Done
+   return true;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Pop an element off of the stack. Return null if stack is empty.
 
 void* PointerCircular::get ()

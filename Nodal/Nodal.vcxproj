@@ -95,11 +95,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\ccBlockArray.cpp" />
+    <ClCompile Include="Source\ccBlockUniverse.cpp" />
     <ClCompile Include="Source\ccLabelledTreeNode.cpp" />
     <ClCompile Include="Source\ccLabelledTreeNodeVisitor.cpp" />
     <ClCompile Include="Source\ccLongTermBlockPool.cpp" />
     <ClCompile Include="Source\ccPointerCircular.cpp" />
     <ClCompile Include="Source\ccPointerStack.cpp" />
+    <ClCompile Include="Source\ccShortTermBlockPool.cpp" />
     <ClCompile Include="Source\ccTreeNode.cpp" />
     <ClCompile Include="Source\ccTreeNodeAttach.cpp" />
     <ClCompile Include="Source\ccTreeNodeCollection.cpp" />
@@ -111,6 +113,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\ccBlockArray.h" />
+    <ClInclude Include="Source\ccBlockUniverse.h" />
     <ClInclude Include="Source\ccCallPointer.h" />
     <ClInclude Include="Source\ccContainers.h" />
     <ClInclude Include="Source\ccContainers2.h" />
@@ -120,6 +123,7 @@
     <ClInclude Include="Source\ccLongTermBlockPool.h" />
     <ClInclude Include="Source\ccPointerCircular.h" />
     <ClInclude Include="Source\ccPointerStack.h" />
+    <ClInclude Include="Source\ccShortTermBlockPool.h" />
     <ClInclude Include="Source\ccTreeNode.h" />
     <ClInclude Include="Source\ccTreeNodeAttach.h" />
     <ClInclude Include="Source\ccTreeNodeCollection.h" />

@@ -35,6 +35,9 @@ public:
    // aAllocate is the number of pointers to allocate, the size of the array.
    void initialize(int aAllocate);
 
+   // Put a pointer onto the circular array.
+   bool  put(void* aPointer);
+
    // Get a pointer from the circular arry.
    void* get();
 

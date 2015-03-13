@@ -18,8 +18,8 @@
 //******************************************************************************
 CmdLineExec::CmdLineExec()
 {
-   Some::Block2A::initializeMemory(1000);
-   Some::Block2B::initializeMemory(1000);
+   Some::Block2A::initializeBlockUniverse(1000,1000);
+   Some::Block2B::initializeBlockUniverse(1000,1000);
 }
 //******************************************************************************
 void CmdLineExec::reset()
