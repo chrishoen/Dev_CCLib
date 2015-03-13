@@ -125,5 +125,5 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
    Some::Block2A* t2A = Some::Block2A::create(CC::MemoryType_LongTerm);
 
    Prn::print(0, 0, "destroy Block2A");
-   Some::Block2A::destroy(t2A);
+   t2A->destroy();
 }

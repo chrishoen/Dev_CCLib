@@ -62,13 +62,13 @@ Block2A* Block2A::create(int aMemoryType)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-void Block2A::destroy(Block2A* aPointer)
+void Block2A::destroy()
 {
    // Call the block's destructor
-   aPointer->~Block2A();
+   this->~Block2A();
 
    // Deallocate the block back to the block pool
-   mLongTermBlockPool.put(aPointer);
+   mLongTermBlockPool.put(this);
 }
 
 //******************************************************************************
