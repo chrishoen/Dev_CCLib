@@ -18,6 +18,7 @@ namespace Some
 //******************************************************************************
 
 CC::LongTermBlockPool Block2A::mLongTermBlockPool;
+int Block2A::mMemoryType = 0;
 
 void Block2A::initializeMemory(int aAllocate)
 {
@@ -46,15 +47,38 @@ Block2A::~Block2A()
 void* Block2A::operator new(size_t sz)
 {
    Prn::print(0, 0, "Block2A::new");
-// return mLongTermBlockPool.get();
-   return ::operator new(sz);
+
+   if (mMemoryType == 0)
+   {
+      return ::operator new(sz);
+   }
+   else if (mMemoryType == 1)
+   {
+      Block2A* tPointer = (Block2A*)mLongTermBlockPool.get();
+      return new(tPointer) Block2A;
+   }
+   return 0;
+}
+
+void* Block2A::operator new(size_t sz,void* ptr)
+{
+      return new (ptr) Block2A;
 }
   
 void Block2A::operator delete(void* ptr)
 {
    Prn::print(0, 0, "Block2A::delete");
-// mLongTermBlockPool.put(ptr);
-   ::operator delete(ptr);
+
+   if (mMemoryType == 0)
+   {
+      ::operator delete(ptr);
+   }
+   else if (mMemoryType == 1)
+   {
+      Block2A* tPointer = (Block2A*)mLongTermBlockPool.get();
+      tPointer->~Block2A();
+      mLongTermBlockPool.put(ptr);
+   }
 }
 
 //******************************************************************************
