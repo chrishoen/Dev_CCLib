@@ -8,7 +8,7 @@
 //******************************************************************************
 //******************************************************************************
 
-#include <new>
+#include "ccDefs.h"
 #include "ccLongTermBlockPool.h"
 
 namespace Some
@@ -24,14 +24,14 @@ public:
    Block2A();
   ~Block2A();
 
-   static Block2A*  create();
+   static Block2A*  create(int aMemoryType=0);
    static void      destroy(Block2A* aPointer);
 
    static CC::LongTermBlockPool mLongTermBlockPool;
 
    static void initializeMemory(int aAllocate);
 
-   static int mMemoryType;
+   int mMemoryType;
 };
 
 //******************************************************************************

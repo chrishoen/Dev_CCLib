@@ -6,6 +6,7 @@ Description:
 //******************************************************************************
 //******************************************************************************
 
+#include <new>
 #include "prnPrint.h"
 
 #include "someBlock2.h"
@@ -18,7 +19,6 @@ namespace Some
 //******************************************************************************
 
 CC::LongTermBlockPool Block2A::mLongTermBlockPool;
-int Block2A::mMemoryType = 1;
 
 void Block2A::initializeMemory(int aAllocate)
 {
@@ -32,6 +32,7 @@ void Block2A::initializeMemory(int aAllocate)
 
 Block2A::Block2A()
 {
+   mMemoryType = 0;
    Prn::print(0, 0, "Block2A::Block2A");
 }
 
@@ -43,12 +44,17 @@ Block2A::~Block2A()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-Block2A* Block2A::create()
+Block2A* Block2A::create(int aMemoryType)
 {
    // Allocate a block from the block pool
    Block2A* tPointer = (Block2A*)mLongTermBlockPool.get();
+
    // Call the constructor on the allocated block using placement new
    tPointer = new(tPointer)Block2A;
+
+   // Store memory type
+   tPointer->mMemoryType = aMemoryType;
+
    // Return the allocated block
    return tPointer;
 }
@@ -60,7 +66,8 @@ void Block2A::destroy(Block2A* aPointer)
 {
    // Call the block's destructor
    aPointer->~Block2A();
-   // Deallocate the block from the block pool
+
+   // Deallocate the block back to the block pool
    mLongTermBlockPool.put(aPointer);
 }
 

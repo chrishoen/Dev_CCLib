@@ -114,6 +114,7 @@
     <ClInclude Include="Source\ccCallPointer.h" />
     <ClInclude Include="Source\ccContainers.h" />
     <ClInclude Include="Source\ccContainers2.h" />
+    <ClInclude Include="Source\ccDefs.h" />
     <ClInclude Include="Source\ccLabelledTreeNode.h" />
     <ClInclude Include="Source\ccLabelledTreeNodeVisitor.h" />
     <ClInclude Include="Source\ccLongTermBlockPool.h" />
