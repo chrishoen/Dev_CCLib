@@ -37,6 +37,9 @@ void LongTermBlockPool::initialize(int aAllocate, int aBlockSize)
    // Allocate memory for the block array
    mBlocks.initialize(aAllocate,aBlockSize);
 
+   // Initialize the pointer stack
+   mPointerStack.initialize(aAllocate);
+
    // Push the addresses of the blocks in the array onto the pointer stack.
    for (int i = 0; i < aAllocate; i++)
    {

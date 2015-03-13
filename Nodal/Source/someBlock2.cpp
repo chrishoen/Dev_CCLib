@@ -43,36 +43,18 @@ Block2A::~Block2A()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-
-void* Block2A::operator new(size_t sz)
+Block2A* Block2A::create()
 {
-   Prn::print(0, 0, "Block2A::new");
-
-   if (mMemoryType == 0)
-   {
-      return ::operator new(sz);
-   }
-   else if (mMemoryType == 1)
-   {
-      Block2A* tPointer = (Block2A*)mLongTermBlockPool.get();
-      return ::operator new(sz,tPointer);
-   }
-   return 0;
+   Block2A* tPointer = (Block2A*)mLongTermBlockPool.get();
+   return tPointer;
 }
 
-void Block2A::operator delete(void* ptr)
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+void Block2A::destroy(Block2A* aPointer)
 {
-   Prn::print(0, 0, "Block2A::delete");
-
-   if (mMemoryType == 0)
-   {
-      ::operator delete(ptr);
-   }
-   else if (mMemoryType == 1)
-   {
-      Block2A* tPointer = (Block2A*)mLongTermBlockPool.get();
-      mLongTermBlockPool.put(ptr);
-   }
+   mLongTermBlockPool.put(aPointer);
 }
 
 //******************************************************************************

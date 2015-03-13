@@ -122,10 +122,8 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
    Prn::print(0, 0, "");
 
    Prn::print(0, 0, "new Block2A");
-   Some::Block2A* t2A = new Some::Block2A;
-   Prn::print(0, 0, "");
+   Some::Block2A* t2A = Some::Block2A::create();
 
    Prn::print(0, 0, "delete Block2A");
-   delete t2A;
-   Prn::print(0, 0, "");
+   Some::Block2A::destroy(t2A);
 }
