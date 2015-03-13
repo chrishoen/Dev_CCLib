@@ -18,7 +18,7 @@ namespace Some
 //******************************************************************************
 
 CC::LongTermBlockPool Block2A::mLongTermBlockPool;
-int Block2A::mMemoryType = 0;
+int Block2A::mMemoryType = 1;
 
 void Block2A::initializeMemory(int aAllocate)
 {
