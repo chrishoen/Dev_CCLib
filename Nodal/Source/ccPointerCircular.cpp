@@ -47,7 +47,7 @@ void PointerCircular::initialize(int aAllocate)
    // Allocate memory for the array
    mArray    = new void*[aAllocate];
 
-   // initialize variables
+   // Initialize variables
    mPutIndex    = 0;
    mGetIndex    = 0;
    mAllocate = aAllocate;
@@ -56,15 +56,16 @@ void PointerCircular::initialize(int aAllocate)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Push an element onto the stack. Return false if stack is full.
+// Put a pointer into the circular array.
 
 bool PointerCircular::put (void* aPointer)
 {
    // Guard
    if (mPutIndex == mAllocate) return false;
 
-   //Copy the source element to the element at the stack index
+   // Copy the pointer into the array.
    mArray[mPutIndex] = aPointer;
+
    // Increment the index
    ++mPutIndex;
 
@@ -75,7 +76,7 @@ bool PointerCircular::put (void* aPointer)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Pop an element off of the stack. Return null if stack is empty.
+// Get a pointer from the array.
 
 void* PointerCircular::get ()
 {

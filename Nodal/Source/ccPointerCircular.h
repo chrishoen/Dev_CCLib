@@ -31,14 +31,14 @@ public:
    PointerCircular();
   ~PointerCircular();
 
-   // Allocate memory for the pointer array and initialize the index. 
+   // Allocate memory for the pointer array and initialize the indices. 
    // aAllocate is the number of pointers to allocate, the size of the array.
    void initialize(int aAllocate);
 
-   // Put a pointer onto the circular array.
+   // Put a pointer into the circular array.
    bool  put(void* aPointer);
 
-   // Get a pointer from the circular arry.
+   // Get a pointer from the circular array.
    void* get();
 
    //---------------------------------------------------------------------------
@@ -47,8 +47,10 @@ public:
    // Array of pointers, Dynamically allocated by initialize.
    void** mArray;
 
-   // Index into the array.
+   // Index into the array, to put to.
    int mPutIndex;
+
+   // Index into the array, to get from.
    int mGetIndex;
 
    // Size of the array, number of pointers allocated.
