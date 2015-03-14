@@ -55,6 +55,9 @@
     <ClCompile Include="Source\ccBlockUniverse.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\ccTreeNodeDestroyer.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h">
@@ -112,6 +115,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccBlockUniverse.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ccTreeNodeDestroyer.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

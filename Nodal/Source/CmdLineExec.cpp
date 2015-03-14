@@ -8,6 +8,7 @@
 #include "ccTreeNode.h"
 #include "ccTreeNodeAttach.h"
 #include "ccTreeNodeVisitor.h"
+#include "ccTreeNodeDestroyer.h"
 #include "ccLabelledTreeNode.h"
 #include "ccLabelledTreeNodeVisitor.h"
 #include "someBlock1.h"
@@ -160,7 +161,7 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,4);
+   aCmd->setArgDefault(1,5);
 
    CC::LabelledTreeNode::mBlockUniverse.show("CC::LabelledTreeNode::mBlockUniverse1");
 
@@ -214,6 +215,10 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
    else if (aCmd->argInt(1) == 4)
    {
       CC::destroyAllLabelledTreeNodes(tRootNode);
+   }
+   else if (aCmd->argInt(1) == 5)
+   {
+      CC::destroyAllTreeNodes(tRootNode);
    }
 
    CC::LabelledTreeNode::mBlockUniverse.show("CC::LabelledTreeNode::mBlockUniverse3");
