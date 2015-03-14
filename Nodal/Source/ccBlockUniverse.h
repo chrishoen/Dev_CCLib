@@ -1,5 +1,6 @@
 #ifndef _CCBLOCKUNIVERSE_H_
 #define _CCBLOCKUNIVERSE_H_
+
 /*==============================================================================
 
 This establishes a memory block universe. It provides memory management for 
