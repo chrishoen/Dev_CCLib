@@ -44,8 +44,10 @@ public:
    // parameter specifies either system memory, or short term block pool,
    // or long term block pool. It is analogous to new.
 
-   static LabelledTreeNode* create (int aMemoryType=0);
+   static LabelledTreeNode* create ();
+   static LabelledTreeNode* create (int aMemoryType);
    static LabelledTreeNode* create (int aMemoryType,int aIdentifier,char* aLabel);
+   static LabelledTreeNode* create (int aIdentifier,char* aLabel);
 
    // This method calls the class destructor and then deallocates the object
    // from system memory or from block universe short term or long term
@@ -59,6 +61,12 @@ public:
    // used by the destroy method to determine how to deallocate the block.
 
    int mMemoryType;
+
+   // This static member specifies the default memory type. If a create is
+   // called without a memory type parameter then this variable is used.
+   // This is a static member variable that is hard coded in the class 
+   // cpp file.
+   static int mDefaultMemoryType;
 
    // Constructor, it is called by create after allocation of a new block.
    LabelledTreeNode();

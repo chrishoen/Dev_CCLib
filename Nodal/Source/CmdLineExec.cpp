@@ -155,13 +155,54 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0, 0, "");
 
-   Prn::print(0, 0, "create  Block2A");
-   Some::Block2A* t2A = Some::Block2A::create(CC::MemoryType_LongTerm);
+   aCmd->setArgDefault(1,3);
 
-   Prn::print(0, 0, "destroy Block2A");
-   t2A->destroy();
+   CC::LabelledTreeNode* tRootNode = CC::LabelledTreeNode::create(0,"root");
+   CC::TreeNode* tNode = 0;
+
+   tNode = CC::LabelledTreeNode::create( 1,   "node1" );
+   CC::attachAfterLastChild(tNode,tRootNode);
+
+   tNode = CC::LabelledTreeNode::create( 2,   "node2" );
+   CC::attachAfterLastChild(tNode,tRootNode);
+
+   tNode = CC::LabelledTreeNode::create( 21,  "node21" );
+   CC::attachAfterLastChild(tNode,tRootNode->mLastChildNode);
+
+   tNode = CC::LabelledTreeNode::create( 22,  "node22" );
+   CC::attachAfterLastChild(tNode,tRootNode->mLastChildNode);
+
+   tNode = CC::LabelledTreeNode::create( 221, "node221" );
+   CC::attachAfterLastChild(tNode,tRootNode->mLastChildNode->mLastChildNode);
+
+   tNode = CC::LabelledTreeNode::create( 222, "node222" );
+   CC::attachAfterLastChild(tNode,tRootNode->mLastChildNode->mLastChildNode);
+
+   tNode = CC::LabelledTreeNode::create( 23,  "node23" );
+   CC::attachAfterLastChild(tNode,tRootNode->mLastChildNode);
+
+   tNode = CC::LabelledTreeNode::create( 24,  "node24" );
+   CC::attachAfterLastChild(tNode,tRootNode->mLastChildNode);
+
+   tNode = CC::LabelledTreeNode::create( 3,   "node3" );
+   CC::attachAfterLastChild(tNode,tRootNode);
+
+   tNode = CC::LabelledTreeNode::create( 4,   "node4" );
+   CC::attachAfterLastChild(tNode,tRootNode);
+
+   if (aCmd->argInt(1) == 1)
+   {
+      CC::printAllLabelledTreeNodes1(tRootNode);
+   }
+   else if (aCmd->argInt(1) == 2)
+   {
+      CC::printAllLabelledTreeNodes2(tRootNode);
+   }
+   else if (aCmd->argInt(1) == 3)
+   {
+      CC::printAllLabelledTreeNodes3(tRootNode);
+   }
 }
 
 //******************************************************************************
@@ -170,6 +211,12 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
+   Prn::print(0, 0, "create  Block2A");
+   Some::Block2A* t2A = Some::Block2A::create(CC::MemoryType_LongTerm);
+
+   Prn::print(0, 0, "destroy Block2A");
+   t2A->destroy();
+
    Prn::print(0, 0, "");
 
    Prn::print(0, 0, "create  Block2B");
