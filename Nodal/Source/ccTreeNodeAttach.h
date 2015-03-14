@@ -68,6 +68,7 @@ A file directory cannot contain two files or directories which are identical.
 These rules are not enforced by the TreeNode attach methods.
 
 */
+
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
@@ -104,12 +105,12 @@ These rules are not enforced by the TreeNode attach methods.
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-// Attach an object node to this subject node, before it
+// Attach a subject node to an object node, before it
 
 /*
-   CASE1 BEFORE, there is no node before the subject node
+   CASE1 BEFORE, there is no node before the object node
 
-   parent->mFirstChildNode = subject
+   parent->mFirstChildNode = object
    +-----------+
    | parent    |
    +-----------+
@@ -117,12 +118,12 @@ These rules are not enforced by the TreeNode attach methods.
       |     |
       v     |
    +-----------+
-   | subject   |
+   | object    |
    +-----------+
-   subject->mParentNode = parent
-   subject->mBeforeNode = 0
+   object->mParentNode = parent
+   object->mBeforeNode = 0
 
-   CASE1 AFTER, there is no node before the subject node
+   CASE1 AFTER, there is no node before the object node
 
    parent->mFirstChildNode = object
    +-----------+
@@ -132,37 +133,37 @@ These rules are not enforced by the TreeNode attach methods.
       |    |                            |
       v    |                            |   
    +-----------+                   +-----------+
-   | object    |<----------------->| subject   |       
+   | subject   |<----------------->| object    |       
    +-----------+                   +-----------+
-   object->mParentNode = parent    subject->mBeforeNode = object
-   object->mBeforeNode = 0         
-   object->mAfterNode  = subject   
+   subject->mParentNode = parent   object->mBeforeNode = subject
+   subject->mBeforeNode = 0         
+   subject->mAfterNode  = object   
 
-   CASE2 BEFORE, there is a node before the subject node
+   CASE2 BEFORE, there is a node before the object node
 
    +-----------+                   +-----------+
-   | before    |<----------------->| subject   |       
+   | before    |<----------------->| object    |       
    +-----------+                   +-----------+
-   object->mAfterNode = subject    subject->mBeforeNode = before       
+   before->mAfterNode = object     object->mBeforeNode = before       
 
-   CASE2 AFTER, there is a node before the subject node
+   CASE2 AFTER, there is a node before the object node
 
    +-----------+                   +-----------+                   +-----------+
-   | before    |<----------------->| object    |<----------------->| subject   |
+   | before    |<----------------->| subject   |<----------------->| object    |
    +-----------+                   +-----------+                   +-----------+
-   before->mAfterNode = object     object->mBeforeNode = before    subject->mBeforeNode = object       
-                                   object->mAfterNode  = subject
-                                   object->mParentNode = subject->mParentNode
+   before->mAfterNode = subject    subject->mBeforeNode = before   object->mBeforeNode = subject       
+                                   subject->mAfterNode  = object
+                                   subject->mParentNode = object->mParentNode
 */        
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-// Attach an object node to this subject node, after it
+// Attach a subject node to an object node, after it
 
 /*
-   CASE1 BEFORE, there is no node after the subject node
+   CASE1 BEFORE, there is no node after the object node
 
-   parent->mLastChildNode = subject
+   parent->mLastChildNode = object
    +-----------+
    | parent    |
    +-----------+
@@ -170,14 +171,14 @@ These rules are not enforced by the TreeNode attach methods.
       |     |
       v     |
    +-----------+
-   | subject   |
+   | object    |
    +-----------+
-   subject->mParentNode = parent
-   subject->mAfterNode  = 0
+   object->mParentNode = parent
+   object->mAfterNode  = 0
 
-   CASE1 AFTER, there is no node before the subject node
+   CASE1 AFTER, there is no node after the object node
 
-   parent->mLastChildNode = object
+   parent->mLastChildNode = subject
    +-----------+
    | parent    |<-----------------------+
    +-----------+                        |
@@ -185,27 +186,27 @@ These rules are not enforced by the TreeNode attach methods.
       |    |                            |
       v    |                            |   
    +-----------+                   +-----------+
-   | subject   |<----------------->| object    |       
+   | object    |<----------------->| subject   |       
    +-----------+                   +-----------+
-   subject->mAfterNode = object    object->mBeforeNode = subject 
-                                   object->mAfterNode  = 0
-                                   object->mParentNode = parent
+   object->mAfterNode = subject    subject->mBeforeNode = object 
+                                   subject->mAfterNode  = 0
+                                   subject->mParentNode = parent
 
-   CASE2 BEFORE, there is a node after the subject node
+   CASE2 BEFORE, there is a node after the object node
 
    +-----------+                   +-----------+
-   | subject   |<----------------->| after     |       
+   | object    |<----------------->| after     |       
    +-----------+                   +-----------+
-   subject->mAfterNode = after     after->mBeforeNode = subject   
+   object->mAfterNode = after      after->mBeforeNode = object   
 
-   CASE2 AFTER, there is a node after the subject node
+   CASE2 AFTER, there is a node after the object node
 
    +-----------+                   +-----------+                   +-----------+
-   | subject   |<----------------->| object    |<----------------->| after     |
+   | object    |<----------------->| subject   |<----------------->| after     |
    +-----------+                   +-----------+                   +-----------+
-   subject->mAfterNode = object    object->mBeforeNode = subject   after->mBeforeNode = object       
-                                   object->mAfterNode  = after
-                                   object->mParentNode = subject->mParentNode
+   object->mAfterNode = subject    subject->mBeforeNode = object   after->mBeforeNode = subject       
+                                   subject->mAfterNode  = after
+                                   subject->mParentNode = object->mParentNode
 */
 //****************************************************************************
 //****************************************************************************

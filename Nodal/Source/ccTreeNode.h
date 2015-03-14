@@ -23,8 +23,6 @@ namespace CC
 // a node before it or a node after it. Second, any node can have a parent
 // node that it belongs to above it, or it can have some number of child
 // nodes that belong to it below it.
-
-// Here is the class definition, there is more documentation after it.
 //   
 //****************************************************************************
 //****************************************************************************
@@ -73,6 +71,11 @@ public:
    int mIdentifier;
    int mOrder;
 
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   // Methods provided by inheritors
+
    // This is called on a subject node after it is attached to an object node
    virtual void onAttached() {}
 
@@ -95,7 +98,6 @@ public:
 //****************************************************************************
 //****************************************************************************
 }//namespace
-
 
 /*
 TreeNode is a class that supports recursive data structures.
@@ -162,207 +164,5 @@ These rules are not enforced by the TreeNode attach methods.
    +-----------+                   +-----------+                   +-----------+
    first->mParentNode = parent     node->mParentNode = parent      last->mParentNode = parent
 */
-
-//****************************************************************************
-//****************************************************************************
-//****************************************************************************
-// Attach an object node to this subject node, before it
-
-/*
-   CASE1 BEFORE, there is no node before the subject node
-
-   parent->mFirstChildNode = subject
-   +-----------+
-   | parent    |
-   +-----------+
-      |     ^
-      |     |
-      v     |
-   +-----------+
-   | subject   |
-   +-----------+
-   subject->mParentNode = parent
-   subject->mBeforeNode = 0
-
-   CASE1 AFTER, there is no node before the subject node
-
-   parent->mFirstChildNode = object
-   +-----------+
-   | parent    |<-----------------------+
-   +-----------+                        |
-      |    ^                            |
-      |    |                            |
-      v    |                            |   
-   +-----------+                   +-----------+
-   | object    |<----------------->| subject   |       
-   +-----------+                   +-----------+
-   object->mParentNode = parent    subject->mBeforeNode = object
-   object->mBeforeNode = 0         
-   object->mAfterNode  = subject   
-
-   CASE2 BEFORE, there is a node before the subject node
-
-   +-----------+                   +-----------+
-   | before    |<----------------->| subject   |       
-   +-----------+                   +-----------+
-   object->mAfterNode = subject    subject->mBeforeNode = before       
-
-   CASE2 AFTER, there is a node before the subject node
-
-   +-----------+                   +-----------+                   +-----------+
-   | before    |<----------------->| object    |<----------------->| subject   |
-   +-----------+                   +-----------+                   +-----------+
-   before->mAfterNode = object     object->mBeforeNode = before    subject->mBeforeNode = object       
-                                   object->mAfterNode  = subject
-                                   object->mParentNode = subject->mParentNode
-*/        
-//****************************************************************************
-//****************************************************************************
-//****************************************************************************
-// Attach an object node to this subject node, after it
-
-/*
-   CASE1 BEFORE, there is no node after the subject node
-
-   parent->mLastChildNode = subject
-   +-----------+
-   | parent    |
-   +-----------+
-      |     ^
-      |     |
-      v     |
-   +-----------+
-   | subject   |
-   +-----------+
-   subject->mParentNode = parent
-   subject->mAfterNode  = 0
-
-   CASE1 AFTER, there is no node before the subject node
-
-   parent->mLastChildNode = object
-   +-----------+
-   | parent    |<-----------------------+
-   +-----------+                        |
-      |    ^                            |
-      |    |                            |
-      v    |                            |   
-   +-----------+                   +-----------+
-   | subject   |<----------------->| object    |       
-   +-----------+                   +-----------+
-   subject->mAfterNode = object    object->mBeforeNode = subject 
-                                   object->mAfterNode  = 0
-                                   object->mParentNode = parent
-
-   CASE2 BEFORE, there is a node after the subject node
-
-   +-----------+                   +-----------+
-   | subject   |<----------------->| after     |       
-   +-----------+                   +-----------+
-   subject->mAfterNode = after     after->mBeforeNode = subject   
-
-   CASE2 AFTER, there is a node after the subject node
-
-   +-----------+                   +-----------+                   +-----------+
-   | subject   |<----------------->| object    |<----------------->| after     |
-   +-----------+                   +-----------+                   +-----------+
-   subject->mAfterNode = object    object->mBeforeNode = subject   after->mBeforeNode = object       
-                                   object->mAfterNode  = after
-                                   object->mParentNode = subject->mParentNode
-*/
-//****************************************************************************
-//****************************************************************************
-//****************************************************************************
-// Detach this subject node from its parent and before and after nodes
-
-/*
-   CASE1 BEFORE, there is no node before the subject node
-
-   parent->mFirstChildNode = subject
-   +-----------+
-   | parent    |<-----------------------+
-   +-----------+                        |
-      |    ^                            |
-      |    |                            |
-      v    |                            |   
-   +-----------+                   +-----------+
-   | subject   |<----------------->| after     |       
-   +-----------+                   +-----------+
-   subject->mBeforeNode = 0        after->mBeforeNode = subject
-   subject->mAfterNode  = after   
-
-   CASE1 AFTER, there is no node before the subject node
-
-   parent->mFirstChildNode = after
-   +-----------+
-   | parent    |
-   +-----------+
-      |     ^
-      |     |
-      v     |
-   +-----------+
-   | after     |
-   +-----------+
-   after->mBeforeNode = 0
-
-   CASE2 BEFORE, there is a node before the subject node
-
-   +-----------+                   +-----------+                   +-----------+
-   | before    |<----------------->| subject   |<----------------->| after     |
-   +-----------+                   +-----------+                   +-----------+
-   before->mAfterNode = subject    subject->mBeforeNode = before    after->mBeforeNode = subject       
-                                   subject->mAfterNode  = after
-
-   CASE2 AFTER, there is a node before the subject node
-
-   +-----------+                   +-----------+
-   | before    |<----------------->| after     |       
-   +-----------+                   +-----------+
-   object->mAfterNode = after      after->mBeforeNode = before
-
-   CASE3 BEFORE, there is no node after the subject node
-
-   parent->mLastChildNode = subject
-   +-----------+
-   | parent    |<-----------------------+
-   +-----------+                        |
-      |    ^                            |
-      |    |                            |
-      v    |                            |   
-   +-----------+                   +-----------+
-   | before    |<----------------->| subject   |       
-   +-----------+                   +-----------+
-   before->mAfterNode = subject    subject->mBeforeNode = before        
-                                   subject->mAfterNode  = 0   
-
-   CASE3 AFTER, there is no node after the subject node
-
-   parent->mLastChildNode = before
-   +-----------+
-   | parent    |
-   +-----------+
-      |     ^
-      |     |
-      v     |
-   +-----------+
-   | before    |
-   +-----------+
-   after->mAfterNode = 0
-
-   CASE4 BEFORE, there is a node after the subject node
-
-   +-----------+                   +-----------+                   +-----------+
-   | before    |<----------------->| subject   |<----------------->| after     |
-   +-----------+                   +-----------+                   +-----------+
-   before->mAfterNode = subject    subject->mBeforeNode = before    after->mBeforeNode = subject       
-                                   subject->mAfterNode  = after
-
-   CASE4 AFTER, there is a node before the subject node
-
-   +-----------+                   +-----------+
-   | before    |<----------------->| after     |       
-   +-----------+                   +-----------+
-   before->mAfterNode = after      after->mBeforeNode = before       
-
-*/        
 
 #endif
