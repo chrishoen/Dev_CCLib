@@ -59,6 +59,7 @@ LabelledTreeNode* LabelledTreeNode::create(int aMemoryType,int aIdentifier,char*
    case CC::MemoryType_System :
       // Allocate a block from system memory
       tPointer = (LabelledTreeNode*)malloc(sizeof(LabelledTreeNode));
+//    printf("LINE101 %X\n", tPointer);
       break;
    case CC::MemoryType_ShortTermWithDestructor :
    case CC::MemoryType_ShortTermWithoutDestructor :
@@ -121,6 +122,7 @@ void LabelledTreeNode::destroy()
       // Call the block's destructor
       this->~LabelledTreeNode();
       // Deallocate the block back to system memory
+//    printf("LINE102 %X\n", this);
       free(this);
       break;
    case CC::MemoryType_ShortTermWithDestructor :
@@ -197,9 +199,8 @@ void LabelledTreeNode::onAttached()
    strncat(mFullPath, ".", MaxFullPathSize);
    strncat(mFullPath, mLabel, MaxFullPathSize);
 
-   printf("objectNodeOnAttached %d %s %s\n", 
+   printf("objectNodeOnAttached %5d %s\n", 
       this->mIdentifier,
-      this->mLabel,
       this->mFullPath);
 }
 

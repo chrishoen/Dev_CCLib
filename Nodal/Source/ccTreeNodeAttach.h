@@ -26,7 +26,7 @@ void attachBeforeFirstChild (TreeNode* aSubjectNode,TreeNode* aObjectNode);
 void attachAfterLastChild (TreeNode* aSubjectNode,TreeNode* aObjectNode);
 
 // Detach a subject node from all of the nodes to which it is attached
-void detach();
+void detach(TreeNode* aSubjectNode);
 
 
 //****************************************************************************

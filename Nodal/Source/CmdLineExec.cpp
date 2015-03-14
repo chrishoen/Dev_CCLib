@@ -232,7 +232,7 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
    Prn::print(0, 0, "create  Block2A");
-   Some::Block2A* t2A = Some::Block2A::create(CC::MemoryType_LongTerm);
+   Some::Block2A* t2A = Some::Block2A::create(CC::MemoryType_System);
 
    Prn::print(0, 0, "destroy Block2A");
    t2A->destroy();
@@ -240,7 +240,7 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
    Prn::print(0, 0, "");
 
    Prn::print(0, 0, "create  Block2B");
-   Some::Block2B* t2B = Some::Block2B::create(CC::MemoryType_LongTerm);
+   Some::Block2B* t2B = Some::Block2B::create(CC::MemoryType_System);
 
    Prn::print(0, 0, "destroy Block2B");
    t2B->destroy();

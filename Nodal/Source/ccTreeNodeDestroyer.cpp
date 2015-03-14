@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include "ccTreeNodeDestroyer.h"
+#include "ccTreeNodeAttach.h"
 
 namespace CC
 {
@@ -64,7 +65,10 @@ void destroyAllTreeNodesBelow(
       // Update the recursive index
       aRecursiveAnchor->mIndex++;
 
-      // Visit the child node after the recursive call
+      // Detach the child node after the recursive call
+      detach(tChildNode);
+
+      // Destroy the child node after the recursive call
       tChildNode->destroy();
 
       // Proceed to the next child node
