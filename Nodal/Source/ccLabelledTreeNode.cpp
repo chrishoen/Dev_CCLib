@@ -60,8 +60,7 @@ LabelledTreeNode* LabelledTreeNode::create(int aMemoryType,int aIdentifier,char*
       // Allocate a block from system memory
       tPointer = (LabelledTreeNode*)malloc(sizeof(LabelledTreeNode));
       break;
-   case CC::MemoryType_ShortTermWithDestructor :
-   case CC::MemoryType_ShortTermWithoutDestructor :
+   case CC::MemoryType_ShortTerm :
       // Allocate a block from the short term block pool
       tPointer = (LabelledTreeNode*)LabelledTreeNode::mBlockUniverse.mShortTermBlockPool.get();
       break;
@@ -123,12 +122,7 @@ void LabelledTreeNode::destroy()
       // Deallocate the block back to system memory
       free(this);
       break;
-   case CC::MemoryType_ShortTermWithDestructor :
-      // Call the block's destructor
-      this->~LabelledTreeNode();
-      // Deallocate the block back to the short term block pool
-      break;
-   case CC::MemoryType_ShortTermWithoutDestructor :
+   case CC::MemoryType_ShortTerm :
       // Deallocate the block back to the short term block pool
       break;
    case CC::MemoryType_LongTerm :

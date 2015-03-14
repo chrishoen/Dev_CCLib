@@ -24,6 +24,7 @@ TreeNode::TreeNode()
    // Empty state
    mIdentifier=0;
    mOrder = 0;
+   mMemoryType = 0;
 }
 
 TreeNode::TreeNode(int aIdentifier)
@@ -37,6 +38,8 @@ TreeNode::TreeNode(int aIdentifier)
 
    // Set state
    mIdentifier = aIdentifier;
+   mOrder = 0;
+   mMemoryType = 0;
 }
 
 //****************************************************************************

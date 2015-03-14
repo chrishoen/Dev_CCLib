@@ -82,6 +82,13 @@ public:
 
    virtual void destroy(){}
 
+   // This member variable specifes the memory type for an instance of the
+   // class that has been created: system, short term block pool, or long term
+   // block pool. It is set by the create method when it is allocated it is
+   // used by the destroy method to determine how to deallocate the block.
+
+   int mMemoryType;
+
 };
 
 //****************************************************************************
