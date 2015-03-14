@@ -20,5 +20,13 @@ void printAllLabelledTreeNodes3(LabelledTreeNode* aSubjectNode);
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
+
+void visitLabelledTreeNodeForDestroy (LabelledTreeNode* aSubjectNode, RecursiveAnchor* aRecursiveAnchor);
+
+void destroyAllLabelledTreeNodes(LabelledTreeNode* aSubjectNode);
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
 }//namespace
 #endif

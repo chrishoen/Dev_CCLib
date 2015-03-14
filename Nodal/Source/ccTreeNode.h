@@ -76,6 +76,12 @@ public:
    // This is called on a subject node after it is attached to an object node
    virtual void onAttached() {}
 
+   // This method calls the class destructor and then deallocates the object
+   // from system memory or from block universe short term or long term
+   // memory block pools. It is analogous to delete.
+
+   virtual void destroy(){}
+
 };
 
 //****************************************************************************

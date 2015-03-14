@@ -44,7 +44,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,3);
+   aCmd->setArgDefault(1,4);
 
    CC::LabelledTreeNode* tRootNode = new CC::LabelledTreeNode(0,"root");
    CC::TreeNode* tNode = 0;
@@ -92,6 +92,11 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
    {
       CC::printAllLabelledTreeNodes3(tRootNode);
    }
+   else if (aCmd->argInt(1) == 4)
+   {
+      CC::destroyAllLabelledTreeNodes(tRootNode);
+   }
+
 }
 
 //******************************************************************************

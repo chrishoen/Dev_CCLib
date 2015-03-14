@@ -48,14 +48,15 @@ void visitAllNodes2(
    RecursiveAnchor* aRecursiveAnchor,
    NodeVistorCall*  aNodeVisitorCall)
 {
-   // Visit the subject node
-   (*aNodeVisitorCall)(aSubjectNode, aRecursiveAnchor);
-
    // Visit all nodes below the subject node
    visitAllNodesBelow2(
       aSubjectNode,
       aRecursiveAnchor,
       aNodeVisitorCall);
+
+   // Visit the subject node
+   (*aNodeVisitorCall)(aSubjectNode, aRecursiveAnchor);
+
 }
 
 //****************************************************************************

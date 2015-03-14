@@ -11,12 +11,15 @@ namespace CC
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
 
 void visitLabelledTreeNodeForPrint (TreeNode* aSubjectNode, RecursiveAnchor* aRecursiveAnchor)
 {
    LabelledTreeNode* tSubjectNode = static_cast<LabelledTreeNode*>(aSubjectNode);
 
-   printf("visitLabelledTreeNode %3d %d %d %5d %s\n", 
+   printf("visitLabelledTreeNodeForPrint %3d %d %d %5d %s\n", 
       aRecursiveAnchor->mIndex, 
       aRecursiveAnchor->mFirstInLevel,
       aRecursiveAnchor->mLevel,
@@ -51,6 +54,35 @@ void printAllLabelledTreeNodes3(LabelledTreeNode* aSubjectNode)
    {
       tNode = visitNode(tNode, &tRecursiveAnchor, &tNodeVisitorCall);
    }
+}
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+
+void visitLabelledTreeNodeForDestroy (TreeNode* aSubjectNode, RecursiveAnchor* aRecursiveAnchor)
+{
+   LabelledTreeNode* tSubjectNode = static_cast<LabelledTreeNode*>(aSubjectNode);
+
+   printf("visitLabelledTreeNodeForDestroy %3d %1d %1d %5d %s\n", 
+      aRecursiveAnchor->mIndex, 
+      aRecursiveAnchor->mFirstInLevel,
+      aRecursiveAnchor->mLevel,
+      tSubjectNode->mIdentifier,
+      tSubjectNode->mFullPath);
+
+   tSubjectNode->destroy();
+}
+
+void destroyAllLabelledTreeNodes(LabelledTreeNode* aSubjectNode)
+{
+   visitAllNodes2(
+      aSubjectNode,
+      new RecursiveAnchor(),
+      new NodeVistorCall(visitLabelledTreeNodeForDestroy));
 }
 
 }//namespace

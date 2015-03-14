@@ -171,6 +171,9 @@ LabelledTreeNode::LabelledTreeNode(int aIdentifier,char* aLabel)
 
 LabelledTreeNode::~LabelledTreeNode()
 {
+   printf("LabelledTreeNode::~LabelledTreeNode     %5d %s\n", 
+      this->mIdentifier,
+      this->mFullPath);
 }
 
 //****************************************************************************
