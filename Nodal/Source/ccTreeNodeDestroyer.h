@@ -11,7 +11,8 @@ namespace CC
    // subject root node. It recursively traverses the nodes in destruction
    // order, such that child nodes are destroyed before parent nodes. It
    // recursively destroys all of the nodes below the subject root node
-   // and then destroys the subject root node.
+   // and then destroys the subject root node. For each node destroyed, 
+   // it calls the node destroy function.
 
    void destroyAllTreeNodes(
       TreeNode*        aSubjectNode);
