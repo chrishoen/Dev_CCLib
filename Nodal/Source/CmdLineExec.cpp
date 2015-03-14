@@ -92,10 +92,6 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
    {
       CC::printAllLabelledTreeNodes3(tRootNode);
    }
-   else if (aCmd->argInt(1) == 4)
-   {
-      CC::destroyAllLabelledTreeNodes(tRootNode);
-   }
 
 }
 
@@ -152,6 +148,10 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
    {
       CC::printAllLabelledTreeNodes3(tRootNode);
    }
+   else if (aCmd->argInt(1) == 4)
+   {
+      CC::destroyAllLabelledTreeNodes(tRootNode);
+   }
 }
 
 //******************************************************************************
@@ -160,8 +160,9 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
+   aCmd->setArgDefault(1,4);
 
-   aCmd->setArgDefault(1,3);
+   CC::LabelledTreeNode::mBlockUniverse.show("CC::LabelledTreeNode::mBlockUniverse1");
 
    CC::LabelledTreeNode* tRootNode = CC::LabelledTreeNode::create(0,"root");
    CC::TreeNode* tNode = 0;
@@ -196,6 +197,8 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
    tNode = CC::LabelledTreeNode::create( 4,   "node4" );
    CC::attachAfterLastChild(tNode,tRootNode);
 
+   CC::LabelledTreeNode::mBlockUniverse.show("CC::LabelledTreeNode::mBlockUniverse2");
+
    if (aCmd->argInt(1) == 1)
    {
       CC::printAllLabelledTreeNodes1(tRootNode);
@@ -208,6 +211,12 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
    {
       CC::printAllLabelledTreeNodes3(tRootNode);
    }
+   else if (aCmd->argInt(1) == 4)
+   {
+      CC::destroyAllLabelledTreeNodes(tRootNode);
+   }
+
+   CC::LabelledTreeNode::mBlockUniverse.show("CC::LabelledTreeNode::mBlockUniverse3");
 }
 
 //******************************************************************************

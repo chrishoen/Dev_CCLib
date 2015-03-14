@@ -45,4 +45,12 @@ void BlockUniverse::initialize(
 
 }
 
+// Show
+void BlockUniverse::show(char* aLabel)
+{
+   printf("%s %d %d\n", 
+      aLabel, 
+      mLongTermBlockPool.mPointerStack.mIndex,
+      mShortTermBlockPool.mPointerCircular.mIndex);
+}
 }//namespace

@@ -48,6 +48,9 @@ public:
 
    // Array of long term allocated memory blocks
    LongTermBlockPool mLongTermBlockPool;
+
+   // Show
+   void show(char* aLabel);
 };
 
 //******************************************************************************
