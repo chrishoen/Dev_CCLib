@@ -2,7 +2,10 @@
 #define _CCSHORTTERMBLOCKPOOL_H_
 /*==============================================================================
 
-This defines an array of memory blocks that are dynamically allocated.
+This defines a pool of memory blocks that have a lifetime that is short term.
+The blocks are not persistent. Blocks are allocated from the pool but they are
+not deallocated, they are simply reused. The pool operates in a circular
+manner.
 
 ==============================================================================*/
 
@@ -18,11 +21,11 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This class encapsulates a pool of persistent memory blocks. At 
-// initialization, it allocates an array of blocks and it allocates a stack
-// of pointers into the blocks. To allocate a block from the pool, a pointer is 
-// popped from the stack. To free a block, a pointer is pushed back onto the
-// stack.
+// This class encapsulates a pool of non persistent memory blocks. At 
+// initialization, it allocates an array of blocks and it allocates a circular
+// array of pointers into the blocks. To allocate a block from the pool, a 
+// pointer is gotten from the circular array. Blocks are not deallocated, they
+// are simply reused.
 
 class ShortTermBlockPool
 {
@@ -34,7 +37,7 @@ public:
    ShortTermBlockPool();
   ~ShortTermBlockPool();
 
-   // Allocate memory for the block array and initialize the pointer stack.
+   // Allocate memory for the block array and initialize the pointer array.
    void initialize(int aAllocate,int aBlockSize);
 
    // Get a block from the pool, allocate
@@ -46,9 +49,8 @@ public:
    // Array of allocated memory blocks
    BlockArray mBlocks;
 
-   // Stack of pointers into the block array. To allocate a block, a pointer 
-   // is popped off of the stack. To free a block, a pointer is pushed back
-   // onto the stack.
+   // Array of pointers into the block array. To allocate a block, a pointer 
+   // is gotten from the array and its index is incremented.
    PointerCircular mPointerCircular;
 };
 

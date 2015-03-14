@@ -4,6 +4,10 @@
 
 This defines an array of memory blocks that are dynamically allocated.
 
+This defines a pool of memory blocks that have a lifetime that is long term.
+The blocks are persistent. Blocks are allocated and deallocated from the pool.
+This is similar to a system heap.
+
 ==============================================================================*/
 
 //******************************************************************************

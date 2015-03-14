@@ -3,7 +3,7 @@
 /*==============================================================================
 
 This defines a stack of void* pointers. It can be used by specialized heaps
-and pools as an allocator. It is not thread safe.
+and pools as an allocator.
 
 ==============================================================================*/
 
@@ -43,7 +43,7 @@ public:
    //---------------------------------------------------------------------------
    // Members
 
-   // Array of pointers, Dynamically allocated by initialize.
+   // Array of pointers, dynamically allocated by initialize.
    void** mArray;
 
    // Index into the array.
