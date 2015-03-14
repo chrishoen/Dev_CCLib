@@ -5,6 +5,7 @@
 
 #include "ccTreeNodeDestroyer.h"
 #include "ccTreeNodeAttach.h"
+#include "ccDefs.h"
 
 namespace CC
 {
@@ -16,6 +17,14 @@ namespace CC
 void destroyAllTreeNodes(
    TreeNode*        aSubjectNode)
 {
+   // If short term memory then there is no destruction
+   if (aSubjectNode->mMemoryType == CC::MemoryType_ShortTerm)
+   {
+      // Detach the subject node from all nodes to which iti is attached
+      detach(aSubjectNode);
+      return;
+   }
+
    // Recursive anchor
    RecursiveAnchor* tRecursiveAnchor = new RecursiveAnchor();
 
@@ -24,7 +33,7 @@ void destroyAllTreeNodes(
       aSubjectNode,
       tRecursiveAnchor);
 
-   // Visit the subject node
+   // Destroy the subject node
    aSubjectNode->destroy();
 
 }
@@ -57,10 +66,14 @@ void destroyAllTreeNodesBelow(
       aRecursiveAnchor->mFirstInLevel = tFirstInLevel;
       tFirstInLevel = false;
 
-      // Recursively call this method for the child node
-      destroyAllTreeNodesBelow(
-         tChildNode,
-         aRecursiveAnchor);
+      // If not short term memory then there is destruction
+      if (aSubjectNode->mMemoryType != CC::MemoryType_ShortTerm)
+      {
+         // Recursively call this method for the child node
+         destroyAllTreeNodesBelow(
+            tChildNode,
+            aRecursiveAnchor);
+      }
 
       // Update the recursive index
       aRecursiveAnchor->mIndex++;
@@ -68,7 +81,7 @@ void destroyAllTreeNodesBelow(
       // Store a pointer to the next child node before deleting it
       TreeNode* tAfterChildNode = tChildNode->mAfterNode;
 
-      // Detach the child node
+      // Detach the child node from all nodes to which it is attached
       detach(tChildNode);
 
       // Destroy the child node
