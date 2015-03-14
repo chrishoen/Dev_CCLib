@@ -16,10 +16,11 @@ namespace CC
    void destroyAllTreeNodes(
       TreeNode*        aSubjectNode);
 
-   // This destroys all child nodes below a subject node. It is called 
+   // This destroys all child nodes below a subject root node. It is called 
    // by the above recursive destroy function. It recursively traverses 
    // the nodes in destruction order, such that child nodes are 
-   // destroyed before parent nodes.
+   // destroyed before parent nodes. For each node destroyed, it calls the
+   // node destroy function.
 
    void destroyAllTreeNodesBelow(
       TreeNode*        aSubjectNode,
