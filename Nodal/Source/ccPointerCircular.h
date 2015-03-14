@@ -48,7 +48,8 @@ public:
    void** mArray;
 
    // Index into the array.
-   int mIndex;
+   int mPutIndex;
+   int mGetIndex;
 
    // Size of the array, number of pointers allocated.
    int mAllocate;

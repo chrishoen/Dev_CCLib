@@ -27,7 +27,8 @@ PointerCircular::PointerCircular()
 {
    // All null
    mArray    = 0;
-   mIndex    = 0;
+   mPutIndex    = 0;
+   mGetIndex    = 0;
    mAllocate = 0;
 }
 
@@ -47,7 +48,8 @@ void PointerCircular::initialize(int aAllocate)
    mArray    = new void*[aAllocate];
 
    // initialize variables
-   mIndex    = 0;
+   mPutIndex    = 0;
+   mGetIndex    = 0;
    mAllocate = aAllocate;
 }
 
@@ -59,12 +61,12 @@ void PointerCircular::initialize(int aAllocate)
 bool PointerCircular::put (void* aPointer)
 {
    // Guard
-   if (mIndex == mAllocate) return false;
+   if (mPutIndex == mAllocate) return false;
 
    //Copy the source element to the element at the stack index
-   mArray[mIndex] = aPointer;
+   mArray[mPutIndex] = aPointer;
    // Increment the index
-   ++mIndex;
+   ++mPutIndex;
 
    // Done
    return true;
@@ -78,10 +80,10 @@ bool PointerCircular::put (void* aPointer)
 void* PointerCircular::get ()
 {
    // Get the pointer at the current index
-   void* tPointer = mArray[mIndex];
+   void* tPointer = mArray[mGetIndex];
 
    // Increment the index
-   if (++mIndex == mAllocate) mIndex = 0;
+   if (++mGetIndex == mAllocate) mGetIndex = 0;
 
    // Return the pointer
    return tPointer;

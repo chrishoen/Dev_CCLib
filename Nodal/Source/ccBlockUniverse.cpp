@@ -42,7 +42,6 @@ void BlockUniverse::initialize(
 
    // Initialize the long term block pool
    mLongTermBlockPool.initialize(aAllocateLongTermBlocks,aBlockSize);
-
 }
 
 // Show
@@ -51,6 +50,6 @@ void BlockUniverse::show(char* aLabel)
    printf("%s %d %d\n", 
       aLabel, 
       mLongTermBlockPool.mPointerStack.mIndex,
-      mShortTermBlockPool.mPointerCircular.mIndex);
+      mShortTermBlockPool.mPointerCircular.mGetIndex);
 }
 }//namespace
