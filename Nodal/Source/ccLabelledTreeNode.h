@@ -44,10 +44,17 @@ public:
    // parameter specifies either system memory, or short term block pool,
    // or long term block pool. It is analogous to new.
 
+   // Create with default memory type and default member variables
    static LabelledTreeNode* create ();
+
+   // Create with specifed memory type and default member variables
    static LabelledTreeNode* create (int aMemoryType);
-   static LabelledTreeNode* create (int aMemoryType,int aIdentifier,char* aLabel);
+
+   // Create with default memory type and specified member variables
    static LabelledTreeNode* create (int aIdentifier,char* aLabel);
+
+   // Create with specifed memory type and specified member variables
+   static LabelledTreeNode* create (int aMemoryType,int aIdentifier,char* aLabel);
 
    // This method calls the class destructor and then deallocates the object
    // from system memory or from block universe short term or long term

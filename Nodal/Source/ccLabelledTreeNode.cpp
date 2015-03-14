@@ -81,7 +81,7 @@ LabelledTreeNode* LabelledTreeNode::create(int aMemoryType,int aIdentifier,char*
 }
 
 //******************************************************************************
-// Variation on create
+// Create with default memory type and default member variables
 
 LabelledTreeNode* LabelledTreeNode::create()
 { 
@@ -89,7 +89,7 @@ LabelledTreeNode* LabelledTreeNode::create()
 }
 
 //******************************************************************************
-// Variation on create
+// Create with specifed memory type and default member variables
 
 LabelledTreeNode* LabelledTreeNode::create (int aMemoryType)
 { 
@@ -97,7 +97,7 @@ LabelledTreeNode* LabelledTreeNode::create (int aMemoryType)
 }
 
 //******************************************************************************
-// Variation on create
+// Create with default memory type and specified member variables
 
 LabelledTreeNode* LabelledTreeNode::create (int aIdentifier,char* aLabel)
 { 
