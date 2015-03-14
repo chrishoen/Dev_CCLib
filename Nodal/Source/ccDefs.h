@@ -13,9 +13,10 @@ namespace CC
 
    enum
    {
-      MemoryType_System = 0,
-      MemoryType_LongTerm = 1,
-      MemoryType_ShortTerm = 2,
+      MemoryType_System                     = 0,
+      MemoryType_LongTerm                   = 1,
+      MemoryType_ShortTermWithDestructor    = 2,
+      MemoryType_ShortTermWithoutDestructor = 3,
    };
 
 } //namespace
