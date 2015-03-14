@@ -18,8 +18,18 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 
+// Static member block universe. It contains a short term and a long term
+// block pool. These block pools, or system memory, are used to establish
+// memory for all instances of this class that are created within a process.
+// The block universe must be initialized at the beginning of a process, 
+// prior to any block creation.
+
 CC::BlockUniverse Block2A::mBlockUniverse;
 CC::BlockUniverse Block2B::mBlockUniverse;
+
+// This static method initializes the block universe. In a process, it must
+// be called prior to any block creations. It initializes the block universe
+// short term and long term block pools.
 
 void Block2A::initializeBlockUniverse(
       int aAllocateShortTermBlocks,
@@ -31,6 +41,10 @@ void Block2A::initializeBlockUniverse(
       sizeof(Block2A));
 }
 
+// This static method initializes the block universe. In a process, it must
+// be called prior to any block creations. It initializes the block universe
+// short term and long term block pools.
+
 void Block2B::initializeBlockUniverse(
       int aAllocateShortTermBlocks,
       int aAllocateLongTermBlocks)
@@ -41,25 +55,15 @@ void Block2B::initializeBlockUniverse(
       sizeof(Block2A));
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This static method allocates a block from system memory or from block
+// universe short term or long term memory block pools. After allocation,
+// it calls the class constructor on the allocated block. The memory type
+// parameter specifies either system memory, or short term block pool,
+// or long term block pool. It is analogous to new.
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-Block2A::Block2A()
-{
-   mMemoryType = 0;
-   Prn::print(0, 0, "Block2A::Block2A");
-}
-
-Block2A::~Block2A()
-{
-   Prn::print(0, 0, "Block2A::~Block2A");
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
 Block2A* Block2A::create(int aMemoryType)
 {
    // Block pointer
@@ -95,6 +99,10 @@ Block2A* Block2A::create(int aMemoryType)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// This method calls the class destructor and then deallocates the object
+// from system memory or from block universe short term or long term
+// memory block pools. It is analogous to delete.
+
 void Block2A::destroy()
 {
    // Call the block's destructor
@@ -120,11 +128,38 @@ void Block2A::destroy()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Constructor, it is called by create after allocation of a new block.
+
+Block2A::Block2A()
+{
+   mMemoryType = 0;
+   Prn::print(0, 0, "Block2A::Block2A");
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Destructor, it is called by destroy before deallocation of a block.
+
+Block2A::~Block2A()
+{
+   Prn::print(0, 0, "Block2A::~Block2A");
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Constructor, it is called by create after allocation of a new block.
 
 Block2B::Block2B()
 {
    Prn::print(0, 0, "Block2B::Block2B");
 }
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Destructor, it is called by destroy before deallocation of a block.
 
 Block2B::~Block2B()
 {
@@ -134,6 +169,12 @@ Block2B::~Block2B()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// This static method allocates a block from system memory or from block
+// universe short term or long term memory block pools. After allocation,
+// it calls the class constructor on the allocated block. The memory type
+// parameter specifies either system memory, or short term block pool,
+// or long term block pool. It is analogous to new.
+
 Block2B* Block2B::create(int aMemoryType)
 {
    // Allocate a block from the block pool
@@ -152,6 +193,10 @@ Block2B* Block2B::create(int aMemoryType)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// This method calls the class destructor and then deallocates the object
+// from system memory or from block universe short term or long term
+// memory block pools. It is analogous to delete.
+
 void Block2B::destroy()
 {
    // Call the block's destructor
