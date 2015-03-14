@@ -103,7 +103,6 @@
     <ClCompile Include="Source\ccPointerStack.cpp" />
     <ClCompile Include="Source\ccShortTermBlockPool.cpp" />
     <ClCompile Include="Source\ccTreeNode.cpp" />
-    <ClCompile Include="Source\ccTreeNodeAttach.cpp" />
     <ClCompile Include="Source\ccTreeNodeCollection.cpp" />
     <ClCompile Include="Source\ccTreeNodeDestroyer.cpp" />
     <ClCompile Include="Source\ccTreeNodeVisitor.cpp" />
@@ -126,7 +125,6 @@
     <ClInclude Include="Source\ccPointerStack.h" />
     <ClInclude Include="Source\ccShortTermBlockPool.h" />
     <ClInclude Include="Source\ccTreeNode.h" />
-    <ClInclude Include="Source\ccTreeNodeAttach.h" />
     <ClInclude Include="Source\ccTreeNodeCollection.h" />
     <ClInclude Include="Source\ccTreeNodeDestroyer.h" />
     <ClInclude Include="Source\ccTreeNodeVisitor.h" />

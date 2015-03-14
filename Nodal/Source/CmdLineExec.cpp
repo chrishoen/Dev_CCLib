@@ -6,7 +6,6 @@
 #include "prnPrint.h"
 
 #include "ccTreeNode.h"
-#include "ccTreeNodeAttach.h"
 #include "ccTreeNodeVisitor.h"
 #include "ccTreeNodeDestroyer.h"
 #include "ccLabelledTreeNode.h"
@@ -53,34 +52,34 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
    CC::TreeNode* tNode = 0;
 
    tNode = new CC::LabelledTreeNode(1, "node1");
-   CC::attachAfterLastChild(tNode,tRootNode);
+   tNode->attachAfterLastChild(tRootNode);
 
    tNode = new CC::LabelledTreeNode(2, "node2");
-   CC::attachAfterLastChild(tNode,tRootNode);
+   tNode->attachAfterLastChild(tRootNode);
 
    tNode = new CC::LabelledTreeNode(21, "node21");
-   CC::attachAfterLastChild(tNode,tRootNode->mLastChildNode);
+   tNode->attachAfterLastChild(tRootNode->mLastChildNode);
 
    tNode = new CC::LabelledTreeNode(22, "node22");
-   CC::attachAfterLastChild(tNode,tRootNode->mLastChildNode);
+   tNode->attachAfterLastChild(tRootNode->mLastChildNode);
 
    tNode = new CC::LabelledTreeNode(221, "node221");
-   CC::attachAfterLastChild(tNode,tRootNode->mLastChildNode->mLastChildNode);
+   tNode->attachAfterLastChild(tRootNode->mLastChildNode->mLastChildNode);
 
    tNode = new CC::LabelledTreeNode(222, "node222");
-   CC::attachAfterLastChild(tNode,tRootNode->mLastChildNode->mLastChildNode);
+   tNode->attachAfterLastChild(tRootNode->mLastChildNode->mLastChildNode);
 
    tNode = new CC::LabelledTreeNode(23, "node23");
-   CC::attachAfterLastChild(tNode,tRootNode->mLastChildNode);
+   tNode->attachAfterLastChild(tRootNode->mLastChildNode);
 
    tNode = new CC::LabelledTreeNode(24, "node24");
-   CC::attachAfterLastChild(tNode,tRootNode->mLastChildNode);
+   tNode->attachAfterLastChild(tRootNode->mLastChildNode);
 
    tNode = new CC::LabelledTreeNode(3, "node3");
-   CC::attachAfterLastChild(tNode,tRootNode);
+   tNode->attachAfterLastChild(tRootNode);
 
    tNode = new CC::LabelledTreeNode(4, "node4");
-   CC::attachAfterLastChild(tNode,tRootNode);
+   tNode->attachAfterLastChild(tRootNode);
 
 
    if (aCmd->argInt(1) == 1)
@@ -110,34 +109,34 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
    CC::TreeNode* tNode = 0;
 
    tNode = CC::LabelledTreeNode::create(CC::MemoryType_LongTerm, 1, "node1");
-   CC::attachAfterLastChild(tNode,tRootNode);
+   tNode->attachAfterLastChild(tRootNode);
 
    tNode = CC::LabelledTreeNode::create(CC::MemoryType_LongTerm, 2, "node2");
-   CC::attachAfterLastChild(tNode,tRootNode);
+   tNode->attachAfterLastChild(tRootNode);
 
    tNode = CC::LabelledTreeNode::create(CC::MemoryType_LongTerm, 21, "node21");
-   CC::attachAfterLastChild(tNode,tRootNode->mLastChildNode);
+   tNode->attachAfterLastChild(tRootNode->mLastChildNode);
 
    tNode = CC::LabelledTreeNode::create(CC::MemoryType_LongTerm, 22, "node22");
-   CC::attachAfterLastChild(tNode,tRootNode->mLastChildNode);
+   tNode->attachAfterLastChild(tRootNode->mLastChildNode);
 
    tNode = CC::LabelledTreeNode::create(CC::MemoryType_LongTerm, 221, "node221");
-   CC::attachAfterLastChild(tNode,tRootNode->mLastChildNode->mLastChildNode);
+   tNode->attachAfterLastChild(tRootNode->mLastChildNode->mLastChildNode);
 
    tNode = CC::LabelledTreeNode::create(CC::MemoryType_LongTerm, 222, "node222");
-   CC::attachAfterLastChild(tNode,tRootNode->mLastChildNode->mLastChildNode);
+   tNode->attachAfterLastChild(tRootNode->mLastChildNode->mLastChildNode);
 
    tNode = CC::LabelledTreeNode::create(CC::MemoryType_LongTerm, 23, "node23");
-   CC::attachAfterLastChild(tNode,tRootNode->mLastChildNode);
+   tNode->attachAfterLastChild(tRootNode->mLastChildNode);
 
    tNode = CC::LabelledTreeNode::create(CC::MemoryType_LongTerm, 24, "node24");
-   CC::attachAfterLastChild(tNode,tRootNode->mLastChildNode);
+   tNode->attachAfterLastChild(tRootNode->mLastChildNode);
 
    tNode = CC::LabelledTreeNode::create(CC::MemoryType_LongTerm, 3, "node3");
-   CC::attachAfterLastChild(tNode,tRootNode);
+   tNode->attachAfterLastChild(tRootNode);
 
    tNode = CC::LabelledTreeNode::create(CC::MemoryType_LongTerm, 4, "node4");
-   CC::attachAfterLastChild(tNode,tRootNode);
+   tNode->attachAfterLastChild(tRootNode);
 
    if (aCmd->argInt(1) == 1)
    {
@@ -171,34 +170,34 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
    CC::TreeNode* tNode = 0;
 
    tNode = CC::LabelledTreeNode::create( 1,   "node1" );
-   CC::attachAfterLastChild(tNode,tRootNode);
+   tNode->attachAfterLastChild(tRootNode);
 
    tNode = CC::LabelledTreeNode::create( 2,   "node2" );
-   CC::attachAfterLastChild(tNode,tRootNode);
+   tNode->attachAfterLastChild(tRootNode);
 
    tNode = CC::LabelledTreeNode::create( 21,  "node21" );
-   CC::attachAfterLastChild(tNode,tRootNode->mLastChildNode);
+   tNode->attachAfterLastChild(tRootNode->mLastChildNode);
 
    tNode = CC::LabelledTreeNode::create( 22,  "node22" );
-   CC::attachAfterLastChild(tNode,tRootNode->mLastChildNode);
+   tNode->attachAfterLastChild(tRootNode->mLastChildNode);
 
    tNode = CC::LabelledTreeNode::create( 221, "node221" );
-   CC::attachAfterLastChild(tNode,tRootNode->mLastChildNode->mLastChildNode);
+   tNode->attachAfterLastChild(tRootNode->mLastChildNode->mLastChildNode);
 
    tNode = CC::LabelledTreeNode::create( 222, "node222" );
-   CC::attachAfterLastChild(tNode,tRootNode->mLastChildNode->mLastChildNode);
+   tNode->attachAfterLastChild(tRootNode->mLastChildNode->mLastChildNode);
 
    tNode = CC::LabelledTreeNode::create( 23,  "node23" );
-   CC::attachAfterLastChild(tNode,tRootNode->mLastChildNode);
+   tNode->attachAfterLastChild(tRootNode->mLastChildNode);
 
    tNode = CC::LabelledTreeNode::create( 24,  "node24" );
-   CC::attachAfterLastChild(tNode,tRootNode->mLastChildNode);
+   tNode->attachAfterLastChild(tRootNode->mLastChildNode);
 
    tNode = CC::LabelledTreeNode::create( 3,   "node3" );
-   CC::attachAfterLastChild(tNode,tRootNode);
+   tNode->attachAfterLastChild(tRootNode);
 
    tNode = CC::LabelledTreeNode::create( 4,   "node4" );
-   CC::attachAfterLastChild(tNode,tRootNode);
+   tNode->attachAfterLastChild(tRootNode);
 
    CC::LabelledTreeNode::mBlockUniverse.show("CC::LabelledTreeNode::mBlockUniverse2");
 

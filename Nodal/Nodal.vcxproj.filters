@@ -28,9 +28,6 @@
     <ClCompile Include="Source\ccLabelledTreeNodeVisitor.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ccTreeNodeAttach.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\ccPointerStack.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -79,9 +76,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccLabelledTreeNodeVisitor.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ccTreeNodeAttach.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccContainers.h">

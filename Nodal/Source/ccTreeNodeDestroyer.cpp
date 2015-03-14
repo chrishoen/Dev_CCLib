@@ -4,7 +4,6 @@
 #include <string.h>
 
 #include "ccTreeNodeDestroyer.h"
-#include "ccTreeNodeAttach.h"
 #include "ccDefs.h"
 
 namespace CC
@@ -15,13 +14,13 @@ namespace CC
 //****************************************************************************
 
 void destroyAllTreeNodes(
-   TreeNode*        aSubjectNode)
+   TreeNode* aSubjectNode)
 {
    // If short term memory then there is no destruction
    if (aSubjectNode->mMemoryType == CC::MemoryType_ShortTerm)
    {
       // Detach the subject node from all nodes to which iti is attached
-      detach(aSubjectNode);
+      aSubjectNode->detach();
       return;
    }
 
@@ -82,7 +81,7 @@ void destroyAllTreeNodesBelow(
       TreeNode* tAfterChildNode = tChildNode->mAfterNode;
 
       // Detach the child node from all nodes to which it is attached
-      detach(tChildNode);
+      tChildNode->detach();
 
       // Destroy the child node
       tChildNode->destroy();
