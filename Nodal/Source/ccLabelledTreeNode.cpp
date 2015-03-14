@@ -196,7 +196,6 @@ void LabelledTreeNode::onAttached()
    strncpy(mFullPath, tParentNode->mFullPath, MaxFullPathSize);
    strncat(mFullPath, ".", MaxFullPathSize);
    strncat(mFullPath, mLabel, MaxFullPathSize);
-   return;
 
    printf("objectNodeOnAttached %d %s %s\n", 
       this->mIdentifier,

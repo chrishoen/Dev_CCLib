@@ -23,6 +23,7 @@ CmdLineExec::CmdLineExec()
    Some::Block2B::initializeBlockUniverse(1000,1000);
 
    CC::LabelledTreeNode::initializeBlockUniverse(1000,1000);
+   CC::LabelledTreeNode::mDefaultMemoryType = CC::MemoryType_LongTerm;
 }
 //******************************************************************************
 void CmdLineExec::reset()
