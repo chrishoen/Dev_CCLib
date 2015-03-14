@@ -20,6 +20,8 @@ CmdLineExec::CmdLineExec()
 {
    Some::Block2A::initializeBlockUniverse(1000,1000);
    Some::Block2B::initializeBlockUniverse(1000,1000);
+
+   CC::LabelledTreeNode::initializeBlockUniverse(1000,1000);
 }
 //******************************************************************************
 void CmdLineExec::reset()
@@ -33,6 +35,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("GO2"    ))  executeGo2(aCmd);
    if(aCmd->isCmd("GO3"    ))  executeGo3(aCmd);
    if(aCmd->isCmd("GO4"    ))  executeGo4(aCmd);
+   if(aCmd->isCmd("GO5"    ))  executeGo5(aCmd);
 }
 
 //******************************************************************************
@@ -97,23 +100,53 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0, 0, "");
+   aCmd->setArgDefault(1,3);
 
-   Prn::print(0, 0, "new Block1A");
-   Some::Block1A* t1A = new Some::Block1A;
-   Prn::print(0, 0, "");
+   CC::LabelledTreeNode* tRootNode = CC::LabelledTreeNode::create(CC::MemoryType_LongTerm,0,"root");
+   CC::TreeNode* tNode = 0;
 
-   Prn::print(0, 0, "new Block1B");
-   Some::Block1B* t1B = new Some::Block1B;
-   Prn::print(0, 0, "");
+   tNode = CC::LabelledTreeNode::create(CC::MemoryType_LongTerm, 1, "node1");
+   CC::attachAfterLastChild(tNode,tRootNode);
 
-   Prn::print(0, 0, "delete Block1A");
-   delete t1A;
-   Prn::print(0, 0, "");
+   tNode = CC::LabelledTreeNode::create(CC::MemoryType_LongTerm, 2, "node2");
+   CC::attachAfterLastChild(tNode,tRootNode);
 
-   Prn::print(0, 0, "delete Block1B");
-   delete t1B;
-   Prn::print(0, 0, "");
+   tNode = CC::LabelledTreeNode::create(CC::MemoryType_LongTerm, 21, "node21");
+   CC::attachAfterLastChild(tNode,tRootNode->mLastChildNode);
+
+   tNode = CC::LabelledTreeNode::create(CC::MemoryType_LongTerm, 22, "node22");
+   CC::attachAfterLastChild(tNode,tRootNode->mLastChildNode);
+
+   tNode = CC::LabelledTreeNode::create(CC::MemoryType_LongTerm, 221, "node221");
+   CC::attachAfterLastChild(tNode,tRootNode->mLastChildNode->mLastChildNode);
+
+   tNode = CC::LabelledTreeNode::create(CC::MemoryType_LongTerm, 222, "node222");
+   CC::attachAfterLastChild(tNode,tRootNode->mLastChildNode->mLastChildNode);
+
+   tNode = CC::LabelledTreeNode::create(CC::MemoryType_LongTerm, 23, "node23");
+   CC::attachAfterLastChild(tNode,tRootNode->mLastChildNode);
+
+   tNode = CC::LabelledTreeNode::create(CC::MemoryType_LongTerm, 24, "node24");
+   CC::attachAfterLastChild(tNode,tRootNode->mLastChildNode);
+
+   tNode = CC::LabelledTreeNode::create(CC::MemoryType_LongTerm, 3, "node3");
+   CC::attachAfterLastChild(tNode,tRootNode);
+
+   tNode = CC::LabelledTreeNode::create(CC::MemoryType_LongTerm, 4, "node4");
+   CC::attachAfterLastChild(tNode,tRootNode);
+
+   if (aCmd->argInt(1) == 1)
+   {
+      CC::printAllLabelledTreeNodes1(tRootNode);
+   }
+   else if (aCmd->argInt(1) == 2)
+   {
+      CC::printAllLabelledTreeNodes2(tRootNode);
+   }
+   else if (aCmd->argInt(1) == 3)
+   {
+      CC::printAllLabelledTreeNodes3(tRootNode);
+   }
 }
 
 //******************************************************************************
@@ -144,4 +177,12 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 
    Prn::print(0, 0, "destroy Block2B");
    t2B->destroy();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
+{
 }

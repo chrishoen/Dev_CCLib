@@ -2,15 +2,153 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <new>
 #include "ccLabelledTreeNode.h"
 
 namespace CC
 {
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+// Static member block universe. It contains a short term and a long term
+// block pool. These block pools, or system memory, are used to establish
+// memory for all instances of this class that are created within a process.
+// The block universe must be initialized at the beginning of a process, 
+// prior to any block creation.
+
+CC::BlockUniverse LabelledTreeNode::mBlockUniverse;
+
+// This static method initializes the block universe. In a process, it must
+// be called prior to any block creations. It initializes the block universe
+// short term and long term block pools.
+
+void LabelledTreeNode::initializeBlockUniverse(
+      int aAllocateShortTermBlocks,
+      int aAllocateLongTermBlocks)
+{
+   LabelledTreeNode::mBlockUniverse.initialize(
+      aAllocateShortTermBlocks,
+      aAllocateLongTermBlocks,
+      sizeof(LabelledTreeNode));
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This static method allocates a block from system memory or from block
+// universe short term or long term memory block pools. After allocation,
+// it calls the class constructor on the allocated block. The memory type
+// parameter specifies either system memory, or short term block pool,
+// or long term block pool. It is analogous to new.
+
+LabelledTreeNode* LabelledTreeNode::create(int aMemoryType)
+{
+   // Block pointer
+   LabelledTreeNode* tPointer = 0;
+
+   // Allocate memory for the block
+   switch (aMemoryType)
+   {
+   case CC::MemoryType_System :
+      // Allocate a block from system memory
+      tPointer = (LabelledTreeNode*)malloc(sizeof(LabelledTreeNode));
+      break;
+   case CC::MemoryType_ShortTerm :
+      // Allocate a block from the short term block pool
+      tPointer = (LabelledTreeNode*)LabelledTreeNode::mBlockUniverse.mShortTermBlockPool.get();
+      break;
+   case CC::MemoryType_LongTerm :
+      // Allocate a block from the long term block pool
+      tPointer = (LabelledTreeNode*)LabelledTreeNode::mBlockUniverse.mLongTermBlockPool.get();
+      break;
+   }
+
+   // Call the constructor on the allocated block using placement new
+   tPointer = new(tPointer)LabelledTreeNode;
+
+   // Store block memory type
+   tPointer->mMemoryType = aMemoryType;
+
+   // Return the allocated block
+   return tPointer;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This static method allocates a block from system memory or from block
+// universe short term or long term memory block pools. After allocation,
+// it calls the class constructor on the allocated block. The memory type
+// parameter specifies either system memory, or short term block pool,
+// or long term block pool. It is analogous to new.
+
+LabelledTreeNode* LabelledTreeNode::create(int aMemoryType,int aIdentifier,char* aLabel)
+{
+   // Block pointer
+   LabelledTreeNode* tPointer = 0;
+
+   // Allocate memory for the block
+   switch (aMemoryType)
+   {
+   case CC::MemoryType_System :
+      // Allocate a block from system memory
+      tPointer = (LabelledTreeNode*)malloc(sizeof(LabelledTreeNode));
+      break;
+   case CC::MemoryType_ShortTerm :
+      // Allocate a block from the short term block pool
+      tPointer = (LabelledTreeNode*)LabelledTreeNode::mBlockUniverse.mShortTermBlockPool.get();
+      break;
+   case CC::MemoryType_LongTerm :
+      // Allocate a block from the long term block pool
+      tPointer = (LabelledTreeNode*)LabelledTreeNode::mBlockUniverse.mLongTermBlockPool.get();
+      break;
+   }
+
+   // Call the constructor on the allocated block using placement new
+   tPointer = new(tPointer)LabelledTreeNode(aIdentifier,aLabel);
+
+   // Store block memory type
+   tPointer->mMemoryType = aMemoryType;
+
+   // Return the allocated block
+   return tPointer;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This method calls the class destructor and then deallocates the object
+// from system memory or from block universe short term or long term
+// memory block pools. It is analogous to delete.
+
+void LabelledTreeNode::destroy()
+{
+   // Call the block's destructor
+   this->~LabelledTreeNode();
+
+   // Deallocate memory for the block
+   switch (this->mMemoryType)
+   {
+   case CC::MemoryType_System :
+      // Deallocate the block back to system memory
+      free(this);
+      break;
+   case CC::MemoryType_ShortTerm :
+      // Deallocate the block back to the short term block pool
+      break;
+   case CC::MemoryType_LongTerm :
+      // Deallocate the block back to the long term block pool
+      LabelledTreeNode::mBlockUniverse.mLongTermBlockPool.put(this);
+      break;
+   }
+}
+
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-// Constructor
+// Constructor, it is called by create after allocation of a new block.
 
 LabelledTreeNode::LabelledTreeNode()
 {
@@ -20,11 +158,22 @@ LabelledTreeNode::LabelledTreeNode()
 
 }
 
+// Constructor, it is called by create after allocation of a new block.
+
 LabelledTreeNode::LabelledTreeNode(int aIdentifier,char* aLabel)
 {
    mIdentifier = aIdentifier;
    strncpy(mLabel, aLabel, MaxLabelSize);
    strncpy(mFullPath, aLabel, MaxFullPathSize);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Destructor, it is called by destroy before deallocation of a block.
+
+LabelledTreeNode::~LabelledTreeNode()
+{
 }
 
 //****************************************************************************
