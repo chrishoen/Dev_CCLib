@@ -65,14 +65,17 @@ void destroyAllTreeNodesBelow(
       // Update the recursive index
       aRecursiveAnchor->mIndex++;
 
-      // Detach the child node after the recursive call
+      // Store a pointer to the next child node before deleting it
+      TreeNode* tAfterChildNode = tChildNode->mAfterNode;
+
+      // Detach the child node
       detach(tChildNode);
 
-      // Destroy the child node after the recursive call
+      // Destroy the child node
       tChildNode->destroy();
 
       // Proceed to the next child node
-      tChildNode = tChildNode->mAfterNode;
+      tChildNode = tAfterChildNode;
    }
 
    // After the loop, decrement the recursive level
