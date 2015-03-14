@@ -7,16 +7,17 @@
 namespace CC
 {
 
-   //******************************************************************************
-   //******************************************************************************
-   //******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Block memory type
 
-   enum
-   {
-      MemoryType_System    = 0,
-      MemoryType_LongTerm  = 1,
-      MemoryType_ShortTerm = 2,
-   };
+enum
+{
+   MemoryType_System    = 0,   // System heap storage, malloc/free
+   MemoryType_LongTerm  = 1,   // Lifetime that is long term, persistent
+   MemoryType_ShortTerm = 2,   // Lifetime that is short term, non persistent
+};
 
 } //namespace
 #endif
