@@ -12,6 +12,7 @@ Description:
 #include <string.h>
 #include "my_functions.h"
 
+#include "ccCriticalSection.h"
 #include "ccPointerStack.h"
 
 namespace CC
@@ -61,10 +62,16 @@ bool PointerStack::push (void* aPointer)
    // Guard
    if (mIndex == mAllocate) return false;
 
+   // Critical section
+   enterCriticalSection();
+
    //Copy the source element to the element at the stack index
    mArray[mIndex] = aPointer;
    // Increment the index
    ++mIndex;
+
+   // Critical section
+   leaveCriticalSection();
 
    // Done
    return true;
@@ -80,10 +87,16 @@ void* PointerStack::pop ()
    // Guard
    if (mIndex == 0) return 0;
 
+   // Critical section
+   enterCriticalSection();
+
    // Pop the element above the stack index into a temp pointer
    void* tPointer = mArray[mIndex - 1];
    // Decrement the index
    --mIndex;
+
+   // Critical section
+   leaveCriticalSection();
 
    // Return the temp pointer
    return tPointer;

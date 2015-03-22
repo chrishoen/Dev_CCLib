@@ -12,6 +12,7 @@ Description:
 #include <string.h>
 #include "my_functions.h"
 
+#include "ccCriticalSection.h"
 #include "ccPointerCircular.h"
 
 namespace CC
@@ -63,11 +64,17 @@ bool PointerCircular::put (void* aPointer)
    // Guard
    if (mPutIndex == mAllocate) return false;
 
+   // Critical section
+   enterCriticalSection();
+
    // Copy the pointer into the array.
    mArray[mPutIndex] = aPointer;
 
    // Increment the index
    ++mPutIndex;
+
+   // Critical section
+   leaveCriticalSection();
 
    // Done
    return true;
@@ -80,11 +87,17 @@ bool PointerCircular::put (void* aPointer)
 
 void* PointerCircular::get ()
 {
+   // Critical section
+   enterCriticalSection();
+
    // Get the pointer at the current index
    void* tPointer = mArray[mGetIndex];
 
    // Increment the index
    if (++mGetIndex == mAllocate) mGetIndex = 0;
+
+   // Critical section
+   leaveCriticalSection();
 
    // Return the pointer
    return tPointer;
