@@ -196,7 +196,7 @@ void TreeNode::attachAfterLastChild  (TreeNode* aObjectNode)
    if (this->mFirstChildNode == 0)
    {
       // Set object node's parent as this node
-      aObjectNode->mParentNode                = this;
+      aObjectNode->mParentNode  = this;
       // Set the object node as the first and last child of this node
       this->mFirstChildNode     = aObjectNode;
       this->mLastChildNode      = aObjectNode;

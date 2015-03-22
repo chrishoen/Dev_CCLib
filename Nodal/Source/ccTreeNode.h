@@ -140,7 +140,7 @@ public:
    //--------------------------------------------------------------------------
    // Methods provided by inheritors
 
-   // This is called on this subject node after it is attached to an object
+   // This is called on an object node after it is attached to this subject
    // node
    virtual void onAttached() {}
 
@@ -151,7 +151,7 @@ public:
 
    virtual void destroy(){}
 
-   // This member variable specifes the memory type for an instance of the
+   // This member variable specifes the memory type for an instance of this
    // class that has been created: system, short term block pool, or long term
    // block pool. It is set by the create method when it is allocated it is
    // used by the destroy method to determine how to deallocate the block.
