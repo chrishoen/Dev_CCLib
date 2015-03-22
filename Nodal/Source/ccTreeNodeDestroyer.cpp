@@ -19,7 +19,7 @@ void destroyAllTreeNodes(
    // If short term memory then there is no destruction
    if (aSubjectNode->mMemoryType == CC::MemoryType_ShortTerm)
    {
-      // Detach the subject node from all nodes to which iti is attached
+      // Detach the subject node from all nodes to which it is attached
       aSubjectNode->detach();
       return;
    }
