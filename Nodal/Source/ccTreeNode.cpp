@@ -45,130 +45,128 @@ TreeNode::TreeNode(int aIdentifier)
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-// Attach a subject node to an object node, before it
+// Attach an object node to this subject node, before it
 
 void TreeNode::attachBefore (TreeNode* aObjectNode)
 {
-   // If the object node does not have a node before it
-   if (aObjectNode->mBeforeNode == 0)
+   // If this node does not have a node before it
+   if (this->mBeforeNode == 0)
    {
-      // The object node is its root node's first child
-      if (aObjectNode->mParentNode != 0)
+      // This node is its root node's first child
+      if (this->mParentNode != 0)
       {
-         // Set the subject node as the root node's new first child
-         aObjectNode->mParentNode->mFirstChildNode = this;
+         // Set the object node as this node's parent's new last child
+         this->mParentNode->mFirstChildNode = aObjectNode;
       }
-      // Attach the subject node before the object node
-      this->mBeforeNode      = 0;
-      this->mAfterNode       = aObjectNode;
-      aObjectNode->mBeforeNode       = this;
+      // Attach the object node before this node
+      aObjectNode->mBeforeNode      = 0;
+      aObjectNode->mAfterNode       = this;
+      this->mBeforeNode       = aObjectNode;
    }
-   // If the object node does have a node before it
+   // If this node does have a node before it
    else
    {
-      // Insert the subject node between the object node and the node before it
-      this->mBeforeNode      = aObjectNode->mBeforeNode;
-      this->mAfterNode       = aObjectNode;
-      aObjectNode->mBeforeNode->mAfterNode = this;
-      aObjectNode->mBeforeNode             = this;
+      // Insert the object node between this node and the node before it
+      aObjectNode->mBeforeNode      = this->mBeforeNode;
+      aObjectNode->mAfterNode       = this;
+      this->mBeforeNode->mAfterNode = aObjectNode;
+      this->mBeforeNode             = aObjectNode;
    }
-   // The subect node inherits the object nodes's parent node
-   this->mParentNode = aObjectNode->mParentNode;
-   // Notify the subject node that it is attached to an object node
-   this->onAttached();
+   // The object node inherits this nodes's parent node
+   aObjectNode->mParentNode = this->mParentNode;
+   // Notify the object node that it is attached to this node
+   aObjectNode->onAttached();
 }
 
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-// Attach a subject node to an object node, after it
+// Attach an object node to this subject node, after it
 
 void TreeNode::attachAfter (TreeNode* aObjectNode)
 {
-   // If the object node does not have a node after it
-   if (aObjectNode->mAfterNode == 0)
+   // If this node does not have a node after it
+   if (this->mAfterNode == 0)
    {
-      // The object node is its root node's last child
-      if (aObjectNode->mParentNode != 0)
+      // This node is its root node's last child
+      if (this->mParentNode != 0)
       {
-         // Set the subject node as the root node's new last child
-         aObjectNode->mParentNode->mLastChildNode = this;
+         // Set the object node as this node's parent's new last child
+         this->mParentNode->mLastChildNode = aObjectNode;
       }
-      // Attach the subject node after the object node
-      this->mBeforeNode      = aObjectNode;
-      this->mAfterNode       = 0;
-      aObjectNode->mAfterNode        = this;
+      // Attach the object node after this node
+      aObjectNode->mBeforeNode      = this;
+      aObjectNode->mAfterNode       = 0;
+      this->mAfterNode        = aObjectNode;
    }
-   // Else the object node does have a node after it
+   // Else this node does have a node after it
    else
    {
-      // Insert the subject node between the object node and the node after it
-      this->mBeforeNode      = aObjectNode;
-      this->mAfterNode       = aObjectNode->mAfterNode;
-      aObjectNode->mAfterNode->mBeforeNode = this;
-      aObjectNode->mAfterNode              = this;
+      // Insert the object node between this node and the node after it
+      aObjectNode->mBeforeNode      = this;
+      aObjectNode->mAfterNode       = this->mAfterNode;
+      this->mAfterNode->mBeforeNode = aObjectNode;
+      this->mAfterNode              = aObjectNode;
    }
-   // The subject node inherits the object node's parent node
-   this->mParentNode = aObjectNode->mParentNode;
-   // Notify the subject node that it is attached to an object node
-   this->onAttached();
+   // The object node inherits this node's parent node
+   aObjectNode->mParentNode = this->mParentNode;
+   // Notify the object node that it is attached to this node
+   aObjectNode->onAttached();
 }
 
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-// Attach a subject node to the first child of an object node, before it.
-// The subject node becomes the object node's first child.
+// Attach an object node to the first child of this subject node, before it.
+// The object node becomes this subject node's first child.
 
 void TreeNode::attachBeforeFirstChild (TreeNode* aObjectNode)
 {
-   // If the object node's parent node doesn't have any children
-   if (aObjectNode->mFirstChildNode == 0)
+   // If this node doesn't have any children
+   if (this->mFirstChildNode == 0)
    {
-      // Set the object node as this subject node's parent
-      this->mParentNode                = aObjectNode;
-      // Set the subject node as the first and last child to the parent
-      aObjectNode->mFirstChildNode     = this;
-      aObjectNode->mLastChildNode      = this;
-      // Notify the subject node that it is attached to an object node
-      this->onAttached();
-      return;
+      // Set object node's parent as this node
+      aObjectNode->mParentNode                = this;
+      // Set the object node as the first and last child of this node
+      this->mFirstChildNode     = aObjectNode;
+      this->mLastChildNode      = aObjectNode;
+      // Notify the object node that it is attached
+      aObjectNode->onAttached();
    }
-   // Else the object node's parent node does have children
+   // Else this node does have children
    else
    {
-      // Attach the subject node before the first child
-      this->attachBefore(aObjectNode->mFirstChildNode);
+      // Attach the object node before the first child of this node
+      this->mFirstChildNode->attachBefore(aObjectNode);
    }
 }
 
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-// Attach a subject node to the last child of an object node, after it
-// The subject node becomes the object node's last child.
+// Attach an object node to the last child of this subject node, after it.
+// The object node becomes this subject node's last child.
 
 void TreeNode::attachAfterLastChild  (TreeNode* aObjectNode)
 {
-   // If the object node's parent node doesn't have any children
-   if (aObjectNode->mFirstChildNode == 0)
+   // If this node doesn't have any children
+   if (this->mFirstChildNode == 0)
    {
-      // Set the object node as this subject node's parent
-      this->mParentNode                = aObjectNode;
-      // Set the subject node as the first and last child to the parent
-      aObjectNode->mFirstChildNode     = this;
-      aObjectNode->mLastChildNode      = this;
-      // Notify the subject node that it is attached to an object node
-      this->onAttached();
+      // Set object node's parent as this node
+      aObjectNode->mParentNode                = this;
+      // Set the object node as the first and last child of this node
+      this->mFirstChildNode     = aObjectNode;
+      this->mLastChildNode      = aObjectNode;
+      // Notify the object node that it is attached
+      aObjectNode->onAttached();
    }
-   // Else the object node's parent node does have children
+   // Else this node does have children
    else
    {
-      // Attach the subject node after the last child
-      this->attachAfter(aObjectNode->mLastChildNode);
+      // Attach the object node after the last child of this node
+      this->mLastChildNode->attachAfter(aObjectNode);
    }
 }
-
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************

@@ -101,18 +101,18 @@ public:
    //--------------------------------------------------------------------------
    // These attach this subject node to an object node.
 
-   // Attach this subject node to an object node, before it
+   // Attach an object node to this subject node, before it
    void attachBefore (TreeNode* aObjectNode);
 
-   // Attach this subject node to an object node, after it
+   // Attach an object node to this subject node, after it
    void attachAfter (TreeNode* aObjectNode);
 
-   // Attach this subject node to the first child of an object node, before it.
-   // The subject node becomes the object node's first child.
+   // Attach an object node to the first child of this subject node, before it.
+   // The object node becomes this subject node's first child.
    void attachBeforeFirstChild (TreeNode* aObjectNode);
 
-   // Attach this subject node to the last child of an object node, after it.
-   // The subject node becomes the object node's last child.
+   // Attach an object node to the last child of this subject node, after it.
+   // The object node becomes this subject node's last child.
    void attachAfterLastChild (TreeNode* aObjectNode);
 
    // Detach this subject node from all of the nodes to which it is attached

@@ -14,11 +14,11 @@ TreeNodeCollection::TreeNodeCollection()
    mRootNode = &mRootNodeInstance;
 }
 
-bool TreeNodeCollection::putLast(TreeNode* aSubjectNode)
+bool TreeNodeCollection::putLast(TreeNode* aObjectNode)
 {
    if (mSize < mMaxSize)
    {
-      aSubjectNode->attachAfterLastChild(mRootNode);
+      mRootNode->attachAfterLastChild(aObjectNode);
       mSize++;
       return true;
    }
@@ -32,11 +32,11 @@ TreeNode* TreeNodeCollection::getFirst()
 {
    if (mSize == 0) return 0;
 
-   TreeNode* tSubjectNode = mRootNode->detachFirstChild();
-   if (tSubjectNode)
+   TreeNode* tObjectNode = mRootNode->detachFirstChild();
+   if (tObjectNode)
    {
       mSize--;
    }
-   return tSubjectNode;
+   return tObjectNode;
 }
 }//namespace
