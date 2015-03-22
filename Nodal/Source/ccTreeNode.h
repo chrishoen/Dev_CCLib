@@ -107,11 +107,11 @@ public:
    // Attach this subject node to an object node, after it
    void attachAfter (TreeNode* aObjectNode);
 
-   // Attach this subject node to the first child of an object node, before it
+   // Attach this subject node to the first child of an object node, before it.
    // The subject node becomes the object node's first child.
    void attachBeforeFirstChild (TreeNode* aObjectNode);
 
-   // Attach this subject node to the last child of an object node, after it
+   // Attach this subject node to the last child of an object node, after it.
    // The subject node becomes the object node's last child.
    void attachAfterLastChild (TreeNode* aObjectNode);
 

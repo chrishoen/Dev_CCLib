@@ -217,11 +217,46 @@ void TreeNode::detach()
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-// Detach the first child node of this parent subject node. Return the
-// detached child node.
+// Detach the first child node of this parent subject node. Return a pointer
+// to detached child node.
+
 TreeNode* TreeNode::detachFirstChild ()
 {
-   return 0;
+   // Pointer to the first child node of this subject parent node, this is
+   // the node that is to be be detached.
+   TreeNode* tNodeToDetach = this->mFirstChildNode;
+
+   // If the node to be detached has a node after it
+   if (tNodeToDetach->mAfterNode != 0)
+   {
+      // Because this node is the first child of its parent and therefore has
+      // no node before it then set the node after it to also have no node
+      // before it.
+      tNodeToDetach->mAfterNode->mBeforeNode = 0;
+
+      // Set the new first child node of this subject parent node to be the
+      // node after the node that is to be detached.
+      this->mFirstChildNode = tNodeToDetach->mAfterNode;
+   }
+   // If the node to be detached does not have a node after it,
+   // then it is the only child node of its parent.
+   else
+   {
+      // Set the subect parent node to have no first child node.
+      this->mFirstChildNode = 0;
+      // Also, set the subect parent node to have no last child node.
+      this->mLastChildNode = 0;
+   }
+
+   // Set the detached node to have no node after it. Because it is the 
+   // first child node then it already has no node before it.
+   tNodeToDetach->mAfterNode = 0;
+
+   // Set the detached node to have no node parent node above it.
+   tNodeToDetach->mParentNode = 0;
+
+   // Return the pointer to the detached node.
+   return tNodeToDetach;
 }
 
 //****************************************************************************
@@ -234,33 +269,39 @@ TreeNode* TreeNode::detachLastChild()
 {
    // Pointer to the last child node of this subject parent node, this is
    // the node that is to be be detached.
-   TreeNode* tDetachedNode = this->mLastChildNode;
+   TreeNode* tNodeToDetach = this->mLastChildNode;
 
    // If the node to be detached has a node before it
-   if (tDetachedNode->mBeforeNode != 0)
+   if (tNodeToDetach->mBeforeNode != 0)
    {
-      // Because this node is the last child of it's parent and therefor has
+      // Because this node is the last child of its parent and therefore has
       // no node after it then set the node before it to also have no node
       // after it.
-      tDetachedNode->mBeforeNode->mAfterNode = 0;
+      tNodeToDetach->mBeforeNode->mAfterNode = 0;
 
       // Set the new last child node of this subject parent node to be the
       // node before the node that is to be detached.
-      this->mLastChildNode = tDetachedNode->mBeforeNode;
+      this->mLastChildNode = tNodeToDetach->mBeforeNode;
    }
-   // If the last child of this subject parent node does not has a node
-   // before it, then it is the only child node of it's parent.
+   // If the node to be detached does not have a node before it,
+   // then it is the only child node of its parent.
    else
    {
       // Set the subect parent node to have no last child node.
       this->mLastChildNode = 0;
-      // Also, for safety, set the subect parent node to have no first
-      // child node.
+      // Also, set the subect parent node to have no first child node.
       this->mFirstChildNode = 0;
    }
 
-   // Return the pointer to the detached node
-   return tDetachedNode;
+   // Set the detached node to have no node before it. Because it is the 
+   // last child node then it already has no node after it.
+   tNodeToDetach->mBeforeNode = 0;
+
+   // Set the detached node to have no node parent node above it.
+   tNodeToDetach->mParentNode = 0;
+
+   // Return the pointer to the detached node.
+   return tNodeToDetach;
 }
 
 //****************************************************************************
