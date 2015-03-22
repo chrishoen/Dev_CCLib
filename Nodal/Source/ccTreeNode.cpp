@@ -213,6 +213,56 @@ void TreeNode::detach()
    this->mBeforeNode = 0;
    this->mAfterNode = 0;
 }
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+// Detach the first child node of this parent subject node. Return the
+// detached child node.
+TreeNode* TreeNode::detachFirstChild ()
+{
+   return 0;
+}
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+// Detach the last child node of this parent subject node. Return a pointer
+// to the detached child node.
+
+TreeNode* TreeNode::detachLastChild()
+{
+   // Pointer to the last child node of this subject parent node, this is
+   // the node that is to be be detached.
+   TreeNode* tDetachedNode = this->mLastChildNode;
+
+   // If the node to be detached has a node before it
+   if (tDetachedNode->mBeforeNode != 0)
+   {
+      // Because this node is the last child of it's parent and therefor has
+      // no node after it then set the node before it to also have no node
+      // after it.
+      tDetachedNode->mBeforeNode->mAfterNode = 0;
+
+      // Set the new last child node of this subject parent node to be the
+      // node before the node that is to be detached.
+      this->mLastChildNode = tDetachedNode->mBeforeNode;
+   }
+   // If the last child of this subject parent node does not has a node
+   // before it, then it is the only child node of it's parent.
+   else
+   {
+      // Set the subect parent node to have no last child node.
+      this->mLastChildNode = 0;
+      // Also, for safety, set the subect parent node to have no first
+      // child node.
+      this->mFirstChildNode = 0;
+   }
+
+   // Return the pointer to the detached node
+   return tDetachedNode;
+}
+
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************

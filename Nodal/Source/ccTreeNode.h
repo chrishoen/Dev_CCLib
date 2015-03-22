@@ -74,7 +74,7 @@ public:
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
    // Node flags, these encode relationship's that this node has with other 
-   // nodes, within its tree structure.
+   // nodes, within its tree structure. These flags all default to false.
 
    typedef union TreeNodeFlags
    {
@@ -86,9 +86,9 @@ public:
          // This is true if the node is a parent node of some child nodes.
          bool mIsParent    : 1;
          // This is true if the node is the first child of its parent node.
-         bool mFirstChild  : 1;
+         bool mIsFirstChild  : 1;
          // This is true if the node is the last child of its parent node.
-         bool mLastChild   : 1;
+         bool mIsLastChild   : 1;
       };
       // Binary value
       unsigned char mValue;
@@ -118,6 +118,18 @@ public:
    // Detach this subject node from all of the nodes to which it is attached
    void detach();
 
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   // These detach attached object nodes from this parent subject node.
+
+   // Detach the first child node of this parent subject node. Return the
+   // detached child node.
+   TreeNode* detachFirstChild ();
+
+   // Detach the last child node of this parent subject node. Return the
+   // detached child node.
+   TreeNode* detachLastChild ();
 
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
