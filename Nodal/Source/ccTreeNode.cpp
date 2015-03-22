@@ -23,8 +23,8 @@ TreeNode::TreeNode()
 
    // Empty state
    mIdentifier=0;
-   mOrder = 0;
    mMemoryType = 0;
+   mTreeNodeFlags.mValue = 0;
 }
 
 TreeNode::TreeNode(int aIdentifier)
@@ -38,8 +38,8 @@ TreeNode::TreeNode(int aIdentifier)
 
    // Set state
    mIdentifier = aIdentifier;
-   mOrder = 0;
    mMemoryType = 0;
+   mTreeNodeFlags.mValue = 0;
 }
 
 //****************************************************************************
@@ -136,40 +136,8 @@ void TreeNode::attachBeforeFirstChild (TreeNode* aObjectNode)
    // Else the object node's parent node does have children
    else
    {
-      // Start a loop at the first child node of the object node. 
-      // The loop will attach the subject node to the child node or a 
-      // node after it, based on relative order.
-
-      TreeNode* tChildNode = aObjectNode->mFirstChildNode;
-
-      // Loop through the child nodes, starting at the first
-      while (true)
-      {
-         // If the order of the subject node is less than or equal 
-         // to the loop child node then the subject node is inserted
-         // before the child node
-         if (this->mOrder <= tChildNode->mOrder)
-         {
-            // Attach the subject node before the loop child node
-            this->attachBefore(tChildNode);
-            // Exit the loop
-            return;
-         }
-         // If there is not a node after the loop child node then all
-         // child nodes have been searched and none were of order less
-         // than or equal. The subject node will be attached after the
-         // last child node. 
-         if (tChildNode->mAfterNode == 0)
-         {
-            // Attach the subject node after the loop child node. This will
-            // become the last child node of the given object node.
-            this->attachAfter(tChildNode);
-            // Exit the loop
-            return;
-         }
-         // Else advance the loop child node to the one after it
-         tChildNode = tChildNode->mAfterNode;
-      }
+      // Attach the subject node before the first child
+      this->attachBefore(aObjectNode->mFirstChildNode);
    }
 }
 

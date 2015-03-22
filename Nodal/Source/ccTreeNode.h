@@ -69,7 +69,32 @@ public:
    // Node state
 
    int mIdentifier;
-   int mOrder;
+   
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   // Node flags, these encode relationship's that this node has with other 
+   // nodes, within its tree structure.
+
+   typedef union TreeNodeFlags
+   {
+      // Flags
+      struct
+      {
+         // This is true if the node is a root, that is has no parent node.
+         bool mIsRoot      : 1;
+         // This is true if the node is a parent node of some child nodes.
+         bool mIsParent    : 1;
+         // This is true if the node is the first child of its parent node.
+         bool mFirstChild  : 1;
+         // This is true if the node is the last child of its parent node.
+         bool mLastChild   : 1;
+      };
+      // Binary value
+      unsigned char mValue;
+   } TreeNodeFlags;
+
+   TreeNodeFlags mTreeNodeFlags;
 
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------

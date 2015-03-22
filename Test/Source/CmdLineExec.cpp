@@ -31,24 +31,46 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 //******************************************************************************
 
+typedef struct Flags1
+{
+   bool mFirstChild :1;
+   bool mLastChild  :1;
+} Flags1;
+
+typedef union Flags2
+{
+   struct
+   {
+      bool mFirstChild : 1;
+      bool mLastChild : 1;
+   };
+   unsigned char mValue;
+} Flags2;
+
+void test_function1(Flags1* aFlags)
+{
+   aFlags->mFirstChild = true;
+}
+void test_function2(Flags2* aFlags)
+{
+   aFlags->mFirstChild = true;
+}
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   int tSize = aCmd->argInt(1);
+   Flags1 tFlags;
+   tFlags.mFirstChild = true;
+   Prn::print(0, 0, "sizeof Flags %d", sizeof(Flags1));
 
-   double* tX = (double*)malloc(tSize * sizeof(double));
-   tX[0]=0.0;
-   tX[9]=9.0;
 }
 
 //******************************************************************************
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   int tSize=10;
-   double* tX = new double[tSize];
-
-   tX[0]=0.0;
-   tX[9]=9.0;
+   Flags2 tFlags;
+   tFlags.mFirstChild = true;
+   tFlags.mValue = 0;
+   Prn::print(0, 0, "sizeof Flags %d", sizeof(Flags2));
 }
 
 //******************************************************************************

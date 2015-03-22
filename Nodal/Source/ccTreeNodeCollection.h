@@ -17,6 +17,7 @@ public:
    TreeNodeCollection();
 
    // Members
+   TreeNode  mRootNodeInstance;
    TreeNode* mRootNode;
    int       mSize;
    int       mMaxSize;
@@ -26,6 +27,11 @@ public:
    int  size()                   { return mSize; }
    bool isEmpty()                { return mSize == 0; }
    bool isFull()                 { return mSize == mMaxSize; }
+
+   // Methods
+   bool putLast(TreeNode* aSubjectNode);
+   TreeNode* getFirst();
+
 };
 
 //****************************************************************************
