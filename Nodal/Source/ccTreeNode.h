@@ -81,10 +81,10 @@ public:
       // Flags
       struct
       {
-         // This is true if the node is a root, that is has no parent node.
-         bool mIsRoot      : 1;
+         // This is true if the node is a root, that it has no parent node.
+         bool mIsRoot        : 1;
          // This is true if the node is a parent node of some child nodes.
-         bool mIsParent    : 1;
+         bool mIsParent      : 1;
          // This is true if the node is the first child of its parent node.
          bool mIsFirstChild  : 1;
          // This is true if the node is the last child of its parent node.
@@ -123,12 +123,12 @@ public:
    //--------------------------------------------------------------------------
    // These detach attached object nodes from this parent subject node.
 
-   // Detach the first child node of this parent subject node. Return the
-   // detached child node.
+   // Detach the first child node of this parent subject node. Return a
+   // pointer to the detached child node.
    TreeNode* detachFirstChild ();
 
-   // Detach the last child node of this parent subject node. Return the
-   // detached child node.
+   // Detach the last child node of this parent subject node. Return a
+   // pointer to the detached child node.
    TreeNode* detachLastChild ();
 
    //--------------------------------------------------------------------------
