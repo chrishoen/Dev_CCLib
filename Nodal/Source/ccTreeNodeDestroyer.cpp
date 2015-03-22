@@ -20,7 +20,7 @@ void destroyAllTreeNodes(
    if (aSubjectNode->mMemoryType == CC::MemoryType_ShortTerm)
    {
       // Detach the subject node from all nodes to which it is attached
-      aSubjectNode->detach();
+      aSubjectNode->detachFromAll();
       return;
    }
 
@@ -81,7 +81,7 @@ void destroyAllTreeNodesBelow(
       TreeNode* tAfterChildNode = tChildNode->mAfterNode;
 
       // Detach the child node from all nodes to which it is attached
-      tChildNode->detach();
+      tChildNode->detachFromAll();
 
       // Destroy the child node
       tChildNode->destroy();

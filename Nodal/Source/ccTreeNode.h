@@ -19,10 +19,10 @@ namespace CC
 // There are methods provided that can be used to attach nodes to other
 // nodes.
 // 
-// Node colletions are ordered in two ways. First, any given node can have
-// a node before it or a node after it. Second, any node can have a parent
-// node that it belongs to above it, or it can have some number of child
-// nodes that belong to it below it.
+// Node collections are ordered in two ways. First, any given node can
+// havea node before it or a node after it. Second, any node can have a
+// parent node that it belongs to above it, or it can have some number of
+// child nodes that belong to it below it.
 //   
 //****************************************************************************
 //****************************************************************************
@@ -116,7 +116,7 @@ public:
    void attachAfterLastChild (TreeNode* aObjectNode);
 
    // Detach this subject node from all of the nodes to which it is attached
-   void detach();
+   void detachFromAll();
 
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------

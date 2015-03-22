@@ -174,7 +174,7 @@ void TreeNode::attachAfterLastChild  (TreeNode* aObjectNode)
 //****************************************************************************
 // Detach a subject node from its parent and before and after nodes
 
-void TreeNode::detach()
+void TreeNode::detachFromAll()
 {
    // If this subject node does not have a node before it
    if (this->mBeforeNode == 0)
@@ -228,6 +228,12 @@ TreeNode* TreeNode::detachFirstChild ()
    // the node that is to be be detached.
    TreeNode* tNodeToDetach = this->mFirstChildNode;
 
+   // If there is no node to be detached
+   if (tNodeToDetach == 0)
+   {
+      return 0;
+   }
+
    // If the node to be detached has a node after it
    if (tNodeToDetach->mAfterNode != 0)
    {
@@ -272,6 +278,12 @@ TreeNode* TreeNode::detachLastChild()
    // Pointer to the last child node of this subject parent node, this is
    // the node that is to be be detached.
    TreeNode* tNodeToDetach = this->mLastChildNode;
+
+   // If there is no node to be detached
+   if (tNodeToDetach == 0)
+   {
+      return 0;
+   }
 
    // If the node to be detached has a node before it
    if (tNodeToDetach->mBeforeNode != 0)

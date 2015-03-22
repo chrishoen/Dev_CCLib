@@ -32,10 +32,9 @@ TreeNode* TreeNodeCollection::getFirst()
 {
    if (mSize == 0) return 0;
 
-   TreeNode* tSubjectNode = mRootNode->mFirstChildNode;
+   TreeNode* tSubjectNode = mRootNode->detachFirstChild();
    if (tSubjectNode)
    {
-      tSubjectNode->detach();
       mSize--;
    }
    return tSubjectNode;
