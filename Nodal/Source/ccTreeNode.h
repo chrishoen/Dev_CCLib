@@ -94,7 +94,11 @@ public:
       unsigned char mValue;
    } TreeNodeFlags;
 
+   // These are the flags
    TreeNodeFlags mTreeNodeFlags;
+
+   // This updates the flags
+   void updateTreeNodeFlags();
 
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
