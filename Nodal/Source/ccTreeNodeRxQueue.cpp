@@ -16,6 +16,7 @@ TreeNodeRxQueue::TreeNodeRxQueue()
 {
    mRootNode = &mRootNodeInstance;
    mPreviousRxNode = 0;
+   mLevel = 0;
 }
 
 void TreeNodeRxQueue::putRxNode(LabelledTreeNode* aNode)
@@ -24,6 +25,7 @@ void TreeNodeRxQueue::putRxNode(LabelledTreeNode* aNode)
    {
       mRootNode->attachAfterLastChild(aNode);
       mPreviousRxNode = aNode;
+      mLevel = 1;
    }
    else
    {
@@ -31,11 +33,13 @@ void TreeNodeRxQueue::putRxNode(LabelledTreeNode* aNode)
       {
          mPreviousRxNode->attachBeforeFirstChild(aNode);
          mPreviousRxNode = aNode;
+         mLevel++;
       }
       else if (aNode->mTreeNodeTxFlags.mLastChild)
       {
          mPreviousRxNode->mParentNode->attachAfterLastChild(aNode);
          mPreviousRxNode = (LabelledTreeNode*)mPreviousRxNode->mParentNode;
+         mLevel--;
       }
       else 
       {
@@ -47,6 +51,8 @@ void TreeNodeRxQueue::putRxNode(LabelledTreeNode* aNode)
 
 LabelledTreeNode* TreeNodeRxQueue::getNextRxNode()
 {
+   if (mLevel != 1) return 0;
+
    LabelledTreeNode* tNode = (LabelledTreeNode*)mRootNode->detachFirstChild();
    return tNode;
 }

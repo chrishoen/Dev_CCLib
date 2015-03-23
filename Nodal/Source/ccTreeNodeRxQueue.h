@@ -21,6 +21,7 @@ public:
    LabelledTreeNode  mRootNodeInstance;
    LabelledTreeNode* mRootNode;
    LabelledTreeNode* mPreviousRxNode;
+   int               mLevel;
 
    // Methods
    void putRxNode(LabelledTreeNode* aNode);
