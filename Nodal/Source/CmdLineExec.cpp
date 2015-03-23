@@ -10,6 +10,8 @@
 #include "ccTreeNodeDestroyer.h"
 #include "ccLabelledTreeNode.h"
 #include "ccLabelledTreeNodeVisitor.h"
+#include "ccTreeNodeTxQueue.h"
+#include "ccTreeNodeRxQueue.h"
 #include "someBlock1.h"
 #include "someBlock2.h"
 
@@ -294,5 +296,37 @@ void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo6(Ris::CmdLineCmd* aCmd)
 {
-   CC::printAllLabelledTreeNodes1(mRootNode);
+   CC::TreeNodeTxQueue tTxQueue;
+   CC::TreeNodeRxQueue tRxQueue;
+
+   tTxQueue.putTxNode(mRootNode);
+
+   while (true)
+   {
+      CC::TreeNode* tNode = tTxQueue.getNextTxNode();
+      if (tNode != 0)
+      {
+         printf("LINE101 %d\n",tNode->mIdentifier);
+       //tRxQueue.putRxNode(tNode);
+      }
+      else
+      {
+         break;
+      }
+   }
+   return;
+
+   while (true)
+   {
+      CC::TreeNode* tNode = tRxQueue.getNextRxNode();
+      if (tNode != 0)
+      {
+         printf("LINE201 %d\n",tNode->mIdentifier);
+      }
+      else
+      {
+         break;
+      }
+   }
+
 }
