@@ -140,41 +140,38 @@ TreeNode* TreeNode::detachFirstChild ()
    // the node that is to be be detached.
    TreeNode* tNodeToDetach = this->mFirstChildNode;
 
-   // If there is no node to be detached
-   if (tNodeToDetach == 0)
+   // If there is a node to be detached
+   if (tNodeToDetach != 0)
    {
-      return 0;
+      // If the node to be detached has a node after it
+      if (tNodeToDetach->mAfterNode != 0)
+      {
+         // Because this node is the first child of its parent and therefore has
+         // no node before it then set the node after it to also have no node
+         // before it.
+         tNodeToDetach->mAfterNode->mBeforeNode = 0;
+
+         // Set the new first child node of this subject parent node to be the
+         // node after the node that is to be detached.
+         this->mFirstChildNode = tNodeToDetach->mAfterNode;
+      }
+      // If the node to be detached does not have a node after it,
+      // then it is the only child node of its parent.
+      else
+      {
+         // Set the subect parent node to have no first child node.
+         this->mFirstChildNode = 0;
+         // Also, set the subect parent node to have no last child node.
+         this->mLastChildNode = 0;
+      }
+
+      // Set the detached node to have no node after it. Because it is the 
+      // first child node then it already has no node before it.
+      tNodeToDetach->mAfterNode = 0;
+
+      // Set the detached node to have no node parent node above it.
+      tNodeToDetach->mParentNode = 0;
    }
-
-   // If the node to be detached has a node after it
-   if (tNodeToDetach->mAfterNode != 0)
-   {
-      // Because this node is the first child of its parent and therefore has
-      // no node before it then set the node after it to also have no node
-      // before it.
-      tNodeToDetach->mAfterNode->mBeforeNode = 0;
-
-      // Set the new first child node of this subject parent node to be the
-      // node after the node that is to be detached.
-      this->mFirstChildNode = tNodeToDetach->mAfterNode;
-   }
-   // If the node to be detached does not have a node after it,
-   // then it is the only child node of its parent.
-   else
-   {
-      // Set the subect parent node to have no first child node.
-      this->mFirstChildNode = 0;
-      // Also, set the subect parent node to have no last child node.
-      this->mLastChildNode = 0;
-   }
-
-   // Set the detached node to have no node after it. Because it is the 
-   // first child node then it already has no node before it.
-   tNodeToDetach->mAfterNode = 0;
-
-   // Set the detached node to have no node parent node above it.
-   tNodeToDetach->mParentNode = 0;
-
    // Return the pointer to the detached node.
    return tNodeToDetach;
 }
@@ -191,41 +188,38 @@ TreeNode* TreeNode::detachLastChild()
    // the node that is to be be detached.
    TreeNode* tNodeToDetach = this->mLastChildNode;
 
-   // If there is no node to be detached
-   if (tNodeToDetach == 0)
+   // If there is a node to be detached
+   if (tNodeToDetach != 0)
    {
-      return 0;
+      // If the node to be detached has a node before it
+      if (tNodeToDetach->mBeforeNode != 0)
+      {
+         // Because this node is the last child of its parent and therefore has
+         // no node after it then set the node before it to also have no node
+         // after it.
+         tNodeToDetach->mBeforeNode->mAfterNode = 0;
+
+         // Set the new last child node of this subject parent node to be the
+         // node before the node that is to be detached.
+         this->mLastChildNode = tNodeToDetach->mBeforeNode;
+      }
+      // If the node to be detached does not have a node before it,
+      // then it is the only child node of its parent.
+      else
+      {
+         // Set the subect parent node to have no last child node.
+         this->mLastChildNode = 0;
+         // Also, set the subect parent node to have no first child node.
+         this->mFirstChildNode = 0;
+      }
+
+      // Set the detached node to have no node before it. Because it is the 
+      // last child node then it already has no node after it.
+      tNodeToDetach->mBeforeNode = 0;
+
+      // Set the detached node to have no node parent node above it.
+      tNodeToDetach->mParentNode = 0;
    }
-
-   // If the node to be detached has a node before it
-   if (tNodeToDetach->mBeforeNode != 0)
-   {
-      // Because this node is the last child of its parent and therefore has
-      // no node after it then set the node before it to also have no node
-      // after it.
-      tNodeToDetach->mBeforeNode->mAfterNode = 0;
-
-      // Set the new last child node of this subject parent node to be the
-      // node before the node that is to be detached.
-      this->mLastChildNode = tNodeToDetach->mBeforeNode;
-   }
-   // If the node to be detached does not have a node before it,
-   // then it is the only child node of its parent.
-   else
-   {
-      // Set the subect parent node to have no last child node.
-      this->mLastChildNode = 0;
-      // Also, set the subect parent node to have no first child node.
-      this->mFirstChildNode = 0;
-   }
-
-   // Set the detached node to have no node before it. Because it is the 
-   // last child node then it already has no node after it.
-   tNodeToDetach->mBeforeNode = 0;
-
-   // Set the detached node to have no node parent node above it.
-   tNodeToDetach->mParentNode = 0;
-
    // Return the pointer to the detached node.
    return tNodeToDetach;
 }
