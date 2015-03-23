@@ -307,7 +307,7 @@ void CmdLineExec::executeGo6(Ris::CmdLineCmd* aCmd)
       if (tNode != 0)
       {
          printf("LINE101 %d\n",tNode->mIdentifier);
-       //tRxQueue.putRxNode(tNode);
+         tRxQueue.putRxNode(tNode);
       }
       else
       {

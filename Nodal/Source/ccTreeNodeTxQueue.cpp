@@ -30,15 +30,23 @@ TreeNode* TreeNodeTxQueue::getNextTxNode()
 {
    TreeNode* tNextTxNode = getNextNode(mPreviousTxNode);
 
-   tNextTxNode->mTreeNodeTxFlags.mValue = 0;
-
    if (tNextTxNode != 0)
    {
+      tNextTxNode->mTreeNodeTxFlags.mValue = 0;
+
       if (tNextTxNode == mPreviousTxNode->mFirstChildNode)
       {
          tNextTxNode->mTreeNodeTxFlags.mFirstChild = true;
       }
-      else if (tNextTxNode == mPreviousTxNode->mParentNode->mLastChildNode)
+
+      if (tNextTxNode == mPreviousTxNode->mParentNode != 0)
+      {
+         if (tNextTxNode == mPreviousTxNode->mParentNode->mLastChildNode)
+         {
+            tNextTxNode->mTreeNodeTxFlags.mLastChild = true;
+         }
+      }
+      else
       {
          tNextTxNode->mTreeNodeTxFlags.mLastChild = true;
       }
