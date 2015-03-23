@@ -21,23 +21,26 @@ void TreeNodeRxQueue::putRxNode(TreeNode* aNode)
    if (mPreviousRxNode == 0)
    {
       mRootNode->attachAfterLastChild(aNode);
+      mPreviousRxNode = aNode;
    }
    else
    {
       if (aNode->mTreeNodeTxFlags.mFirstChild)
       {
          mPreviousRxNode->attachBeforeFirstChild(aNode);
+         mPreviousRxNode = aNode;
       }
       else if (aNode->mTreeNodeTxFlags.mLastChild)
       {
-         mPreviousRxNode->attachAfterLastChild(aNode);
+         mPreviousRxNode->mParentNode->attachAfterLastChild(aNode);
+         mPreviousRxNode = mPreviousRxNode->mParentNode;
       }
       else 
       {
          mPreviousRxNode->mParentNode->attachAfterLastChild(aNode);
+         mPreviousRxNode = aNode;
       }
    }
-   mPreviousRxNode = aNode;
 }
 
 TreeNode* TreeNodeRxQueue::getNextRxNode()
