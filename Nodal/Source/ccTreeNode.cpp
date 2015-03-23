@@ -45,6 +45,194 @@ TreeNode::TreeNode(int aIdentifier)
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
+// Attach an object node to the first child of this subject node, before it.
+// The object node becomes this subject node's first child.
+
+void TreeNode::attachBeforeFirstChild (TreeNode* aObjectNode)
+{
+   // If this node doesn't have any children
+   // Attach the object node as the only child of this node
+   if (this->mFirstChildNode == 0)
+   {
+      // Set object node's parent as this node
+      // Set object node's before as null
+      // Set object node's after  as null
+      aObjectNode->mParentNode  = this;
+      aObjectNode->mBeforeNode  = 0;
+      aObjectNode->mAfterNode   = 0;
+
+      // Set the object node as the first and last child of this node
+      this->mFirstChildNode     = aObjectNode;
+      this->mLastChildNode      = aObjectNode;
+   }
+   // Else this node does have children
+   // Attach the object node after the last child of this node
+   else
+   {
+      // Set object node's parent as this node
+      // Set object node's before as null
+      // Set object node's after  as the current first child
+      aObjectNode->mParentNode  = this;
+      aObjectNode->mBeforeNode  = 0;
+      aObjectNode->mAfterNode   = this->mFirstChildNode;
+
+      // Set the object node as this node's new first child
+      this->mFirstChildNode->mBeforeNode = aObjectNode;
+      this->mFirstChildNode              = aObjectNode;
+   }
+
+   // Notify the object node that it is attached to this node
+   aObjectNode->onAttached();
+}
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+// Attach an object node to the last child of this subject node, after it.
+// The object node becomes this subject node's last child.
+
+void TreeNode::attachAfterLastChild  (TreeNode* aObjectNode)
+{
+   // If this node doesn't have any children
+   // Attach the object node as the only child of this node
+   if (this->mFirstChildNode == 0)
+   {
+      // Set object node's parent as this node
+      // Set object node's before as null
+      // Set object node's after  as null
+      aObjectNode->mParentNode  = this;
+      aObjectNode->mBeforeNode  = 0;
+      aObjectNode->mAfterNode   = 0;
+
+      // Set the object node as the first and last child of this node
+      this->mFirstChildNode     = aObjectNode;
+      this->mLastChildNode      = aObjectNode;
+   }
+   // Else this node does have children
+   // Attach the object node after the last child of this node
+   else
+   {
+      // Set object node's parent as this node
+      // Set object node's before as the current last child
+      // Set object node's after  as null
+      aObjectNode->mParentNode  = this;
+      aObjectNode->mBeforeNode  = this->mLastChildNode;
+      aObjectNode->mAfterNode   = 0;
+
+      // Set the object node as this node's new last child
+      this->mLastChildNode->mAfterNode = aObjectNode;
+      this->mLastChildNode             = aObjectNode;
+   }
+
+   // Notify the object node that it is attached to this node
+   aObjectNode->onAttached();
+}
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+// Detach the first child node of this parent subject node. Return a pointer
+// to detached child node.
+
+TreeNode* TreeNode::detachFirstChild ()
+{
+   // Pointer to the first child node of this subject parent node, this is
+   // the node that is to be be detached.
+   TreeNode* tNodeToDetach = this->mFirstChildNode;
+
+   // If there is no node to be detached
+   if (tNodeToDetach == 0)
+   {
+      return 0;
+   }
+
+   // If the node to be detached has a node after it
+   if (tNodeToDetach->mAfterNode != 0)
+   {
+      // Because this node is the first child of its parent and therefore has
+      // no node before it then set the node after it to also have no node
+      // before it.
+      tNodeToDetach->mAfterNode->mBeforeNode = 0;
+
+      // Set the new first child node of this subject parent node to be the
+      // node after the node that is to be detached.
+      this->mFirstChildNode = tNodeToDetach->mAfterNode;
+   }
+   // If the node to be detached does not have a node after it,
+   // then it is the only child node of its parent.
+   else
+   {
+      // Set the subect parent node to have no first child node.
+      this->mFirstChildNode = 0;
+      // Also, set the subect parent node to have no last child node.
+      this->mLastChildNode = 0;
+   }
+
+   // Set the detached node to have no node after it. Because it is the 
+   // first child node then it already has no node before it.
+   tNodeToDetach->mAfterNode = 0;
+
+   // Set the detached node to have no node parent node above it.
+   tNodeToDetach->mParentNode = 0;
+
+   // Return the pointer to the detached node.
+   return tNodeToDetach;
+}
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+// Detach the last child node of this parent subject node. Return a pointer
+// to the detached child node.
+
+TreeNode* TreeNode::detachLastChild()
+{
+   // Pointer to the last child node of this subject parent node, this is
+   // the node that is to be be detached.
+   TreeNode* tNodeToDetach = this->mLastChildNode;
+
+   // If there is no node to be detached
+   if (tNodeToDetach == 0)
+   {
+      return 0;
+   }
+
+   // If the node to be detached has a node before it
+   if (tNodeToDetach->mBeforeNode != 0)
+   {
+      // Because this node is the last child of its parent and therefore has
+      // no node after it then set the node before it to also have no node
+      // after it.
+      tNodeToDetach->mBeforeNode->mAfterNode = 0;
+
+      // Set the new last child node of this subject parent node to be the
+      // node before the node that is to be detached.
+      this->mLastChildNode = tNodeToDetach->mBeforeNode;
+   }
+   // If the node to be detached does not have a node before it,
+   // then it is the only child node of its parent.
+   else
+   {
+      // Set the subect parent node to have no last child node.
+      this->mLastChildNode = 0;
+      // Also, set the subect parent node to have no first child node.
+      this->mFirstChildNode = 0;
+   }
+
+   // Set the detached node to have no node before it. Because it is the 
+   // last child node then it already has no node after it.
+   tNodeToDetach->mBeforeNode = 0;
+
+   // Set the detached node to have no node parent node above it.
+   tNodeToDetach->mParentNode = 0;
+
+   // Return the pointer to the detached node.
+   return tNodeToDetach;
+}
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
 // Update the tree node flags
 
 void TreeNode::updateTreeNodeFlags()
@@ -157,78 +345,6 @@ void TreeNode::attachAfter (TreeNode* aObjectNode)
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-// Attach an object node to the first child of this subject node, before it.
-// The object node becomes this subject node's first child.
-
-void TreeNode::attachBeforeFirstChild (TreeNode* aObjectNode)
-{
-   // If this node doesn't have any children
-   if (this->mFirstChildNode == 0)
-   {
-      // Set object node's parent as this node
-      aObjectNode->mParentNode                = this;
-      // Set the object node as the first and last child of this node
-      this->mFirstChildNode     = aObjectNode;
-      this->mLastChildNode      = aObjectNode;
-      // Update tree node flags
-      this->updateTreeNodeFlags();
-      aObjectNode->updateTreeNodeFlags();
-      // Notify the object node that it is attached
-      aObjectNode->onAttached();
-   }
-   // Else this node does have children
-   else
-   {
-      // Attach the object node before the first child of this node
-      this->mFirstChildNode->attachBefore(aObjectNode);
-   }
-}
-
-//****************************************************************************
-//****************************************************************************
-//****************************************************************************
-// Attach an object node to the last child of this subject node, after it.
-// The object node becomes this subject node's last child.
-
-void TreeNode::attachAfterLastChild  (TreeNode* aObjectNode)
-{
-   // If this node doesn't have any children
-   // Attach the object node as the only child of this node
-   if (this->mFirstChildNode == 0)
-   {
-      // Set object node's parent as this node
-      // Set object node's before as null
-      // Set object node's after  as null
-      aObjectNode->mParentNode  = this;
-      aObjectNode->mBeforeNode  = 0;
-      aObjectNode->mAfterNode   = 0;
-
-      // Set the object node as the first and last child of this node
-      this->mFirstChildNode     = aObjectNode;
-      this->mLastChildNode      = aObjectNode;
-   }
-   // Else this node does have children
-   // Attach the object node after the last child of this node
-   else
-   {
-      // Set object node's parent as this node
-      // Set object node's before as the current last child
-      // Set object node's after  as null
-      aObjectNode->mParentNode  = this;
-      aObjectNode->mBeforeNode  = this->mLastChildNode;
-      aObjectNode->mAfterNode   = 0;
-
-      // Set the object node as this node's new last child
-      this->mLastChildNode->mAfterNode = aObjectNode;
-      this->mLastChildNode             = aObjectNode;
-   }
-
-   // Notify the object node that it is attached to this node
-   aObjectNode->onAttached();
-}
-//****************************************************************************
-//****************************************************************************
-//****************************************************************************
 // Detach a subject node from its parent and before and after nodes
 
 void TreeNode::detachFromAll()
@@ -271,108 +387,6 @@ void TreeNode::detachFromAll()
    this->mParentNode = 0;
    this->mBeforeNode = 0;
    this->mAfterNode = 0;
-}
-
-//****************************************************************************
-//****************************************************************************
-//****************************************************************************
-// Detach the first child node of this parent subject node. Return a pointer
-// to detached child node.
-
-TreeNode* TreeNode::detachFirstChild ()
-{
-   // Pointer to the first child node of this subject parent node, this is
-   // the node that is to be be detached.
-   TreeNode* tNodeToDetach = this->mFirstChildNode;
-
-   // If there is no node to be detached
-   if (tNodeToDetach == 0)
-   {
-      return 0;
-   }
-
-   // If the node to be detached has a node after it
-   if (tNodeToDetach->mAfterNode != 0)
-   {
-      // Because this node is the first child of its parent and therefore has
-      // no node before it then set the node after it to also have no node
-      // before it.
-      tNodeToDetach->mAfterNode->mBeforeNode = 0;
-
-      // Set the new first child node of this subject parent node to be the
-      // node after the node that is to be detached.
-      this->mFirstChildNode = tNodeToDetach->mAfterNode;
-   }
-   // If the node to be detached does not have a node after it,
-   // then it is the only child node of its parent.
-   else
-   {
-      // Set the subect parent node to have no first child node.
-      this->mFirstChildNode = 0;
-      // Also, set the subect parent node to have no last child node.
-      this->mLastChildNode = 0;
-   }
-
-   // Set the detached node to have no node after it. Because it is the 
-   // first child node then it already has no node before it.
-   tNodeToDetach->mAfterNode = 0;
-
-   // Set the detached node to have no node parent node above it.
-   tNodeToDetach->mParentNode = 0;
-
-   // Return the pointer to the detached node.
-   return tNodeToDetach;
-}
-
-//****************************************************************************
-//****************************************************************************
-//****************************************************************************
-// Detach the last child node of this parent subject node. Return a pointer
-// to the detached child node.
-
-TreeNode* TreeNode::detachLastChild()
-{
-   // Pointer to the last child node of this subject parent node, this is
-   // the node that is to be be detached.
-   TreeNode* tNodeToDetach = this->mLastChildNode;
-
-   // If there is no node to be detached
-   if (tNodeToDetach == 0)
-   {
-      return 0;
-   }
-
-   // If the node to be detached has a node before it
-   if (tNodeToDetach->mBeforeNode != 0)
-   {
-      // Because this node is the last child of its parent and therefore has
-      // no node after it then set the node before it to also have no node
-      // after it.
-      tNodeToDetach->mBeforeNode->mAfterNode = 0;
-
-      // Set the new last child node of this subject parent node to be the
-      // node before the node that is to be detached.
-      this->mLastChildNode = tNodeToDetach->mBeforeNode;
-   }
-   // If the node to be detached does not have a node before it,
-   // then it is the only child node of its parent.
-   else
-   {
-      // Set the subect parent node to have no last child node.
-      this->mLastChildNode = 0;
-      // Also, set the subect parent node to have no first child node.
-      this->mFirstChildNode = 0;
-   }
-
-   // Set the detached node to have no node before it. Because it is the 
-   // last child node then it already has no node after it.
-   tNodeToDetach->mBeforeNode = 0;
-
-   // Set the detached node to have no node parent node above it.
-   tNodeToDetach->mParentNode = 0;
-
-   // Return the pointer to the detached node.
-   return tNodeToDetach;
 }
 
 //****************************************************************************

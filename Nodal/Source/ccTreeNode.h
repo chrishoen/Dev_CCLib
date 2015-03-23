@@ -66,10 +66,74 @@ public:
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
-   // Node state
+   // Node identifier
 
    int mIdentifier;
    
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   // These attach an object node to this subject node, as a child node
+
+   // Attach an object node to the first child of this subject node, before it.
+   // The object node becomes this subject node's first child.
+   void attachBeforeFirstChild (TreeNode* aObjectNode);
+
+   // Attach an object node to the last child of this subject node, after it.
+   // The object node becomes this subject node's last child.
+   void attachAfterLastChild (TreeNode* aObjectNode);
+
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   // These detach attached object nodes from this parent subject node.
+
+   // Detach the first child node of this parent subject node. Return a
+   // pointer to the detached child node.
+   TreeNode* detachFirstChild ();
+
+   // Detach the last child node of this parent subject node. Return a
+   // pointer to the detached child node.
+   TreeNode* detachLastChild ();
+
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   // These attach an object node to this subject node.
+
+   // Attach an object node to this subject node, before it
+   void attachBefore (TreeNode* aObjectNode);
+
+   // Attach an object node to this subject node, after it
+   void attachAfter (TreeNode* aObjectNode);
+
+   // Detach this subject node from all of the nodes to which it is attached.
+   // This is used when a node is destroyed.
+   void detachFromAll();
+
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   // Methods provided by inheritors
+
+   // This is called on an object node after it is attached to this subject
+   // node
+   virtual void onAttached() {}
+
+   // This method calls the class destructor and then deallocates the object
+   // from system memory or from block universe short term or long term
+   // memory block pools. It is analogous to delete. It is overloaded by
+   // inheriting classes.
+
+   virtual void destroy(){}
+
+   // This member variable specifes the memory type for an instance of this
+   // class that has been created: system, short term block pool, or long term
+   // block pool. It is set by the create method when it is allocated it is
+   // used by the destroy method to determine how to deallocate the block.
+
+   int mMemoryType;
+
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
@@ -99,65 +163,6 @@ public:
 
    // This updates the flags
    void updateTreeNodeFlags();
-
-   //--------------------------------------------------------------------------
-   //--------------------------------------------------------------------------
-   //--------------------------------------------------------------------------
-   // These attach an object node to this subject node.
-
-   // Attach an object node to this subject node, before it
-   void attachBefore (TreeNode* aObjectNode);
-
-   // Attach an object node to this subject node, after it
-   void attachAfter (TreeNode* aObjectNode);
-
-   // Attach an object node to the first child of this subject node, before it.
-   // The object node becomes this subject node's first child.
-   void attachBeforeFirstChild (TreeNode* aObjectNode);
-
-   // Attach an object node to the last child of this subject node, after it.
-   // The object node becomes this subject node's last child.
-   void attachAfterLastChild (TreeNode* aObjectNode);
-
-   // Detach this subject node from all of the nodes to which it is attached.
-   // This is used when a node is destroyed.
-   void detachFromAll();
-
-   //--------------------------------------------------------------------------
-   //--------------------------------------------------------------------------
-   //--------------------------------------------------------------------------
-   // These detach attached object nodes from this parent subject node.
-
-   // Detach the first child node of this parent subject node. Return a
-   // pointer to the detached child node.
-   TreeNode* detachFirstChild ();
-
-   // Detach the last child node of this parent subject node. Return a
-   // pointer to the detached child node.
-   TreeNode* detachLastChild ();
-
-   //--------------------------------------------------------------------------
-   //--------------------------------------------------------------------------
-   //--------------------------------------------------------------------------
-   // Methods provided by inheritors
-
-   // This is called on an object node after it is attached to this subject
-   // node
-   virtual void onAttached() {}
-
-   // This method calls the class destructor and then deallocates the object
-   // from system memory or from block universe short term or long term
-   // memory block pools. It is analogous to delete. It is overloaded by
-   // inheriting classes.
-
-   virtual void destroy(){}
-
-   // This member variable specifes the memory type for an instance of this
-   // class that has been created: system, short term block pool, or long term
-   // block pool. It is set by the create method when it is allocated it is
-   // used by the destroy method to determine how to deallocate the block.
-
-   int mMemoryType;
 
 };
 
