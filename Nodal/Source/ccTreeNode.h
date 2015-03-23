@@ -140,30 +140,25 @@ public:
    // Node flags, these encode relationship's that this node has with other 
    // nodes, within its tree structure. These flags all default to false.
 
-   typedef union TreeNodeFlags
+   typedef union TreeNodeTxFlags
    {
       // Flags
       struct
       {
          // This is true if the node is a root, that it has no parent node.
-         bool mIsRoot        : 1;
-         // This is true if the node is a parent node of some child nodes.
-         bool mIsParent      : 1;
-         // This is true if the node is the first child of its parent node.
-         bool mIsFirstChild  : 1;
-         // This is true if the node is the last child of its parent node.
-         bool mIsLastChild   : 1;
+         bool mDecrementLevel    : 1;
+         bool mSameLevel         : 1;
+         bool mIncrementLevel    : 1;
+
+         bool mFirstChild : 1;
+         bool mLastChild : 1;
       };
       // Binary value
       unsigned char mValue;
-   } TreeNodeFlags;
+   } TreeNodeTxFlags;
 
    // These are the flags
-   TreeNodeFlags mTreeNodeFlags;
-
-   // This updates the flags
-   void updateTreeNodeFlags();
-
+   TreeNodeTxFlags mTreeNodeTxFlags;
 };
 
 //****************************************************************************

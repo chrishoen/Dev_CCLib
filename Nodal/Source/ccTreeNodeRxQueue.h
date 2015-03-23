@@ -1,5 +1,5 @@
-#ifndef _CCTREENODETXQUEUE_H_
-#define _CCTREENODETXQUEUE_H_
+#ifndef _CCTREENODERXQUEUE_H_
+#define _CCTREENODERXQUEUE_H_
 
 #include "ccTreeNode.h"
 
@@ -10,20 +10,20 @@ namespace CC
 //****************************************************************************
 //****************************************************************************
 
-class TreeNodeTxQueue
+class TreeNodeRxQueue
 {
 public:
    // Constructor
-   TreeNodeTxQueue();
+   TreeNodeRxQueue();
 
    // Members
    TreeNode  mRootNodeInstance;
    TreeNode* mRootNode;
-   TreeNode* mPreviousTxNode;
+   TreeNode* mPreviousRxNode;
 
    // Methods
-   void putTxNode(TreeNode* aNode);
-   TreeNode* getNextTxNode();
+   void putRxNode(TreeNode* aNode);
+   TreeNode* getNextRxNode();
 
 };
 

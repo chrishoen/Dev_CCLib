@@ -24,7 +24,7 @@ TreeNode::TreeNode()
    // Empty state
    mIdentifier=0;
    mMemoryType = 0;
-   mTreeNodeFlags.mValue = 0;
+   mTreeNodeTxFlags.mValue = 0;
 }
 
 TreeNode::TreeNode(int aIdentifier)
@@ -39,7 +39,7 @@ TreeNode::TreeNode(int aIdentifier)
    // Set state
    mIdentifier = aIdentifier;
    mMemoryType = 0;
-   mTreeNodeFlags.mValue = 0;
+   mTreeNodeTxFlags.mValue = 0;
 }
 
 //****************************************************************************
@@ -227,40 +227,6 @@ TreeNode* TreeNode::detachLastChild()
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-// Update the tree node flags
-
-void TreeNode::updateTreeNodeFlags()
-{
-   // This is true if the node is a root, that it has no parent node.
-   mTreeNodeFlags.mIsRoot = this->mParentNode == 0;
-
-   // This is true if the node is a parent node of some child nodes.
-   mTreeNodeFlags.mIsParent = this->mFirstChildNode != 0;
-
-   // This is true if the node is the first child of its parent node.
-   if (this->mParentNode != 0)
-   {
-      mTreeNodeFlags.mIsFirstChild = (this == this->mParentNode->mFirstChildNode);
-   }
-   else 
-   {
-      mTreeNodeFlags.mIsFirstChild = false;
-   }
-
-   // This is true if the node is the last child of its parent node.
-   if (this->mParentNode != 0)
-   {
-      mTreeNodeFlags.mIsLastChild = (this == this->mParentNode->mLastChildNode);
-   }
-   else 
-   {
-      mTreeNodeFlags.mIsLastChild = false;
-   }
-}
-
-//****************************************************************************
-//****************************************************************************
-//****************************************************************************
 // Attach an object node to this subject node, before it
 
 void TreeNode::attachBefore (TreeNode* aObjectNode)
@@ -290,9 +256,6 @@ void TreeNode::attachBefore (TreeNode* aObjectNode)
    }
    // The object node inherits this nodes's parent node
    aObjectNode->mParentNode = this->mParentNode;
-   // Update tree node flags
-   this->updateTreeNodeFlags();
-   aObjectNode->updateTreeNodeFlags();
    // Notify the object node that it is attached to this node
    aObjectNode->onAttached();
 }
@@ -329,9 +292,6 @@ void TreeNode::attachAfter (TreeNode* aObjectNode)
    }
    // The object node inherits this node's parent node
    aObjectNode->mParentNode = this->mParentNode;
-   // Update tree node flags
-   this->updateTreeNodeFlags();
-   aObjectNode->updateTreeNodeFlags();
    // Notify the object node that it is attached to this node
    aObjectNode->onAttached();
 }

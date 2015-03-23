@@ -13,14 +13,14 @@ namespace CC
 TreeNodeTxQueue::TreeNodeTxQueue()
 {
    mRootNode = &mRootNodeInstance;
-   mNextTxNode = 0;
+   mPreviousTxNode = 0;
 }
 
 void TreeNodeTxQueue::putTxNode(TreeNode* aNode)
 {
-   if (mNextTxNode == 0)
+   if (mPreviousTxNode == 0)
    {
-      mNextTxNode = aNode;
+      mPreviousTxNode = aNode;
    }
 
    mRootNode->attachAfterLastChild(aNode);
@@ -28,11 +28,23 @@ void TreeNodeTxQueue::putTxNode(TreeNode* aNode)
 
 TreeNode* TreeNodeTxQueue::getNextTxNode()
 {
-   TreeNode* tNode = mNextTxNode;
-   if (mNextTxNode != 0)
+   TreeNode* tNextTxNode = getNextNode(mPreviousTxNode);
+
+   tNextTxNode->mTreeNodeTxFlags.mValue = 0;
+
+   if (tNextTxNode != 0)
    {
-      mNextTxNode = getNextNode(mNextTxNode);
+      if (tNextTxNode == mPreviousTxNode->mFirstChildNode)
+      {
+         tNextTxNode->mTreeNodeTxFlags.mFirstChild = true;
+      }
+      else if (tNextTxNode == mPreviousTxNode->mLastChildNode)
+      {
+         tNextTxNode->mTreeNodeTxFlags.mLastChild = true;
+      }
+
    }
-   return tNode;
+   mPreviousTxNode = tNextTxNode;
+   return tNextTxNode;
 }
 }//namespace
