@@ -58,6 +58,9 @@
     <ClCompile Include="Source\ccCriticalSection_win.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\ccTreeNodeTxQueue.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h">
@@ -118,6 +121,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccCriticalSection.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ccTreeNodeTxQueue.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
