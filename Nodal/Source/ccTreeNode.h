@@ -119,7 +119,8 @@ public:
    // The object node becomes this subject node's last child.
    void attachAfterLastChild (TreeNode* aObjectNode);
 
-   // Detach this subject node from all of the nodes to which it is attached
+   // Detach this subject node from all of the nodes to which it is attached.
+   // This is used when a node is destroyed.
    void detachFromAll();
 
    //--------------------------------------------------------------------------

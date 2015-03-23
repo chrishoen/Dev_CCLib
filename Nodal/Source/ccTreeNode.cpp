@@ -210,7 +210,30 @@ void TreeNode::attachAfterLastChild  (TreeNode* aObjectNode)
    else
    {
       // Attach the object node after the last child of this node
-      this->mLastChildNode->attachAfter(aObjectNode);
+//    this->mLastChildNode->attachAfter(aObjectNode);
+
+      TreeNode* tChildNode = this->mLastChildNode;
+
+      // Attach the object node after the last child node
+      aObjectNode->mBeforeNode         = tChildNode;
+      aObjectNode->mAfterNode          = 0;
+      tChildNode->mAfterNode = aObjectNode;
+
+      // Set the object node as this node's new last child
+      this->mLastChildNode = aObjectNode;
+
+      // The object node inherits this node's parent node
+      aObjectNode->mParentNode = this;
+      // Update tree node flags
+      tChildNode->updateTreeNodeFlags();
+      aObjectNode->updateTreeNodeFlags();
+      // Notify the object node that it is attached to this node
+      aObjectNode->onAttached();
+
+
+
+
+
    }
 }
 //****************************************************************************
