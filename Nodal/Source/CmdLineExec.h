@@ -1,6 +1,7 @@
 #ifndef _CMDLINEEXEC_H_
 #define _CMDLINEEXEC_H_
 
+#include "ccLabelledTreeNode.h"
 #include "risCmdLineExec.h"
 
 //******************************************************************************
@@ -21,6 +22,9 @@ public:
   void executeGo3 (Ris::CmdLineCmd* aCmd);
   void executeGo4 (Ris::CmdLineCmd* aCmd);
   void executeGo5 (Ris::CmdLineCmd* aCmd);
+  void executeGo6 (Ris::CmdLineCmd* aCmd);
+
+  CC::LabelledTreeNode* mRootNode;
 };
 
 //******************************************************************************

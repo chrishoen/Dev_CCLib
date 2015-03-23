@@ -28,6 +28,38 @@ CmdLineExec::CmdLineExec()
 //******************************************************************************
 void CmdLineExec::reset()
 {
+   mRootNode = new CC::LabelledTreeNode(0,"root");
+   CC::TreeNode* tNode = 0;
+
+   tNode = new CC::LabelledTreeNode(1, "node1");
+   mRootNode->attachAfterLastChild(tNode);
+
+   tNode = new CC::LabelledTreeNode(2, "node2");
+   mRootNode->attachAfterLastChild(tNode);
+
+   tNode = new CC::LabelledTreeNode(21, "node21");
+   mRootNode->mLastChildNode->attachAfterLastChild(tNode);
+
+   tNode = new CC::LabelledTreeNode(22, "node22");
+   mRootNode->mLastChildNode->attachAfterLastChild(tNode);
+
+   tNode = new CC::LabelledTreeNode(221, "node221");
+   mRootNode->mLastChildNode->mLastChildNode->attachAfterLastChild(tNode);
+
+   tNode = new CC::LabelledTreeNode(222, "node222");
+   mRootNode->mLastChildNode->mLastChildNode->attachAfterLastChild(tNode);
+
+   tNode = new CC::LabelledTreeNode(23, "node23");
+   mRootNode->mLastChildNode->attachAfterLastChild(tNode);
+
+   tNode = new CC::LabelledTreeNode(24, "node24");
+   mRootNode->mLastChildNode->attachAfterLastChild(tNode);
+
+   tNode = new CC::LabelledTreeNode(3, "node3");
+   mRootNode->attachAfterLastChild(tNode);
+
+   tNode = new CC::LabelledTreeNode(4, "node4");
+   mRootNode->attachAfterLastChild(tNode);
 }
 //******************************************************************************
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
@@ -38,6 +70,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("GO3"    ))  executeGo3(aCmd);
    if(aCmd->isCmd("GO4"    ))  executeGo4(aCmd);
    if(aCmd->isCmd("GO5"    ))  executeGo5(aCmd);
+   if(aCmd->isCmd("GO6"    ))  executeGo6(aCmd);
 }
 
 //******************************************************************************
@@ -252,4 +285,14 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 {
+   CC::printAllLabelledTreeNodes1(mRootNode);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo6(Ris::CmdLineCmd* aCmd)
+{
+   CC::printAllLabelledTreeNodes1(mRootNode);
 }
