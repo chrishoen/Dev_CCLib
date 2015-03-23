@@ -38,7 +38,7 @@ TreeNode* TreeNodeTxQueue::getNextTxNode()
       {
          tNextTxNode->mTreeNodeTxFlags.mFirstChild = true;
       }
-      else if (tNextTxNode == mPreviousTxNode->mLastChildNode)
+      else if (tNextTxNode == mPreviousTxNode->mParentNode->mLastChildNode)
       {
          tNextTxNode->mTreeNodeTxFlags.mLastChild = true;
       }
