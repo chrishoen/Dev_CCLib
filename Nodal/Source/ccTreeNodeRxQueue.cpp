@@ -20,7 +20,6 @@ void TreeNodeRxQueue::putRxNode(TreeNode* aNode)
 {
    if (mPreviousRxNode == 0)
    {
-      mPreviousRxNode = aNode;
       mRootNode->attachAfterLastChild(aNode);
    }
    else
