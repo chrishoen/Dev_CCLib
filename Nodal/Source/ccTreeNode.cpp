@@ -193,48 +193,38 @@ void TreeNode::attachBeforeFirstChild (TreeNode* aObjectNode)
 void TreeNode::attachAfterLastChild  (TreeNode* aObjectNode)
 {
    // If this node doesn't have any children
+   // Attach the object node as the only child of this node
    if (this->mFirstChildNode == 0)
    {
       // Set object node's parent as this node
+      // Set object node's before as null
+      // Set object node's after  as null
       aObjectNode->mParentNode  = this;
+      aObjectNode->mBeforeNode  = 0;
+      aObjectNode->mAfterNode   = 0;
+
       // Set the object node as the first and last child of this node
       this->mFirstChildNode     = aObjectNode;
       this->mLastChildNode      = aObjectNode;
-      // Update tree node flags
-      this->updateTreeNodeFlags();
-      aObjectNode->updateTreeNodeFlags();
-      // Notify the object node that it is attached
-      aObjectNode->onAttached();
    }
    // Else this node does have children
+   // Attach the object node after the last child of this node
    else
    {
-      // Attach the object node after the last child of this node
-//    this->mLastChildNode->attachAfter(aObjectNode);
-
-      TreeNode* tChildNode = this->mLastChildNode;
-
-      // Attach the object node after the last child node
-      aObjectNode->mBeforeNode         = tChildNode;
-      aObjectNode->mAfterNode          = 0;
-      tChildNode->mAfterNode = aObjectNode;
+      // Set object node's parent as this node
+      // Set object node's before as the current last child
+      // Set object node's after  as null
+      aObjectNode->mParentNode  = this;
+      aObjectNode->mBeforeNode  = this->mLastChildNode;
+      aObjectNode->mAfterNode   = 0;
 
       // Set the object node as this node's new last child
-      this->mLastChildNode = aObjectNode;
-
-      // The object node inherits this node's parent node
-      aObjectNode->mParentNode = this;
-      // Update tree node flags
-      tChildNode->updateTreeNodeFlags();
-      aObjectNode->updateTreeNodeFlags();
-      // Notify the object node that it is attached to this node
-      aObjectNode->onAttached();
-
-
-
-
-
+      this->mLastChildNode->mAfterNode = aObjectNode;
+      this->mLastChildNode             = aObjectNode;
    }
+
+   // Notify the object node that it is attached to this node
+   aObjectNode->onAttached();
 }
 //****************************************************************************
 //****************************************************************************
