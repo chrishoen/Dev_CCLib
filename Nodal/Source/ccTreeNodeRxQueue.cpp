@@ -1,4 +1,5 @@
 
+#include <stdio.h>
 #include "ccTreeNodeVisitor.h"
 #include "ccTreeNodeRxQueue.h"
 
@@ -11,12 +12,13 @@ namespace CC
 // Constructor
 
 TreeNodeRxQueue::TreeNodeRxQueue()
+: mRootNodeInstance(0,"RxRoot")
 {
    mRootNode = &mRootNodeInstance;
    mPreviousRxNode = 0;
 }
 
-void TreeNodeRxQueue::putRxNode(TreeNode* aNode)
+void TreeNodeRxQueue::putRxNode(LabelledTreeNode* aNode)
 {
    if (mPreviousRxNode == 0)
    {
@@ -33,7 +35,7 @@ void TreeNodeRxQueue::putRxNode(TreeNode* aNode)
       else if (aNode->mTreeNodeTxFlags.mLastChild)
       {
          mPreviousRxNode->mParentNode->attachAfterLastChild(aNode);
-         mPreviousRxNode = mPreviousRxNode->mParentNode;
+         mPreviousRxNode = (LabelledTreeNode*)mPreviousRxNode->mParentNode;
       }
       else 
       {
@@ -43,8 +45,9 @@ void TreeNodeRxQueue::putRxNode(TreeNode* aNode)
    }
 }
 
-TreeNode* TreeNodeRxQueue::getNextRxNode()
+LabelledTreeNode* TreeNodeRxQueue::getNextRxNode()
 {
-   return 0;
+   LabelledTreeNode* tNode = (LabelledTreeNode*)mRootNode->detachFirstChild();
+   return tNode;
 }
 }//namespace

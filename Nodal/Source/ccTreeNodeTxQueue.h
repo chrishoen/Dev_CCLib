@@ -1,7 +1,7 @@
 #ifndef _CCTREENODETXQUEUE_H_
 #define _CCTREENODETXQUEUE_H_
 
-#include "ccTreeNode.h"
+#include "ccLabelledTreeNode.h"
 
 namespace CC
 {
@@ -17,13 +17,13 @@ public:
    TreeNodeTxQueue();
 
    // Members
-   TreeNode  mRootNodeInstance;
-   TreeNode* mRootNode;
-   TreeNode* mPreviousTxNode;
+   LabelledTreeNode  mRootNodeInstance;
+   LabelledTreeNode* mRootNode;
+   LabelledTreeNode* mPreviousTxNode;
 
    // Methods
-   void putTxNode(TreeNode* aNode);
-   TreeNode* getNextTxNode();
+   void putTxNode(LabelledTreeNode* aNode);
+   LabelledTreeNode* getNextTxNode();
 
 };
 

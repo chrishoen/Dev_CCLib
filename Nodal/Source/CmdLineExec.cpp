@@ -303,25 +303,25 @@ void CmdLineExec::executeGo6(Ris::CmdLineCmd* aCmd)
 
    while (true)
    {
-      CC::TreeNode* tNode = tTxQueue.getNextTxNode();
-      if (tNode != 0)
+      CC::LabelledTreeNode* tTxNode = tTxQueue.getNextTxNode();
+      if (tTxNode != 0)
       {
-         printf("LINE101 %d\n",tNode->mIdentifier);
-         tRxQueue.putRxNode(tNode);
+       //printf("LINE101 %d\n",tTxNode->mIdentifier);
+         CC::LabelledTreeNode* tRxNode = new CC::LabelledTreeNode(tTxNode->mIdentifier, tTxNode->mLabel);
+         tRxQueue.putRxNode(tRxNode);
       }
       else
       {
          break;
       }
    }
-   return;
 
    while (true)
    {
-      CC::TreeNode* tNode = tRxQueue.getNextRxNode();
-      if (tNode != 0)
+      CC::LabelledTreeNode* tRxNode = tRxQueue.getNextRxNode();
+      if (tRxNode != 0)
       {
-         printf("LINE201 %d\n",tNode->mIdentifier);
+         printf("LINE201 %d\n",tRxNode->mIdentifier);
       }
       else
       {

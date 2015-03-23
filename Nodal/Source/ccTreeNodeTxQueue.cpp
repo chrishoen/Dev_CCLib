@@ -11,12 +11,13 @@ namespace CC
 // Constructor
 
 TreeNodeTxQueue::TreeNodeTxQueue()
+: mRootNodeInstance(0,"TxRoot")
 {
    mRootNode = &mRootNodeInstance;
    mPreviousTxNode = 0;
 }
 
-void TreeNodeTxQueue::putTxNode(TreeNode* aNode)
+void TreeNodeTxQueue::putTxNode(LabelledTreeNode* aNode)
 {
    if (mPreviousTxNode == 0)
    {
@@ -26,9 +27,9 @@ void TreeNodeTxQueue::putTxNode(TreeNode* aNode)
    mRootNode->attachAfterLastChild(aNode);
 }
 
-TreeNode* TreeNodeTxQueue::getNextTxNode()
+LabelledTreeNode* TreeNodeTxQueue::getNextTxNode()
 {
-   TreeNode* tNextTxNode = getNextNode(mPreviousTxNode);
+   LabelledTreeNode* tNextTxNode = (LabelledTreeNode*)getNextNode(mPreviousTxNode);
 
    if (tNextTxNode != 0)
    {
