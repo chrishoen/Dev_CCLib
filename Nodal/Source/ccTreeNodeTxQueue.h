@@ -76,8 +76,8 @@ public:
       TreeNodeClass* tGetNode = mGetNode;
 
       mPreviousGetNode=mGetNode;
-      mNextGetNode = (TreeNodeClass*)getNextNode(mGetNode);
       mGetNode = mNextGetNode;
+      mNextGetNode = (TreeNodeClass*)getNextNode(mNextGetNode);
 
       return tGetNode;
    }

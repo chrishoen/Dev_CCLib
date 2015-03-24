@@ -129,14 +129,17 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
    CC::TreeNodeTxQueue<CC::LabelledTreeNode> tTxQueue;
    CC::TreeNodeRxQueue<CC::LabelledTreeNode> tRxQueue;
 
+   printf("tTxQueue.putTxNode********************\n");
    tTxQueue.putTxNode(mRootNode);
 
+   printf("tTxQueue.putRxNode********************BEGIN\n");
    while (true)
    {
       CC::LabelledTreeNode* tTxNode = tTxQueue.getNextTxNode();
       if (tTxNode != 0)
       {
          CC::LabelledTreeNode* tRxNode = new CC::LabelledTreeNode(tTxNode->mIdentifier, tTxNode->mLabel);
+         tRxNode->mTreeNodeTxFlags = tTxNode->mTreeNodeTxFlags;
          tRxQueue.putRxNode(tRxNode);
       }
       else
@@ -145,12 +148,13 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
       }
    }
 
+   printf("tTxQueue.putRxNode********************END\n");
    while (true)
    {
       CC::LabelledTreeNode* tRxNode = tRxQueue.getNextRxNode();
       if (tRxNode != 0)
       {
-         printf("LINE201 %d\n",tRxNode->mIdentifier);
+         printf("LINE201 %d %d\n",tRxNode->mTreeNodeTxFlags.mIsLastInStructure,tRxNode->mIdentifier);
       }
       else
       {
