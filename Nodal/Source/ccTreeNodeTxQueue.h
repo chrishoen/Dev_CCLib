@@ -76,6 +76,7 @@ public:
 
       if (mNextGetNode == 0)
       {
+         printf("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ %d\n",mGetNode->mIdentifier);
          mGetNode->mTreeNodeTxFlags.mIsLastInStructure = true;
       }
       else if (mNextGetNode->mParentNode == mRootNode)
