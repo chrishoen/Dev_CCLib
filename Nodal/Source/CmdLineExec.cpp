@@ -147,20 +147,27 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
          break;
       }
    }
-
    printf("tTxQueue.putRxNode********************END\n");
+
+   printf("tTxQueue.getRxNode********************************BEGIN\n");
+// CC::LabelledTreeNode* tRxNode = tRxQueue.getNextRxNode();
+// CC::printAllLabelledTreeNodes1(tRxNode);
+   printf("tTxQueue.getRxNode********************************END\n");
+
    while (true)
    {
       CC::LabelledTreeNode* tRxNode = tRxQueue.getNextRxNode();
       if (tRxNode != 0)
       {
-         printf("LINE201 %d %d\n",tRxNode->mTreeNodeTxFlags.mIsLastInStructure,tRxNode->mIdentifier);
+         CC::printAllLabelledTreeNodes1(tRxNode);
+//       printf("LINE201 %d %d\n",tRxNode->mTreeNodeTxFlags.mIsLastInStructure,tRxNode->mIdentifier);
       }
       else
       {
          break;
       }
    }
+   printf("tTxQueue.getRxNode********************************END\n");
 }
 
 //******************************************************************************
