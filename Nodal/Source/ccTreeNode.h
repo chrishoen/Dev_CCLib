@@ -146,12 +146,10 @@ public:
       struct
       {
          // This is true if the node is a root, that it has no parent node.
-         bool mDecrementLevel    : 1;
-         bool mSameLevel         : 1;
-         bool mIncrementLevel    : 1;
-
-         bool mFirstChild : 1;
-         bool mLastChild : 1;
+         bool mIsParent : 1;
+         bool mIsFirstChild : 1;
+         bool mIsLastChild : 1;
+         bool mIsLastInStructure : 1;
       };
       // Binary value
       unsigned char mValue;

@@ -45,19 +45,19 @@ public:
 
          if (tNextTxNode == mPreviousTxNode->mFirstChildNode)
          {
-            tNextTxNode->mTreeNodeTxFlags.mFirstChild = true;
+            tNextTxNode->mTreeNodeTxFlags.mIsFirstChild = true;
          }
 
          if (tNextTxNode == mPreviousTxNode->mParentNode != 0)
          {
             if (tNextTxNode == mPreviousTxNode->mParentNode->mLastChildNode)
             {
-               tNextTxNode->mTreeNodeTxFlags.mLastChild = true;
+               tNextTxNode->mTreeNodeTxFlags.mIsLastChild = true;
             }
          }
          else
          {
-            tNextTxNode->mTreeNodeTxFlags.mLastChild = true;
+            tNextTxNode->mTreeNodeTxFlags.mIsLastChild = true;
          }
 
       }

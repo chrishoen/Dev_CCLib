@@ -42,12 +42,12 @@ public:
       }
       else
       {
-         if (aNode->mTreeNodeTxFlags.mFirstChild)
+         if (aNode->mTreeNodeTxFlags.mIsFirstChild)
          {
             mPreviousRxNode->attachBeforeFirstChild(aNode);
             mPreviousRxNode = aNode;
          }
-         else if (aNode->mTreeNodeTxFlags.mLastChild)
+         else if (aNode->mTreeNodeTxFlags.mIsLastChild)
          {
             mPreviousRxNode->mParentNode->attachAfterLastChild(aNode);
             mPreviousRxNode = (TreeNodeClass*)mPreviousRxNode->mParentNode;
