@@ -45,6 +45,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("GO4"    ))  executeGo4(aCmd);
    if(aCmd->isCmd("GO5"    ))  executeGo5(aCmd);
    if(aCmd->isCmd("GO6"    ))  executeGo6(aCmd);
+   if(aCmd->isCmd("GO7"    ))  executeGo7(aCmd);
 }
 
 //******************************************************************************
@@ -236,4 +237,34 @@ void CmdLineExec::executeGo6(Ris::CmdLineCmd* aCmd)
    return;
    printf("**********************************printLabelledTreeNodeRxQueue\n");
    CC::printLabelledTreeNodeRxQueue(&tRxQueue);
+}
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo7(Ris::CmdLineCmd* aCmd)
+{
+   printf("**********************************go7\n");
+   printf("**********************************go7\n");
+   printf("**********************************go7\n");
+   printf("\n");
+
+   CC::LabelledTreeNode* tRootNode = new CC::LabelledTreeNode(0,"troot");
+
+   printf("**********************************generateTreeNodes1(tRootNode1)\n");
+   CC::LabelledTreeNode* tRootNode1 = new CC::LabelledTreeNode(0,"root1");
+   generateTreeNodes1(tRootNode1);
+
+   printf("**********************************generateTreeNodes1(tRootNode2)\n");
+   CC::LabelledTreeNode* tRootNode2 = new CC::LabelledTreeNode(0,"root2");
+   generateTreeNodes1(tRootNode2);
+
+   printf("**********************************attachAfterLastChild(tRootNode1)\n");
+   tRootNode->attachAfterLastChild(tRootNode1);
+
+   printf("**********************************attachAfterLastChild(tRootNode2\n");
+   tRootNode->attachAfterLastChild(tRootNode2);
+
+   printf("**********************************printAllLabelledTreeNodes1(mRootNode)\n");
+   CC::printAllLabelledTreeNodes1(tRootNode);
 }

@@ -23,6 +23,7 @@ public:
   void executeGo4 (Ris::CmdLineCmd* aCmd);
   void executeGo5 (Ris::CmdLineCmd* aCmd);
   void executeGo6 (Ris::CmdLineCmd* aCmd);
+  void executeGo7 (Ris::CmdLineCmd* aCmd);
 
   CC::LabelledTreeNode* mRootNode;
 };
