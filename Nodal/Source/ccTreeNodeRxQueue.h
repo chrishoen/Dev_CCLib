@@ -35,7 +35,7 @@ public:
 
    void putRxNode(TreeNodeClass* aNode)
    {
-      if (mPreviousRxNode == 0)
+      if (mRootNode->mFirstChildNode==0)
       {
          mRootNode->attachAfterLastChild(aNode);
          mPreviousRxNode = aNode;
@@ -58,10 +58,21 @@ public:
             mPreviousRxNode = aNode;
          }
       }
+      mLastChildRxComplete = aNode->mTreeNodeTxFlags.mIsLastInStructure;
    }
 
    TreeNodeClass* getNextRxNode()
    {
+      if (mRootNode->mFirstChildNode == 0)
+      {
+         return 0;
+      }
+
+      if (mRootNode->mFirstChildNode == mRootNode->mFirstChildNode && !mLastChildRxComplete)
+      {
+         return 0;
+      }
+
       TreeNodeClass* tNode = (TreeNodeClass*)mRootNode->detachFirstChild();
       return tNode;
    }

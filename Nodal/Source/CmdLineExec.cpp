@@ -150,10 +150,6 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
    printf("tTxQueue.putRxNode********************END\n");
 
    printf("tTxQueue.getRxNode********************************BEGIN\n");
-// CC::LabelledTreeNode* tRxNode = tRxQueue.getNextRxNode();
-// CC::printAllLabelledTreeNodes1(tRxNode);
-   printf("tTxQueue.getRxNode********************************END\n");
-
    while (true)
    {
       CC::LabelledTreeNode* tRxNode = tRxQueue.getNextRxNode();
