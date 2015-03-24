@@ -192,7 +192,7 @@ void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 
    printf("**********************************transferLabelledTreeNodeQueues\n");
    CC::transferLabelledTreeNodeQueues(&tTxQueue, &tRxQueue);
-
+   return;
    printf("**********************************printLabelledTreeNodeRxQueue\n");
    CC::printLabelledTreeNodeRxQueue(&tRxQueue);
 }

@@ -32,12 +32,13 @@ public:
 
    void putTxNode(TreeNodeClass* aNode)
    {
-//    if (mRootNode->mFirstChildNode == 0)
-      if (mPreviousGetNode==0)
+      if (mRootNode->mFirstChildNode == 0)
+//    if (mPreviousGetNode==0)
       {
+         printf("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$\n");
          mPreviousGetNode = 0;
          mGetNode         = aNode;
-         mNextGetNode     = (TreeNodeClass*)getNextNode(aNode);
+         mNextGetNode     = (TreeNodeClass*)getNextNode(aNode,mRootNode);
          mGetNode->mTreeNodeTxFlags.mIsLastInStructure = mNextGetNode == 0;
       }
 
@@ -72,21 +73,7 @@ public:
       }
 
 
-//    mGetNode->mTreeNodeTxFlags.mIsLastInStructure = mNextGetNode == 0;
-
-      if (mNextGetNode == 0)
-      {
-         printf("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ %d\n",mGetNode->mIdentifier);
-         mGetNode->mTreeNodeTxFlags.mIsLastInStructure = true;
-      }
-      else if (mNextGetNode->mParentNode == mRootNode)
-      {
-         mGetNode->mTreeNodeTxFlags.mIsLastInStructure = true;
-      }
-      else
-      {
-         mGetNode->mTreeNodeTxFlags.mIsLastInStructure = false;
-      }
+      mGetNode->mTreeNodeTxFlags.mIsLastInStructure = mNextGetNode == 0;
 
       TreeNodeClass* tGetNode = mGetNode;
 
@@ -100,7 +87,8 @@ public:
       {
          mPreviousGetNode = mGetNode;
          mGetNode = mNextGetNode;
-         mNextGetNode = (TreeNodeClass*)getNextNode(mNextGetNode);
+         mNextGetNode = (TreeNodeClass*)getNextNode(mNextGetNode,mRootNode);
+//       mNextGetNode = (TreeNodeClass*)getNextNode(mNextGetNode);
       }
 
 

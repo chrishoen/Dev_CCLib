@@ -313,6 +313,53 @@ TreeNode* getNextNode(
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
+// Return a pointer to the next node, in construction order
+
+TreeNode* getNextNode(
+   TreeNode*        aSubjectNode,
+   TreeNode*        aRootNode)
+{
+   // Guard
+   if (aSubjectNode == 0) return 0;
+
+   // Pointer to the next node
+   TreeNode* tNextNode = 0;
+
+   // If the subject node has child nodes
+   if (aSubjectNode->mFirstChildNode)
+   {
+      // The next node will be the first child node of the subject node
+      tNextNode = aSubjectNode->mFirstChildNode;
+   }
+   // Else if the subject node has a node after it
+   else if (aSubjectNode->mAfterNode)
+   {
+      // The next node will be the node after it
+      tNextNode = aSubjectNode->mAfterNode;
+   }
+   // Else the subject node has no child nodes and no nodes after it
+   else
+   {
+      // If the subject node is the child of a parent node that is not the root node
+      if (aSubjectNode->mParentNode && aSubjectNode->mParentNode != aRootNode)
+      {
+         // The next node will be the node after the parent node.
+         // If the parent node has no node after it then there is no next node.
+         tNextNode = aSubjectNode->mParentNode->mAfterNode;
+      }
+      // If all nodes have already been visited then there is no next node
+      else
+      {
+         tNextNode = 0;
+      }
+   }
+   // Return the next node
+   return tNextNode;
+}
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
 // Return a pointer to the previous node, in construction order
 
 TreeNode* getPreviousNode(
