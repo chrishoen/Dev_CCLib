@@ -74,6 +74,19 @@ public:
 
 //    mGetNode->mTreeNodeTxFlags.mIsLastInStructure = mNextGetNode == 0;
 
+      if (mNextGetNode == 0)
+      {
+         mGetNode->mTreeNodeTxFlags.mIsLastInStructure = true;
+      }
+      else if (mNextGetNode->mParentNode == mRootNode)
+      {
+         mGetNode->mTreeNodeTxFlags.mIsLastInStructure = true;
+      }
+      else
+      {
+         mGetNode->mTreeNodeTxFlags.mIsLastInStructure = false;
+      }
+
       TreeNodeClass* tGetNode = mGetNode;
 
       if (mGetNode->mTreeNodeTxFlags.mIsLastInStructure)
@@ -89,19 +102,6 @@ public:
          mNextGetNode = (TreeNodeClass*)getNextNode(mNextGetNode);
       }
 
-
-      if (mNextGetNode == 0)
-      {
-         tGetNode->mTreeNodeTxFlags.mIsLastInStructure = true;
-      }
-      else if (tGetNode->mParentNode == mRootNode)
-      {
-         tGetNode->mTreeNodeTxFlags.mIsLastInStructure = true;
-      }
-      else
-      {
-         tGetNode->mTreeNodeTxFlags.mIsLastInStructure = false;
-      }
 
       if (tGetNode->mTreeNodeTxFlags.mIsLastInStructure)
       {

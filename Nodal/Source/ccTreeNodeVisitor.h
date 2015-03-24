@@ -129,6 +129,15 @@ void printAllTreeNodes3(TreeNode* aRootNode);
 TreeNode* getNextNode(
    TreeNode*        aSubjectNode);
 
+//----------------------------------------------------------------------------
+// Iteratively visit a colletion
+
+// This can be called in a loop that visits all tree nodes in a collection.
+// It returns the previous node that is was be visited.
+
+TreeNode* getPreviousNode(
+   TreeNode*        aSubjectNode);
+
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
