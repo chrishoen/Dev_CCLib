@@ -17,19 +17,27 @@ public:
    // Members
    TreeNodeClass  mRootNodeInstance;
    TreeNodeClass* mRootNode;
-   TreeNodeClass* mPreviousTxNode;
+
+   TreeNodeClass* mPreviousGetNode;
+   TreeNodeClass* mGetNode;
+   TreeNodeClass* mNextGetNode;
 
    TreeNodeTxQueue()
    {
       mRootNode = &mRootNodeInstance;
-      mPreviousTxNode = 0;
+      mPreviousGetNode=0;
+      mGetNode=0;
+      mNextGetNode=0;
    }
 
    void putTxNode(TreeNodeClass* aNode)
    {
-      if (mPreviousTxNode == 0)
+      if (mRootNode->mFirstChildNode == 0)
       {
-         mPreviousTxNode = aNode;
+         mPreviousGetNode = 0;
+         mGetNode         = aNode;
+         mNextGetNode     = (TreeNodeClass*)getNextNode(aNode);
+         mGetNode->mTreeNodeTxFlags.mIsLastInStructure = mNextGetNode == 0;
       }
 
       mRootNode->attachAfterLastChild(aNode);
@@ -37,32 +45,41 @@ public:
 
    TreeNodeClass* getNextTxNode()
    {
-      TreeNodeClass* tNextTxNode = (TreeNodeClass*)getNextNode(mPreviousTxNode);
-
-      if (tNextTxNode != 0)
+      if (mGetNode == 0)
       {
-         tNextTxNode->mTreeNodeTxFlags.mValue = 0;
-
-         if (tNextTxNode == mPreviousTxNode->mFirstChildNode)
-         {
-            tNextTxNode->mTreeNodeTxFlags.mIsFirstChild = true;
-         }
-
-         if (tNextTxNode == mPreviousTxNode->mParentNode != 0)
-         {
-            if (tNextTxNode == mPreviousTxNode->mParentNode->mLastChildNode)
-            {
-               tNextTxNode->mTreeNodeTxFlags.mIsLastChild = true;
-            }
-         }
-         else
-         {
-            tNextTxNode->mTreeNodeTxFlags.mIsLastChild = true;
-         }
-
+         mPreviousGetNode=0;
+         mNextGetNode=0;
+         return 0;
       }
-      mPreviousTxNode = tNextTxNode;
-      return tNextTxNode;
+
+      if (mPreviousGetNode != 0)
+      {
+         mGetNode->mTreeNodeTxFlags.mIsFirstChild = mGetNode == mPreviousGetNode->mFirstChildNode;
+      }
+      else
+      {
+         mGetNode->mTreeNodeTxFlags.mIsFirstChild = false;
+      }
+
+      if (mPreviousGetNode != 0)
+      {
+         mGetNode->mTreeNodeTxFlags.mIsLastChild = mGetNode == mPreviousGetNode->mLastChildNode;
+      }
+      else
+      {
+         mGetNode->mTreeNodeTxFlags.mIsLastChild = false;
+      }
+
+      mGetNode->mTreeNodeTxFlags.mIsLastInStructure = mNextGetNode == 0;
+
+
+      TreeNodeClass* tGetNode = mGetNode;
+
+      mPreviousGetNode=mGetNode;
+      mNextGetNode = (TreeNodeClass*)getNextNode(mGetNode);
+      mGetNode = mNextGetNode;
+
+      return tGetNode;
    }
 };
 
