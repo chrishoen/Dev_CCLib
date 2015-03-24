@@ -19,7 +19,7 @@ public:
    TreeNodeClass  mRootNodeInstance;
    TreeNodeClass* mRootNode;
    TreeNodeClass* mPreviousRxNode;
-   int               mLevel;
+   bool           mLastChildRxComplete;
 
 //****************************************************************************
 //****************************************************************************
@@ -30,7 +30,7 @@ public:
    {
       mRootNode = &mRootNodeInstance;
       mPreviousRxNode = 0;
-      mLevel = 0;
+      mLastChildRxComplete = false;
    }
 
    void putRxNode(TreeNodeClass* aNode)
@@ -39,7 +39,6 @@ public:
       {
          mRootNode->attachAfterLastChild(aNode);
          mPreviousRxNode = aNode;
-         mLevel = 1;
       }
       else
       {
@@ -47,13 +46,11 @@ public:
          {
             mPreviousRxNode->attachBeforeFirstChild(aNode);
             mPreviousRxNode = aNode;
-            mLevel++;
          }
          else if (aNode->mTreeNodeTxFlags.mLastChild)
          {
             mPreviousRxNode->mParentNode->attachAfterLastChild(aNode);
             mPreviousRxNode = (TreeNodeClass*)mPreviousRxNode->mParentNode;
-            mLevel--;
          }
          else 
          {
@@ -65,8 +62,6 @@ public:
 
    TreeNodeClass* getNextRxNode()
    {
-      if (mLevel != 1) return 0;
-
       TreeNodeClass* tNode = (TreeNodeClass*)mRootNode->detachFirstChild();
       return tNode;
    }

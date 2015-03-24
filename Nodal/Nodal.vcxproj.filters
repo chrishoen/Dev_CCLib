@@ -58,12 +58,6 @@
     <ClCompile Include="Source\ccCriticalSection_win.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ccTreeNodeTxQueue.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ccTreeNodeRxQueue.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\GenerateTreeNodes.cpp">
       <Filter>Source</Filter>
     </ClCompile>
