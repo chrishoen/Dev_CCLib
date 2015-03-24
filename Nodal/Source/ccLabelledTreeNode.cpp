@@ -165,6 +165,16 @@ LabelledTreeNode::LabelledTreeNode(int aIdentifier,char* aLabel)
    }
 }
 
+void LabelledTreeNode::setLabel(char* aLabel)
+{
+   strncpy(mLabel, aLabel, MaxLabelSize);
+}
+
+void LabelledTreeNode::setFullPath(char* aFullPath)
+{
+   strncpy(mFullPath, aFullPath, MaxFullPathSize);
+}
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************

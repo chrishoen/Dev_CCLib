@@ -83,10 +83,13 @@ public:
    // Label
    enum { MaxLabelSize = 20 };
    char mLabel[MaxLabelSize];
+   void setLabel(char* aLabel);
+
 
    // Full path
    enum { MaxFullPathSize = 200 };
    char mFullPath[MaxFullPathSize];
+   void setFullPath(char* aFullPath);
 
    // This is called on a subject node after it is attached to an object node
    virtual void onAttached();

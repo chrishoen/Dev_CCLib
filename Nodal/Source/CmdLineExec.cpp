@@ -183,11 +183,15 @@ void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
    CC::TreeNodeTxQueue<CC::LabelledTreeNode> tTxQueue;
    CC::TreeNodeRxQueue<CC::LabelledTreeNode> tRxQueue;
 
+   tTxQueue.mRootNode->setFullPath("TxRoot");
+   tRxQueue.mRootNode->setFullPath("RxRoot");
+
    printf("**********************************generateTreeNodes1(tRootNode1)\n");
    CC::LabelledTreeNode* tRootNode1 = new CC::LabelledTreeNode(0,"root1");
    generateTreeNodes1(tRootNode1);
 
    printf("**********************************tTxQueue.putTxNode(tRootNode1)\n");
+
    tTxQueue.putTxNode(tRootNode1);
 
    printf("**********************************transferLabelledTreeNodeQueues\n");
@@ -210,6 +214,9 @@ void CmdLineExec::executeGo6(Ris::CmdLineCmd* aCmd)
 
    CC::TreeNodeTxQueue<CC::LabelledTreeNode> tTxQueue;
    CC::TreeNodeRxQueue<CC::LabelledTreeNode> tRxQueue;
+
+   tTxQueue.mRootNode->setFullPath("TxRoot");
+   tRxQueue.mRootNode->setFullPath("RxRoot");
 
    printf("**********************************generateTreeNodes1(tRootNode1)\n");
    CC::LabelledTreeNode* tRootNode1 = new CC::LabelledTreeNode(0,"root1");
