@@ -110,6 +110,7 @@
     <ClCompile Include="Source\ccTreeNodeTxQueue.cpp" />
     <ClCompile Include="Source\ccTreeNodeVisitor.cpp" />
     <ClCompile Include="Source\CmdLineExec.cpp" />
+    <ClCompile Include="Source\GenerateTreeNodes.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\someBlock1.cpp" />
     <ClCompile Include="Source\someBlock2.cpp" />
@@ -135,6 +136,7 @@
     <ClInclude Include="Source\ccTreeNodeTxQueue.h" />
     <ClInclude Include="Source\ccTreeNodeVisitor.h" />
     <ClInclude Include="Source\CmdLineExec.h" />
+    <ClInclude Include="Source\GenerateTreeNodes.h" />
     <ClInclude Include="Source\someBlock1.h" />
     <ClInclude Include="Source\someBlock2.h" />
   </ItemGroup>
