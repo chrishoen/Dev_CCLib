@@ -51,6 +51,7 @@ public:
          {
             mPreviousRxNode->mParentNode->attachAfterLastChild(aNode);
             mPreviousRxNode = (TreeNodeClass*)mPreviousRxNode->mParentNode;
+//          mPreviousRxNode = aNode;
          }
          else 
          {

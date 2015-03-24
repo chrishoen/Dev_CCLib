@@ -353,6 +353,11 @@ TreeNode* getNextNode(
          tNextNode = 0;
       }
    }
+   if (tNextNode == 0)
+   {
+//    printf("ZERO ZERO ZERO ZERO ZERO ZERO ZERO ZERO ZERO %d\n",aSubjectNode->mIdentifier);
+   }
+
    // Return the next node
    return tNextNode;
 }
