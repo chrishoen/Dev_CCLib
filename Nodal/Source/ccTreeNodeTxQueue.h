@@ -72,6 +72,11 @@ public:
 
       mGetNode->mTreeNodeTxFlags.mIsLastInStructure = mNextGetNode == 0;
 
+      if (mGetNode->mTreeNodeTxFlags.mIsLastInStructure && false)
+      {
+         printf("LINE201 LastInStructure %d %d\n",mGetNode->mTreeNodeTxFlags.mIsLastInStructure,mGetNode->mIdentifier);
+      }
+
 
       TreeNodeClass* tGetNode = mGetNode;
 

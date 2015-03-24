@@ -10,6 +10,7 @@
 #include "ccTreeNodeDestroyer.h"
 #include "ccLabelledTreeNode.h"
 #include "ccLabelledTreeNodeVisitor.h"
+#include "ccLabelledTreeNodeChannel.h"
 #include "ccTreeNodeTxQueue.h"
 #include "ccTreeNodeRxQueue.h"
 #include "someBlock1.h"
@@ -133,6 +134,7 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
    tTxQueue.putTxNode(mRootNode);
 
    printf("tTxQueue.putRxNode********************BEGIN\n");
+
    while (true)
    {
       CC::LabelledTreeNode* tTxNode = tTxQueue.getNextTxNode();
@@ -147,6 +149,7 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
          break;
       }
    }
+
    printf("tTxQueue.putRxNode********************END\n");
 
    printf("tTxQueue.getRxNode********************************BEGIN\n");
@@ -172,7 +175,19 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 {
+   CC::TreeNodeTxQueue<CC::LabelledTreeNode> tTxQueue;
+   CC::TreeNodeRxQueue<CC::LabelledTreeNode> tRxQueue;
+
+   tTxQueue.putTxNode(mRootNode);
+
+   CC::transferLabelledTreeNodeQueues(&tTxQueue, &tRxQueue);
+
+   CC::printLabelledTreeNodeRxQueue(&tRxQueue);
 }
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
 void CmdLineExec::executeGo6(Ris::CmdLineCmd* aCmd)
 {

@@ -98,6 +98,7 @@
     <ClCompile Include="Source\ccBlockUniverse.cpp" />
     <ClCompile Include="Source\ccCriticalSection_win.cpp" />
     <ClCompile Include="Source\ccLabelledTreeNode.cpp" />
+    <ClCompile Include="Source\ccLabelledTreeNodeChannel.cpp" />
     <ClCompile Include="Source\ccLabelledTreeNodeVisitor.cpp" />
     <ClCompile Include="Source\ccLongTermBlockPool.cpp" />
     <ClCompile Include="Source\ccPointerCircular.cpp" />
@@ -122,6 +123,7 @@
     <ClInclude Include="Source\ccCriticalSection.h" />
     <ClInclude Include="Source\ccDefs.h" />
     <ClInclude Include="Source\ccLabelledTreeNode.h" />
+    <ClInclude Include="Source\ccLabelledTreeNodeChannel.h" />
     <ClInclude Include="Source\ccLabelledTreeNodeVisitor.h" />
     <ClInclude Include="Source\ccLongTermBlockPool.h" />
     <ClInclude Include="Source\ccPointerCircular.h" />
