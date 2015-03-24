@@ -1,7 +1,8 @@
 #ifndef _CCTREENODETXQUEUE_H_
 #define _CCTREENODETXQUEUE_H_
 
-#include "ccLabelledTreeNode.h"
+#include "ccTreeNode.h"
+#include "ccTreeNodeVisitor.h"
 
 namespace CC
 {
@@ -9,22 +10,60 @@ namespace CC
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-
+template <class TreeNodeClass>
 class TreeNodeTxQueue
 {
 public:
-   // Constructor
-   TreeNodeTxQueue();
-
    // Members
-   LabelledTreeNode  mRootNodeInstance;
-   LabelledTreeNode* mRootNode;
-   LabelledTreeNode* mPreviousTxNode;
+   TreeNodeClass  mRootNodeInstance;
+   TreeNodeClass* mRootNode;
+   TreeNodeClass* mPreviousTxNode;
 
-   // Methods
-   void putTxNode(LabelledTreeNode* aNode);
-   LabelledTreeNode* getNextTxNode();
+   TreeNodeTxQueue()
+   {
+      mRootNode = &mRootNodeInstance;
+      mPreviousTxNode = 0;
+   }
 
+   void putTxNode(TreeNodeClass* aNode)
+   {
+      if (mPreviousTxNode == 0)
+      {
+         mPreviousTxNode = aNode;
+      }
+
+      mRootNode->attachAfterLastChild(aNode);
+   }
+
+   TreeNodeClass* getNextTxNode()
+   {
+      TreeNodeClass* tNextTxNode = (TreeNodeClass*)getNextNode(mPreviousTxNode);
+
+      if (tNextTxNode != 0)
+      {
+         tNextTxNode->mTreeNodeTxFlags.mValue = 0;
+
+         if (tNextTxNode == mPreviousTxNode->mFirstChildNode)
+         {
+            tNextTxNode->mTreeNodeTxFlags.mFirstChild = true;
+         }
+
+         if (tNextTxNode == mPreviousTxNode->mParentNode != 0)
+         {
+            if (tNextTxNode == mPreviousTxNode->mParentNode->mLastChildNode)
+            {
+               tNextTxNode->mTreeNodeTxFlags.mLastChild = true;
+            }
+         }
+         else
+         {
+            tNextTxNode->mTreeNodeTxFlags.mLastChild = true;
+         }
+
+      }
+      mPreviousTxNode = tNextTxNode;
+      return tNextTxNode;
+   }
 };
 
 //****************************************************************************

@@ -296,8 +296,8 @@ void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo6(Ris::CmdLineCmd* aCmd)
 {
-   CC::TreeNodeTxQueue tTxQueue;
-   CC::TreeNodeRxQueue tRxQueue;
+   CC::TreeNodeTxQueue<CC::LabelledTreeNode> tTxQueue;
+   CC::TreeNodeRxQueue<CC::LabelledTreeNode> tRxQueue;
 
    tTxQueue.putTxNode(mRootNode);
 
