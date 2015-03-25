@@ -61,6 +61,7 @@ public:
       }
 
       if (mGetNode->mParentNode != 0)
+      if (mGetNode->mParentNode != mRootNode)
       {
          mGetNode->mTreeNodeTxFlags.mIsLastChild = (mGetNode == mGetNode->mParentNode->mLastChildNode);
       }

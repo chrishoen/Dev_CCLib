@@ -18,8 +18,7 @@ public:
    // Members
    TreeNodeClass  mRootNodeInstance;
    TreeNodeClass* mRootNode;
-   TreeNodeClass* mPreviousRxNode;
-   bool           mLastChildRxComplete;
+   TreeNodeClass* mPutNode;
 
 //****************************************************************************
 //****************************************************************************
@@ -29,8 +28,7 @@ public:
    TreeNodeRxQueue()
    {
       mRootNode = &mRootNodeInstance;
-      mPreviousRxNode = 0;
-      mLastChildRxComplete = false;
+      mPutNode = 0;
    }
 
    void putRxNode(TreeNodeClass* aNode)
@@ -38,29 +36,31 @@ public:
       if (mRootNode->mFirstChildNode==0)
       {
          mRootNode->attachAfterLastChild(aNode);
-         mPreviousRxNode = aNode;
+         mPutNode = aNode;
       }
       else
       {
          if (aNode->mTreeNodeTxFlags.mIsFirstChild)
          {
-            mPreviousRxNode->attachBeforeFirstChild(aNode);
-            mPreviousRxNode = aNode;
+            mPutNode->attachBeforeFirstChild(aNode);
+            mPutNode = aNode;
          }
          else if (aNode->mTreeNodeTxFlags.mIsLastChild)
          {
-            mPreviousRxNode->mParentNode->attachAfterLastChild(aNode);
-            mPreviousRxNode = (TreeNodeClass*)mPreviousRxNode->mParentNode;
+            mPutNode->mParentNode->attachAfterLastChild(aNode);
+            mPutNode = (TreeNodeClass*)mPutNode->mParentNode;
+//          mPutNode = (TreeNodeClass*)aNode->mParentNode;
          }
          else 
          {
-            mPreviousRxNode->mParentNode->attachAfterLastChild(aNode);
-            mPreviousRxNode = aNode;
+            mPutNode->mParentNode->attachAfterLastChild(aNode);
+            mPutNode = aNode;
          }
       }
       if (aNode->mTreeNodeTxFlags.mIsLastInStructure)
       {
          mRootNode->mLastChildNode->mTreeNodeTxFlags.mIsLastInStructure = true;
+//       mPutNode = mRootNode;
       }
    }
 
