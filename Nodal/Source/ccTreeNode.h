@@ -82,6 +82,8 @@ public:
    // Attach an object node to the last child of this subject node, after it.
    // The object node becomes this subject node's last child.
    void attachAfterLastChild (TreeNode* aObjectNode);
+   // Attach as last in structure
+   void attachAfterLastChildAsLastInStructure (TreeNode* aObjectNode);
 
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------

@@ -91,6 +91,15 @@ void TreeNode::attachBeforeFirstChild (TreeNode* aObjectNode)
 // Attach an object node to the last child of this subject node, after it.
 // The object node becomes this subject node's last child.
 
+void TreeNode::attachAfterLastChildAsLastInStructure(TreeNode* aObjectNode)
+{
+   // Set the last in structure transmit flag
+   aObjectNode->mTreeNodeTxFlags.mIsLastInStructure = true;
+
+   // Attach
+   attachAfterLastChild(aObjectNode);
+}
+
 void TreeNode::attachAfterLastChild  (TreeNode* aObjectNode)
 {
    // If this node doesn't have any children

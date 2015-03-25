@@ -59,7 +59,12 @@ public:
             mPreviousRxNode = aNode;
          }
       }
-      mLastChildRxComplete = aNode->mTreeNodeTxFlags.mIsLastInStructure;
+//    mLastChildRxComplete = aNode->mTreeNodeTxFlags.mIsLastInStructure;
+      if (aNode->mTreeNodeTxFlags.mIsLastInStructure)
+      {
+         mRootNode->mLastChildNode->mTreeNodeTxFlags.mIsLastInStructure = true;
+         printf("AAAAAAAAAAAAAAAAAAAAAAAAAAA\n");
+      }
    }
 
    TreeNodeClass* getNextRxNode()
@@ -69,7 +74,7 @@ public:
          return 0;
       }
 
-      if (mRootNode->mFirstChildNode == mRootNode->mFirstChildNode && !mLastChildRxComplete)
+      if (!mRootNode->mFirstChildNode->mTreeNodeTxFlags.mIsLastInStructure)
       {
          return 0;
       }

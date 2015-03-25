@@ -39,7 +39,7 @@ public:
          mGetNode         = aNode;
 //       mNextGetNode     = (TreeNodeClass*)getNextNode(aNode);
          mNextGetNode     = (TreeNodeClass*)getNextNode(aNode,mRootNode);
-         mGetNode->mTreeNodeTxFlags.mIsLastInStructure = mNextGetNode == 0;
+//       mGetNode->mTreeNodeTxFlags.mIsLastInStructure = mNextGetNode == 0;
       }
 
       mRootNode->attachAfterLastChild(aNode);
@@ -72,8 +72,8 @@ public:
          mGetNode->mTreeNodeTxFlags.mIsLastChild = false;
       }
 
+//    mGetNode->mTreeNodeTxFlags.mIsLastInStructure = mNextGetNode == 0;
 
-      mGetNode->mTreeNodeTxFlags.mIsLastInStructure = mNextGetNode == 0;
 
       TreeNodeClass* tGetNode = mGetNode;
 
