@@ -21,6 +21,7 @@ inline void transferLabelledTreeNodeQueues(
    while (true)
    {
       CC::LabelledTreeNode* tTxNode = aTxQueue->getNextTxNode();
+
       if (tTxNode != 0)
       {
          CC::LabelledTreeNode* tRxNode = new CC::LabelledTreeNode(tTxNode->mIdentifier, tTxNode->mLabel);

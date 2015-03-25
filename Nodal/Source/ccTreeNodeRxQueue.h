@@ -51,7 +51,6 @@ public:
          {
             mPreviousRxNode->mParentNode->attachAfterLastChild(aNode);
             mPreviousRxNode = (TreeNodeClass*)mPreviousRxNode->mParentNode;
-//          mPreviousRxNode = aNode;
          }
          else 
          {
@@ -59,11 +58,9 @@ public:
             mPreviousRxNode = aNode;
          }
       }
-//    mLastChildRxComplete = aNode->mTreeNodeTxFlags.mIsLastInStructure;
       if (aNode->mTreeNodeTxFlags.mIsLastInStructure)
       {
          mRootNode->mLastChildNode->mTreeNodeTxFlags.mIsLastInStructure = true;
-         printf("AAAAAAAAAAAAAAAAAAAAAAAAAAA\n");
       }
    }
 
@@ -80,6 +77,9 @@ public:
       }
 
       TreeNodeClass* tNode = (TreeNodeClass*)mRootNode->detachFirstChild();
+      if (tNode == 0)
+      {
+      }
       return tNode;
    }
 };

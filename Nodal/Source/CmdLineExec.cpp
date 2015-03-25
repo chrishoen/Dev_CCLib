@@ -128,86 +128,6 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
-   CC::TreeNodeTxQueue<CC::LabelledTreeNode> tTxQueue;
-   CC::TreeNodeRxQueue<CC::LabelledTreeNode> tRxQueue;
-
-   printf("tTxQueue.putTxNode********************\n");
-   tTxQueue.putTxNode(mRootNode);
-
-   printf("tTxQueue.putRxNode********************BEGIN\n");
-
-   while (true)
-   {
-      CC::LabelledTreeNode* tTxNode = tTxQueue.getNextTxNode();
-      if (tTxNode != 0)
-      {
-         CC::LabelledTreeNode* tRxNode = new CC::LabelledTreeNode(tTxNode->mIdentifier, tTxNode->mLabel);
-         tRxNode->mTreeNodeTxFlags = tTxNode->mTreeNodeTxFlags;
-         tRxQueue.putRxNode(tRxNode);
-      }
-      else
-      {
-         break;
-      }
-   }
-
-   printf("tTxQueue.putRxNode********************END\n");
-
-   printf("tTxQueue.getRxNode********************************BEGIN\n");
-   while (true)
-   {
-      CC::LabelledTreeNode* tRxNode = tRxQueue.getNextRxNode();
-      if (tRxNode != 0)
-      {
-         CC::printAllLabelledTreeNodes1(tRxNode);
-//       printf("LINE201 %d %d\n",tRxNode->mTreeNodeTxFlags.mIsLastInStructure,tRxNode->mIdentifier);
-      }
-      else
-      {
-         break;
-      }
-   }
-   printf("tTxQueue.getRxNode********************************END\n");
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
-{
-   printf("**********************************go5\n");
-   printf("**********************************go5\n");
-   printf("**********************************go5\n");
-   printf("\n");
-
-   CC::TreeNodeTxQueue<CC::LabelledTreeNode> tTxQueue;
-   CC::TreeNodeRxQueue<CC::LabelledTreeNode> tRxQueue;
-
-   tTxQueue.mRootNode->setFullPath("TxRoot");
-   tRxQueue.mRootNode->setFullPath("RxRoot");
-
-   printf("**********************************generateTreeNodes1(tRootNode1)\n");
-   CC::LabelledTreeNode* tRootNode1 = new CC::LabelledTreeNode(0,"root1");
-   generateTreeNodes1(tRootNode1);
-
-   printf("**********************************tTxQueue.putTxNode(tRootNode1)\n");
-
-   tTxQueue.putTxNode(tRootNode1);
-
-   printf("**********************************transferLabelledTreeNodeQueues\n");
-   CC::transferLabelledTreeNodeQueues(&tTxQueue, &tRxQueue);
-   return;
-   printf("**********************************printLabelledTreeNodeRxQueue\n");
-   CC::printLabelledTreeNodeRxQueue(&tRxQueue);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void CmdLineExec::executeGo6(Ris::CmdLineCmd* aCmd)
-{
    printf("**********************************go6\n");
    printf("**********************************go6\n");
    printf("**********************************go6\n");
@@ -229,19 +149,33 @@ void CmdLineExec::executeGo6(Ris::CmdLineCmd* aCmd)
    CC::LabelledTreeNode* tRootNode2 = new CC::LabelledTreeNode(0,"root2");
    generateTreeNodes1(tRootNode2);
 
-#if 1
    printf("**********************************tTxQueue.putTxNode(tRootNode1)\n");
    tTxQueue.putTxNode(tRootNode1);
-#endif
-#if 1
+
    printf("**********************************tTxQueue.putTxNode(tRootNode2)\n");
    tTxQueue.putTxNode(tRootNode2);
-#endif
+
    printf("**********************************transferLabelledTreeNodeQueues\n");
    CC::transferLabelledTreeNodeQueues(&tTxQueue, &tRxQueue);
-   return;
+
    printf("**********************************printLabelledTreeNodeRxQueue\n");
    CC::printLabelledTreeNodeRxQueue(&tRxQueue);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
+{
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo6(Ris::CmdLineCmd* aCmd)
+{
 }
 //******************************************************************************
 //******************************************************************************
