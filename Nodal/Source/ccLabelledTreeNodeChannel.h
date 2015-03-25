@@ -44,20 +44,16 @@ inline void printLabelledTreeNodeRxQueue(
    CC::TreeNodeRxQueue<CC::LabelledTreeNode>* aRxQueue)
 {
    CC::printAllLabelledTreeNodes1(aRxQueue->mRootNode);
-   return;
+}
 
-   while (true)
-   {
-      CC::LabelledTreeNode* tRxNode = aRxQueue->getNextRxNode();
-      if (tRxNode != 0)
-      {
-         CC::printAllLabelledTreeNodes1(tRxNode);
-      }
-      else
-      {
-         break;
-      }
-   }
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+
+inline void printLabelledTreeNodeTxQueue(
+   CC::TreeNodeTxQueue<CC::LabelledTreeNode>* aTxQueue)
+{
+   CC::printAllLabelledTreeNodes1(aTxQueue->mRootNode);
 }
 
 //****************************************************************************

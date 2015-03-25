@@ -155,6 +155,9 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
    printf("**********************************tTxQueue.putTxNode(tRootNode2)\n");
    tTxQueue.putTxNode(tRootNode2);
 
+   printf("**********************************printLabelledTreeNodeTxQueue\n");
+   CC::printLabelledTreeNodeTxQueue(&tTxQueue);
+   return;
    printf("**********************************transferLabelledTreeNodeQueues\n");
    CC::transferLabelledTreeNodeQueues(&tTxQueue, &tRxQueue);
 
