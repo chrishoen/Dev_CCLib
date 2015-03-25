@@ -54,18 +54,18 @@ public:
          return 0;
       }
 
-      if (mPreviousGetNode != 0)
+      if (mGetNode->mParentNode != 0)
       {
-         mGetNode->mTreeNodeTxFlags.mIsFirstChild = mGetNode == mPreviousGetNode->mFirstChildNode;
+         mGetNode->mTreeNodeTxFlags.mIsFirstChild = (mGetNode == mGetNode->mParentNode->mFirstChildNode);
       }
       else
       {
          mGetNode->mTreeNodeTxFlags.mIsFirstChild = false;
       }
 
-      if (mPreviousGetNode != 0)
+      if (mGetNode->mParentNode != 0)
       {
-         mGetNode->mTreeNodeTxFlags.mIsLastChild = mGetNode == mPreviousGetNode->mLastChildNode;
+         mGetNode->mTreeNodeTxFlags.mIsLastChild = (mGetNode == mGetNode->mParentNode->mLastChildNode);
       }
       else
       {
