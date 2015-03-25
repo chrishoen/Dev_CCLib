@@ -325,7 +325,7 @@ TreeNode* getNextNode(
    // Pointer to the next node
    TreeNode* tNextNode = 0;
 
-#if 0
+#if 1
    // If the subject node has child nodes
    if (aSubjectNode->mFirstChildNode)
    {
@@ -335,11 +335,20 @@ TreeNode* getNextNode(
    // If the subject node is the child of a parent node that is not the root node
    else if (aSubjectNode->mParentNode && aSubjectNode->mParentNode != aRootNode)
    {
-      // The next node will be the node after this node.
-      tNextNode = aSubjectNode->mParentNode->mAfterNode;
+      if (aSubjectNode->mAfterNode)
+      {
+         // The next node will be the node after it
+         tNextNode = aSubjectNode->mAfterNode;
+      }
+      else
+      {
+         // The next node will be the node after the parent node.
+         // If the parent node has no node after it then there is no next node.
+         tNextNode = aSubjectNode->mParentNode->mAfterNode;
+      }
    }
 #endif
-#if 1
+#if 0
    // If the subject node has child nodes
    if (aSubjectNode->mFirstChildNode)
    {

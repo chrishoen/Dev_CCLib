@@ -233,7 +233,7 @@ void CmdLineExec::executeGo6(Ris::CmdLineCmd* aCmd)
    printf("**********************************tTxQueue.putTxNode(tRootNode1)\n");
    tTxQueue.putTxNode(tRootNode1);
 #endif
-#if 0
+#if 1
    printf("**********************************tTxQueue.putTxNode(tRootNode2)\n");
    tTxQueue.putTxNode(tRootNode2);
 #endif
