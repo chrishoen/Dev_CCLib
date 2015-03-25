@@ -325,6 +325,21 @@ TreeNode* getNextNode(
    // Pointer to the next node
    TreeNode* tNextNode = 0;
 
+#if 0
+   // If the subject node has child nodes
+   if (aSubjectNode->mFirstChildNode)
+   {
+      // The next node will be the first child node of the subject node
+      tNextNode = aSubjectNode->mFirstChildNode;
+   }
+   // If the subject node is the child of a parent node that is not the root node
+   else if (aSubjectNode->mParentNode && aSubjectNode->mParentNode != aRootNode)
+   {
+      // The next node will be the node after this node.
+      tNextNode = aSubjectNode->mParentNode->mAfterNode;
+   }
+#endif
+#if 1
    // If the subject node has child nodes
    if (aSubjectNode->mFirstChildNode)
    {
@@ -353,6 +368,7 @@ TreeNode* getNextNode(
          tNextNode = 0;
       }
    }
+#endif
    if (tNextNode == 0)
    {
       printf("ZERO ZERO ZERO ZERO ZERO ZERO ZERO ZERO ZERO %d\n",aSubjectNode->mIdentifier);
