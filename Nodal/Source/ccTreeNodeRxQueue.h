@@ -49,7 +49,6 @@ public:
          {
             mPutNode->mParentNode->attachAfterLastChild(aNode);
             mPutNode = (TreeNodeClass*)mPutNode->mParentNode;
-//          mPutNode = (TreeNodeClass*)aNode->mParentNode;
          }
          else 
          {
@@ -60,7 +59,6 @@ public:
       if (aNode->mTreeNodeTxFlags.mIsLastInStructure)
       {
          mRootNode->mLastChildNode->mTreeNodeTxFlags.mIsLastInStructure = true;
-//       mPutNode = mRootNode;
       }
    }
 
