@@ -37,8 +37,8 @@ public:
          printf("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$\n");
          mPreviousGetNode = 0;
          mGetNode         = aNode;
-         mNextGetNode     = (TreeNodeClass*)getNextNode(aNode);
-//       mNextGetNode     = (TreeNodeClass*)getNextNode(aNode,mRootNode);
+//       mNextGetNode     = (TreeNodeClass*)getNextNode(aNode);
+         mNextGetNode     = (TreeNodeClass*)getNextNode(aNode,mRootNode);
          mGetNode->mTreeNodeTxFlags.mIsLastInStructure = mNextGetNode == 0;
       }
 
@@ -87,8 +87,8 @@ public:
       {
          mPreviousGetNode = mGetNode;
          mGetNode = mNextGetNode;
-//       mNextGetNode = (TreeNodeClass*)getNextNode(mNextGetNode,mRootNode);
-         mNextGetNode = (TreeNodeClass*)getNextNode(mNextGetNode);
+         mNextGetNode = (TreeNodeClass*)getNextNode(mNextGetNode,mRootNode);
+//       mNextGetNode = (TreeNodeClass*)getNextNode(mNextGetNode);
       }
 
       if (tGetNode->mTreeNodeTxFlags.mIsLastInStructure)

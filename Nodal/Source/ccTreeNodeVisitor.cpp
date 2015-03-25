@@ -355,7 +355,7 @@ TreeNode* getNextNode(
    }
    if (tNextNode == 0)
    {
-//    printf("ZERO ZERO ZERO ZERO ZERO ZERO ZERO ZERO ZERO %d\n",aSubjectNode->mIdentifier);
+      printf("ZERO ZERO ZERO ZERO ZERO ZERO ZERO ZERO ZERO %d\n",aSubjectNode->mIdentifier);
    }
 
    // Return the next node

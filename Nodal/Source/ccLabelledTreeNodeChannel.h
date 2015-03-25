@@ -42,6 +42,9 @@ inline void transferLabelledTreeNodeQueues(
 inline void printLabelledTreeNodeRxQueue(
    CC::TreeNodeRxQueue<CC::LabelledTreeNode>* aRxQueue)
 {
+   CC::printAllLabelledTreeNodes1(aRxQueue->mRootNode);
+   return;
+
    while (true)
    {
       CC::LabelledTreeNode* tRxNode = aRxQueue->getNextRxNode();
