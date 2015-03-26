@@ -324,40 +324,4 @@ TreeNode* getNextNode(
    return tNextNode;
 }
 
-//****************************************************************************
-//****************************************************************************
-//****************************************************************************
-// Return a pointer to the previous node, in construction order
-
-TreeNode* getPreviousNode(
-   TreeNode*        aSubjectNode)
-{
-   // Guard
-   if (aSubjectNode == 0) return 0;
-
-   // Pointer to the previous node
-   TreeNode* tPreviousNode = 0;
-
-   // If the subject node has a node before it
-   if (aSubjectNode->mBeforeNode)
-   {
-      // The previous node will be the node before it
-      tPreviousNode = aSubjectNode->mBeforeNode;
-   }
-   // Else If the subject node has a parent node
-   else if (aSubjectNode->mParentNode)
-   {
-      // The previous node will be the parent node
-      tPreviousNode = aSubjectNode->mParentNode;
-   }
-   // Else the subject node doesn't have a previous node, it is a root node.
-   else
-   {
-      tPreviousNode = 0;
-   }
-
-   // Return the previous node
-   return tPreviousNode;
-}
-
 }//namespace
