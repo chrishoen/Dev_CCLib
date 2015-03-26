@@ -307,6 +307,32 @@ TreeNode* getNextNode(
    // Else the subject node has no child nodes and no nodes after it
    else
    {
+      // Loop up through the parent nodes of the subject node
+      // to find the first parent node that has an after node
+
+      // Start the loop at the subject node's parent
+      TreeNode* tParentNode = aSubjectNode->mParentNode;
+
+      // Loop until a parent is found that has an after node or there 
+      // there are no parents
+      while (tParentNode != 0)
+      {
+         // If the parent has an after node then the next node will be
+         // that one
+         if ((tNextNode = tParentNode->mAfterNode) != 0)
+         {
+            // This is the closest parent to the subject node that has
+            // an after node. Exit the loop
+            break;
+         }
+         // If the parent doesn't have an after node
+         else
+         {
+            // Advance up to the next parent
+            tParentNode = tParentNode->mParentNode;
+         }
+      }
+#if 0
       // If the subject node is the child of a parent node
       if (aSubjectNode->mParentNode)
       {
@@ -319,6 +345,7 @@ TreeNode* getNextNode(
       {
          tNextNode = 0;
       }
+#endif
    }
    // Return the next node
    return tNextNode;
