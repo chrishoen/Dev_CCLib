@@ -159,6 +159,8 @@ public:
 
    // These are the flags
    TreeNodeTxFlags mTreeNodeTxFlags;
+
+   int mTxAttachLevel;
 };
 
 //****************************************************************************

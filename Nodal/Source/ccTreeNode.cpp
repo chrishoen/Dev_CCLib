@@ -25,6 +25,7 @@ TreeNode::TreeNode()
    mIdentifier=0;
    mMemoryType = 0;
    mTreeNodeTxFlags.mValue = 0;
+   mTxAttachLevel = 0;
 }
 
 TreeNode::TreeNode(int aIdentifier)
@@ -40,6 +41,7 @@ TreeNode::TreeNode(int aIdentifier)
    mIdentifier = aIdentifier;
    mMemoryType = 0;
    mTreeNodeTxFlags.mValue = 0;
+   mTxAttachLevel = 0;
 }
 
 //****************************************************************************
