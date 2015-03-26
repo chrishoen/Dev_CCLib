@@ -206,7 +206,6 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
    printf("\n");
    CC::printLabelledTreeNodeTxQueue(&tTxQueue);
    printf("\n");
-   return;
 
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
