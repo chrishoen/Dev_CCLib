@@ -229,20 +229,28 @@ TreeNode* visitNode(
    // Else the subject node has no child nodes and no nodes after it
    else
    {
-      tNextNode = 0;
+      // Loop up through the parent nodes of the subject node
+      // to find the first parent node that has an after node
+
+      // Start the loop at the subject node's parent
       TreeNode* tParentNode = aSubjectNode->mParentNode;
+      // Loop until there are no parents
       while (tParentNode != 0)
       {
-         tNextNode = tParentNode->mAfterNode;
+         // The next node level will decrease
+         aRecursiveAnchor->mLevel--;
 
-         if (tNextNode != 0)
+         // If the parent has an after node then the next node will be
+         // that one
+         if ((tNextNode = tParentNode->mAfterNode) != 0)
          {
-            // The next node level will decrease
-            aRecursiveAnchor->mLevel--;
+            // Exit the loop
             break;
          }
+         // If the parent doesn't have an after node
          else
          {
+            // Advance up to the next parent
             tParentNode = tParentNode->mParentNode;
          }
       }
