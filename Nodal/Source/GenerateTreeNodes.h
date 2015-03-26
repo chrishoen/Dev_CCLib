@@ -9,6 +9,7 @@
 
 void generateTreeNodes1(CC::LabelledTreeNode* tRootNode);
 void generateTreeNodes2(CC::LabelledTreeNode* tRootNode);
+void generateTreeNodes3(CC::LabelledTreeNode* tRootNode);
 
 //******************************************************************************
 #endif

@@ -99,3 +99,33 @@ void generateTreeNodes2(CC::LabelledTreeNode* tRootNode)
 
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void generateTreeNodes3(CC::LabelledTreeNode* tRootNode)
+{
+   CC::TreeNode* tNode = 0;
+
+   tNode = CC::LabelledTreeNode::create( 1,   "node1" );
+   tRootNode->attachAfterLastChild(tNode);
+
+   tNode = CC::LabelledTreeNode::create( 2,   "node2" );
+   tRootNode->attachAfterLastChild(tNode);
+
+   tNode = CC::LabelledTreeNode::create( 21,  "node21" );
+   tRootNode->mLastChildNode->attachAfterLastChild(tNode);
+
+
+   tNode = CC::LabelledTreeNode::create( 211,  "node211" );
+   tRootNode->mLastChildNode->mLastChildNode->attachAfterLastChild(tNode);
+
+
+   tNode = CC::LabelledTreeNode::create( 2111,  "node2111" );
+   tRootNode->mLastChildNode->mLastChildNode->mLastChildNode->attachAfterLastChild(tNode);
+
+   tNode = CC::LabelledTreeNode::create( 22,  "node22" );
+   tRootNode->mLastChildNode->attachAfterLastChildAsLastInStructure(tNode);
+
+}
+

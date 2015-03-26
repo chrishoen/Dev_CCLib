@@ -54,10 +54,36 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,4);
+   aCmd->setArgDefault(1,3);
 
    CC::LabelledTreeNode* tRootNode = new CC::LabelledTreeNode(0,"root");
-   generateTreeNodes2(tRootNode);
+
+   if (aCmd->argInt(1) == 1)
+   {
+      generateTreeNodes1(tRootNode);
+   }
+   else if (aCmd->argInt(1) == 2)
+   {
+      generateTreeNodes2(tRootNode);
+   }
+   else if (aCmd->argInt(1) == 3)
+   {
+      generateTreeNodes3(tRootNode);
+   }
+
+   CC::printAllLabelledTreeNodes3(tRootNode);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
+{
+   aCmd->setArgDefault(1,1);
+
+   CC::LabelledTreeNode* tRootNode = new CC::LabelledTreeNode(0,"root");
+   generateTreeNodes3(tRootNode);
 
    if (aCmd->argInt(1) == 1)
    {
@@ -78,7 +104,7 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1,5);
 
@@ -117,7 +143,7 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
    CC::printAllLabelledTreeNodes1(mRootNode);
 }
@@ -126,15 +152,15 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 {
    //---------------------------------------------------------------------------
    aCmd->setArgDefault(1,1);
    int tStage = aCmd->argInt(1);
 
-   printf("**********************************go4\n");
-   printf("**********************************go4\n");
-   printf("**********************************go4\n");
+   printf("**********************************go5\n");
+   printf("**********************************go5\n");
+   printf("**********************************go5\n");
    printf("\n");
 
 
@@ -224,26 +250,11 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
-{
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
 void CmdLineExec::executeGo6(Ris::CmdLineCmd* aCmd)
 {
-}
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void CmdLineExec::executeGo7(Ris::CmdLineCmd* aCmd)
-{
-   printf("**********************************go7\n");
-   printf("**********************************go7\n");
-   printf("**********************************go7\n");
+   printf("**********************************go6\n");
+   printf("**********************************go6\n");
+   printf("**********************************go6\n");
    printf("\n");
 
    CC::LabelledTreeNode* tRootNode = new CC::LabelledTreeNode(0,"troot");
@@ -264,4 +275,11 @@ void CmdLineExec::executeGo7(Ris::CmdLineCmd* aCmd)
 
    printf("**********************************printAllLabelledTreeNodes1(mRootNode)\n");
    CC::printAllLabelledTreeNodes1(tRootNode);
+}
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo7(Ris::CmdLineCmd* aCmd)
+{
 }
