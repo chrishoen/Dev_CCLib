@@ -30,7 +30,7 @@ inline void transferLabelledTreeNodeQueues(
 
          CC::LabelledTreeNode* tRxNode = new CC::LabelledTreeNode(tTxNode->mIdentifier, tTxNode->mLabel);
          tRxNode->mTreeNodeTxFlags = tTxNode->mTreeNodeTxFlags;
-       //aRxQueue->putRxNode(tRxNode);
+         aRxQueue->putRxNode(tRxNode);
       }
       else
       {
