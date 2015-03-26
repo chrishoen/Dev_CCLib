@@ -229,6 +229,24 @@ TreeNode* visitNode(
    // Else the subject node has no child nodes and no nodes after it
    else
    {
+      tNextNode = 0;
+      TreeNode* tParentNode = aSubjectNode->mParentNode;
+      while (tParentNode != 0)
+      {
+         tNextNode = tParentNode->mAfterNode;
+
+         if (tNextNode != 0)
+         {
+            // The next node level will decrease
+            aRecursiveAnchor->mLevel--;
+            break;
+         }
+         else
+         {
+            tParentNode = tParentNode->mParentNode;
+         }
+      }
+#if 0
       // If the subject node is the child of a parent node
       if (aSubjectNode->mParentNode)
       {
@@ -243,6 +261,7 @@ TreeNode* visitNode(
       {
          tNextNode = 0;
       }
+#endif
    }
    // Return the next node
    return tNextNode;
