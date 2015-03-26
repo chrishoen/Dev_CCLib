@@ -61,9 +61,6 @@
     <ClCompile Include="Source\GenerateTreeNodes.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ccLabelledTreeNodeChannel.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h">

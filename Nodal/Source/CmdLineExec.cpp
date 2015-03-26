@@ -128,10 +128,14 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
+   aCmd->setArgDefault(1,1);
+   int tStage = aCmd->argInt(1);
+
    printf("**********************************go4\n");
    printf("**********************************go4\n");
    printf("**********************************go4\n");
    printf("\n");
+
 
    CC::TreeNodeTxQueue<CC::LabelledTreeNode> tTxQueue;
    CC::TreeNodeRxQueue<CC::LabelledTreeNode> tRxQueue;
@@ -140,32 +144,54 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
    tRxQueue.mRootNode->setLabel("RxRoot");
    tTxQueue.mRootNode->setFullPath("TxRoot");
    tRxQueue.mRootNode->setFullPath("RxRoot");
+   
+   CC::LabelledTreeNode* tRootNode1 = new CC::LabelledTreeNode(1000, "root1");
+   CC::LabelledTreeNode* tRootNode2 = new CC::LabelledTreeNode(2000, "root2");
+   CC::LabelledTreeNode* tRootNode3 = new CC::LabelledTreeNode(3000, "root3");
 
-   printf("**********************************generateTreeNodes1(tRootNode1)\n");
-   CC::LabelledTreeNode* tRootNode1 = new CC::LabelledTreeNode(1000,"root1");
-   generateTreeNodes1(tRootNode1);
+   if (tStage >= 1)
+   {
+      printf("**********************************generateTreeNodes1(tRootNode1)\n");
+      generateTreeNodes1(tRootNode1);
+   }
 
-   printf("**********************************generateTreeNodes1(tRootNode2)\n");
-   CC::LabelledTreeNode* tRootNode2 = new CC::LabelledTreeNode(2000,"root2");
-   generateTreeNodes1(tRootNode2);
+   if (tStage >= 2)
+   {
+      printf("**********************************generateTreeNodes1(tRootNode2)\n");
+      CC::LabelledTreeNode* tRootNode2 = new CC::LabelledTreeNode(2000, "root2");
+      generateTreeNodes1(tRootNode2);
+   }
 
-   printf("**********************************generateTreeNodes1(tRootNode2)\n");
-   CC::LabelledTreeNode* tRootNode3 = new CC::LabelledTreeNode(3000,"root3");
-   generateTreeNodes1(tRootNode3);
+   if (tStage >= 3)
+   {
+      printf("**********************************generateTreeNodes1(tRootNode3)\n");
+      CC::LabelledTreeNode* tRootNode3 = new CC::LabelledTreeNode(3000, "root3");
+      generateTreeNodes1(tRootNode3);
+   }
 
-   printf("**********************************tTxQueue.putTxNode(tRootNode1)\n");
-   tTxQueue.putTxNode(tRootNode1);
+   if (tStage >= 1)
+   {
+      printf("**********************************tTxQueue.putTxNode(tRootNode1)\n");
+      tTxQueue.putTxNode(tRootNode1);
+   }
 
-   printf("**********************************tTxQueue.putTxNode(tRootNode2)\n");
-   tTxQueue.putTxNode(tRootNode2);
+   if (tStage >= 2)
+   {
+      printf("**********************************tTxQueue.putTxNode(tRootNode2)\n");
+      tTxQueue.putTxNode(tRootNode2);
+   }
 
-   printf("**********************************tTxQueue.putTxNode(tRootNode3)\n");
-   tTxQueue.putTxNode(tRootNode3);
+   if (tStage >= 3)
+   {
+      printf("**********************************tTxQueue.putTxNode(tRootNode3)\n");
+      tTxQueue.putTxNode(tRootNode3);
+   }
 
    printf("**********************************printLabelledTreeNodeTxQueue\n");
    printf("\n");
    CC::printLabelledTreeNodeTxQueue(&tTxQueue);
    printf("\n");
+   return;
 
    printf("**********************************transferLabelledTreeNodeQueues\n");
    CC::transferLabelledTreeNodeQueues(&tTxQueue, &tRxQueue);

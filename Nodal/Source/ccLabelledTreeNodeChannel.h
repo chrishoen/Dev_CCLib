@@ -24,13 +24,13 @@ inline void transferLabelledTreeNodeQueues(
 
       if (tTxNode != 0)
       {
-//       printf("getNextTxNode        %5d %s\n", 
-//          tTxNode->mIdentifier,
-//          tTxNode->mFullPath);
+         printf("getNextTxNode        %5d %s\n", 
+            tTxNode->mIdentifier,
+            tTxNode->mFullPath);
 
          CC::LabelledTreeNode* tRxNode = new CC::LabelledTreeNode(tTxNode->mIdentifier, tTxNode->mLabel);
          tRxNode->mTreeNodeTxFlags = tTxNode->mTreeNodeTxFlags;
-         aRxQueue->putRxNode(tRxNode);
+       //aRxQueue->putRxNode(tRxNode);
       }
       else
       {
