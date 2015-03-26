@@ -133,16 +133,6 @@ TreeNode* getNextNode(
 // Iteratively visit a colletion
 
 // This can be called in a loop that visits all tree nodes in a collection.
-// It returns the next node that is to be visited.
-
-TreeNode* getNextNode(
-   TreeNode*        aSubjectNode,
-   TreeNode*        aRootNode);
-
-//----------------------------------------------------------------------------
-// Iteratively visit a colletion
-
-// This can be called in a loop that visits all tree nodes in a collection.
 // It returns the previous node that is was be visited.
 
 TreeNode* getPreviousNode(
