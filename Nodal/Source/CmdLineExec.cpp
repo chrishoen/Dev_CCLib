@@ -149,11 +149,18 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
    CC::LabelledTreeNode* tRootNode2 = new CC::LabelledTreeNode(2000,"root2");
    generateTreeNodes1(tRootNode2);
 
+   printf("**********************************generateTreeNodes1(tRootNode2)\n");
+   CC::LabelledTreeNode* tRootNode3 = new CC::LabelledTreeNode(3000,"root3");
+   generateTreeNodes1(tRootNode3);
+
    printf("**********************************tTxQueue.putTxNode(tRootNode1)\n");
    tTxQueue.putTxNode(tRootNode1);
 
    printf("**********************************tTxQueue.putTxNode(tRootNode2)\n");
    tTxQueue.putTxNode(tRootNode2);
+
+   printf("**********************************tTxQueue.putTxNode(tRootNode3)\n");
+   tTxQueue.putTxNode(tRootNode3);
 
    printf("**********************************printLabelledTreeNodeTxQueue\n");
    printf("\n");
