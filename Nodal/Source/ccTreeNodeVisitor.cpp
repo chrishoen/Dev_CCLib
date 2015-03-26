@@ -234,7 +234,9 @@ TreeNode* visitNode(
 
       // Start the loop at the subject node's parent
       TreeNode* tParentNode = aSubjectNode->mParentNode;
-      // Loop until there are no parents
+
+      // Loop until a parent is found that has an after node or there 
+      // there are no parents
       while (tParentNode != 0)
       {
          // The next node level will decrease
@@ -244,7 +246,8 @@ TreeNode* visitNode(
          // that one
          if ((tNextNode = tParentNode->mAfterNode) != 0)
          {
-            // Exit the loop
+            // This is the closest parent to the subject node that has
+            // an after node. Exit the loop
             break;
          }
          // If the parent doesn't have an after node
@@ -254,22 +257,6 @@ TreeNode* visitNode(
             tParentNode = tParentNode->mParentNode;
          }
       }
-#if 0
-      // If the subject node is the child of a parent node
-      if (aSubjectNode->mParentNode)
-      {
-         // The next node will be the node after the parent node.
-         // If the parent node has no node after it then there is no next node.
-         tNextNode = aSubjectNode->mParentNode->mAfterNode;
-         // The next node level will decrease
-         aRecursiveAnchor->mLevel--;
-      }
-      // If all nodes have already been visited then there is no next node
-      else
-      {
-         tNextNode = 0;
-      }
-#endif
    }
    // Return the next node
    return tNextNode;
