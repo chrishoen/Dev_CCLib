@@ -292,17 +292,27 @@ TreeNode* getNextNode(
    // Pointer to the next node
    TreeNode* tNextNode = 0;
 
+   // Transmit attach level starts at subject node level
+   int tTxAttachLevel = aSubjectNode->mTxAttachLevel;
+
    // If the subject node has child nodes
    if (aSubjectNode->mFirstChildNode)
    {
       // The next node will be the first child node of the subject node
       tNextNode = aSubjectNode->mFirstChildNode;
+
+      // Update the transmit attachment level, going down one level
+      tTxAttachLevel++;
+      tNextNode->mTxAttachLevel = tTxAttachLevel;
    }
    // Else if the subject node has a node after it
    else if (aSubjectNode->mAfterNode)
    {
       // The next node will be the node after it
       tNextNode = aSubjectNode->mAfterNode;
+
+      // Update the transmit attachment level
+      tNextNode->mTxAttachLevel = tTxAttachLevel;
    }
    // Else the subject node has no child nodes and no nodes after it
    else
@@ -317,12 +327,18 @@ TreeNode* getNextNode(
       // there are no parents
       while (tParentNode != 0)
       {
+         // Decrement the transmit attachment level, going up one level
+         tTxAttachLevel--;
+
          // If the parent has an after node then the next node will be
          // that one
          if ((tNextNode = tParentNode->mAfterNode) != 0)
          {
             // This is the closest parent to the subject node that has
-            // an after node. Exit the loop
+            // an after node.  
+            // Update the transmit attachment level
+            tNextNode->mTxAttachLevel = tTxAttachLevel;
+            // Exit the loop.
             break;
          }
          // If the parent doesn't have an after node
@@ -332,6 +348,7 @@ TreeNode* getNextNode(
             tParentNode = tParentNode->mParentNode;
          }
       }
+//    printf("********************** LINE101 %d\n",tTxAttachLevel);
 #if 0
       // If the subject node is the child of a parent node
       if (aSubjectNode->mParentNode)

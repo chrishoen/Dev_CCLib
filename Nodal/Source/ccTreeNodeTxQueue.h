@@ -29,12 +29,12 @@ public:
       mPreviousGetNode=0;
       mGetNode=0;
       mNextGetNode=0;
-      mTxAttachLevel=0;
+      mTxAttachLevel=1;
    }
 
    void putTxNode(TreeNodeClass* aNode)
    {
-      aNode->mTxAttachLevel = 0;
+      aNode->mTxAttachLevel = 1;
       mRootNode->attachAfterLastChild(aNode);
    }
 
@@ -48,6 +48,10 @@ public:
       if (mGetNode == 0)
       {
          mGetNode = (TreeNodeClass*)mRootNode->detachFirstChild();
+         if (mGetNode != 0)
+         {
+//          mGetNode->mTxAttachLevel = 1;
+         }
       }
       else
       {
@@ -57,6 +61,10 @@ public:
       if (mGetNode == 0)
       {
          mGetNode = (TreeNodeClass*)mRootNode->detachFirstChild();
+         if (mGetNode != 0)
+         {
+//          mGetNode->mTxAttachLevel = 1;
+         }
       }
 
       if (mGetNode == 0)
