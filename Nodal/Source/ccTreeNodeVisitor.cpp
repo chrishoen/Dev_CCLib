@@ -268,37 +268,6 @@ TreeNode* visitNode(
          // Set the next node to the ancestor after node
          tNextNode = aSubjectNode->mAncestorWithAfter->mAfterNode;
       }
-
-#if 0
-      // Loop up through the parent nodes of the subject node
-      // to find the first parent node that has an after node
-
-      // Start the loop at the subject node's parent
-      TreeNode* tParentNode = aSubjectNode->mParentNode;
-
-      // Loop until a parent is found that has an after node or there 
-      // there are no parents
-      while (tParentNode != 0)
-      {
-         // The next node level will decrease
-         aRecursiveAnchor->mLevel--;
-
-         // If the parent has an after node then the next node will be
-         // that one
-         if ((tNextNode = tParentNode->mAfterNode) != 0)
-         {
-            // This is the closest parent to the subject node that has
-            // an after node. Exit the loop
-            break;
-         }
-         // If the parent doesn't have an after node
-         else
-         {
-            // Advance up to the next parent
-            tParentNode = tParentNode->mParentNode;
-         }
-      }
-#endif
    }
    // Return the next node
    return tNextNode;
@@ -394,40 +363,10 @@ TreeNode* getNextNode(
       {
          // Set the next node to the ancestor after node
          tNextNode = aSubjectNode->mAncestorWithAfter->mAfterNode;
+
+         // Update the transmit attachment level
          tNextNode->mTxAttachLevel = aSubjectNode->mAncestorWithAfter->mTxAttachLevel;
       }
-#if 0
-      // Loop up through the parent nodes of the subject node
-      // to find the first parent node that has an after node
-
-      // Start the loop at the subject node's parent
-      TreeNode* tParentNode = aSubjectNode->mParentNode;
-
-      // Loop until a parent is found that has an after node or there 
-      // there are no parents
-      while (tParentNode != 0)
-      {
-         // Decrement the transmit attachment level, going up one level
-         tTxAttachLevel--;
-
-         // If the parent has an after node then the next node will be
-         // that one
-         if ((tNextNode = tParentNode->mAfterNode) != 0)
-         {
-            // This is the closest parent to the subject node that has
-            // an after node. Update the transmit attachment level.
-            tNextNode->mTxAttachLevel = tTxAttachLevel;
-            // Exit the loop.
-            break;
-         }
-         // If the parent doesn't have an after node
-         else
-         {
-            // Advance up to the next parent
-            tParentNode = tParentNode->mParentNode;
-         }
-      }
-#endif
    }
    // Return the next node
    return tNextNode;
