@@ -332,31 +332,33 @@ TreeNode* getNextNode(
    if (aSubjectNode == 0) return 0;
 
    //--------------------------------------------------------------------------
-   // Set the subject node above with after node
+   // Pointer to the next node
+
+   TreeNode* tNextNode = 0;
+
+   //--------------------------------------------------------------------------
+   // Set the subject node ancestor with after node
 
    // If the subject node has no parent
    if (aSubjectNode->mParentNode == 0)
    {
-      // Then it has no above node with after node
+      // Then it has no ancestor with after node
       aSubjectNode->mAncestorWithAfter = 0;
    }
    // Else if the parent of the subject node has a node after it
    else if (aSubjectNode->mParentNode->mAfterNode !=0)
    {
-      // Then the subject node above with after node is its parent
+      // Then the subject node ancestor with after node is its parent
       aSubjectNode->mAncestorWithAfter = aSubjectNode->mParentNode;
    }
-   // Else the subject node has no parent with an above node
+   // Else the subject node has no parent with an after node
    else
    {
-      // Copy the subject node's parent above after node to it
+      // Copy the subject node's parent ancestor after node to it.
+      // That will be the closest ancestor that has a node after it.
+      // This is used recursively by calls to getNextNode.
       aSubjectNode->mAncestorWithAfter = aSubjectNode->mParentNode->mAncestorWithAfter;
    }
-
-   //--------------------------------------------------------------------------
-   // Pointer to the next node
-
-   TreeNode* tNextNode = 0;
 
    //--------------------------------------------------------------------------
    // The transmit attach level starts at the subject node level
