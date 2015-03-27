@@ -20,7 +20,8 @@ namespace CC
 // transmitted over a communications channel. At the receiving end of the
 // channel the individual blocks are put to a tree node receive queue,
 // where the tree node structure is reconstructed.
-
+//
+// The templated class must inherit from TreeNode.
 
 template <class TreeNodeClass>
 class TreeNodeTxQueue

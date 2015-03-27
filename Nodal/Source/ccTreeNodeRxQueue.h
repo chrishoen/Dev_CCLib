@@ -24,6 +24,8 @@ namespace CC
 //
 // A structure will not be released from a queue until all of its nodes
 // have been received.
+//
+// The templated class must inherit from TreeNode.
 
 template <class TreeNodeClass>
 class TreeNodeRxQueue
