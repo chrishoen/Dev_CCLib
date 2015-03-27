@@ -219,11 +219,12 @@ TreeNode* visitNode(
       // Then the subject node ancestor with after node is its parent
       aSubjectNode->mAncestorWithAfter = aSubjectNode->mParentNode;
    }
-   // Else the subject node has no parent with an ancestor node
+   // Else the subject node has no parent with an after node
    else
    {
       // Copy the subject node's parent ancestor after node to it.
       // That will be the closest ancestor that has a node after it.
+      // This is used recursively by calls to getNextNode.
       aSubjectNode->mAncestorWithAfter = aSubjectNode->mParentNode->mAncestorWithAfter;
    }
 
@@ -232,8 +233,13 @@ TreeNode* visitNode(
 
    aRecursiveAnchor->mIndex++;
 
+   //--------------------------------------------------------------------------
    // Pointer to the next node
+
    TreeNode* tNextNode = 0;
+
+   //--------------------------------------------------------------------------
+   // Determine the next node
 
    // If the subject node has child nodes
    if (aSubjectNode->mFirstChildNode)
