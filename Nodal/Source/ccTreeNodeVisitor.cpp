@@ -348,21 +348,6 @@ TreeNode* getNextNode(
             tParentNode = tParentNode->mParentNode;
          }
       }
-//    printf("********************** LINE101 %d\n",tTxAttachLevel);
-#if 0
-      // If the subject node is the child of a parent node
-      if (aSubjectNode->mParentNode)
-      {
-         // The next node will be the node after the parent node.
-         // If the parent node has no node after it then there is no next node.
-         tNextNode = aSubjectNode->mParentNode->mAfterNode;
-      }
-      // If all nodes have already been visited then there is no next node
-      else
-      {
-         tNextNode = 0;
-      }
-#endif
    }
    // Return the next node
    return tNextNode;
