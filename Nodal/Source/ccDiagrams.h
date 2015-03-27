@@ -2,7 +2,7 @@
 #define _CCDIAGRAMS_H_
 /*==============================================================================
 
-Construction Order
+Construction Order, parent nodes are created before child nodes
 
    +---------+            +---------+
    |         |----------->|         |
@@ -58,7 +58,7 @@ Construction Order
                                v
                               Exit
 
-Destruction Order
+Destruction Order, child nodes are destroyed before parent nodes
 
    +---------+            +---------+
    |         |            |         |
