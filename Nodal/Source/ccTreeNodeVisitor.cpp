@@ -292,7 +292,7 @@ TreeNode* getNextNode(
    // Pointer to the next node
    TreeNode* tNextNode = 0;
 
-   // Transmit attach level starts at subject node level
+   // The transmit attach level starts at the subject node level
    int tTxAttachLevel = aSubjectNode->mTxAttachLevel;
 
    // If the subject node has child nodes
@@ -335,8 +335,7 @@ TreeNode* getNextNode(
          if ((tNextNode = tParentNode->mAfterNode) != 0)
          {
             // This is the closest parent to the subject node that has
-            // an after node.  
-            // Update the transmit attachment level
+            // an after node. Update the transmit attachment level.
             tNextNode->mTxAttachLevel = tTxAttachLevel;
             // Exit the loop.
             break;

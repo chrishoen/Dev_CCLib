@@ -158,6 +158,15 @@ public:
    // These are the flags
    TreeNodeTxFlags mTreeNodeTxFlags;
 
+   // This is the node attachment level. It is used by transmit and receive
+   // queues to deconstruct and reconstruct tree node structures that are
+   // transmitted over a communications channel.
+   //
+   // This variable should be considered as a sort of temporary variable.
+   // It is changed by various actions done by node queues. It should not
+   // be used as a node level and it is not set by the attachment methods.
+   // It is set by a transmit queue prior to transmission and is used
+   // by a receive queue to reconstruct node structures.
    int mTxAttachLevel;
 };
 

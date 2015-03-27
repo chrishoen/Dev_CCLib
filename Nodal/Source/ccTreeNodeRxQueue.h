@@ -10,16 +10,33 @@ namespace CC
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
+// This is a class template for a tree node receive queue. It is used to
+// receive tree node structures that were transmitted as a sequence of 
+// individual nodes. It is used in conjunction with a tree node transmit
+// queue. 
+//
+// Structured collections are sent to a transmit queue for transmission.
+// The structure is deconstructed into a sequnce of individual nodes.
+// Individual nodes are gotten from the queue, one at a time, and are 
+// transmitted over a communications channel. At the receiving end of the
+// channel the individual blocks are put to a tree node receive queue,
+// where the tree node structure is reconstructed.
 
 template <class TreeNodeClass>
 class TreeNodeRxQueue
 {
 public:
-   // Members
+   // Root node, nodes that are put to the queue are attached here
    TreeNodeClass  mRootNodeInstance;
    TreeNodeClass* mRootNode;
+
+   // Last node that was put to the queue
    TreeNodeClass* mPutNode;
 
+   // This is an array of pointers to parent nodes. It is indexed by the
+   // attachment level of nodes that are put to the queue. When a node
+   // is put to the queue it is attached as a last child of a parent node
+   // that is in this array.
    TreeNode* mParentAtLevel[MaxLevelDepth];
 
 //****************************************************************************
@@ -37,7 +54,6 @@ public:
          mParentAtLevel[i] = 0;
       }
       mParentAtLevel[0] = mRootNode;
-//    mParentAtLevel[1] = mRootNode;
    }
 
    void putRxNode(TreeNodeClass* aNode)
@@ -47,8 +63,6 @@ public:
       {
          mRootNode->attachAfterLastChild(aNode);
          aNode->mTxAttachLevel = 1;
-//       mParentAtLevel[0] = mRootNode;
-//       mParentAtLevel[1] = mRootNode;
          mPutNode = aNode;
       }
       else
