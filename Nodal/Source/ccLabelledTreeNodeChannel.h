@@ -24,7 +24,7 @@ inline void transferLabelledTreeNodeQueues(
 
       if (tTxNode != 0)
       {
-#if 1
+#if 0
          printf("getNextTxNode        %5d %3d %s\n", 
             tTxNode->mIdentifier,
             tTxNode->mTxAttachLevel,

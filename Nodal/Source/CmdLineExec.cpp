@@ -147,7 +147,7 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
    //---------------------------------------------------------------------------
-   aCmd->setArgDefault(1,1);
+   aCmd->setArgDefault(1,3);
    int tStage = aCmd->argInt(1);
 
    printf("**********************************go4\n");

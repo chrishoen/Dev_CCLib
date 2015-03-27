@@ -47,7 +47,7 @@ public:
       {
          mRootNode->attachAfterLastChild(aNode);
          aNode->mTxAttachLevel = 1;
-         mParentAtLevel[0] = mRootNode;
+//       mParentAtLevel[0] = mRootNode;
 //       mParentAtLevel[1] = mRootNode;
          mPutNode = aNode;
       }
