@@ -147,10 +147,8 @@ public:
       // Flags
       struct
       {
-         // This is true if the node is a root, that it has no parent node.
-         bool mIsParent : 1;
-         bool mIsFirstChild : 1;
-         bool mIsLastChild : 1;
+         // This is true if the node is the last in a sequence of a 
+         // transmitted node structure
          bool mIsLastInStructure : 1;
       };
       // Binary value

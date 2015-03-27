@@ -48,10 +48,6 @@ public:
       if (mGetNode == 0)
       {
          mGetNode = (TreeNodeClass*)mRootNode->detachFirstChild();
-         if (mGetNode != 0)
-         {
-//          mGetNode->mTxAttachLevel = 1;
-         }
       }
       else
       {
@@ -61,37 +57,11 @@ public:
       if (mGetNode == 0)
       {
          mGetNode = (TreeNodeClass*)mRootNode->detachFirstChild();
-         if (mGetNode != 0)
-         {
-//          mGetNode->mTxAttachLevel = 1;
-         }
       }
 
       if (mGetNode == 0)
       {
          return 0;
-      }
-
-
-      if (mGetNode->mParentNode != 0)
-      {
-         mGetNode->mTreeNodeTxFlags.mIsFirstChild = (mGetNode == mGetNode->mParentNode->mFirstChildNode);
-      }
-      else
-      {
-         mGetNode->mTreeNodeTxFlags.mIsFirstChild = false;
-      }
-
-      if (mGetNode->mParentNode != 0)
-      {
-         if (mGetNode->mParentNode != mRootNode)
-         {
-            mGetNode->mTreeNodeTxFlags.mIsLastChild = (mGetNode == mGetNode->mParentNode->mLastChildNode);
-         }
-      }
-      else
-      {
-         mGetNode->mTreeNodeTxFlags.mIsLastChild = false;
       }
 
       return mGetNode;

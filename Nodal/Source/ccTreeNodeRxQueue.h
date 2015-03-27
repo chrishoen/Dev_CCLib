@@ -37,7 +37,7 @@ public:
          mParentAtLevel[i] = 0;
       }
       mParentAtLevel[0] = mRootNode;
-      mParentAtLevel[1] = mRootNode;
+//    mParentAtLevel[1] = mRootNode;
    }
 
    void putRxNode(TreeNodeClass* aNode)
@@ -48,7 +48,7 @@ public:
          mRootNode->attachAfterLastChild(aNode);
          aNode->mTxAttachLevel = 1;
          mParentAtLevel[0] = mRootNode;
-         mParentAtLevel[1] = mRootNode;
+//       mParentAtLevel[1] = mRootNode;
          mPutNode = aNode;
       }
       else
