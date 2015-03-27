@@ -135,5 +135,8 @@
     <ClInclude Include="Source\ccLabelledTreeNodeChannel.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="Source\ccDiagrams.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -121,6 +121,7 @@
     <ClInclude Include="Source\ccContainers2.h" />
     <ClInclude Include="Source\ccCriticalSection.h" />
     <ClInclude Include="Source\ccDefs.h" />
+    <ClInclude Include="Source\ccDiagrams.h" />
     <ClInclude Include="Source\ccLabelledTreeNode.h" />
     <ClInclude Include="Source\ccLabelledTreeNodeChannel.h" />
     <ClInclude Include="Source\ccLabelledTreeNodeVisitor.h" />
