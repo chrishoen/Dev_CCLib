@@ -60,59 +60,6 @@ public:
          mParentAtLevel[aNode->mTxAttachLevel - 1]->attachAfterLastChild(aNode);
          mPutNode = aNode;
          mParentAtLevel[aNode->mTxAttachLevel] = mPutNode->mParentNode;
-#if 0
-         if (aNode->mTxAttachLevel > mPutNode->mTxAttachLevel)
-         {
-            mParentAtLevel[aNode->mTxAttachLevel + 1] = mPutNode;
-            mPutNode->attachBeforeFirstChild(aNode);
-            mPutNode = aNode;
-         }
-         if (aNode->mTreeNodeTxFlags.mIsFirstChild)
-         {
-            mPutNode->attachBeforeFirstChild(aNode);
-            mPutNode = aNode;
-         }
-         else if (aNode->mTreeNodeTxFlags.mIsLastChild)
-         {
-            mPutNode->mParentNode->attachAfterLastChild(aNode);
-            mPutNode = (TreeNodeClass*)mPutNode->mParentNode;
-         }
-         else 
-         {
-            mPutNode->mParentNode->attachAfterLastChild(aNode);
-            mPutNode = aNode;
-         }
-#endif
-      }
-      if (aNode->mTreeNodeTxFlags.mIsLastInStructure)
-      {
-         mRootNode->mLastChildNode->mTreeNodeTxFlags.mIsLastInStructure = true;
-      }
-   }
-   void putRxNode22(TreeNodeClass* aNode)
-   {
-      if (mRootNode->mFirstChildNode==0)
-      {
-         mRootNode->attachAfterLastChild(aNode);
-         mPutNode = aNode;
-      }
-      else
-      {
-         if (aNode->mTreeNodeTxFlags.mIsFirstChild)
-         {
-            mPutNode->attachBeforeFirstChild(aNode);
-            mPutNode = aNode;
-         }
-         else if (aNode->mTreeNodeTxFlags.mIsLastChild)
-         {
-            mPutNode->mParentNode->attachAfterLastChild(aNode);
-            mPutNode = (TreeNodeClass*)mPutNode->mParentNode;
-         }
-         else 
-         {
-            mPutNode->mParentNode->attachAfterLastChild(aNode);
-            mPutNode = aNode;
-         }
       }
       if (aNode->mTreeNodeTxFlags.mIsLastInStructure)
       {

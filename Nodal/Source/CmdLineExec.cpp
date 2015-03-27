@@ -179,19 +179,19 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
    if (tStage >= 1)
    {
       printf("**********************************generateTreeNodes1(tRootNode1)\n");
-      generateTreeNodes3(tRootNode1);
+      generateTreeNodes2(tRootNode1);
    }
 
    if (tStage >= 2)
    {
       printf("**********************************generateTreeNodes1(tRootNode2)\n");
-      generateTreeNodes3(tRootNode2);
+      generateTreeNodes2(tRootNode2);
    }
 
    if (tStage >= 3)
    {
       printf("**********************************generateTreeNodes1(tRootNode3)\n");
-      generateTreeNodes3(tRootNode3);
+      generateTreeNodes2(tRootNode3);
    }
 
    //---------------------------------------------------------------------------
