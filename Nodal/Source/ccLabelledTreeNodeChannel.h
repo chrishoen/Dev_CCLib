@@ -31,6 +31,7 @@ inline void transferLabelledTreeNodeQueues(
 #endif
          CC::LabelledTreeNode* tRxNode = new CC::LabelledTreeNode(tTxNode->mIdentifier, tTxNode->mLabel);
          tRxNode->mTreeNodeTxFlags = tTxNode->mTreeNodeTxFlags;
+         tRxNode->mTxAttachLevel = tTxNode->mTxAttachLevel;
          aRxQueue->putRxNode(tRxNode);
       }
       else
