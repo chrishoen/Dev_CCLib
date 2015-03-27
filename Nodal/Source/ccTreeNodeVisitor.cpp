@@ -199,11 +199,37 @@ TreeNode* visitNode(
    RecursiveAnchor* aRecursiveAnchor,
    NodeVistorCall*  aNodeVisitorCall)
 {
+   //--------------------------------------------------------------------------
    // Visit the subject node
+
    (*aNodeVisitorCall)(aSubjectNode, aRecursiveAnchor);
 
-      // Update the recursive index
-      aRecursiveAnchor->mIndex++;
+   //--------------------------------------------------------------------------
+   // Set the subject node above with after node
+
+   // If the subject node has no parent
+   if (aSubjectNode->mParentNode == 0)
+   {
+      // Then it has no above node with after node
+      aSubjectNode->mAboveWithAfter = 0;
+   }
+   // Else if the parent of the subject node has a node after it
+   else if (aSubjectNode->mParentNode->mAfterNode !=0)
+   {
+      // Then the subject node above with after node is its parent
+      aSubjectNode->mAboveWithAfter = aSubjectNode->mParentNode;
+   }
+   // Else the subject node has no parent with an above node
+   else
+   {
+      // Copy the subject node's parent above after node to it
+      aSubjectNode->mAboveWithAfter = aSubjectNode->mParentNode->mAboveWithAfter;
+   }
+
+   //--------------------------------------------------------------------------
+   // Update the recursive index
+
+   aRecursiveAnchor->mIndex++;
 
    // Pointer to the next node
    TreeNode* tNextNode = 0;
@@ -229,6 +255,14 @@ TreeNode* visitNode(
    // Else the subject node has no child nodes and no nodes after it
    else
    {
+      // If the subject node has an above after node
+      if (aSubjectNode->mAboveWithAfter)
+      {
+         // Set the next node to the above after node
+         tNextNode = aSubjectNode->mAboveWithAfter->mAfterNode;
+      }
+
+#if 0
       // Loop up through the parent nodes of the subject node
       // to find the first parent node that has an after node
 
@@ -257,6 +291,7 @@ TreeNode* visitNode(
             tParentNode = tParentNode->mParentNode;
          }
       }
+#endif
    }
    // Return the next node
    return tNextNode;
@@ -289,13 +324,41 @@ TreeNode* getNextNode(
    // Guard
    if (aSubjectNode == 0) return 0;
 
+   //--------------------------------------------------------------------------
+   // Set the subject node above with after node
+
+   // If the subject node has no parent
+   if (aSubjectNode->mParentNode == 0)
+   {
+      // Then it has no above node with after node
+      aSubjectNode->mAboveWithAfter = 0;
+   }
+   // Else if the parent of the subject node has a node after it
+   else if (aSubjectNode->mParentNode->mAfterNode !=0)
+   {
+      // Then the subject node above with after node is its parent
+      aSubjectNode->mAboveWithAfter = aSubjectNode->mParentNode;
+   }
+   // Else the subject node has no parent with an above node
+   else
+   {
+      // Copy the subject node's parent above after node to it
+      aSubjectNode->mAboveWithAfter = aSubjectNode->mParentNode->mAboveWithAfter;
+   }
+
+   //--------------------------------------------------------------------------
    // Pointer to the next node
+
    TreeNode* tNextNode = 0;
 
+   //--------------------------------------------------------------------------
    // The transmit attach level starts at the subject node level
+
    int tTxAttachLevel = aSubjectNode->mTxAttachLevel;
 
+   //--------------------------------------------------------------------------
    // If the subject node has child nodes
+
    if (aSubjectNode->mFirstChildNode)
    {
       // The next node will be the first child node of the subject node

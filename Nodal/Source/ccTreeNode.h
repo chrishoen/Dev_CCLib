@@ -168,6 +168,8 @@ public:
    // It is set by a transmit queue prior to transmission and is used
    // by a receive queue to reconstruct node structures.
    int mTxAttachLevel;
+
+   TreeNode* mAboveWithAfter;
 };
 
 //****************************************************************************
