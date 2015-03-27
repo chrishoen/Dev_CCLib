@@ -211,19 +211,19 @@ TreeNode* visitNode(
    if (aSubjectNode->mParentNode == 0)
    {
       // Then it has no above node with after node
-      aSubjectNode->mAboveWithAfter = 0;
+      aSubjectNode->mAncestorWithAfter = 0;
    }
    // Else if the parent of the subject node has a node after it
    else if (aSubjectNode->mParentNode->mAfterNode !=0)
    {
       // Then the subject node above with after node is its parent
-      aSubjectNode->mAboveWithAfter = aSubjectNode->mParentNode;
+      aSubjectNode->mAncestorWithAfter = aSubjectNode->mParentNode;
    }
    // Else the subject node has no parent with an above node
    else
    {
       // Copy the subject node's parent above after node to it
-      aSubjectNode->mAboveWithAfter = aSubjectNode->mParentNode->mAboveWithAfter;
+      aSubjectNode->mAncestorWithAfter = aSubjectNode->mParentNode->mAncestorWithAfter;
    }
 
    //--------------------------------------------------------------------------
@@ -256,10 +256,10 @@ TreeNode* visitNode(
    else
    {
       // If the subject node has an above after node
-      if (aSubjectNode->mAboveWithAfter)
+      if (aSubjectNode->mAncestorWithAfter)
       {
          // Set the next node to the above after node
-         tNextNode = aSubjectNode->mAboveWithAfter->mAfterNode;
+         tNextNode = aSubjectNode->mAncestorWithAfter->mAfterNode;
       }
 
 #if 0
@@ -331,19 +331,19 @@ TreeNode* getNextNode(
    if (aSubjectNode->mParentNode == 0)
    {
       // Then it has no above node with after node
-      aSubjectNode->mAboveWithAfter = 0;
+      aSubjectNode->mAncestorWithAfter = 0;
    }
    // Else if the parent of the subject node has a node after it
    else if (aSubjectNode->mParentNode->mAfterNode !=0)
    {
       // Then the subject node above with after node is its parent
-      aSubjectNode->mAboveWithAfter = aSubjectNode->mParentNode;
+      aSubjectNode->mAncestorWithAfter = aSubjectNode->mParentNode;
    }
    // Else the subject node has no parent with an above node
    else
    {
       // Copy the subject node's parent above after node to it
-      aSubjectNode->mAboveWithAfter = aSubjectNode->mParentNode->mAboveWithAfter;
+      aSubjectNode->mAncestorWithAfter = aSubjectNode->mParentNode->mAncestorWithAfter;
    }
 
    //--------------------------------------------------------------------------

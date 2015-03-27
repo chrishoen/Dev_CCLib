@@ -167,9 +167,27 @@ public:
    // be used as a node level and it is not set by the attachment methods.
    // It is set by a transmit queue prior to transmission and is used
    // by a receive queue to reconstruct node structures.
+   //
+   // Use of this variable is mainly via the getNextNode visitor call,
+   // which assumes a tree node structure traversal in construction order.
+
    int mTxAttachLevel;
 
-   TreeNode* mAboveWithAfter;
+   // This is a pointer to the closest ancestor of this node that has a node
+   // after it. It is used by transmit and receive queues to deconstruct and
+   // reconstruct tree node structures that are transmitted over a 
+   // communications channel.
+   //
+   // This variable should be considered as a sort of temporary variable.
+   // It is changed by various actions done by node queues. It should not
+   // be used as a node level and it is not set by the attachment methods.
+   // It is set by a transmit queue prior to transmission and is used
+   // by a receive queue to reconstruct node structures.
+   //
+   // Use of this variable is mainly via the getNextNode visitor call,
+   // which assumes a tree node structure traversal in construction order.
+
+   TreeNode* mAncestorWithAfter;
 };
 
 //****************************************************************************
