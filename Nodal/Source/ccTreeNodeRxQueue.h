@@ -20,6 +20,8 @@ public:
    TreeNodeClass* mRootNode;
    TreeNodeClass* mPutNode;
 
+   TreeNode* mParentAtLevel[MaxLevelDepth];
+
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
@@ -29,9 +31,65 @@ public:
    {
       mRootNode = &mRootNodeInstance;
       mPutNode = 0;
+
+      for (int i = 0; i < MaxLevelDepth; i++)
+      {
+         mParentAtLevel[i] = 0;
+      }
+      mParentAtLevel[0] = mRootNode;
+      mParentAtLevel[1] = mRootNode;
    }
 
    void putRxNode(TreeNodeClass* aNode)
+   {
+
+      if (mRootNode->mFirstChildNode==0)
+      {
+         mRootNode->attachAfterLastChild(aNode);
+         aNode->mTxAttachLevel = 1;
+         mParentAtLevel[0] = mRootNode;
+         mParentAtLevel[1] = mRootNode;
+         mPutNode = aNode;
+      }
+      else
+      {
+         if (aNode->mTxAttachLevel > mPutNode->mTxAttachLevel)
+         {
+            mParentAtLevel[aNode->mTxAttachLevel - 1] = mPutNode;
+         }
+         mParentAtLevel[aNode->mTxAttachLevel - 1]->attachAfterLastChild(aNode);
+         mPutNode = aNode;
+         mParentAtLevel[aNode->mTxAttachLevel] = mPutNode->mParentNode;
+#if 0
+         if (aNode->mTxAttachLevel > mPutNode->mTxAttachLevel)
+         {
+            mParentAtLevel[aNode->mTxAttachLevel + 1] = mPutNode;
+            mPutNode->attachBeforeFirstChild(aNode);
+            mPutNode = aNode;
+         }
+         if (aNode->mTreeNodeTxFlags.mIsFirstChild)
+         {
+            mPutNode->attachBeforeFirstChild(aNode);
+            mPutNode = aNode;
+         }
+         else if (aNode->mTreeNodeTxFlags.mIsLastChild)
+         {
+            mPutNode->mParentNode->attachAfterLastChild(aNode);
+            mPutNode = (TreeNodeClass*)mPutNode->mParentNode;
+         }
+         else 
+         {
+            mPutNode->mParentNode->attachAfterLastChild(aNode);
+            mPutNode = aNode;
+         }
+#endif
+      }
+      if (aNode->mTreeNodeTxFlags.mIsLastInStructure)
+      {
+         mRootNode->mLastChildNode->mTreeNodeTxFlags.mIsLastInStructure = true;
+      }
+   }
+   void putRxNode22(TreeNodeClass* aNode)
    {
       if (mRootNode->mFirstChildNode==0)
       {

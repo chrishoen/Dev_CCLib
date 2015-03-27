@@ -19,6 +19,8 @@ enum
    MemoryType_ShortTerm = 2,   // Lifetime that is short term, non persistent
 };
 
+enum { MaxLevelDepth = 20 };
+
 } //namespace
 #endif
 
