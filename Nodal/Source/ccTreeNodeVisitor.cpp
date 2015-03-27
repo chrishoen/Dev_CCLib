@@ -389,6 +389,14 @@ TreeNode* getNextNode(
    // Else the subject node has no child nodes and no nodes after it
    else
    {
+      // If the subject node has an ancestor after node
+      if (aSubjectNode->mAncestorWithAfter)
+      {
+         // Set the next node to the ancestor after node
+         tNextNode = aSubjectNode->mAncestorWithAfter->mAfterNode;
+         tNextNode->mTxAttachLevel = aSubjectNode->mAncestorWithAfter->mTxAttachLevel;
+      }
+#if 0
       // Loop up through the parent nodes of the subject node
       // to find the first parent node that has an after node
 
@@ -419,6 +427,7 @@ TreeNode* getNextNode(
             tParentNode = tParentNode->mParentNode;
          }
       }
+#endif
    }
    // Return the next node
    return tNextNode;
