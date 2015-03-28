@@ -79,9 +79,6 @@ public:
 
    // Label
    int mData;
-
-   // This is called on a subject node after it is attached to an object node
-   virtual void onAttached();
 };
 
 //****************************************************************************
