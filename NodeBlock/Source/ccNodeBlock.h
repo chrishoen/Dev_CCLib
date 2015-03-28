@@ -15,7 +15,29 @@ namespace CC
 class NodeBlock : public TreeNode
 {
 public:
-   typedef TreeNode BaseClass;
+
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   // Class members
+
+   typedef union BlockData
+   {
+      // Flags
+      struct
+      {
+         unsigned short mBlockType;
+         unsigned short mBlockSubType;
+         unsigned short mDataSize;
+         unsigned short mTreeNodeTxFlags;
+         unsigned short mTreeNodeTxAttachLevel;
+      };
+      // Binary value
+      enum {MaxDataSize=200};
+      unsigned short mData[MaxDataSize/2];
+   } BlockData;
+
+   BlockData mBlockData;
 
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
