@@ -19,12 +19,11 @@ void visitNodeBlockForPrint (TreeNode* aSubjectNode, RecursiveAnchor* aRecursive
 {
    NodeBlock* tSubjectNode = static_cast<NodeBlock*>(aSubjectNode);
 
-   printf("visitNodeBlockForPrint %3d %d %d %5d %s\n", 
-      aRecursiveAnchor->mIndex, 
+   printf("visitNodeBlockForPrint %3d %d %d %5d\n",
+      aRecursiveAnchor->mIndex,
       aRecursiveAnchor->mFirstInLevel,
       aRecursiveAnchor->mLevel,
-      tSubjectNode->mIdentifier,
-      tSubjectNode->mFullPath);
+      tSubjectNode->mIdentifier);
 }
 
 void printAllNodeBlocks1(NodeBlock* aSubjectNode)
@@ -67,12 +66,11 @@ void visitNodeBlockForDestroy (TreeNode* aSubjectNode, RecursiveAnchor* aRecursi
 {
    NodeBlock* tSubjectNode = static_cast<NodeBlock*>(aSubjectNode);
 #if 0
-   printf("visitNodeBlockForDestroy %3d %1d %1d %5d %s\n", 
+   printf("visitNodeBlockForDestroy %3d %1d %1d %5d\n", 
       aRecursiveAnchor->mIndex, 
       aRecursiveAnchor->mFirstInLevel,
       aRecursiveAnchor->mLevel,
-      tSubjectNode->mIdentifier,
-      tSubjectNode->mFullPath);
+      tSubjectNode->mIdentifier);
 #endif
    tSubjectNode->destroy();
 }
