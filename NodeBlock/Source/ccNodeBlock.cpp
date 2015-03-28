@@ -48,7 +48,7 @@ void NodeBlock::initializeBlockUniverse(
 // parameter specifies either system memory, or short term block pool,
 // or long term block pool. It is analogous to new.
 
-NodeBlock* NodeBlock::create(int aMemoryType,int aIdentifier,char* aLabel)
+NodeBlock* NodeBlock::create(int aMemoryType,int aIdentifier)
 {
    // Block pointer
    NodeBlock* tPointer = 0;
@@ -71,7 +71,7 @@ NodeBlock* NodeBlock::create(int aMemoryType,int aIdentifier,char* aLabel)
    }
 
    // Call the constructor on the allocated block using placement new
-   tPointer = new(tPointer)NodeBlock(aIdentifier,aLabel);
+   tPointer = new(tPointer)NodeBlock(aIdentifier);
 
    // Store block memory type
    tPointer->mMemoryType = aMemoryType;
@@ -85,23 +85,15 @@ NodeBlock* NodeBlock::create(int aMemoryType,int aIdentifier,char* aLabel)
 
 NodeBlock* NodeBlock::create()
 { 
-   return NodeBlock::create(NodeBlock::mDefaultMemoryType, 0, 0);
-}
-
-//******************************************************************************
-// Create with specifed memory type and default member variables
-
-NodeBlock* NodeBlock::create (int aMemoryType)
-{ 
-   return NodeBlock::create(aMemoryType, 0, 0);
+   return NodeBlock::create(NodeBlock::mDefaultMemoryType, 0);
 }
 
 //******************************************************************************
 // Create with default memory type and specified member variables
 
-NodeBlock* NodeBlock::create (int aIdentifier,char* aLabel)
+NodeBlock* NodeBlock::create (int aIdentifier)
 { 
-   return NodeBlock::create(NodeBlock::mDefaultMemoryType, aIdentifier, aLabel);
+   return NodeBlock::create(NodeBlock::mDefaultMemoryType, aIdentifier);
 }
 
 //******************************************************************************
@@ -141,38 +133,15 @@ void NodeBlock::destroy()
 
 NodeBlock::NodeBlock()
 {
-   // Empty string
-   strncpy(mLabel, "/", MaxLabelSize);
-   strncpy(mFullPath, "/", MaxFullPathSize);
+   mData = 101;
 }
 
 // Constructor, it is called by create after allocation of a new block.
 
-NodeBlock::NodeBlock(int aIdentifier,char* aLabel)
+NodeBlock::NodeBlock(int aIdentifier)
 {
-   // Empty string
-   strncpy(mLabel, "/", MaxLabelSize);
-   strncpy(mFullPath, "/", MaxFullPathSize);
-
    // Identifier
    mIdentifier = aIdentifier;
-
-   // Label and full path
-   if (aLabel)
-   {
-      strncpy(mLabel, aLabel, MaxLabelSize);
-      strncpy(mFullPath, aLabel, MaxFullPathSize);
-   }
-}
-
-void NodeBlock::setLabel(char* aLabel)
-{
-   strncpy(mLabel, aLabel, MaxLabelSize);
-}
-
-void NodeBlock::setFullPath(char* aFullPath)
-{
-   strncpy(mFullPath, aFullPath, MaxFullPathSize);
 }
 
 //******************************************************************************
@@ -183,9 +152,8 @@ void NodeBlock::setFullPath(char* aFullPath)
 NodeBlock::~NodeBlock()
 {
    return;
-   printf("NodeBlock::~NodeBlock     %5d %s\n", 
-      this->mIdentifier,
-      this->mFullPath);
+   printf("NodeBlock::~NodeBlock     %5d\n",
+      this->mIdentifier);
 }
 
 //****************************************************************************
@@ -196,11 +164,6 @@ NodeBlock::~NodeBlock()
 void NodeBlock::onAttached()
 {
    if (mParentNode==0) return;
-   NodeBlock* tParentNode = static_cast<NodeBlock*>(mParentNode);
-
-   strncpy(mFullPath, tParentNode->mFullPath, MaxFullPathSize);
-   strncat(mFullPath, ".", MaxFullPathSize);
-   strncat(mFullPath, mLabel, MaxFullPathSize);
 #if 0
    printf("objectNodeOnAttached %5d %s\n", 
       this->mIdentifier,

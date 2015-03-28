@@ -47,14 +47,11 @@ public:
    // Create with default memory type and default member variables
    static NodeBlock* create ();
 
-   // Create with specifed memory type and default member variables
-   static NodeBlock* create (int aMemoryType);
-
    // Create with default memory type and specified member variables
-   static NodeBlock* create (int aIdentifier,char* aLabel);
+   static NodeBlock* create (int aIdentifier);
 
    // Create with specifed memory type and specified member variables
-   static NodeBlock* create (int aMemoryType,int aIdentifier,char* aLabel);
+   static NodeBlock* create (int aMemoryType,int aIdentifier);
 
    // This method calls the class destructor and then deallocates the object
    // from system memory or from block universe short term or long term
@@ -70,7 +67,7 @@ public:
 
    // Constructor, it is called by create after allocation of a new block.
    NodeBlock();
-   NodeBlock(int aIdentifier,char* aLabel);
+   NodeBlock(int aIdentifier);
 
    // Destructor, it is called by destroy before deallocation of a block.
   ~NodeBlock();
@@ -81,15 +78,7 @@ public:
    // Class members
 
    // Label
-   enum { MaxLabelSize = 20 };
-   char mLabel[MaxLabelSize];
-   void setLabel(char* aLabel);
-
-
-   // Full path
-   enum { MaxFullPathSize = 200 };
-   char mFullPath[MaxFullPathSize];
-   void setFullPath(char* aFullPath);
+   int mData;
 
    // This is called on a subject node after it is attached to an object node
    virtual void onAttached();

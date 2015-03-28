@@ -26,7 +26,7 @@ CmdLineExec::CmdLineExec()
 //******************************************************************************
 void CmdLineExec::reset()
 {
-   mRootNode = new CC::NodeBlock(0,"root");
+   mRootNode = new CC::NodeBlock(0);
 
    generateTreeNodes1(mRootNode);
 }
@@ -51,7 +51,7 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1,2);
 
-   CC::NodeBlock* tRootNode = new CC::NodeBlock(0,"root");
+   CC::NodeBlock* tRootNode = new CC::NodeBlock(0);
 
    if (aCmd->argInt(1) == 1)
    {
@@ -77,7 +77,7 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1,1);
 
-   CC::NodeBlock* tRootNode = new CC::NodeBlock(0,"root");
+   CC::NodeBlock* tRootNode = new CC::NodeBlock(0);
    generateTreeNodes3(tRootNode);
 
    if (aCmd->argInt(1) == 1)
@@ -105,7 +105,7 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
    CC::NodeBlock::mBlockUniverse.show("CC::NodeBlock::mBlockUniverse1");
 
-   CC::NodeBlock* tRootNode = CC::NodeBlock::create(0,"root");
+   CC::NodeBlock* tRootNode = CC::NodeBlock::create(0);
    generateTreeNodes2(tRootNode);
 
    CC::NodeBlock::mBlockUniverse.show("CC::NodeBlock::mBlockUniverse2");
@@ -158,14 +158,9 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
    CC::TreeNodeTxQueue<CC::NodeBlock> tTxQueue;
    CC::TreeNodeRxQueue<CC::NodeBlock> tRxQueue;
 
-   tTxQueue.mRootNode->setLabel("TxRoot");
-   tRxQueue.mRootNode->setLabel("RxRoot");
-   tTxQueue.mRootNode->setFullPath("TxRoot");
-   tRxQueue.mRootNode->setFullPath("RxRoot");
-   
-   CC::NodeBlock* tRootNode1 = new CC::NodeBlock(1000, "root1");
-   CC::NodeBlock* tRootNode2 = new CC::NodeBlock(2000, "root2");
-   CC::NodeBlock* tRootNode3 = new CC::NodeBlock(3000, "root3");
+   CC::NodeBlock* tRootNode1 = new CC::NodeBlock(1000);
+   CC::NodeBlock* tRootNode2 = new CC::NodeBlock(2000);
+   CC::NodeBlock* tRootNode3 = new CC::NodeBlock(3000);
 
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
@@ -244,14 +239,14 @@ void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
    printf("**********************************go5\n");
    printf("\n");
 
-   CC::NodeBlock* tRootNode = new CC::NodeBlock(0,"troot");
+   CC::NodeBlock* tRootNode = new CC::NodeBlock(0);
 
    printf("**********************************generateTreeNodes1(tRootNode1)\n");
-   CC::NodeBlock* tRootNode1 = new CC::NodeBlock(0,"root1");
+   CC::NodeBlock* tRootNode1 = new CC::NodeBlock(0);
    generateTreeNodes1(tRootNode1);
 
    printf("**********************************generateTreeNodes1(tRootNode2)\n");
-   CC::NodeBlock* tRootNode2 = new CC::NodeBlock(0,"root2");
+   CC::NodeBlock* tRootNode2 = new CC::NodeBlock(0);
    generateTreeNodes1(tRootNode2);
 
    printf("**********************************attachAfterLastChild(tRootNode1)\n");

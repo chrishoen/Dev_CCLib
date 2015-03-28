@@ -30,7 +30,7 @@ inline void transferNodeBlockQueues(
             tTxNode->mTxAttachLevel,
             tTxNode->mFullPath);
 #endif
-         CC::NodeBlock* tRxNode = new CC::NodeBlock(tTxNode->mIdentifier, tTxNode->mLabel);
+         CC::NodeBlock* tRxNode = new CC::NodeBlock(tTxNode->mIdentifier);
          tRxNode->mTreeNodeTxFlags = tTxNode->mTreeNodeTxFlags;
          tRxNode->mTxAttachLevel = tTxNode->mTxAttachLevel;
          aRxQueue->putRxNode(tRxNode);
