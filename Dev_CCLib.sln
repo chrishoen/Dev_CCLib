@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Classes", "Classes\Classes.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CCLib", "CCLib\CCLib.vcxproj", "{1909118A-707C-47E4-80BC-84130E1C951B}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NodeBlock", "NodeBlock\NodeBlock.vcxproj", "{E1F60D79-DED6-45EB-B67F-E6DDC706A2EA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -33,6 +35,10 @@ Global
 		{1909118A-707C-47E4-80BC-84130E1C951B}.Debug|Win32.Build.0 = Debug|Win32
 		{1909118A-707C-47E4-80BC-84130E1C951B}.Release|Win32.ActiveCfg = Release|Win32
 		{1909118A-707C-47E4-80BC-84130E1C951B}.Release|Win32.Build.0 = Release|Win32
+		{E1F60D79-DED6-45EB-B67F-E6DDC706A2EA}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E1F60D79-DED6-45EB-B67F-E6DDC706A2EA}.Debug|Win32.Build.0 = Debug|Win32
+		{E1F60D79-DED6-45EB-B67F-E6DDC706A2EA}.Release|Win32.ActiveCfg = Release|Win32
+		{E1F60D79-DED6-45EB-B67F-E6DDC706A2EA}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
