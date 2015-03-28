@@ -53,7 +53,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>C:\RisLib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\RisLib\include;..\CCLib\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -94,51 +94,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source\ccBlockArray.cpp" />
-    <ClCompile Include="Source\ccBlockUniverse.cpp" />
-    <ClCompile Include="Source\ccCriticalSection_win.cpp" />
-    <ClCompile Include="Source\ccLabelledTreeNode.cpp" />
-    <ClCompile Include="Source\ccLabelledTreeNodeVisitor.cpp" />
-    <ClCompile Include="Source\ccLongTermBlockPool.cpp" />
-    <ClCompile Include="Source\ccPointerCircular.cpp" />
-    <ClCompile Include="Source\ccPointerStack.cpp" />
-    <ClCompile Include="Source\ccShortTermBlockPool.cpp" />
-    <ClCompile Include="Source\ccTreeNode.cpp" />
-    <ClCompile Include="Source\ccTreeNodeCollection.cpp" />
-    <ClCompile Include="Source\ccTreeNodeDestroyer.cpp" />
-    <ClCompile Include="Source\ccTreeNodeVisitor.cpp" />
     <ClCompile Include="Source\CmdLineExec.cpp" />
-    <ClCompile Include="Source\GenerateTreeNodes.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\someBlock1.cpp" />
     <ClCompile Include="Source\someBlock2.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\ccBlockArray.h" />
-    <ClInclude Include="Source\ccBlockUniverse.h" />
-    <ClInclude Include="Source\ccCallPointer.h" />
-    <ClInclude Include="Source\ccContainers.h" />
-    <ClInclude Include="Source\ccContainers2.h" />
-    <ClInclude Include="Source\ccCriticalSection.h" />
-    <ClInclude Include="Source\ccDefs.h" />
-    <ClInclude Include="Source\ccDiagrams.h" />
-    <ClInclude Include="Source\ccLabelledTreeNode.h" />
-    <ClInclude Include="Source\ccLabelledTreeNodeChannel.h" />
-    <ClInclude Include="Source\ccLabelledTreeNodeVisitor.h" />
-    <ClInclude Include="Source\ccLongTermBlockPool.h" />
-    <ClInclude Include="Source\ccPointerCircular.h" />
-    <ClInclude Include="Source\ccPointerStack.h" />
-    <ClInclude Include="Source\ccShortTermBlockPool.h" />
-    <ClInclude Include="Source\ccTreeNode.h" />
-    <ClInclude Include="Source\ccTreeNodeCollection.h" />
-    <ClInclude Include="Source\ccTreeNodeDestroyer.h" />
-    <ClInclude Include="Source\ccTreeNodeRxQueue.h" />
-    <ClInclude Include="Source\ccTreeNodeTxQueue.h" />
-    <ClInclude Include="Source\ccTreeNodeVisitor.h" />
     <ClInclude Include="Source\CmdLineExec.h" />
-    <ClInclude Include="Source\GenerateTreeNodes.h" />
     <ClInclude Include="Source\someBlock1.h" />
     <ClInclude Include="Source\someBlock2.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CCLib\CCLib.vcxproj">
+      <Project>{1909118a-707c-47e4-80bc-84130e1c951b}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
