@@ -96,6 +96,7 @@
   <ItemGroup>
     <ClCompile Include="Source\ccNodeBlock.cpp" />
     <ClCompile Include="Source\ccNodeBlockVisitor.cpp" />
+    <ClCompile Include="Source\ccSegmentCopier.cpp" />
     <ClCompile Include="Source\CmdLineExec.cpp" />
     <ClCompile Include="Source\GenerateNodeBlocks.cpp" />
     <ClCompile Include="Source\Main.cpp" />
@@ -104,6 +105,7 @@
     <ClInclude Include="Source\ccNodeBlock.h" />
     <ClInclude Include="Source\ccNodeBlockChannel.h" />
     <ClInclude Include="Source\ccNodeBlockVisitor.h" />
+    <ClInclude Include="Source\ccSegmentCopier.h" />
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\GenerateNodeBlocks.h" />
   </ItemGroup>
