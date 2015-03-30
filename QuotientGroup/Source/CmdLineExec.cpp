@@ -32,13 +32,15 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   CC::QuotientGroup<4096, 16> tSlot;
+   CC::QuotientGroupZPlusOverN<16> tSlot;
    tSlot.putG(128);
 }
 //******************************************************************************
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
+   CC::QuotientGroupGOverN<4096, 16> tSlot;
+   tSlot.putG(128);
 }
 
 //******************************************************************************
