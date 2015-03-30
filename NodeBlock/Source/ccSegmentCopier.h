@@ -61,8 +61,8 @@ public:
    //---------------------------------------------------------------------------
    // Members
 
-   Element* mSegment,
-   int      mNumOfElementsInSegment,
+   Element* mSegment;
+   int      mNumOfElementsInSegment;
    int      mNumOfElementsInFragment;
    int      mSegmentIndex;
 };
