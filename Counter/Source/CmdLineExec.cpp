@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 #include "prnPrint.h"
-#include "ccQuotientGroup.h"
+#include "Modulo.h"
 
 #include "CmdLineExec.h"
 
@@ -32,14 +32,14 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   CC::QuotientGroupZPlusOverN<16> tSlot;
+   QuotientGroupZPlusOverN<16> tSlot;
    tSlot.putG(128);
 }
 //******************************************************************************
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   CC::QuotientGroupGOverN<4096, 16> tSlot;
+   QuotientGroupGOverN<4096, 16> tSlot;
    tSlot.putG(128);
 }
 
