@@ -11,18 +11,17 @@ integer quotient groups.
 //******************************************************************************
 //******************************************************************************
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-template <int N>
-class Mod4096ModN
+template <int M,int N,int NShift>
+class ModuloM_ModuloN
 {
 public:
    //---------------------------------------------------------------------------
    // Members
 
-   static const int c4096RemainderMask = 4095;
+   static const int cMRemainderMask = M-1;
+   static const int cNRemainderMask = N-1;
+   static const int cNQuotientShift = NShift;
+
    static int mQuotientShift;
    static int mRemainderMask;
 
@@ -30,7 +29,7 @@ public:
    // Methods
 
    // Constructor
-   Mod4096ModN()
+   ModuloM_ModuloN()
    {
       mQuotient      = 0;
       mRemainder     = 0;
@@ -40,9 +39,9 @@ public:
 
    void convertFromZ(int aZ)
    {
-      int t4096Remainder = aZ & c4096RemainderMask;
-      mQuotient  = t4096Remainder >> mQuotientShift;
-      mRemainder = t4096Remainder  & mRemainderMask;
+      int tMRemainder = aZ & cMRemainderMask;
+      mQuotient  = tMRemainder >> cNQuotientShift;
+      mRemainder = tMRemainder  & cNRemainderMask;
 
       mFrequencyFlag = mRemainder==0;
 
@@ -60,19 +59,20 @@ public:
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-typedef Mod4096ModN<4096> Counter4096_1hz;
-typedef Mod4096ModN<2048> Counter4096_2hz;
-typedef Mod4096ModN<1024> Counter4096_4hz;
-typedef Mod4096ModN<512>  Counter4096_8hz;
-typedef Mod4096ModN<256>  Counter4096_16hz;
-typedef Mod4096ModN<128>  Counter4096_32hz;
-typedef Mod4096ModN<64>   Counter4096_64hz;
-typedef Mod4096ModN<32>   Counter4096_128hz;
-typedef Mod4096ModN<16>   Counter4096_256hz;
-typedef Mod4096ModN<8>    Counter4096_512hz;
-typedef Mod4096ModN<4>    Counter4096_1024hz;
-typedef Mod4096ModN<2>    Counter4096_2048hz;
-typedef Mod4096ModN<1>    Counter4096_4096hz;
+//      Modulo Modulo Counter                                      // Quotient   Remainder
+typedef ModuloM_ModuloN<4096, 4096,  12>   Counter4096_1hz;        // [0..0]     [0..4095] 
+typedef ModuloM_ModuloN<4096, 2048,  11>   Counter4096_2hz;        // [0..1]     [0..2047] 
+typedef ModuloM_ModuloN<4096, 1024,  10>   Counter4096_4hz;        // [0..3]     [0..1023] 
+typedef ModuloM_ModuloN<4096,  512,   9>   Counter4096_8hz;        // [0..7]     [0..511]  
+typedef ModuloM_ModuloN<4096,  256,   8>   Counter4096_16hz;       // [0..15]    [0..255]  
+typedef ModuloM_ModuloN<4096,  128,   7>   Counter4096_32hz;       // [0..31]    [0..127]  
+typedef ModuloM_ModuloN<4096,   64,   6>   Counter4096_64hz;       // [0..63]    [0..63]   
+typedef ModuloM_ModuloN<4096,   32,   5>   Counter4096_128hz;      // [0..127]   [0..31]   
+typedef ModuloM_ModuloN<4096,   16,   4>   Counter4096_256hz;      // [0..255]   [0..15]   
+typedef ModuloM_ModuloN<4096,    8,   3>   Counter4096_512hz;      // [0..511]   [0..7]    
+typedef ModuloM_ModuloN<4096,    4,   2>   Counter4096_1024hz;     // [0..1023]  [0..3]    
+typedef ModuloM_ModuloN<4096,    2,   1>   Counter4096_2048hz;     // [0..2047]  [0..1]    
+typedef ModuloM_ModuloN<4096,    1,   0>   Counter4096_4096hz;     // [0..4095]  [0..0]    
 
 //******************************************************************************
 

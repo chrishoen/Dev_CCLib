@@ -32,14 +32,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   Mod4096ModN<1024> tSlot;
-   tSlot.convertFromZ(128);
-}
-//******************************************************************************
-
-void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
-{
-   Counter4096_4hz tCounter;
+   Counter4096_128hz tCounter;
    for (int i = 0; i < 4096; i++)
    {
       tCounter.convertFromZ(i);
@@ -48,6 +41,11 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
          tCounter.mRemainder,
          tCounter.mFrequencyFlag);
    }
+}
+//******************************************************************************
+
+void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
+{
 }
 
 //******************************************************************************
