@@ -32,15 +32,22 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   QuotientGroupZPlusOverN<16> tSlot;
-   tSlot.putG(128);
+   Mod4096ModN<1024> tSlot;
+   tSlot.convertFromZ(128);
 }
 //******************************************************************************
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   QuotientGroupGOverN<4096, 16> tSlot;
-   tSlot.putG(128);
+   Counter4096_4hz tCounter;
+   for (int i = 0; i < 4096; i++)
+   {
+      tCounter.convertFromZ(i);
+      printf("%5d %5d %5d %d\n", i,
+         tCounter.mQuotient,
+         tCounter.mRemainder,
+         tCounter.mFrequencyFlag);
+   }
 }
 
 //******************************************************************************
