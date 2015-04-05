@@ -1,52 +1,45 @@
-#ifndef _QUOTIENTGROUP_H_
-#define _QUOTIENTGROUP_H_
+#ifndef _MODULO_H_
+#define _MODULO_H_
 /*==============================================================================
 
 This defines a class template that is used to define classes that are used
 to implement counters.
 
 These counters are specialized in that they are based on numbers that are
-powers of two. Each counter class is based on two integer modulo groups that
+powers of two. Each counter class is based on integer modulo groups that
 use bit shifts to implement division operations and bit masks to implement
 modulo operations.
 
 This integer modulo groups are as follows:
 
-ZPlusM is the group based on the positive integers modulo M.
-ZPlusN is the group based on the positive integers modulo N.
-ZPlusD is the group based on the positive integers modulo D.
-Where M = N*D
+Modulo(M) is the group based on the positive integers modulo M.
+Modulo(N) is the group based on the positive integers modulo N.
+Modulo(D) is the group based on the positive integers modulo D.
 
-For ZPlusM: 
+For Modulo(M): 
   The group set is {0,1,...,M-1} also known as [0..M-1].
   The binary operation on two group elements is (A + B) mod M.
   The inverse of a group element A is A==0 ? 0 : M-A.
   The group identity element is 0.
 
-For ZPlusN: 
-  The group set is {0,1,...,N-1} also known as [0..N-1].
-  The binary operation on two group elements is (A + B) mod N.
-  The inverse of a group element A is A==0 ? 0 : N-A.
-  The group identity element is 0.
+Here M = N*D
 
-For ZPlusD, Where D=M/N
-  The group set is {0,1,...,D-1} also known as [0..D-1].
-  The binary operation on two group elements is (A + B) mod D.
-  The inverse of a group element A is A==0 ? 0 : D-A.
-  The group identity element is 0.
+M is a power of two. For some LM,         M=2^LM.
+N is a power of two. For some LN <= LM,   N=2^LN.
+D is a power of two. For some LD = LM-LN, D=2^LD.
 
-Each counter class is based on ZPlusM, where the counter is incremented
+Each counter class is based on Modulo(M), where the counter is incremented
 M times every clock period. Thus a clock that is incremented at 4096hz and 
 has a period of one second will have an M of 4096 and the clock values will
 vary as [0..4095].
 
-The clock values are elements of ZPlusM and are represented by ordered pairs
+The clock values are elements of Modulo(M) and are represented by ordered pairs
 (q,r) of quotients and remainders that result after division by N. 
 q = m div N
 r = m mod N
 m = q*N + r
-The quotients  q are elements of the group ZPlusD.
-The remainders r are elements of the group ZPlusN.
+The quotients  q are elements of the group Modulo(D).
+The remainders r are elements of the group Modulo(N).
 
 This allows construction of counters with subcounters. For example a clock
 with a frequency of 4096hz and a period of one second can be represented by
@@ -125,7 +118,7 @@ public:
    // Conversions. Since M and N are powers of 2, division is a shift and 
    // modulo is a mask
 
-   // Convert from a positive integer
+   // Convert from a positive integer, (also known as Z superscript +)
    inline void convertFromZPlus(unsigned aZ)
    {
       // Z mod M         ; is an element of [0..M-1]
@@ -137,7 +130,7 @@ public:
    }
 
    // Convert to a positive integer modulo M, is an element of [0..M-1]
-   inline unsigned convertToZPlusM()
+   inline unsigned convertToModuloM()
    {
       // Z = Q*N + R
       return mQuotient*N + mRemainder;
@@ -152,20 +145,17 @@ public:
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
-   // Group operations for ZPlusM and ZPlusN.
-   //
-   // ZPlusM is the group based on the positive integers modulo M.
-   // ZPlusN is the group based on the positive integers modulo N.
-   // Here M is a multiple of N. (M = 2^LM, N = 2^LN, LM >= LN)
+   // Group operations for Modulo(M), Modulo(N) and Modulo(D).
 
-   // This gives the group binary operation for ZPLusM
-   // It also gives the group binary operation for ZPlusN
+   // This gives the group binary operation for Modulo(M)
+   // It also gives the group binary operation for Modulo(N)
+   // It also gives the group binary operation for Modulo(D)
 
    inline ThisClass add(ThisClass aThat)
    {
       // Convert to [0..M-1]
-      unsigned tMThis = convertToZPlusM();
-      unsigned tMThat = aThat.convertToZPlusM();
+      unsigned tMThis = convertToModuloM();
+      unsigned tMThat = aThat.convertToModuloM();
       // Sum
       unsigned tMSum = tMThis + tMThat;
       if (tMSum >= M) tMSum = tMSum - M;
@@ -173,13 +163,14 @@ public:
       return ThisClass(tMSum);
    }
 
-   // This gives the group inverse for ZPlusM
-   // It also gives the group inverse for ZPlusN
+   // This gives the group inverse for Modulo(M)
+   // It also gives the group inverse for Modulo(N)
+   // It also gives the group inverse for Modulo(D)
 
    inline ThisClass inverse()
    {
       // Convert to [0..M-1]
-      unsigned tMThis = convertToZPlusM();
+      unsigned tMThis = convertToModuloM();
       // [0..M-1] inverse     
       unsigned tMInverse = tMThis == 0 ? 0 : M - tMThis;
       // Return inverse
@@ -195,8 +186,8 @@ public:
    inline void addTo(ThisClass aThat)
    {
       // Convert to [0..M-1]
-      unsigned tMThis = convertToZPlusM();
-      unsigned tMThat = aThat.convertToZPlusM();
+      unsigned tMThis = convertToModuloM();
+      unsigned tMThat = aThat.convertToModuloM();
       // Sum
       unsigned tMSum = tMThis + tMThat;
       if (tMSum >= M) tMSum = tMSum - M;
@@ -208,8 +199,8 @@ public:
    inline ThisClass subrtract(ThisClass aThat)
    {
       // Convert to [0..M-1]
-      unsigned tMThis = convertToZPlusM();
-      unsigned tMThatInverse = aThat.convertToZPlusM().inverse();
+      unsigned tMThis = convertToModuloM();
+      unsigned tMThatInverse = aThat.convertToModuloM().inverse();
       // Difference
       unsigned tMDifference = tMThis + tMThatInverse;
       if (tMDifference >= M) tMDifference = tMDifference - M;
@@ -221,8 +212,8 @@ public:
    inline void subrtractFrom(ThisClass aThat)
    {
       // Convert to [0..M-1]
-      unsigned tMThis = convertToZPlusM();
-      unsigned tMThatInverse = aThat.convertToZPlusM().inverse();
+      unsigned tMThis = convertToModuloM();
+      unsigned tMThatInverse = aThat.convertToModuloM().inverse();
       // Difference
       unsigned tMDifference = tMThis + tMThatInverse;
       if (tMDifference >= M) tMDifference = tMDifference - M;
@@ -231,7 +222,6 @@ public:
    }
 
 };
-
 
 //******************************************************************************
 //******************************************************************************
