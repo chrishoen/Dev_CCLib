@@ -14,7 +14,6 @@ This integer modulo groups are as follows:
 
 Modulo(M) is the group based on the positive integers modulo M.
 Modulo(N) is the group based on the positive integers modulo N.
-Modulo(D) is the group based on the positive integers modulo D.
 
 For Modulo(M): 
   The group set is {0,1,...,M-1} also known as [0..M-1].
@@ -28,6 +27,10 @@ M is a power of two. For some LM,         M=2^LM.
 N is a power of two. For some LN <= LM,   N=2^LN.
 D is a power of two. For some LD = LM-LN, D=2^LD.
 
+So M = N*D 
+So (2^LM) = (2^LN)*(2^LD) = (2^LN)*(2^LM)/(2^LN) = (2^LM)
+So LM = LN + LD
+
 Each counter class is based on Modulo(M), where the counter is incremented
 M times every clock period. Thus a clock that is incremented at 4096hz and 
 has a period of one second will have an M of 4096 and the clock values will
@@ -38,7 +41,6 @@ The clock values are elements of Modulo(M) and are represented by ordered pairs
 q = m div N
 r = m mod N
 m = q*N + r
-The quotients  q are elements of the group Modulo(D).
 The remainders r are elements of the group Modulo(N).
 
 This allows construction of counters with subcounters. For example a clock
@@ -145,12 +147,11 @@ public:
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
-   // Group operations for Modulo(M), Modulo(N) and Modulo(D).
+   // Group operations for Modulo(M) and Modulo(N)
 
    // This gives the group binary operation for Modulo(M)
    // It also gives the group binary operation for Modulo(N)
-   // It also gives the group binary operation for Modulo(D)
-
+   
    inline ThisClass add(ThisClass aThat)
    {
       // Convert to [0..M-1]
@@ -165,7 +166,6 @@ public:
 
    // This gives the group inverse for Modulo(M)
    // It also gives the group inverse for Modulo(N)
-   // It also gives the group inverse for Modulo(D)
 
    inline ThisClass inverse()
    {

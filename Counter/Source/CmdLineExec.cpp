@@ -83,6 +83,10 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
    Counter32_8hz tInverse;
    Counter32_8hz tSum;
 
+// Counter4096_128hz tCounter;
+// Counter4096_128hz tInverse;
+// Counter4096_128hz tSum;
+
    for (int i = 0; i < 32; i++)
    {
       tCounter.convertFromZPlus(i);
