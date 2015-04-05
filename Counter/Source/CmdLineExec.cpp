@@ -103,17 +103,23 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 {
-   Counter32_8hz tCounter;
-   unsigned      tZPlusM;
+   aCmd->setArgDefaultUnsigned(1, 0);
+   aCmd->setArgDefaultUnsigned(2, 1);
 
-   for (int i = 0; i < 64; i++)
+   Counter32_8hz tCounter;
+   Counter32_8hz tDelta(aCmd->argUnsigned(1),aCmd->argUnsigned(2));
+   Counter32_8hz tSum;
+
+   for (int i = 0; i < 32; i++)
    {
       tCounter.convertFromZPlus(i);
-      tZPlusM = tCounter.convertToZPlusM();
-      printf("%5d %5d %5d %5d\n", i,
+      tSum = tCounter.add(tDelta);
+
+      printf("%5d $$ %5d %5d   $$ %5d %5d\n", i,
          tCounter.mQuotient,
          tCounter.mRemainder,
-         tZPlusM);
+         tSum.mQuotient,
+         tSum.mRemainder);
    }
 }
 

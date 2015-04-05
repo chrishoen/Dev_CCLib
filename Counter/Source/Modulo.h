@@ -113,10 +113,10 @@ public:
    }
 
    // Constructor
-   inline ModuloM_ModuloN_PowerOfTwo(unsigned aMRemainder,unsigned aNRemainder)
+   inline ModuloM_ModuloN_PowerOfTwo(unsigned aQuotient,unsigned aRemainder)
    {
-      mMRemainder = aMRemainder;
-      mNRemainder = aNRemainder;
+      mQuotient  = aQuotient;
+      mRemainder = aRemainder;
    }
 
    //---------------------------------------------------------------------------
@@ -156,7 +156,7 @@ public:
    //
    // ZPlusM is the group based on the positive integers modulo M.
    // ZPlusN is the group based on the positive integers modulo N.
-   // Here M is a multiple of N. (M = 2^P, N = 2^Q, P >= Q)
+   // Here M is a multiple of N. (M = 2^LM, N = 2^LN, LM >= LN)
 
    // This gives the group binary operation for ZPLusM
    // It also gives the group binary operation for ZPlusN
@@ -168,6 +168,7 @@ public:
       unsigned tMThat = aThat.convertToZPlusM();
       // Sum
       unsigned tMSum = tMThis + tMThat;
+      if (tMSum >= M) tMSum = tMSum - M;
       // Return sum
       return ThisClass(tMSum);
    }
@@ -184,6 +185,51 @@ public:
       // Return inverse
       return ThisClass(tMInverse);
    }
+
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // More operations
+
+   // A = A + B
+   inline void addTo(ThisClass aThat)
+   {
+      // Convert to [0..M-1]
+      unsigned tMThis = convertToZPlusM();
+      unsigned tMThat = aThat.convertToZPlusM();
+      // Sum
+      unsigned tMSum = tMThis + tMThat;
+      if (tMSum >= M) tMSum = tMSum - M;
+      // Return sum
+      *this = ThisClass(tMSum);
+   }
+
+   // C = A - B
+   inline ThisClass subrtract(ThisClass aThat)
+   {
+      // Convert to [0..M-1]
+      unsigned tMThis = convertToZPlusM();
+      unsigned tMThatInverse = aThat.convertToZPlusM().inverse();
+      // Difference
+      unsigned tMDifference = tMThis + tMThatInverse;
+      if (tMDifference >= M) tMDifference = tMDifference - M;
+      // Return difference
+      return ThisClass(tMDifference);
+   }
+
+   // A = A - B
+   inline void subrtractFrom(ThisClass aThat)
+   {
+      // Convert to [0..M-1]
+      unsigned tMThis = convertToZPlusM();
+      unsigned tMThatInverse = aThat.convertToZPlusM().inverse();
+      // Difference
+      unsigned tMDifference = tMThis + tMThatInverse;
+      if (tMDifference >= M) tMDifference = tMDifference - M;
+      // Return difference
+      *this = ThisClass(tMDifference);
+   }
+
 };
 
 
