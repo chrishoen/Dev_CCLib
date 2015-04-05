@@ -15,6 +15,7 @@ template <unsigned M,unsigned N,unsigned NShift>
 class ModuloM_ModuloN_PowerOfTwo
 {
 public:
+   typedef ModuloM_ModuloN_PowerOfTwo<M, N, NShift> ThisClass;
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
@@ -29,8 +30,8 @@ public:
    //---------------------------------------------------------------------------
    // Members
 
-   unsigned  mQuotient;
-   unsigned  mRemainder;
+   unsigned short mQuotient;
+   unsigned short mRemainder;
 
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
@@ -87,25 +88,25 @@ public:
    //---------------------------------------------------------------------------
    // Group operations
 
-   inline ModuloM_ModuloN_PowerOfTwo<M, N, NShift> inverse()
+   inline ThisClass inverse()
    {
       unsigned tMThis = convertToZPlus();
      
       unsigned tMInverse = tMThis == 0 ? 0 : M - tMThis;
 
-      ModuloM_ModuloN_PowerOfTwo<M, N, NShift> tInverse(tMInverse);
+      ThisClass tInverse(tMInverse);
 
       return tInverse;
    }
 
-   inline ModuloM_ModuloN_PowerOfTwo<M, N, NShift> add(ModuloM_ModuloN_PowerOfTwo<M, N, NShift> aThat)
+   inline ThisClass add(ThisClass aThat)
    {
       unsigned tMThis = convertToZPlus();
       unsigned tMThat = aThat.convertToZPlus();
      
       unsigned tMSum = tMThis + tMThat;
 
-      ModuloM_ModuloN_PowerOfTwo<M, N, NShift> tSum(tMSum);
+      ThisClass tSum(tMSum);
 
       return tSum;
    }
@@ -115,7 +116,7 @@ public:
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-//      Modulo Modulo Counter                                      // Quotient   Remainder
+//      Modulo Modulo Counter                                                 // Quotient   Remainder
 typedef ModuloM_ModuloN_PowerOfTwo<4096, 4096,  12>   Counter4096_1hz;        // [0..0]     [0..4095] 
 typedef ModuloM_ModuloN_PowerOfTwo<4096, 2048,  11>   Counter4096_2hz;        // [0..1]     [0..2047] 
 typedef ModuloM_ModuloN_PowerOfTwo<4096, 1024,  10>   Counter4096_4hz;        // [0..3]     [0..1023] 
