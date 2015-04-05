@@ -3,7 +3,7 @@
 /*==============================================================================
 
 This defines a class template that is used to define classes that encapsulate
-integer quotient groups.
+unsignedeger quotient groups.
 
 ==============================================================================*/
 
@@ -11,7 +11,7 @@ integer quotient groups.
 //******************************************************************************
 //******************************************************************************
 
-template <int M,int N,int NShift>
+template <unsigned M,unsigned N,unsigned NShift>
 class ModuloM_ModuloN_PowerOfTwo
 {
 public:
@@ -20,18 +20,17 @@ public:
    //---------------------------------------------------------------------------
    // Constants
 
-   static const int cMRemainderMask = M-1;
-   static const int cNRemainderMask = N-1;
-   static const int cNQuotientShift = NShift;
+   static const unsigned cMRemainderMask = M-1;
+   static const unsigned cNRemainderMask = N-1;
+   static const unsigned cNQuotientShift = NShift;
 
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
    // Members
 
-   int      mQuotient;
-   int      mRemainder;
-   bool     mFrequencyFlag;
+   unsigned  mQuotient;
+   unsigned  mRemainder;
 
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
@@ -43,21 +42,19 @@ public:
    {
       mQuotient      = 0;
       mRemainder     = 0;
-      mFrequencyFlag = false;
    }
 
    // Constructor
-   ModuloM_ModuloN_PowerOfTwo(int aZ)
+   ModuloM_ModuloN_PowerOfTwo(unsigned aZ)
    {
-      convertFromZ(aZ);
+      convertFromZPlus(aZ);
    }
 
    // Constructor
-   ModuloM_ModuloN_PowerOfTwo(int aMRemainder,int aNRemainder)
+   ModuloM_ModuloN_PowerOfTwo(unsigned aMRemainder,unsigned aNRemainder)
    {
       mMRemainder = aMRemainder;
       mNRemainder = aNRemainder;
-      mFrequencyFlag = mRemainder==0;
    }
 
    //---------------------------------------------------------------------------
@@ -65,21 +62,53 @@ public:
    //---------------------------------------------------------------------------
    // Conversions
 
-   // Convert from an integer
-   inline void convertFromZ(int aZ)
+   // Convert from a positive integer
+   inline void convertFromZPlus(unsigned aZ)
    {
-      int tMRemainder = aZ & cMRemainderMask;
+      unsigned tMRemainder = aZ & cMRemainderMask;
       mQuotient  = tMRemainder >> cNQuotientShift;
       mRemainder = tMRemainder  & cNRemainderMask;
-      mFrequencyFlag = mRemainder==0;
    }
 
-   // Convert to an integer
-   inline int convertToZ()
+   // Convert to a positive integer
+   inline unsigned convertToZPlus()
    {
-      return mNQuotient*N + mNRemainder;
+      return mQuotient*N + mRemainder;
    }
 
+   // Is first in N set
+   inline bool isFirst()
+   {
+      return mRemainder == 0;
+   }
+
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // Group operations
+
+   inline ModuloM_ModuloN_PowerOfTwo<M, N, NShift> inverse()
+   {
+      unsigned tMThis = convertToZPlus();
+     
+      unsigned tMInverse = tMThis == 0 ? 0 : M - tMThis;
+
+      ModuloM_ModuloN_PowerOfTwo<M, N, NShift> tInverse(tMInverse);
+
+      return tInverse;
+   }
+
+   inline ModuloM_ModuloN_PowerOfTwo<M, N, NShift> add(ModuloM_ModuloN_PowerOfTwo<M, N, NShift> aThat)
+   {
+      unsigned tMThis = convertToZPlus();
+      unsigned tMThat = aThat.convertToZPlus();
+     
+      unsigned tMSum = tMThis + tMThat;
+
+      ModuloM_ModuloN_PowerOfTwo<M, N, NShift> tSum(tMSum);
+
+      return tSum;
+   }
 };
 
 
@@ -100,6 +129,8 @@ typedef ModuloM_ModuloN_PowerOfTwo<4096,    8,   3>   Counter4096_512hz;      //
 typedef ModuloM_ModuloN_PowerOfTwo<4096,    4,   2>   Counter4096_1024hz;     // [0..1023]  [0..3]    
 typedef ModuloM_ModuloN_PowerOfTwo<4096,    2,   1>   Counter4096_2048hz;     // [0..2047]  [0..1]    
 typedef ModuloM_ModuloN_PowerOfTwo<4096,    1,   0>   Counter4096_4096hz;     // [0..4095]  [0..0]    
+
+typedef ModuloM_ModuloN_PowerOfTwo<32,      4,   2>   Counter32_8hz;          // [0..7]     [0..3]    
 
 //******************************************************************************
 

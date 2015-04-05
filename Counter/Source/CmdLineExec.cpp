@@ -35,29 +35,68 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
    Counter4096_128hz tCounter;
    for (int i = 0; i < 4096; i++)
    {
-      tCounter.convertFromZ(i);
+      tCounter.convertFromZPlus(i);
       printf("%5d %5d %5d %d\n", i,
          tCounter.mQuotient,
          tCounter.mRemainder,
-         tCounter.mFrequencyFlag);
+         tCounter.isFirst());
    }
 }
 //******************************************************************************
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
+   Counter32_8hz tCounter;
+   for (int i = 0; i < 32; i++)
+   {
+      tCounter.convertFromZPlus(i);
+      printf("%5d %5d %5d\n", i,
+         tCounter.mQuotient,
+         tCounter.mRemainder);
+   }
 }
 
 //******************************************************************************
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
+   Counter32_8hz tCounter;
+   Counter32_8hz tInverse;
+   for (int i = 0; i < 32; i++)
+   {
+      tCounter.convertFromZPlus(i);
+      tInverse = tCounter.inverse();
+
+      printf("%5d $$ %5d %5d   $$ %5d %5d\n", i,
+         tCounter.mQuotient,
+         tCounter.mRemainder,
+         tInverse.mQuotient,
+         tInverse.mRemainder);
+   }
 }
 
 //******************************************************************************
 
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
+   Counter32_8hz tCounter;
+   Counter32_8hz tInverse;
+   Counter32_8hz tSum;
+
+   for (int i = 0; i < 32; i++)
+   {
+      tCounter.convertFromZPlus(i);
+      tInverse = tCounter.inverse();
+      tSum = tCounter.add(tInverse);
+
+      printf("%5d $$ %5d %5d   $$ %5d %5d  $$ %5d %5d\n", i,
+         tCounter.mQuotient,
+         tCounter.mRemainder,
+         tInverse.mQuotient,
+         tInverse.mRemainder,
+         tSum.mQuotient,
+         tSum.mRemainder);
+   }
 }
 
 //******************************************************************************
