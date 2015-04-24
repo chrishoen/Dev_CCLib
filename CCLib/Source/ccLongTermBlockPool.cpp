@@ -15,9 +15,11 @@ Description:
 
 namespace CC
 {
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Constructor
 
 LongTermBlockPool::LongTermBlockPool()
 {
@@ -30,7 +32,12 @@ LongTermBlockPool::~LongTermBlockPool()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Store member variables and dynamically allocate memory for the block array.
+// This class encapsulates a pool of persistent memory blocks. At 
+// initialization, it allocates an array of blocks and it allocates a stack
+// of pointers into the blocks. To allocate a block from the pool, a pointer is 
+// popped from the stack. To free a block, a pointer is pushed back onto the
+// stack. This is thread safe because it the stack accesses use critical
+// sections. 
 
 void LongTermBlockPool::initialize(int aAllocate, int aBlockSize)
 {
@@ -50,7 +57,8 @@ void LongTermBlockPool::initialize(int aAllocate, int aBlockSize)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Get a block from the pool, allocate
+// Get a block from the pool, this allocates a block. It pops a pointer
+// from the pointer stack.
 
 void* LongTermBlockPool::get()
 {
@@ -60,7 +68,9 @@ void* LongTermBlockPool::get()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Put a block back to the pool, free
+// Put a block back to the pool, this deallocates a block. It pushes a 
+// pointer onto the pointer stack.
+
 void LongTermBlockPool::put(void* aBlockPointer)
 {
    mPointerStack.push(aBlockPointer);
