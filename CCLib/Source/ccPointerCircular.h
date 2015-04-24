@@ -2,8 +2,9 @@
 #define _POINTERCIRCULAR_H_
 /*==============================================================================
 
-This defines a circular array of pointers. It is used by heaps and
-and pools as an allocator. It is not thread safe.
+This defines a circular array of pointers. It is used by short term memory 
+block pools to establish circular buffers. It is thread safe, it uses critical
+sections to lock access to array indices.
 
 ==============================================================================*/
 
@@ -38,19 +39,19 @@ public:
 
    // Put a pointer into the circular array. This is used during initialization
    // of short term memory pools by filling up the pointer array with allocated
-   // block addresses. 
+   // block addresses. It cycles through the array via the PutIndex.
    bool  put(void* aPointer);
 
    // Get a pointer from the circular array. This is used to allocate a block
    // from a short term memory pool. It returns the address of an allocated
    // block. It does so in a circular manner by indexing through the pointer
-   // array.
+   // array, via the GetIndex.
    void* get();
 
    //---------------------------------------------------------------------------
    // Members
 
-   // Array of pointers, Dynamically allocated by initialize.
+   // Array of pointers, it is dynamically allocated by initialize.
    void** mArray;
 
    // Index into the array. Put operations cycle through the array via this
