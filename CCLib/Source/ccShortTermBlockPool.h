@@ -16,6 +16,20 @@ term lifetimes. Blocks that are allocated from long term pools must be
 deallocated once their lifetimes have expired. Blocks that are allocated from 
 short term pools are not dellocated, they are simply reused. 
 
+Short term memory pools are useful in realtime systems that perform
+communications operations with transfer rates that have a steady state 
+average, but with a non zero standard deviation. Blocks can be allocated at
+a source object and sent along a chain to a destination object after some
+indeteminate time. As long as the transfer time is bounded and the pool has
+enogh blocks, after the blocks are used at the destination, they can be
+discarded. They do not have to be deleted or deallocated, they are simply
+reused. 
+
+They convention that is used here is that short term memory blocks do not
+have destructors. When a destination object is finished with a block that
+it receives it does not do a delete on it. It just simply forgets about it.
+
+
 ==============================================================================*/
 
 //******************************************************************************
@@ -47,6 +61,7 @@ public:
   ~ShortTermBlockPool();
 
    // Allocate memory for the block array and initialize the pointer array.
+   // It is passed the number of blocks to allocate and the size of the blocks.
    void initialize(int aAllocate,int aBlockSize);
 
    // Get a block from the pool, this allocates a block. It gets a pointer

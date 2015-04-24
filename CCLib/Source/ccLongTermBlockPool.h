@@ -45,6 +45,7 @@ public:
   ~LongTermBlockPool();
 
    // Allocate memory for the block array and initialize the pointer stack.
+   // It is passed the number of blocks to allocate and the size of the blocks.
    void initialize(int aAllocate,int aBlockSize);
 
    // Get a block from the pool, this allocates a block. It pops a pointer

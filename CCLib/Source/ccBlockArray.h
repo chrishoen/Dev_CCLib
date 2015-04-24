@@ -2,7 +2,9 @@
 #define _BLOCKARRAY_H_
 /*==============================================================================
 
-This defines an array of memory blocks that are dynamically allocated.
+This defines an array of memory blocks that are dynamically allocated. It 
+provides an initialization method that allocates the blocks and it provides
+an indexing method that is used to access the blocks.
 
 ==============================================================================*/
 
@@ -28,10 +30,11 @@ public:
    BlockArray();
   ~BlockArray();
 
-   // Allocate memory for the block array.
+   // Allocate memory for the block array. It is passed the number of blocks to 
+   // allocate and the size of the blocks.
    void initialize(int aAllocate,int aBlockSize);
 
-   // Return a pointer to a block, based on block index
+   // Return a pointer to a block, based on its block index.
    char* e(int aIndex);
 
 
