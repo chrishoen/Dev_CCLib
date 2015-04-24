@@ -58,7 +58,8 @@ public:
    //---------------------------------------------------------------------------
    // Members
 
-   // Array of allocated memory blocks
+   // Array of allocated memory blocks. The blocks are allocated on the 
+   // system heap and this maintains a pointer to the blocks.
    BlockArray mBlocks;
 
    // Stack of pointers into the block array. To allocate a block, a pointer 
