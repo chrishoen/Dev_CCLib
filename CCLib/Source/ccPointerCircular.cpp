@@ -42,13 +42,13 @@ PointerCircular::~PointerCircular()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Initialize dynamically allocates storage for the pointer array via the 
-// system heap.
+// Allocate memory for the pointer array and initialize the indices. 
+// aAllocate is the number of pointers to allocate, the size of the array.
 
 void PointerCircular::initialize(int aAllocate)
 {
    // Allocate memory for the array
-   mArray    = new void*[aAllocate];
+   mArray = new void*[aAllocate];
 
    // Initialize variables
    mPutIndex    = 0;
@@ -59,7 +59,9 @@ void PointerCircular::initialize(int aAllocate)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Put a pointer into the circular array.
+// Put a pointer into the circular array. This is used during initialization
+// of short term memory pools by filling up the pointer array with allocated
+// block addresses. It cycles through the array via the PutIndex.
 
 bool PointerCircular::put (void* aPointer)
 {
@@ -85,7 +87,10 @@ bool PointerCircular::put (void* aPointer)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Get a pointer from the array.
+// Get a pointer from the circular array. This is used to allocate a block
+// from a short term memory pool. It returns the address of an allocated
+// block. It does so in a circular manner by indexing through the pointer
+// array, via the GetIndex.
 
 void* PointerCircular::get ()
 {
