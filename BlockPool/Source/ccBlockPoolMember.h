@@ -8,12 +8,28 @@
 #include "ccDefs.h"
 #include "ccBlockPool.h"
 
+/*==============================================================================
+This is class template for classes whose instances will be members of a 
+memory block pool.
+
+
+This defines class template that other classes inherit from. Instances of 
+inheriting classes are established to be members of a block memory pool that is 
+of a fixed number of blocks of fixed size.
+
+Instances of classes that inherit from this base class template are members
+of a memory block pool. The class template provides static member variables
+that establish the block pool and it provides access methods to it.
+==============================================================================*/
+
 namespace CC
 {
 
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
+// This is a class template for classes whose instances are members of a 
+// memory block pool. 
 
 template <class MemberClass>
 class BlockPoolMember
