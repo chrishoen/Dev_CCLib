@@ -35,10 +35,10 @@
     <ClInclude Include="Source\ccBlockPool.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccBlockPoolMember.h">
+    <ClInclude Include="Source\someClass6.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\someClass6.h">
+    <ClInclude Include="Source\ccBlockPoolBlockClass.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

@@ -102,7 +102,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\ccBlockPool.h" />
-    <ClInclude Include="Source\ccBlockPoolMember.h" />
+    <ClInclude Include="Source\ccBlockPoolBlockClass.h" />
     <ClInclude Include="Source\ccShortTermBlockPoolMember.h" />
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\someClass5.h" />

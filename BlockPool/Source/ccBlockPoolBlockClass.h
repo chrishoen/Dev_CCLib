@@ -1,11 +1,9 @@
-#ifndef _CCBLOCKPOOLMEMBER_H_
-#define _CCBLOCKPOOLMEMBER_H_
+#ifndef _CCBLOCKPOOLBLOCKCLASS_H_
+#define _CCBLOCKPOOLBLOCKCLASS_H_
 
 #include <new>
 #include <stdio.h>
 
-#include "ccTreeNode.h"
-#include "ccDefs.h"
 #include "ccBlockPool.h"
 
 /*==============================================================================
@@ -30,8 +28,8 @@ namespace CC
 // This is a class template for classes whose instances use a block pool 
 // for memory management.
 
-template <class MemberClass>
-class BlockPoolMember
+template <class BlockClass>
+class BlockPoolBlockClass
 {
 public:
 
@@ -51,7 +49,7 @@ public:
    // blocks to allocate from system heap memory.
    static void initializeShortTermBlockPool(int aAllocate)
    {
-      mBlockPool.initializeShortTerm(aAllocate, sizeof(MemberClass));
+      mBlockPool.initializeShortTerm(aAllocate, sizeof(BlockClass));
    }
 
    // This initializes the memory block pool to be long term lifetime,
@@ -59,7 +57,7 @@ public:
    // allocate from system heap memory.
    static void initializeLongTermBlockPool(int aAllocate)
    {
-      mBlockPool.initializeLongTerm(aAllocate, sizeof(MemberClass));
+      mBlockPool.initializeLongTerm(aAllocate, sizeof(BlockClass));
    }
 
    //--------------------------------------------------------------------------
@@ -67,16 +65,16 @@ public:
    //--------------------------------------------------------------------------
    // This allocates a block from the block pool and uses placement new
    // to call the class constructor. It is analogous to new.
-   static MemberClass* create()
+   static BlockClass* create()
    {
       // Block pointer.
-      MemberClass* tPointer = 0;
+      BlockClass* tPointer = 0;
 
       // Allocate a block from the block pool.
-      tPointer = (MemberClass*)mBlockPool.get();
+      tPointer = (BlockClass*)mBlockPool.get();
 
       // Call the constructor on the allocated block using placement new.
-      new(tPointer)MemberClass();
+      new(tPointer)BlockClass();
 
       // Return the pointer to the allocated block.
       return tPointer;
@@ -105,7 +103,7 @@ Here's an example:
 
    In SomeClass.h>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-   class SomeClass : public CC::BlockPoolMember<SomeClass>
+   class SomeClass : public CC::BlockPoolBlockClass<SomeClass>
    {
    public:
 
