@@ -7,6 +7,7 @@
 #include "risContainers.h"
 
 #include "someClass3.h"
+#include "someClass4.h"
 using namespace Some;
 
 
@@ -58,11 +59,7 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   int tSize=10;
-   double* tX = new double[tSize];
-
-   tX[0]=0.0;
-   tX[9]=9.0;
+   Class4A* t4A = new Class4A;
 }
 
 //******************************************************************************
