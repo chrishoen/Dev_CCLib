@@ -10,6 +10,7 @@ Description:
 
 #include "someClass6.h"
 
+// Global instance of the block pool
 CC::BlockPool Some::Class6A::mBlockPool;
 
 namespace Some
@@ -19,11 +20,6 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-
-Class6A::Class6A()
-{
-   printf("Class6A::Class6A\n");
-}
 
    
 }//namespace

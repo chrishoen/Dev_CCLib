@@ -23,8 +23,15 @@ class Class6A : public CC::BlockPoolBlock<Class6A>
 {
 public:
 
-   Class6A();
-   void sayHello(){ printf("hello\n"); }
+   Class6A()
+   {
+      printf("Class6A::Class6A\n");
+   }
+   
+   void sayHello()
+   { 
+      printf("hello\n");
+   }
 
 };
 

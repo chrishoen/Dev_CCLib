@@ -6,7 +6,6 @@
 #include "prnPrint.h"
 #include "risContainers.h"
 
-#include "someClass5.h"
 #include "someClass6.h"
 using namespace Some;
 
@@ -15,7 +14,6 @@ using namespace Some;
 //******************************************************************************
 CmdLineExec::CmdLineExec()
 {
-   Class5A::initializeBlockPool(1000);
    Class6A::initializeShortTermBlockPool(1000);
 }
 //******************************************************************************
@@ -37,16 +35,15 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   Class5A* t5A = Class5A::create();
+   Class6A* t6A = Class6A::create();
+   t6A->sayHello();
+   t6A->destroy();
 }
 
 //******************************************************************************
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   Class6A* t6A = Class6A::create();
-   t6A->sayHello();
-   t6A->destroy();
 }
 
 //******************************************************************************
