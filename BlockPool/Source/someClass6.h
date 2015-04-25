@@ -24,7 +24,7 @@ class Class6A : public CC::BlockPoolMember<Class6A>
 public:
 
    Class6A();
-  ~Class6A();
+   void sayHello(){ printf("hello\n"); }
 
 };
 

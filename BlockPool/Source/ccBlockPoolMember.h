@@ -19,6 +19,37 @@ initialize the memory pool, and also methods that provide access to it.
 The static variables establish global variables that instantiate the
 memory pools.
 
+Here's a simple example:
+
+   In SomeClass.h>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+   class SomeClass : public CC::BlockPoolMember<SomeClass>
+   {
+   public:
+
+      SomeClass();
+      {
+         printf("SomeClass::SomeClass\n");
+      }
+
+      void sayHello()
+      { 
+         printf("hello\n"); 
+      }
+
+   };
+
+   In SomeClass.cpp>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+   CC::BlockPool Some::Class6A::mBlockPool;
+
+   In SomeClassCaller.cpp>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+   SomeClass::initializeShortTermBlockPool(1000);
+   SomeClass* object = SomeClass::create();
+   object->sayHello();
+   object->destroy();
+
 ==============================================================================*/
 
 namespace CC
@@ -82,23 +113,13 @@ public:
       return tPointer;
    }
 
-   // This method calls the class destructor and then deallocates the object
-   // from system memory or from block universe short term or long term
-   // memory block pools. It is analogous to delete.
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   // This deallocates the object back to the block pool. It does not call
+   // a destructor for the object.
    void destroy()
    {
-      // If this block pool is short term
-      if (mBlockPool.isShortTerm())
-      {
-         //Do not call the block's destructor
-      }
-      // Else if this block pool is long term
-      else if (mBlockPool.isLongTerm())
-      {
-         // Call the block's destructor
-//       this->~MemberClass();
-      }
-
       // Deallocate the block back to the block pool
       mBlockPool.put(this);
    }

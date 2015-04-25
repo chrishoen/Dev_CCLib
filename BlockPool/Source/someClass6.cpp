@@ -25,10 +25,5 @@ Class6A::Class6A()
    printf("Class6A::Class6A\n");
 }
 
-Class6A::~Class6A()
-{
-   printf("Class6A::~Class6A\n");
-}
-
    
 }//namespace
