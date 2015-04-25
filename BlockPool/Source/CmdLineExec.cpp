@@ -14,6 +14,7 @@ using namespace Some;
 //******************************************************************************
 CmdLineExec::CmdLineExec()
 {
+   Class5A::initializeBlockPool(1000);
 }
 //******************************************************************************
 void CmdLineExec::reset()
@@ -34,7 +35,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   Class5A* t5A = new Class5A;
+   Class5A* t5A = Class5A::create();
 }
 
 //******************************************************************************

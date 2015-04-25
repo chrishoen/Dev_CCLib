@@ -1,6 +1,9 @@
 #ifndef _CCSHORTTERMBLOCKPOOLMEMBER_H_
 #define _CCSHORTTERMBLOCKPOOLMEMBER_H_
 
+#include <new>
+#include <stdio.h>
+
 #include "ccTreeNode.h"
 #include "ccDefs.h"
 #include "ccShortTermBlockPool.h"
@@ -49,7 +52,17 @@ public:
    // Create with default memory type and default member variables
    static MemberClass* create()
    {
-      return (MemberClass*)mBlockPool.get();
+      // Block pointer
+      MemberClass* tPointer = 0;
+
+      // Allocate a block from the short term block pool
+      tPointer = (MemberClass*)mBlockPool.get();
+
+      // Call the constructor on the allocated block using placement new
+      new(tPointer)MemberClass();
+
+      // Return the allocated block
+      return tPointer;
    }
 
    // This method calls the class destructor and then deallocates the object

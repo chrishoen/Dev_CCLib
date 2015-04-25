@@ -10,10 +10,11 @@ Description:
 
 #include "someClass5.h"
 
+CC::ShortTermBlockPool Some::Class5A::mBlockPool;
+
 namespace Some
 {
 
-   static CC::ShortTermBlockPoolMember<Class5A> mBlockPool;
 
 //******************************************************************************
 //******************************************************************************
