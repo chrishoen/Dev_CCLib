@@ -7,9 +7,6 @@
     <ClCompile Include="Source\Main.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ccBlockPool.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\someClass6.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -23,13 +20,7 @@
     <ClInclude Include="Source\CmdLineExec.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccBlockPool.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\someClass6.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ccBlockPoolBlock.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

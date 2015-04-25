@@ -94,14 +94,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source\ccBlockPool.cpp" />
     <ClCompile Include="Source\CmdLineExec.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\someClass6.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\ccBlockPool.h" />
-    <ClInclude Include="Source\ccBlockPoolBlock.h" />
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\someClass6.h" />
   </ItemGroup>

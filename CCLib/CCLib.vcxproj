@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\ccBlockArray.cpp" />
+    <ClCompile Include="Source\ccBlockPool.cpp" />
     <ClCompile Include="Source\ccBlockUniverse.cpp" />
     <ClCompile Include="Source\ccCriticalSection_win.cpp" />
     <ClCompile Include="Source\ccLabelledTreeNode.cpp" />
@@ -28,6 +29,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\ccBlockArray.h" />
+    <ClInclude Include="Source\ccBlockPool.h" />
+    <ClInclude Include="Source\ccBlockPoolBlock.h" />
     <ClInclude Include="Source\ccBlockUniverse.h" />
     <ClInclude Include="Source\ccCallPointer.h" />
     <ClInclude Include="Source\ccContainers.h" />
