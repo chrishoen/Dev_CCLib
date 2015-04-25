@@ -13,7 +13,7 @@ Description:
 namespace Some
 {
 
-   int Class5A::mCount = 101;
+   static CC::ShortTermBlockPoolMember<Class5A> mBlockPool;
 
 //******************************************************************************
 //******************************************************************************
@@ -21,7 +21,7 @@ namespace Some
 
 Class5A::Class5A()
 {
-   printf("Class5A::Class5A %d %d\n",sizeof(this),mCount);
+   printf("Class5A::Class5A\n");
 }
 
 Class5A::~Class5A()

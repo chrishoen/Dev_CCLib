@@ -5,6 +5,7 @@
 ==============================================================================*/
 
 #include <stdio.h>
+#include "ccShortTermBlockPoolMember.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -13,29 +14,12 @@
 
 namespace Some
 {
-template <class Element>
-class TemplatedClass5B
-{
-public:
-
-   TemplatedClass5B()
-   {
-      printf("TemplatedClass5B::TemplatedClass5B %d\n",sizeof(Element));
-      reset();
-   }
-
-   void reset()
-   {
-   }
-
-   static int mCount;
-};
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-class Class5A : public TemplatedClass5B<Class5A>
+class Class5A : public CC::ShortTermBlockPoolMember<Class5A>
 {
 public:
 
