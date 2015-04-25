@@ -32,12 +32,9 @@ BlockPool::~BlockPool()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This class encapsulates a pool of persistent memory blocks. At 
-// initialization, it allocates an array of blocks and it allocates a stack
-// of pointers into the blocks. To allocate a block from the pool, a pointer is 
-// popped from the stack. To free a block, a pointer is pushed back onto the
-// stack. This is thread safe because it the stack accesses use critical
-// sections. 
+// This initializes the block pool for short term blocks. It allocates memory
+// for the block array and initializes the circular pointer array. It is
+// passed the number of blocks to allocate and the size of the blocks.
 
 void BlockPool::initializeShortTerm(int aAllocate, int aBlockSize)
 {
@@ -50,12 +47,20 @@ void BlockPool::initializeShortTerm(int aAllocate, int aBlockSize)
    // Initialize the pointer circular array
    mShortTermPointerCircular.initialize(aAllocate);
 
-   // Push the addresses of the blocks in the array onto the pointer stack.
+   // Push the addresses of the blocks in the array onto the pointer 
+   // circular array.
    for (int i = 0; i < aAllocate; i++)
    {
       mShortTermPointerCircular.put(mBlocks.e(i));
    }
 }
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This initializes the block pool for long term blocks. It allocates memory
+// for the block array and initializes the pointer stack. It is passed the
+// number of blocks to allocate and the size of the blocks.
 
 void BlockPool::initializeLongTerm(int aAllocate, int aBlockSize)
 {
@@ -78,19 +83,26 @@ void BlockPool::initializeLongTerm(int aAllocate, int aBlockSize)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Get a block from the pool, this allocates a block. It pops a pointer
-// from the pointer stack.
+// Get a block from the pool, this allocates a block. If the block pool is 
+// short term, it gets a pointer from the circular array of pointers and 
+// advances the index into the array. If the block pool is long term, it 
+// pops a pointer from the pointer stack.
 
 void* BlockPool::get()
 {
+   // If this pool is short term
    if (mBlockPoolType == BlockPoolType_ShortTerm)
    {
+      // Get a block from the circular pointer array
       return mShortTermPointerCircular.get();
    }
+   // Else if this pool is long term
    else if (mBlockPoolType == BlockPoolType_LongTerm)
    {
+      // Get a block from the pointer stack
       return mLongTermPointerStack.pop();
    }
+   // Else error
    else
    {
       return 0;
@@ -100,16 +112,21 @@ void* BlockPool::get()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Put a block back to the pool, this deallocates a block. It pushes a 
-// pointer onto the pointer stack.
+// Put a block back to the pool, this deallocates a block. If the block pool
+// is short term, it does nothing. If the block pool is long term, it pushes
+// the pointer back onto the pointer stack.
 
 void BlockPool::put(void* aBlockPointer)
 {
+   // If this pool is short term
    if (mBlockPoolType == BlockPoolType_ShortTerm)
    {
+      //Do nothing, the block is simply reused
    }
+   // Else if this pool is long term
    else if (mBlockPoolType == BlockPoolType_LongTerm)
    {
+      // Push the block back onto the stacj
       mLongTermPointerStack.push(aBlockPointer);
    }
 }

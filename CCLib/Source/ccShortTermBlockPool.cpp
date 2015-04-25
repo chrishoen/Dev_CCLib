@@ -43,7 +43,7 @@ void ShortTermBlockPool::initialize(int aAllocate, int aBlockSize)
    // Initialize the pointer circular array
    mPointerCircular.initialize(aAllocate);
 
-   // Push the addresses of the blocks in the array onto the pointer stack.
+   // Push the addresses of the blocks in the array onto the pointer array.
    for (int i = 0; i < aAllocate; i++)
    {
       mPointerCircular.put(mBlocks.e(i));
