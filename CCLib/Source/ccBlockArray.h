@@ -1,5 +1,5 @@
-#ifndef _BLOCKARRAY_H_
-#define _BLOCKARRAY_H_
+#ifndef _CCBLOCKARRAY_H_
+#define _CCBLOCKARRAY_H_
 /*==============================================================================
 
 This defines an array of memory blocks that are dynamically allocated. It 

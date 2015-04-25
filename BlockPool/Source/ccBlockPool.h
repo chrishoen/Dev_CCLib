@@ -1,5 +1,5 @@
-#ifndef _BLOCKPOOL_H_
-#define _BLOCKPOOL_H_
+#ifndef _CCBLOCKPOOL_H_
+#define _CCBLOCKPOOL_H_
 /*==============================================================================
 
 This defines a memory pool of a fixed number of blocks that are of a fixed
