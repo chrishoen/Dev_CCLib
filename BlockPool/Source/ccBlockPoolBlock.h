@@ -1,5 +1,5 @@
-#ifndef _CCBLOCKPOOLBLOCKCLASS_H_
-#define _CCBLOCKPOOLBLOCKCLASS_H_
+#ifndef _CCBLOCKPOOLBLOCK_H_
+#define _CCBLOCKPOOLBLOCK_H_
 
 #include <new>
 #include <stdio.h>
@@ -29,7 +29,7 @@ namespace CC
 // for memory management.
 
 template <class BlockClass>
-class BlockPoolBlockClass
+class BlockPoolBlock
 {
 public:
 
@@ -103,7 +103,7 @@ Here's an example:
 
    In SomeClass.h>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-   class SomeClass : public CC::BlockPoolBlockClass<SomeClass>
+   class SomeClass : public CC::BlockPoolBlock<SomeClass>
    {
    public:
 
