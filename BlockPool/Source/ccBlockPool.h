@@ -29,7 +29,8 @@ namespace CC
 // objects allocated at any given time. The memory for the objects is allocated
 // at program initialization and allocation/deallocation of the objects
 // throughout the programs lifetime is much faster than system heap
-// malloc/free operations (new/delete).
+// malloc/free operations (new/delete). To use this, the maximum number of 
+// blocks that can be allocated at any given time must be known apriori.
 // 
 // There are two types of memory block pool: short term and long term. Short
 // term blocks are non persistent and have short term lifetimes. Long term

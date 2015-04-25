@@ -126,7 +126,7 @@ void BlockPool::put(void* aBlockPointer)
    // Else if this pool is long term
    else if (mBlockPoolType == BlockPoolType_LongTerm)
    {
-      // Push the block back onto the stacj
+      // Push the block back onto the stack
       mLongTermPointerStack.push(aBlockPointer);
    }
 }
