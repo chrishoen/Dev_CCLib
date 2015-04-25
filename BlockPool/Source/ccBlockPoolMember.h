@@ -27,7 +27,7 @@ namespace CC
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-// This is a class template for classes whose instances are use a block pool 
+// This is a class template for classes whose instances use a block pool 
 // for memory management.
 
 template <class MemberClass>
@@ -69,26 +69,38 @@ public:
    // to call the class constructor. It is analogous to new.
    static MemberClass* create()
    {
-      // Block pointer
+      // Block pointer.
       MemberClass* tPointer = 0;
 
-      // Allocate a block from the block pool
+      // Allocate a block from the block pool.
       tPointer = (MemberClass*)mBlockPool.get();
 
-      // Call the constructor on the allocated block using placement new
+      // Call the constructor on the allocated block using placement new.
       new(tPointer)MemberClass();
 
-      // Return the allocated block
+      // Return the pointer to the allocated block.
       return tPointer;
    }
 
    // This method calls the class destructor and then deallocates the object
    // from system memory or from block universe short term or long term
    // memory block pools. It is analogous to delete.
-
-   static void destroy()
+   void destroy()
    {
+      // If this block pool is short term
+      if (mBlockPool.isShortTerm())
+      {
+         //Do not call the block's destructor
+      }
+      // Else if this block pool is long term
+      else if (mBlockPool.isLongTerm())
+      {
+         // Call the block's destructor
+//       this->~MemberClass();
+      }
 
+      // Deallocate the block back to the block pool
+      mBlockPool.put(this);
    }
 
 };

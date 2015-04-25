@@ -88,13 +88,16 @@ public:
    // term blocks are non persistent and long term blocks are persistent.
    enum
    {
-      BlockPoolType_ShortTerm = 1, 
-      BlockPoolType_LongTerm  = 2, 
+      BlockPoolType_ShortTerm = 1,
+      BlockPoolType_LongTerm  = 2,
    };
 
    // This variable determines which of the two following pointer arrays are
    // used, short term or long term.
    int mBlockPoolType;
+
+   bool isShortTerm(){ return mBlockPoolType == BlockPoolType_ShortTerm; }
+   bool isLongTerm() { return mBlockPoolType == BlockPoolType_LongTerm; }
 
    // This is a circular buffer of pointers. This is used if the block pool
    // has short term blocks. It is an array of pointers into the above

@@ -45,6 +45,7 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
    Class6A* t6A = Class6A::create();
+   t6A->destroy();
 }
 
 //******************************************************************************
