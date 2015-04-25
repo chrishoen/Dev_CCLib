@@ -56,10 +56,6 @@ NodeBlock* NodeBlock::create(int aMemoryType,int aIdentifier)
    // Allocate memory for the block
    switch (aMemoryType)
    {
-   case CC::MemoryType_System :
-      // Allocate a block from system memory
-      tPointer = (NodeBlock*)malloc(sizeof(NodeBlock));
-      break;
    case CC::MemoryType_ShortTerm :
       // Allocate a block from the short term block pool
       tPointer = (NodeBlock*)NodeBlock::mBlockUniverse.mShortTermBlockPool.get();
@@ -108,12 +104,6 @@ void NodeBlock::destroy()
    // Deallocate memory for the block
    switch (this->mMemoryType)
    {
-   case CC::MemoryType_System :
-      // Call the block's destructor
-      this->~NodeBlock();
-      // Deallocate the block back to system memory
-      free(this);
-      break;
    case CC::MemoryType_ShortTerm :
       // Deallocate the block back to the short term block pool
       break;
