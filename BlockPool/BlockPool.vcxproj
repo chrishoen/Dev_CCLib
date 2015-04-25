@@ -98,12 +98,15 @@
     <ClCompile Include="Source\CmdLineExec.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\someClass5.cpp" />
+    <ClCompile Include="Source\someClass6.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\ccBlockPool.h" />
+    <ClInclude Include="Source\ccBlockPoolMember.h" />
     <ClInclude Include="Source\ccShortTermBlockPoolMember.h" />
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\someClass5.h" />
+    <ClInclude Include="Source\someClass6.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CCLib\CCLib.vcxproj">
