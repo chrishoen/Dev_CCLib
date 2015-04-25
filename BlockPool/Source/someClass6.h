@@ -19,6 +19,8 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 
+// This class inherits from BlockPoolBlock to establish a unique memory block
+// pool that is used for the memory management of instances of the class.
 class Class6A : public CC::BlockPoolBlock<Class6A>
 {
 public:
