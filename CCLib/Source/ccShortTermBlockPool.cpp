@@ -37,8 +37,6 @@ ShortTermBlockPool::~ShortTermBlockPool()
 
 void ShortTermBlockPool::initialize(int aAllocate, int aBlockSize)
 {
-   printf("ShortTermBlockPool::initialize %d %d\n",aAllocate, aBlockSize);
-
    // Allocate memory for the block array
    mBlocks.initialize(aAllocate,aBlockSize);
 

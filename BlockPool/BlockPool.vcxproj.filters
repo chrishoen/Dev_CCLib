@@ -10,6 +10,9 @@
     <ClCompile Include="Source\someClass5.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\ccBlockPool.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
@@ -24,6 +27,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccShortTermBlockPoolMember.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ccBlockPool.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
