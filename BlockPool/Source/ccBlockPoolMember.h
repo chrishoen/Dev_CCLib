@@ -10,16 +10,14 @@
 
 /*==============================================================================
 
-This is a base class template that classes inherit from. It is intended for
-classes whose instances will be members of a memory block pool.
+This is a template that defines a base class that can be inherited by classes
+that are members of a memory block pool, instances of the inheriting classes
+use block pools for memory management.
 
-Instances of classes that inherit from this base class template are members
-of a memory block pool. The class template provides static member variables
-that instantiate and initialize the memory pool, and also methods that
-provide access to it. 
-
-
-
+The class template provides static member variables that instantiate and 
+initialize the memory pool, and also methods that provide access to it. 
+The static variables establish global variables that instantiate the
+memory pools.
 
 ==============================================================================*/
 
@@ -29,8 +27,8 @@ namespace CC
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-// This is a class template for classes whose instances are members of a 
-// memory block pool. 
+// This is a class template for classes whose instances are use a block pool 
+// for memory management.
 
 template <class MemberClass>
 class BlockPoolMember
@@ -40,45 +38,41 @@ public:
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
-   // Memory management, constructors and destructors
-
-   // Static member block universe. It contains a short term and a long term
-   // block pool. These block pools, or system memory, are used to establish
-   // memory for all instances of this class that are created within a process.
-   // The block universe must be initialized at the beginning of a process, 
-   // prior to any block creation.
-
+   // Static member which provides a global variable for the memory block 
+   // pool.
    static CC::BlockPool mBlockPool;
 
-   // This static method initializes the block universe. In a process, it must
-   // be called prior to any block creations. It initializes the block universe
-   // short term and long term block pools.
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
 
-   static void initializeShortTermBlockPool(
-      int aAllocate)
+   // This initializes the memory block pool to be short term lifetime,
+   // non persistent, circular buffer based. It is passed the number of
+   // blocks to allocate from system heap memory.
+   static void initializeShortTermBlockPool(int aAllocate)
    {
       mBlockPool.initializeShortTerm(aAllocate, sizeof(MemberClass));
    }
 
-   static void initializelongTermBlockPool(
-      int aAllocate)
+   // This initializes the memory block pool to be long term lifetime,
+   // persistent, stack based. It is passed the number of blocks to
+   // allocate from system heap memory.
+   static void initializeLongTermBlockPool(int aAllocate)
    {
       mBlockPool.initializeLongTerm(aAllocate, sizeof(MemberClass));
    }
 
-   // This static method allocates a block from system memory or from block
-   // universe short term or long term memory block pools. After allocation,
-   // it calls the class constructor on the allocated block. The memory type
-   // parameter specifies either system memory, or short term block pool,
-   // or long term block pool. It is analogous to new.
-
-   // Create with default memory type and default member variables
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   // This allocates a block from the block pool and uses placement new
+   // to call the class constructor. It is analogous to new.
    static MemberClass* create()
    {
       // Block pointer
       MemberClass* tPointer = 0;
 
-      // Allocate a block from the short term block pool
+      // Allocate a block from the block pool
       tPointer = (MemberClass*)mBlockPool.get();
 
       // Call the constructor on the allocated block using placement new
