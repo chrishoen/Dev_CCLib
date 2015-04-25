@@ -19,37 +19,6 @@ initialize the memory pool, and also methods that provide access to it.
 The static variables establish global variables that instantiate the
 memory pools.
 
-Here's a simple example:
-
-   In SomeClass.h>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-   class SomeClass : public CC::BlockPoolMember<SomeClass>
-   {
-   public:
-
-      SomeClass();
-      {
-         printf("SomeClass::SomeClass\n");
-      }
-
-      void sayHello()
-      { 
-         printf("hello\n"); 
-      }
-
-   };
-
-   In SomeClass.cpp>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-   CC::BlockPool Some::Class6A::mBlockPool;
-
-   In SomeClassCaller.cpp>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-   SomeClass::initializeShortTermBlockPool(1000);
-   SomeClass* object = SomeClass::create();
-   object->sayHello();
-   object->destroy();
-
 ==============================================================================*/
 
 namespace CC
@@ -130,4 +99,39 @@ public:
 //****************************************************************************
 //****************************************************************************
 }//namespace
+/*==============================================================================
+
+Here's an example:
+
+   In SomeClass.h>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+   class SomeClass : public CC::BlockPoolMember<SomeClass>
+   {
+   public:
+
+      SomeClass();
+      {
+         printf("SomeClass::SomeClass\n");
+      }
+
+      void sayHello()
+      { 
+         printf("hello\n"); 
+      }
+
+   };
+
+   In SomeClass.cpp>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+   CC::BlockPool Some::Class6A::mBlockPool;
+
+   In SomeClassCaller.cpp>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+   SomeClass::initializeShortTermBlockPool(1000);
+   SomeClass* object = SomeClass::create();
+   object->sayHello();
+   object->destroy();
+
+==============================================================================*/
+
 #endif
