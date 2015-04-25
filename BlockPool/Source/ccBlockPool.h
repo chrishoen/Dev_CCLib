@@ -59,19 +59,15 @@ public:
 
    //---------------------------------------------------------------------------
    // Get a block from the pool, this allocates a block.
-   // 
    // If the block pool is short term, it gets a pointer from the circular
    // array of pointers and advances the index into the array.
-   // 
    // If the block pool is long term, it pops a pointer from the pointer
    // stack.
    void* get();
 
    //---------------------------------------------------------------------------
    // Put a block back to the pool, this deallocates a block.
-   //
    // If the block pool is short term, it does nothing.
-   // 
    // If the block pool is long term, it pushes the pointer back onto the
    // pointer stack.
    void put(void* aBlockPointer);
@@ -79,32 +75,34 @@ public:
    //---------------------------------------------------------------------------
    // Members
 
-   // Array of allocated memory blocks. The blocks are allocated on the system
-   // heap and this maintains a pointer to the blocks.
+   // This allocates storage for the blocks on the system heap. It provides
+   // pointer access to the allocated blocks.
    BlockArray mBlocks;
 
-   // The two types of block pool, short term and long term.
+   // The two types of block pool, short term and long term lifetimes. Short
+   // term blocks are non persistent and long term blocks are persistent.
    enum
    {
-      BlockPoolType_ShortTerm = 1,   // Lifetime that is short term, non persistent
-      BlockPoolType_LongTerm  = 2,   // Lifetime that is long term, persistent
+      BlockPoolType_ShortTerm = 1, 
+      BlockPoolType_LongTerm  = 2, 
    };
 
-   // This variable determines which of the two following pointer arrays are used,
-   // short term or long term.
+   // This variable determines which of the two following pointer arrays are
+   // used, short term or long term.
    int mBlockPoolType;
 
-   // This is used if the block pool has short term blocks. It is an array of
-   // pointers into the above allocated memory block array. To allocate a 
-   // block, a pointer is gotten from the array and its index is incremented.
-   // Allocations are locked with critical sections.
+   // This is a circular buffer of pointers. This is used if the block pool
+   // has short term blocks. It is an array of pointers into the above
+   // allocated memory block array. To allocate a block, a pointer is gotten
+   // from the array and its index is incremented. Allocations are locked with
+   // critical sections.
    PointerCircular mShortTermPointerCircular;
 
-   // This is used if the block pool has long term blocks. It is a stack of 
-   // pointers into the above allocated memory block array. To allocate a 
-   // block, a pointer is popped off of the stack. To free a block, a pointer
-   // is pushed back onto the stack. Pushes and Pops are locked with 
-   // critical sections.
+   // This is a stack of pointers. This is used if the block pool has long
+   // term blocks. It is a stack of pointers into the above allocated memory
+   // block array. To allocate a block, a pointer is popped off of the stack.
+   // To free a block, a pointer is pushed back onto the stack. Pushes and
+   // Pops are locked with critical sections.
    PointerStack mLongTermPointerStack;
 };
 
