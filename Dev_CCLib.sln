@@ -17,6 +17,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Counter", "Counter\Counter.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BlockPool", "BlockPool\BlockPool.vcxproj", "{75C78698-F814-479A-820F-00F5F1757AC6}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ShortTerm", "ShortTerm\ShortTerm.vcxproj", "{54D5686D-218B-49AE-A620-519EAC941D3D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -51,6 +53,10 @@ Global
 		{75C78698-F814-479A-820F-00F5F1757AC6}.Debug|Win32.Build.0 = Debug|Win32
 		{75C78698-F814-479A-820F-00F5F1757AC6}.Release|Win32.ActiveCfg = Release|Win32
 		{75C78698-F814-479A-820F-00F5F1757AC6}.Release|Win32.Build.0 = Release|Win32
+		{54D5686D-218B-49AE-A620-519EAC941D3D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{54D5686D-218B-49AE-A620-519EAC941D3D}.Debug|Win32.Build.0 = Debug|Win32
+		{54D5686D-218B-49AE-A620-519EAC941D3D}.Release|Win32.ActiveCfg = Release|Win32
+		{54D5686D-218B-49AE-A620-519EAC941D3D}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
