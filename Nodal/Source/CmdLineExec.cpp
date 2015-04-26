@@ -25,8 +25,7 @@ CmdLineExec::CmdLineExec()
    Some::Block2A::initializeBlockUniverse(1000,1000);
    Some::Block2B::initializeBlockUniverse(1000,1000);
 
-   CC::LabelledTreeNode::initializeBlockUniverse(1000,1000);
-   CC::LabelledTreeNode::mDefaultMemoryType = CC::MemoryType_ShortTerm;
+   CC::LabelledTreeNode::initializeShortTermBlockPool(1000);
 }
 //******************************************************************************
 void CmdLineExec::reset()
@@ -108,12 +107,12 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1,5);
 
-   CC::LabelledTreeNode::mBlockUniverse.show("CC::LabelledTreeNode::mBlockUniverse1");
+// CC::LabelledTreeNode::mBlockUniverse.show("CC::LabelledTreeNode::mBlockUniverse1");
 
    CC::LabelledTreeNode* tRootNode = CC::LabelledTreeNode::create(0,"root");
    generateTreeNodes2(tRootNode);
 
-   CC::LabelledTreeNode::mBlockUniverse.show("CC::LabelledTreeNode::mBlockUniverse2");
+// CC::LabelledTreeNode::mBlockUniverse.show("CC::LabelledTreeNode::mBlockUniverse2");
 
    if (aCmd->argInt(1) == 1)
    {
@@ -136,7 +135,7 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
       CC::destroyAllTreeNodes(tRootNode);
    }
 
-   CC::LabelledTreeNode::mBlockUniverse.show("CC::LabelledTreeNode::mBlockUniverse3");
+// CC::LabelledTreeNode::mBlockUniverse.show("CC::LabelledTreeNode::mBlockUniverse3");
 }
 
 

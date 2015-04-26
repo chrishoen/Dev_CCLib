@@ -35,9 +35,9 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   Class6A* t6A = Class6A::create();
+   Class6A* t6A = Class6A::allocate();
    t6A->sayHello();
-   t6A->destroy();
+   t6A->deallocate();
 }
 
 //******************************************************************************
