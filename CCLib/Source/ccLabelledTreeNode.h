@@ -72,9 +72,6 @@ public:
    LabelledTreeNode();
    LabelledTreeNode(int aIdentifier,char* aLabel);
 
-   // Destructor, it is called by destroy before deallocation of a block.
-  ~LabelledTreeNode();
-
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
