@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 #include "prnPrint.h"
-#include "Modulo.h"
+#include "ModuloMN_PowerOfTwo.h"
 
 #include "CmdLineExec.h"
 
