@@ -13,8 +13,6 @@
 #include "ccLabelledTreeNodeChannel.h"
 #include "ccTreeNodeTxQueue.h"
 #include "ccTreeNodeRxQueue.h"
-#include "someBlock1.h"
-#include "someBlock2.h"
 #include "GenerateTreeNodes.h"
 
 #include "CmdLineExec.h"
@@ -22,9 +20,6 @@
 //******************************************************************************
 CmdLineExec::CmdLineExec()
 {
-   Some::Block2A::initializeBlockUniverse(1000,1000);
-   Some::Block2B::initializeBlockUniverse(1000,1000);
-
    CC::LabelledTreeNode::initializeShortTermBlockPool(1000);
 }
 //******************************************************************************

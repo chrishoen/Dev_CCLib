@@ -96,13 +96,9 @@
   <ItemGroup>
     <ClCompile Include="Source\CmdLineExec.cpp" />
     <ClCompile Include="Source\Main.cpp" />
-    <ClCompile Include="Source\someBlock1.cpp" />
-    <ClCompile Include="Source\someBlock2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h" />
-    <ClInclude Include="Source\someBlock1.h" />
-    <ClInclude Include="Source\someBlock2.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CCLib\CCLib.vcxproj">

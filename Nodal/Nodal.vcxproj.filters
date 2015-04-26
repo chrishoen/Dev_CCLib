@@ -13,21 +13,9 @@
     <ClCompile Include="Source\Main.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\someBlock1.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\someBlock2.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\someBlock1.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\someBlock2.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

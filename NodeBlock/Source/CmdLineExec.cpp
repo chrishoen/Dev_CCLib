@@ -20,8 +20,7 @@
 //******************************************************************************
 CmdLineExec::CmdLineExec()
 {
-   CC::NodeBlock::initializeBlockUniverse(1000,1000);
-   CC::NodeBlock::mDefaultMemoryType = CC::MemoryType_ShortTerm;
+   CC::NodeBlock::initializeShortTermBlockPool(1000);
 }
 //******************************************************************************
 void CmdLineExec::reset()
@@ -103,12 +102,12 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1,5);
 
-   CC::NodeBlock::mBlockUniverse.show("CC::NodeBlock::mBlockUniverse1");
+// CC::NodeBlock::mBlockUniverse.show("CC::NodeBlock::mBlockUniverse1");
 
    CC::NodeBlock* tRootNode = CC::NodeBlock::create(0);
    generateTreeNodes2(tRootNode);
 
-   CC::NodeBlock::mBlockUniverse.show("CC::NodeBlock::mBlockUniverse2");
+// CC::NodeBlock::mBlockUniverse.show("CC::NodeBlock::mBlockUniverse2");
 
    if (aCmd->argInt(1) == 1)
    {
@@ -131,7 +130,7 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
       CC::destroyAllTreeNodes(tRootNode);
    }
 
-   CC::NodeBlock::mBlockUniverse.show("CC::NodeBlock::mBlockUniverse3");
+// CC::NodeBlock::mBlockUniverse.show("CC::NodeBlock::mBlockUniverse3");
 }
 
 
