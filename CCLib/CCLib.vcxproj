@@ -16,10 +16,8 @@
     <ClCompile Include="Source\ccCriticalSection_win.cpp" />
     <ClCompile Include="Source\ccLabelledTreeNode.cpp" />
     <ClCompile Include="Source\ccLabelledTreeNodeVisitor.cpp" />
-    <ClCompile Include="Source\ccLongTermBlockPool.cpp" />
     <ClCompile Include="Source\ccPointerCircular.cpp" />
     <ClCompile Include="Source\ccPointerStack.cpp" />
-    <ClCompile Include="Source\ccShortTermBlockPool.cpp" />
     <ClCompile Include="Source\ccTreeNode.cpp" />
     <ClCompile Include="Source\ccTreeNodeCollection.cpp" />
     <ClCompile Include="Source\ccTreeNodeDestroyer.cpp" />
@@ -39,10 +37,8 @@
     <ClInclude Include="Source\ccLabelledTreeNode.h" />
     <ClInclude Include="Source\ccLabelledTreeNodeChannel.h" />
     <ClInclude Include="Source\ccLabelledTreeNodeVisitor.h" />
-    <ClInclude Include="Source\ccLongTermBlockPool.h" />
     <ClInclude Include="Source\ccPointerCircular.h" />
     <ClInclude Include="Source\ccPointerStack.h" />
-    <ClInclude Include="Source\ccShortTermBlockPool.h" />
     <ClInclude Include="Source\ccTreeNode.h" />
     <ClInclude Include="Source\ccTreeNodeCollection.h" />
     <ClInclude Include="Source\ccTreeNodeDestroyer.h" />

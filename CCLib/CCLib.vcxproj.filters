@@ -18,16 +18,10 @@
     <ClCompile Include="Source\ccLabelledTreeNodeVisitor.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ccLongTermBlockPool.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\ccPointerCircular.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\ccPointerStack.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ccShortTermBlockPool.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\ccTreeNode.cpp">
@@ -80,16 +74,10 @@
     <ClInclude Include="Source\ccLabelledTreeNodeVisitor.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccLongTermBlockPool.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\ccPointerCircular.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccPointerStack.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ccShortTermBlockPool.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccTreeNode.h">
