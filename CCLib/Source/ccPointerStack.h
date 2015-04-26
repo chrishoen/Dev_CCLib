@@ -51,6 +51,11 @@ public:
 
    // Size of the array, number of pointers allocated.
    int mAllocate;
+
+   // Count of allocated elements. This is incremented by pop operations and
+   // decremented by push operations. This is a usage counter that is used
+   // to track usage of the stack.
+   int mCount;
 };
 
 //******************************************************************************

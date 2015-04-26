@@ -121,7 +121,8 @@ void BlockPool::put(void* aBlockPointer)
    // If this pool is short term
    if (mBlockPoolType == BlockPoolType_ShortTerm)
    {
-      //Do nothing, the block is simply reused
+      // Decrement the circular pointer array usage counter
+      mShortTermPointerCircular.done();
    }
    // Else if this pool is long term
    else if (mBlockPoolType == BlockPoolType_LongTerm)
@@ -130,4 +131,31 @@ void BlockPool::put(void* aBlockPointer)
       mLongTermPointerStack.push(aBlockPointer);
    }
 }
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Helpers
+
+void BlockPool::show()
+{
+   int tCount = 0;
+
+   if (mBlockPoolType == BlockPoolType_ShortTerm)
+   {
+      tCount = mShortTermPointerCircular.mCount;
+   }
+   else if (mBlockPoolType == BlockPoolType_LongTerm)
+   {
+      tCount = mLongTermPointerStack.mCount;
+   }
+
+   printf("BlockPool Count %d\n", tCount);
+}
+
+
+
+
+
+
 }//namespace

@@ -113,6 +113,11 @@ public:
    // a block, a pointer is pushed back onto the stack. Pushes and Pops are
    // locked with critical sections, making tehm thread safe.
    PointerStack mLongTermPointerStack;
+
+   //---------------------------------------------------------------------------
+   // Helpers
+   void show();
+
 };
 
 //******************************************************************************

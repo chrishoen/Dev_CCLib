@@ -28,9 +28,10 @@ PointerCircular::PointerCircular()
 {
    // All null
    mArray    = 0;
-   mPutIndex    = 0;
-   mGetIndex    = 0;
+   mPutIndex = 0;
+   mGetIndex = 0;
    mAllocate = 0;
+   mCount    = 0;
 }
 
 PointerCircular::~PointerCircular()
@@ -103,11 +104,34 @@ void* PointerCircular::get ()
    // Increment the index
    if (++mGetIndex == mAllocate) mGetIndex = 0;
 
+   // Increment the usage counter
+   mCount++;
+
    // Critical section
    leaveCriticalSection();
 
    // Return the pointer
    return tPointer;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This is called by an owner to indicate that it is done with its current
+// element. It decrements the usage counter. It is used to track usage of
+// the circular buffer.
+
+void PointerCircular::done ()
+{
+   // Critical section
+   enterCriticalSection();
+
+   // Decrement the usage counter
+   mCount--;
+
+   // Critical section
+   leaveCriticalSection();
+
 }
 
 }//namespace

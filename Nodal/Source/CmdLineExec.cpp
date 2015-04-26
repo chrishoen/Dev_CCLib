@@ -102,12 +102,12 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1,5);
 
-// CC::LabelledTreeNode::mBlockUniverse.show("CC::LabelledTreeNode::mBlockUniverse1");
+   CC::LabelledTreeNode::mBlockPool.show();
 
    CC::LabelledTreeNode* tRootNode = CC::LabelledTreeNode::create(0,"root");
    generateTreeNodes2(tRootNode);
 
-// CC::LabelledTreeNode::mBlockUniverse.show("CC::LabelledTreeNode::mBlockUniverse2");
+   CC::LabelledTreeNode::mBlockPool.show();
 
    if (aCmd->argInt(1) == 1)
    {
@@ -130,7 +130,7 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
       CC::destroyAllTreeNodes(tRootNode);
    }
 
-// CC::LabelledTreeNode::mBlockUniverse.show("CC::LabelledTreeNode::mBlockUniverse3");
+   CC::LabelledTreeNode::mBlockPool.show();
 }
 
 

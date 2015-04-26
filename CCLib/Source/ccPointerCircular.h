@@ -48,6 +48,11 @@ public:
    // array, via the GetIndex.
    void* get();
 
+   // This is called by an owner to indicate that it is done with its current
+   // element. It decrements the usage counter. It is used to track usage of
+   // the circular buffer.
+   void done();
+
    //---------------------------------------------------------------------------
    // Members
 
@@ -64,6 +69,11 @@ public:
 
    // Size of the array, number of pointers allocated.
    int mAllocate;
+
+   // Count of allocated elements. This is incremented by get operations and
+   // decremented by done operations. This is a usage counter that is used
+   // to track usage of the circular buffer.
+   int mCount;
 };
 
 //******************************************************************************
