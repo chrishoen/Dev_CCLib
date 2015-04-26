@@ -17,11 +17,13 @@
     <ClCompile Include="Source\ccLabelledTreeNode.cpp" />
     <ClCompile Include="Source\ccLabelledTreeNodeVisitor.cpp" />
     <ClCompile Include="Source\ccPointerCircular.cpp" />
+    <ClCompile Include="Source\ccPointerShiftRegister.cpp" />
     <ClCompile Include="Source\ccPointerStack.cpp" />
     <ClCompile Include="Source\ccTreeNode.cpp" />
     <ClCompile Include="Source\ccTreeNodeCollection.cpp" />
     <ClCompile Include="Source\ccTreeNodeDestroyer.cpp" />
     <ClCompile Include="Source\ccTreeNodeVisitor.cpp" />
+    <ClCompile Include="Source\cc_functions.cpp" />
     <ClCompile Include="Source\GenerateTreeNodes.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -38,6 +40,7 @@
     <ClInclude Include="Source\ccLabelledTreeNodeChannel.h" />
     <ClInclude Include="Source\ccLabelledTreeNodeVisitor.h" />
     <ClInclude Include="Source\ccPointerCircular.h" />
+    <ClInclude Include="Source\ccPointerShiftRegister.h" />
     <ClInclude Include="Source\ccPointerStack.h" />
     <ClInclude Include="Source\ccTreeNode.h" />
     <ClInclude Include="Source\ccTreeNodeCollection.h" />
@@ -45,6 +48,7 @@
     <ClInclude Include="Source\ccTreeNodeRxQueue.h" />
     <ClInclude Include="Source\ccTreeNodeTxQueue.h" />
     <ClInclude Include="Source\ccTreeNodeVisitor.h" />
+    <ClInclude Include="Source\cc_functions.h" />
     <ClInclude Include="Source\GenerateTreeNodes.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

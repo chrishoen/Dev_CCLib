@@ -42,6 +42,12 @@
     <ClCompile Include="Source\ccBlockPool.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\ccPointerShiftRegister.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\cc_functions.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\ccBlockArray.h">
@@ -105,6 +111,12 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccBlockPoolBlock.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ccPointerShiftRegister.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\cc_functions.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
