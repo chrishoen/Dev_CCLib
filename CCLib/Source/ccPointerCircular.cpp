@@ -1,5 +1,9 @@
 /*==============================================================================
-Description:
+
+This defines a circular array of pointers. It is used by short term memory 
+block pools to establish circular buffers. It is thread safe, it uses critical
+sections to lock access to array indices.
+
 ==============================================================================*/
 
 //******************************************************************************
