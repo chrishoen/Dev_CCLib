@@ -108,8 +108,8 @@ void* PointerStack::pop ()
 
 }//namespace
 
-#if 0
-******************************************************************************
+//******************************************************************************
+/*
 Stack <Element,Allocate>
 
 This structure implements a stack of type Element and of size Allocate. It 
@@ -177,4 +177,5 @@ In the following example M=4,A=4
          3 | X | G
            +---+   
 
-#endif
+*/
+
