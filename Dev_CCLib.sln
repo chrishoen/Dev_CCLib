@@ -17,7 +17,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Counter", "Counter\Counter.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BlockPool", "BlockPool\BlockPool.vcxproj", "{75C78698-F814-479A-820F-00F5F1757AC6}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MessageHeap", "STMemory\STMemory.vcxproj", "{EFADCEB6-AEC9-4E55-B2F5-B278238E5158}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ShortTerm", "ShortTerm\ShortTerm.vcxproj", "{EA19233B-94CE-4A34-9668-FBA038D5F308}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,10 +53,10 @@ Global
 		{75C78698-F814-479A-820F-00F5F1757AC6}.Debug|Win32.Build.0 = Debug|Win32
 		{75C78698-F814-479A-820F-00F5F1757AC6}.Release|Win32.ActiveCfg = Release|Win32
 		{75C78698-F814-479A-820F-00F5F1757AC6}.Release|Win32.Build.0 = Release|Win32
-		{EFADCEB6-AEC9-4E55-B2F5-B278238E5158}.Debug|Win32.ActiveCfg = Debug|Win32
-		{EFADCEB6-AEC9-4E55-B2F5-B278238E5158}.Debug|Win32.Build.0 = Debug|Win32
-		{EFADCEB6-AEC9-4E55-B2F5-B278238E5158}.Release|Win32.ActiveCfg = Release|Win32
-		{EFADCEB6-AEC9-4E55-B2F5-B278238E5158}.Release|Win32.Build.0 = Release|Win32
+		{EA19233B-94CE-4A34-9668-FBA038D5F308}.Debug|Win32.ActiveCfg = Debug|Win32
+		{EA19233B-94CE-4A34-9668-FBA038D5F308}.Debug|Win32.Build.0 = Debug|Win32
+		{EA19233B-94CE-4A34-9668-FBA038D5F308}.Release|Win32.ActiveCfg = Release|Win32
+		{EA19233B-94CE-4A34-9668-FBA038D5F308}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
