@@ -5,6 +5,7 @@
 
 #include "prnPrint.h"
 #include "ccShortTermMemory.h"
+#include "someClass1.h"
 
 #include "CmdLineExec.h"
 
@@ -31,6 +32,8 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
+   Some::Class1A* tX = CC::newShortTermMemory<Some::Class1A>();
+   tX->sayHello();
 }
 
 //******************************************************************************
@@ -49,33 +52,9 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
 //******************************************************************************
 
-inline size_t MessageHeap_alignSize(size_t aSize)
-{
-   // If this is a 32 bit system
-   if (sizeof(int*) == 4)
-   {
-      // Align the size to be on an eight byte boundary
-      if ((aSize & 7) == 0) return aSize;
-      else return ((aSize >> 3) << 3) + 8;
-   }
-   else
-   // Else this is a 64 bit system
-   {
-      // Align the size to be on a sixteen byte boundary
-      if ((aSize & 15) == 0) return aSize;
-      else return ((aSize >> 4) << 4) + 16;
-   }
-}
-
 
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
-   printf("sizeof(int*) %d\n", sizeof(int*));
-
-   for (unsigned tN = 0; tN < 34; tN++)
-   {
-      printf("%5d %08X %08X\n", tN, tN, MessageHeap_alignSize(tN));
-   }
 }
 
 //******************************************************************************

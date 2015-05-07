@@ -1,42 +1,41 @@
-#ifndef _CCPOINTERHELPER_H_
-#define _CCPOINTERHELPER_H_
-/*==============================================================================
+#ifndef _SOMECLASS1_H_
+#define _SOMECLASS1_H_
 
+/*==============================================================================
 ==============================================================================*/
 
+#include <stdio.h>
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
 
-namespace CC
+namespace Some
 {
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-typedef union VoidStarUnion
+class Class1A
 {
-   void*        mPointer;
-   unsigned int mAddress;
-} VoidStarUnion;
+public:
 
-template <typename T>
-union PointerUnion
-{
-   T*           mPointer;
-   unsigned int mAddress;
+   Class1A()
+   {
+      printf("Class1A::Class1A\n");
+   }
+   
+   void sayHello()
+   { 
+      printf("hello\n");
+   }
+
 };
-
-inline unsigned int alignSizeEightBytes(unsigned int aSize)
-{
-   if ((aSize & 7) == 0) return aSize;
-// else return (aSize & 0xFFFFFFF8) + 8;
-   else return ((aSize>>3)<<3) + 8;
-}
 
 //******************************************************************************
 }//namespace
+
 #endif
 
