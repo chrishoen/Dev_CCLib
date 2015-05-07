@@ -23,5 +23,8 @@
     <ClInclude Include="Source\ccShortTermMemory.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="Source\ccPointerHelper.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

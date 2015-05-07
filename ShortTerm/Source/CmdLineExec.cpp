@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 #include "prnPrint.h"
-#include "risContainers.h"
+#include "ccPointerHelper.h"
 
 #include "risLUT.h"
 
@@ -31,52 +31,30 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 //******************************************************************************
 
-typedef struct Flags1
-{
-   bool mFirstChild :1;
-   bool mLastChild  :1;
-} Flags1;
-
-typedef union Flags2
-{
-   struct
-   {
-      bool mFirstChild : 1;
-      bool mLastChild : 1;
-   };
-   unsigned char mValue;
-} Flags2;
-
-void test_function1(Flags1* aFlags)
-{
-   aFlags->mFirstChild = true;
-}
-void test_function2(Flags2* aFlags)
-{
-   aFlags->mFirstChild = true;
-}
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   Flags1 tFlags;
-   tFlags.mFirstChild = true;
-   Prn::print(0, 0, "sizeof Flags %d", sizeof(Flags1));
-
+   CC::PointerUnion<void> tPointerUnion;
+   tPointerUnion.mPointer = malloc(100);
+   printf("%08X\n", tPointerUnion.mAddress);
 }
 
 //******************************************************************************
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   Flags2 tFlags;
-   tFlags.mFirstChild = true;
-   tFlags.mValue = 0;
-   Prn::print(0, 0, "sizeof Flags %d", sizeof(Flags2));
+   aCmd->setArgDefaultUnsigned(1,1);
+
+   unsigned int tSize = aCmd->argUnsigned(1);
+
+   printf("%08X %08X\n", tSize,CC::alignSizeEightBytes(tSize));
 }
 
 //******************************************************************************
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
+   unsigned int tN = 0x7FFFFFF1;
+   printf("%08X %08X\n", tN,((tN>>3)<<3));
 }
 
 //******************************************************************************

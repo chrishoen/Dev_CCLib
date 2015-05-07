@@ -99,6 +99,7 @@
     <ClCompile Include="Source\Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\ccPointerHelper.h" />
     <ClInclude Include="Source\ccShortTermMemory.h" />
     <ClInclude Include="Source\CmdLineExec.h" />
   </ItemGroup>
