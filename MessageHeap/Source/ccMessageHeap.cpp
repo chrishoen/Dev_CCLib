@@ -163,8 +163,12 @@ void* MessageHeap::allocate(size_t aSize)
    // Set the sequence number for the allocated message.
    tHeaderPtr->mSequenceNumber = mSequenceNumber++;
 
+   // Set the sync word.
+   tHeaderPtr->mSyncWord = HeaderSyncWord;
+
    // Store the pointer to the allocated message for the next allocation.
    mPreviousMessageHeader = tHeaderPtr;
+
 
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
