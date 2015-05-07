@@ -5,6 +5,7 @@
 
 #include "prnPrint.h"
 #include "ccPointerHelper.h"
+#include "ccMessageHeap.h"
 
 #include "CmdLineExec.h"
 
@@ -90,5 +91,6 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 {
+    printf("%5d\n",sizeof(CC::MessageHeap::Header));
 }
 

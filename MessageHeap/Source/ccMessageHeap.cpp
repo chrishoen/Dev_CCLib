@@ -60,6 +60,9 @@ MessageHeap::MessageHeap ()
    mHeapBeginPtr = 0;
    mHeapEndPtr = 0;
    mWorkingPtr = 0;
+
+   mSequenceNumber = 0;
+   mPreviousMessageHeader = 0;
 }
 
 MessageHeap::~MessageHeap ()
@@ -106,6 +109,9 @@ void MessageHeap::initialize(size_t aAllocate)
 
 void* MessageHeap::allocate(size_t aSize)
 {
+   //--------------------------------------------------------------------------
+   // Calculate the size to allocate.
+
    // Round up the size to be on an eight byte boundary for 32 bit systems
    // or a sixteen byte bounday for 64 bit systems. In other words, for a 32
    // bit system, if you want to allocate one byte, this will allocate eight
@@ -113,12 +119,21 @@ void* MessageHeap::allocate(size_t aSize)
    // with calls to malloc.
    size_t tSize = MessageHeap_roundUpSize(aSize);
 
+   // Increase the allocated size to include the header. This means that the
+   // allocated size will include size for the requested number of bytes for
+   // the message and for the heap header and that it will be on the correct
+   // byte boundary.
+   tSize += HeaderAllocate;
+
+   //--------------------------------------------------------------------------
+   // Calculate the pointer for the allocated segment.
+
    // To allocate from the heap, store a copy of the current working pointer.
    // This is the address on the message heap that will be allocated.
    char* tAllocatePtr = mWorkingPtr;
 
    // Advance the current working pointer by the size to allocate.
-   mWorkingPtr += aSize;
+   mWorkingPtr += tSize;
 
    // If this advancement goes past the end of the memory allocated for the
    // heap, then there is a rollover. This should be infrequent.
@@ -130,8 +145,33 @@ void* MessageHeap::allocate(size_t aSize)
       tAllocatePtr = mHeapBeginPtr;
    }
 
-   // Return the pointer to the allocated memory.
-   return (void*)tAllocatePtr;
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   // Pointer and header management
+
+   // Set a header pointer to point to the beginning of the allocated region.
+   Header* tHeaderPtr = (Header*)tAllocatePtr;
+
+   // Set a body pointer to point after the header pointer.
+   char* tBodyPtr   = tAllocatePtr + HeaderAllocate;
+
+   // Set the allocated region header previous pointer to point to the header
+   // of the previous message that was allocated.
+   tHeaderPtr->mPreviousMessageHeader = mPreviousMessageHeader;
+
+   // Set the sequence number for the allocated message.
+   tHeaderPtr->mSequenceNumber = mSequenceNumber++;
+
+   // Store the pointer to the allocated message for the next allocation.
+   mPreviousMessageHeader = tHeaderPtr;
+
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   // Return the pointer to the allocated memory for the message body.
+
+   return (void*)tBodyPtr;
 }
 
 }//namespace

@@ -74,8 +74,9 @@ public:
    // This is a header that is placed at the start of every message that is 
    // allocated from the message heap. This header is only used by message
    // heap processing and has nothing to do with actual message headers.
+   // This structure must not take up more than sixteen bytes.
 
-   typedef struct MessageHeader
+   typedef struct Header
    {
       // This is a synch word, if it is not correct then the message has been
       // corrupted, the message heap has been overrun.
@@ -87,12 +88,20 @@ public:
       // last message that was allocated before this message. The sequence 
       // number of the previous message should be one more than the sequence
       // number of a message that is being checked.
-      MessageHeader*   mPreviousMessageHeader;
+      Header*   mPreviousMessageHeader;
 
-   }  BlockHeader;
+   }  Header;
 
+   enum { HeaderAllocate = 16 };
 
+   // This is a sequence number that is inserted into the header of any
+   // message that is allocated. It is used for consistency checks.
+   unsigned mSequenceNumber;
 
+   // This is a pointer to the header of the previous message that was 
+   // allocated. It is used to compare its sequence number with that of a
+   // a message that is being checked.
+   Header* mPreviousMessageHeader;
 };
 //******************************************************************************
 }//namespace
