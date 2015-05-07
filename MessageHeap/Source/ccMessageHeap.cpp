@@ -174,6 +174,80 @@ void* MessageHeap::allocate(size_t aSize)
    return (void*)tBodyPtr;
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This checks a memory segment for consistency, it should show if a message
+// in the heap has been overrun. It returns true if the memory seqgment was
+// found to be consistent.
+
+bool MessageHeap::check(void* aMessage)
+{
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   // Convert the input pointer to point to the message body.
+
+   char* tBodyCharPtr = (char*)aMessage;
+
+   // Calculate pointers to the message header. These should point to the 
+   // beginning of the memory that was allocated for the message.
+
+   char*    tHeaderCharPtr = tBodyCharPtr - HeaderAllocate;
+   Header*  tHeaderPtr     = (Header*)tHeaderCharPtr;
+
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   // Check the validity of the pointer.
+
+   // Check the range of the header pointer.
+   if ((tHeaderCharPtr < mHeapBeginPtr) || (tHeaderCharPtr >= mHeapEndPtr))
+   {
+      return false;
+   }
+
+   // Check the sync word of the header
+   if (tHeaderPtr->mSyncWord != HeaderSyncWord)
+   {
+      return false;
+   }
+
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   // Check the validty of the message with the previous message.
+
+   // Extract pointers to the previous message header. 
+   Header*  tPreviousHeaderPtr     = tHeaderPtr->mPreviousMessageHeader;
+   char*    tPreviousHeaderCharPtr = (char*)tPreviousHeaderPtr;
+
+   // Check the range of the previous header pointer.
+   if ((tPreviousHeaderCharPtr < mHeapBeginPtr) || (tPreviousHeaderCharPtr >= mHeapEndPtr))
+   {
+      return false;
+   }
+
+   // Check the sync word of the previous header
+   if (tPreviousHeaderPtr->mSyncWord != HeaderSyncWord)
+   {
+      return false;
+   }
+
+   // Check the sequence number of the previous message.
+   if (tHeaderPtr->mSequenceNumber != tPreviousHeaderPtr->mSyncWord + 1)
+   {
+      return false;
+   }
+
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   // All validity checks have passed.
+
+   return true;
+}
+
 }//namespace
 
 

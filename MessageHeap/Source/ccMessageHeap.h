@@ -94,6 +94,8 @@ public:
 
    enum { HeaderAllocate = 16 };
 
+   enum { HeaderSyncWord = 0xAAAABBBB };
+
    // This is a sequence number that is inserted into the header of any
    // message that is allocated. It is used for consistency checks.
    unsigned mSequenceNumber;
@@ -102,6 +104,17 @@ public:
    // allocated. It is used to compare its sequence number with that of a
    // a message that is being checked.
    Header* mPreviousMessageHeader;
+
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // Check
+
+   // This checks a memory segment for consistency, it should show if a message
+   // in the heap has been overrun. It returns true if the memory seqgment was
+   // found to be consistent.
+
+   bool check(void* aMessage);
 };
 //******************************************************************************
 }//namespace
