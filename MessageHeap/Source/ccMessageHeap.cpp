@@ -156,19 +156,18 @@ void* MessageHeap::allocate(size_t aSize)
    // Set a body pointer to point after the header pointer.
    char* tBodyPtr   = tAllocatePtr + HeaderAllocate;
 
-   // Set the allocated region header previous pointer to point to the header
-   // of the previous message that was allocated.
-   tHeaderPtr->mPreviousMessageHeader = mPreviousMessageHeader;
+   // Set the header sync word.
+   tHeaderPtr->mSyncWord = HeaderSyncWord;
 
    // Set the sequence number for the allocated message.
    tHeaderPtr->mSequenceNumber = mSequenceNumber++;
 
-   // Set the sync word.
-   tHeaderPtr->mSyncWord = HeaderSyncWord;
+   // Set the allocated region header previous pointer to point to the header
+   // of the previous message that was allocated.
+   tHeaderPtr->mPreviousMessageHeader = mPreviousMessageHeader;
 
    // Store the pointer to the allocated message for the next allocation.
    mPreviousMessageHeader = tHeaderPtr;
-
 
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------

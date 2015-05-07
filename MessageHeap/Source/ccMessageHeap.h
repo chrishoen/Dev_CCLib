@@ -65,7 +65,10 @@ public:
    //---------------------------------------------------------------------------
    // Allocate
 
-   // This allocates a sub segment of the message memory heap.
+   // This allocates a variable sized segment of memory from the message heap.
+   // It is used analogously to malloc. For 32 bit systems, it allocates on
+   // an eight byte boundary. For 64 bit systems, it allocates on a sixteen
+   // byte boundary.
    void* allocate(size_t aSize);
 
    //---------------------------------------------------------------------------
@@ -74,26 +77,31 @@ public:
    // This is a header that is placed at the start of every message that is 
    // allocated from the message heap. This header is only used by message
    // heap processing and has nothing to do with actual message headers.
-   // This structure must not take up more than sixteen bytes.
+   // Values of this structure are set when a message is allocated and they
+   // are tested when a message is checked for consistency.
 
    typedef struct Header
    {
       // This is a synch word, if it is not correct then the message has been
       // corrupted, the message heap has been overrun.
-      unsigned         mSyncWord;
+      unsigned mSyncWord;
+      
       // This is a sequence number for the message. It is assigned when the
       // message is allocated.
-      unsigned         mSequenceNumber;
+      unsigned mSequenceNumber;
+
       // This is a pointer to the previous message in the message heap, the
       // last message that was allocated before this message. The sequence 
       // number of the previous message should be one more than the sequence
       // number of a message that is being checked.
-      Header*   mPreviousMessageHeader;
+      Header* mPreviousMessageHeader;
 
    }  Header;
 
+   // This structure must not take up more than sixteen bytes.
    enum { HeaderAllocate = 16 };
 
+   // This is the value for the sync word.
    enum { HeaderSyncWord = 0xAAAABBBB };
 
    // This is a sequence number that is inserted into the header of any
