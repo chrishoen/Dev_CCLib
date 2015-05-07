@@ -7,7 +7,7 @@
     <ClCompile Include="Source\Main.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ccMessageHeap.cpp">
+    <ClCompile Include="Source\ccSTMemory.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -23,7 +23,7 @@
     <ClInclude Include="Source\ccPointerHelper.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccMessageHeap.h">
+    <ClInclude Include="Source\ccSTMemory.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

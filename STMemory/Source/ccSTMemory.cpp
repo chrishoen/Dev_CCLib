@@ -9,11 +9,72 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define  _CCMESSAGEHEAP_CPP_
-#include "ccMessageHeap.h"
+#include "ccSTMemory.h"
 
 namespace CC
 {
+
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // Regional variables
+
+   // This is a pointer to the begining of the system memory that is allocated
+   // for the message heap.
+   static char* rHeapBeginPtr = 0;
+
+   // This is a pointer to one byte after the end of the message heap. It is 
+   // equal to mmHeapBeginPtr + mAllocate.
+   static char* rHeapEndPtr = 0;
+
+   // This is a pointer that cycles through the message heap memory, when
+   // messages are allocated. Its current value points at the next available 
+   // section of the heap. When memory is allocated from the heap, the current
+   // value is returned and the pointer is incremented apprpriately. If there 
+   // is a rollover, then it is set back to point to the beginining of the heap.
+   static char* rWorkingPtr = 0;
+
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // This is a header that is placed at the start of every message that is 
+   // allocated from the message heap. This header is only used by message
+   // heap processing and has nothing to do with actual message headers.
+   // Values of this structure are set when a message is allocated and they
+   // are tested when a message is checked for consistency.
+
+   typedef struct Header
+   {
+      // This is a synch word, if it is not correct then the message has been
+      // corrupted, the message heap has been overrun.
+      unsigned mSyncWord;
+      
+      // This is a sequence number for the message. It is assigned when the
+      // message is allocated.
+      unsigned mSequenceNumber;
+
+      // This is a pointer to the previous message in the message heap, the
+      // last message that was allocated before this message. The sequence 
+      // number of the previous message should be one more than the sequence
+      // number of a message that is being checked.
+      Header* mPreviousMessageHeader;
+
+   } Header;
+
+   // This structure must not take up more than sixteen bytes.
+   enum { HeaderAllocate = 16 };
+
+   // This is the value for the sync word.
+   enum { HeaderSyncWord = 0xAAAABBBB };
+
+   // This is a sequence number that is inserted into the header of any
+   // message that is allocated. It is used for consistency checks.
+   static unsigned rSequenceNumber;
+
+   // This is a pointer to the header of the previous message that was 
+   // allocated. It is used to compare its sequence number with that of a
+   // a message that is being checked.
+   static Header* rPreviousMessageHeader;
 
 //******************************************************************************
 //******************************************************************************
@@ -30,7 +91,7 @@ namespace CC
 //    MessageHeap_alignSize(9) == 16
 
 
-inline size_t MessageHeap_roundUpSize(size_t aSize)
+inline size_t STMemory_roundUpSize(size_t aSize)
 {
    // If this is a 32 bit system
    if (sizeof(int*) == 4)
@@ -53,54 +114,28 @@ inline size_t MessageHeap_roundUpSize(size_t aSize)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Constructor
 
-MessageHeap::MessageHeap ()
-{
-   // Null values
-   mHeapBeginPtr = 0;
-   mHeapEndPtr = 0;
-   mWorkingPtr = 0;
-
-   mSequenceNumber = 0;
-   mPreviousMessageHeader = 0;
-}
-
-MessageHeap::~MessageHeap ()
-{
-   // It the heap was initialized and has allocated system memory
-   if (mHeapBeginPtr != 0)
-   {
-      // Deallocate the system memory
-      free(mHeapBeginPtr);
-   }
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void MessageHeap::initialize(size_t aAllocate)
+void initializeSTMemory(size_t aAllocate)
 {
    // Round up the size to be on an eight byte boundary for 32 bit systems
    // or a sixteen byte bounday for 64 bit systems. In other words, for a 32
    // bit system, if you want to allocate one byte, this will allocate eight
    // bytes. This keeps everything on byte boundaries so as to be consistent
    // with calls to malloc.
-   size_t tSize = MessageHeap_roundUpSize(aAllocate);
+   size_t tSize = STMemory_roundUpSize(aAllocate);
 
    // Allocate system memory for the message heap. NOTE: the malloc call
    // returns a  pointer that is aligned on an 8 byte boundary for 32 bit
    // systems or returns a pointer that is aligned a 16 byte boundary for 64
    // bit systems.
-   mHeapBeginPtr = (char*)malloc(tSize);
+   rHeapBeginPtr = (char*)malloc(tSize);
 
    // Set the heap end pointer. This should point to one byte after the
    // allocated region.
-   mHeapEndPtr = mHeapBeginPtr + tSize;
+   rHeapEndPtr = rHeapBeginPtr + tSize;
 
    // Set the working pointer to point to the start of the message heap.
-   mWorkingPtr = mHeapBeginPtr;
+   rWorkingPtr = rHeapBeginPtr;
 }
 
 //******************************************************************************
@@ -108,7 +143,7 @@ void MessageHeap::initialize(size_t aAllocate)
 //******************************************************************************
 // This allocates a sub segment of the message memory heap.
 
-void* MessageHeap::allocate(size_t aSize)
+void* allocateSTMemory(size_t aSize)
 {
    //--------------------------------------------------------------------------
    // Calculate the size to allocate.
@@ -118,7 +153,7 @@ void* MessageHeap::allocate(size_t aSize)
    // bit system, if you want to allocate one byte, this will allocate eight
    // bytes. This keeps everything on byte boundaries so as to be consistent
    // with calls to malloc.
-   size_t tSize = MessageHeap_roundUpSize(aSize);
+   size_t tSize = STMemory_roundUpSize(aSize);
 
    // Increase the allocated size to include the header. This means that the
    // allocated size will include size for the requested number of bytes for
@@ -131,19 +166,19 @@ void* MessageHeap::allocate(size_t aSize)
 
    // To allocate from the heap, store a copy of the current working pointer.
    // This is the address on the message heap that will be allocated.
-   char* tAllocatePtr = mWorkingPtr;
+   char* tAllocatePtr = rWorkingPtr;
 
    // Advance the current working pointer by the size to allocate.
-   mWorkingPtr += tSize;
+   rWorkingPtr += tSize;
 
    // If this advancement goes past the end of the memory allocated for the
    // heap, then there is a rollover. This should be infrequent.
-   if (mWorkingPtr >= mHeapEndPtr)
+   if (rWorkingPtr >= rHeapEndPtr)
    {
       // Set the current working pointer back to the start of the heap
-      mWorkingPtr = mHeapBeginPtr;
+      rWorkingPtr = rHeapBeginPtr;
       // Allocate to the current working pointer.
-      tAllocatePtr = mHeapBeginPtr;
+      tAllocatePtr = rHeapBeginPtr;
    }
 
    //--------------------------------------------------------------------------
@@ -161,14 +196,14 @@ void* MessageHeap::allocate(size_t aSize)
    tHeaderPtr->mSyncWord = HeaderSyncWord;
 
    // Set the sequence number for the allocated message.
-   tHeaderPtr->mSequenceNumber = mSequenceNumber++;
+   tHeaderPtr->mSequenceNumber = rSequenceNumber++;
 
    // Set the allocated region header previous pointer to point to the header
    // of the previous message that was allocated.
-   tHeaderPtr->mPreviousMessageHeader = mPreviousMessageHeader;
+   tHeaderPtr->mPreviousMessageHeader = rPreviousMessageHeader;
 
    // Store the pointer to the allocated message for the next allocation.
-   mPreviousMessageHeader = tHeaderPtr;
+   rPreviousMessageHeader = tHeaderPtr;
 
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
@@ -185,7 +220,7 @@ void* MessageHeap::allocate(size_t aSize)
 // in the heap has been overrun. It returns true if the memory seqgment was
 // found to be consistent.
 
-bool MessageHeap::check(void* aMessage)
+bool checkSTMemory(void* aMessage)
 {
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
@@ -206,7 +241,7 @@ bool MessageHeap::check(void* aMessage)
    // Check the validity of the pointer.
 
    // Check the range of the header pointer.
-   if ((tHeaderCharPtr < mHeapBeginPtr) || (tHeaderCharPtr >= mHeapEndPtr))
+   if ((tHeaderCharPtr < rHeapBeginPtr) || (tHeaderCharPtr >= rHeapEndPtr))
    {
       return false;
    }
@@ -227,7 +262,7 @@ bool MessageHeap::check(void* aMessage)
    char*    tPreviousHeaderCharPtr = (char*)tPreviousHeaderPtr;
 
    // Check the range of the previous header pointer.
-   if ((tPreviousHeaderCharPtr < mHeapBeginPtr) || (tPreviousHeaderCharPtr >= mHeapEndPtr))
+   if ((tPreviousHeaderCharPtr < rHeapBeginPtr) || (tPreviousHeaderCharPtr >= rHeapEndPtr))
    {
       return false;
    }
