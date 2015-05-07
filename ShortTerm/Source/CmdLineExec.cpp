@@ -4,7 +4,6 @@
 #include <stdio.h>
 
 #include "prnPrint.h"
-#include "ccPointerHelper.h"
 #include "ccShortTermMemory.h"
 
 #include "CmdLineExec.h"
@@ -32,20 +31,12 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   CC::PointerUnion<void> tPointerUnion;
-   tPointerUnion.mPointer = malloc(100);
-   printf("%08X\n", tPointerUnion.mAddress);
 }
 
 //******************************************************************************
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefaultUnsigned(1,1);
-
-   unsigned int tSize = aCmd->argUnsigned(1);
-
-   printf("%08X %08X\n", tSize,CC::alignSizeEightBytes(tSize));
 }
 
 //******************************************************************************
