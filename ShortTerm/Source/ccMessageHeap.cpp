@@ -17,6 +17,41 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// This is an inline function that aligns a size to round up to an eight
+// byte boundary for 32 byte systems or rounds up to a sixteen byte boundary
+// for 64 bit systems. It is used below.
+
+// For example, for 32 bit systems
+//    MessageHeap_alignSize(0) == 0
+//    MessageHeap_alignSize(1) == 8
+//    MessageHeap_alignSize(7) == 8
+//    MessageHeap_alignSize(8) == 8
+//    MessageHeap_alignSize(9) == 16
+
+
+inline size_t MessageHeap_roundUpSize(size_t aSize)
+{
+   // If this is a 32 bit system
+   if (sizeof(int*) == 4)
+   {
+      // Align the size to be on an eight byte boundary
+      if ((aSize & 7) == 0) return aSize;
+      else return ((aSize >> 3) << 3) + 8;
+   }
+   else
+   // Else this is a 64 bit system
+   {
+      // Align the size to be on a sixteen byte boundary
+      if ((aSize & 15) == 0) return aSize;
+      else return ((aSize >> 4) << 4) + 16;
+   }
+}
+
+
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Constructor
 
 MessageHeap::MessageHeap ()
@@ -62,6 +97,10 @@ void MessageHeap::initialize(size_t aAllocate)
 
 void* MessageHeap::allocate(size_t aSize)
 {
+   // Round up the size to be on an eight byte boundary for 32 bit systems
+   // or a sixteen byte bounday for 64 bit systems.
+   size_t tSize = MessageHeap_roundUpSize(aSize);
+
    // To allocate from the heap, store a copy of the current working pointer.
    char* tAllocatePtr = mWorkingPtr;
 
@@ -78,7 +117,7 @@ void* MessageHeap::allocate(size_t aSize)
       tAllocatePtr = mHeapBeginPtr;
    }
 
-   // Return the pointer
+   // Return the pointer to the allocated memory.
    return tAllocatePtr;
 }
 

@@ -57,6 +57,12 @@ public:
    // This is a pointer the beginning of the next memory sub segment to be 
    // allocated. The allocate method returns this and then incements it
    // by the size of sub segment.
+
+   // This is a pointer that cycles through the message heap memory, when
+   // messages are allocated. Its current value points at the next available 
+   // section of the heap. When memory is allocated from the heap, the current
+   // value is returned and the pointer is incremented apprpriately. If there 
+   // is a rollover, then it is set back to point to the beginining of the heap.
    char* mWorkingPtr;
 
    //---------------------------------------------------------------------------
