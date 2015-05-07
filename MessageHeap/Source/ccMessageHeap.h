@@ -110,7 +110,7 @@ public:
       // number of a message that is being checked.
       Header* mPreviousMessageHeader;
 
-   }  Header;
+   } Header;
 
    // This structure must not take up more than sixteen bytes.
    enum { HeaderAllocate = 16 };
