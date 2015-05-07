@@ -98,17 +98,21 @@ void MessageHeap::initialize(size_t aAllocate)
 void* MessageHeap::allocate(size_t aSize)
 {
    // Round up the size to be on an eight byte boundary for 32 bit systems
-   // or a sixteen byte bounday for 64 bit systems.
+   // or a sixteen byte bounday for 64 bit systems. In other words, for a 32
+   // bit system, if you want to allocate one byte, this will allocate eight
+   // bytes. This keeps everything on byte boundaries so as to be consistent
+   // with calls to malloc.
    size_t tSize = MessageHeap_roundUpSize(aSize);
 
    // To allocate from the heap, store a copy of the current working pointer.
+   // This is the address on the message heap that will be allocated.
    char* tAllocatePtr = mWorkingPtr;
 
    // Advance the current working pointer by the size to allocate.
    mWorkingPtr += aSize;
 
    // If this advancement goes past the end of the memory allocated for the
-   // heap, then there is a rollover.
+   // heap, then there is a rollover. This should be infrequent.
    if (mWorkingPtr >= mHeapEndPtr)
    {
       // Set the current working pointer back to the start of the heap
