@@ -7,7 +7,7 @@
     <ClCompile Include="Source\Main.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ccShortTermMemory.cpp">
+    <ClCompile Include="Source\ccMessageHeap.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -20,10 +20,10 @@
     <ClInclude Include="Source\CmdLineExec.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccShortTermMemory.h">
+    <ClInclude Include="Source\ccPointerHelper.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccPointerHelper.h">
+    <ClInclude Include="Source\ccMessageHeap.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

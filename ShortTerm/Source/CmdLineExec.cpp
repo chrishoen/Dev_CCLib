@@ -6,8 +6,6 @@
 #include "prnPrint.h"
 #include "ccPointerHelper.h"
 
-#include "risLUT.h"
-
 #include "CmdLineExec.h"
 
 //******************************************************************************
