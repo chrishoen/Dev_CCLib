@@ -6,6 +6,8 @@
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 
+#include "ccMessageHeap.h"
+
 void main_initialize();
 
 
@@ -36,6 +38,9 @@ int main(int argc,char** argv)
 //******************************************************************************
 void main_initialize()
 {
+   // Initialize the message heap
+   CC::gMessageHeap.initialize(1024*1024);
+
    // Initialize print filters
    Prn::initializePrint();
 

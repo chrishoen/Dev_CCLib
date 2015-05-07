@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define  _CCMESSAGEHEAP_CPP_
 #include "ccMessageHeap.h"
 
 namespace CC
