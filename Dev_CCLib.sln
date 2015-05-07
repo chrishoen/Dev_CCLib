@@ -17,7 +17,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Counter", "Counter\Counter.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BlockPool", "BlockPool\BlockPool.vcxproj", "{75C78698-F814-479A-820F-00F5F1757AC6}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ShortTerm", "ShortTerm\ShortTerm.vcxproj", "{54D5686D-218B-49AE-A620-519EAC941D3D}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MessageHeap", "MessageHeap\MessageHeap.vcxproj", "{54D5686D-218B-49AE-A620-519EAC941D3D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
