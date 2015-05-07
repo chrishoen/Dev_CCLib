@@ -33,12 +33,37 @@ public:
   ~MessageHeap ();
 
    //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
    // Initialize
     
    // This allocates system memory for the message heap and initializes member
    // variables. It is passed the number of bytes of system memory to allocate
    // for the message heap.
    void initialize (size_t aAllocate);
+
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // Allocate
+
+   // This allocates a variable sized segment of memory from the message heap.
+   // It is used analogously to malloc. For 32 bit systems, it allocates on
+   // an eight byte boundary. For 64 bit systems, it allocates on a sixteen
+   // byte boundary.
+   void* allocate(size_t aSize);
+
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // Check
+
+   // This checks a message for consistency, it should show if a message in the 
+   // heap has been overrun. It returns true if the memory seqgment was found
+   // to be consistent. It tests pointer range, message sync word and sequence
+   // number.
+
+   bool check(void* aMessage);
 
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
@@ -59,17 +84,6 @@ public:
    // value is returned and the pointer is incremented apprpriately. If there 
    // is a rollover, then it is set back to point to the beginining of the heap.
    char* mWorkingPtr;
-
-   //---------------------------------------------------------------------------
-   //---------------------------------------------------------------------------
-   //---------------------------------------------------------------------------
-   // Allocate
-
-   // This allocates a variable sized segment of memory from the message heap.
-   // It is used analogously to malloc. For 32 bit systems, it allocates on
-   // an eight byte boundary. For 64 bit systems, it allocates on a sixteen
-   // byte boundary.
-   void* allocate(size_t aSize);
 
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
@@ -112,18 +126,6 @@ public:
    // allocated. It is used to compare its sequence number with that of a
    // a message that is being checked.
    Header* mPreviousMessageHeader;
-
-   //---------------------------------------------------------------------------
-   //---------------------------------------------------------------------------
-   //---------------------------------------------------------------------------
-   // Check
-
-   // This checks a message for consistency, it should show if a message in the 
-   // heap has been overrun. It returns true if the memory seqgment was found
-   // to be consistent. It tests pointer range, message sync word and sequence
-   // number.
-
-   bool check(void* aMessage);
 };
 //******************************************************************************
 }//namespace
