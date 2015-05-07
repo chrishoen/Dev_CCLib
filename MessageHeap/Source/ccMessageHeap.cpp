@@ -78,15 +78,22 @@ MessageHeap::~MessageHeap ()
 
 void MessageHeap::initialize(size_t aAllocate)
 {
+   // Round up the size to be on an eight byte boundary for 32 bit systems
+   // or a sixteen byte bounday for 64 bit systems. In other words, for a 32
+   // bit system, if you want to allocate one byte, this will allocate eight
+   // bytes. This keeps everything on byte boundaries so as to be consistent
+   // with calls to malloc.
+   size_t tSize = MessageHeap_roundUpSize(aAllocate);
+
    // Allocate system memory for the message heap. NOTE: the malloc call
    // returns a  pointer that is aligned on an 8 byte boundary for 32 bit
    // systems or returns a pointer that is aligned a 16 byte boundary for 64
    // bit systems.
-   mHeapBeginPtr = (char*)malloc(aAllocate);
+   mHeapBeginPtr = (char*)malloc(tSize);
 
    // Set the heap end pointer. This should point to one byte after the
    // allocated region.
-   mHeapEndPtr = mHeapBeginPtr + aAllocate;
+   mHeapEndPtr = mHeapBeginPtr + tSize;
 
    // Set the working pointer to point to the start of the message heap.
    mWorkingPtr = mHeapBeginPtr;
@@ -124,7 +131,7 @@ void* MessageHeap::allocate(size_t aSize)
    }
 
    // Return the pointer to the allocated memory.
-   return tAllocatePtr;
+   return (void*)tAllocatePtr;
 }
 
 }//namespace
