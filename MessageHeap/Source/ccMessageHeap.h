@@ -118,9 +118,10 @@ public:
    //---------------------------------------------------------------------------
    // Check
 
-   // This checks a memory segment for consistency, it should show if a message
-   // in the heap has been overrun. It returns true if the memory seqgment was
-   // found to be consistent.
+   // This checks a message for consistency, it should show if a message in the 
+   // heap has been overrun. It returns true if the memory seqgment was found
+   // to be consistent. It tests pointer range, message sync word and sequence
+   // number.
 
    bool check(void* aMessage);
 };
