@@ -16,7 +16,6 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This class encapsualtes byte buffers. It represents memory sections. It
 
 class MessageHeap
 {
@@ -53,10 +52,6 @@ public:
    // This is a pointer to one byte after the end of the message heap. It is 
    // equal to mmHeapBeginPtr + mAllocate.
    char* mHeapEndPtr;
-
-   // This is a pointer the beginning of the next memory sub segment to be 
-   // allocated. The allocate method returns this and then incements it
-   // by the size of sub segment.
 
    // This is a pointer that cycles through the message heap memory, when
    // messages are allocated. Its current value points at the next available 

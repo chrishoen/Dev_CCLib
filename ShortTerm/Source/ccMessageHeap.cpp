@@ -19,7 +19,7 @@ namespace CC
 //******************************************************************************
 // This is an inline function that aligns a size to round up to an eight
 // byte boundary for 32 byte systems or rounds up to a sixteen byte boundary
-// for 64 bit systems. It is used below.
+// for 64 bit systems. It is used below. NOTE: I tested this independently.
 
 // For example, for 32 bit systems
 //    MessageHeap_alignSize(0) == 0
@@ -64,7 +64,7 @@ MessageHeap::MessageHeap ()
 
 MessageHeap::~MessageHeap ()
 {
-   // It the heap was initialized and allocated system memory
+   // It the heap was initialized and has allocated system memory
    if (mHeapBeginPtr != 0)
    {
       // Deallocate the system memory
@@ -78,12 +78,14 @@ MessageHeap::~MessageHeap ()
 
 void MessageHeap::initialize(size_t aAllocate)
 {
-   // Allocate system memory for the message heap. The malloc call returns a 
-   // pointer that is aligned on an 8 byte boundary for 32 bit systmes or
-   // returns a pointer that is aligned a 16 byte boundary for 64 bit systems.
+   // Allocate system memory for the message heap. NOTE: the malloc call
+   // returns a  pointer that is aligned on an 8 byte boundary for 32 bit
+   // systems or returns a pointer that is aligned a 16 byte boundary for 64
+   // bit systems.
    mHeapBeginPtr = (char*)malloc(aAllocate);
 
-   // Set the heap end pointer.
+   // Set the heap end pointer. This should point to one byte after the
+   // allocated region.
    mHeapEndPtr = mHeapBeginPtr + aAllocate;
 
    // Set the working pointer to point to the start of the message heap.
