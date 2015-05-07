@@ -17,28 +17,30 @@ namespace CC
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
-   // Initialize
+   // Initialize short term memory
     
    // This allocates system memory for the message heap and initializes member
    // variables. It is passed the number of bytes of system memory to allocate
    // for the message heap.
+
    void initializeSTMemory(size_t aAllocate);
 
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
-   // Allocate
+   // Allocate from short term memory
 
    // This allocates a variable sized segment of memory from the message heap.
    // It is used analogously to malloc. For 32 bit systems, it allocates on
    // an eight byte boundary. For 64 bit systems, it allocates on a sixteen
    // byte boundary.
-   void* allocateSTMemory(size_t aSize);
+
+   void* allocateFromSTMemory(size_t aSize);
 
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
-   // Check
+   // Check short term memory
 
    // This checks a message for consistency, it should show if a message in the 
    // heap has been overrun. It returns true if the memory seqgment was found
@@ -54,7 +56,7 @@ template <class Message>
 Message* newSTMemory()
 {
    // Allocate memory for the message from the message heap.
-   Message* tPointer = (Message*)allocateSTMemory(sizeof(Message));
+   Message* tPointer = (Message*)allocateFromSTMemory(sizeof(Message));
 
    // Call the constructor on the allocated message using placement new.
    new(tPointer)Message();

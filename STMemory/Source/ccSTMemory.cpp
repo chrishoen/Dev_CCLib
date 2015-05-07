@@ -14,74 +14,76 @@
 namespace CC
 {
 
-   //---------------------------------------------------------------------------
-   //---------------------------------------------------------------------------
-   //---------------------------------------------------------------------------
-   // Regional variables
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+// Regional variables. These variables have scope only within this file.
+// They maintain storage as global variables, but they are only visible to
+// code that is contained in this file.
 
-   // This is a pointer to the begining of the system memory that is allocated
-   // for the message heap.
-   static char* rHeapBeginPtr = 0;
+// This is a pointer to the begining of the system memory that is allocated
+// for the message heap.
+static char* rHeapBeginPtr = 0;
 
-   // This is a pointer to one byte after the end of the message heap. It is 
-   // equal to mmHeapBeginPtr + mAllocate.
-   static char* rHeapEndPtr = 0;
+// This is a pointer to one byte after the end of the message heap. It is 
+// equal to mmHeapBeginPtr + mAllocate.
+static char* rHeapEndPtr = 0;
 
-   // This is a pointer that cycles through the message heap memory, when
-   // messages are allocated. Its current value points at the next available 
-   // section of the heap. When memory is allocated from the heap, the current
-   // value is returned and the pointer is incremented apprpriately. If there 
-   // is a rollover, then it is set back to point to the beginining of the heap.
-   static char* rWorkingPtr = 0;
+// This is a pointer that cycles through the message heap memory, when
+// messages are allocated. Its current value points at the next available 
+// section of the heap. When memory is allocated from the heap, the current
+// value is returned and the pointer is incremented apprpriately. If there 
+// is a rollover, then it is set back to point to the beginining of the heap.
+static char* rWorkingPtr = 0;
 
-   //---------------------------------------------------------------------------
-   //---------------------------------------------------------------------------
-   //---------------------------------------------------------------------------
-   // This is a header that is placed at the start of every message that is 
-   // allocated from the message heap. This header is only used by message
-   // heap processing and has nothing to do with actual message headers.
-   // Values of this structure are set when a message is allocated and they
-   // are tested when a message is checked for consistency.
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+// This is a header that is placed at the start of every message that is 
+// allocated from the message heap. This header is only used by message
+// heap processing and has nothing to do with actual message headers.
+// Values of this structure are set when a message is allocated and they
+// are tested when a message is checked for consistency.
 
-   typedef struct Header
-   {
-      // This is a synch word, if it is not correct then the message has been
-      // corrupted, the message heap has been overrun.
-      unsigned mSyncWord;
+typedef struct Header
+{
+   // This is a synch word, if it is not correct then the message has been
+   // corrupted, the message heap has been overrun.
+   unsigned mSyncWord;
       
-      // This is a sequence number for the message. It is assigned when the
-      // message is allocated.
-      unsigned mSequenceNumber;
+   // This is a sequence number for the message. It is assigned when the
+   // message is allocated.
+   unsigned mSequenceNumber;
 
-      // This is a pointer to the previous message in the message heap, the
-      // last message that was allocated before this message. The sequence 
-      // number of the previous message should be one more than the sequence
-      // number of a message that is being checked.
-      Header* mPreviousMessageHeader;
+   // This is a pointer to the previous message in the message heap, the
+   // last message that was allocated before this message. The sequence 
+   // number of the previous message should be one more than the sequence
+   // number of a message that is being checked.
+   Header* mPreviousMessageHeader;
 
-   } Header;
+} Header;
 
-   // This structure must not take up more than sixteen bytes.
-   enum { HeaderAllocate = 16 };
+// This structure must not take up more than sixteen bytes.
+enum { HeaderAllocate = 16 };
 
-   // This is the value for the sync word.
-   enum { HeaderSyncWord = 0xAAAABBBB };
+// This is the value for the sync word.
+enum { HeaderSyncWord = 0xAAAABBBB };
 
-   // This is a sequence number that is inserted into the header of any
-   // message that is allocated. It is used for consistency checks.
-   static unsigned rSequenceNumber;
+// This is a sequence number that is inserted into the header of any
+// message that is allocated. It is used for consistency checks.
+static unsigned rSequenceNumber;
 
-   // This is a pointer to the header of the previous message that was 
-   // allocated. It is used to compare its sequence number with that of a
-   // a message that is being checked.
-   static Header* rPreviousMessageHeader;
+// This is a pointer to the header of the previous message that was 
+// allocated. It is used to compare its sequence number with that of a
+// a message that is being checked.
+static Header* rPreviousMessageHeader;
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This is an inline function that aligns a size to round up to an eight
-// byte boundary for 32 byte systems or rounds up to a sixteen byte boundary
-// for 64 bit systems. It is used below. NOTE: I tested this independently.
+// This is a function that aligns a size to round up to an eight byte boundary
+// for 32 byte systems or rounds up to a sixteen byte boundary for 64 bit
+// systems. It is used below. NOTE: I have tested this independently.
 
 // For example, for 32 bit systems
 //    MessageHeap_alignSize(0) == 0
@@ -89,7 +91,6 @@ namespace CC
 //    MessageHeap_alignSize(7) == 8
 //    MessageHeap_alignSize(8) == 8
 //    MessageHeap_alignSize(9) == 16
-
 
 inline size_t STMemory_roundUpSize(size_t aSize)
 {
@@ -108,8 +109,6 @@ inline size_t STMemory_roundUpSize(size_t aSize)
       else return ((aSize >> 4) << 4) + 16;
    }
 }
-
-
 
 //******************************************************************************
 //******************************************************************************
@@ -143,7 +142,7 @@ void initializeSTMemory(size_t aAllocate)
 //******************************************************************************
 // This allocates a sub segment of the message memory heap.
 
-void* allocateSTMemory(size_t aSize)
+void* allocateFromSTMemory(size_t aSize)
 {
    //--------------------------------------------------------------------------
    // Calculate the size to allocate.
