@@ -22,17 +22,17 @@ CC::BlockPool LabelledTreeNode::mBlockPool;
 
 LabelledTreeNode* LabelledTreeNode::create (int aIdentifier,char* aLabel)
 { 
-      // Block pointer.
-      LabelledTreeNode* tPointer = 0;
+   // Block pointer.
+   LabelledTreeNode* tPointer = 0;
 
-      // Allocate a block from the block pool.
-      tPointer = (LabelledTreeNode*)mBlockPool.get();
+   // Allocate a block from the block pool.
+   tPointer = (LabelledTreeNode*)mBlockPool.get();
 
-      // Call the constructor on the allocated block using placement new.
-      new(tPointer)LabelledTreeNode(aIdentifier,aLabel);
+   // Call the constructor on the allocated block using placement new.
+   new(tPointer)LabelledTreeNode(aIdentifier,aLabel);
 
-      // Return the pointer to the allocated block.
-      return tPointer;
+   // Return the pointer to the allocated block.
+   return tPointer;
 }
 
 //******************************************************************************

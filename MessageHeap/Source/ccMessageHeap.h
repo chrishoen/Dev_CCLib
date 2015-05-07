@@ -9,6 +9,7 @@
 //******************************************************************************
 //******************************************************************************
 #include <stddef.h>
+#include <new>
 
 namespace CC
 {
@@ -139,6 +140,23 @@ public:
 extern  MessageHeap gMessageHeap;
 #endif
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+template <class Message>
+Message* newMessage()
+{
+   // Allocate memory for the message from the message heap.
+   Message* tPointer = (Message*)gMessageHeap.allocate(sizeof(Message));
+
+   // Call the constructor on the allocated message using placement new.
+   new(tPointer)Message();
+
+   // Return the pointer to the allocated message.
+   return tPointer;
+
+}
+//******************************************************************************
 //******************************************************************************
 //******************************************************************************
 }//namespace
