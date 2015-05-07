@@ -24,6 +24,7 @@ MessageHeap::MessageHeap ()
    // Null values
    mHeapBeginPtr = 0;
    mHeapEndPtr = 0;
+   mWorkingPtr = 0;
 }
 
 MessageHeap::~MessageHeap ()
@@ -50,6 +51,35 @@ void MessageHeap::initialize(size_t aAllocate)
    // Set the heap end pointer.
    mHeapEndPtr = mHeapBeginPtr + aAllocate;
 
+   // Set the working pointer to point to the start of the message heap.
+   mWorkingPtr = mHeapBeginPtr;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This allocates a sub segment of the message memory heap.
+
+void* MessageHeap::allocate(size_t aSize)
+{
+   // To allocate from the heap, store a copy of the current working pointer.
+   char* tAllocatePtr = mWorkingPtr;
+
+   // Advance the current working pointer by the size to allocate.
+   mWorkingPtr += aSize;
+
+   // If this advancement goes past the end of the memory allocated for the
+   // heap, then there is a rollover.
+   if (mWorkingPtr >= mHeapEndPtr)
+   {
+      // Set the current working pointer back to the start of the heap
+      mWorkingPtr = mHeapBeginPtr;
+      // Allocate to the current working pointer.
+      tAllocatePtr = mHeapBeginPtr;
+   }
+
+   // Return the pointer
+   return tAllocatePtr;
 }
 
 }//namespace
