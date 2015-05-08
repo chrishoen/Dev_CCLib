@@ -47,7 +47,7 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   Some::Class1A* tX = CC::newSTM<Some::Class1A>(101);
+   Some::Class1A* tX = CC::newSTM<Some::Class1A>(101,102);
    tX->sayHello();
    printf("check %d\n", CC::checkSTM(tX));
 }
@@ -56,7 +56,6 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
-   Some::Class1A* tX = new Some::Class1A(101,102);
 }
 
 //******************************************************************************
