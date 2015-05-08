@@ -81,7 +81,7 @@ void operator delete(void* ptr)
 {
    // If the pointer does not point to an object that was allocated from the
    // short term memory heap, which would be the normal case.
-   if (!CC::isInShortTermMemory(ptr))
+   if (!CC::isInSTM(ptr))
    {
       // Do the default memory free. This is exactly what would have happened
       // if this file had not overridden the delete operator.

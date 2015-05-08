@@ -114,7 +114,7 @@ static size_t roundUpSize(size_t aSize)
 //******************************************************************************
 //******************************************************************************
 
-void initializeShortTermMemory(size_t aAllocate)
+void initializeSTM(size_t aAllocate)
 {
    // Round up the size to be on an eight byte boundary for 32 bit systems
    // or a sixteen byte bounday for 64 bit systems. In other words, for a 32
@@ -151,7 +151,7 @@ void initializeShortTermMemory(size_t aAllocate)
 //******************************************************************************
 // This allocates a sub segment of the message memory heap.
 
-void* allocateFromShortTermMemory(size_t aSize)
+void* allocateFromSTM(size_t aSize)
 {
    //--------------------------------------------------------------------------
    // Calculate the size to allocate.
@@ -310,7 +310,7 @@ bool checkSTM(void* aMessage)
 // This returns true if the given pointer is within the region of short term
 // memory, if this pointer was allocated as part of short term memory.
 
-bool isInShortTermMemory(void* aPtr)
+bool isInSTM(void* aPtr)
 {
    // Guard
    if (rHeapBeginPtr == 0) return false;
@@ -325,7 +325,7 @@ bool isInShortTermMemory(void* aPtr)
 //******************************************************************************
 // This is a global variable that initializes the short term memory heap to
 // a default size. It is executed at program initialization, before main.
-// Further calls to initializeShortTermMemory will override the default size.
+// Further calls to initializeSTM will override the default size.
 
 class ShortTermMemoryInitClass
 {
@@ -333,7 +333,7 @@ public:
 
    ShortTermMemoryInitClass()
    {
-      initializeShortTermMemory(16*1024);
+      initializeSTM(16*1024);
    }
 };
 

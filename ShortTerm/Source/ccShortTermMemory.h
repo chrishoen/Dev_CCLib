@@ -23,7 +23,7 @@ namespace CC
 // initializes internal variables. It is passed the number of bytes of
 // system memory to allocate for it.
 
-void initializeShortTermMemory(size_t aAllocate);
+void initializeSTM(size_t aAllocate);
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
@@ -35,7 +35,7 @@ void initializeShortTermMemory(size_t aAllocate);
 // allocates on an eight byte boundary. For 64 bit systems, it allocates
 // on a sixteen byte boundary.
 
-void* allocateFromShortTermMemory(size_t aSize);
+void* allocateFromSTM(size_t aSize);
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
@@ -44,7 +44,7 @@ void* allocateFromShortTermMemory(size_t aSize);
 // memory, if this pointer points to an object that was allocated as part of
 // short term memory.
 
-bool isInShortTermMemory(void* aPtr);
+bool isInSTM(void* aPtr);
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
@@ -69,7 +69,7 @@ template <class Message>
 Message* newSTM()
 {
    // Allocate memory for the message from the short term memory heap.
-   Message* tPointer = (Message*)allocateFromShortTermMemory(sizeof(Message));
+   Message* tPointer = (Message*)allocateFromSTM(sizeof(Message));
 
    // Call the constructor on the allocated message using placement new.
    new(tPointer)Message();
@@ -87,7 +87,7 @@ template <class Message,typename X1>
 Message* newSTM(X1 aX1)
 {
    // Allocate memory for the message from the message heap.
-   Message* tPointer = (Message*)allocateFromShortTermMemory(sizeof(Message));
+   Message* tPointer = (Message*)allocateFromSTM(sizeof(Message));
 
    // Call the constructor on the allocated message using placement new.
    new(tPointer)Message(aX1);
@@ -105,7 +105,7 @@ template <class Message,typename X1,typename X2>
 Message* newSTM(X1 aX1,X2 aX2)
 {
    // Allocate memory for the message from the message heap.
-   Message* tPointer = (Message*)allocateFromShortTermMemory(sizeof(Message));
+   Message* tPointer = (Message*)allocateFromSTM(sizeof(Message));
 
    // Call the constructor on the allocated message using placement new.
    new(tPointer)Message(aX1,aX2);
@@ -123,7 +123,7 @@ template <class Message,typename X1,typename X2,typename X3>
 Message* newSTM(X1 aX1,X2 aX2,X3 aX3)
 {
    // Allocate memory for the message from the message heap.
-   Message* tPointer = (Message*)allocateFromShortTermMemory(sizeof(Message));
+   Message* tPointer = (Message*)allocateFromSTM(sizeof(Message));
 
    // Call the constructor on the allocated message using placement new.
    new(tPointer)Message(aX1,aX2,aX3);
@@ -141,7 +141,7 @@ template <class Message,typename X1,typename X2,typename X3,typename X4>
 Message* newSTM(X1 aX1,X2 aX2,X3 aX3,X4 aX4)
 {
    // Allocate memory for the message from the message heap.
-   Message* tPointer = (Message*)allocateFromShortTermMemory(sizeof(Message));
+   Message* tPointer = (Message*)allocateFromSTM(sizeof(Message));
 
    // Call the constructor on the allocated message using placement new.
    new(tPointer)Message(aX1,aX2,aX3,aX4);
