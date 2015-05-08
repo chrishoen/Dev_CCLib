@@ -307,6 +307,18 @@ bool checkSTM(void* aMessage)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// This returns true if the given pointer is within the region of short term
+// memory, if this pointer was allocated as part of short term memory.
+
+bool isInTermMemory(void* aPtr)
+{
+   // Check the range of the header pointer.
+   return (rHeapBeginPtr <= aPtr) && (aPtr < rHeapEndPtr);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // This is a global variable that initializes the short term memory heap to
 // a default size. It is executed at program initialization, before main.
 // Further calls to initializeShortTermMemory will override the default size.
