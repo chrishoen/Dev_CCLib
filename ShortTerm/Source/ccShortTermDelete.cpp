@@ -45,31 +45,36 @@ namespace, or if it is defined as a static non-member function at global scope
 #include "ccShortTermMemory.h"
 
 //******************************************************************************
-// This is a replacement for the delete operator. If the given pointer points
-// into the short term memory heap then the object pointed to was allocated
-// from the short term memory heap. If this is the case then the delete
-// operation does nothing, because there are no deleteions for the short term
-// memory heap. If this is not the case then the standard memory free is 
-// called. Note that, in either case, the compiler calls the destructor for
-// the object pointed to.
+// This is a replacement for the delete operator. It is global in scope.
+//
+// If the given pointer is within the bounds of the short term memory heap then
+// the object pointed to was allocated from the short term memory heap. 
+//
+// If this is not the case, which is normal, then the object pointed to was
+// allocated from the system heap. Therefore the standard memory free is
+// called, which is exactly what would have happened if this file had not 
+// overridden the delete operator.
+//
+// If it is the case, then the pointer points to an object that was allocated
+// from the short term memory heap. If so, nothing is done, because the short 
+// term memory heap does not do deletions.
 
 void operator delete(void* ptr)
 {
-   // If the pointer points to an object that was allocated from the
-   // short term memory heap.
-   if (CC::isInShortTermMemory(ptr))
-   {
-      // Do nothing, short term memory doesn't do deletes.
-   }
-   // Else the pointer does not point to an object that was allocated from the
+   // If the pointer does not point to an object that was allocated from the
    // short term memory heap, which would be the normal case.
-   else
+   if (!CC::isInShortTermMemory(ptr))
    {
       // Do the default memory free. This is exactly what would have happened
       // if this file had not overridden the delete operator.
       std::free(ptr);
    }
-
+   // Else the pointer does point to an object that was allocated from the
+   // short term memory heap.
+   else
+   {
+      // Do nothing, short term memory doesn't do deletes.
+   }
 }
 
 //******************************************************************************
