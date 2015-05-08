@@ -32,8 +32,15 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   Some::Class1A* tX = CC::newShortTermMemory<Some::Class1A>();
-   tX->sayHello();
+   aCmd->setArgDefault(1, 1);
+   int tN = aCmd->argInt(1);
+
+   for (int i = 0; i < tN; i++)
+   {
+      Some::Class1A* tX = CC::newSTM<Some::Class1A>();
+      tX->sayHello();
+      printf("check %d %d\n", i, CC::checkSTM(tX));
+   }
 }
 
 //******************************************************************************

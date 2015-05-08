@@ -242,12 +242,14 @@ bool checkShortTermMemory(void* aMessage)
    // Check the range of the header pointer.
    if ((tHeaderCharPtr < rHeapBeginPtr) || (tHeaderCharPtr >= rHeapEndPtr))
    {
+      printf("checkShortTermMemory1\n");
       return false;
    }
 
    // Check the sync word of the header
    if (tHeaderPtr->mSyncWord != HeaderSyncWord)
    {
+      printf("checkShortTermMemory2\n");
       return false;
    }
 
@@ -255,6 +257,13 @@ bool checkShortTermMemory(void* aMessage)
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
    // Check the validty of the message with the previous message.
+
+   // If this is the first message, then there is no previous message.
+   if (tHeaderPtr->mSequenceNumber == 0)
+   {
+      // Pass
+      return true;
+   }
 
    // Extract pointers to the previous message header. 
    Header*  tPreviousHeaderPtr     = tHeaderPtr->mPreviousMessageHeader;
@@ -273,7 +282,7 @@ bool checkShortTermMemory(void* aMessage)
    }
 
    // Check the sequence number of the previous message.
-   if (tHeaderPtr->mSequenceNumber != tPreviousHeaderPtr->mSyncWord + 1)
+   if (tHeaderPtr->mSequenceNumber != tPreviousHeaderPtr->mSequenceNumber + 1)
    {
       return false;
    }
