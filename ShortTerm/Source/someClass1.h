@@ -27,6 +27,11 @@ public:
       printf("Class1A::Class1A\n");
    }
    
+   Class1A(int aX1)
+   {
+      printf("Class1A::Class1A %d\n",aX1);
+   }
+   
    void sayHello()
    { 
       printf("hello\n");

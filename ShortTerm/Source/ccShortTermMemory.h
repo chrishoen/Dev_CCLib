@@ -91,6 +91,23 @@ Message* newSTM()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+
+template <class Message,class X1>
+Message* newSTM(X1 aX1)
+{
+   // Allocate memory for the message from the message heap.
+   Message* tPointer = (Message*)allocateFromShortTermMemory(sizeof(Message));
+
+   // Call the constructor on the allocated message using placement new.
+   new(tPointer)Message(aX1);
+
+   // Return the pointer to the allocated message.
+   return tPointer;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 }//namespace
 #endif
 
