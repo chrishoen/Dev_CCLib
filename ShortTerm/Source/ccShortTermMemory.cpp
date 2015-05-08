@@ -123,6 +123,15 @@ void initializeShortTermMemory(size_t aAllocate)
    // with calls to malloc.
    size_t tSize = roundUpSize(aAllocate);
 
+   // If memory for the message heap has already been allocated then free it.
+   // This provides a mechanism to override previous initializations. The
+   // message heap is initialized to a default size at program initialization,
+   // See below at the end of this file.
+   if (rHeapBeginPtr != 0)
+   {
+      free(rHeapBeginPtr);
+   }
+
    // Allocate system memory for the message heap. NOTE: the malloc call
    // returns a  pointer that is aligned on an 8 byte boundary for 32 bit
    // systems or returns a pointer that is aligned a 16 byte boundary for 64
@@ -294,6 +303,25 @@ bool checkSTM(void* aMessage)
 
    return true;
 }
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This is a global variable that initializes the short term memory heap to
+// a default size. It is executed at program initialization, before main.
+// Further calls to initializeShortTermMemory will override the default size.
+
+class ShortTermMemoryInitClass
+{
+public:
+
+   ShortTermMemoryInitClass()
+   {
+      initializeShortTermMemory(16*1024);
+   }
+};
+
+ShortTermMemoryInitClass rShortTermMemoryInitInstance;
 
 }//namespace
 
