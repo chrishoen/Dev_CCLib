@@ -92,7 +92,7 @@ Message* newSTM()
 //******************************************************************************
 //******************************************************************************
 
-template <class Message,class X1>
+template <class Message,typename X1>
 Message* newSTM(X1 aX1)
 {
    // Allocate memory for the message from the message heap.
