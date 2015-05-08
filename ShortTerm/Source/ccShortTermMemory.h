@@ -47,29 +47,7 @@ void* allocateFromShortTermMemory(size_t aSize);
 // to be consistent. It tests pointer range, message sync word and sequence
 // number.
 
-bool checkShortTermMemory(void* aMessage);
-
-bool inline checkSTM(void* aMessage)
-{
-   return checkShortTermMemory(aMessage);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-template <class Message>
-Message* newShortTermMemory()
-{
-   // Allocate memory for the message from the message heap.
-   Message* tPointer = (Message*)allocateFromShortTermMemory(sizeof(Message));
-
-   // Call the constructor on the allocated message using placement new.
-   new(tPointer)Message();
-
-   // Return the pointer to the allocated message.
-   return tPointer;
-}
+bool checkSTM(void* aMessage);
 
 //******************************************************************************
 //******************************************************************************

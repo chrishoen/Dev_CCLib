@@ -92,7 +92,7 @@ static Header* rPreviousMessageHeader;
 //    MessageHeap_alignSize(8) == 8
 //    MessageHeap_alignSize(9) == 16
 
-inline size_t ShortTermMemory_roundUpSize(size_t aSize)
+static size_t roundUpSize(size_t aSize)
 {
    // If this is a 32 bit system
    if (sizeof(int*) == 4)
@@ -121,7 +121,7 @@ void initializeShortTermMemory(size_t aAllocate)
    // bit system, if you want to allocate one byte, this will allocate eight
    // bytes. This keeps everything on byte boundaries so as to be consistent
    // with calls to malloc.
-   size_t tSize = ShortTermMemory_roundUpSize(aAllocate);
+   size_t tSize = roundUpSize(aAllocate);
 
    // Allocate system memory for the message heap. NOTE: the malloc call
    // returns a  pointer that is aligned on an 8 byte boundary for 32 bit
@@ -152,7 +152,7 @@ void* allocateFromShortTermMemory(size_t aSize)
    // bit system, if you want to allocate one byte, this will allocate eight
    // bytes. This keeps everything on byte boundaries so as to be consistent
    // with calls to malloc.
-   size_t tSize = ShortTermMemory_roundUpSize(aSize);
+   size_t tSize = roundUpSize(aSize);
 
    // Increase the allocated size to include the header. This means that the
    // allocated size will include size for the requested number of bytes for
@@ -219,7 +219,7 @@ void* allocateFromShortTermMemory(size_t aSize)
 // in the heap has been overrun. It returns true if the memory seqgment was
 // found to be consistent.
 
-bool checkShortTermMemory(void* aMessage)
+bool checkSTM(void* aMessage)
 {
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
