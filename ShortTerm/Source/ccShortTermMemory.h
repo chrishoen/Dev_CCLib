@@ -20,8 +20,8 @@ namespace CC
 // Initialize the short term memory heap.
     
 // This allocates system memory for the short term memory heap and
-// initializes member variables. It is passed the number of bytes of system
-// memory to allocate for it.
+// initializes internal variables. It is passed the number of bytes of
+// system memory to allocate for it.
 
 void initializeShortTermMemory(size_t aAllocate);
 
