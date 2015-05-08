@@ -52,6 +52,9 @@ bool checkSTM(void* aMessage);
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// This function template provides a means to allocate memory for a message on
+// the short term message heap and to call a constructor for the allocated
+// message. It is used analogously to new.
 
 template <class Message>
 Message* newSTM()
@@ -69,6 +72,7 @@ Message* newSTM()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Likewise, this also provides constructor arguments.
 
 template <class Message,typename X1>
 Message* newSTM(X1 aX1)
@@ -78,6 +82,24 @@ Message* newSTM(X1 aX1)
 
    // Call the constructor on the allocated message using placement new.
    new(tPointer)Message(aX1);
+
+   // Return the pointer to the allocated message.
+   return tPointer;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Likewise, this also provides constructor arguments.
+
+template <class Message,typename X1,typename X2>
+Message* newSTM(X1 aX1,X2 aX2)
+{
+   // Allocate memory for the message from the message heap.
+   Message* tPointer = (Message*)allocateFromShortTermMemory(sizeof(Message));
+
+   // Call the constructor on the allocated message using placement new.
+   new(tPointer)Message(aX1,aX2);
 
    // Return the pointer to the allocated message.
    return tPointer;

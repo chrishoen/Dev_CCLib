@@ -32,6 +32,11 @@ public:
       printf("Class1A::Class1A %d\n",aX1);
    }
    
+   Class1A(int aX1,int aX2)
+   {
+      printf("Class1A::Class1A %d %d\n",aX1,aX2);
+   }
+   
    void sayHello()
    { 
       printf("hello\n");

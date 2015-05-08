@@ -56,7 +56,7 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
-   Some::Class1A* tX = new Some::Class1A(101);
+   Some::Class1A* tX = new Some::Class1A(101,102);
 }
 
 //******************************************************************************
