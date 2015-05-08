@@ -94,6 +94,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\ccDelete.cpp" />
     <ClCompile Include="Source\CmdLineExec.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\someClass1.cpp" />
