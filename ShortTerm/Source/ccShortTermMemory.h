@@ -17,7 +17,7 @@ namespace CC
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
-// Initialize short term memory
+// Initialize the short term memory heap.
     
 // This allocates system memory for the message heap and initializes member
 // variables. It is passed the number of bytes of system memory to allocate
@@ -28,7 +28,7 @@ void initializeShortTermMemory(size_t aAllocate);
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
-// Allocate from short term memory
+// Allocate from the short term memory heap.
 
 // This allocates a variable sized segment of memory from the message heap.
 // It is used analogously to malloc. For 32 bit systems, it allocates on
@@ -40,7 +40,7 @@ void* allocateFromShortTermMemory(size_t aSize);
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
-// Check short term memory
+// Check a message that is in the short term memory heap.
 
 // This checks a message for consistency, it should show if a message in the 
 // heap has been overrun. It returns true if the memory seqgment was found
@@ -108,6 +108,42 @@ Message* newSTM(X1 aX1,X2 aX2)
 
    // Call the constructor on the allocated message using placement new.
    new(tPointer)Message(aX1,aX2);
+
+   // Return the pointer to the allocated message.
+   return tPointer;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Likewise, this also provides constructor arguments.
+
+template <class Message,typename X1,typename X2,typename X3>
+Message* newSTM(X1 aX1,X2 aX2,X3 aX3)
+{
+   // Allocate memory for the message from the message heap.
+   Message* tPointer = (Message*)allocateFromShortTermMemory(sizeof(Message));
+
+   // Call the constructor on the allocated message using placement new.
+   new(tPointer)Message(aX1,aX2,aX3);
+
+   // Return the pointer to the allocated message.
+   return tPointer;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Likewise, this also provides constructor arguments.
+
+template <class Message,typename X1,typename X2,typename X3,typename X4>
+Message* newSTM(X1 aX1,X2 aX2,X3 aX3,X4 aX4)
+{
+   // Allocate memory for the message from the message heap.
+   Message* tPointer = (Message*)allocateFromShortTermMemory(sizeof(Message));
+
+   // Call the constructor on the allocated message using placement new.
+   new(tPointer)Message(aX1,aX2,aX3,aX4);
 
    // Return the pointer to the allocated message.
    return tPointer;
