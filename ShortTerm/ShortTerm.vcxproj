@@ -16,7 +16,7 @@
     <ClInclude Include="Source\someClass1.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\ccShortTermDelete.cpp" />
+    <ClCompile Include="Source\ccDangerous.cpp" />
     <ClCompile Include="Source\ccShortTermMemory.cpp" />
     <ClCompile Include="Source\CmdLineExec.cpp" />
     <ClCompile Include="Source\Main.cpp" />

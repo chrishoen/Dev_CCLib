@@ -29,7 +29,7 @@
     <ClCompile Include="Source\someClass1.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ccShortTermDelete.cpp">
+    <ClCompile Include="Source\ccDangerous.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,5 +1,23 @@
 /*==============================================================================
 Description:
+
+I'm naming this file as dangerous so that you will be aware of the dangers
+of including it in a build. 
+
+It globally replaces the delete operator.
+
+The replacement delete operator looks at a given pointer. If it points to an 
+object that was not allocated from the short term memory heap then it points
+to an object that was allocated from the syetem heap. In this case its memory
+is freed as normal. If it does point to an object that was allocated on the 
+short term heap then nothing happens, because the short term memory heap
+doesn't do deletions.
+
+This is provided as as a safety measure against legacy code that might call
+delete on objects that, instead of being created with new, were allocated from
+the short term memory heap. These objects don't live on the system heap and 
+cannot be deleted from it.
+
 ==============================================================================*/
 
 //******************************************************************************
