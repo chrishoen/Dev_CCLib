@@ -22,21 +22,36 @@ class Class1A
 {
 public:
 
+   //--------------------------------------------------------------------------
+   // Constructors
+
    Class1A()
    {
-      printf("Class1A::Class1A\n");
+      printf("Class1A::Class1A constructor\n");
    }
    
+  
    Class1A(int aX1)
    {
-      printf("Class1A::Class1A %d\n",aX1);
+      printf("Class1A::Class1A  constructor %d\n",aX1);
    }
    
    Class1A(int aX1,int aX2)
    {
-      printf("Class1A::Class1A %d %d\n",aX1,aX2);
+      printf("Class1A::Class1A  constructor %d %d\n",aX1,aX2);
    }
    
+   //--------------------------------------------------------------------------
+   // Destructor
+
+  ~Class1A()
+   {
+      printf("Class1A::~Class1A destructor\n");
+   }
+
+  //--------------------------------------------------------------------------
+  // Methods
+
    void sayHello()
    { 
       printf("hello\n");
