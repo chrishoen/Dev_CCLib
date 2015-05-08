@@ -50,6 +50,7 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
    Some::Class1A* tX = CC::newSTM<Some::Class1A>(101,102);
    tX->sayHello();
    printf("check %d\n", CC::checkSTM(tX));
+   delete tX;
 }
 
 //******************************************************************************

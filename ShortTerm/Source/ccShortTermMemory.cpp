@@ -312,7 +312,11 @@ bool checkSTM(void* aMessage)
 
 bool isInShortTermMemory(void* aPtr)
 {
-   // Check the range of the header pointer.
+   // Guard
+   if (rHeapBeginPtr == 0) return false;
+
+   // Return true if the pointer is within the bounds of the short term
+   // memory heap.
    return (rHeapBeginPtr <= aPtr) && (aPtr < rHeapEndPtr);
 }
 
