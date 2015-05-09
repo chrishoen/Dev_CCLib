@@ -1,6 +1,13 @@
 #ifndef _CCSHORTTERMMEMORY_H_
 #define _CCSHORTTERMMEMORY_H_
 /*==============================================================================
+STM short term memory heap used by messaging systems.
+
+Realtime systems commonly have message communications between threads and 
+between processes. Messages are nonpersistent and they have short lifetimes.
+
+This provides a package that establishes a short term memory heap and provides
+a function that can be used to allocate memory for a message from the heap.
 
 
 ==============================================================================*/
