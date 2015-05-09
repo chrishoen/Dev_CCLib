@@ -4,10 +4,35 @@
 STM short term memory heap used by messaging systems.
 
 Realtime systems commonly have message communications between threads and 
-between processes. Messages are nonpersistent and they have short lifetimes.
+between processes. 
 
-This provides a package that establishes a short term memory heap and provides
-a function that can be used to allocate memory for a message from the heap.
+This provides a package that establishes a short term memory heap for messages 
+and provides a function that can be used to allocate memory for a message from
+the heap.
+
+Messages are nonpersistent and they have short lifetimes. This package provides
+memory management specialized for messages.
+
+Memory for messages is allocated from the heap in a circular fashion, the heap
+acts like a big global circular buffer. 
+
+Messages that are allocated from the heap are not deallocated back to the heap.
+There is no deallocation. Messages that are allocated live their short
+lifetimes and are fogotten about. Memory that is allocated for a message will
+be overwritten by the allocation of a future message. 
+
+Care must be taken to ensure that a message's lifetime expires before its 
+memory is overwritten by the allocation of a new message. 
+
+This is done by allocating enough memory for the heap. The heap size should
+be the maximum data rate times the longest lifetime for any given message.
+For example, if you have a maximum sustained data rate of 1MB/sec and you have
+a worst case message that will have a lifetime of 5 seconds, then you should
+set the heap size to be 5MB (Of course, you should multiple by two, and
+allocate 10MB).
+
+Allocation of memory from the heap is fast. That's its advantage. Also,
+allocations are thread safe, they are enclosed in critical sections.
 
 
 ==============================================================================*/
