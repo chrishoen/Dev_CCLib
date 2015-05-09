@@ -42,7 +42,6 @@ you want to clone a message. You don't have to worry about destruction order,
 message are never destroyed, they are simply forgotten about and their memory
 is eventually reused.
 
-
 ==============================================================================*/
 
 //******************************************************************************

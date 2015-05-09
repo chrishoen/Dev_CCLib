@@ -63,9 +63,22 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
 //******************************************************************************
 
-
+char* getHelloWorldString(int aX)
+{
+   // This allocates memory for a string on the short term heap
+   char* tStr = (char*)CC::allocateFromSTM(100);
+   // This writes to the string
+   sprintf(tStr, "Hello World %d", aX);
+   // Return the string
+   return tStr;
+}
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
+   // This gets the string and printfs it and then forgets about it. The string
+   // is nonpersistent, but has a lifetime long enough to be useful. The 
+   // lifetime expires after the printf.
+
+   printf("MyHelloWorld %s", getHelloWorldString(101));
 }
 
 //******************************************************************************
