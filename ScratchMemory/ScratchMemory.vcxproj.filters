@@ -1,22 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source">
-      <UniqueIdentifier>{3e1e412e-b1ec-4fa1-9ebf-e86ce460dd96}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Source\CmdLineExec.h">
+    <ClCompile Include="Source\ccDangerous.cpp">
       <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\someClass1.h">
+    </ClCompile>
+    <ClCompile Include="Source\ccScratchMemory.cpp">
       <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ccScratchMemory.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
+    </ClCompile>
     <ClCompile Include="Source\CmdLineExec.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -26,11 +16,21 @@
     <ClCompile Include="Source\someClass1.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ccDangerous.cpp">
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\ccScratchMemory.h">
       <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ccScratchMemory.cpp">
+    </ClInclude>
+    <ClInclude Include="Source\CmdLineExec.h">
       <Filter>Source</Filter>
-    </ClCompile>
+    </ClInclude>
+    <ClInclude Include="Source\someClass1.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source">
+      <UniqueIdentifier>{e9ff5521-b37e-44a9-940b-7fa8591c4dea}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>
