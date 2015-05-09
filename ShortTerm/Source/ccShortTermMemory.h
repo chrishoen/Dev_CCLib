@@ -34,6 +34,14 @@ allocate 10MB).
 Allocation of memory from the heap is fast. That's its advantage. Also,
 allocations are thread safe, they are enclosed in critical sections.
 
+Messages are never deallocated from the heap and there is no protection
+against heap overruns. Message destructors are never called. This is frought
+with danger, but it greatly simplifies code that processes message. You
+don't have to worry about deletions or resource counts or what happens when
+you want to clone a message. You don't have to worry about destruction order,
+message are never destroyed, they are simply forgotten about and their memory
+is eventually reused.
+
 
 ==============================================================================*/
 
