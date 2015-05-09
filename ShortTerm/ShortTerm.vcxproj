@@ -11,13 +11,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\ccShortTermMemory.h" />
+    <ClInclude Include="Source\ccScratchMemory.h" />
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\someClass1.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\ccDangerous.cpp" />
-    <ClCompile Include="Source\ccShortTermMemory.cpp" />
+    <ClCompile Include="Source\ccScratchMemory.cpp" />
     <ClCompile Include="Source\CmdLineExec.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\someClass1.cpp" />

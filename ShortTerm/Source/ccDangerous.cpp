@@ -60,7 +60,7 @@ namespace, or if it is defined as a static non-member function at global scope
 #include <cstdio>
 #include <cstdlib>
 
-#include "ccShortTermMemory.h"
+#include "ccScratchMemory.h"
 
 //******************************************************************************
 // This is a replacement for the delete operator. It is global in scope.
@@ -81,7 +81,7 @@ void operator delete(void* ptr)
 {
    // If the pointer does not point to an object that was allocated from the
    // short term memory heap, which would be the normal case.
-   if (!CC::isInSTM(ptr))
+   if (!CC::isInScratchMemory(ptr))
    {
       // Do the default memory free. This is exactly what would have happened
       // if this file had not overridden the delete operator.

@@ -6,20 +6,17 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\ccShortTermMemory.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\CmdLineExec.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\someClass1.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="Source\ccScratchMemory.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\ccShortTermMemory.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\CmdLineExec.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -30,6 +27,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\ccDangerous.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ccScratchMemory.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

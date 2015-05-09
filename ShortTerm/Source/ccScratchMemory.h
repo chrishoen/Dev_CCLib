@@ -1,7 +1,7 @@
-#ifndef _CCSHORTTERMMEMORY_H_
-#define _CCSHORTTERMMEMORY_H_
+#ifndef _CCSCRATCHMEMORY_H_
+#define _CCSCRATCHMEMORY_H_
 /*==============================================================================
-STM short term memory heap used by messaging systems.
+ScratchMemory short term memory heap used by messaging systems.
 
 Realtime systems commonly have message communications between threads and 
 between processes. 
@@ -20,6 +20,16 @@ Messages that are allocated from the heap are not deallocated back to the heap.
 There is no deallocation. Messages that are allocated live their short
 lifetimes and are fogotten about. Memory that is allocated for a message will
 be overwritten by the allocation of a future message. 
+
+An example of a typical message lifetime would be that memory for the message
+is allocated from the short term heap, the message is processed over the
+course of one second, maybe passed from one thread to the next, the memory 
+for the message is forgotten and is overwritten after ten seconds.
+
+The idea here is that memory for a message is allocated, the message lives
+a short lifetime, during which time it is processed. After the lifetime of the
+message has expired, the memory that was allocated for it is reused, it is 
+overwritten by a new allocation.
 
 Care must be taken to ensure that a message's lifetime expires before its 
 memory is overwritten by the allocation of a new message. 
@@ -62,7 +72,7 @@ namespace CC
 // initializes internal variables. It is passed the number of bytes of
 // system memory to allocate for it.
 
-void initializeSTM(size_t aAllocate);
+void initializeScratchMemory(size_t aAllocate);
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
@@ -74,7 +84,7 @@ void initializeSTM(size_t aAllocate);
 // allocates on an eight byte boundary. For 64 bit systems, it allocates
 // on a sixteen byte boundary.
 
-void* allocateFromSTM(size_t aSize);
+void* allocateFromScratchMemory(size_t aSize);
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
@@ -83,7 +93,7 @@ void* allocateFromSTM(size_t aSize);
 // memory, if this pointer points to an object that was allocated as part of
 // short term memory.
 
-bool isInSTM(void* aPtr);
+bool isInScratchMemory(void* aPtr);
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
@@ -95,7 +105,7 @@ bool isInSTM(void* aPtr);
 // to be consistent. It tests pointer range, message sync word and sequence
 // number.
 
-bool checkSTM(void* aMessage);
+bool checkScratchMemory(void* aMessage);
 
 //******************************************************************************
 //******************************************************************************
@@ -105,10 +115,10 @@ bool checkSTM(void* aMessage);
 // message. It is used analogously to new.
 
 template <class Message>
-Message* newSTM()
+Message* newScratchMemory()
 {
    // Allocate memory for the message from the short term memory heap.
-   Message* tPointer = (Message*)allocateFromSTM(sizeof(Message));
+   Message* tPointer = (Message*)allocateFromScratchMemory(sizeof(Message));
 
    // Call the constructor on the allocated message using placement new.
    new(tPointer)Message();
@@ -123,10 +133,10 @@ Message* newSTM()
 // Likewise, this also has constructor arguments.
 
 template <class Message,typename X1>
-Message* newSTM(X1 aX1)
+Message* newScratchMemory(X1 aX1)
 {
    // Allocate memory for the message from the message heap.
-   Message* tPointer = (Message*)allocateFromSTM(sizeof(Message));
+   Message* tPointer = (Message*)allocateFromScratchMemory(sizeof(Message));
 
    // Call the constructor on the allocated message using placement new.
    new(tPointer)Message(aX1);
@@ -141,10 +151,10 @@ Message* newSTM(X1 aX1)
 // Likewise, this also has constructor arguments.
 
 template <class Message,typename X1,typename X2>
-Message* newSTM(X1 aX1,X2 aX2)
+Message* newScratchMemory(X1 aX1,X2 aX2)
 {
    // Allocate memory for the message from the message heap.
-   Message* tPointer = (Message*)allocateFromSTM(sizeof(Message));
+   Message* tPointer = (Message*)allocateFromScratchMemory(sizeof(Message));
 
    // Call the constructor on the allocated message using placement new.
    new(tPointer)Message(aX1,aX2);
@@ -159,10 +169,10 @@ Message* newSTM(X1 aX1,X2 aX2)
 // Likewise, this also has constructor arguments.
 
 template <class Message,typename X1,typename X2,typename X3>
-Message* newSTM(X1 aX1,X2 aX2,X3 aX3)
+Message* newScratchMemory(X1 aX1,X2 aX2,X3 aX3)
 {
    // Allocate memory for the message from the message heap.
-   Message* tPointer = (Message*)allocateFromSTM(sizeof(Message));
+   Message* tPointer = (Message*)allocateFromScratchMemory(sizeof(Message));
 
    // Call the constructor on the allocated message using placement new.
    new(tPointer)Message(aX1,aX2,aX3);
@@ -177,10 +187,10 @@ Message* newSTM(X1 aX1,X2 aX2,X3 aX3)
 // Likewise, this also has constructor arguments.
 
 template <class Message,typename X1,typename X2,typename X3,typename X4>
-Message* newSTM(X1 aX1,X2 aX2,X3 aX3,X4 aX4)
+Message* newScratchMemory(X1 aX1,X2 aX2,X3 aX3,X4 aX4)
 {
    // Allocate memory for the message from the message heap.
-   Message* tPointer = (Message*)allocateFromSTM(sizeof(Message));
+   Message* tPointer = (Message*)allocateFromScratchMemory(sizeof(Message));
 
    // Call the constructor on the allocated message using placement new.
    new(tPointer)Message(aX1,aX2,aX3,aX4);

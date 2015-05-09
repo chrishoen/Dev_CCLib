@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 #include "prnPrint.h"
-#include "ccShortTermMemory.h"
+#include "ccScratchMemory.h"
 #include "someClass1.h"
 
 #include "CmdLineExec.h"
@@ -37,9 +37,9 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
    for (int i = 0; i < tN; i++)
    {
-      Some::Class1A* tX = CC::newSTM<Some::Class1A>();
+      Some::Class1A* tX = CC::newScratchMemory<Some::Class1A>();
       tX->sayHello();
-      printf("check %d %d\n", i, CC::checkSTM(tX));
+      printf("check %d %d\n", i, CC::checkScratchMemory(tX));
    }
 }
 
@@ -47,9 +47,9 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   Some::Class1A* tX = CC::newSTM<Some::Class1A>(101,102);
+   Some::Class1A* tX = CC::newScratchMemory<Some::Class1A>(101,102);
    tX->sayHello();
-   printf("check %d\n", CC::checkSTM(tX));
+   printf("check %d\n", CC::checkScratchMemory(tX));
    delete tX;
 }
 
@@ -66,7 +66,7 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 char* getHelloWorldString(int aX)
 {
    // This allocates memory for a string on the short term heap
-   char* tStr = (char*)CC::allocateFromSTM(100);
+   char* tStr = (char*)CC::allocateFromScratchMemory(100);
    // This writes to the string
    sprintf(tStr, "Hello World %d", aX);
    // Return the string

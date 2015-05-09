@@ -6,7 +6,7 @@
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 
-#include "ccShortTermMemory.h"
+#include "ccScratchMemory.h"
 
 void main_initialize();
 
@@ -39,7 +39,7 @@ int main(int argc,char** argv)
 void main_initialize()
 {
    // Initialize the message heap
-   CC::initializeSTM(1024);
+   CC::initializeScratchMemory(1024);
 
    // Initialize print filters
    Prn::initializePrint();
