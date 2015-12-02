@@ -20,7 +20,7 @@ public:
 
    TemplatedClass4B()
    {
-      printf("TemplatedClass4B::TemplatedClass4B %d\n",sizeof(Element));
+      printf("TemplatedClass4B::TemplatedClass4B %d\n",(int)sizeof(Element));
       reset();
    }
 

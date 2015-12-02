@@ -21,7 +21,7 @@ namespace Some
 
 Class4A::Class4A()
 {
-   printf("Class4A::Class4A %d %d\n",sizeof(this),mCount);
+   printf("Class4A::Class4A %d %d\n",(int)sizeof(this),mCount);
 }
 
 Class4A::~Class4A()
