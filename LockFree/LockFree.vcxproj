@@ -19,8 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{e1f60d79-ded6-45eb-b67f-e6ddc706a2ea}</ProjectGuid>
-    <RootNamespace>Nodal</RootNamespace>
+    <ProjectGuid>{dc2cb427-1edb-42ea-86f4-772e54b3c584}</ProjectGuid>
+    <RootNamespace>Test</RootNamespace>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -84,7 +84,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>C:\MyLib\RisLib\include;..\CCLib\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\MyLib\RisLib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -105,7 +105,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>C:\MyLib\RisLib\include;..\CCLib\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\MyLib\RisLib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -167,24 +167,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source\ccNodeBlock.cpp" />
-    <ClCompile Include="Source\ccNodeBlockVisitor.cpp" />
     <ClCompile Include="Source\CmdLineExec.cpp" />
-    <ClCompile Include="Source\GenerateNodeBlocks.cpp" />
     <ClCompile Include="Source\Main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\ccNodeBlock.h" />
-    <ClInclude Include="Source\ccNodeBlockChannel.h" />
-    <ClInclude Include="Source\ccNodeBlockVisitor.h" />
-    <ClInclude Include="Source\ccSegmentCopier.h" />
     <ClInclude Include="Source\CmdLineExec.h" />
-    <ClInclude Include="Source\GenerateNodeBlocks.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\CCLib\CCLib.vcxproj">
-      <Project>{1909118a-707c-47e4-80bc-84130e1c951b}</Project>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
