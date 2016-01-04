@@ -1,11 +1,12 @@
-#ifndef _INTEGERSTACK_H_
-#define _INTEGERSTACK_H_
+#ifndef _TOKENSTACK_H_
+#define _TOKENSTACK_H_
 /*==============================================================================
 
-This defines a stack of void* Integers. It can be used by specialized heaps
+This defines a stack of Tokens. It can be used by specialized heaps
 and pools as an allocator.
 
 ==============================================================================*/
+#include <windows.h>
 
 //******************************************************************************
 //******************************************************************************
@@ -16,46 +17,41 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This class encapsulates a Integer stack. It maintains an array of Integers
+// This class encapsulates a Token stack. It maintains an array of Tokens
 // that are dynamically allocated at initialization. Access to the array is 
 // done is a stack manner, with pushes and pops.
 
-class IntegerStack
+class TokenStack
 {
 public:
    //---------------------------------------------------------------------------
    // Methods
 
    // Constructor
-   IntegerStack();
-  ~IntegerStack();
+   TokenStack();
+  ~TokenStack();
 
    // Allocate memory for the stack array and initialize the stack index. 
-   // aAllocate is the number of Integers to allocate, the size of the array.
-   void initialize(int aAllocate);
+   // aAllocate is the number of Tokens to allocate, the size of the array.
+   void initialize(LONG aAllocate);
 
-   // Push a Integer onto the stack. Return false if the stack is full.
-   bool  push(void* aInteger);
+   // Push a Token onto the stack. Return false if the stack is full.
+   bool push(LONG aToken);
 
-   // Pop a Integer off of the stack. Return null if the stack is empty.
-   void* pop();
+   // Pop a Token off of the stack. Return null if the stack is empty.
+   LONG pop();
 
    //---------------------------------------------------------------------------
    // Members
 
-   // Array of Integers, dynamically allocated by initialize.
-   void** mArray;
+   // Array of Tokens, dynamically allocated by initialize.
+   LONG* mArray;
 
    // Index into the array.
-   int mIndex;
+   LONG mIndex;
 
-   // Size of the array, number of Integers allocated.
+   // Size of the array, number of Tokens allocated.
    int mAllocate;
-
-   // Count of allocated elements. This is incremented by pop operations and
-   // decremented by push operations. This is a usage counter that is used
-   // to track usage of the stack.
-   int mCount;
 };
 
 //******************************************************************************

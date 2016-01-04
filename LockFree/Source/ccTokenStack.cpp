@@ -6,13 +6,14 @@ Description:
 //******************************************************************************
 //******************************************************************************
 
+#include <windows.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
 
 #include "ccCriticalSection.h"
-#include "ccIntegerStack.h"
+#include "ccTokenStack.h"
 
 namespace CC
 {
@@ -23,16 +24,15 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 
-IntegerStack::IntegerStack()
+TokenStack::TokenStack()
 {
    // All null
    mArray    = 0;
    mIndex    = 0;
    mAllocate = 0;
-   mCount    = 0;
 }
 
-IntegerStack::~IntegerStack()
+TokenStack::~TokenStack()
 {
    // Deallocate the array
    if (mArray) delete mArray;
@@ -42,10 +42,10 @@ IntegerStack::~IntegerStack()
 //******************************************************************************
 //******************************************************************************
 
-void IntegerStack::initialize(int aAllocate)
+void TokenStack::initialize(LONG aAllocate)
 {
    // Allocate memory for the array
-   mArray    = new void*[aAllocate];
+   mArray    = new LONG[aAllocate];
 
    // initialize variables
    mIndex    = 0;
@@ -57,23 +57,15 @@ void IntegerStack::initialize(int aAllocate)
 //******************************************************************************
 // Push an element onto the stack. Return false if stack is full.
 
-bool IntegerStack::push (void* aInteger)
+bool TokenStack::push (LONG aValue)
 {
    // Guard
    if (mIndex == mAllocate) return false;
 
-   // Critical section
-   enterCriticalSection();
+   LONG tOriginal = InterlockedIncrement(&mIndex);
 
    //Copy the source element to the element at the stack index
-   mArray[mIndex] = aInteger;
-   // Increment the index
-   ++mIndex;
-   // Decrement the usage counter
-   mCount--;
-
-   // Critical section
-   leaveCriticalSection();
+   mArray[tOriginal] = aValue;
 
    // Done
    return true;
@@ -84,26 +76,16 @@ bool IntegerStack::push (void* aInteger)
 //******************************************************************************
 // Pop an element off of the stack. Return null if stack is empty.
 
-void* IntegerStack::pop ()
+LONG TokenStack::pop ()
 {
    // Guard
    if (mIndex == 0) return 0;
 
-   // Critical section
-   enterCriticalSection();
+   LONG tOriginal = InterlockedDecrement(&mIndex);
+   if (tOriginal == 0) return -1;
 
-   // Pop the element above the stack index into a temp Integer
-   void* tInteger = mArray[mIndex - 1];
-   // Decrement the index
-   --mIndex;
-   // Increment the usage counter
-   mCount++;
-
-   // Critical section
-   leaveCriticalSection();
-
-   // Return the temp Integer
-   return tInteger;
+   // Pop the element above the stack index into a temp Token
+   return mArray[tOriginal - 1];
 }
 
 }//namespace
@@ -114,7 +96,7 @@ Stack <Element,Allocate>
 
 This structure implements a stack of type Element and of size Allocate. It 
 provides members that implement stack push and pop operations, which use 
-element Integers. It provides members that give direct access to the stack
+element Tokens. It provides members that give direct access to the stack
 push and pop elements so that pushes and pops can be performed with minimum
 copying. This is not thread safe.
 
