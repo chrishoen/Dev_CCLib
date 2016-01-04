@@ -167,10 +167,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\ccCriticalSection_win.cpp" />
+    <ClCompile Include="Source\ccIntegerStack.cpp" />
     <ClCompile Include="Source\CmdLineExec.cpp" />
     <ClCompile Include="Source\Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\ccCriticalSection.h" />
+    <ClInclude Include="Source\ccIntegerStack.h" />
     <ClInclude Include="Source\CmdLineExec.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
