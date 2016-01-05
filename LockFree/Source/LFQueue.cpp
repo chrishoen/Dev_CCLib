@@ -16,14 +16,8 @@ namespace LFQueue
    static const LONG cCapacityMask = 0x03;
 
    static int mBuffer[cCapacity];
-
-
-   static const LONG cState_WriteStarted  = 1;
-   static const LONG cState_WriteFinished = 2;
-   static const LONG cState_ReadStarted   = 3;
-   static const LONG cState_ReadFinished  = 4;
-
-   static BOOL mReadInProgress[cCapacity];
+   
+   static LONG mReadInProgress[cCapacity];
 
    LONG mReadAvailable  = 0;
    LONGLONG mWriteCount = 0;
@@ -74,16 +68,6 @@ namespace LFQueue
       LONGLONG tWriteCount = InterlockedExchangeAdd64(&mWriteCount,1);
       LONG     tWriteIndex = tWriteCount % cCapacity;
 
-      // Test state to see if there was a read acquire but not a 
-      // corresponding read release
-      if (mReadInProgress[tWriteIndex] == TRUE)
-      {
-         // Undo the increments and exit
-         InterlockedExchangeAdd(&mReadAvailable, -1);
-         InterlockedExchangeAdd64(&mWriteCount, -1);
-         return false;
-      }
-
       // Store result
       *aWriteIndex = tWriteIndex;
       return true;
@@ -95,8 +79,6 @@ namespace LFQueue
 
    void releaseWriteIndex(int aWriteIndex)
    {
-      // Set state
-      mReadInProgress[aWriteIndex] = TRUE;
    }
 
    //******************************************************************************
@@ -107,17 +89,6 @@ namespace LFQueue
    {
       // Guard for empty, number of available reads is at zero
       if (mReadAvailable <= 0) return false;
-
-      // Decrement the number of reads that are available
-      LONG tOriginal = InterlockedExchangeAdd(&mReadAvailable,-1);
-
-      // Guard for empty again
-      if (tOriginal <= 0)
-      {
-         // Undo decrement and exit
-         InterlockedExchangeAdd(&mReadAvailable,1);
-         return false;
-      }
 
       // Increment the read count and get the read index from it
       // This doesn't need interlocks because there is only one reader.
@@ -135,8 +106,8 @@ namespace LFQueue
 
    void releaseReadIndex(int aReadIndex)
    {
-      // Set state
-      mReadInProgress[aReadIndex] = FALSE;
+      // Decrement the number of reads that are available
+      InterlockedDecrement(&mReadAvailable);
    }
 
    //******************************************************************************
