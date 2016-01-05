@@ -13,10 +13,11 @@ namespace LFQueue
    // Regionals
 
    static const int cCapacity = 4;
+   static const int cCapacityMask = 0x03;
 
    static int mBuffer[cCapacity];
 
-   LONG mAvailable  = 0;
+   LONG mReadAvailable  = 0;
    LONGLONG mWriteCount = 0;
    LONGLONG mReadCount  = 0;
 
@@ -30,7 +31,7 @@ namespace LFQueue
 
    void initialize()
    {
-      mAvailable  = 0;
+      mReadAvailable  = 0;
       mWriteCount = 0;
       mReadCount  = 0;
 
@@ -40,7 +41,7 @@ namespace LFQueue
       }
    }
 
-   LONG available() {return mAvailable;}
+   LONG available() {return mReadAvailable;}
 
    //******************************************************************************
    //******************************************************************************
@@ -88,10 +89,19 @@ namespace LFQueue
 
    bool getWriteIndex(int* aWriteIndex)
    {
-      if (!increment(&mAvailable)) return false;
+      if (mReadAvailable >= cCapacity) return false;
+
+      LONG tOriginal = InterlockedExchangeAdd(&mReadAvailable,1);
+
+      if (tOriginal >= cCapacity)
+      {
+         InterlockedDecrement(&mReadAvailable);
+         return false;
+      }
 
       LONGLONG tWriteCount = InterlockedExchangeAdd64(&mWriteCount,1);
-      LONG     tWriteIndex = tWriteCount % cCapacity;
+//    LONG     tWriteIndex = tWriteCount % cCapacity;
+      LONG     tWriteIndex = tWriteCount & cCapacityMask;
       *aWriteIndex = tWriteIndex;
       return true;
    }
@@ -102,10 +112,19 @@ namespace LFQueue
 
    bool getReadIndex(int* aReadIndex)
    {
-      if (!decrement(&mAvailable)) return false;
+      if (mReadAvailable <= 0) return false;
+
+      LONG tOriginal = InterlockedExchangeAdd(&mReadAvailable,-1);
+
+      if (tOriginal <= 0)
+      {
+         InterlockedIncrement(&mReadAvailable);
+         return false;
+      }
 
       LONGLONG tReadCount = InterlockedExchangeAdd64(&mReadCount,1);
-      LONG     tReadIndex = tReadCount % cCapacity;
+//    LONG     tReadIndex = tReadCount % cCapacity;
+      LONG     tReadIndex = tReadCount & cCapacityMask;
       *aReadIndex = tReadIndex;
       return true;
    }
