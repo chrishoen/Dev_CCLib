@@ -4,20 +4,26 @@
 #include <stdio.h>
 
 #include "prnPrint.h"
-#include "risContainers.h"
-
-#include "risLUT.h"
+#include "LFQueue.h"
 
 #include "CmdLineExec.h"
 
 //******************************************************************************
+
 CmdLineExec::CmdLineExec()
 {
+   mCount=0;
+   LFQueue::initialize();
 }
+
 //******************************************************************************
+
 void CmdLineExec::reset()
 {
+   mCount=0;
+   LFQueue::initialize();
 }
+
 //******************************************************************************
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
@@ -25,69 +31,43 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("GO1"    ))  executeGo1(aCmd);
    if(aCmd->isCmd("GO2"    ))  executeGo2(aCmd);
    if(aCmd->isCmd("GO3"    ))  executeGo3(aCmd);
-   if(aCmd->isCmd("GO4"    ))  executeGo4(aCmd);
-   if(aCmd->isCmd("GO5"    ))  executeGo5(aCmd);
+   if(aCmd->isCmd("W"      ))  executeWrite(aCmd);
+   if(aCmd->isCmd("R"      ))  executeRead(aCmd);
 }
 
 //******************************************************************************
 
-typedef struct Flags1
-{
-   bool mFirstChild :1;
-   bool mLastChild  :1;
-} Flags1;
+//******************************************************************************
 
-typedef union Flags2
+void CmdLineExec::executeWrite(Ris::CmdLineCmd* aCmd)
 {
-   struct
-   {
-      bool mFirstChild : 1;
-      bool mLastChild : 1;
-   };
-   unsigned char mValue;
-} Flags2;
+   mCount++;
+   bool tStatus = LFQueue::write(mCount);
+   Prn::print(0, "WRITE     %d %d",tStatus,mCount);
+}
 
-void test_function1(Flags1* aFlags)
+//******************************************************************************
+
+void CmdLineExec::executeRead(Ris::CmdLineCmd* aCmd)
 {
-   aFlags->mFirstChild = true;
+   int tCount=0;
+   bool tStatus = LFQueue::read(&tCount);
+   Prn::print(0, "READ      %d %d",tStatus,tCount);
 }
-void test_function2(Flags2* aFlags)
-{
-   aFlags->mFirstChild = true;
-}
+
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   Flags1 tFlags;
-   tFlags.mFirstChild = true;
-   Prn::print(0, 0, "sizeof Flags %d", sizeof(Flags1));
-
 }
 
 //******************************************************************************
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   Flags2 tFlags;
-   tFlags.mFirstChild = true;
-   tFlags.mValue = 0;
-   Prn::print(0, 0, "sizeof Flags %d", sizeof(Flags2));
 }
 
 //******************************************************************************
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
-{
-}
-
-//******************************************************************************
-
-void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
-{
-}
-
-//******************************************************************************
-
-void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 {
 }
 

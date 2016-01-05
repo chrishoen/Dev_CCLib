@@ -12,7 +12,6 @@ Description:
 #include <math.h>
 #include <string.h>
 
-#include "ccCriticalSection.h"
 #include "ccTokenStack.h"
 
 namespace CC
