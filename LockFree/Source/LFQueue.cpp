@@ -99,27 +99,37 @@ namespace LFQueue
 
    bool acquireWriteIndex(int* aWriteIndex)
    {
+      // Guard for full, number of available reads is at capacity
       if (mReadAvailable >= cCapacity) return false;
 
+      // Increment the number of reads that are available
       LONG tOriginal = InterlockedExchangeAdd(&mReadAvailable,1);
 
+      // Guard for full again
       if (tOriginal >= cCapacity)
       {
+         // Undo the increment and exit
          InterlockedExchangeAdd(&mReadAvailable,-1);
          return false;
       }
 
+      // Increment the write count and get the write index from it
       LONGLONG tWriteCount = InterlockedExchangeAdd64(&mWriteCount,1);
       LONG     tWriteIndex = tWriteCount % cCapacity;
 
+      // Test state to see if there was a read acquire but not a 
+      // corresponding read release
       if (mState[tWriteIndex] != cState_ReadFinished)
       {
+         // Undo the increments and exit
          InterlockedExchangeAdd(&mReadAvailable, -1);
          InterlockedExchangeAdd64(&mWriteCount, -1);
          return false;
       }
+      // Set state
       mState[tWriteIndex] = cState_WriteStarted;
 
+      // Store result
       *aWriteIndex = tWriteIndex;
       return true;
    }
@@ -130,6 +140,7 @@ namespace LFQueue
 
    void releaseWriteIndex(int aWriteIndex)
    {
+      // Set state
       mState[aWriteIndex] = cState_WriteFinished;
    }
 
@@ -139,27 +150,37 @@ namespace LFQueue
 
    bool acquireReadIndex(int* aReadIndex)
    {
+      // Guard for empty, number of available reads is at zero
       if (mReadAvailable <= 0) return false;
 
+      // Decrement the number of reads that are available
       LONG tOriginal = InterlockedExchangeAdd(&mReadAvailable,-1);
 
+      // Guard for empty again
       if (tOriginal <= 0)
       {
+         // Undo decrement and exit
          InterlockedExchangeAdd(&mReadAvailable,1);
          return false;
       }
 
-      LONG tReadIndex = mReadCount % cCapacity;
-      mReadCount++;
+      // Increment the read count and get the read index from it
+      // This doesn't need interlocks because there is only one reader.
+      LONGLONG tReadCount = mReadCount++;
+      LONG     tReadIndex = tReadCount % cCapacity;
 
+      // Test state to see if there was a write acquire but not a 
+      // corresponding write release
       if (mState[tReadIndex] != cState_WriteFinished)
       {
          InterlockedExchangeAdd(&mReadAvailable,1);
          mReadCount--;
          return false;
       }
+      // Set state
       mState[tReadIndex] = cState_ReadStarted;
 
+      // Store result
       *aReadIndex = tReadIndex;
       return true;
    }
@@ -170,6 +191,7 @@ namespace LFQueue
 
    void releaseReadIndex(int aReadIndex)
    {
+      // Set state
       mState[aReadIndex] = cState_ReadFinished;
    }
 
