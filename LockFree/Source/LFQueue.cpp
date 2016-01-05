@@ -16,6 +16,7 @@ namespace LFQueue
    static const int cCapacityMask = 0x03;
 
    static int mBuffer[cCapacity];
+   static bool mValidFlag[cCapacity];
 
    LONG mReadAvailable  = 0;
    LONGLONG mWriteCount = 0;
@@ -38,6 +39,7 @@ namespace LFQueue
       for (int i=0;i<cCapacity;i++)
       {
          mBuffer[i]=0;
+         mValidFlag[i]=false;
       }
    }
 
@@ -87,7 +89,7 @@ namespace LFQueue
    //******************************************************************************
    //******************************************************************************
 
-   bool getWriteIndex(int* aWriteIndex)
+   bool acquireWriteIndex(int* aWriteIndex)
    {
       if (mReadAvailable >= cCapacity) return false;
 
@@ -95,13 +97,21 @@ namespace LFQueue
 
       if (tOriginal >= cCapacity)
       {
-         InterlockedDecrement(&mReadAvailable);
+         InterlockedExchangeAdd(&mReadAvailable,-1);
          return false;
       }
 
       LONGLONG tWriteCount = InterlockedExchangeAdd64(&mWriteCount,1);
-//    LONG     tWriteIndex = tWriteCount % cCapacity;
-      LONG     tWriteIndex = tWriteCount & cCapacityMask;
+      LONG     tWriteIndex = tWriteCount % cCapacity;
+
+      if (mValidFlag[tWriteIndex])
+      {
+         InterlockedExchangeAdd(&mReadAvailable, -1);
+         InterlockedExchangeAdd64(&mWriteCount, -1);
+         return false;
+      }
+      mValidFlag[tWriteIndex] = false;
+
       *aWriteIndex = tWriteIndex;
       return true;
    }
@@ -110,7 +120,16 @@ namespace LFQueue
    //******************************************************************************
    //******************************************************************************
 
-   bool getReadIndex(int* aReadIndex)
+   void releaseWriteIndex(int aWriteIndex)
+   {
+      mValidFlag[aWriteIndex]=true;
+   }
+
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+
+   bool acquireReadIndex(int* aReadIndex)
    {
       if (mReadAvailable <= 0) return false;
 
@@ -118,15 +137,31 @@ namespace LFQueue
 
       if (tOriginal <= 0)
       {
-         InterlockedIncrement(&mReadAvailable);
+         InterlockedExchangeAdd(&mReadAvailable,1);
          return false;
       }
 
-      LONGLONG tReadCount = InterlockedExchangeAdd64(&mReadCount,1);
-//    LONG     tReadIndex = tReadCount % cCapacity;
-      LONG     tReadIndex = tReadCount & cCapacityMask;
+      LONG tReadIndex = mReadCount % cCapacity;
+      mReadCount++;
+
+      if (!mValidFlag[tReadIndex])
+      {
+         InterlockedExchangeAdd(&mReadAvailable,1);
+         mReadCount--;
+         return false;
+      }
+
       *aReadIndex = tReadIndex;
       return true;
+   }
+
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+
+   void releaseReadIndex(int aReadIndex)
+   {
+      mValidFlag[aReadIndex]=false;
    }
 
    //******************************************************************************
@@ -136,9 +171,12 @@ namespace LFQueue
    bool write(int aValue)
    {
       int tWriteIndex=0;
-      if (!getWriteIndex(&tWriteIndex)) return false;
+      if (!acquireWriteIndex(&tWriteIndex)) return false;
 
       mBuffer[tWriteIndex] = aValue;
+
+      releaseWriteIndex(tWriteIndex);
+
       return true;
    }
 
@@ -149,9 +187,12 @@ namespace LFQueue
    bool read(int* aValue)
    {
       int tReadIndex=0;
-      if (!getReadIndex(&tReadIndex)) return false;
+      if (!acquireReadIndex(&tReadIndex)) return false;
 
       *aValue = mBuffer[tReadIndex];
+
+      releaseReadIndex(tReadIndex);
+
       return true;
    }
 
