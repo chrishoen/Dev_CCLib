@@ -17,8 +17,6 @@ namespace LFQueue
 
    static int mBuffer[cCapacity];
    
-   static LONG mReadInProgress[cCapacity];
-
    LONG mReadAvailable  = 0;
    LONGLONG mWriteCount = 0;
    LONGLONG mReadCount  = 0;
@@ -37,7 +35,6 @@ namespace LFQueue
       for (int i=0;i<cCapacity;i++)
       {
          mBuffer[i]=0;
-         mReadInProgress[i]=FALSE;
       }
    }
 
