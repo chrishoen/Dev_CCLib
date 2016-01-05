@@ -16,7 +16,15 @@ namespace LFQueue
    static const int cCapacityMask = 0x03;
 
    static int mBuffer[cCapacity];
-   static bool mValidFlag[cCapacity];
+
+
+   static const int cState_WriteStarted  = 1;
+   static const int cState_WriteFinished = 2;
+   static const int cState_ReadStarted   = 3;
+   static const int cState_ReadFinished  = 4;
+
+
+   static int mState[cCapacity];
 
    LONG mReadAvailable  = 0;
    LONGLONG mWriteCount = 0;
@@ -39,7 +47,7 @@ namespace LFQueue
       for (int i=0;i<cCapacity;i++)
       {
          mBuffer[i]=0;
-         mValidFlag[i]=false;
+         mState[i]=cState_ReadFinished;
       }
    }
 
@@ -104,13 +112,13 @@ namespace LFQueue
       LONGLONG tWriteCount = InterlockedExchangeAdd64(&mWriteCount,1);
       LONG     tWriteIndex = tWriteCount % cCapacity;
 
-      if (mValidFlag[tWriteIndex])
+      if (mState[tWriteIndex] != cState_ReadFinished)
       {
          InterlockedExchangeAdd(&mReadAvailable, -1);
          InterlockedExchangeAdd64(&mWriteCount, -1);
          return false;
       }
-      mValidFlag[tWriteIndex] = false;
+      mState[tWriteIndex] = cState_WriteStarted;
 
       *aWriteIndex = tWriteIndex;
       return true;
@@ -122,7 +130,7 @@ namespace LFQueue
 
    void releaseWriteIndex(int aWriteIndex)
    {
-      mValidFlag[aWriteIndex]=true;
+      mState[aWriteIndex] = cState_WriteFinished;
    }
 
    //******************************************************************************
@@ -144,12 +152,13 @@ namespace LFQueue
       LONG tReadIndex = mReadCount % cCapacity;
       mReadCount++;
 
-      if (!mValidFlag[tReadIndex])
+      if (mState[tReadIndex] != cState_WriteFinished)
       {
          InterlockedExchangeAdd(&mReadAvailable,1);
          mReadCount--;
          return false;
       }
+      mState[tReadIndex] = cState_ReadStarted;
 
       *aReadIndex = tReadIndex;
       return true;
@@ -161,7 +170,7 @@ namespace LFQueue
 
    void releaseReadIndex(int aReadIndex)
    {
-      mValidFlag[aReadIndex]=false;
+      mState[aReadIndex] = cState_ReadFinished;
    }
 
    //******************************************************************************
