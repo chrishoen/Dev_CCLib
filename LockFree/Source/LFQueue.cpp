@@ -17,8 +17,8 @@ namespace LFQueue
    static int mBuffer[cCapacity];
 
    LONG mAvailable  = 0;
-   LONG mWriteCount = 0;
-   LONG mReadCount  = 0;
+   LONGLONG mWriteCount = 0;
+   LONGLONG mReadCount  = 0;
 
    bool increment (LONG* aCount);
    bool decrement (LONG* aCount);
@@ -86,12 +86,39 @@ namespace LFQueue
    //******************************************************************************
    //******************************************************************************
 
-   bool write(int aValue)
+   bool getWriteIndex(int* aWriteIndex)
    {
       if (!increment(&mAvailable)) return false;
 
-      ULONG tWriteCount = InterlockedExchangeAdd(&mWriteCount,1);
-      ULONG tWriteIndex = tWriteCount % cCapacity;
+      LONGLONG tWriteCount = InterlockedExchangeAdd64(&mWriteCount,1);
+      LONG     tWriteIndex = tWriteCount % cCapacity;
+      *aWriteIndex = tWriteIndex;
+      return true;
+   }
+
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+
+   bool getReadIndex(int* aReadIndex)
+   {
+      if (!decrement(&mAvailable)) return false;
+
+      LONGLONG tReadCount = InterlockedExchangeAdd64(&mReadCount,1);
+      LONG     tReadIndex = tReadCount % cCapacity;
+      *aReadIndex = tReadIndex;
+      return true;
+   }
+
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+
+   bool write(int aValue)
+   {
+      int tWriteIndex=0;
+      if (!getWriteIndex(&tWriteIndex)) return false;
+
       mBuffer[tWriteIndex] = aValue;
       return true;
    }
@@ -102,10 +129,9 @@ namespace LFQueue
 
    bool read(int* aValue)
    {
-      if (!decrement(&mAvailable)) return false;
+      int tReadIndex=0;
+      if (!getReadIndex(&tReadIndex)) return false;
 
-      ULONG tReadCount = InterlockedExchangeAdd(&mReadCount,1);
-      ULONG tReadIndex = tReadCount % cCapacity;
       *aValue = mBuffer[tReadIndex];
       return true;
    }

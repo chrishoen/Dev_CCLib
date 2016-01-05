@@ -43,7 +43,15 @@ void CmdLineExec::executeWrite(Ris::CmdLineCmd* aCmd)
 {
    mCount++;
    bool tStatus = LFQueue::write(mCount);
-   Prn::print(0, "WRITE     %d %d",tStatus,mCount);
+
+   if (tStatus)
+   {
+      Prn::print(0, "WRITE PASS  %d", mCount);
+   }
+   else
+   {
+      Prn::print(0, "WRITE FAIL");
+   }
 }
 
 //******************************************************************************
@@ -52,7 +60,15 @@ void CmdLineExec::executeRead(Ris::CmdLineCmd* aCmd)
 {
    int tCount=0;
    bool tStatus = LFQueue::read(&tCount);
-   Prn::print(0, "READ      %d %d",tStatus,tCount);
+
+   if (tStatus)
+   {
+      Prn::print(0, "READ  PASS          %d", tCount);
+   }
+   else
+   {
+      Prn::print(0, "READ  FAIL");
+   }
 }
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
