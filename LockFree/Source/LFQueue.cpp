@@ -23,8 +23,7 @@ namespace LFQueue
    static const LONG cState_ReadStarted   = 3;
    static const LONG cState_ReadFinished  = 4;
 
-
-   static LONG mState[cCapacity];
+   static BOOL mReadInProgress[cCapacity];
 
    LONG mReadAvailable  = 0;
    LONGLONG mWriteCount = 0;
@@ -44,7 +43,7 @@ namespace LFQueue
       for (int i=0;i<cCapacity;i++)
       {
          mBuffer[i]=0;
-         mState[i]=cState_ReadFinished;
+         mReadInProgress[i]=FALSE;
       }
    }
 
@@ -77,15 +76,13 @@ namespace LFQueue
 
       // Test state to see if there was a read acquire but not a 
       // corresponding read release
-      if (InterlockedAdd(&mState[tWriteIndex],0) != cState_ReadFinished)
+      if (mReadInProgress[tWriteIndex] == TRUE)
       {
          // Undo the increments and exit
          InterlockedExchangeAdd(&mReadAvailable, -1);
          InterlockedExchangeAdd64(&mWriteCount, -1);
          return false;
       }
-      // Set state
-      InterlockedExchange(&mState[tWriteIndex],cState_WriteStarted);
 
       // Store result
       *aWriteIndex = tWriteIndex;
@@ -99,7 +96,7 @@ namespace LFQueue
    void releaseWriteIndex(int aWriteIndex)
    {
       // Set state
-      InterlockedExchange(&mState[aWriteIndex],cState_WriteFinished);
+      mReadInProgress[aWriteIndex] = TRUE;
    }
 
    //******************************************************************************
@@ -127,9 +124,6 @@ namespace LFQueue
       LONGLONG tReadCount = mReadCount++;
       LONG     tReadIndex = tReadCount % cCapacity;
 
-      // Set state
-      InterlockedExchange(&mState[tReadIndex],cState_ReadStarted);
-
       // Store result
       *aReadIndex = tReadIndex;
       return true;
@@ -142,7 +136,7 @@ namespace LFQueue
    void releaseReadIndex(int aReadIndex)
    {
       // Set state
-      InterlockedExchange(&mState[aReadIndex],cState_ReadFinished);
+      mReadInProgress[aReadIndex] = FALSE;
    }
 
    //******************************************************************************
