@@ -38,7 +38,7 @@ void Count::initialize(LONG aMaxCount)
 //******************************************************************************
 //******************************************************************************
 
-bool Count::increment (LONG* aCount)
+bool Count::increment ()
 {
    // Guard
    if (mCount >= mMaxCount) return false;
@@ -51,7 +51,6 @@ bool Count::increment (LONG* aCount)
       return false;
    }
 
-   *aCount = tOriginal + 1;
    return true;
 }
 
@@ -59,7 +58,7 @@ bool Count::increment (LONG* aCount)
 //******************************************************************************
 //******************************************************************************
 
-bool Count::decrement (LONG* aCount)
+bool Count::decrement ()
 {
    // Guard
    if (mCount < 0) return false;
@@ -72,7 +71,6 @@ bool Count::decrement (LONG* aCount)
       return false;
    }
 
-   *aCount = tOriginal - 1;
    return true;
 }
 

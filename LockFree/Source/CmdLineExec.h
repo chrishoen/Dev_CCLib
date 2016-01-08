@@ -1,7 +1,9 @@
 #ifndef _CMDLINEEXEC_H_
 #define _CMDLINEEXEC_H_
 
+#include <windows.h>
 #include "risCmdLineExec.h"
+#include "ccTokenStack.h"
 
 //******************************************************************************
 // specific command line executive
@@ -20,10 +22,12 @@ public:
   void executeGo2(Ris::CmdLineCmd* aCmd);
   void executeGo3(Ris::CmdLineCmd* aCmd);
 
-  void executeWrite (Ris::CmdLineCmd* aCmd);
-  void executeRead  (Ris::CmdLineCmd* aCmd);
+  void executePush (Ris::CmdLineCmd* aCmd);
+  void executePop  (Ris::CmdLineCmd* aCmd);
 
-  int mCount;
+  LONG mCount;
+
+  CC::TokenStack mStack;
 };
 
 //******************************************************************************

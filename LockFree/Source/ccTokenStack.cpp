@@ -28,7 +28,7 @@ TokenStack::TokenStack()
    // All null
    mArray    = 0;
    mIndex    = 0;
-   mAllocate = 0;
+   mCapacity = 0;
 }
 
 TokenStack::~TokenStack()
@@ -41,14 +41,14 @@ TokenStack::~TokenStack()
 //******************************************************************************
 //******************************************************************************
 
-void TokenStack::initialize(LONG aAllocate)
+VOID TokenStack::initialize(LONG aCapacity)
 {
    // Allocate memory for the array
-   mArray    = new LONG[aAllocate];
+   mArray    = new LONG[100];
 
    // initialize variables
    mIndex    = 0;
-   mAllocate = aAllocate;
+   mCapacity = aCapacity;
 }
 
 //******************************************************************************
@@ -56,15 +56,25 @@ void TokenStack::initialize(LONG aAllocate)
 //******************************************************************************
 // Push an element onto the stack. Return false if stack is full.
 
-bool TokenStack::push (LONG aValue)
+BOOLEAN TokenStack::push (LONG aValue)
 {
-   // Guard
-   if (mIndex == mAllocate) return false;
+   // Guard for full, stack index is at capacity
+   if (mIndex >= mCapacity) return false;
 
-   LONG tOriginal = InterlockedIncrement(&mIndex);
+   // Increment the stack index
+   LONG tOriginal = InterlockedExchangeAdd(&mIndex,1);
 
-   //Copy the source element to the element at the stack index
+   // Guard for full again
+   if (tOriginal >= mCapacity)
+   {
+      // Undo the increment and exit
+      InterlockedDecrement(&mIndex);
+      return false;
+   }
+
+   // Push the value at the original stack index
    mArray[tOriginal] = aValue;
+   return true;
 
    // Done
    return true;
@@ -75,16 +85,26 @@ bool TokenStack::push (LONG aValue)
 //******************************************************************************
 // Pop an element off of the stack. Return null if stack is empty.
 
-LONG TokenStack::pop ()
+BOOLEAN TokenStack::pop (LONG* aValue)
 {
-   // Guard
-   if (mIndex == 0) return 0;
+   // Guard for full, stack index is at zero
+   if (mIndex <= 0) return false;
 
-   LONG tOriginal = InterlockedDecrement(&mIndex);
-   if (tOriginal == 0) return -1;
+   // Decrement the stack index
+   LONG tOriginal = InterlockedExchangeAdd(&mIndex,-1);
 
-   // Pop the element above the stack index into a temp Token
-   return mArray[tOriginal - 1];
+   if (tOriginal <= 0)
+   {
+      // Undo the decrement and exit
+      InterlockedDecrement(&mIndex);
+      return false;
+   }
+
+   // Pop the element before the stack index
+   *aValue = mArray[tOriginal - 1];
+
+   // Done
+   return true;
 }
 
 }//namespace
@@ -109,7 +129,7 @@ A  Allocate
 In the following example M=4,A=4
 
            +---+             GF = 0 
-         0 |   | P           PF = 1
+         0 | I | P           PF = 1
            +---+              I = 0
          1 |   | 
            +---+   
@@ -121,7 +141,7 @@ In the following example M=4,A=4
            +---+             GF = 1 
          0 | X | G           PF = 1
            +---+              I = 1
-         1 |   | P
+         1 | I | P
            +---+   
          2 |   | 
            +---+   
@@ -133,7 +153,7 @@ In the following example M=4,A=4
            +---+              I = 2
          1 | X | G
            +---+   
-         2 |   | P
+         2 | I | P
            +---+   
          3 |   | 
            +---+   
@@ -145,7 +165,7 @@ In the following example M=4,A=4
            +---+   
          2 | X | G
            +---+   
-         3 |   | P
+         3 | I | P
            +---+   
 
            +---+             GF = 1 
@@ -157,6 +177,6 @@ In the following example M=4,A=4
            +---+   
          3 | X | G
            +---+   
-
+             I
 */
 

@@ -33,13 +33,13 @@ public:
 
    // Allocate memory for the stack array and initialize the stack index. 
    // aAllocate is the number of Tokens to allocate, the size of the array.
-   void initialize(LONG aAllocate);
+   void initialize(LONG aCapacity);
 
    // Push a Token onto the stack. Return false if the stack is full.
-   bool push(LONG aToken);
+   BOOLEAN push(LONG aToken);
 
    // Pop a Token off of the stack. Return null if the stack is empty.
-   LONG pop();
+   BOOLEAN pop(LONG* aToken);
 
    //---------------------------------------------------------------------------
    // Members
@@ -51,7 +51,7 @@ public:
    LONG mIndex;
 
    // Size of the array, number of Tokens allocated.
-   int mAllocate;
+   LONG mCapacity;
 };
 
 //******************************************************************************

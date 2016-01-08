@@ -13,10 +13,10 @@
     <ClCompile Include="Source\ccCount.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\LFQueue.cpp">
+    <ClCompile Include="Source\MainInit.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\MainInit.cpp">
+    <ClCompile Include="Source\KMessageLFQueue.c">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -35,10 +35,10 @@
     <ClInclude Include="Source\ccCount.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\LFQueue.h">
+    <ClInclude Include="Source\MainInit.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\MainInit.h">
+    <ClInclude Include="Source\KMessageLFQueue.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
