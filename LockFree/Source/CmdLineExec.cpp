@@ -81,9 +81,21 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 }
 
 //******************************************************************************
+typedef union
+{
+    struct    
+    { 
+      unsigned short mShort1;  
+      unsigned short mShort2;  
+    } Parms;
+    unsigned mData;
+} MyStruct;
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
+   MyStruct tS;
+   tS.mData = 0;
+   tS.Parms.mShort1 = 1;
 }
 
 //******************************************************************************
