@@ -1,3 +1,4 @@
+#include <windows.h>
 #include <math.h>
 #include <string.h>
 #include <stdlib.h>
@@ -40,7 +41,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executePush(Ris::CmdLineCmd* aCmd)
 {
-   BOOLEAN tStatus = mStack.push(mCount);
+   bool tStatus = mStack.push(mCount);
 
    if (tStatus)
    {
@@ -57,8 +58,8 @@ void CmdLineExec::executePush(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executePop(Ris::CmdLineCmd* aCmd)
 {
-   LONG tCount=0;
-   BOOLEAN tStatus = mStack.pop(&tCount);
+   int tCount=0;
+   bool tStatus = mStack.pop(&tCount);
 
    if (tStatus)
    {

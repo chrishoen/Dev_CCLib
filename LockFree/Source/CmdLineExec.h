@@ -1,7 +1,6 @@
 #ifndef _CMDLINEEXEC_H_
 #define _CMDLINEEXEC_H_
 
-#include <windows.h>
 #include "risCmdLineExec.h"
 #include "ccTokenStack.h"
 
@@ -25,7 +24,7 @@ public:
   void executePush (Ris::CmdLineCmd* aCmd);
   void executePop  (Ris::CmdLineCmd* aCmd);
 
-  LONG mCount;
+  int mCount;
 
   CC::TokenStack mStack;
 };

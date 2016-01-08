@@ -41,10 +41,10 @@ TokenStack::~TokenStack()
 //******************************************************************************
 //******************************************************************************
 
-VOID TokenStack::initialize(LONG aCapacity)
+VOID TokenStack::initialize(int aCapacity)
 {
    // Allocate memory for the array
-   mArray    = new LONG[100];
+   mArray    = new int[100];
 
    // initialize variables
    mIndex    = 0;
@@ -64,19 +64,19 @@ VOID TokenStack::initialize(LONG aCapacity)
 //       mIndex++
 //
 
-BOOLEAN TokenStack::push (LONG aValue)
+bool TokenStack::push (int aValue)
 {
    // Guard for full, stack index is at capacity
    if (mIndex >= mCapacity) return false;
 
    // Increment the stack index
-   LONG tOriginal = InterlockedExchangeAdd(&mIndex,1);
+   int tOriginal = (int)InterlockedExchangeAdd((PLONG)&mIndex,1);
 
    // Guard for full again
    if (tOriginal >= mCapacity)
    {
       // Undo the increment and exit
-      InterlockedDecrement(&mIndex);
+      InterlockedDecrement((PLONG)&mIndex);
       return false;
    }
 
@@ -102,18 +102,18 @@ BOOLEAN TokenStack::push (LONG aValue)
 //       aX = tX
 // 
 
-BOOLEAN TokenStack::pop (LONG* aValue)
+bool TokenStack::pop (int* aValue)
 {
    // Guard for full, stack index is at zero
    if (mIndex <= 0) return false;
 
    // Decrement the stack index
-   LONG tOriginal = InterlockedExchangeAdd(&mIndex,-1);
+   int tOriginal = (int)InterlockedExchangeAdd((PLONG)&mIndex,-1);
 
    if (tOriginal <= 0)
    {
       // Undo the decrement and exit
-      InterlockedDecrement(&mIndex);
+      InterlockedDecrement((PLONG)&mIndex);
       return false;
    }
 

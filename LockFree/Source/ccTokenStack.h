@@ -6,7 +6,6 @@ This defines a stack of Tokens. It can be used by specialized heaps
 and pools as an allocator.
 
 ==============================================================================*/
-#include <windows.h>
 
 //******************************************************************************
 //******************************************************************************
@@ -33,25 +32,25 @@ public:
 
    // Allocate memory for the stack array and initialize the stack index. 
    // aAllocate is the number of Tokens to allocate, the size of the array.
-   void initialize(LONG aCapacity);
+   void initialize(int aCapacity);
 
    // Push a Token onto the stack. Return false if the stack is full.
-   BOOLEAN push(LONG aToken);
+   bool push(int aToken);
 
    // Pop a Token off of the stack. Return null if the stack is empty.
-   BOOLEAN pop(LONG* aToken);
+   bool pop(int* aToken);
 
    //---------------------------------------------------------------------------
    // Members
 
    // Array of Tokens, dynamically allocated by initialize.
-   LONG* mArray;
+   int* mArray;
 
    // Index into the array.
-   LONG mIndex;
+   int mIndex;
 
    // Size of the array, number of Tokens allocated.
-   LONG mCapacity;
+   int mCapacity;
 };
 
 //******************************************************************************
