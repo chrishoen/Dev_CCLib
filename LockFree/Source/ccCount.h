@@ -30,8 +30,8 @@ public:
    // Initialize 
    void initialize(LONG aMaxCount);
 
-   bool increment ();
-   bool decrement ();
+   bool tryIncrement ();
+   bool tryDecrement ();
 
    //---------------------------------------------------------------------------
    // Members

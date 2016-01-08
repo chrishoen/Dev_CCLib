@@ -38,12 +38,12 @@ void Count::initialize(LONG aMaxCount)
 //******************************************************************************
 //******************************************************************************
 
-bool Count::increment ()
+bool Count::tryIncrement ()
 {
    // Guard
    if (mCount >= mMaxCount) return false;
 
-   LONG tOriginal = InterlockedIncrement(&mCount);
+   LONG tOriginal = InterlockedExchangeAdd(&mCount,1);
 
    if (tOriginal >= mMaxCount)
    {
@@ -58,12 +58,12 @@ bool Count::increment ()
 //******************************************************************************
 //******************************************************************************
 
-bool Count::decrement ()
+bool Count::tryDecrement ()
 {
    // Guard
-   if (mCount < 0) return false;
+   if (mCount <= 0) return false;
 
-   LONG tOriginal = InterlockedDecrement(&mCount);
+   LONG tOriginal = InterlockedExchangeAdd(&mCount,-1);
 
    if (tOriginal <= 0)
    {
