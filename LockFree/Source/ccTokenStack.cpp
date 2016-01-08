@@ -55,6 +55,14 @@ VOID TokenStack::initialize(LONG aCapacity)
 //******************************************************************************
 //******************************************************************************
 // Push an element onto the stack. Return false if stack is full.
+//
+// The stack index range is [0 , mIndex  ]
+// Pushes are valid for     [0 , mIndex-1]
+//
+//    push(aX)
+//       mArray[mIndex]=aX
+//       mIndex++
+//
 
 BOOLEAN TokenStack::push (LONG aValue)
 {
@@ -84,6 +92,15 @@ BOOLEAN TokenStack::push (LONG aValue)
 //******************************************************************************
 //******************************************************************************
 // Pop an element off of the stack. Return null if stack is empty.
+//
+// The stack index range is [0 , mIndex  ]
+// Pops are valid for       [1 , mIndex  ]
+//
+//    pop(aX)
+//       tX = mArray[mIndex]
+//       mIndex--
+//       aX = tX
+// 
 
 BOOLEAN TokenStack::pop (LONG* aValue)
 {
