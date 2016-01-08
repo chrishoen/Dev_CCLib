@@ -57,8 +57,9 @@ VOID TokenStack::initialize(int aCapacity)
 //******************************************************************************
 // Push an element onto the stack. Return false if stack is full.
 //
-// The stack index range is [0 , mIndex  ]
-// Pushes are valid for     [0 , mIndex-1]
+// Memory is  valid for     [0 , mCapacity-1]
+// The stack index range is [0 , mCapacity  ]
+// Pushes are valid for     [0 , mCapacity-1]
 //
 //    push(aX)
 //       mArray[mIndex]=aX
@@ -91,8 +92,9 @@ bool TokenStack::push (int aValue)
 //******************************************************************************
 // Pop an element off of the stack. Return null if stack is empty.
 //
-// The stack index range is [0 , mIndex  ]
-// Pops are valid for       [1 , mIndex  ]
+// Memory is  valid for     [0 , mCapacity-1]
+// The stack index range is [0 , mCapacity  ]
+// Pops are valid for       [1 , mCapacity  ]
 //
 //    pop(aX)
 //       tX = mArray[mIndex]
