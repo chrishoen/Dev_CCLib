@@ -10,16 +10,13 @@
     <ClCompile Include="Source\ccTokenStack.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ccCount.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\MainInit.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\KMessageLFQueue.c">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ccLFCount.cpp">
+    <ClCompile Include="Source\ccLFIndex.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -35,16 +32,13 @@
     <ClInclude Include="Source\ccTokenStack.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccCount.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\MainInit.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\KMessageLFQueue.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccLFCount.h">
+    <ClInclude Include="Source\ccLFIndex.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,12 +1,10 @@
-#ifndef _COUNT_H_
-#define _COUNT_H_
+#ifndef _LFCOUNT_H_
+#define _LFCOUNT_H_
 /*==============================================================================
 
-This a Counts. It can be used by specialized heaps
-and pools as an allocator.
+These support a lock free counter.
 
 ==============================================================================*/
-#include <windows.h>
 
 //******************************************************************************
 //******************************************************************************
@@ -19,8 +17,18 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 
-   BOOLEAN tryIncrement22 ();
-   BOOLEAN tryDecrement22 ();
+   bool tryLFDecrement(
+      int* aIndex,
+      int  aLowerLimit,
+      int* aOriginalIndex,
+      int* aNewIndex);
+
+
+   bool tryLFIncrement(
+      int* aIndex,
+      int  aUpperLimit,
+      int* aOriginalIndex,
+      int* aNewIndex);
 
 //******************************************************************************
 

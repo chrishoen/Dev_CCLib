@@ -7,7 +7,7 @@ Description:
 //******************************************************************************
 
 #include <windows.h>
-#include "ccLFCount.h"
+#include "ccLFIndex.h"
 namespace CC
 {
    //******************************************************************************
@@ -15,34 +15,27 @@ namespace CC
    //******************************************************************************
 
    bool tryLFDecrement(
-      int* aCount,
+      int* aIndex,
       int  aLimit,
-      int* aOriginalCount,
-      int* aNewCount)
+      int* aOriginalIndex,
+      int* aNewIndex)
    {
       // Guard
-      if (*aCount <= aLimit) return false;
+      if (*aIndex <= aLimit) return false;
 
       int tCompare, tExchange, tOriginal;
       while (true)
       {
-         tCompare = *aCount;
+         tCompare = *aIndex;
          if (tCompare <= aLimit) return false;
          tExchange = tCompare - 1;
-         tOriginal = InterlockedCompareExchange((PLONG)aCount, tExchange, tCompare);
+         tOriginal = InterlockedCompareExchange((PLONG)aIndex, tExchange, tCompare);
          if (tOriginal == tCompare) break;
       }
 
-      if (aOriginalCount)
-      {
-         *aOriginalCount = tOriginal;
-      }
-
-      if (aNewCount)
-      {
-         *aNewCount = tExchange;
-      }
-
+      // Store results
+      if (aOriginalIndex)  *aOriginalIndex = tOriginal;
+      if (aNewIndex)       *aNewIndex = tExchange;
       return true;
 
    }
@@ -52,35 +45,28 @@ namespace CC
    //******************************************************************************
 
    bool tryLFIncrement(
-      int* aCount,
+      int* aIndex,
       int  aLimit,
-      int* aOriginalCount,
-      int* aNewCount)
+      int* aOriginalIndex,
+      int* aNewIndex)
    {
 
       // Guard
-      if (*aCount >= aLimit) return false;
+      if (*aIndex >= aLimit) return false;
 
       int tCompare, tExchange, tOriginal;
       while (true)
       {
-         tCompare = *aCount;
+         tCompare = *aIndex;
          if (tCompare >= aLimit) return false;
          tExchange = tCompare + 1;
-         tOriginal = InterlockedCompareExchange((PLONG)aCount, tExchange, tCompare);
+         tOriginal = InterlockedCompareExchange((PLONG)aIndex, tExchange, tCompare);
          if (tOriginal == tCompare) break;
       }
 
-      if (aOriginalCount)
-      {
-         *aOriginalCount = tOriginal;
-      }
-
-      if (aNewCount)
-      {
-         *aNewCount = tExchange;
-      }
-
+      // Store results
+      if (aOriginalIndex)  *aOriginalIndex = tOriginal;
+      if (aNewIndex)       *aNewIndex = tExchange;
       return true;
    }
 

@@ -12,6 +12,7 @@ Description:
 #include <math.h>
 #include <string.h>
 
+#include "ccLFIndex.h"
 #include "ccTokenStack.h"
 
 namespace CC
@@ -66,23 +67,20 @@ VOID TokenStack::initialize(int aCapacity)
 
 bool TokenStack::push (int aValue)
 {
-   // Guard for full, stack index is at capacity
-   if (mIndex >= mCapacity) return false;
+   int tOriginalIndex = 0;
 
-   // Increment the stack index
-   int tOriginal = (int)InterlockedExchangeAdd((PLONG)&mIndex,1);
-
-   // Guard for full again
-   if (tOriginal >= mCapacity)
+   // Try to increment the stack index
+   if (!tryLFIncrement(
+      &mIndex,
+      mCapacity,
+      &tOriginalIndex,
+      0))
    {
-      // Undo the increment and exit
-      InterlockedDecrement((PLONG)&mIndex);
       return false;
    }
 
    // Push the value at the original stack index
-   mArray[tOriginal] = aValue;
-   return true;
+   mArray[tOriginalIndex] = aValue;
 
    // Done
    return true;
@@ -104,21 +102,20 @@ bool TokenStack::push (int aValue)
 
 bool TokenStack::pop (int* aValue)
 {
-   // Guard for full, stack index is at zero
-   if (mIndex <= 0) return false;
+   int tNewIndex = 0;
 
-   // Decrement the stack index
-   int tOriginal = (int)InterlockedExchangeAdd((PLONG)&mIndex,-1);
-
-   if (tOriginal <= 0)
+   // Try to increment the stack index
+   if (!tryLFDecrement(
+      &mIndex,
+      0,
+      0,
+      &tNewIndex))
    {
-      // Undo the decrement and exit
-      InterlockedDecrement((PLONG)&mIndex);
       return false;
    }
 
-   // Pop the element before the stack index
-   *aValue = mArray[tOriginal - 1];
+   // Pop the value at the decremented stack index
+   *aValue = mArray[tNewIndex] ;
 
    // Done
    return true;
