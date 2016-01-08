@@ -168,6 +168,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\ccCount.cpp" />
+    <ClCompile Include="Source\ccLFCount.cpp" />
     <ClCompile Include="Source\ccTokenStack.cpp" />
     <ClCompile Include="Source\CmdLineExec.cpp" />
     <ClCompile Include="Source\KMessageLFQueue.c" />
@@ -176,6 +177,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\ccCount.h" />
+    <ClInclude Include="Source\ccLFCount.h" />
     <ClInclude Include="Source\ccTokenStack.h" />
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\KMessageLFQueue.h" />

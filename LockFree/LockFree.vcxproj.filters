@@ -19,6 +19,9 @@
     <ClCompile Include="Source\KMessageLFQueue.c">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\ccLFCount.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
@@ -39,6 +42,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\KMessageLFQueue.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ccLFCount.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
