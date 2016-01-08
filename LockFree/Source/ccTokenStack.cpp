@@ -134,66 +134,66 @@ This structure implements a stack of type Element and of size Allocate. It
 provides members that implement stack push and pop operations, which use 
 element Tokens. It provides members that give direct access to the stack
 push and pop elements so that pushes and pops can be performed with minimum
-copying. This is not thread safe.
+copying.
 
 I  Index
 S  Size
 PF PushFlag
 GF PopFlag
 M  MaxNumOfElements
-A  Allocate
 
-In the following example M=4,A=4
+In the following example M=4
 
            +---+             GF = 0 
-         0 | I | P           PF = 1
+         3 |   |             PF = 1
            +---+              I = 0
+         2 |   | 
+           +---+   
          1 |   | 
            +---+   
-         2 |   | 
-           +---+   
-         3 |   | 
+         0 | I | P
            +---+   
 
            +---+             GF = 1 
-         0 | X | G           PF = 1
+         3 |   |             PF = 1
            +---+              I = 1
+         2 |   |  
+           +---+   
          1 | I | P
            +---+   
-         2 |   | 
-           +---+   
-         3 |   | 
+         0 | X | G
            +---+   
 
            +---+             GF = 1 
-         0 | X |             PF = 1
+         3 |   |             PF = 1
            +---+              I = 2
-         1 | X | G
-           +---+   
          2 | I | P
            +---+   
-         3 |   | 
+         1 | X | G
+           +---+   
+         0 | X | 
            +---+   
 
            +---+             GF = 1 
-         0 | X |             PF = 1
+         3 | I | P           PF = 1
            +---+              I = 3
-         1 | X | 
-           +---+   
          2 | X | G
            +---+   
-         3 | I | P
+         1 | X |  
+           +---+   
+         0 | X |  
            +---+   
 
+             I
            +---+             GF = 1 
-         0 | X |             PF = 0
+         3 | X | G           PF = 0
            +---+              I = 4
-         1 | X | 
-           +---+   
          2 | X | 
            +---+   
-         3 | X | G
+         1 | X | 
            +---+   
-             I
+         0 | X |  
+           +---+   
 */
 
+ 
