@@ -12,26 +12,50 @@ namespace LFQueue
    //***************************************************************************
    // Regionals
 
+   // Queue capacity
    static const LONG cCapacity = 4;
-   static const LONG cCapacityMask = 0x03;
-   static int mArray[1000];
    
-   int mWriteIndex = 0;
-   int mReadAvailable = 0;
-
+   //---------------------------------------------------------------------------
+   // These two variables are each 16 bits and they are packed into a 32 bit 
+   // structure because the atomic compare exchange operation used works on
+   // 32 bit integers. This limits the queue size to 64K elements. The only 
+   // code that can safely change these variables is contained here. Any other
+   // code should be read only.
+   //
+   // WriteIndex is used to circularly index into queue memory for write 
+   // operations. ReadAvailable is used to indicate the number of reads that 
+   // are available. They have the following ranges:
+   //
+   //      0 <= WriteIndex    <= Capacity-1
+   //      0 <= ReadAvailable <= Capacity
+   //
+   //      IF ReadAvailable == 0        THEN the queue is empty
+   //      IF ReadAvailable == Capacity THEN the queue is full
+   //
+   //  The ReadIndex is derived from WriteIndex and ReadAvailable.
+   //
+   //      ReadIndex = WriteIndex - ReadAvailable;
+   //      IF ReadIndex < 0 THEN ReadIndex = ReadIndex + Capacity;
+   //---------------------------------------------------------------------------
 
    typedef union
    {
        struct    
        { 
-         signed short mWriteIndex;  
-         signed short mReadAvailable;  
+         unsigned short mWriteIndex;  
+         unsigned short mReadAvailable;  
        } Parms;
        signed mPacked;
    } LFQueueParms;
 
    LFQueueParms mParms;
 
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Regionals
+
+   static int mArray[1000];
 
    //***************************************************************************
    //***************************************************************************
@@ -51,6 +75,11 @@ namespace LFQueue
    //******************************************************************************
    //******************************************************************************
    //******************************************************************************
+   // This is called to start a write operation. If the queue is not full then
+   // it succeeds. It updates the variable pointed by the input pointer with the 
+   // WriteIndex that is to be used to access queue memory for the write, it
+   // increments ReadAvailable and returns true. If it fails because the queue is 
+   // full then it returns false.
 
    bool tryStartWrite(int* aWriteIndex)
    {
@@ -92,6 +121,7 @@ namespace LFQueue
    //******************************************************************************
    //******************************************************************************
    //******************************************************************************
+   // This is a place holder.
 
    void finishWrite()
    {
@@ -100,16 +130,25 @@ namespace LFQueue
    //******************************************************************************
    //******************************************************************************
    //******************************************************************************
+   // This is called to start a read operation. If the queue is not empty then it 
+   // succeeds, it  updates the variable pointed by the input pointer with the 
+   // ReadIndex that is to be used to access queue memory for the read and returns 
+   // true. If it fails because the queue is empty then it returns false.
 
    bool tryStartRead(int* aReadIndex)
    {
+      // Store the current parms in a temp. This doesn't need to be atomic
+      // because it is assumed to run on a 32 bit architecture.
       LFQueueParms tParms;
-      tParms.mPacked = InterlockedAdd((PLONG)(&mParms.mPacked),0);
+      tParms.mPacked = mParms.mPacked;
 
+      // Exit if the queue is empty.
       if (tParms.Parms.mReadAvailable == 0) return false;
 
+      // Update the read index
       int tReadIndex = tParms.Parms.mWriteIndex - tParms.Parms.mReadAvailable;
       if (tReadIndex < 0) tReadIndex = tReadIndex + cCapacity;
+
       // Store result
       *aReadIndex = tReadIndex;
       return true;
@@ -118,6 +157,7 @@ namespace LFQueue
    //******************************************************************************
    //******************************************************************************
    //******************************************************************************
+   // This is called to finish a read operation. It decrements ReadAvailable.
 
    void finishRead()
    {
