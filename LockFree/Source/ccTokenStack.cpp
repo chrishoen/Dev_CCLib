@@ -136,9 +136,8 @@ push and pop elements so that pushes and pops can be performed with minimum
 copying.
 
 I  Index
-S  Size
-PF PushFlag
-GF PopFlag
+PF PushFlag, if true then a push is allowed
+GF PopFlag,  if true then a pop  is allowed
 M  MaxNumOfElements
 
 In the following example M=4
