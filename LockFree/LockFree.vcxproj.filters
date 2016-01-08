@@ -16,7 +16,7 @@
     <ClCompile Include="Source\KMessageLFQueue.c">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ccLFIndex.cpp">
+    <ClCompile Include="Source\ccLFBounded.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -38,7 +38,7 @@
     <ClInclude Include="Source\KMessageLFQueue.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccLFIndex.h">
+    <ClInclude Include="Source\ccLFBounded.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

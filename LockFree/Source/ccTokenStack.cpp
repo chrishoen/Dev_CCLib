@@ -12,7 +12,7 @@ Description:
 #include <math.h>
 #include <string.h>
 
-#include "ccLFIndex.h"
+#include "ccLFBounded.h"
 #include "ccTokenStack.h"
 
 namespace CC
@@ -71,8 +71,10 @@ bool TokenStack::push (int aValue)
    int tOriginalIndex = 0;
 
    // Try to increment the stack index
-   if (!tryLFIncrement(
+   if (!tryLFBoundedAdd(
       &mIndex,
+      1,
+      0,
       mCapacity,
       &tOriginalIndex,
       0))
@@ -106,10 +108,12 @@ bool TokenStack::pop (int* aValue)
 {
    int tNewIndex = 0;
 
-   // Try to increment the stack index
-   if (!tryLFDecrement(
+   // Try to decrement the stack index
+   if (!tryLFBoundedAdd(
       &mIndex,
+      -1,
       0,
+      mCapacity,
       0,
       &tNewIndex))
    {

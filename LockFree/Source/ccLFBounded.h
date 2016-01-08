@@ -1,5 +1,5 @@
-#ifndef _LFCOUNT_H_
-#define _LFCOUNT_H_
+#ifndef _LFBOUNDED_H_
+#define _LFBOUNDED_H_
 /*==============================================================================
 
 These support a lock free counter.
@@ -17,18 +17,13 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 
-   bool tryLFDecrement(
-      int* aIndex,
-      int  aLowerLimit,
-      int* aOriginalIndex,
-      int* aNewIndex);
-
-
-   bool tryLFIncrement(
-      int* aIndex,
-      int  aUpperLimit,
-      int* aOriginalIndex,
-      int* aNewIndex);
+   bool tryLFBoundedAdd(
+      int* aValue,
+      int  aAdd,
+      int  aLowerBound,
+      int  aUpperBound,
+      int* aOriginalValue,
+      int* aNewValue);
 
 //******************************************************************************
 
