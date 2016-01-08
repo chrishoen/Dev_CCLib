@@ -103,6 +103,7 @@ void CmdLineExec::executeWrite(Ris::CmdLineCmd* aCmd)
    if (tStatus)
    {
       LFQueue::write(tWriteIndex,mCount);
+      LFQueue::finishWrite();
       Prn::print(0, "WRITE PASS  %2d $$ %d", tWriteIndex,mCount);
    }
    else
@@ -123,6 +124,7 @@ void CmdLineExec::executeRead(Ris::CmdLineCmd* aCmd)
    if (tStatus)
    {
       LFQueue::read(tReadIndex,&tCount);
+      LFQueue::finishRead();
       Prn::print(0, "READ  PASS  %2d $$      %d", tReadIndex,tCount);
    }
    else
