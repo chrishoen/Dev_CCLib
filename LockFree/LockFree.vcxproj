@@ -171,6 +171,7 @@
     <ClCompile Include="Source\ccTokenStack.cpp" />
     <ClCompile Include="Source\CmdLineExec.cpp" />
     <ClCompile Include="Source\KMessageLFQueue.c" />
+    <ClCompile Include="Source\LFQueue.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
   </ItemGroup>
@@ -179,6 +180,7 @@
     <ClInclude Include="Source\ccTokenStack.h" />
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\KMessageLFQueue.h" />
+    <ClInclude Include="Source\LFQueue.h" />
     <ClInclude Include="Source\MainInit.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

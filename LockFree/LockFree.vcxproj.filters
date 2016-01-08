@@ -19,6 +19,9 @@
     <ClCompile Include="Source\ccLFBounded.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\LFQueue.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
@@ -39,6 +42,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccLFBounded.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LFQueue.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
