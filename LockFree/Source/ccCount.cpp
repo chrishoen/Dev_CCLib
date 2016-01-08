@@ -8,70 +8,86 @@ Description:
 
 #include <windows.h>
 #include "ccCount.h"
-
 namespace CC
 {
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+   // Regionals
 
-Count::Count()
-{
-   // All null
-   mCount    = 0;
-}
+   int mCount = 0;
+   int mMaxCount = 4;
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
 
-void Count::initialize(LONG aMaxCount)
-{
-   mMaxCount = aMaxCount;
-   mCount    = 0;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-bool Count::tryIncrement ()
-{
-   // Guard
-   if (mCount >= mMaxCount) return false;
-
-   LONG tOriginal = InterlockedExchangeAdd(&mCount,1);
-
-   if (tOriginal >= mMaxCount)
+   bool tryDecrement1()
    {
-      InterlockedDecrement(&mCount);
-      return false;
+      // Guard
+      if (mCount == 0) return false;
+
+      int tCompare, tExchange, tOriginal;
+      while (true)
+      {
+         tCompare = mCount;
+         if (tCompare == 0) return false;
+         tExchange = tCompare - 1;
+         tOriginal = InterlockedCompareExchange((PLONG)&mCount, tExchange, tCompare);
+         if (tOriginal == tCompare) return true;
+      }
    }
 
-   return true;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-bool Count::tryDecrement ()
-{
-   // Guard
-   if (mCount <= 0) return false;
-
-   LONG tOriginal = InterlockedExchangeAdd(&mCount,-1);
-
-   if (tOriginal <= 0)
+   bool tryDecrement2(int* aCount,int aLimit)
    {
-      InterlockedIncrement(&mCount);
-      return false;
+      // Guard
+      if (*aCount == aLimit) return false;
+
+      int tCompare, tExchange, tOriginal;
+      while (true)
+      {
+         tCompare = *aCount;
+         if (tCompare == aLimit) return false;
+         tExchange = tCompare - 1;
+         tOriginal = InterlockedCompareExchange((PLONG)aCount, tExchange, tCompare);
+         if (tOriginal == tCompare) return true;
+      }
    }
 
-   return true;
-}
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+
+   bool tryIncrement1()
+   {
+      // Guard
+      if (mCount == mMaxCount) return false;
+
+      int tCompare, tExchange, tOriginal;
+      while (true)
+      {
+         tCompare = mCount;
+         if (tCompare == mMaxCount) return false;
+         tExchange = tCompare - 1;
+         tOriginal = InterlockedCompareExchange((PLONG)&mCount, tExchange, tCompare);
+         if (tOriginal == tCompare) return true;
+      }
+   }
+
+   bool tryIncrement2(int* aCount,int aLimit)
+   {
+      // Guard
+      if (*aCount == aLimit) return false;
+
+      int tCompare, tExchange, tOriginal;
+      while (true)
+      {
+         tCompare = *aCount;
+         if (tCompare == aLimit) return false;
+         tExchange = tCompare + 1;
+         tOriginal = InterlockedCompareExchange((PLONG)aCount, tExchange, tCompare);
+         if (tOriginal == tCompare) return true;
+      }
+   }
 
 }//namespace
