@@ -6,7 +6,6 @@
 
 #include "prnPrint.h"
 #include "someClass1.h"
-#include "LFPointerQueue.h"
 
 #include "CmdLineExec.h"
 using namespace Some;
@@ -16,7 +15,7 @@ using namespace Some;
 CmdLineExec::CmdLineExec()
 {
    mCount=0;
-   LFPointerQueue::initialize();
+   mQueue.initialize(4);
 }
 
 //******************************************************************************
@@ -24,7 +23,7 @@ CmdLineExec::CmdLineExec()
 void CmdLineExec::reset()
 {
    mCount=0;
-   LFPointerQueue::initialize();
+   mQueue.initialize(4);
 }
 
 //******************************************************************************
@@ -77,7 +76,7 @@ void CmdLineExec::executeWrite(Ris::CmdLineCmd* aCmd)
    Class1A* tObject = new Class1A;
    tObject->mCode1 = mCount;
 
-   bool tStatus = LFPointerQueue::writePtr(tObject);
+   bool tStatus = mQueue.writePtr(tObject);
    if (tStatus)
    {
       Prn::print(0, "WRITE PASS      $$ %d", mCount);
@@ -92,7 +91,7 @@ void CmdLineExec::executeWrite(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeRead(Ris::CmdLineCmd* aCmd)
 {
-   Class1A* tObject = (Class1A*)LFPointerQueue::readPtr();
+   Class1A* tObject = (Class1A*)mQueue.readPtr();
 
    if (tObject)
    {

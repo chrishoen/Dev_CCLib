@@ -1,75 +1,51 @@
-#include <stdio.h>
-#include <string.h>
+/*==============================================================================
+Description:
+==============================================================================*/
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 #include <windows.h>
-#include "prnPrint.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <math.h>
+#include <string.h>
 
-#include "LFQueue.h"
+#include "ccLFPointerQueue.h"
 
-namespace LFQueue
+namespace CC
 {
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Regionals
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
 
-   // Queue capacity
-   static const LONG cCapacity = 4;
-   
-   //---------------------------------------------------------------------------
-   // These two variables are each 16 bits and they are packed into a 32 bit 
-   // structure because the atomic compare exchange operation used works on
-   // 32 bit integers. This limits the queue size to 64K elements. The only 
-   // code that can safely change these variables is contained here. Any other
-   // code should be read only.
-   //
-   // WriteIndex is used to circularly index into queue memory for write 
-   // operations. ReadAvailable is used to indicate the number of reads that 
-   // are available. They have the following ranges:
-   //
-   //      0 <= WriteIndex    <= Capacity-1
-   //      0 <= ReadAvailable <= Capacity
-   //
-   //      IF ReadAvailable == 0        THEN the queue is empty
-   //      IF ReadAvailable == Capacity THEN the queue is full
-   //
-   //  The ReadIndex is derived from WriteIndex and ReadAvailable.
-   //
-   //      ReadIndex = WriteIndex - ReadAvailable;
-   //      IF ReadIndex < 0 THEN ReadIndex = ReadIndex + Capacity;
-   //---------------------------------------------------------------------------
-
-   typedef union
+   LFPointerQueue::LFPointerQueue()
    {
-       struct    
-       { 
-         unsigned short mWriteIndex;  
-         unsigned short mReadAvailable;  
-       } Parms;
-       signed mPacked;
-   } LFQueueParms;
+      // All null
+      mArray = 0;
+      mAllocate = 0;
+      mParms.mPacked = 0;
+   }
 
-   LFQueueParms mParms;
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Regionals
-
-   static int mArray[1000];
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Initialize
-
-   void initialize()
+   LFPointerQueue::~LFPointerQueue()
    {
-      mParms.mPacked=0;
+      // Deallocate the array
+      if (mArray) delete mArray;
+   }
 
-      for (int i=0;i<1000;i++)
-      {
-         mArray[i]=0;
-      }
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+
+   void LFPointerQueue::initialize(int aAllocate)
+   {
+      // Allocate memory for the array
+      mArray = new void*[aAllocate];
+      mAllocate = aAllocate;
+
+      // Initialize variables
+      mParms.mPacked = 0;
    }
 
    //******************************************************************************
@@ -81,7 +57,7 @@ namespace LFQueue
    // increments ReadAvailable and returns true. If it fails because the queue is 
    // full then it returns false.
 
-   bool tryStartWrite(int* aWriteIndex)
+   bool LFPointerQueue::tryStartWrite(int* aWriteIndex)
    {
       // Locals
       LFQueueParms tCompare, tExchange, tOriginal;
@@ -123,7 +99,7 @@ namespace LFQueue
    //******************************************************************************
    // This is a place holder.
 
-   void finishWrite()
+   void LFPointerQueue::finishWrite()
    {
    }
 
@@ -135,7 +111,7 @@ namespace LFQueue
    // ReadIndex that is to be used to access queue memory for the read and returns 
    // true. If it fails because the queue is empty then it returns false.
 
-   bool tryStartRead(int* aReadIndex)
+   bool LFPointerQueue::tryStartRead(int* aReadIndex)
    {
       // Store the current parms in a temp. This doesn't need to be atomic
       // because it is assumed to run on a 32 bit architecture.
@@ -159,7 +135,7 @@ namespace LFQueue
    //******************************************************************************
    // This is called to finish a read operation. It decrements ReadAvailable.
 
-   void finishRead()
+   void LFPointerQueue::finishRead()
    {
       // Locals
       LFQueueParms tCompare, tExchange, tOriginal;
@@ -191,15 +167,30 @@ namespace LFQueue
    //******************************************************************************
    //******************************************************************************
 
-   void write(int aWriteIndex,int  aValue)
+   bool LFPointerQueue::writePtr (void* aValue)
    {
-      mArray[aWriteIndex] = aValue;
+      int tWriteIndex;
+      if (!tryStartWrite(&tWriteIndex))
+      {
+         delete aValue;
+         return false;
+      }
+
+      mArray[tWriteIndex] = aValue;
+      return true;
    }
 
-   void read  (int aReadIndex,int* aValue)
+   void* LFPointerQueue::readPtr ()
    {
-      *aValue = mArray[aReadIndex];
+      void* tValue;
+      int tReadIndex;
+      if (!tryStartRead(&tReadIndex)) return NULL;
+
+      tValue = mArray[tReadIndex];
+      finishRead();
+      return tValue;
    }
 
 
-}
+
+}//namespace

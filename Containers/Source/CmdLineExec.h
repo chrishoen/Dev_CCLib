@@ -1,6 +1,7 @@
 #ifndef _CMDLINEEXEC_H_
 #define _CMDLINEEXEC_H_
 
+#include "ccLFPointerQueue.h"
 #include "risCmdLineExec.h"
 
 //******************************************************************************
@@ -24,6 +25,7 @@ public:
   void executeRead  (Ris::CmdLineCmd* aCmd);
 
   int mCount;
+  CC::LFPointerQueue mQueue;
 };
 
 //******************************************************************************
