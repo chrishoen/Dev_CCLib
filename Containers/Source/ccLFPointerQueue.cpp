@@ -170,11 +170,7 @@ namespace CC
    bool LFPointerQueue::writePtr (void* aValue)
    {
       int tWriteIndex;
-      if (!tryStartWrite(&tWriteIndex))
-      {
-         delete aValue;
-         return false;
-      }
+      if (!tryStartWrite(&tWriteIndex)) return false;
 
       mArray[tWriteIndex] = aValue;
       return true;

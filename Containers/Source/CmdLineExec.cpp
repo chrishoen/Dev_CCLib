@@ -84,6 +84,7 @@ void CmdLineExec::executeWrite(Ris::CmdLineCmd* aCmd)
    else
    {
       Prn::print(0, "WRITE FAIL");
+      delete tObject;
    }
 }
 
