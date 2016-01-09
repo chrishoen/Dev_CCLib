@@ -4,6 +4,19 @@
 
 This defines a queue of void* pointers. 
 
+This implements a pointer queue. The queue is thread safe. It uses an atomic
+interlocked compare and exchange to guard against concurrency contentions. 
+It is based on a multiple writer, single reader model. A writer starts a write, 
+obtaining a write index to the next queue element that is available to be can 
+written to. If the queue is full then the write start fails. The writer then
+writes to the corresponding queue element. After the write is complete the 
+writer somehow signals the reader to read from the queue. The reader wakes up 
+and starts a read, obtaining a read index to the next queue element that is 
+available to be read from. If the queue is empty, then the read start fails 
+(this should not happen because writer should not signal the reader). The 
+reader then reads from the corresponding queue element and then calls finish 
+read to update the queue state.
+
 ==============================================================================*/
 
 //******************************************************************************
@@ -15,9 +28,6 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This class encapsulates a pointer stack. It maintains an array of pointers
-// that are dynamically allocated at initialization. Access to the array is 
-// done is a stack manner, with pushes and pops.
 
 class LFPointerQueue
 {
@@ -29,8 +39,9 @@ public:
    LFPointerQueue();
   ~LFPointerQueue();
 
-   // Allocate memory for the stack array and initialize the stack index. 
-   // aAllocate is the number of pointers to allocate, the size of the array.
+   // Allocate memory for the queue array and initialize the queue logic. 
+   // variables. aAllocate is the number of pointers to allocate, the size of
+   // the array.
    void initialize(int aAllocate);
 
    // Write a pointer to the queue. Return false if the queue is full.
@@ -88,13 +99,27 @@ public:
    } LFQueueParms;
 
    LFQueueParms mParms;
+
    //---------------------------------------------------------------------------
    // Queue Logic Methods
 
+   // This is called to start a write operation. If the queue is not full then
+   // it succeeds. It updates the variable pointed by the input pointer with the 
+   // WriteIndex that is to be used to access queue memory for the write, it
+   // increments ReadAvailable and returns true. If it fails because the queue is 
+   // full then it returns false.
    bool tryStartWrite (int* aWriteIndex);
+
+   // This is a place holder.
    void finishWrite();
 
+   // This is called to start a read operation. If the queue is not empty then it 
+   // succeeds, it  updates the variable pointed by the input pointer with the 
+   // ReadIndex that is to be used to access queue memory for the read and returns 
+   // true. If it fails because the queue is empty then it returns false.
    bool tryStartRead  (int* aReadIndex);
+
+   // This is called to finish a read operation. It decrements ReadAvailable.
    void finishRead();
 
 };

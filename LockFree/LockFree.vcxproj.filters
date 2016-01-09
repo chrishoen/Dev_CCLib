@@ -13,13 +13,13 @@
     <ClCompile Include="Source\MainInit.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\KMessageLFQueue.c">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\ccLFBounded.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\LFQueue.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LFPointerQueue.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -38,13 +38,13 @@
     <ClInclude Include="Source\MainInit.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\KMessageLFQueue.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\ccLFBounded.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\LFQueue.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LFPointerQueue.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

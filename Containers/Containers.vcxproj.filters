@@ -10,9 +10,6 @@
     <ClCompile Include="Source\MainInit.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\LFPointerQueue.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\someClass1.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -30,9 +27,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\MainInit.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\LFPointerQueue.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\someClass1.h">

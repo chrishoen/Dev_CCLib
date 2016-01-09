@@ -169,7 +169,6 @@
   <ItemGroup>
     <ClCompile Include="Source\ccLFPointerQueue.cpp" />
     <ClCompile Include="Source\CmdLineExec.cpp" />
-    <ClCompile Include="Source\LFPointerQueue.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
     <ClCompile Include="Source\someClass1.cpp" />
@@ -177,7 +176,6 @@
   <ItemGroup>
     <ClInclude Include="Source\ccLFPointerQueue.h" />
     <ClInclude Include="Source\CmdLineExec.h" />
-    <ClInclude Include="Source\LFPointerQueue.h" />
     <ClInclude Include="Source\MainInit.h" />
     <ClInclude Include="Source\someClass1.h" />
   </ItemGroup>
