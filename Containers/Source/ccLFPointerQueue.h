@@ -62,9 +62,6 @@ public:
    //---------------------------------------------------------------------------
    // Queue Logic Members
 
-   // Queue capacity
-   static const int cCapacity = 4;
-   
    //---------------------------------------------------------------------------
    // These two variables are each 16 bits and they are packed into a 32 bit 
    // structure because the atomic compare exchange operation used works on
@@ -76,16 +73,16 @@ public:
    // operations. ReadAvailable is used to indicate the number of reads that 
    // are available. They have the following ranges:
    //
-   //      0 <= WriteIndex    <= Capacity-1
-   //      0 <= ReadAvailable <= Capacity
+   //      0 <= WriteIndex    <= Allocate-1
+   //      0 <= ReadAvailable <= Allocate
    //
    //      IF ReadAvailable == 0        THEN the queue is empty
-   //      IF ReadAvailable == Capacity THEN the queue is full
+   //      IF ReadAvailable == Allocate THEN the queue is full
    //
    //  The ReadIndex is derived from WriteIndex and ReadAvailable.
    //
    //      ReadIndex = WriteIndex - ReadAvailable;
-   //      IF ReadIndex < 0 THEN ReadIndex = ReadIndex + Capacity;
+   //      IF ReadIndex < 0 THEN ReadIndex = ReadIndex + Allocate;
    //---------------------------------------------------------------------------
 
    typedef union

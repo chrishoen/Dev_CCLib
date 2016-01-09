@@ -68,13 +68,13 @@ namespace CC
          // Get the current value, it will be used in the compare exchange.
          tCompare = mParms;
          // Exit if the queue is full
-         if (tCompare.Parms.mReadAvailable==cCapacity) return false;
+         if (tCompare.Parms.mReadAvailable==mAllocate) return false;
 
          // Update queue parameters for the exchange variable
          tExchange = tCompare;
          tExchange.Parms.mReadAvailable++;
          tWriteIndex = tExchange.Parms.mWriteIndex;
-         if (++tExchange.Parms.mWriteIndex == cCapacity) tExchange.Parms.mWriteIndex=0;
+         if (++tExchange.Parms.mWriteIndex == mAllocate) tExchange.Parms.mWriteIndex=0;
 
          // This call atomically reads the value and compares it to what was
          // previously read at the first line of this loop. If they are the
@@ -123,7 +123,7 @@ namespace CC
 
       // Update the read index
       int tReadIndex = tParms.Parms.mWriteIndex - tParms.Parms.mReadAvailable;
-      if (tReadIndex < 0) tReadIndex = tReadIndex + cCapacity;
+      if (tReadIndex < 0) tReadIndex = tReadIndex + mAllocate;
 
       // Store result
       *aReadIndex = tReadIndex;
