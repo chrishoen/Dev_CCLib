@@ -84,7 +84,6 @@ void CmdLineExec::executeWrite(Ris::CmdLineCmd* aCmd)
    }
    else
    {
-      delete tObject;
       Prn::print(0, "WRITE FAIL");
    }
 }
@@ -93,10 +92,9 @@ void CmdLineExec::executeWrite(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeRead(Ris::CmdLineCmd* aCmd)
 {
-   Class1A* tObject = 0;
-   bool tStatus = LFPointerQueue::readPtr((void**)&tObject);
+   Class1A* tObject = (Class1A*)LFPointerQueue::readPtr();
 
-   if (tStatus)
+   if (tObject)
    {
       Prn::print(0, "READ  PASS      $$ %d", tObject->mCode1);
       delete tObject;

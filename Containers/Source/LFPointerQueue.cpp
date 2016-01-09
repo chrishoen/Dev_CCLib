@@ -208,20 +208,25 @@ namespace LFPointerQueue
    bool writePtr (void* aValue)
    {
       int tWriteIndex;
-      if (!tryStartWrite(&tWriteIndex)) return false;
+      if (!tryStartWrite(&tWriteIndex))
+      {
+         delete aValue;
+         return false;
+      }
 
       mArray[tWriteIndex] = aValue;
       return true;
    }
 
-   bool readPtr (void** aValue)
+   void* readPtr ()
    {
+      void* tValue;
       int tReadIndex;
-      if (!tryStartRead(&tReadIndex)) return false;
+      if (!tryStartRead(&tReadIndex)) return NULL;
 
-      *aValue = mArray[tReadIndex];
+      tValue = mArray[tReadIndex];
       finishRead();
-      return true;
+      return tValue;
    }
 
 

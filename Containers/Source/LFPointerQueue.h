@@ -6,19 +6,19 @@
 //******************************************************************************
 namespace LFPointerQueue
 {
-   void initialize();
+   void  initialize();
 
-   bool tryStartWrite (int* aWriteIndex);
-   void finishWrite();
+   bool  tryStartWrite (int* aWriteIndex);
+   void  finishWrite();
 
-   bool tryStartRead  (int* aReadIndex);
-   void finishRead();
+   bool  tryStartRead  (int* aReadIndex);
+   void  finishRead();
 
-   void write (int aWriteIndex, void*  aValue);
-   void read  (int aReadIndex,  void** aValue);
+   void  write (int aWriteIndex, void*  aValue);
+   void  read  (int aReadIndex,  void** aValue);
 
-   bool writePtr (void*  aValue);
-   bool readPtr  (void** aValue);
+   bool  writePtr (void*  aValue);
+   void* readPtr  ();
 }
 #endif
 
