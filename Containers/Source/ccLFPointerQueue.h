@@ -2,7 +2,7 @@
 #define _CCLFPOINTERQUEUE_H_
 /*==============================================================================
 
-This defines a queue of void* pointers. 
+Lock Free Pointer Queue. 
 
 This implements a pointer queue. The queue is thread safe. It uses an atomic
 interlocked compare and exchange to guard against concurrency contentions. 
