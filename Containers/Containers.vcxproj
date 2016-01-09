@@ -168,12 +168,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\CmdLineExec.cpp" />
+    <ClCompile Include="Source\LFPointerQueue.cpp" />
+    <ClCompile Include="Source\LFQueue.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
+    <ClCompile Include="Source\someClass1.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h" />
+    <ClInclude Include="Source\LFPointerQueue.h" />
+    <ClInclude Include="Source\LFQueue.h" />
     <ClInclude Include="Source\MainInit.h" />
+    <ClInclude Include="Source\someClass1.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
