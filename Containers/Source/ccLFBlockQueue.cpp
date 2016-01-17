@@ -46,7 +46,7 @@ namespace CC
       mParms.mPacked = 0;
 
       // Allocate memory for the array
-      mMemory = (char*)malloc(mAllocate*mBlockSize);
+      mMemory = malloc(mAllocate*mBlockSize);
    }
 
    //******************************************************************************
@@ -54,9 +54,9 @@ namespace CC
    //******************************************************************************
    // Return a pointer to a block, based on block array index
 
-   char* LFBlockQueue::element(int aIndex)
+   void* LFBlockQueue::element(int aIndex)
    {
-      return &mMemory[mBlockSize*aIndex];
+      return (void*)((char*)mMemory + mBlockSize*aIndex);
    }
 
    //******************************************************************************

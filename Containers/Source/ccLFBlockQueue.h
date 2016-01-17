@@ -48,13 +48,13 @@ public:
 
    // Return a pointer to a block, based on its block index.
   
-   char* element(int aIndex);
+   void* element(int aIndex);
 
    //---------------------------------------------------------------------------
    // Memory Members
 
    // Pointer to allocated memory
-   char* mMemory;
+   void* mMemory;
 
    // Number of blocks allocated
    int mAllocate;
