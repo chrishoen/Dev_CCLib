@@ -16,6 +16,9 @@
     <ClCompile Include="Source\ccLFPointerQueue.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\ccLFBlockQueue.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
@@ -33,6 +36,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccLFPointerQueue.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ccLFBlockQueue.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
