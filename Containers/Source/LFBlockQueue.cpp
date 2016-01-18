@@ -27,26 +27,33 @@ namespace LFBlockQueue
    // Queue Logic Members
 
    //---------------------------------------------------------------------------
-   // These two variables are each 16 bits and they are packed into a 32 bit 
-   // structure because the atomic compare exchange operation used works on
-   // 32 bit integers. This limits the queue size to 64K elements. The only 
-   // code that can safely change these variables is contained here. Any other
-   // code should be read only.
+   // These three variables are packed into a 32 bit structure because the
+   // atomic compare exchange operation used works on 32 bit integers. This
+   // limits the queue size. The only code that can safely change these
+   // variables is contained here. Any other code should be read only.
+   //
+   // WriteInProgress is used to count the number of write operations that are
+   // in progress. A writer increments this with a start write operation and 
+   // decrements it with a finish write operation.
    //
    // WriteIndex is used to circularly index into queue memory for write 
-   // operations. ReadAvailable is used to indicate the number of reads that 
-   // are available. They have the following ranges:
+   // operations.
+   // 
+   // ReadAvailable is used to indicate the number of reads that are available.
    //
-   //      0 <= WriteIndex    <= Capacity-1
-   //      0 <= ReadAvailable <= Capacity
+   // These variables have the following ranges:
+   //
+   //      0 <= WriteInProgress <= MaxWriteInProgress
+   //      0 <= WriteIndex <= Allocate-1
+   //      0 <= ReadAvailable + WriteInProgress <= Allocate
    //
    //      IF ReadAvailable == 0        THEN the queue is empty
-   //      IF ReadAvailable == Capacity THEN the queue is full
+   //      IF ReadAvailable == Allocate THEN the queue is full
    //
    //  The ReadIndex is derived from WriteIndex and ReadAvailable.
    //
    //      ReadIndex = WriteIndex - ReadAvailable;
-   //      IF ReadIndex < 0 THEN ReadIndex = ReadIndex + Capacity;
+   //      IF ReadIndex < 0 THEN ReadIndex = ReadIndex + Allocate;
    //---------------------------------------------------------------------------
 
    // Max number of writers
