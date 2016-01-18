@@ -195,7 +195,8 @@ namespace LFBlockQueue
 
    void* tryStartRead()
    {
-      // Store the current parms in a temp. This doesn't need to be atomic.
+      // Store the current parms in a temp. Because there can only be one
+      // reader, this doesn't need to be atomic.
       LFBlockQueueParms tParms;
       tParms.mPacked = mParms.mPacked;
 
