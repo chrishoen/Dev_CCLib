@@ -21,8 +21,9 @@ namespace CC
 
    bool executeLFCasLoop(
       unsigned*         aValue,
+      unsigned*         aExchange,
       unsigned*         aOriginal,
-      LFCasLoopFunction aFuncion);
+      LFCasLoopFunction aFunction);
 
 //******************************************************************************
 

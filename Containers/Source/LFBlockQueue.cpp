@@ -122,21 +122,20 @@ namespace LFBlockQueue
    {
       // Locals
       LFBlockQueueState tCompare, tExchange, tOriginal;
-      unsigned tWriteIndex;
 
       while (true)
       {
          // Get the current value, it will be used in the compare exchange.
          tCompare = mState;
+         tExchange = tCompare;
+
          // Exit if the queue is full or will be full.
-         if (tCompare.State.mReadAvailable + tCompare.State.mWriteInProgress >= mAllocate) return 0;
+         if (tExchange.State.mReadAvailable + tExchange.State.mWriteInProgress >= mAllocate) return 0;
          // Exit if there are too many writes in progress.
-         if (tCompare.State.mWriteInProgress==cMaxWriteInProgress) return 0;
+         if (tExchange.State.mWriteInProgress==cMaxWriteInProgress) return 0;
 
          // Update queue state for the exchange variable.
-         tExchange = tCompare;
          tExchange.State.mWriteInProgress++;
-         tWriteIndex = tExchange.State.mWriteIndex;
          if (++tExchange.State.mWriteIndex == mAllocate) tExchange.State.mWriteIndex=0;
 
          // This call atomically reads the value and compares it to what was
@@ -153,7 +152,7 @@ namespace LFBlockQueue
       }
 
       // Return a pointer to the element to write to.
-      return element(tWriteIndex);
+      return element(tOriginal.State.mWriteIndex);
    }
 
    //******************************************************************************
@@ -170,10 +169,10 @@ namespace LFBlockQueue
       while (true)
       {
          // Get the current value, it will be used in the compare exchange.
-         tCompare = mState;
+         tCompare  = mState;
+         tExchange = tCompare;
 
          // Update queue state for the exchange variable
-         tExchange = tCompare;
          tExchange.State.mReadAvailable++;
          tExchange.State.mWriteInProgress--;
 
@@ -230,10 +229,10 @@ namespace LFBlockQueue
       while (true)
       {
          // Get the current value, it will be used in the compare exchange.
-         tCompare = mState;
+         tCompare  = mState;
+         tExchange = tCompare;
 
          // Update queue state for the exchange variable
-         tExchange = tCompare;
          tExchange.State.mReadAvailable--;
 
          // This call atomically reads the value and compares it to what was

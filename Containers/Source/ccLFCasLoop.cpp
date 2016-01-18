@@ -12,6 +12,7 @@ namespace CC
 {
    bool executeLFCasLoop(
       unsigned*         aValue,
+      unsigned*         aExchange,
       unsigned*         aOriginal,
       LFCasLoopFunction aFunction)
    {
@@ -42,6 +43,12 @@ namespace CC
       }
 
       // Return the results.
+
+      if (aExchange != NULL)
+      {
+         *aExchange = tExchange;
+      }
+
       if (aOriginal != NULL)
       {
          *aOriginal = tOriginal;
