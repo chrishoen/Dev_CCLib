@@ -137,14 +137,10 @@ namespace LFBlockQueue2
    void* tryStartWrite()
    {
       // Locals
-      LFBlockQueueState tExchange, tOriginal;
+      LFBlockQueueState tOriginal;
 
-      // Update the queue state to start a write.
-      if (CC::applyLFCasLoopFunction(
-         &mState,
-         &tExchange,
-         &tOriginal,
-         tryWriteStartUpdate))
+      // Test and update the queue state to start a write.
+      if (CC::applyLFCasLoopFunction(&mState,0,&tOriginal,tryWriteStartUpdate))
       {
          // Return a pointer to the element to write to.
          return element(tOriginal.State.mWriteIndex);
@@ -162,33 +158,21 @@ namespace LFBlockQueue2
    // This is called to finish a write operation. It increments ReadAvailable
    // and decrements WriteInProgress.
 
+   bool finishWriteUpdate(void* aExchange)
+   {
+      LFBlockQueueState* tExchange = (LFBlockQueueState*)aExchange;
+
+      // Update queue state for the exchange variable
+      tExchange->State.mReadAvailable++;
+      tExchange->State.mWriteInProgress--;
+
+      return true;
+   }
+
    void finishWrite()
    {
-      // Locals
-      LFBlockQueueState tCompare, tExchange, tOriginal;
-
-      while (true)
-      {
-         // Get the current value, it will be used in the compare exchange.
-         tCompare  = mState;
-         tExchange = tCompare;
-
-         // Update queue state for the exchange variable
-         tExchange.State.mReadAvailable++;
-         tExchange.State.mWriteInProgress--;
-
-         // This call atomically reads the value and compares it to what was
-         // previously read at the first line of this loop. If they are the
-         // same then this was not concurrently preempted and so the original
-         // value is replaced with the exchange value. It returns the
-         // original value from before the compare.
-         tOriginal.mPacked = InterlockedCompareExchange((PLONG)(&mState.mPacked), tExchange.mPacked, tCompare.mPacked);
-
-         // If the original and the compare values are the same then there
-         // was no preemption and the exchange was a success, so exit the 
-         // loop. If they were not the same then retry.
-         if (tOriginal.mPacked == tCompare.mPacked) break;
-      }
+      // Update the queue state to finish a write.
+      CC::applyLFCasLoopFunction(&mState,0,0,finishWriteUpdate);
    }
 
    //******************************************************************************
@@ -222,31 +206,19 @@ namespace LFBlockQueue2
    //******************************************************************************
    // This is called to finish a read operation. It decrements ReadAvailable.
 
+   bool finishReadUpdate(void* aExchange)
+   {
+      LFBlockQueueState* tExchange = (LFBlockQueueState*)aExchange;
+
+      // Update queue state for the exchange variable
+      tExchange->State.mReadAvailable--;
+
+      return true;
+   }
+
    void finishRead()
    {
-      // Locals
-      LFBlockQueueState tCompare, tExchange, tOriginal;
-
-      while (true)
-      {
-         // Get the current value, it will be used in the compare exchange.
-         tCompare  = mState;
-         tExchange = tCompare;
-
-         // Update queue state for the exchange variable
-         tExchange.State.mReadAvailable--;
-
-         // This call atomically reads the value and compares it to what was
-         // previously read at the first line of this loop. If they are the
-         // same then this was not concurrently preempted and so the original
-         // value is replaced with the exchange value. It returns the
-         // original value from before the compare.
-         tOriginal.mPacked = InterlockedCompareExchange((PLONG)(&mState.mPacked), tExchange.mPacked, tCompare.mPacked);
-
-         // If the original and the compare values are the same then there
-         // was no preemption and the exchange was a success, so exit the 
-         // loop. If they were not the same then retry.
-         if (tOriginal.mPacked == tCompare.mPacked) break;
-      }
+      // Update the queue state to finish a read.
+      CC::applyLFCasLoopFunction(&mState,0,0,finishReadUpdate);
    }
 }
