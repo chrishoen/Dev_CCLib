@@ -19,7 +19,10 @@
     <ClCompile Include="Source\ccLFBlockQueue.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\LFQueue2.cpp">
+    <ClCompile Include="Source\LFQueue.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LFBlockQueue.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -44,7 +47,10 @@
     <ClInclude Include="Source\ccLFBlockQueue.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\LFQueue2.h">
+    <ClInclude Include="Source\LFQueue.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LFBlockQueue.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

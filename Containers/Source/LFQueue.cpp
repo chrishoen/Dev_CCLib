@@ -3,9 +3,9 @@
 #include <windows.h>
 #include "prnPrint.h"
 
-#include "LFQueue2.h"
+#include "LFQueue.h"
 
-namespace LFQueue2
+namespace LFQueue
 {
    //***************************************************************************
    //***************************************************************************
