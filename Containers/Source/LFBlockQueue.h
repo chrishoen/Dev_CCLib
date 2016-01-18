@@ -20,7 +20,7 @@ namespace LFBlockQueue
    void finalize();
 
    //---------------------------------------------------------------------------
-   // Queue Logic Methods
+   // Queue State Methods
 
    // This is called to start a write operation. If the queue is not full then
    // it succeeds. It determines the next block to be written to, updates the 
