@@ -118,7 +118,7 @@ namespace LFBlockQueue2
    // increments ReadAvailable and returns true. If it fails because the queue is 
    // full then it returns false.
 
-   bool tryWriteStartUpdate(unsigned* aExchange)
+   bool tryWriteStartUpdate(void* aExchange)
    {
       LFBlockQueueState* tExchange = (LFBlockQueueState*)aExchange;
 
@@ -141,9 +141,9 @@ namespace LFBlockQueue2
 
       // Update the queue state to start a write.
       if (CC::applyLFCasLoopFunction(
-         &mState.mPacked,
-         &tExchange.mPacked,
-         &tOriginal.mPacked,
+         &mState,
+         &tExchange,
+         &tOriginal,
          tryWriteStartUpdate))
       {
          // Return a pointer to the element to write to.

@@ -11,18 +11,19 @@ Description:
 namespace CC
 {
    bool applyLFCasLoopFunction(
-      unsigned*         aValue,
-      unsigned*         aExchange,
-      unsigned*         aOriginal,
+      void*             aValue,
+      void*             aExchange,
+      void*             aOriginal,
       LFCasLoopFunction aFunction)
    {
       // Locals
+      unsigned* tValue = (unsigned*)aValue;
       unsigned tCompare, tExchange, tOriginal;
 
       while (true)
       {
          // Get the current value, it will be used in the compare exchange.
-         tCompare = *aValue;
+         tCompare = *tValue;
          tExchange = tCompare;
 
          // Update the exchange variable with a new value.
@@ -46,12 +47,12 @@ namespace CC
 
       if (aExchange != NULL)
       {
-         *aExchange = tExchange;
+         *((unsigned*)aExchange) = tExchange;
       }
 
       if (aOriginal != NULL)
       {
-         *aOriginal = tOriginal;
+         *((unsigned*)aOriginal) = tOriginal;
       }
       return true;
    }

@@ -17,12 +17,12 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 
-   typedef bool (*LFCasLoopFunction)(unsigned* aExchange);
+   typedef bool (*LFCasLoopFunction)(void* aExchange);
 
    bool applyLFCasLoopFunction(
-      unsigned*         aValue,
-      unsigned*         aExchange,
-      unsigned*         aOriginal,
+      void*         aValue,
+      void*         aExchange,
+      void*         aOriginal,
       LFCasLoopFunction aFunction);
 
 //******************************************************************************
