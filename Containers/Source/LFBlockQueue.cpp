@@ -24,7 +24,7 @@ namespace LFBlockQueue
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Queue Logic Members
+   // Queue State Members
 
    //---------------------------------------------------------------------------
    // These three variables are packed into a 32 bit structure because the
@@ -66,11 +66,11 @@ namespace LFBlockQueue
          unsigned mWriteInProgress : 8;  
          unsigned mWriteIndex      :12;  
          unsigned mReadAvailable   :12;  
-       } Parms;
+       } State;
        signed mPacked;
-   } LFBlockQueueParms;
+   } LFBlockQueueState;
 
-   LFBlockQueueParms mParms;
+   static LFBlockQueueState mState;
 
    //******************************************************************************
    //******************************************************************************
@@ -84,7 +84,7 @@ namespace LFBlockQueue
       // Initialize variables
       mAllocate = aAllocate;
       mBlockSize = aBlockSize;
-      mParms.mPacked = 0;
+      mState.mPacked = 0;
 
       // Allocate memory for the array
       mMemory = malloc(mAllocate*mBlockSize);
@@ -109,7 +109,6 @@ namespace LFBlockQueue
       return (void*)((char*)mMemory + mBlockSize*aIndex);
    }
 
-
    //******************************************************************************
    //******************************************************************************
    //******************************************************************************
@@ -122,30 +121,30 @@ namespace LFBlockQueue
    void* tryStartWrite()
    {
       // Locals
-      LFBlockQueueParms tCompare, tExchange, tOriginal;
+      LFBlockQueueState tCompare, tExchange, tOriginal;
       unsigned tWriteIndex;
 
       while (true)
       {
          // Get the current value, it will be used in the compare exchange.
-         tCompare = mParms;
+         tCompare = mState;
          // Exit if the queue is full or will be full.
-         if (tCompare.Parms.mReadAvailable + tCompare.Parms.mWriteInProgress >= mAllocate) return 0;
+         if (tCompare.State.mReadAvailable + tCompare.State.mWriteInProgress >= mAllocate) return 0;
          // Exit if there are too many writes in progress.
-         if (tCompare.Parms.mWriteInProgress==cMaxWriteInProgress) return 0;
+         if (tCompare.State.mWriteInProgress==cMaxWriteInProgress) return 0;
 
-         // Update queue parameters for the exchange variable.
+         // Update queue state for the exchange variable.
          tExchange = tCompare;
-         tExchange.Parms.mWriteInProgress++;
-         tWriteIndex = tExchange.Parms.mWriteIndex;
-         if (++tExchange.Parms.mWriteIndex == mAllocate) tExchange.Parms.mWriteIndex=0;
+         tExchange.State.mWriteInProgress++;
+         tWriteIndex = tExchange.State.mWriteIndex;
+         if (++tExchange.State.mWriteIndex == mAllocate) tExchange.State.mWriteIndex=0;
 
          // This call atomically reads the value and compares it to what was
          // previously read at the first line of this loop. If they are the
          // same then this was not concurrently preempted and so the original
          // value is replaced with the exchange value. It returns the
          // original value from before the compare.
-         tOriginal.mPacked = InterlockedCompareExchange((PLONG)(&mParms.mPacked), tExchange.mPacked, tCompare.mPacked);
+         tOriginal.mPacked = InterlockedCompareExchange((PLONG)(&mState.mPacked), tExchange.mPacked, tCompare.mPacked);
 
          // If the original and the compare values are the same then there
          // was no preemption and the exchange was a success, so exit the 
@@ -166,24 +165,24 @@ namespace LFBlockQueue
    void finishWrite()
    {
       // Locals
-      LFBlockQueueParms tCompare, tExchange, tOriginal;
+      LFBlockQueueState tCompare, tExchange, tOriginal;
 
       while (true)
       {
          // Get the current value, it will be used in the compare exchange.
-         tCompare = mParms;
+         tCompare = mState;
 
-         // Update queue parameters for the exchange variable
+         // Update queue state for the exchange variable
          tExchange = tCompare;
-         tExchange.Parms.mReadAvailable++;
-         tExchange.Parms.mWriteInProgress--;
+         tExchange.State.mReadAvailable++;
+         tExchange.State.mWriteInProgress--;
 
          // This call atomically reads the value and compares it to what was
          // previously read at the first line of this loop. If they are the
          // same then this was not concurrently preempted and so the original
          // value is replaced with the exchange value. It returns the
          // original value from before the compare.
-         tOriginal.mPacked = InterlockedCompareExchange((PLONG)(&mParms.mPacked), tExchange.mPacked, tCompare.mPacked);
+         tOriginal.mPacked = InterlockedCompareExchange((PLONG)(&mState.mPacked), tExchange.mPacked, tCompare.mPacked);
 
          // If the original and the compare values are the same then there
          // was no preemption and the exchange was a success, so exit the 
@@ -204,14 +203,14 @@ namespace LFBlockQueue
    {
       // Store the current parms in a temp. Because there can only be one
       // reader, this doesn't need to be atomic.
-      LFBlockQueueParms tParms;
-      tParms.mPacked = mParms.mPacked;
+      LFBlockQueueState tState;
+      tState.mPacked = mState.mPacked;
 
       // Exit if the queue is empty.
-      if (tParms.Parms.mReadAvailable == 0) return 0;
+      if (tState.State.mReadAvailable == 0) return 0;
 
       // Update the read index
-      int tReadIndex = tParms.Parms.mWriteIndex - tParms.Parms.mReadAvailable;
+      int tReadIndex = tState.State.mWriteIndex - tState.State.mReadAvailable;
       if (tReadIndex < 0) tReadIndex = tReadIndex + mAllocate;
 
       // Return a pointer to the element to read from.
@@ -226,23 +225,23 @@ namespace LFBlockQueue
    void finishRead()
    {
       // Locals
-      LFBlockQueueParms tCompare, tExchange, tOriginal;
+      LFBlockQueueState tCompare, tExchange, tOriginal;
 
       while (true)
       {
          // Get the current value, it will be used in the compare exchange.
-         tCompare = mParms;
+         tCompare = mState;
 
-         // Update queue parameters for the exchange variable
+         // Update queue state for the exchange variable
          tExchange = tCompare;
-         tExchange.Parms.mReadAvailable--;
+         tExchange.State.mReadAvailable--;
 
          // This call atomically reads the value and compares it to what was
          // previously read at the first line of this loop. If they are the
          // same then this was not concurrently preempted and so the original
          // value is replaced with the exchange value. It returns the
          // original value from before the compare.
-         tOriginal.mPacked = InterlockedCompareExchange((PLONG)(&mParms.mPacked), tExchange.mPacked, tCompare.mPacked);
+         tOriginal.mPacked = InterlockedCompareExchange((PLONG)(&mState.mPacked), tExchange.mPacked, tCompare.mPacked);
 
          // If the original and the compare values are the same then there
          // was no preemption and the exchange was a success, so exit the 

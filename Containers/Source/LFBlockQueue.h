@@ -28,7 +28,7 @@ namespace LFBlockQueue
    // If it fails because the queue is full then it returns a null pointer.
    void* tryStartWrite();
 
-   // This is called to finish a write operation. It updates queue parameters.
+   // This is called to finish a write operation. It updates the queue state.
    void finishWrite();
 
    // This is called to start a read operation. If the queue is not empty then
@@ -37,7 +37,7 @@ namespace LFBlockQueue
    // If it fails because the queue is empty then it returns a null pointer.
    void* tryStartRead();
 
-   // This is called to finish a read operation. It updates queue parameters.
+   // This is called to finish a read operation. It updates the queue state.
    void finishRead();
 }
 #endif
