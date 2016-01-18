@@ -112,20 +112,20 @@ namespace LFBlockQueue
    // increments ReadAvailable and returns true. If it fails because the queue is 
    // full then it returns false.
 
-   bool tryStartWrite(int* aWriteIndex)
+   void* tryStartWrite()
    {
       // Locals
       LFBlockQueueParms tCompare, tExchange, tOriginal;
-      int tWriteIndex;
+      unsigned tWriteIndex;
 
       while (true)
       {
          // Get the current value, it will be used in the compare exchange.
          tCompare = mParms;
          // Exit if the queue is full or will be full
-         if (tCompare.Parms.mReadAvailable + tCompare.Parms.mWriteCount >= mAllocate) return false;
+         if (tCompare.Parms.mReadAvailable + tCompare.Parms.mWriteCount >= mAllocate) return 0;
          // Exit if there are too many pending writes
-         if (tCompare.Parms.mWriteCount==cMaxWriteCount) return false;
+         if (tCompare.Parms.mWriteCount==cMaxWriteCount) return 0;
 
          // Update queue parameters for the exchange variable
          tExchange = tCompare;
@@ -146,9 +146,8 @@ namespace LFBlockQueue
          if (tOriginal.mPacked == tCompare.mPacked) break;
       }
 
-      // Store results
-      *aWriteIndex = tWriteIndex;
-      return true;
+      // Return a pointer to the element to write to.
+      return element(tWriteIndex);
    }
 
    //******************************************************************************
@@ -194,7 +193,7 @@ namespace LFBlockQueue
    // ReadIndex that is to be used to access queue memory for the read and returns 
    // true. If it fails because the queue is empty then it returns false.
 
-   bool tryStartRead(int* aReadIndex)
+   void* tryStartRead()
    {
       // Store the current parms in a temp. This doesn't need to be atomic
       // because it is assumed to run on a 32 bit architecture.
@@ -202,15 +201,14 @@ namespace LFBlockQueue
       tParms.mPacked = mParms.mPacked;
 
       // Exit if the queue is empty.
-      if (tParms.Parms.mReadAvailable == 0) return false;
+      if (tParms.Parms.mReadAvailable == 0) return 0;
 
       // Update the read index
       int tReadIndex = tParms.Parms.mWriteIndex - tParms.Parms.mReadAvailable;
       if (tReadIndex < 0) tReadIndex = tReadIndex + mAllocate;
 
-      // Store result
-      *aReadIndex = tReadIndex;
-      return true;
+      // Return a pointer to the element to read from.
+      return element(tReadIndex);
    }
 
    //******************************************************************************
