@@ -10,7 +10,7 @@ Description:
 #include "ccLFCasLoop.h"
 namespace CC
 {
-   bool executeLFCasLoop(
+   bool applyLFCasLoopFunction(
       unsigned*         aValue,
       unsigned*         aExchange,
       unsigned*         aOriginal,

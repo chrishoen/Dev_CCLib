@@ -172,6 +172,7 @@
     <ClCompile Include="Source\ccLFPointerQueue.cpp" />
     <ClCompile Include="Source\CmdLineExec.cpp" />
     <ClCompile Include="Source\LFBlockQueue.cpp" />
+    <ClCompile Include="Source\LFBlockQueue2.cpp" />
     <ClCompile Include="Source\LFQueue.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
@@ -183,6 +184,7 @@
     <ClInclude Include="Source\ccLFPointerQueue.h" />
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\LFBlockQueue.h" />
+    <ClInclude Include="Source\LFBlockQueue2.h" />
     <ClInclude Include="Source\LFQueue.h" />
     <ClInclude Include="Source\MainInit.h" />
     <ClInclude Include="Source\someClass1.h" />

@@ -19,7 +19,7 @@ namespace CC
 
    typedef bool (*LFCasLoopFunction)(unsigned* aExchange);
 
-   bool executeLFCasLoop(
+   bool applyLFCasLoopFunction(
       unsigned*         aValue,
       unsigned*         aExchange,
       unsigned*         aOriginal,

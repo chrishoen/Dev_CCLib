@@ -28,6 +28,9 @@
     <ClCompile Include="Source\ccLFCasLoop.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\LFBlockQueue2.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
@@ -57,6 +60,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccLFCasLoop.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LFBlockQueue2.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
