@@ -122,12 +122,12 @@ namespace LFBlockQueue
       {
          // Get the current value, it will be used in the compare exchange.
          tCompare = mParms;
-         // Exit if the queue is full or will be full
+         // Exit if the queue is full or will be full.
          if (tCompare.Parms.mReadAvailable + tCompare.Parms.mWriteCount >= mAllocate) return 0;
-         // Exit if there are too many pending writes
+         // Exit if there are too many writes in progress.
          if (tCompare.Parms.mWriteCount==cMaxWriteCount) return 0;
 
-         // Update queue parameters for the exchange variable
+         // Update queue parameters for the exchange variable.
          tExchange = tCompare;
          tExchange.Parms.mWriteCount++;
          tWriteIndex = tExchange.Parms.mWriteIndex;
@@ -195,8 +195,7 @@ namespace LFBlockQueue
 
    void* tryStartRead()
    {
-      // Store the current parms in a temp. This doesn't need to be atomic
-      // because it is assumed to run on a 32 bit architecture.
+      // Store the current parms in a temp. This doesn't need to be atomic.
       LFBlockQueueParms tParms;
       tParms.mPacked = mParms.mPacked;
 
