@@ -50,15 +50,15 @@ namespace LFBlockQueue
    //---------------------------------------------------------------------------
 
    // Max number of writers
-   static const LONG cMaxWriteCount = 255;
+   static const LONG cMaxWriteInProgress = 255;
    
    typedef union
    {
        struct    
        { 
-         unsigned mWriteCount    :8;  
-         unsigned mWriteIndex    :12;  
-         unsigned mReadAvailable :12;  
+         unsigned mWriteInProgress : 8;  
+         unsigned mWriteIndex      :12;  
+         unsigned mReadAvailable   :12;  
        } Parms;
        signed mPacked;
    } LFBlockQueueParms;
@@ -123,13 +123,13 @@ namespace LFBlockQueue
          // Get the current value, it will be used in the compare exchange.
          tCompare = mParms;
          // Exit if the queue is full or will be full.
-         if (tCompare.Parms.mReadAvailable + tCompare.Parms.mWriteCount >= mAllocate) return 0;
+         if (tCompare.Parms.mReadAvailable + tCompare.Parms.mWriteInProgress >= mAllocate) return 0;
          // Exit if there are too many writes in progress.
-         if (tCompare.Parms.mWriteCount==cMaxWriteCount) return 0;
+         if (tCompare.Parms.mWriteInProgress==cMaxWriteInProgress) return 0;
 
          // Update queue parameters for the exchange variable.
          tExchange = tCompare;
-         tExchange.Parms.mWriteCount++;
+         tExchange.Parms.mWriteInProgress++;
          tWriteIndex = tExchange.Parms.mWriteIndex;
          if (++tExchange.Parms.mWriteIndex == mAllocate) tExchange.Parms.mWriteIndex=0;
 
@@ -154,7 +154,7 @@ namespace LFBlockQueue
    //******************************************************************************
    //******************************************************************************
    // This is called to finish a write operation. It increments ReadAvailable
-   // and decrements WriteCount.
+   // and decrements WriteInProgress.
 
    void finishWrite()
    {
@@ -169,7 +169,7 @@ namespace LFBlockQueue
          // Update queue parameters for the exchange variable
          tExchange = tCompare;
          tExchange.Parms.mReadAvailable++;
-         tExchange.Parms.mWriteCount--;
+         tExchange.Parms.mWriteInProgress--;
 
          // This call atomically reads the value and compares it to what was
          // previously read at the first line of this loop. If they are the
@@ -242,5 +242,4 @@ namespace LFBlockQueue
          if (tOriginal.mPacked == tCompare.mPacked) break;
       }
    }
-
 }
