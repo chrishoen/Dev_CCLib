@@ -11,19 +11,18 @@ Description:
 namespace CC
 {
    bool applyLFCasLoopFunction(
-      void*             aValue,
-      void*             aExchange,
-      void*             aOriginal,
+      int*  aValue,
+      int*  aExchange,
+      int*  aOriginal,
       LFCasLoopFunction aFunction)
    {
       // Locals
-      unsigned* tValue = (unsigned*)aValue;
-      unsigned tCompare, tExchange, tOriginal;
+      int tCompare, tExchange, tOriginal;
 
       while (true)
       {
          // Get the current value, it will be used in the compare exchange.
-         tCompare = *tValue;
+         tCompare = *aValue;
          tExchange = tCompare;
 
          // Update the exchange variable with a new value.
@@ -35,7 +34,7 @@ namespace CC
          // same then this was not concurrently preempted and so the original
          // value is replaced with the exchange value. It returns the
          // original value from before the compare.
-         tOriginal = (unsigned)InterlockedCompareExchange((PLONG)aValue, tExchange, tCompare);
+         tOriginal = InterlockedCompareExchange((PLONG)aValue, tExchange, tCompare);
 
          // If the original and the compare values are the same then there
          // was no preemption and the exchange was a success, so exit the 

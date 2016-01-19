@@ -2,7 +2,6 @@
 #include <string.h>
 #include <windows.h>
 
-#include "ccLFCasLoop.h"
 #include "LFBlockQueue2.h"
 
 namespace LFBlockQueue2
@@ -111,24 +110,84 @@ namespace LFBlockQueue2
    //******************************************************************************
    //******************************************************************************
    //******************************************************************************
+   // Use a compare and swap loop to apply a function to update a variable.
+   //
+   //    Value      points to the variable to be updated.
+   //    Exchange   points to a variable that contains the new value.
+   //    Original   points to a variable that contains the original value.
+   //    Function   points to the function that updates the variable.
+   //
+   //    Returns true if the variable was successfully updated.
+   //
+
+   typedef bool (*CasLoopFunction)(LFBlockQueueState* aExchange);
+
+   static bool applyCasLoopFunction(
+      LFBlockQueueState*  aValue,
+      LFBlockQueueState*  aExchange,
+      LFBlockQueueState*  aOriginal,
+      CasLoopFunction     aFunction)
+   {
+      // Locals
+      LFBlockQueueState tCompare, tExchange, tOriginal;
+
+      while (true)
+      {
+         // Get the current value, it will be used in the compare exchange.
+         tCompare  = *aValue;
+         tExchange = tCompare;
+
+         // Update the exchange variable with a new value.
+         // Exit the loop if unsuccessful.
+         if (!aFunction(&tExchange)) return false;
+
+         // This call atomically reads the value and compares it to what was
+         // previously read at the first line of this loop. If they are the
+         // same then this was not concurrently preempted and so the original
+         // value is replaced with the exchange value. It returns the
+         // original value from before the compare.
+         *(LONG*)(&tOriginal) = InterlockedCompareExchange((PLONG)aValue, *(LONG*)(&tExchange), *(LONG*)(&tCompare));
+
+         // If the original and the compare values are the same then there was
+         // no preemption or contention and the exchange was a success, so exit
+         // the loop. If they were not the same then retry.
+         if (*(LONG*)(&tOriginal) == *(LONG*)(&tCompare)) break;
+      }
+
+      // Return the results.
+
+      if (aExchange != NULL)
+      {
+         *aExchange = tExchange;
+      }
+
+      if (aOriginal != NULL)
+      {
+         *aOriginal = tOriginal;
+      }
+
+      return true;
+   }
+
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
    // This is called to start a write operation. If the queue is not full then
    // it succeeds. It updates the variable pointed by the input pointer with the 
    // WriteIndex that is to be used to access queue memory for the write, it
    // increments ReadAvailable and returns true. If it fails because the queue is 
    // full then it returns false.
 
-   bool tryWriteStartUpdate(void* aExchange)
+   bool tryWriteStartUpdate(LFBlockQueueState* aState)
    {
-      LFBlockQueueState* tState = (LFBlockQueueState*)aExchange;
-
       // Exit if the queue is full or will be full.
-      if (tState->mReadAvailable + tState->mWriteInProgress >= mAllocate) return false;
+      if (aState->mReadAvailable + aState->mWriteInProgress >= mAllocate) return false;
       // Exit if there are too many writes in progress.
-      if (tState->mWriteInProgress==cMaxWriteInProgress) return false;
+      if (aState->mWriteInProgress==cMaxWriteInProgress) return false;
 
       // Update queue state for the exchange variable.
-      tState->mWriteInProgress++;
-      if (++tState->mWriteIndex == mAllocate) tState->mWriteIndex=0;
+      aState->mWriteInProgress++;
+      if (++aState->mWriteIndex == mAllocate) aState->mWriteIndex=0;
 
       return true;
    }
@@ -139,7 +198,7 @@ namespace LFBlockQueue2
       LFBlockQueueState tOriginal;
 
       // Test and update the queue state to start a write.
-      if (CC::applyLFCasLoopFunction(&mState,0,&tOriginal,tryWriteStartUpdate))
+      if (applyCasLoopFunction(&mState,0,&tOriginal,tryWriteStartUpdate))
       {
          // Return a pointer to the element to write to.
          return element(tOriginal.mWriteIndex);
@@ -157,13 +216,11 @@ namespace LFBlockQueue2
    // This is called to finish a write operation. It increments ReadAvailable
    // and decrements WriteInProgress.
 
-   bool finishWriteUpdate(void* aExchange)
+   bool finishWriteUpdate(LFBlockQueueState* aState)
    {
-      LFBlockQueueState* tState = (LFBlockQueueState*)aExchange;
-
       // Update queue state for the exchange variable
-      tState->mReadAvailable++;
-      tState->mWriteInProgress--;
+      aState->mReadAvailable++;
+      aState->mWriteInProgress--;
 
       return true;
    }
@@ -171,7 +228,7 @@ namespace LFBlockQueue2
    void finishWrite()
    {
       // Update the queue state to finish a write.
-      CC::applyLFCasLoopFunction(&mState,0,0,finishWriteUpdate);
+      applyCasLoopFunction(&mState,0,0,finishWriteUpdate);
    }
 
    //******************************************************************************
@@ -204,12 +261,10 @@ namespace LFBlockQueue2
    //******************************************************************************
    // This is called to finish a read operation. It decrements ReadAvailable.
 
-   bool finishReadUpdate(void* aExchange)
+   bool finishReadUpdate(LFBlockQueueState* aState)
    {
-      LFBlockQueueState* tState = (LFBlockQueueState*)aExchange;
-
       // Update queue state for the exchange variable
-      tState->mReadAvailable--;
+      aState->mReadAvailable--;
 
       return true;
    }
@@ -217,6 +272,6 @@ namespace LFBlockQueue2
    void finishRead()
    {
       // Update the queue state to finish a read.
-      CC::applyLFCasLoopFunction(&mState,0,0,finishReadUpdate);
+      applyCasLoopFunction(&mState,0,0,finishReadUpdate);
    }
 }
