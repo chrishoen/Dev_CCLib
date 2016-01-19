@@ -185,8 +185,9 @@ namespace LFBlockQueue2
       // Exit if there are too many writes in progress.
       if (aState->mWriteInProgress==cMaxWriteInProgress) return false;
 
-      // Update queue state for the exchange variable.
+      // Increment the write in progress count.
       aState->mWriteInProgress++;
+      // Increment the write index, wrap if necessary.
       if (++aState->mWriteIndex == mAllocate) aState->mWriteIndex=0;
 
       return true;
@@ -218,7 +219,7 @@ namespace LFBlockQueue2
 
    bool finishWriteUpdate(LFBlockQueueState* aState)
    {
-      // Update queue state for the exchange variable
+      // Update the queue state to finish a write.
       aState->mReadAvailable++;
       aState->mWriteInProgress--;
 
@@ -241,8 +242,8 @@ namespace LFBlockQueue2
 
    void* tryStartRead()
    {
-      // Store the current parms in a temp. Because there can only be one
-      // reader, this doesn't need to be atomic.
+      // Store the current state in a temp. Because there can only be one reader, 
+      // this doesn't need to be atomic.
       LFBlockQueueState tState = mState;
 
       // Exit if the queue is empty.
