@@ -98,13 +98,14 @@ namespace SListQueue
       int tWriteIndex = cInvalid;
       if (!mStack.tryPop(&tWriteIndex)) return false;
 
+      // Store the write value in the write block.
+      mBlockArray[tWriteIndex].mValue = aWriteValue;
+      mBlockArray[tWriteIndex].mNext = cInvalid;
+
       // If the queue is empty
       if (mState.mReadAvailable == 0)
       {
-         // Add the block at the queue head.
-         // Add the block at the queue tail.
-         mBlockArray[tWriteIndex].mValue = aWriteValue;
-         mBlockArray[tWriteIndex].mNext = cInvalid;
+         // Add the block at the queue head and tail.
          mState.mHeadIndex = tWriteIndex;
          mState.mTailIndex = tWriteIndex;
          mState.mReadAvailable++;
@@ -114,8 +115,6 @@ namespace SListQueue
       {
          // Add the block at the queue tail.
          mBlockArray[mState.mTailIndex].mNext = tWriteIndex;
-         mBlockArray[tWriteIndex].mValue = aWriteValue;
-         mBlockArray[tWriteIndex].mNext = cInvalid;
          mState.mTailIndex = tWriteIndex;
          mState.mReadAvailable++;
       }
