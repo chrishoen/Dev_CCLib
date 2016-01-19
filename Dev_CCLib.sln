@@ -25,6 +25,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LockFree", "LockFree\LockFr
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Containers", "Containers\Containers.vcxproj", "{06CE136A-0E35-4ED9-AEBC-CDA1669B3303}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LFQueue", "LFQueue\LFQueue.vcxproj", "{35F7CF8A-C843-486E-93BA-4CF3B09F5113}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -121,6 +123,14 @@ Global
 		{06CE136A-0E35-4ED9-AEBC-CDA1669B3303}.Release|Win32.Build.0 = Release|Win32
 		{06CE136A-0E35-4ED9-AEBC-CDA1669B3303}.Release|x64.ActiveCfg = Release|x64
 		{06CE136A-0E35-4ED9-AEBC-CDA1669B3303}.Release|x64.Build.0 = Release|x64
+		{35F7CF8A-C843-486E-93BA-4CF3B09F5113}.Debug|Win32.ActiveCfg = Debug|Win32
+		{35F7CF8A-C843-486E-93BA-4CF3B09F5113}.Debug|Win32.Build.0 = Debug|Win32
+		{35F7CF8A-C843-486E-93BA-4CF3B09F5113}.Debug|x64.ActiveCfg = Debug|x64
+		{35F7CF8A-C843-486E-93BA-4CF3B09F5113}.Debug|x64.Build.0 = Debug|x64
+		{35F7CF8A-C843-486E-93BA-4CF3B09F5113}.Release|Win32.ActiveCfg = Release|Win32
+		{35F7CF8A-C843-486E-93BA-4CF3B09F5113}.Release|Win32.Build.0 = Release|Win32
+		{35F7CF8A-C843-486E-93BA-4CF3B09F5113}.Release|x64.ActiveCfg = Release|x64
+		{35F7CF8A-C843-486E-93BA-4CF3B09F5113}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
