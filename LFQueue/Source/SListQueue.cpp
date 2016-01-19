@@ -248,7 +248,7 @@ namespace SListQueue
          aState->mTailIndex = aWriteIndex;
          aState->mReadAvailable++;
       }
-
+      // Success
       return true;
    }
 
@@ -305,7 +305,7 @@ namespace SListQueue
       // Update queue state for the exchange variable
       aState->mReadAvailable--;
       aState->mHeadIndex = aIndex;
-
+      // Success
       return true;
    }
 
@@ -320,6 +320,8 @@ namespace SListQueue
 
       // Exit if the queue is empty.
       if (tState.mReadAvailable == 0) return false;
+      // Exit if the head block is invalid.
+      if (tState.mHeadIndex == cInvalid) return false;
 
       int tNextHeadIndex = mBlockArray[mState.mHeadIndex].mNext;
 
