@@ -8,14 +8,8 @@ namespace LFQueue
 {
    void initialize (unsigned aAllocate);
 
-   bool tryStartWrite (int* aWriteIndex);
-   void finishWrite();
-
-   bool tryStartRead  (int* aReadIndex);
-   void finishRead();
-
-   void write (int aWriteIndex, int  aValue);
-   void read  (int aReadIndex,  int* aValue);
+   bool tryWrite (unsigned  aWriteValue);
+   bool tryRead  (unsigned* aReadValue);
 }
 #endif
 

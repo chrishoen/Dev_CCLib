@@ -58,15 +58,9 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeWrite(Ris::CmdLineCmd* aCmd)
 {
-   mCount++;
-   int  tWriteIndex=0;
-   bool tStatus = LFQueue::tryStartWrite(&tWriteIndex);
-
-   if (tStatus)
+   if (LFQueue::tryWrite(++mCount))
    {
-      LFQueue::write(tWriteIndex,mCount);
-      LFQueue::finishWrite();
-      Prn::print(0, "WRITE PASS  %2d $$ %d", tWriteIndex,mCount);
+      Prn::print(0, "WRITE PASS  $$ %d", mCount);
    }
    else
    {
@@ -78,16 +72,10 @@ void CmdLineExec::executeWrite(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeRead(Ris::CmdLineCmd* aCmd)
 {
-   int tCount=0;
-   int  tReadIndex=0;
-   bool tStatus = LFQueue::tryStartRead(&tReadIndex);
-
-
-   if (tStatus)
+   unsigned tCount=0;
+   if (LFQueue::tryRead(&tCount))
    {
-      LFQueue::read(tReadIndex,&tCount);
-      LFQueue::finishRead();
-      Prn::print(0, "READ  PASS  %2d $$      %d", tReadIndex,tCount);
+      Prn::print(0, "READ  PASS  $$ %d", tCount);
    }
    else
    {

@@ -23,7 +23,7 @@ public:
   void executeWrite (Ris::CmdLineCmd* aCmd);
   void executeRead  (Ris::CmdLineCmd* aCmd);
 
-  int mCount;
+  unsigned mCount;
 };
 
 //******************************************************************************

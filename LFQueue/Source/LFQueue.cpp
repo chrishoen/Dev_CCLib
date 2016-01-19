@@ -13,7 +13,7 @@ namespace LFQueue
    // Memory Members
 
    // Integer array
-   static int mArray[1000];
+   static unsigned mArray[1000];
 
    // Number of blocks allocated
    static unsigned mAllocate = 0;
@@ -48,16 +48,14 @@ namespace LFQueue
 
    typedef struct
    { 
-      unsigned mWriteInProgress : 8;  
-      unsigned mWriteIndex      :12;  
-      unsigned mReadAvailable   :12;  
+      unsigned mWriteValue      :8;  
+      unsigned mWriteIndex      :8;  
+      unsigned mReadAvailable   :8;  
+      unsigned mPadding         :8;  
    } LFQueueState;
 
    static LFQueueState mState;
 
-   // Max number of writers
-   static const LONG cMaxWriteInProgress = 255;
-   
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -68,7 +66,7 @@ namespace LFQueue
       // Initialize variables
       mAllocate  = aAllocate;
 
-      mState.mWriteInProgress = 0;  
+      mState.mWriteValue = 0;  
       mState.mWriteIndex = 0;  
       mState.mReadAvailable = 0;  
 
@@ -78,16 +76,75 @@ namespace LFQueue
       }
    }
 
-   //******************************************************************************
-   // Deallocate memory
+   //***************************************************************************
+   // Finalize
 
    void finalize()
    {
    }
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Initialize
+   // Use a compare and swap loop to apply a function to update a variable.
+   //
+   //    Value      points to the variable to be updated.
+   //    Exchange   points to a variable that contains the new value.
+   //    Original   points to a variable that contains the original value.
+   //    Function   points to the function that updates the variable.
+   //
+   //    Returns true if the variable was successfully updated.
+   //
+
+   typedef bool (*CasLoopFunction)(LFQueueState* aExchange, int aParm1);
+
+   static bool applyCasLoopFunction(
+      LFQueueState*    aValue,
+      LFQueueState*    aExchange,
+      LFQueueState*    aOriginal,
+      CasLoopFunction  aFunction,
+      int              aParm1)
+   {
+      // Locals
+      LFQueueState tCompare, tExchange, tOriginal;
+
+      while (true)
+      {
+         // Get the current value, it will be used in the compare exchange.
+         tCompare  = *aValue;
+         tExchange = tCompare;
+
+         // Update the exchange variable with a new value.
+         // Exit the loop if unsuccessful.
+         if (!aFunction(&tExchange,aParm1)) return false;
+
+         // This call atomically reads the value and compares it to what was
+         // previously read at the first line of this loop. If they are the
+         // same then this was not concurrently preempted and so the original
+         // value is replaced with the exchange value. It returns the
+         // original value from before the compare.
+         *(LONG*)(&tOriginal) = InterlockedCompareExchange((PLONG)aValue, *(LONG*)(&tExchange), *(LONG*)(&tCompare));
+
+         // If the original and the compare values are the same then there was
+         // no preemption or contention and the exchange was a success, so exit
+         // the loop. If they were not the same then retry.
+         if (*(LONG*)(&tOriginal) == *(LONG*)(&tCompare)) break;
+      }
+
+      // Return the results.
+
+      if (aExchange != NULL)
+      {
+         *aExchange = tExchange;
+      }
+
+      if (aOriginal != NULL)
+      {
+         *aOriginal = tOriginal;
+      }
+
+      return true;
+   }
 
    //******************************************************************************
    //******************************************************************************
@@ -98,77 +155,37 @@ namespace LFQueue
    // increments ReadAvailable and returns true. If it fails because the queue is 
    // full then it returns false.
 
-   bool tryStartWrite(int* aWriteIndex)
+   bool tryWriteUpdate(LFQueueState* aState, int aParm1)
    {
-      // Locals
-      LFQueueState tCompare, tExchange, tOriginal;
-      int tWriteIndex;
+      // Exit if the queue is full or will be full.
+      if (aState->mReadAvailable == mAllocate) return false;
 
-      while (true)
-      {
-         // Get the current value, it will be used in the compare exchange.
-         tCompare = mState;
-         // Exit if the queue is full or will be full
-         if (tCompare.mReadAvailable + tCompare.mWriteInProgress >= mAllocate) return false;
-         // Exit if there are too many pending writes
-         if (tCompare.mWriteInProgress==cMaxWriteInProgress) return false;
+      // Store the tail write value.
+      aState->mWriteValue = aParm1;
+      // Increment the write index, wrap if necessary.
+      if (++aState->mWriteIndex == mAllocate) aState->mWriteIndex=0;
+      // Increment the read available count.
+      aState->mReadAvailable++;
 
-         // Update queue parameters for the exchange variable
-         tExchange = tCompare;
-         tExchange.mWriteInProgress++;
-         tWriteIndex = tExchange.mWriteIndex;
-         if (++tExchange.mWriteIndex == mAllocate) tExchange.mWriteIndex=0;
-
-         // This call atomically reads the value and compares it to what was
-         // previously read at the first line of this loop. If they are the
-         // same then this was not concurrently preempted and so the original
-         // value is replaced with the exchange value. It returns the
-         // original value from before the compare.
-         *(LONG*)(&tOriginal) = InterlockedCompareExchange((PLONG)&mState, *(LONG*)(&tExchange), *(LONG*)(&tCompare));
-
-         // If the original and the compare values are the same then there
-         // was no preemption and the exchange was a success, so exit the 
-         // loop. If they were not the same then retry.
-         if (*(LONG*)(&tOriginal) == *(LONG*)(&tCompare)) break;
-      }
-
-      // Store results
-      *aWriteIndex = tWriteIndex;
       return true;
    }
 
-   //******************************************************************************
-   //******************************************************************************
-   //******************************************************************************
-   // This is called to finish a write operation. It increments ReadAvailable
-   // and decrements WriteCount.
-
-   void finishWrite()
+   bool tryWrite (unsigned aWriteValue)
    {
       // Locals
-      LFQueueState tCompare, tExchange, tOriginal;
+      LFQueueState tOriginal;
 
-      while (true)
+      // Test and update the queue state to write.
+      if (applyCasLoopFunction(&mState,0,&tOriginal,tryWriteUpdate,aWriteValue))
       {
-         // Get the current value, it will be used in the compare exchange.
-         tCompare = mState;
-
-         // Update queue parameters for the exchange variable
-         tExchange = tCompare;
-         tExchange.mReadAvailable++;
-         tExchange.mWriteInProgress--;
-
-         // This call atomically reads the value and compares it to what was
-         // previously read at the first line of this loop. If they are the
-         // same then this was not concurrently preempted and so the original
-         // value is replaced with the exchange value. It returns the
-         // original value from before the compare.
-         *(LONG*)(&tOriginal) = InterlockedCompareExchange((PLONG)&mState, *(LONG*)(&tExchange), *(LONG*)(&tCompare));
-
-         // If the original and the compare values are the same then there
-         // was no preemption and the exchange was a success, so exit the 
-         // loop. If they were not the same then retry.
-         if (*(LONG*)(&tOriginal) == *(LONG*)(&tCompare)) break;
+         // Store the value in the array.
+         mArray[tOriginal.mWriteIndex] = aWriteValue;
+         return true;
+      }
+      else
+      {
+         // The queue is full, return false.
+         return false;
       }
    }
 
@@ -179,8 +196,17 @@ namespace LFQueue
    // succeeds, it  updates the variable pointed by the input pointer with the 
    // ReadIndex that is to be used to access queue memory for the read and returns 
    // true. If it fails because the queue is empty then it returns false.
+   // This is called for a operation. It decrements ReadAvailable.
 
-   bool tryStartRead(int* aReadIndex)
+   bool tryReadUpdate(LFQueueState* aState,int aParm1)
+   {
+      // Update queue state for the exchange variable
+      aState->mReadAvailable--;
+
+      return true;
+   }
+
+   bool tryRead(unsigned* aReadValue)
    {
       // Store the current parms in a temp. This doesn't need to be atomic
       // because it is assumed to run on a 32 bit architecture.
@@ -194,56 +220,12 @@ namespace LFQueue
       if (tReadIndex < 0) tReadIndex = tReadIndex + mAllocate;
 
       // Store result
-      *aReadIndex = tReadIndex;
+      *aReadValue = mArray[tReadIndex];
+
+      // Update the queue state to finish a read.
+      applyCasLoopFunction(&mState,0,0,tryReadUpdate,0);
+
+      // Done.
       return true;
    }
-
-   //******************************************************************************
-   //******************************************************************************
-   //******************************************************************************
-   // This is called to finish a read operation. It decrements ReadAvailable.
-
-   void finishRead()
-   {
-      // Locals
-      LFQueueState tCompare, tExchange, tOriginal;
-
-      while (true)
-      {
-         // Get the current value, it will be used in the compare exchange.
-         tCompare = mState;
-
-         // Update queue parameters for the exchange variable
-         tExchange = tCompare;
-         tExchange.mReadAvailable--;
-
-         // This call atomically reads the value and compares it to what was
-         // previously read at the first line of this loop. If they are the
-         // same then this was not concurrently preempted and so the original
-         // value is replaced with the exchange value. It returns the
-         // original value from before the compare.
-         *(LONG*)(&tOriginal) = InterlockedCompareExchange((PLONG)&mState, *(LONG*)(&tExchange), *(LONG*)(&tCompare));
-
-         // If the original and the compare values are the same then there
-         // was no preemption and the exchange was a success, so exit the 
-         // loop. If they were not the same then retry.
-         if (*(LONG*)(&tOriginal) == *(LONG*)(&tCompare)) break;
-      }
-   }
-
-   //******************************************************************************
-   //******************************************************************************
-   //******************************************************************************
-
-   void write(int aWriteIndex,int  aValue)
-   {
-      mArray[aWriteIndex] = aValue;
-   }
-
-   void read  (int aReadIndex,int* aValue)
-   {
-      *aValue = mArray[aReadIndex];
-   }
-
-
 }
