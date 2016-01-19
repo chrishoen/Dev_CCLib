@@ -59,18 +59,14 @@ namespace LFBlockQueue2
    // Max number of writers
    static const LONG cMaxWriteInProgress = 255;
    
-   typedef union
-   {
-       struct State   
-       { 
-         unsigned mWriteInProgress : 8;  
-         unsigned mWriteIndex      :12;  
-         unsigned mReadAvailable   :12;  
-       } mState;
-       unsigned mPacked;
+   typedef struct
+   { 
+      unsigned mWriteInProgress : 8;  
+      unsigned mWriteIndex      :12;  
+      unsigned mReadAvailable   :12;  
    } LFBlockQueueState;
 
-   static LFBlockQueueState mQueueState;
+   static LFBlockQueueState mState;
 
    //******************************************************************************
    //******************************************************************************
@@ -82,9 +78,12 @@ namespace LFBlockQueue2
    void initialize(unsigned aAllocate,unsigned aBlockSize)
    {
       // Initialize variables
-      mAllocate = aAllocate;
+      mAllocate  = aAllocate;
       mBlockSize = aBlockSize;
-      mQueueState.mPacked = 0;
+
+      mState.mWriteInProgress = 0;  
+      mState.mWriteIndex = 0;  
+      mState.mReadAvailable = 0;  
 
       // Allocate memory for the array
       mMemory = malloc(mAllocate*mBlockSize);
@@ -120,7 +119,7 @@ namespace LFBlockQueue2
 
    bool tryWriteStartUpdate(void* aExchange)
    {
-      LFBlockQueueState::State* tState = (LFBlockQueueState::State*)aExchange;
+      LFBlockQueueState* tState = (LFBlockQueueState*)aExchange;
 
       // Exit if the queue is full or will be full.
       if (tState->mReadAvailable + tState->mWriteInProgress >= mAllocate) return false;
@@ -140,10 +139,10 @@ namespace LFBlockQueue2
       LFBlockQueueState tOriginal;
 
       // Test and update the queue state to start a write.
-      if (CC::applyLFCasLoopFunction(&mQueueState,0,&tOriginal,tryWriteStartUpdate))
+      if (CC::applyLFCasLoopFunction(&mState,0,&tOriginal,tryWriteStartUpdate))
       {
          // Return a pointer to the element to write to.
-         return element(tOriginal.mState.mWriteIndex);
+         return element(tOriginal.mWriteIndex);
       }
       else
       {
@@ -160,7 +159,7 @@ namespace LFBlockQueue2
 
    bool finishWriteUpdate(void* aExchange)
    {
-      LFBlockQueueState::State* tState = (LFBlockQueueState::State*)aExchange;
+      LFBlockQueueState* tState = (LFBlockQueueState*)aExchange;
 
       // Update queue state for the exchange variable
       tState->mReadAvailable++;
@@ -172,7 +171,7 @@ namespace LFBlockQueue2
    void finishWrite()
    {
       // Update the queue state to finish a write.
-      CC::applyLFCasLoopFunction(&mQueueState,0,0,finishWriteUpdate);
+      CC::applyLFCasLoopFunction(&mState,0,0,finishWriteUpdate);
    }
 
    //******************************************************************************
@@ -187,14 +186,13 @@ namespace LFBlockQueue2
    {
       // Store the current parms in a temp. Because there can only be one
       // reader, this doesn't need to be atomic.
-      LFBlockQueueState tQueueState = mQueueState;
-      LFBlockQueueState::State* tState = (LFBlockQueueState::State*)&tQueueState;
+      LFBlockQueueState tState = mState;
 
       // Exit if the queue is empty.
-      if (tState->mReadAvailable == 0) return 0;
+      if (tState.mReadAvailable == 0) return 0;
 
       // Update the read index
-      int tReadIndex = tState->mWriteIndex - tState->mReadAvailable;
+      int tReadIndex = tState.mWriteIndex - tState.mReadAvailable;
       if (tReadIndex < 0) tReadIndex = tReadIndex + mAllocate;
 
       // Return a pointer to the element to read from.
@@ -208,7 +206,7 @@ namespace LFBlockQueue2
 
    bool finishReadUpdate(void* aExchange)
    {
-      LFBlockQueueState::State* tState = (LFBlockQueueState::State*)aExchange;
+      LFBlockQueueState* tState = (LFBlockQueueState*)aExchange;
 
       // Update queue state for the exchange variable
       tState->mReadAvailable--;
@@ -219,6 +217,6 @@ namespace LFBlockQueue2
    void finishRead()
    {
       // Update the queue state to finish a read.
-      CC::applyLFCasLoopFunction(&mQueueState,0,0,finishReadUpdate);
+      CC::applyLFCasLoopFunction(&mState,0,0,finishReadUpdate);
    }
 }
