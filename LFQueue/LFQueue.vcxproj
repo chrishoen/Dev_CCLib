@@ -173,6 +173,7 @@
     <ClCompile Include="Source\LFQueue.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
+    <ClCompile Include="Source\SList2Queue.cpp" />
     <ClCompile Include="Source\SListQueue.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -181,6 +182,7 @@
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\LFQueue.h" />
     <ClInclude Include="Source\MainInit.h" />
+    <ClInclude Include="Source\SList2Queue.h" />
     <ClInclude Include="Source\SListQueue.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
