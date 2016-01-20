@@ -114,11 +114,6 @@ namespace SList2Queue
       mNode[mTailIndex].mNext = tWriteIndex;
       mTailIndex = tWriteIndex;
 
-      if (mNode[mHeadIndex].mNext == cInvalid)
-      {
-         mNode[mHeadIndex].mNext = tWriteIndex;
-      }
-
       // Done
       return true;
    }
