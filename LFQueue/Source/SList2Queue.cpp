@@ -17,7 +17,7 @@ namespace SList2Queue
    { 
       int mValue;  
       int mNext;  
-   } SListBlock;
+   } SListNode;
 
    static const int cInvalid = 999;
 
@@ -34,8 +34,8 @@ namespace SList2Queue
    //***************************************************************************
    // Memory Members
 
-   // Block array
-   static SListBlock mBlock[1000];
+   // Node array
+   static SListNode mNode[1000];
 
    // Number of blocks allocated
    static int mAllocate = 0;
@@ -58,15 +58,9 @@ namespace SList2Queue
       for (int i=mAllocate-1; i>=0; --i)
       {
          mStack.tryPush(i);
-         mBlock[i].mValue = 0;
-         mBlock[i].mNext = cInvalid;
+         mNode[i].mValue = 0;
+         mNode[i].mNext = cInvalid;
       }
-#if 0
-      mStack.tryPop(&mTailIndex);
-      mBlock[mTailIndex].mValue = 0;
-      mBlock[mTailIndex].mNext = cInvalid;
-      mHeadIndex = mTailIndex;  
-#endif
 
       mHeadIndex = cInvalid;
       mTailIndex = cInvalid;  
@@ -95,11 +89,11 @@ namespace SList2Queue
       if (!mStack.tryPop(&tWriteIndex)) return false;
 
       // Store the write value in the write block.
-      mBlock[tWriteIndex].mValue = aWriteValue;
-      mBlock[tWriteIndex].mNext = cInvalid;
+      mNode[tWriteIndex].mValue = aWriteValue;
+      mNode[tWriteIndex].mNext = cInvalid;
 
       // Add the block at the queue tail.
-      mBlock[mTailIndex].mNext = tWriteIndex;
+      mNode[mTailIndex].mNext = tWriteIndex;
       mTailIndex = tWriteIndex;
 
       if (mHeadIndex == cInvalid)
@@ -129,10 +123,10 @@ namespace SList2Queue
       int tSaveIndex = mHeadIndex;
 
       // Extract the read value from the head block.
-      *aReadValue = mBlock[mHeadIndex].mValue;
+      *aReadValue = mNode[mHeadIndex].mValue;
 
       // Update the head index.
-      mHeadIndex = mBlock[mHeadIndex].mNext;
+      mHeadIndex = mNode[mHeadIndex].mNext;
 
       // Push the original head index back onto the stack.
       mStack.tryPush(tSaveIndex);
