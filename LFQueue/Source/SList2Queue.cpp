@@ -100,17 +100,18 @@ namespace SList2Queue
    // increments ReadAvailable and returns true. If it fails because the queue is 
    // full then it returns false.
 
-   bool tryWrite (int aWriteValue)
+   bool tryWrite2 (int aWriteValue)
    {
-      // Try to allocate an index from the stack
+      // Try to allocate an index from the stack.
+      // Exit if the stack is empty.
       int tWriteIndex;
       if (!mStack.tryPop(&tWriteIndex)) return false;
 
-      // Store the write value in the write block.
+      // Store the write value in a new node.
       mNode[tWriteIndex].mValue = aWriteValue;
       mNode[tWriteIndex].mNext = cInvalid;
 
-      // Add the block at the queue tail.
+      // Attach the node to the queue tail.
       mNode[mTailIndex].mNext = tWriteIndex;
       mTailIndex = tWriteIndex;
 
@@ -118,17 +119,18 @@ namespace SList2Queue
       return true;
    }
 
-   bool tryWrite2 (int aWriteValue)
+   bool tryWrite (int aWriteValue)
    {
       // Try to allocate an index from the stack
+      // Exit if the stack is empty.
       int tWriteIndex;
       if (!mStack.tryPop(&tWriteIndex)) return false;
 
-      // Store the write value in the write block.
+      // Store the write value in a new node.
       mNode[tWriteIndex].mValue = aWriteValue;
       mNode[tWriteIndex].mNext = cInvalid;
 
-      // Add the block at the queue tail.
+      // Attach the node to the queue tail.
       int tTailIndex;
       while (true)
       {
@@ -138,8 +140,6 @@ namespace SList2Queue
          boolCas(&mTailIndex, mNode[tTailIndex].mNext, tTailIndex);
       }
       boolCas(&mTailIndex,tWriteIndex,tTailIndex);
-
-      boolCas(&mHeadIndex,mTailIndex,cInvalid);
 
       // Done
       return true;
