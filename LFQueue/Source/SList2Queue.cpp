@@ -48,7 +48,7 @@ namespace SList2Queue
    //***************************************************************************
    // Version Members
 
-   int mWriteVersion = 1;
+   int mWriteVersion = 2;
    int mReadVersion  = 0;
 
    //***************************************************************************
@@ -163,6 +163,8 @@ namespace SList2Queue
    //    process halts it might not proceed, but it is faster.
    // 
 
+   //***************************************************************************
+
    bool tryWrite0 (int aWriteValue)
    {
       // Try to allocate an index from the stack. Exit if the stack is empty.
@@ -180,6 +182,8 @@ namespace SList2Queue
       // Done
       return true;
    }
+
+   //***************************************************************************
 
    bool tryWrite1 (int aWriteValue)
    {
@@ -207,10 +211,37 @@ namespace SList2Queue
       return true;
    }
 
+   //***************************************************************************
+
    bool tryWrite2 (int aWriteValue)
    {
-      return false;
+      // Try to allocate an index from the stack
+      // Exit if the stack is empty.
+      int tWriteIndex;
+      if (!mStack.tryPop(&tWriteIndex)) return false;
+
+      // Store the write value in a new node.
+      mNode[tWriteIndex].mValue = aWriteValue;
+      mNode[tWriteIndex].mNext = cInvalid;
+
+      // Attach the node to the queue tail.
+      int tTailIndex    = mTailIndex;
+      int tOldTailIndex = tTailIndex;
+      while (true)
+      {
+         while (mNode[tTailIndex].mNext != cInvalid)
+         {
+            tTailIndex = mNode[tTailIndex].mNext;
+         }
+         if (boolCas(&mNode[tTailIndex].mNext, tWriteIndex, cInvalid)) break;
+      }
+      boolCas(&mTailIndex,tWriteIndex,tOldTailIndex);
+
+      // Done
+      return true;
    }
+
+   //***************************************************************************
 
    bool tryWrite3 (int aWriteValue)
    {
@@ -230,7 +261,6 @@ namespace SList2Queue
          tTailIndex = mTailIndex;
 
          if (boolCas(&mNode[tTailIndex].mNext, tWriteIndex, cInvalid)) break;
-//       boolCas(&mTailIndex, mNode[tTailIndex].mNext, tTailIndex);
       }
       boolCas(&mTailIndex,tWriteIndex,tTailIndex);
 
