@@ -51,7 +51,7 @@ namespace SList2Queue
    void initialize (int aAllocate)
    {
       // Initialize variables
-      mAllocate  = aAllocate + 1;
+      mAllocate  = aAllocate;
 
       mStack.initialize(mAllocate);
 
@@ -61,12 +61,15 @@ namespace SList2Queue
          mBlock[i].mValue = 0;
          mBlock[i].mNext = cInvalid;
       }
-
+#if 0
       mStack.tryPop(&mTailIndex);
       mBlock[mTailIndex].mValue = 0;
       mBlock[mTailIndex].mNext = cInvalid;
-
       mHeadIndex = mTailIndex;  
+#endif
+
+      mHeadIndex = cInvalid;
+      mTailIndex = cInvalid;  
    }
 
    //***************************************************************************
@@ -88,7 +91,7 @@ namespace SList2Queue
    bool tryWrite (int aWriteValue)
    {
       // Try to allocate an index from the stack
-      int tWriteIndex = cInvalid;
+      int tWriteIndex;
       if (!mStack.tryPop(&tWriteIndex)) return false;
 
       // Store the write value in the write block.
@@ -98,6 +101,11 @@ namespace SList2Queue
       // Add the block at the queue tail.
       mBlock[mTailIndex].mNext = tWriteIndex;
       mTailIndex = tWriteIndex;
+
+      if (mHeadIndex == cInvalid)
+      {
+         mHeadIndex = mTailIndex;
+      }
 
       // Done
       return true;
@@ -115,19 +123,19 @@ namespace SList2Queue
    bool tryRead (int* aReadValue) 
    {
       // Exit if the queue is empty.
-      if (mHeadIndex == mTailIndex) return false;
+      if (mHeadIndex == cInvalid) return false;
 
       // Store the head index in a temp.
-      int tHeadIndex = mBlock[mHeadIndex].mNext;
+      int tSaveIndex = mHeadIndex;
 
       // Extract the read value from the head block.
-      *aReadValue = mBlock[tHeadIndex].mValue;
+      *aReadValue = mBlock[mHeadIndex].mValue;
 
       // Update the head index.
       mHeadIndex = mBlock[mHeadIndex].mNext;
 
-      // Push the read index back onto the stack.
-      mStack.tryPush(tHeadIndex);
+      // Push the original head index back onto the stack.
+      mStack.tryPush(tSaveIndex);
 
       // Done.
       return true;
