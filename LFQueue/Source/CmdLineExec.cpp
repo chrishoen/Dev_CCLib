@@ -67,7 +67,7 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeWrite(Ris::CmdLineCmd* aCmd)
 {
-   if (SList2Queue::tryWrite(++mCount))
+   if (SList2Queue::tryWrite2(++mCount))
    {
       Prn::print(0, "WRITE PASS  $$ %d", mCount);
    }

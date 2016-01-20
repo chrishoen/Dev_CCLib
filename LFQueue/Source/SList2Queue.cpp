@@ -76,6 +76,22 @@ namespace SList2Queue
    //******************************************************************************
    //******************************************************************************
    //******************************************************************************
+
+   static bool boolCas(int* aValue, int aExchange, int aCompare)
+   {
+      int tOriginal = (int)InterlockedCompareExchange((PLONG)aValue, *((LONG*)&aExchange), *((LONG*)&aCompare));
+      return tOriginal == aCompare; 
+   }
+
+   static int valCas(int* aValue, int aExchange, int aCompare)
+   {
+      int tOriginal = (int)InterlockedCompareExchange((PLONG)aValue, *((LONG*)&aExchange), *((LONG*)&aCompare));
+      return tOriginal; 
+   }
+
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
    // This is called to start a write operation. If the queue is not full then
    // it succeeds. It updates the variable pointed by the input pointer with the 
    // WriteIndex that is to be used to access queue memory for the write, it
@@ -100,6 +116,33 @@ namespace SList2Queue
       {
          mHeadIndex = mTailIndex;
       }
+
+      // Done
+      return true;
+   }
+
+   bool tryWrite2 (int aWriteValue)
+   {
+      // Try to allocate an index from the stack
+      int tWriteIndex;
+      if (!mStack.tryPop(&tWriteIndex)) return false;
+
+      // Store the write value in the write block.
+      mNode[tWriteIndex].mValue = aWriteValue;
+      mNode[tWriteIndex].mNext = cInvalid;
+
+      // Add the block at the queue tail.
+      int tTailIndex;
+      while (true)
+      {
+         tTailIndex = mTailIndex;
+
+         if (boolCas(&mNode[tTailIndex].mNext,cInvalid,tWriteIndex)) break;
+         boolCas(&mTailIndex,tTailIndex,mNode[tTailIndex].mNext);
+      }
+      boolCas(&mTailIndex,tTailIndex,tWriteIndex);
+
+      boolCas(&mHeadIndex,cInvalid,mTailIndex);
 
       // Done
       return true;
