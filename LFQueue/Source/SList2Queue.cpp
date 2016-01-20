@@ -91,6 +91,12 @@ namespace SList2Queue
       return tOriginal; 
    }
 
+   static int valExchange(int* aDestin, int aExchange)
+   {
+      int tOriginal = (int)InterlockedExchange((PLONG)aDestin, *((LONG*)&aExchange));
+      return tOriginal; 
+   }
+
    //******************************************************************************
    //******************************************************************************
    //******************************************************************************
@@ -154,7 +160,7 @@ namespace SList2Queue
    // true. If it fails because the queue is empty then it returns false.
    // This is called for a operation. It decrements ReadAvailable.
 
-   bool tryRead2 (int* aReadValue) 
+   bool tryRead (int* aReadValue) 
    {
       // Store the read index in a temp.
       int tReadIndex = mNode[mHeadIndex].mNext;
@@ -175,7 +181,7 @@ namespace SList2Queue
       return true;
    }
 
-   bool tryRead (int* aReadValue) 
+   bool tryRead2 (int* aReadValue) 
    {
       int tHeadIndex;
       while (true)
