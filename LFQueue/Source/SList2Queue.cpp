@@ -43,6 +43,8 @@ namespace SList2Queue
    // Stack of indices into block array
    static CC::TokenStack mStack;
 
+   int mPopIndex;
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -51,7 +53,7 @@ namespace SList2Queue
    void initialize (int aAllocate)
    {
       // Initialize variables
-      mAllocate  = aAllocate;
+      mAllocate = aAllocate + 1;
 
       mStack.initialize(mAllocate);
 
@@ -62,8 +64,8 @@ namespace SList2Queue
          mNode[i].mNext = cInvalid;
       }
 
-      mHeadIndex = cInvalid;
-      mTailIndex = cInvalid;  
+      mStack.tryPop(&mHeadIndex);
+      mTailIndex = mHeadIndex;  
    }
 
    //***************************************************************************
@@ -77,15 +79,15 @@ namespace SList2Queue
    //******************************************************************************
    //******************************************************************************
 
-   static bool boolCas(int* aValue, int aExchange, int aCompare)
+   static bool boolCas(int* aDestin, int aExchange, int aCompare)
    {
-      int tOriginal = (int)InterlockedCompareExchange((PLONG)aValue, *((LONG*)&aExchange), *((LONG*)&aCompare));
+      int tOriginal = (int)InterlockedCompareExchange((PLONG)aDestin, *((LONG*)&aExchange), *((LONG*)&aCompare));
       return tOriginal == aCompare; 
    }
 
-   static int valCas(int* aValue, int aExchange, int aCompare)
+   static int valCas(int* aDestin, int aExchange, int aCompare)
    {
-      int tOriginal = (int)InterlockedCompareExchange((PLONG)aValue, *((LONG*)&aExchange), *((LONG*)&aCompare));
+      int tOriginal = (int)InterlockedCompareExchange((PLONG)aDestin, *((LONG*)&aExchange), *((LONG*)&aCompare));
       return tOriginal; 
    }
 
@@ -112,9 +114,9 @@ namespace SList2Queue
       mNode[mTailIndex].mNext = tWriteIndex;
       mTailIndex = tWriteIndex;
 
-      if (mHeadIndex == cInvalid)
+      if (mNode[mHeadIndex].mNext == cInvalid)
       {
-         mHeadIndex = mTailIndex;
+         mNode[mHeadIndex].mNext = tWriteIndex;
       }
 
       // Done
@@ -137,12 +139,12 @@ namespace SList2Queue
       {
          tTailIndex = mTailIndex;
 
-         if (boolCas(&mNode[tTailIndex].mNext,cInvalid,tWriteIndex)) break;
-         boolCas(&mTailIndex,tTailIndex,mNode[tTailIndex].mNext);
+         if (boolCas(&mNode[tTailIndex].mNext, tWriteIndex, cInvalid)) break;
+         boolCas(&mTailIndex, mNode[tTailIndex].mNext, tTailIndex);
       }
-      boolCas(&mTailIndex,tTailIndex,tWriteIndex);
+      boolCas(&mTailIndex,tWriteIndex,tTailIndex);
 
-      boolCas(&mHeadIndex,cInvalid,mTailIndex);
+      boolCas(&mHeadIndex,mTailIndex,cInvalid);
 
       // Done
       return true;
@@ -159,20 +161,20 @@ namespace SList2Queue
 
    bool tryRead (int* aReadValue) 
    {
-      // Exit if the queue is empty.
-      if (mHeadIndex == cInvalid) return false;
+      // Store the read index in a temp.
+      int tReadIndex = mNode[mHeadIndex].mNext;
 
-      // Store the head index in a temp.
-      int tSaveIndex = mHeadIndex;
+      // Exit if the queue is empty.
+      if (tReadIndex == cInvalid) return false;
 
       // Extract the read value from the head block.
-      *aReadValue = mNode[mHeadIndex].mValue;
+      *aReadValue = mNode[tReadIndex].mValue;
+
+      // Push the previous head index back onto the stack.
+      mStack.tryPush(mHeadIndex);
 
       // Update the head index.
-      mHeadIndex = mNode[mHeadIndex].mNext;
-
-      // Push the original head index back onto the stack.
-      mStack.tryPush(tSaveIndex);
+      mHeadIndex = tReadIndex;
 
       // Done.
       return true;
