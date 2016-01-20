@@ -29,7 +29,7 @@ TokenStack::TokenStack()
    // All null
    mArray    = 0;
    mIndex    = 0;
-   mCapacity = 0;
+   mAllocate = 0;
 }
 
 TokenStack::~TokenStack()
@@ -42,14 +42,14 @@ TokenStack::~TokenStack()
 //******************************************************************************
 //******************************************************************************
 
-VOID TokenStack::initialize(int aCapacity)
+VOID TokenStack::initialize(int aAllocate)
 {
    // Allocate memory for the array
    mArray    = new int[100];
 
    // initialize variables
    mIndex    = 0;
-   mCapacity = aCapacity;
+   mAllocate = aAllocate;
 }
 
 //******************************************************************************
@@ -57,9 +57,9 @@ VOID TokenStack::initialize(int aCapacity)
 //******************************************************************************
 // Push an element onto the stack. Return false if stack is full.
 //
-// Memory is  valid for     [0 , mCapacity-1]
-// The stack index range is [0 , mCapacity  ]
-// Pushes are valid for     [0 , mCapacity-1]
+// Memory is  valid for     [0 , mAllocate-1]
+// The stack index range is [0 , mAllocate  ]
+// Pushes are valid for     [0 , mAllocate-1]
 //
 //    push(aX)
 //       mArray[mIndex]=aX
@@ -75,7 +75,7 @@ bool TokenStack::tryPush (int aValue)
       &mIndex,
       1,
       0,
-      mCapacity,
+      mAllocate,
       &tOriginalIndex,
       0))
    {
@@ -94,9 +94,9 @@ bool TokenStack::tryPush (int aValue)
 //******************************************************************************
 // Pop an element off of the stack. Return null if stack is empty.
 //
-// Memory is  valid for     [0 , mCapacity-1]
-// The stack index range is [0 , mCapacity  ]
-// Pops are valid for       [1 , mCapacity  ]
+// Memory is  valid for     [0 , mAllocate-1]
+// The stack index range is [0 , mAllocate  ]
+// Pops are valid for       [1 , mAllocate  ]
 //
 //    pop(aX)
 //       tX = mArray[mIndex]
@@ -113,7 +113,7 @@ bool TokenStack::tryPop (int* aValue)
       &mIndex,
       -1,
       0,
-      mCapacity,
+      mAllocate,
       0,
       &tNewIndex))
    {

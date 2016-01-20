@@ -121,13 +121,13 @@ namespace SList2Queue
    //******************************************************************************
    // Easier to use compare and exchange functions.
 
-   static bool boolCas(int* aDestin, int aExchange, int aCompare)
+   static bool boolCae(int* aDestin, int aExchange, int aCompare)
    {
       int tOriginal = (int)InterlockedCompareExchange((PLONG)aDestin, *((LONG*)&aExchange), *((LONG*)&aCompare));
       return tOriginal == aCompare; 
    }
 
-   static int valCas(int* aDestin, int aExchange, int aCompare)
+   static int valCae(int* aDestin, int aExchange, int aCompare)
    {
       int tOriginal = (int)InterlockedCompareExchange((PLONG)aDestin, *((LONG*)&aExchange), *((LONG*)&aCompare));
       return tOriginal; 
@@ -202,10 +202,10 @@ namespace SList2Queue
       {
          tTailIndex = mTailIndex;
 
-         if (boolCas(&mNode[tTailIndex].mNext, tWriteIndex, cInvalid)) break;
-         boolCas(&mTailIndex, mNode[tTailIndex].mNext, tTailIndex);
+         if (boolCae(&mNode[tTailIndex].mNext, tWriteIndex, cInvalid)) break;
+         boolCae(&mTailIndex, mNode[tTailIndex].mNext, tTailIndex);
       }
-      boolCas(&mTailIndex,tWriteIndex,tTailIndex);
+      boolCae(&mTailIndex,tWriteIndex,tTailIndex);
 
       // Done
       return true;
@@ -233,9 +233,9 @@ namespace SList2Queue
          {
             tTailIndex = mNode[tTailIndex].mNext;
          }
-         if (boolCas(&mNode[tTailIndex].mNext, tWriteIndex, cInvalid)) break;
+         if (boolCae(&mNode[tTailIndex].mNext, tWriteIndex, cInvalid)) break;
       }
-      boolCas(&mTailIndex,tWriteIndex,tOldTailIndex);
+      boolCae(&mTailIndex,tWriteIndex,tOldTailIndex);
 
       // Done
       return true;
@@ -260,9 +260,9 @@ namespace SList2Queue
       {
          tTailIndex = mTailIndex;
 
-         if (boolCas(&mNode[tTailIndex].mNext, tWriteIndex, cInvalid)) break;
+         if (boolCae(&mNode[tTailIndex].mNext, tWriteIndex, cInvalid)) break;
       }
-      boolCas(&mTailIndex,tWriteIndex,tTailIndex);
+      boolCae(&mTailIndex,tWriteIndex,tTailIndex);
 
       // Done
       return true;
@@ -315,7 +315,7 @@ namespace SList2Queue
          // Exit if the queue is empty.
          if (mNode[tHeadIndex].mNext == cInvalid) return false;
 
-         if (boolCas(&mHeadIndex, mNode[tHeadIndex].mNext, tHeadIndex)) break;
+         if (boolCae(&mHeadIndex, mNode[tHeadIndex].mNext, tHeadIndex)) break;
       }
       // Extract the read value from the head block.
       int tReadIndex = mNode[tHeadIndex].mNext;

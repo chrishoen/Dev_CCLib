@@ -32,7 +32,7 @@ public:
 
    // Allocate memory for the stack array and initialize the stack index. 
    // aAllocate is the number of Tokens to allocate, the size of the array.
-   void initialize(int aCapacity);
+   void initialize(int aAllocate);
 
    // Push a Token onto the stack. Return false if the stack is full.
    bool tryPush(int aToken);
@@ -50,7 +50,7 @@ public:
    int mIndex;
 
    // Size of the array, number of Tokens allocated.
-   int mCapacity;
+   int mAllocate;
 };
 
 //******************************************************************************
