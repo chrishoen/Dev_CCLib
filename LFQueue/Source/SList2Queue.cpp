@@ -43,7 +43,13 @@ namespace SList2Queue
    // Stack of indices into block array
    static CC::TokenStack mStack;
 
-   int mPopIndex;
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Version Members
+
+   int mWriteVersion = 1;
+   int mReadVersion  = 0;
 
    //***************************************************************************
    //***************************************************************************
@@ -78,6 +84,42 @@ namespace SList2Queue
    //******************************************************************************
    //******************************************************************************
    //******************************************************************************
+   // Select version.
+
+   bool tryWrite0 (int  aWriteValue);
+   bool tryWrite1 (int  aWriteValue);
+   bool tryWrite2 (int  aWriteValue);
+   bool tryWrite3 (int  aWriteValue);
+
+   bool tryWrite(int aWriteValue)
+   {
+      switch (mWriteVersion)
+      {
+      case 0: return tryWrite0(aWriteValue);
+      case 1: return tryWrite1(aWriteValue);
+      case 2: return tryWrite2(aWriteValue);
+      case 3: return tryWrite3(aWriteValue);
+      }
+      return false;
+   }
+
+   bool tryRead0(int* aReadValue);
+   bool tryRead1(int* aReadValue);
+
+   bool tryRead(int* aReadValue)
+   {
+      switch (mReadVersion)
+      {
+      case 0: return tryRead0(aReadValue);
+      case 1: return tryRead1(aReadValue);
+      }
+      return false;
+   }
+
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+   // Easier to use compare and exchange functions.
 
    static bool boolCas(int* aDestin, int aExchange, int aCompare)
    {
@@ -97,19 +139,33 @@ namespace SList2Queue
       return tOriginal; 
    }
 
-   //******************************************************************************
-   //******************************************************************************
-   //******************************************************************************
-   // This is called to start a write operation. If the queue is not full then
-   // it succeeds. It updates the variable pointed by the input pointer with the 
-   // WriteIndex that is to be used to access queue memory for the write, it
-   // increments ReadAvailable and returns true. If it fails because the queue is 
-   // full then it returns false.
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // This attempts to write a value to the queue. If the queue is not full
+   // then it succeeds. It attempts to pop an index from the index stack. If
+   // the stack is empty then the queue is full and it exits. The popped index
+   // is used to initialize a new node, which stores the input value that is
+   // to be written. The new node is then attached to the queue tail node and
+   // the tail index is updated.
+   // 
+   // There are different versions:
+   //
+   //    tryWrite0 can be used for single writer queues. It doesn't need to
+   //    use any cas logic and it is fastest.
+   //
+   //    tryWrite1 can be used for multple writer queues where, if a writer
+   //    process halts it will always proceed.
+   // 
+   //    tryWrite2 is a variation on tryWrite1.
+   // 
+   //    tryWrite3 can be used for multple writer queues where, if a writer
+   //    process halts it might not proceed, but it is faster.
+   // 
 
-   bool tryWrite2 (int aWriteValue)
+   bool tryWrite0 (int aWriteValue)
    {
-      // Try to allocate an index from the stack.
-      // Exit if the stack is empty.
+      // Try to allocate an index from the stack. Exit if the stack is empty.
       int tWriteIndex;
       if (!mStack.tryPop(&tWriteIndex)) return false;
 
@@ -117,7 +173,7 @@ namespace SList2Queue
       mNode[tWriteIndex].mValue = aWriteValue;
       mNode[tWriteIndex].mNext = cInvalid;
 
-      // Attach the node to the queue tail.
+      // Attach the node to the queue tail node and update the tail index.
       mNode[mTailIndex].mNext = tWriteIndex;
       mTailIndex = tWriteIndex;
 
@@ -125,7 +181,7 @@ namespace SList2Queue
       return true;
    }
 
-   bool tryWrite (int aWriteValue)
+   bool tryWrite1 (int aWriteValue)
    {
       // Try to allocate an index from the stack
       // Exit if the stack is empty.
@@ -151,6 +207,37 @@ namespace SList2Queue
       return true;
    }
 
+   bool tryWrite2 (int aWriteValue)
+   {
+      return false;
+   }
+
+   bool tryWrite3 (int aWriteValue)
+   {
+      // Try to allocate an index from the stack
+      // Exit if the stack is empty.
+      int tWriteIndex;
+      if (!mStack.tryPop(&tWriteIndex)) return false;
+
+      // Store the write value in a new node.
+      mNode[tWriteIndex].mValue = aWriteValue;
+      mNode[tWriteIndex].mNext = cInvalid;
+
+      // Attach the node to the queue tail.
+      int tTailIndex;
+      while (true)
+      {
+         tTailIndex = mTailIndex;
+
+         if (boolCas(&mNode[tTailIndex].mNext, tWriteIndex, cInvalid)) break;
+//       boolCas(&mTailIndex, mNode[tTailIndex].mNext, tTailIndex);
+      }
+      boolCas(&mTailIndex,tWriteIndex,tTailIndex);
+
+      // Done
+      return true;
+   }
+
    //******************************************************************************
    //******************************************************************************
    //******************************************************************************
@@ -160,7 +247,7 @@ namespace SList2Queue
    // true. If it fails because the queue is empty then it returns false.
    // This is called for a operation. It decrements ReadAvailable.
 
-   bool tryRead (int* aReadValue) 
+   bool tryRead0 (int* aReadValue) 
    {
       // Store the read index in a temp.
       int tReadIndex = mNode[mHeadIndex].mNext;
@@ -181,7 +268,7 @@ namespace SList2Queue
       return true;
    }
 
-   bool tryRead2 (int* aReadValue) 
+   bool tryRead1 (int* aReadValue) 
    {
       int tHeadIndex;
       while (true)
