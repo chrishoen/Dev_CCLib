@@ -271,11 +271,17 @@ namespace SList2Queue
    //******************************************************************************
    //******************************************************************************
    //******************************************************************************
-   // This is called to start a read operation. If the queue is not empty then it 
-   // succeeds, it  updates the variable pointed by the input pointer with the 
-   // ReadIndex that is to be used to access queue memory for the read and returns 
-   // true. If it fails because the queue is empty then it returns false.
-   // This is called for a operation. It decrements ReadAvailable.
+   // This attempts to read a value from the queue. If the queue is not empty
+   // then it succeeds. It extracts the read value from the head node, pushes the
+   // previous head index back onto the stack and updates the head index.
+   // 
+   // There are different versions:
+   //
+   //    tryRead0 can be used for single reader queues. It doesn't need to
+   //    use any cas logic and it is fastest.
+   //
+   //    tryRead1 can be used for multple reader queues where, if a reader
+   //    process halts it will always proceed.
 
    bool tryRead0 (int* aReadValue) 
    {
@@ -285,7 +291,7 @@ namespace SList2Queue
       // Exit if the queue is empty.
       if (tReadIndex == cInvalid) return false;
 
-      // Extract the read value from the head block.
+      // Extract the read value from the head node.
       *aReadValue = mNode[tReadIndex].mValue;
 
       // Push the previous head index back onto the stack.
