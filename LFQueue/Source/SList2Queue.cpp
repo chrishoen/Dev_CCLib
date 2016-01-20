@@ -154,7 +154,7 @@ namespace SList2Queue
    // true. If it fails because the queue is empty then it returns false.
    // This is called for a operation. It decrements ReadAvailable.
 
-   bool tryRead (int* aReadValue) 
+   bool tryRead2 (int* aReadValue) 
    {
       // Store the read index in a temp.
       int tReadIndex = mNode[mHeadIndex].mNext;
@@ -170,6 +170,30 @@ namespace SList2Queue
 
       // Update the head index.
       mHeadIndex = tReadIndex;
+
+      // Done.
+      return true;
+   }
+
+   bool tryRead (int* aReadValue) 
+   {
+      int tHeadIndex;
+      while (true)
+      {
+         // Store the read index in a temp.
+         tHeadIndex = mHeadIndex;
+
+         // Exit if the queue is empty.
+         if (mNode[tHeadIndex].mNext == cInvalid) return false;
+
+         if (boolCas(&mHeadIndex, mNode[tHeadIndex].mNext, tHeadIndex)) break;
+      }
+      // Extract the read value from the head block.
+      int tReadIndex = mNode[tHeadIndex].mNext;
+      *aReadValue = mNode[tReadIndex].mValue;
+
+      // Push the previous head index back onto the stack.
+      mStack.tryPush(tHeadIndex);
 
       // Done.
       return true;
