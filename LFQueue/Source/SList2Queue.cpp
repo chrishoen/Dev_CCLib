@@ -4,6 +4,7 @@
 #include "prnPrint.h"
 
 #include "ccTokenStack.h"
+#include "LFAtomic.h"
 #include "SList2Queue.h"
 
 namespace SList2Queue
@@ -116,29 +117,6 @@ namespace SList2Queue
       return false;
    }
 
-   //******************************************************************************
-   //******************************************************************************
-   //******************************************************************************
-   // Easier to use compare and exchange functions.
-
-   static bool boolCae(int* aDestin, int aExchange, int aCompare)
-   {
-      int tOriginal = (int)InterlockedCompareExchange((PLONG)aDestin, *((LONG*)&aExchange), *((LONG*)&aCompare));
-      return tOriginal == aCompare; 
-   }
-
-   static int valCae(int* aDestin, int aExchange, int aCompare)
-   {
-      int tOriginal = (int)InterlockedCompareExchange((PLONG)aDestin, *((LONG*)&aExchange), *((LONG*)&aCompare));
-      return tOriginal; 
-   }
-
-   static int valExchange(int* aDestin, int aExchange)
-   {
-      int tOriginal = (int)InterlockedExchange((PLONG)aDestin, *((LONG*)&aExchange));
-      return tOriginal; 
-   }
-
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -202,10 +180,10 @@ namespace SList2Queue
       {
          tTailIndex = mTailIndex;
 
-         if (boolCae(&mNode[tTailIndex].mNext, tWriteIndex, cInvalid)) break;
-         boolCae(&mTailIndex, mNode[tTailIndex].mNext, tTailIndex);
+         if (boolCompExch(&mNode[tTailIndex].mNext, tWriteIndex, cInvalid)) break;
+         boolCompExch(&mTailIndex, mNode[tTailIndex].mNext, tTailIndex);
       }
-      boolCae(&mTailIndex,tWriteIndex,tTailIndex);
+      boolCompExch(&mTailIndex,tWriteIndex,tTailIndex);
 
       // Done
       return true;
@@ -233,9 +211,9 @@ namespace SList2Queue
          {
             tTailIndex = mNode[tTailIndex].mNext;
          }
-         if (boolCae(&mNode[tTailIndex].mNext, tWriteIndex, cInvalid)) break;
+         if (boolCompExch(&mNode[tTailIndex].mNext, tWriteIndex, cInvalid)) break;
       }
-      boolCae(&mTailIndex,tWriteIndex,tOldTailIndex);
+      boolCompExch(&mTailIndex,tWriteIndex,tOldTailIndex);
 
       // Done
       return true;
@@ -260,9 +238,9 @@ namespace SList2Queue
       {
          tTailIndex = mTailIndex;
 
-         if (boolCae(&mNode[tTailIndex].mNext, tWriteIndex, cInvalid)) break;
+         if (boolCompExch(&mNode[tTailIndex].mNext, tWriteIndex, cInvalid)) break;
       }
-      boolCae(&mTailIndex,tWriteIndex,tTailIndex);
+      boolCompExch(&mTailIndex,tWriteIndex,tTailIndex);
 
       // Done
       return true;
@@ -315,7 +293,7 @@ namespace SList2Queue
          // Exit if the queue is empty.
          if (mNode[tHeadIndex].mNext == cInvalid) return false;
 
-         if (boolCae(&mHeadIndex, mNode[tHeadIndex].mNext, tHeadIndex)) break;
+         if (boolCompExch(&mHeadIndex, mNode[tHeadIndex].mNext, tHeadIndex)) break;
       }
       // Extract the read value from the head block.
       int tReadIndex = mNode[tHeadIndex].mNext;
