@@ -1,11 +1,13 @@
 #include <stdio.h>
 #include <string.h>
 #include <windows.h>
+#include <atomic>
 #include "prnPrint.h"
 
-#include "ccTokenStack.h"
 #include "LFAtomic.h"
 #include "LFFreeList.h"
+
+using namespace std;
 
 namespace LFFreeList
 {
@@ -17,7 +19,7 @@ namespace LFFreeList
    typedef struct
    { 
       int mValue;  
-      int mNext;  
+      atomic<int> mListNext;
    } FreeListNode;
 
    static const int cInvalid = 999;
@@ -27,8 +29,8 @@ namespace LFFreeList
    //***************************************************************************
    // State Members
 
-   int mTailIndex;
-   int mListSize;
+   atomic<int> mListIndex;
+   atomic<int> mListSize;
 
    //***************************************************************************
    //***************************************************************************
@@ -40,9 +42,6 @@ namespace LFFreeList
 
    // Number of blocks allocated
    static int mAllocate = 0;
-
-   // Stack of indices into block array
-   static CC::TokenStack mStack;
 
    //***************************************************************************
    //***************************************************************************
@@ -65,14 +64,14 @@ namespace LFFreeList
       for (int i=0; i<mAllocate-1; i++)
       {
          mNode[i].mValue = 0;
-         mNode[i].mNext  = i + 1;
+         mNode[i].mListNext  = i + 1;
       }
 
       mNode[mAllocate-1].mValue = 0;
-      mNode[mAllocate-1].mNext = cInvalid;
+      mNode[mAllocate-1].mListNext = cInvalid;
 
       mListSize = 0;  
-      mTailIndex = mAllocate-1; 
+      mListIndex = mAllocate-1; 
    }
 
    //***************************************************************************
@@ -124,10 +123,10 @@ namespace LFFreeList
       if (mListSize >= mAllocate) return false;
 
       // Point the new node at the node that the tail points to. 
-      mNode[aIndex].mNext = mNode[mTailIndex].mNext;
+      mNode[aIndex].mListNext = mNode[mListIndex].mListNext.load();
 
       // Point the tail at the new node.
-      mNode[mTailIndex].mNext = aIndex;
+      mNode[mListIndex].mListNext = aIndex;
 
       // Done
       mListSize++;
@@ -146,17 +145,17 @@ namespace LFFreeList
       while (true)
       {
          // Save the index to the next node.
-         tNextIndex = mNode[mTailIndex].mNext;
+         tNextIndex = mNode[mListIndex].mListNext;
 
          // Point the new node at the node that the tail points to. 
-         mNode[aIndex].mNext = tNextIndex;
+         mNode[aIndex].mListNext = tNextIndex;
 
          // Point the tail at the new node.
-         if (my_bool_cae(&mNode[mTailIndex].mNext, aIndex, tNextIndex)) break;
+         if (mNode[mListIndex].mListNext.compare_exchange_weak(tNextIndex, aIndex)) break;
       }
 
       // Done.
-      my_fetch_add(&mListSize,1);
+      mListSize++;
       return true;
    }
 
@@ -168,17 +167,17 @@ namespace LFFreeList
    bool listPop0 (int* aIndex) 
    {
       // Store the index of the node that is to be detached in a temp.
-      int tIndex = mNode[mTailIndex].mNext;
+      int tIndex = mNode[mListIndex].mListNext;
 
       // Exit if the list is empty
       if (tIndex == cInvalid) return false;
 
       // Detach the node.
-      mNode[mTailIndex].mNext = mNode[tIndex].mNext;
+      mNode[mListIndex].mListNext = mNode[tIndex].mListNext.load();
 
       // Reset the detached node.
       mNode[tIndex].mValue = 0;
-      mNode[tIndex].mNext  = cInvalid;
+      mNode[tIndex].mListNext  = cInvalid;
 
       // Return result.
       *aIndex = tIndex;
@@ -194,24 +193,24 @@ namespace LFFreeList
       while (true)
       {
          // Store the index of the node that is to be detached in a temp.
-         tIndex = mNode[mTailIndex].mNext;
+         tIndex = mNode[mListIndex].mListNext;
 
          // Exit if the queue is empty.
          if (tIndex == cInvalid) return false;
 
          // Attempt to detach the node.
-         if (my_bool_cae(&mNode[mTailIndex].mNext, mNode[tIndex].mNext, tIndex)) break;
+         if (mNode[mListIndex].mListNext.compare_exchange_weak(tIndex, mNode[tIndex].mListNext)) break;
       }
 
       // Reset the detached node.
       mNode[tIndex].mValue = 0;
-      mNode[tIndex].mNext  = cInvalid;
+      mNode[tIndex].mListNext  = cInvalid;
 
       // Return result.
       *aIndex = tIndex;
 
       // Done.
-      my_fetch_add(&mListSize,-1);
+      mListSize--;
       return true;
    }
 

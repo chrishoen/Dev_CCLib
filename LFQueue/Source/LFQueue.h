@@ -6,10 +6,10 @@
 //******************************************************************************
 namespace LFQueue
 {
-   void initialize (unsigned aAllocate);
+   void initialize (int aAllocate);
 
-   bool tryWrite (unsigned  aWriteValue);
-   bool tryRead  (unsigned* aReadValue);
+   bool tryWrite  (int  aWriteValue);
+   bool tryRead   (int* aReadValue);
 }
 #endif
 

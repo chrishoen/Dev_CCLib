@@ -1,79 +1,81 @@
 #include <stdio.h>
 #include <string.h>
 #include <windows.h>
+#include <atomic>
 #include "prnPrint.h"
 
+#include "ccTokenStack.h"
+#include "LFAtomic.h"
 #include "LFQueue.h"
+
+using namespace std;
 
 namespace LFQueue
 {
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Memory Members
+   // SList Members
 
-   // Integer array
-   static unsigned mArray[1000];
+   typedef struct
+   { 
+      int mValue;  
+      atomic<int> mNext;  
+   } SListNode;
 
-   // Number of blocks allocated
-   static unsigned mAllocate = 0;
+   static const int cInvalid = 999;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Queue State Members
 
-   //---------------------------------------------------------------------------
-   // These two variables are each 16 bits and they are packed into a 32 bit 
-   // structure because the atomic compare exchange operation used works on
-   // 32 bit integers. This limits the queue size to 64K elements. The only 
-   // code that can safely change these variables is contained here. Any other
-   // code should be read only.
-   //
-   // WriteIndex is used to circularly index into queue memory for write 
-   // operations. ReadAvailable is used to indicate the number of reads that 
-   // are available. They have the following ranges:
-   //
-   //      0 <= WriteIndex    <= Capacity-1
-   //      0 <= ReadAvailable <= Capacity
-   //
-   //      IF ReadAvailable == 0        THEN the queue is empty
-   //      IF ReadAvailable == Capacity THEN the queue is full
-   //
-   //  The ReadIndex is derived from WriteIndex and ReadAvailable.
-   //
-   //      ReadIndex = WriteIndex - ReadAvailable;
-   //      IF ReadIndex < 0 THEN ReadIndex = ReadIndex + Capacity;
-   //---------------------------------------------------------------------------
+   atomic<int> mHeadIndex;  
+   atomic<int> mTailIndex;  
 
-   typedef struct
-   { 
-      unsigned mWriteValue      :8;  
-      unsigned mWriteIndex      :8;  
-      unsigned mReadAvailable   :8;  
-      unsigned mPadding         :8;  
-   } LFQueueState;
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Memory Members
 
-   static LFQueueState mState;
+   // Node array
+   static SListNode mNode[1000];
+
+   // Number of blocks allocated
+   static int mAllocate = 0;
+
+   // Stack of indices into block array
+   static CC::TokenStack mStack;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Version Members
+
+   int mWriteVersion = 3;
+   int mReadVersion  = 0;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Initialize
 
-   void initialize (unsigned aAllocate)
+   void initialize (int aAllocate)
    {
       // Initialize variables
-      mAllocate  = aAllocate;
+      mAllocate = aAllocate + 1;
 
-      mState.mWriteValue = 0;  
-      mState.mWriteIndex = 0;  
-      mState.mReadAvailable = 0;  
+      mStack.initialize(mAllocate);
 
-      for (int i=0;i<1000;i++)
+      for (int i=mAllocate-1; i>=0; --i)
       {
-         mArray[i]=0;
+         mStack.tryPush(i);
+         mNode[i].mValue = 0;
+         mNode[i].mNext = cInvalid;
       }
+
+      mStack.tryPop((int*)&mHeadIndex);
+      mTailIndex = mHeadIndex.load();  
    }
 
    //***************************************************************************
@@ -83,147 +85,228 @@ namespace LFQueue
    {
    }
 
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Use a compare and swap loop to apply a function to update a variable.
-   //
-   //    Value      points to the variable to be updated.
-   //    Exchange   points to a variable that contains the new value.
-   //    Original   points to a variable that contains the original value.
-   //    Function   points to the function that updates the variable.
-   //
-   //    Returns true if the variable was successfully updated.
-   //
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+   // Select version.
 
-   typedef bool (*CasLoopFunction)(LFQueueState* aExchange, int aParm1);
+   bool tryWrite0 (int  aWriteValue);
+   bool tryWrite1 (int  aWriteValue);
+   bool tryWrite2 (int  aWriteValue);
+   bool tryWrite3 (int  aWriteValue);
 
-   static bool applyCasLoopFunction(
-      LFQueueState*    aValue,
-      LFQueueState*    aExchange,
-      LFQueueState*    aOriginal,
-      CasLoopFunction  aFunction,
-      int              aParm1)
+   bool tryWrite(int aWriteValue)
    {
-      // Locals
-      LFQueueState tCompare, tExchange, tOriginal;
+      switch (mWriteVersion)
+      {
+      case 0: return tryWrite0(aWriteValue);
+      case 1: return tryWrite1(aWriteValue);
+      case 2: return tryWrite2(aWriteValue);
+      case 3: return tryWrite3(aWriteValue);
+      }
+      return false;
+   }
 
+   bool tryRead0(int* aReadValue);
+   bool tryRead1(int* aReadValue);
+
+   bool tryRead(int* aReadValue)
+   {
+      switch (mReadVersion)
+      {
+      case 0: return tryRead0(aReadValue);
+      case 1: return tryRead1(aReadValue);
+      }
+      return false;
+   }
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // This attempts to write a value to the queue. If the queue is not full
+   // then it succeeds. It attempts to pop an index from the index stack. If
+   // the stack is empty then the queue is full and it exits. The popped index
+   // is used to initialize a new node, which stores the input value that is
+   // to be written. The new node is then attached to the queue tail node and
+   // the tail index is updated.
+   // 
+   // There are different versions:
+   //
+   //    tryWrite0 can be used for single writer queues. It doesn't need to
+   //    use any cas logic and it is fastest.
+   //
+   //    tryWrite1 can be used for multple writer queues where, if a writer
+   //    process halts it will always proceed.
+   // 
+   //    tryWrite2 is a variation on tryWrite1.
+   // 
+   //    tryWrite3 can be used for multple writer queues where, if a writer
+   //    process halts it might not proceed, but it is faster.
+   // 
+
+   //***************************************************************************
+
+   bool tryWrite0 (int aWriteValue)
+   {
+      // Try to allocate an index from the stack. Exit if the stack is empty.
+      int tWriteIndex;
+      if (!mStack.tryPop(&tWriteIndex)) return false;
+
+      // Store the write value in a new node.
+      mNode[tWriteIndex].mValue = aWriteValue;
+      mNode[tWriteIndex].mNext = cInvalid;
+
+      // Attach the node to the queue tail node and update the tail index.
+      mNode[mTailIndex].mNext = tWriteIndex;
+      mTailIndex = tWriteIndex;
+
+      // Done
+      return true;
+   }
+
+   //***************************************************************************
+
+   bool tryWrite1 (int aWriteValue)
+   {
+      // Try to allocate an index from the stack
+      // Exit if the stack is empty.
+      int tWriteIndex;
+      if (!mStack.tryPop(&tWriteIndex)) return false;
+
+      // Store the write value in a new node.
+      mNode[tWriteIndex].mValue = aWriteValue;
+      mNode[tWriteIndex].mNext = cInvalid;
+
+      // Attach the node to the queue tail.
+      int tTailIndex;
       while (true)
       {
-         // Get the current value, it will be used in the compare exchange.
-         tCompare  = *aValue;
-         tExchange = tCompare;
+         tTailIndex = mTailIndex;
 
-         // Update the exchange variable with a new value.
-         // Exit the loop if unsuccessful.
-         if (!aFunction(&tExchange,aParm1)) return false;
-
-         // This call atomically reads the value and compares it to what was
-         // previously read at the first line of this loop. If they are the
-         // same then this was not concurrently preempted and so the original
-         // value is replaced with the exchange value. It returns the
-         // original value from before the compare.
-         *(LONG*)(&tOriginal) = InterlockedCompareExchange((PLONG)aValue, *(LONG*)(&tExchange), *(LONG*)(&tCompare));
-
-         // If the original and the compare values are the same then there was
-         // no preemption or contention and the exchange was a success, so exit
-         // the loop. If they were not the same then retry.
-         if (*(LONG*)(&tOriginal) == *(LONG*)(&tCompare)) break;
+         int tInvalid = cInvalid;
+         if (mNode[tTailIndex].mNext.compare_exchange_weak(tInvalid, tWriteIndex)) break;
+         mTailIndex.compare_exchange_weak(tTailIndex, mNode[tTailIndex].mNext);
       }
+      mTailIndex.compare_exchange_strong(tTailIndex, tWriteIndex);
 
-      // Return the results.
+      // Done
+      return true;
+   }
 
-      if (aExchange != NULL)
+   //***************************************************************************
+
+   bool tryWrite2 (int aWriteValue)
+   {
+      // Try to allocate an index from the stack
+      // Exit if the stack is empty.
+      int tWriteIndex;
+      if (!mStack.tryPop(&tWriteIndex)) return false;
+
+      // Store the write value in a new node.
+      mNode[tWriteIndex].mValue = aWriteValue;
+      mNode[tWriteIndex].mNext = cInvalid;
+
+      // Attach the node to the queue tail.
+      int tTailIndex    = mTailIndex;
+      int tOldTailIndex = tTailIndex;
+      while (true)
       {
-         *aExchange = tExchange;
+         while (mNode[tTailIndex].mNext != cInvalid)
+         {
+            tTailIndex = mNode[tTailIndex].mNext;
+         }
+         int tInvalid = cInvalid;
+         if (mNode[tTailIndex].mNext.compare_exchange_weak(tInvalid, tWriteIndex)) break;
       }
+      mTailIndex.compare_exchange_strong(tOldTailIndex, tWriteIndex);
 
-      if (aOriginal != NULL)
+      // Done
+      return true;
+   }
+
+   //***************************************************************************
+
+   bool tryWrite3 (int aWriteValue)
+   {
+      // Try to allocate an index from the stack
+      // Exit if the stack is empty.
+      int tWriteIndex;
+      if (!mStack.tryPop(&tWriteIndex)) return false;
+
+      // Store the write value in a new node.
+      mNode[tWriteIndex].mValue = aWriteValue;
+      mNode[tWriteIndex].mNext = cInvalid;
+
+      // Attach the node to the queue tail.
+      int tTailIndex;
+      while (true)
       {
-         *aOriginal = tOriginal;
-      }
+         tTailIndex = mTailIndex;
 
+         int tInvalid = cInvalid;
+         if (mNode[tTailIndex].mNext.compare_exchange_weak(tInvalid, tWriteIndex)) break;
+      }
+      mTailIndex.compare_exchange_strong(tTailIndex, tWriteIndex);
+
+      // Done
       return true;
    }
 
    //******************************************************************************
    //******************************************************************************
    //******************************************************************************
-   // This is called to start a write operation. If the queue is not full then
-   // it succeeds. It updates the variable pointed by the input pointer with the 
-   // WriteIndex that is to be used to access queue memory for the write, it
-   // increments ReadAvailable and returns true. If it fails because the queue is 
-   // full then it returns false.
+   // This attempts to read a value from the queue. If the queue is not empty
+   // then it succeeds. It extracts the read value from the head node, pushes the
+   // previous head index back onto the stack and updates the head index.
+   // 
+   // There are different versions:
+   //
+   //    tryRead0 can be used for single reader queues. It doesn't need to
+   //    use any cas logic and it is fastest.
+   //
+   //    tryRead1 can be used for multple reader queues where, if a reader
+   //    process halts it will always proceed.
 
-   bool tryWriteUpdate(LFQueueState* aState, int aParm1)
+   bool tryRead0 (int* aReadValue) 
    {
-      // Exit if the queue is full or will be full.
-      if (aState->mReadAvailable == mAllocate) return false;
-
-      // Store the tail write value.
-      aState->mWriteValue = aParm1;
-      // Increment the write index, wrap if necessary.
-      if (++aState->mWriteIndex == mAllocate) aState->mWriteIndex=0;
-      // Increment the read available count.
-      aState->mReadAvailable++;
-
-      return true;
-   }
-
-   bool tryWrite (unsigned aWriteValue)
-   {
-      // Locals
-      LFQueueState tOriginal;
-
-      // Test and update the queue state to write.
-      if (applyCasLoopFunction(&mState,0,&tOriginal,tryWriteUpdate,aWriteValue))
-      {
-         // Store the value in the array.
-         mArray[tOriginal.mWriteIndex] = aWriteValue;
-         return true;
-      }
-      else
-      {
-         // The queue is full, return false.
-         return false;
-      }
-   }
-
-   //******************************************************************************
-   //******************************************************************************
-   //******************************************************************************
-   // This is called to start a read operation. If the queue is not empty then it 
-   // succeeds, it  updates the variable pointed by the input pointer with the 
-   // ReadIndex that is to be used to access queue memory for the read and returns 
-   // true. If it fails because the queue is empty then it returns false.
-   // This is called for a operation. It decrements ReadAvailable.
-
-   bool tryReadUpdate(LFQueueState* aState,int aParm1)
-   {
-      // Update queue state for the exchange variable
-      aState->mReadAvailable--;
-
-      return true;
-   }
-
-   bool tryRead(unsigned* aReadValue)
-   {
-      // Store the current parms in a temp. This doesn't need to be atomic
-      // because it is assumed to run on a 32 bit architecture.
-      LFQueueState tState = mState;
+      // Store the read index in a temp.
+      int tReadIndex = mNode[mHeadIndex].mNext;
 
       // Exit if the queue is empty.
-      if (tState.mReadAvailable == 0) return false;
+      if (tReadIndex == cInvalid) return false;
 
-      // Update the read index
-      int tReadIndex = tState.mWriteIndex - tState.mReadAvailable;
-      if (tReadIndex < 0) tReadIndex = tReadIndex + mAllocate;
+      // Extract the read value from the head node.
+      *aReadValue = mNode[tReadIndex].mValue;
 
-      // Store result
-      *aReadValue = mArray[tReadIndex];
+      // Push the previous head index back onto the stack.
+      mStack.tryPush(mHeadIndex);
 
-      // Update the queue state to finish a read.
-      applyCasLoopFunction(&mState,0,0,tryReadUpdate,0);
+      // Update the head index.
+      mHeadIndex = tReadIndex;
+
+      // Done.
+      return true;
+   }
+
+   bool tryRead1 (int* aReadValue) 
+   {
+      int tHeadIndex;
+      while (true)
+      {
+         // Store the read index in a temp.
+         tHeadIndex = mHeadIndex;
+
+         // Exit if the queue is empty.
+         if (mNode[tHeadIndex].mNext == cInvalid) return false;
+
+         if (mHeadIndex.compare_exchange_weak(tHeadIndex, mNode[tHeadIndex].mNext)) break;
+      }
+      // Extract the read value from the head block.
+      int tReadIndex = mNode[tHeadIndex].mNext;
+      *aReadValue = mNode[tReadIndex].mValue;
+
+      // Push the previous head index back onto the stack.
+      mStack.tryPush(tHeadIndex);
 
       // Done.
       return true;
