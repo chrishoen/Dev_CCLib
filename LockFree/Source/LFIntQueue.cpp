@@ -29,8 +29,8 @@ namespace LFIntQueue
    //***************************************************************************
    // Queue State Members
 
-   atomic<int> mHeadIndex;  
-   atomic<int> mTailIndex;  
+   atomic<int> mQueueHead;  
+   atomic<int> mQueueTail;  
 
    //***************************************************************************
    //***************************************************************************
@@ -40,7 +40,7 @@ namespace LFIntQueue
    bool listPush  (int  aIndex);
    bool listPop   (int* aIndex);
 
-   atomic<int> mListIndex;
+   atomic<int> mListTail;
    atomic<int> mListSize;
 
    //***************************************************************************
@@ -79,19 +79,11 @@ namespace LFIntQueue
       mNode[mListAllocate-1].mListNext = cInvalid;
 
       mListSize  = mListAllocate-1;
-      mListIndex = 0;
+      mListTail = 0;
 
-      listPop((int*)&mHeadIndex);
-      mTailIndex = mHeadIndex.load(); 
+      listPop((int*)&mQueueHead);
+      mQueueTail = mQueueHead.load(); 
    }
-
-   //***************************************************************************
-   // Finalize
-
-   void finalize()
-   {
-   }
-
 
    //***************************************************************************
    //***************************************************************************
@@ -105,26 +97,26 @@ namespace LFIntQueue
 
    bool tryWrite (int aWriteValue)
    {
-      // Try to allocate an index from the stack
+      // Try to allocate a node from the free list.
       // Exit if the stack is empty.
-      int tWriteIndex;
-      if (!listPop(&tWriteIndex)) return false;
+      int tWriteNode;
+      if (!listPop(&tWriteNode)) return false;
 
       // Store the write value in a new node.
-      mNode[tWriteIndex].mValue = aWriteValue;
-      mNode[tWriteIndex].mQueueNext = cInvalid;
+      mNode[tWriteNode].mValue = aWriteValue;
+      mNode[tWriteNode].mQueueNext = cInvalid;
 
       // Attach the node to the queue tail.
-      int tTailIndex;
+      int tQueueTail;
       while (true)
       {
-         tTailIndex = mTailIndex;
+         tQueueTail = mQueueTail;
 
          int tInvalid = cInvalid;
-         if (mNode[tTailIndex].mQueueNext.compare_exchange_weak(tInvalid, tWriteIndex)) break;
-         mTailIndex.compare_exchange_weak(tTailIndex, mNode[tTailIndex].mQueueNext);
+         if (mNode[tQueueTail].mQueueNext.compare_exchange_weak(tInvalid, tWriteNode)) break;
+         mQueueTail.compare_exchange_weak(tQueueTail, mNode[tQueueTail].mQueueNext);
       }
-      mTailIndex.compare_exchange_strong(tTailIndex, tWriteIndex);
+      mQueueTail.compare_exchange_strong(tQueueTail, tWriteNode);
 
       // Done
       return true;
@@ -139,23 +131,23 @@ namespace LFIntQueue
 
    bool tryRead (int* aReadValue) 
    {
-      int tHeadIndex;
+      int tQueueHead;
       while (true)
       {
          // Store the read index in a temp.
-         tHeadIndex = mHeadIndex;
+         tQueueHead = mQueueHead;
 
          // Exit if the queue is empty.
-         if (mNode[tHeadIndex].mQueueNext == cInvalid) return false;
+         if (mNode[tQueueHead].mQueueNext == cInvalid) return false;
 
-         if (mHeadIndex.compare_exchange_weak(tHeadIndex, mNode[tHeadIndex].mQueueNext)) break;
+         if (mQueueHead.compare_exchange_weak(tQueueHead, mNode[tQueueHead].mQueueNext)) break;
       }
       // Extract the read value from the head block.
-      int tReadIndex = mNode[tHeadIndex].mQueueNext;
-      *aReadValue = mNode[tReadIndex].mValue;
+      int tReadNode = mNode[tQueueHead].mQueueNext;
+      *aReadValue = mNode[tReadNode].mValue;
 
       // Push the previous head index back onto the stack.
-      listPush(tHeadIndex);
+      listPush(tQueueHead);
 
       // Done.
       return true;
@@ -166,7 +158,7 @@ namespace LFIntQueue
    //***************************************************************************
    // Insert a node into the list after the list tail node.
 
-   bool listPush (int aIndex)
+   bool listPush (int aNode)
    {
       // Exit if the list is full.
       if (mListSize >= mAllocate) return false;
@@ -175,13 +167,13 @@ namespace LFIntQueue
       while (true)
       {
          // Save the index to the next node.
-         tListNext = mNode[mListIndex].mListNext;
+         tListNext = mNode[mListTail].mListNext;
 
          // Point the new node at the node that the tail points to. 
-         mNode[aIndex].mListNext = tListNext;
+         mNode[aNode].mListNext = tListNext;
 
          // Point the tail at the new node.
-         if (mNode[mListIndex].mListNext.compare_exchange_weak(tListNext, aIndex)) break;
+         if (mNode[mListTail].mListNext.compare_exchange_weak(tListNext, aNode)) break;
       }
 
       // Done.
@@ -194,32 +186,34 @@ namespace LFIntQueue
    //******************************************************************************
    // This detaches the node that is after the tail node.
 
-   bool listPop (int* aIndex) 
+   bool listPop (int* aNode) 
    {
-//    printf("listPop %d %d %d\n",mListSize,mListIndex,mNode[mListIndex].mListNext);
-      int tIndex;
+      int tNode;
       while (true)
       {
          // Store the index of the node that is to be detached in a temp.
-         tIndex = mNode[mListIndex].mListNext;
+         tNode = mNode[mListTail].mListNext;
          // Exit if the queue is empty.
-         if (tIndex == cInvalid) return false;
+         if (tNode == cInvalid) return false;
 
          // Attempt to detach the node.
-         if (mNode[mListIndex].mListNext.compare_exchange_weak(tIndex, mNode[tIndex].mListNext)) break;
+         if (mNode[mListTail].mListNext.compare_exchange_weak(tNode, mNode[tNode].mListNext)) break;
       }
 
       // Reset the detached node.
-      mNode[tIndex].mValue = 0;
-      mNode[tIndex].mQueueNext  = cInvalid;
-      mNode[tIndex].mListNext  = cInvalid;
+      mNode[tNode].mValue = 0;
+      mNode[tNode].mQueueNext  = cInvalid;
+      mNode[tNode].mListNext  = cInvalid;
 
       // Return result.
-      *aIndex = tIndex;
+      *aNode = tNode;
 
       // Done.
       mListSize--;
       return true;
    }
-
 }
+
+#if 0
+    printf("listPop %d %d %d\n",mListSize,mListTail,mNode[mListTail].mListNext);
+#endif
