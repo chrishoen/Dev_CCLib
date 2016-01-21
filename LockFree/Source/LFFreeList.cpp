@@ -152,7 +152,7 @@ namespace LFFreeList
          mNode[aIndex].mNext = tNextIndex;
 
          // Point the tail at the new node.
-         if (my_bool_cae(&mNode[mTailIndex].mNext, aIndex, tNextIndex)) break;
+         if (my_bool_cae(&mNode[mTailIndex].mNext, tNextIndex, aIndex)) break;
       }
 
       // Done.
@@ -200,7 +200,7 @@ namespace LFFreeList
          if (tIndex == cInvalid) return false;
 
          // Attempt to detach the node.
-         if (my_bool_cae(&mNode[mTailIndex].mNext, mNode[tIndex].mNext, tIndex)) break;
+         if (my_bool_cae(&mNode[mTailIndex].mNext, tIndex, mNode[tIndex].mNext)) break;
       }
 
       // Reset the detached node.

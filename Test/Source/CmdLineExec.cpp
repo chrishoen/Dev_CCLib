@@ -57,8 +57,27 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 //******************************************************************************
 
+void function1(int* aV)
+{
+   *aV = 1000;
+}
+
+void function2(int& aV)
+{
+   aV = 1001;
+}
+
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
+   atomic<int> tX,tY;
+   tX = 100;
+   tY = tX.load();
+
+   function1((int*)&tX);
+   function2((int&)tY);
+
+   Prn::print(0, "L1   %d %d",tX,tY);
+
 }
 
 //******************************************************************************

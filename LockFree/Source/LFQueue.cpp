@@ -180,10 +180,10 @@ namespace LFQueue
       {
          tTailIndex = mTailIndex;
 
-         if (my_bool_cae(&mNode[tTailIndex].mNext, tWriteIndex, cInvalid)) break;
-         my_bool_cae(&mTailIndex, mNode[tTailIndex].mNext, tTailIndex);
+         if (my_bool_cae(&mNode[tTailIndex].mNext, cInvalid, tWriteIndex)) break;
+         my_bool_cae(&mTailIndex, tTailIndex, mNode[tTailIndex].mNext);
       }
-      my_bool_cae(&mTailIndex,tWriteIndex,tTailIndex);
+      my_bool_cae(&mTailIndex, tTailIndex, tWriteIndex);
 
       // Done
       return true;
@@ -211,9 +211,9 @@ namespace LFQueue
          {
             tTailIndex = mNode[tTailIndex].mNext;
          }
-         if (my_bool_cae(&mNode[tTailIndex].mNext, tWriteIndex, cInvalid)) break;
+         if (my_bool_cae(&mNode[tTailIndex].mNext, cInvalid, tWriteIndex)) break;
       }
-      my_bool_cae(&mTailIndex,tWriteIndex,tOldTailIndex);
+      my_bool_cae(&mTailIndex, tOldTailIndex, tWriteIndex);
 
       // Done
       return true;
@@ -238,9 +238,9 @@ namespace LFQueue
       {
          tTailIndex = mTailIndex;
 
-         if (my_bool_cae(&mNode[tTailIndex].mNext, tWriteIndex, cInvalid)) break;
+         if (my_bool_cae(&mNode[tTailIndex].mNext, cInvalid, tWriteIndex)) break;
       }
-      my_bool_cae(&mTailIndex,tWriteIndex,tTailIndex);
+      my_bool_cae(&mTailIndex, tTailIndex, tWriteIndex);
 
       // Done
       return true;
@@ -293,7 +293,7 @@ namespace LFQueue
          // Exit if the queue is empty.
          if (mNode[tHeadIndex].mNext == cInvalid) return false;
 
-         if (my_bool_cae(&mHeadIndex, mNode[tHeadIndex].mNext, tHeadIndex)) break;
+         if (my_bool_cae(&mHeadIndex, tHeadIndex, mNode[tHeadIndex].mNext)) break;
       }
       // Extract the read value from the head block.
       int tReadIndex = mNode[tHeadIndex].mNext;
@@ -305,6 +305,4 @@ namespace LFQueue
       // Done.
       return true;
    }
-
-
 }
