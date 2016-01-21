@@ -170,18 +170,19 @@
     <ClCompile Include="Source\ccLFBounded.cpp" />
     <ClCompile Include="Source\ccTokenStack.cpp" />
     <ClCompile Include="Source\CmdLineExec.cpp" />
-    <ClCompile Include="Source\LFPointerQueue.cpp" />
-    <ClCompile Include="Source\LFQueue.cpp" />
+    <ClCompile Include="Source\LFFreeList.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
+    <ClCompile Include="Source\SList2Queue.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\ccLFBounded.h" />
     <ClInclude Include="Source\ccTokenStack.h" />
     <ClInclude Include="Source\CmdLineExec.h" />
-    <ClInclude Include="Source\LFPointerQueue.h" />
-    <ClInclude Include="Source\LFQueue.h" />
+    <ClInclude Include="Source\LFAtomic.h" />
+    <ClInclude Include="Source\LFFreeList.h" />
     <ClInclude Include="Source\MainInit.h" />
+    <ClInclude Include="Source\SList2Queue.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,25 +1,25 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Source\CmdLineExec.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Main.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ccTokenStack.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\MainInit.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\CmdLineExec.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LFFreeList.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SList2Queue.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
     <ClCompile Include="Source\ccLFBounded.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\LFQueue.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\LFPointerQueue.cpp">
+    <ClCompile Include="Source\ccTokenStack.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -29,22 +29,25 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\MainInit.h">
+      <Filter>Source</Filter>
+    </ClInclude>
     <ClInclude Include="Source\CmdLineExec.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccTokenStack.h">
+    <ClInclude Include="Source\LFAtomic.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\MainInit.h">
+    <ClInclude Include="Source\LFFreeList.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SList2Queue.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccLFBounded.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\LFQueue.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\LFPointerQueue.h">
+    <ClInclude Include="Source\ccTokenStack.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
