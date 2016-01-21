@@ -199,7 +199,7 @@ namespace LFFreeList
          // Exit if the queue is empty.
          if (tIndex == cInvalid) return false;
 
-         // Attempt to detach the node to pop.
+         // Attempt to detach the node.
          if (my_bool_cae(&mNode[mTailIndex].mNext, mNode[tIndex].mNext, tIndex)) break;
       }
 
