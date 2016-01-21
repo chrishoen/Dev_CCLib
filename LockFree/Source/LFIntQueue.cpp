@@ -4,8 +4,6 @@
 #include <atomic>
 #include "prnPrint.h"
 
-#include "ccTokenStack.h"
-#include "LFAtomic.h"
 #include "LFIntQueue.h"
 
 using namespace std;
@@ -19,8 +17,9 @@ namespace LFIntQueue
 
    typedef struct
    { 
-      int mValue;  
-      atomic<int> mNext;  
+      int         mValue;
+      atomic<int> mQueueNext;
+      atomic<int> mListNext;
    } SListNode;
 
    static const int cInvalid = 999;
@@ -36,6 +35,17 @@ namespace LFIntQueue
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
+   // Free List Members
+
+   bool listPush  (int  aIndex);
+   bool listPop   (int* aIndex);
+
+   atomic<int> mListIndex;
+   atomic<int> mListSize;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Memory Members
 
    // Node array
@@ -43,9 +53,8 @@ namespace LFIntQueue
 
    // Number of blocks allocated
    static int mAllocate = 0;
-
-   // Stack of indices into block array
-   static CC::TokenStack mStack;
+   static int mQueueAllocate = 0;
+   static int mListAllocate = 0;
 
    //***************************************************************************
    //***************************************************************************
@@ -54,20 +63,26 @@ namespace LFIntQueue
 
    void initialize (int aAllocate)
    {
-      // Initialize variables
-      mAllocate = aAllocate + 1;
+      mAllocate      = aAllocate;
+      mQueueAllocate = aAllocate + 1;
+      mListAllocate  = aAllocate + 2;
 
-      mStack.initialize(mAllocate);
-
-      for (int i=mAllocate-1; i>=0; --i)
+      for (int i=0; i<mListAllocate-1; i++)
       {
-         mStack.tryPush(i);
          mNode[i].mValue = 0;
-         mNode[i].mNext = cInvalid;
+         mNode[i].mQueueNext = cInvalid;
+         mNode[i].mListNext  = i + 1;
       }
 
-      mStack.tryPop((int*)&mHeadIndex);
-      mTailIndex = mHeadIndex.load();  
+      mNode[mListAllocate-1].mValue = 0;
+      mNode[mListAllocate-1].mQueueNext = cInvalid;
+      mNode[mListAllocate-1].mListNext = cInvalid;
+
+      mListSize  = mListAllocate-1;
+      mListIndex = 0;
+
+      listPop((int*)&mHeadIndex);
+      mTailIndex = mHeadIndex.load(); 
    }
 
    //***************************************************************************
@@ -93,11 +108,11 @@ namespace LFIntQueue
       // Try to allocate an index from the stack
       // Exit if the stack is empty.
       int tWriteIndex;
-      if (!mStack.tryPop(&tWriteIndex)) return false;
+      if (!listPop(&tWriteIndex)) return false;
 
       // Store the write value in a new node.
       mNode[tWriteIndex].mValue = aWriteValue;
-      mNode[tWriteIndex].mNext = cInvalid;
+      mNode[tWriteIndex].mQueueNext = cInvalid;
 
       // Attach the node to the queue tail.
       int tTailIndex;
@@ -106,8 +121,8 @@ namespace LFIntQueue
          tTailIndex = mTailIndex;
 
          int tInvalid = cInvalid;
-         if (mNode[tTailIndex].mNext.compare_exchange_weak(tInvalid, tWriteIndex)) break;
-         mTailIndex.compare_exchange_weak(tTailIndex, mNode[tTailIndex].mNext);
+         if (mNode[tTailIndex].mQueueNext.compare_exchange_weak(tInvalid, tWriteIndex)) break;
+         mTailIndex.compare_exchange_weak(tTailIndex, mNode[tTailIndex].mQueueNext);
       }
       mTailIndex.compare_exchange_strong(tTailIndex, tWriteIndex);
 
@@ -131,18 +146,80 @@ namespace LFIntQueue
          tHeadIndex = mHeadIndex;
 
          // Exit if the queue is empty.
-         if (mNode[tHeadIndex].mNext == cInvalid) return false;
+         if (mNode[tHeadIndex].mQueueNext == cInvalid) return false;
 
-         if (mHeadIndex.compare_exchange_weak(tHeadIndex, mNode[tHeadIndex].mNext)) break;
+         if (mHeadIndex.compare_exchange_weak(tHeadIndex, mNode[tHeadIndex].mQueueNext)) break;
       }
       // Extract the read value from the head block.
-      int tReadIndex = mNode[tHeadIndex].mNext;
+      int tReadIndex = mNode[tHeadIndex].mQueueNext;
       *aReadValue = mNode[tReadIndex].mValue;
 
       // Push the previous head index back onto the stack.
-      mStack.tryPush(tHeadIndex);
+      listPush(tHeadIndex);
 
       // Done.
       return true;
    }
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Insert a node into the list after the list tail node.
+
+   bool listPush (int aIndex)
+   {
+      // Exit if the list is full.
+      if (mListSize >= mAllocate) return false;
+
+      int tListNext;
+      while (true)
+      {
+         // Save the index to the next node.
+         tListNext = mNode[mListIndex].mListNext;
+
+         // Point the new node at the node that the tail points to. 
+         mNode[aIndex].mListNext = tListNext;
+
+         // Point the tail at the new node.
+         if (mNode[mListIndex].mListNext.compare_exchange_weak(tListNext, aIndex)) break;
+      }
+
+      // Done.
+      mListSize++;
+      return true;
+   }
+
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+   // This detaches the node that is after the tail node.
+
+   bool listPop (int* aIndex) 
+   {
+//    printf("listPop %d %d %d\n",mListSize,mListIndex,mNode[mListIndex].mListNext);
+      int tIndex;
+      while (true)
+      {
+         // Store the index of the node that is to be detached in a temp.
+         tIndex = mNode[mListIndex].mListNext;
+         // Exit if the queue is empty.
+         if (tIndex == cInvalid) return false;
+
+         // Attempt to detach the node.
+         if (mNode[mListIndex].mListNext.compare_exchange_weak(tIndex, mNode[tIndex].mListNext)) break;
+      }
+
+      // Reset the detached node.
+      mNode[tIndex].mValue = 0;
+      mNode[tIndex].mQueueNext  = cInvalid;
+      mNode[tIndex].mListNext  = cInvalid;
+
+      // Return result.
+      *aIndex = tIndex;
+
+      // Done.
+      mListSize--;
+      return true;
+   }
+
 }

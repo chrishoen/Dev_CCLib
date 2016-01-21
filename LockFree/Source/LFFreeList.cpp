@@ -19,7 +19,7 @@ namespace LFFreeList
    typedef struct
    { 
       int mValue;  
-      atomic<int> mListNext;  
+      atomic<int> mListNext;
    } FreeListNode;
 
    static const int cInvalid = 999;
