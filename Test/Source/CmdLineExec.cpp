@@ -57,26 +57,27 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 //******************************************************************************
 
-void function1(int* aV)
-{
-   *aV = 1000;
-}
-
-void function2(int& aV)
-{
-   aV = 1001;
-}
-
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   atomic<int> tX,tY;
+   atomic<int> tX;
+   int tE;
+   int tC = 100;
+
    tX = 100;
-   tY = tX.load();
+   tE = 200;
+   Prn::print(0, "L1   %d %d %d",tX,tC,tE);
 
-   function1((int*)&tX);
-   function2((int&)tY);
+   tX.compare_exchange_weak(tC,tE);
+   Prn::print(0, "L2   %d %d %d",tX,tC,tE);
+   Prn::print(0, "");
 
-   Prn::print(0, "L1   %d %d",tX,tY);
+   tX = 100;
+   tE = 200;
+   Prn::print(0, "L3   %d %d %d",tX,tC,tE);
+
+   tX.compare_exchange_weak(tC,tE);
+   Prn::print(0, "L4   %d %d %d",tX,tC,tE);
+   Prn::print(0, "");
 
 }
 
