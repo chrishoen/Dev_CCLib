@@ -5,9 +5,9 @@
 
 #include "ccTokenStack.h"
 #include "LFAtomic.h"
-#include "SList2Queue.h"
+#include "LFQueue.h"
 
-namespace SList2Queue
+namespace LFQueue
 {
    //***************************************************************************
    //***************************************************************************

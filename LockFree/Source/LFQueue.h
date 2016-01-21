@@ -1,10 +1,10 @@
-#ifndef _SLIST2QUEUE_H_
-#define _SLIST2QUEUE_H_
+#ifndef _LFQUEUE_H_
+#define _LFQUEUE_H_
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-namespace SList2Queue
+namespace LFQueue
 {
    void initialize (int aAllocate);
 
