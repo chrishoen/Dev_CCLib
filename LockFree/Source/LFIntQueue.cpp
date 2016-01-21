@@ -179,6 +179,7 @@ namespace LFIntQueue
    //***************************************************************************
    //***************************************************************************
    // Insert a node into the list after the list tail node.
+   // There can be no concurrent calls to this.
 
    bool listPush (int aNode)
    {
@@ -207,14 +208,14 @@ namespace LFIntQueue
    //******************************************************************************
    //******************************************************************************
    // This detaches the node that is after the tail node.
+   // There can be concurrent calls to this.
 
    bool listPop (int* aNode) 
    {
-      int tNode;
+      // Store the index of the node that is to be detached in a temp.
+      int tNode = mNode[mListTail].mListNext;
       while (true)
       {
-         // Store the index of the node that is to be detached in a temp.
-         tNode = mNode[mListTail].mListNext;
          // Exit if the queue is empty.
          if (tNode == cInvalid) return false;
 
@@ -235,7 +236,3 @@ namespace LFIntQueue
       return true;
    }
 }
-
-#if 0
-    printf("listPop %d %d %d\n",mListSize,mListTail,mNode[mListTail].mListNext);
-#endif
