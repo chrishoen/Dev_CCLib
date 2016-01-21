@@ -12,13 +12,19 @@
 //******************************************************************************
 // Easier to use compare and exchange functions.
 
-inline bool boolCompExch(int* aDestin, int aExchange, int aCompare)
+inline bool my_bool_compexch(int* aDestin, int aExchange, int aCompare)
 {
    int tOriginal = (int)InterlockedCompareExchange((PLONG)aDestin, *((LONG*)&aExchange), *((LONG*)&aCompare));
    return tOriginal == aCompare; 
 }
 
-inline int valCompExch(int* aDestin, int aExchange, int aCompare)
+inline int my_val_compexch(int* aDestin, int aExchange, int aCompare)
+{
+   int tOriginal = (int)InterlockedCompareExchange((PLONG)aDestin, *((LONG*)&aExchange), *((LONG*)&aCompare));
+   return tOriginal; 
+}
+
+inline int my_fetch_add(int* aDestin, int aExchange, int aCompare)
 {
    int tOriginal = (int)InterlockedCompareExchange((PLONG)aDestin, *((LONG*)&aExchange), *((LONG*)&aCompare));
    return tOriginal; 
