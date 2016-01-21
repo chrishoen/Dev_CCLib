@@ -1,11 +1,13 @@
 #include <stdio.h>
 #include <string.h>
 #include <windows.h>
+#include <atomic>
 #include "prnPrint.h"
 
-#include "ccTokenStack.h"
 #include "LFAtomic.h"
 #include "LFFreeList.h"
+
+using namespace std;
 
 namespace LFFreeList
 {
@@ -17,7 +19,7 @@ namespace LFFreeList
    typedef struct
    { 
       int mValue;  
-      int mNext;  
+      atomic<int> mNext;  
    } FreeListNode;
 
    static const int cInvalid = 999;
@@ -27,8 +29,8 @@ namespace LFFreeList
    //***************************************************************************
    // State Members
 
-   int mTailIndex;
-   int mListSize;
+   atomic<int> mTailIndex;
+   atomic<int> mListSize;
 
    //***************************************************************************
    //***************************************************************************
@@ -40,9 +42,6 @@ namespace LFFreeList
 
    // Number of blocks allocated
    static int mAllocate = 0;
-
-   // Stack of indices into block array
-   static CC::TokenStack mStack;
 
    //***************************************************************************
    //***************************************************************************
@@ -124,7 +123,7 @@ namespace LFFreeList
       if (mListSize >= mAllocate) return false;
 
       // Point the new node at the node that the tail points to. 
-      mNode[aIndex].mNext = mNode[mTailIndex].mNext;
+      mNode[aIndex].mNext = mNode[mTailIndex].mNext.load();
 
       // Point the tail at the new node.
       mNode[mTailIndex].mNext = aIndex;
@@ -152,11 +151,11 @@ namespace LFFreeList
          mNode[aIndex].mNext = tNextIndex;
 
          // Point the tail at the new node.
-         if (my_bool_cae(&mNode[mTailIndex].mNext, tNextIndex, aIndex)) break;
+         if (mNode[mTailIndex].mNext.compare_exchange_weak(tNextIndex, aIndex)) break;
       }
 
       // Done.
-      my_fetch_add(&mListSize,1);
+      mListSize++;
       return true;
    }
 
@@ -174,7 +173,7 @@ namespace LFFreeList
       if (tIndex == cInvalid) return false;
 
       // Detach the node.
-      mNode[mTailIndex].mNext = mNode[tIndex].mNext;
+      mNode[mTailIndex].mNext = mNode[tIndex].mNext.load();
 
       // Reset the detached node.
       mNode[tIndex].mValue = 0;
@@ -200,7 +199,7 @@ namespace LFFreeList
          if (tIndex == cInvalid) return false;
 
          // Attempt to detach the node.
-         if (my_bool_cae(&mNode[mTailIndex].mNext, tIndex, mNode[tIndex].mNext)) break;
+         if (mNode[mTailIndex].mNext.compare_exchange_weak(tIndex, mNode[tIndex].mNext)) break;
       }
 
       // Reset the detached node.
@@ -211,7 +210,7 @@ namespace LFFreeList
       *aIndex = tIndex;
 
       // Done.
-      my_fetch_add(&mListSize,-1);
+      mListSize--;
       return true;
    }
 

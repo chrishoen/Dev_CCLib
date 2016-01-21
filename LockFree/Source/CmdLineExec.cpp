@@ -5,7 +5,7 @@
 #include <stdio.h>
 
 #include "prnPrint.h"
-#include "LFQueue.h"
+#include "LFIntQueue.h"
 
 #include "CmdLineExec.h"
 
@@ -14,7 +14,7 @@
 CmdLineExec::CmdLineExec()
 {
    mCount=0;
-   LFQueue::initialize(4);
+   LFIntQueue::initialize(4);
 }
 
 //******************************************************************************
@@ -23,7 +23,7 @@ void CmdLineExec::reset()
 {
    for (int i=0;i<100;i++) printf("\n",i);
    mCount=0;
-   LFQueue::initialize(4);
+   LFIntQueue::initialize(4);
 }
 
 //******************************************************************************
@@ -67,7 +67,7 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeWrite(Ris::CmdLineCmd* aCmd)
 {
-   if (LFQueue::tryWrite(++mCount))
+   if (LFIntQueue::tryWrite(++mCount))
    {
       Prn::print(0, "WRITE PASS  $$ %d", mCount);
    }
@@ -82,7 +82,7 @@ void CmdLineExec::executeWrite(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeRead(Ris::CmdLineCmd* aCmd)
 {
    int tCount=0;
-   if (LFQueue::tryRead(&tCount))
+   if (LFIntQueue::tryRead(&tCount))
    {
       Prn::print(0, "READ            PASS  $$ %d", tCount);
    }
