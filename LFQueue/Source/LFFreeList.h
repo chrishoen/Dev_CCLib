@@ -8,8 +8,9 @@ namespace LFFreeList
 {
    void initialize (int aAllocate);
 
-   bool tryPush  (int  aIndex);
-   bool tryPop   (int* aIndex);
+   bool listPush  (int  aIndex);
+   bool listPop   (int* aIndex);
+
 }
 #endif
 

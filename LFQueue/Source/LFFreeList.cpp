@@ -87,28 +87,28 @@ namespace LFFreeList
    //******************************************************************************
    // Select version.
 
-   bool tryPush0 (int  aIndex);
-   bool tryPush1 (int  aIndex);
+   bool listPush0 (int  aIndex);
+   bool listPush1 (int  aIndex);
 
-   bool tryPush(int aIndex)
+   bool listPush(int aIndex)
    {
       switch (mPushVersion)
       {
-      case 0: return tryPush0(aIndex);
-      case 1: return tryPush1(aIndex);
+      case 0: return listPush0(aIndex);
+      case 1: return listPush1(aIndex);
       }
       return false;
    }
 
-   bool tryPop0(int* aIndex);
-   bool tryPop1(int* aIndex);
+   bool listPop0(int* aIndex);
+   bool listPop1(int* aIndex);
 
-   bool tryPop(int* aIndex)
+   bool listPop(int* aIndex)
    {
       switch (mPopVersion)
       {
-      case 0: return tryPop0(aIndex);
-      case 1: return tryPop1(aIndex);
+      case 0: return listPop0(aIndex);
+      case 1: return listPop1(aIndex);
       }
       return false;
    }
@@ -118,7 +118,7 @@ namespace LFFreeList
    //***************************************************************************
    // Insert a node into the list after the tail node.
 
-   bool tryPush0 (int aIndex)
+   bool listPush0 (int aIndex)
    {
       // Exit if the list is full.
       if (mListSize >= mAllocate) return false;
@@ -137,7 +137,7 @@ namespace LFFreeList
    //***************************************************************************
    // Insert a node into the list after the tail node.
 
-   bool tryPush1 (int aIndex)
+   bool listPush1 (int aIndex)
    {
       // Exit if the list is full.
       if (mListSize >= mAllocate) return false;
@@ -165,7 +165,7 @@ namespace LFFreeList
    //******************************************************************************
    // This detaches the node that is after the tail node.
 
-   bool tryPop0 (int* aIndex) 
+   bool listPop0 (int* aIndex) 
    {
       // Store the index of the node that is to be detached in a temp.
       int tIndex = mNode[mTailIndex].mNext;
@@ -188,7 +188,7 @@ namespace LFFreeList
       return true;
    }
 
-   bool tryPop1 (int* aIndex) 
+   bool listPop1 (int* aIndex) 
    {
       int tIndex;
       while (true)
@@ -214,6 +214,5 @@ namespace LFFreeList
       my_fetch_add(&mListSize,-1);
       return true;
    }
-
 
 }
