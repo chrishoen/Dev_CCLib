@@ -5,6 +5,7 @@
 #include <stdio.h>
 
 #include "prnPrint.h"
+#include "Timing.h"
 #include "LFIntQueue.h"
 
 #include "CmdLineExec.h"
@@ -41,10 +42,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   for (int i=0;i<4;i++)
-   {
-      printf("%d\n",i);
-   }
+   Timing::run1();
 }
 
 //******************************************************************************

@@ -202,7 +202,7 @@ namespace LFIntQueue
 
       // Reset the detached node.
       mNode[tNode].mValue = 0;
-      mNode[tNode].mQueueNext  = cInvalid;
+      mNode[tNode].mQueueNext = cInvalid;
       mNode[tNode].mListNext  = cInvalid;
 
       // Return result.
