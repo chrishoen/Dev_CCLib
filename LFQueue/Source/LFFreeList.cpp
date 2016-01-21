@@ -87,28 +87,28 @@ namespace LFFreeList
    //******************************************************************************
    // Select version.
 
-   bool tryPush0 (int  aPushValue);
-   bool tryPush1 (int  aPushValue);
+   bool tryPush0 (int  aIndex);
+   bool tryPush1 (int  aIndex);
 
-   bool tryPush(int aPushValue)
+   bool tryPush(int aIndex)
    {
       switch (mPushVersion)
       {
-      case 0: return tryPush0(aPushValue);
-      case 1: return tryPush1(aPushValue);
+      case 0: return tryPush0(aIndex);
+      case 1: return tryPush1(aIndex);
       }
       return false;
    }
 
-   bool tryPop0(int* aPopValue);
-   bool tryPop1(int* aPopValue);
+   bool tryPop0(int* aIndex);
+   bool tryPop1(int* aIndex);
 
-   bool tryPop(int* aPopValue)
+   bool tryPop(int* aIndex)
    {
       switch (mPopVersion)
       {
-      case 0: return tryPop0(aPopValue);
-      case 1: return tryPop1(aPopValue);
+      case 0: return tryPop0(aIndex);
+      case 1: return tryPop1(aIndex);
       }
       return false;
    }
@@ -120,6 +120,9 @@ namespace LFFreeList
 
    bool tryPush0 (int aIndex)
    {
+      // Exit if the list is full.
+      if (mListSize >= mAllocate) return false;
+
       // Point the new node at the node that the tail points to. 
       mNode[aIndex].mNext = mNode[mTailIndex].mNext;
 
@@ -136,6 +139,9 @@ namespace LFFreeList
 
    bool tryPush1 (int aIndex)
    {
+      // Exit if the list is full.
+      if (mListSize >= mAllocate) return false;
+
       int tNextIndex;
       while (true)
       {
