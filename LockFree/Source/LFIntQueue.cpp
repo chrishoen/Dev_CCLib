@@ -125,10 +125,33 @@ namespace LFIntQueue
    //******************************************************************************
    //******************************************************************************
    // This attempts to read a value from the queue. If the queue is not empty
-   // then it succeeds. It extracts the read value from the head node, pushes the
-   // previous head node back onto the free list and updates the head index.
+   // then it succeeds. The next node in the queue to be read is the one 
+   // immedialtely after the head node. It extracts the read value from the read
+   // node, pushes the previous head node back onto the free list and updates the
+   // head index.
 
    bool tryRead (int* aReadValue) 
+   {
+      // Store the read node index in a temp.
+      int tReadNode = mNode[mQueueHead].mQueueNext;
+
+      // Exit if the queue is empty.
+      if (tReadNode == cInvalid) return false;
+
+      // Extract the value from the read node.
+      *aReadValue = mNode[tReadNode].mValue;
+
+      // Push the previous head node back onto the free list.
+      listPush(mQueueHead);
+
+      // Update the head node to be the one that was just read from.
+      mQueueHead = tReadNode;
+
+      // Done.
+      return true;
+   }
+
+   bool tryRead1 (int* aReadValue) 
    {
       int tQueueHead;
       while (true)
