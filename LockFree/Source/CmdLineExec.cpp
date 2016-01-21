@@ -42,7 +42,8 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   Timing::run1();
+   aCmd->setArgDefault(1,3);
+   Timing::run1(aCmd->argInt(1));
 }
 
 //******************************************************************************

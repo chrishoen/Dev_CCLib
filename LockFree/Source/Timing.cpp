@@ -20,18 +20,22 @@ namespace Timing
    Ris::TimeMarker mMarker;
    int mWriteCount=0;
    int mReadCount=0;
+
    atomic<int> mAX=0;
+   int mNC=0;
+   int mNE=0;
 
    void test1();
    void test2();
    void test3();
+   void test4();
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Run1
 
-   void run1()
+   void run1(int aTest)
    {
       int tIterations = 1000000;
       mMarker.initialize(tIterations);
@@ -43,7 +47,13 @@ namespace Timing
       for (int i = 0; i < tIterations; i++)
       {
          mMarker.doStart();
-         test1();
+         switch(aTest)
+         {
+            case 1:  test1(); break;
+            case 2:  test2(); break;
+            case 3:  test3(); break;
+            case 4:  test4(); break;
+         }
          mMarker.doStop();
 
          if (mMarker.mStatistics.mEndOfPeriod)
@@ -80,6 +90,15 @@ namespace Timing
    {
       LFIntQueue::tryWrite(++mWriteCount);
       LFIntQueue::tryRead(&mReadCount);
+   }
+
+   void test4()
+   {
+      mAX = 100;
+      mNC = 100;
+      mNE = 200;
+
+      mAX.compare_exchange_weak(mNC,mNE);
    }
 
 
