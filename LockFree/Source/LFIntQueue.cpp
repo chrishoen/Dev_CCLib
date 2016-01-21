@@ -89,11 +89,10 @@ namespace LFIntQueue
    //***************************************************************************
    //***************************************************************************
    // This attempts to write a value to the queue. If the queue is not full
-   // then it succeeds. It attempts to pop an index from the index stack. If
-   // the stack is empty then the queue is full and it exits. The popped index
-   // is used to initialize a new node, which stores the input value that is
-   // to be written. The new node is then attached to the queue tail node and
-   // the tail index is updated.
+   // then it succeeds. It attempts to pop a node from the free list. If
+   // the free list is empty then the queue is full and it exits. The value
+   // is to be written is stored in the new node. The new node is then attached
+   // to the queue tail node and the tail index is updated.
 
    bool tryWrite (int aWriteValue)
    {
@@ -127,7 +126,7 @@ namespace LFIntQueue
    //******************************************************************************
    // This attempts to read a value from the queue. If the queue is not empty
    // then it succeeds. It extracts the read value from the head node, pushes the
-   // previous head index back onto the stack and updates the head index.
+   // previous head node back onto the free list and updates the head index.
 
    bool tryRead (int* aReadValue) 
    {
@@ -146,7 +145,7 @@ namespace LFIntQueue
       int tReadNode = mNode[tQueueHead].mQueueNext;
       *aReadValue = mNode[tReadNode].mValue;
 
-      // Push the previous head index back onto the stack.
+      // Push the previous head node back onto the free list.
       listPush(tQueueHead);
 
       // Done.
