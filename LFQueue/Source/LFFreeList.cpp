@@ -27,8 +27,8 @@ namespace LFFreeList
    //***************************************************************************
    // State Members
 
-   int mHeadIndex;
    int mTailIndex;
+   int mListSize;
 
    //***************************************************************************
    //***************************************************************************
@@ -71,7 +71,7 @@ namespace LFFreeList
       mNode[mAllocate-1].mValue = 0;
       mNode[mAllocate-1].mNext = cInvalid;
 
-      mHeadIndex = 0;  
+      mListSize = 0;  
       mTailIndex = mAllocate-1; 
    }
 
@@ -127,6 +127,7 @@ namespace LFFreeList
       mNode[mTailIndex].mNext = aIndex;
 
       // Done
+      mListSize++;
       return true;
    }
 
@@ -145,8 +146,11 @@ namespace LFFreeList
          mNode[aIndex].mNext = tNextIndex;
 
          // Point the tail at the new node.
-         if (boolCompExch(&mNode[mTailIndex].mNext, aIndex, tNextIndex)) break;
+         if (my_bool_cae(&mNode[mTailIndex].mNext, aIndex, tNextIndex)) break;
       }
+
+      // Done.
+      my_fetch_add(&mListSize,1);
       return true;
    }
 
@@ -174,6 +178,7 @@ namespace LFFreeList
       *aIndex = tIndex;
 
       // Done.
+      mListSize--;
       return true;
    }
 
@@ -189,7 +194,7 @@ namespace LFFreeList
          if (tIndex == cInvalid) return false;
 
          // Attempt to detach the node to pop.
-         if (boolCompExch(&mNode[mTailIndex].mNext, mNode[tIndex].mNext, tIndex)) break;
+         if (my_bool_cae(&mNode[mTailIndex].mNext, mNode[tIndex].mNext, tIndex)) break;
       }
 
       // Reset the detached node.
@@ -200,6 +205,7 @@ namespace LFFreeList
       *aIndex = tIndex;
 
       // Done.
+      my_fetch_add(&mListSize,-1);
       return true;
    }
 

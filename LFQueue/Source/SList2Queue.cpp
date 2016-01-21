@@ -180,10 +180,10 @@ namespace SList2Queue
       {
          tTailIndex = mTailIndex;
 
-         if (boolCompExch(&mNode[tTailIndex].mNext, tWriteIndex, cInvalid)) break;
-         boolCompExch(&mTailIndex, mNode[tTailIndex].mNext, tTailIndex);
+         if (my_bool_cae(&mNode[tTailIndex].mNext, tWriteIndex, cInvalid)) break;
+         my_bool_cae(&mTailIndex, mNode[tTailIndex].mNext, tTailIndex);
       }
-      boolCompExch(&mTailIndex,tWriteIndex,tTailIndex);
+      my_bool_cae(&mTailIndex,tWriteIndex,tTailIndex);
 
       // Done
       return true;
@@ -211,9 +211,9 @@ namespace SList2Queue
          {
             tTailIndex = mNode[tTailIndex].mNext;
          }
-         if (boolCompExch(&mNode[tTailIndex].mNext, tWriteIndex, cInvalid)) break;
+         if (my_bool_cae(&mNode[tTailIndex].mNext, tWriteIndex, cInvalid)) break;
       }
-      boolCompExch(&mTailIndex,tWriteIndex,tOldTailIndex);
+      my_bool_cae(&mTailIndex,tWriteIndex,tOldTailIndex);
 
       // Done
       return true;
@@ -238,9 +238,9 @@ namespace SList2Queue
       {
          tTailIndex = mTailIndex;
 
-         if (boolCompExch(&mNode[tTailIndex].mNext, tWriteIndex, cInvalid)) break;
+         if (my_bool_cae(&mNode[tTailIndex].mNext, tWriteIndex, cInvalid)) break;
       }
-      boolCompExch(&mTailIndex,tWriteIndex,tTailIndex);
+      my_bool_cae(&mTailIndex,tWriteIndex,tTailIndex);
 
       // Done
       return true;
@@ -293,7 +293,7 @@ namespace SList2Queue
          // Exit if the queue is empty.
          if (mNode[tHeadIndex].mNext == cInvalid) return false;
 
-         if (boolCompExch(&mHeadIndex, mNode[tHeadIndex].mNext, tHeadIndex)) break;
+         if (my_bool_cae(&mHeadIndex, mNode[tHeadIndex].mNext, tHeadIndex)) break;
       }
       // Extract the read value from the head block.
       int tReadIndex = mNode[tHeadIndex].mNext;
