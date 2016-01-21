@@ -1,11 +1,14 @@
 #include <stdio.h>
 #include <string.h>
 #include <windows.h>
+#include <atomic>
 #include "prnPrint.h"
 
 #include "ccTokenStack.h"
 #include "LFAtomic.h"
 #include "LFQueue.h"
+
+using namespace std;
 
 namespace LFQueue
 {
@@ -17,7 +20,7 @@ namespace LFQueue
    typedef struct
    { 
       int mValue;  
-      int mNext;  
+      atomic<int> mNext;  
    } SListNode;
 
    static const int cInvalid = 999;
@@ -27,8 +30,8 @@ namespace LFQueue
    //***************************************************************************
    // Queue State Members
 
-   int mHeadIndex;  
-   int mTailIndex;  
+   atomic<int> mHeadIndex;  
+   atomic<int> mTailIndex;  
 
    //***************************************************************************
    //***************************************************************************
@@ -71,8 +74,8 @@ namespace LFQueue
          mNode[i].mNext = cInvalid;
       }
 
-      mStack.tryPop(&mHeadIndex);
-      mTailIndex = mHeadIndex;  
+      mStack.tryPop((int*)&mHeadIndex);
+      mTailIndex = mHeadIndex.load();  
    }
 
    //***************************************************************************
@@ -180,10 +183,11 @@ namespace LFQueue
       {
          tTailIndex = mTailIndex;
 
-         if (my_bool_cae(&mNode[tTailIndex].mNext, cInvalid, tWriteIndex)) break;
-         my_bool_cae(&mTailIndex, tTailIndex, mNode[tTailIndex].mNext);
+         int tInvalid = cInvalid;
+         if (mNode[tTailIndex].mNext.compare_exchange_weak(tInvalid, tWriteIndex)) break;
+         mTailIndex.compare_exchange_weak(tTailIndex, mNode[tTailIndex].mNext);
       }
-      my_bool_cae(&mTailIndex, tTailIndex, tWriteIndex);
+      mTailIndex.compare_exchange_strong(tTailIndex, tWriteIndex);
 
       // Done
       return true;
@@ -211,9 +215,10 @@ namespace LFQueue
          {
             tTailIndex = mNode[tTailIndex].mNext;
          }
-         if (my_bool_cae(&mNode[tTailIndex].mNext, cInvalid, tWriteIndex)) break;
+         int tInvalid = cInvalid;
+         if (mNode[tTailIndex].mNext.compare_exchange_weak(tInvalid, tWriteIndex)) break;
       }
-      my_bool_cae(&mTailIndex, tOldTailIndex, tWriteIndex);
+      mTailIndex.compare_exchange_strong(tOldTailIndex, tWriteIndex);
 
       // Done
       return true;
@@ -238,9 +243,10 @@ namespace LFQueue
       {
          tTailIndex = mTailIndex;
 
-         if (my_bool_cae(&mNode[tTailIndex].mNext, cInvalid, tWriteIndex)) break;
+         int tInvalid = cInvalid;
+         if (mNode[tTailIndex].mNext.compare_exchange_weak(tInvalid, tWriteIndex)) break;
       }
-      my_bool_cae(&mTailIndex, tTailIndex, tWriteIndex);
+      mTailIndex.compare_exchange_strong(tTailIndex, tWriteIndex);
 
       // Done
       return true;
@@ -293,7 +299,7 @@ namespace LFQueue
          // Exit if the queue is empty.
          if (mNode[tHeadIndex].mNext == cInvalid) return false;
 
-         if (my_bool_cae(&mHeadIndex, tHeadIndex, mNode[tHeadIndex].mNext)) break;
+         if (mHeadIndex.compare_exchange_weak(tHeadIndex, mNode[tHeadIndex].mNext)) break;
       }
       // Extract the read value from the head block.
       int tReadIndex = mNode[tHeadIndex].mNext;
