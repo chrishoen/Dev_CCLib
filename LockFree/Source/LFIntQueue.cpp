@@ -178,7 +178,7 @@ namespace LFIntQueue
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Insert a node into the list after the list tail node.
+   // Insert a node into the list before the list tail node.
    // There can be no concurrent calls to this.
 
    bool listPush (int aNode)
@@ -186,17 +186,15 @@ namespace LFIntQueue
       // Exit if the list is full.
       if (mListSize >= mAllocate) return false;
 
-      int tListNext;
+      // Store the node the tail is attached to in a temp.
+      int tNextNode = mNode[mListTail].mListNext;
       while (true)
       {
-         // Save the index to the next node.
-         tListNext = mNode[mListTail].mListNext;
+         // Attach the node to the node that the tail is attached to.
+         mNode[aNode].mListNext = tNextNode;
 
-         // Point the new node at the node that the tail points to. 
-         mNode[aNode].mListNext = tListNext;
-
-         // Point the tail at the new node.
-         if (mNode[mListTail].mListNext.compare_exchange_weak(tListNext, aNode)) break;
+         // Attach the tail node to the node.
+         if (mNode[mListTail].mListNext.compare_exchange_weak(tNextNode, aNode)) break;
       }
 
       // Done.
@@ -207,29 +205,29 @@ namespace LFIntQueue
    //******************************************************************************
    //******************************************************************************
    //******************************************************************************
-   // This detaches the node that is after the tail node.
+   // This detaches the node that is before the tail list node.
    // There can be concurrent calls to this.
 
    bool listPop (int* aNode) 
    {
-      // Store the index of the node that is to be detached in a temp.
-      int tNode = mNode[mListTail].mListNext;
+      // Store the node that is before the tail in a temp.
+      int tNextNode = mNode[mListTail].mListNext;
       while (true)
       {
          // Exit if the queue is empty.
-         if (tNode == cInvalid) return false;
+         if (tNextNode == cInvalid) return false;
 
          // Attempt to detach the node.
-         if (mNode[mListTail].mListNext.compare_exchange_weak(tNode, mNode[tNode].mListNext)) break;
+         if (mNode[mListTail].mListNext.compare_exchange_weak(tNextNode, mNode[tNextNode].mListNext)) break;
       }
 
       // Reset the detached node.
-      mNode[tNode].mValue = 0;
-      mNode[tNode].mQueueNext = cInvalid;
-      mNode[tNode].mListNext  = cInvalid;
+      mNode[tNextNode].mValue = 0;
+      mNode[tNextNode].mQueueNext = cInvalid;
+      mNode[tNextNode].mListNext  = cInvalid;
 
       // Return result.
-      *aNode = tNode;
+      *aNode = tNextNode;
 
       // Done.
       mListSize--;
