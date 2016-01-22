@@ -40,7 +40,7 @@ namespace LFIntQueue
    bool listPush  (int  aIndex);
    bool listPop   (int* aIndex);
 
-   atomic<int> mListTail;
+   atomic<int> mListHead;
    atomic<int> mListSize;
 
    //***************************************************************************
@@ -79,7 +79,7 @@ namespace LFIntQueue
       mNode[mListAllocate-1].mListNext = cInvalid;
 
       mListSize  = mListAllocate-1;
-      mListTail = 0;
+      mListHead = 0;
 
       listPop((int*)&mQueueHead);
       mQueueTail = mQueueHead.load(); 
@@ -97,13 +97,13 @@ namespace LFIntQueue
    bool tryWrite (int aWriteValue)
    {
       // Try to allocate a node from the free list.
-      // Exit if the stack is empty.
-      int tWriteNode;
-      if (!listPop(&tWriteNode)) return false;
+      // Exit if it is empty.
+      int tNode;
+      if (!listPop(&tNode)) return false;
 
-      // Store the write value in a new node.
-      mNode[tWriteNode].mValue = aWriteValue;
-      mNode[tWriteNode].mQueueNext = cInvalid;
+      // Initialize the node with the value.
+      mNode[tNode].mValue = aWriteValue;
+      mNode[tNode].mQueueNext = cInvalid;
 
       // Attach the node to the queue tail.
       int tQueueTail;
@@ -112,10 +112,10 @@ namespace LFIntQueue
          tQueueTail = mQueueTail;
 
          int tInvalid = cInvalid;
-         if (mNode[tQueueTail].mQueueNext.compare_exchange_weak(tInvalid, tWriteNode)) break;
+         if (mNode[tQueueTail].mQueueNext.compare_exchange_weak(tInvalid, tNode)) break;
          mQueueTail.compare_exchange_weak(tQueueTail, mNode[tQueueTail].mQueueNext);
       }
-      mQueueTail.compare_exchange_strong(tQueueTail, tWriteNode);
+      mQueueTail.compare_exchange_strong(tQueueTail, tNode);
 
       // Done
       return true;
@@ -132,33 +132,10 @@ namespace LFIntQueue
 
    bool tryRead (int* aReadValue) 
    {
-      // Store the read node index in a temp.
-      int tReadNode = mNode[mQueueHead].mQueueNext;
-
-      // Exit if the queue is empty.
-      if (tReadNode == cInvalid) return false;
-
-      // Extract the value from the read node.
-      *aReadValue = mNode[tReadNode].mValue;
-
-      // Push the previous head node back onto the free list.
-      listPush(mQueueHead);
-
-      // Update the head node to be the one that was just read from.
-      mQueueHead = tReadNode;
-
-      // Done.
-      return true;
-   }
-
-   bool tryRead1 (int* aReadValue) 
-   {
-      int tQueueHead;
+      // Store the head node in a temp.
+      int tQueueHead = mQueueHead;
       while (true)
       {
-         // Store the read index in a temp.
-         tQueueHead = mQueueHead;
-
          // Exit if the queue is empty.
          if (mNode[tQueueHead].mQueueNext == cInvalid) return false;
 
@@ -187,14 +164,14 @@ namespace LFIntQueue
       if (mListSize >= mAllocate) return false;
 
       // Store the node the tail is attached to in a temp.
-      int tNextNode = mNode[mListTail].mListNext;
+      int tNextNode = mNode[mListHead].mListNext;
       while (true)
       {
          // Attach the node to the node that the tail is attached to.
          mNode[aNode].mListNext = tNextNode;
 
          // Attach the tail node to the node.
-         if (mNode[mListTail].mListNext.compare_exchange_weak(tNextNode, aNode)) break;
+         if (mNode[mListHead].mListNext.compare_exchange_weak(tNextNode, aNode)) break;
       }
 
       // Done.
@@ -211,14 +188,14 @@ namespace LFIntQueue
    bool listPop (int* aNode) 
    {
       // Store the node that is before the tail in a temp.
-      int tNextNode = mNode[mListTail].mListNext;
+      int tNextNode = mNode[mListHead].mListNext;
       while (true)
       {
          // Exit if the queue is empty.
          if (tNextNode == cInvalid) return false;
 
          // Attempt to detach the node.
-         if (mNode[mListTail].mListNext.compare_exchange_weak(tNextNode, mNode[tNextNode].mListNext)) break;
+         if (mNode[mListHead].mListNext.compare_exchange_weak(tNextNode, mNode[tNextNode].mListNext)) break;
       }
 
       // Reset the detached node.
@@ -234,3 +211,28 @@ namespace LFIntQueue
       return true;
    }
 }
+
+
+
+#if 0
+   bool tryRead (int* aReadValue) 
+   {
+      // Store the read node index in a temp.
+      int tReadNode = mNode[mQueueHead].mQueueNext;
+
+      // Exit if the queue is empty.
+      if (tReadNode == cInvalid) return false;
+
+      // Extract the value from the read node.
+      *aReadValue = mNode[tReadNode].mValue;
+
+      // Push the previous head node back onto the free list.
+      listPush(mQueueHead);
+
+      // Update the head node to be the one that was just read from.
+      mQueueHead = tReadNode;
+
+      // Done.
+      return true;
+   }
+#endif
