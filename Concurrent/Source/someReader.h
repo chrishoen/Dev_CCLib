@@ -32,8 +32,8 @@ public:
    void finalize();
    void show();
 
-   bool readOne();
-   void read(int aNumReads);
+   bool readOne(int aMode);
+   void read(int aNumReads = 0);
 
    //---------------------------------------------------------------------------
    // Members

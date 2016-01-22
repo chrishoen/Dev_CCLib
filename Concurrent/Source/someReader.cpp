@@ -53,7 +53,7 @@ void Reader::show()
 //******************************************************************************
 //******************************************************************************
 
-bool Reader::readOne()
+bool Reader::readOne(int aMode)
 {
    IntMessage tMsg;
 
@@ -65,7 +65,7 @@ bool Reader::readOne()
    }
    else
    {
-      mFailCount++;
+      if (aMode == 1) mFailCount++;
       return false;
    }
 }
@@ -80,14 +80,17 @@ void Reader::read(int aNumReads)
    {
       for (int i = 0; i < aNumReads; i++)
       {
-         readOne();
+         readOne(1);
       }
    }
    else
    {
       while(true)
       {
-         if (!readOne()) return;
+         if (!readOne(2))
+         {
+            return;
+         }
       }
    }
 }
