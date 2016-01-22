@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "prnPrint.h"
+#include "my_functions.h"
 
 #include "CmdLineExec.h"
 
@@ -76,6 +77,10 @@ void CmdLineExec::executeRead(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
+   for (int i = 0; i < 30; i++)
+   {
+      Prn::print(0, "rand %d", my_irand(11, 18));
+   }
 }
 
 //******************************************************************************

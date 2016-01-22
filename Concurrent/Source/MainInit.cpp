@@ -1,6 +1,7 @@
 #include <windows.h>
 
 #include "prnPrint.h"
+#include "my_functions.h"
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 
@@ -20,6 +21,8 @@ void enterProcessHigh()
 
    // Set process timer resolution to one millisecond
    timeBeginPeriod(cTimerPeriod);
+   // Seed random numbers
+   my_srand();
 }
 
 //******************************************************************************
