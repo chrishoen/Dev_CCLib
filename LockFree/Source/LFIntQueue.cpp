@@ -111,10 +111,15 @@ namespace LFIntQueue
       {
          tQueueTail = mQueueTail;
 
+         // Update the tail next index to point to the node. It should be
+         // invalid, if not then there was a collision.
          int tInvalid = cInvalid;
          if (mNode[tQueueTail].mQueueNext.compare_exchange_weak(tInvalid, tNode)) break;
+         // If the above line fails then the tail next index was not updated, 
+         // so advance the tail.
          mQueueTail.compare_exchange_weak(tQueueTail, mNode[tQueueTail].mQueueNext);
       }
+      // Update the tail index so that the node is the new tail.
       mQueueTail.compare_exchange_strong(tQueueTail, tNode);
 
       // Done
