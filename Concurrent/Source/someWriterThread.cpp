@@ -54,7 +54,7 @@ void WriterThread::threadRunFunction()
       threadSleep(my_irand(mSleepLower,mSleepUpper));
       if (mTerminateFlag) break;
 
-      mWriter.write(my_irand(mWriteLower,mWriteUpper));
+      gShare.mWriter.write(my_irand(mWriteLower,mWriteUpper));
 
    }
 }
@@ -65,7 +65,7 @@ void WriterThread::threadExitFunction()
 {
    Prn::print(0,"WriterThread::threadExitFunction");
 
-   mWriter.show();
+   gShare.mWriter.show();
 }
 
 //******************************************************************************

@@ -9,7 +9,6 @@
 //******************************************************************************
 //******************************************************************************
 #include "risThreads.h"
-#include "someReader.h"
 
 namespace Some
 {
@@ -33,7 +32,6 @@ public:
    void shutdownThread();
 
    // Reader Members
-   Reader mReader;
    int    mReadLower;
    int    mReadUpper;
 

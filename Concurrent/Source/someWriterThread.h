@@ -9,7 +9,6 @@
 //******************************************************************************
 //******************************************************************************
 #include "risThreads.h"
-#include "someWriter.h"
 
 namespace Some
 {
@@ -33,7 +32,6 @@ public:
    void shutdownThread();
 
    // Writeer Members
-   Writer mWriter;
    int    mWriteLower;
    int    mWriteUpper;
 

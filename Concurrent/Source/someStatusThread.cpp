@@ -46,8 +46,10 @@ void StatusThread::threadRunFunction()
    while(1)
    {
       threadSleep(1000);
-      Prn::print(Prn::ThreadRun1,"StatusThread::threadRunFunction");
       if (mTerminateFlag) break;
+      Prn::print(Prn::ThreadRun1,"Status %6d %6d",
+         gShare.mWriter.mPassCount,
+         gShare.mReader.mPassCount);
    }
 }
 

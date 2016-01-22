@@ -43,7 +43,7 @@ ReaderThread::ReaderThread()
 void ReaderThread::threadInitFunction()
 {
    Prn::print(0,"ReaderThread::threadInitFunction");
-   mReader.initialize();
+   gShare.mReader.initialize();
 }
 
 //******************************************************************************
@@ -55,7 +55,7 @@ void ReaderThread::threadRunFunction()
       threadSleep(my_irand(mSleepLower,mSleepUpper));
       if (mTerminateFlag) break;
 
-      mReader.read(my_irand(mReadLower,mReadUpper));
+      gShare.mReader.read(my_irand(mReadLower,mReadUpper));
    }
 }
 
@@ -64,8 +64,8 @@ void ReaderThread::threadRunFunction()
 void ReaderThread::threadExitFunction()
 {
    Prn::print(0,"ReaderThread::threadExitFunction");
-   mReader.read(0);
-   mReader.show();
+   gShare.mReader.read(0);
+   gShare.mReader.show();
 }
 
 //******************************************************************************
