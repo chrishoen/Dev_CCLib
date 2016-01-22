@@ -23,9 +23,20 @@ public:
    Share();
 
    void initialize();
+   void update();
+   void show();
 
    Writer mWriter;
    Reader mReader;
+
+   unsigned long long  mWriterPassCount;
+   unsigned long long  mWriterFailCount;
+   unsigned long long  mWriterCodeSum;
+
+   unsigned long long  mReaderPassCount;
+   unsigned long long  mReaderFailCount;
+   unsigned long long  mReaderCodeSum;
+
 };
 
 //******************************************************************************

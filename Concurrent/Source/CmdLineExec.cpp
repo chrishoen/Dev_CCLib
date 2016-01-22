@@ -34,6 +34,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("START" ))  executeStart (aCmd);
    if(aCmd->isCmd("STOP"  ))  executeStop  (aCmd);
    if(aCmd->isCmd("X"     ))  executeStop  (aCmd);
+   if(aCmd->isCmd("SHOW"  ))  executeShow  (aCmd);
 
 
    if(aCmd->isCmd("GO2"   ))  executeGo2   (aCmd);
@@ -88,6 +89,14 @@ void CmdLineExec::executeStart(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeStop(Ris::CmdLineCmd* aCmd)
 {
    gThreads.stop();
+}
+
+//******************************************************************************
+
+void CmdLineExec::executeShow(Ris::CmdLineCmd* aCmd)
+{
+   gShare.update();
+   gShare.show();
 }
 
 //******************************************************************************

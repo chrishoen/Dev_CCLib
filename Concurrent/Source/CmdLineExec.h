@@ -25,6 +25,7 @@ public:
 
   void executeStart  (Ris::CmdLineCmd* aCmd);
   void executeStop   (Ris::CmdLineCmd* aCmd);
+  void executeShow   (Ris::CmdLineCmd* aCmd);
 
 };
 //******************************************************************************
