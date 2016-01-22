@@ -23,18 +23,19 @@ class Reader
 {
 public:
 
-   //--------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
    // Methods
 
-  Reader();
+   Reader();
 
-  void initialize();
-  void finalize();
-  void show();
+   void initialize();
+   void finalize();
+   void show();
 
-  void read(int aNumReads);
+   bool readOne();
+   void read(int aNumReads);
 
-   //--------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
    // Members
 
    unsigned  mPassCount;

@@ -23,18 +23,18 @@ class Writer
 {
 public:
 
-   //--------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
    // Methods
 
-  Writer();
+   Writer();
 
-  void initialize(unsigned aIdent=0);
-  void finalize();
-  void show();
+   void initialize(unsigned aIdent=0);
+   void finalize();
+   void show();
 
-  void write(int aNumWrites);
+   void write(int aNumWrites);
 
-   //--------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
    // Members
 
    unsigned short mIdent;

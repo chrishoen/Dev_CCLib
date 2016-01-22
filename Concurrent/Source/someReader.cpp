@@ -53,24 +53,43 @@ void Reader::show()
 //******************************************************************************
 //******************************************************************************
 
+bool Reader::readOne()
+{
+   IntMessage tMsg;
+
+   if (LFIntQueue::tryRead(&tMsg.aint()))
+   {
+      mPassCount++;
+      mCodeSum += tMsg.mCode;
+      return true;
+   }
+   else
+   {
+      mFailCount++;
+      return false;
+   }
+}
+   
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void Reader::read(int aNumReads)
 {
-   for (int i = 0; i < aNumReads; i++)
+   if (aNumReads > 0)
    {
-      IntMessage tMsg;
-
-      if (LFIntQueue::tryRead(&tMsg.aint()))
+      for (int i = 0; i < aNumReads; i++)
       {
-         mPassCount++;
-         mCodeSum += tMsg.mCode;
+         readOne();
       }
-      else
+   }
+   else
+   {
+      while(true)
       {
-         mFailCount++;
+         if (!readOne()) return;
       }
    }
 }
-
-
    
 }//namespace
