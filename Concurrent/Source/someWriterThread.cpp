@@ -5,11 +5,12 @@
 //******************************************************************************
 //******************************************************************************
 #include "prnPrint.h"
+#include "my_functions.h"
 #include "someShare.h"
 #include "GSettings.h"
 
-#define  _SOMETHREAD1_CPP_
-#include "someThread1.h"
+#define  _SOMEWRITERTHREAD_CPP_
+#include "someWriterThread.h"
 
 namespace Some
 {
@@ -18,7 +19,7 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 
-Thread1::Thread1() 
+WriterThread::WriterThread() 
 {
 #if 0
    // Set thread priority
@@ -26,39 +27,51 @@ Thread1::Thread1()
    BaseClass::mThreadAffinityMask = 0x20;
    BaseClass::mThreadIdealProcessor = 5;
 #endif
-   // Members
+
+   // Thread Members
    mTerminateFlag = false;
+   mSleepLower = 900;
+   mSleepUpper = 1000;
+
+   // Writer Members
+   mWriteLower =  900;
+   mWriteUpper = 1100;
 }
 
 //******************************************************************************
 
-void Thread1::threadInitFunction()
+void WriterThread::threadInitFunction()
 {
-   Prn::print(0,"Thread1::threadInitFunction");
+   Prn::print(0,"WriterThread::threadInitFunction");
 }
 
 //******************************************************************************
 
-void Thread1::threadRunFunction()
+void WriterThread::threadRunFunction()
 {
    while(1)
    {
-      threadSleep(1000);
-      Prn::print(Prn::ThreadRun1,"Thread1::threadRunFunction");
+      threadSleep(my_irand(mSleepLower,mSleepUpper));
+      Prn::print(Prn::ThreadRun1,"WriterThread::threadRunFunction");
       if (mTerminateFlag) break;
+
+      mWriter.write(my_irand(mWriteLower,mWriteUpper));
+
    }
 }
 
 //******************************************************************************
 
-void Thread1::threadExitFunction()
+void WriterThread::threadExitFunction()
 {
-   Prn::print(0,"Thread1::threadExitFunction");
+   Prn::print(0,"WriterThread::threadExitFunction");
+
+   mWriter.show();
 }
 
 //******************************************************************************
 
-void Thread1::shutdownThread()
+void WriterThread::shutdownThread()
 {
    // Set terminate
    mTerminateFlag = true;

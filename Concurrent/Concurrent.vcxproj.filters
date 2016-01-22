@@ -22,9 +22,6 @@
     <ClCompile Include="Source\someShare.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\someThread1.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\someMessage.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -38,6 +35,12 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\someThreads.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\someWriterThread.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\someReaderThread.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -54,9 +57,6 @@
     <ClInclude Include="Source\someShare.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\someThread1.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\someMessage.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -70,6 +70,12 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\someThreads.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\someWriterThread.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\someReaderThread.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

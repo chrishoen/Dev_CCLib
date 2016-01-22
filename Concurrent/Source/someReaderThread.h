@@ -1,5 +1,5 @@
-#ifndef _SOMETHREAD1_H_
-#define _SOMETHREAD1_H_
+#ifndef _SOMEREADERTHREAD_H_
+#define _SOMEREADERTHREAD_H_
 
 /*==============================================================================
 
@@ -9,6 +9,7 @@
 //******************************************************************************
 //******************************************************************************
 #include "risThreads.h"
+#include "someReader.h"
 
 namespace Some
 {
@@ -17,13 +18,13 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 
-class Thread1 : public Ris::Threads::BaseThread
+class ReaderThread : public Ris::Threads::BaseThread
 {
 public:
 
+   // Constructor
    typedef Ris::Threads::BaseThread BaseClass;
-
-   Thread1(); 
+   ReaderThread(); 
 
    //Base class overloads.
    void threadInitFunction();
@@ -31,18 +32,16 @@ public:
    void threadExitFunction();
    void shutdownThread();
 
+   // Reader Members
+   Reader mReader;
+   int    mReadLower;
+   int    mReadUpper;
+
    // Thread Members
    bool  mTerminateFlag;
+   int   mSleepLower;
+   int   mSleepUpper;
 };
-
-//******************************************************************************
-// Global instance
-
-#ifdef _SOMETHREAD1_CPP_
-          Thread1* gThread1;
-#else
-   extern Thread1* gThread1;
-#endif
 
 //******************************************************************************
 }//namespace

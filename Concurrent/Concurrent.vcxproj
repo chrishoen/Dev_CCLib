@@ -174,10 +174,11 @@
     <ClCompile Include="Source\MainInit.cpp" />
     <ClCompile Include="Source\someMessage.cpp" />
     <ClCompile Include="Source\someReader.cpp" />
+    <ClCompile Include="Source\someReaderThread.cpp" />
     <ClCompile Include="Source\someThreads.cpp" />
     <ClCompile Include="Source\someWriter.cpp" />
     <ClCompile Include="Source\someShare.cpp" />
-    <ClCompile Include="Source\someThread1.cpp" />
+    <ClCompile Include="Source\someWriterThread.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h" />
@@ -186,10 +187,11 @@
     <ClInclude Include="Source\MainInit.h" />
     <ClInclude Include="Source\someMessage.h" />
     <ClInclude Include="Source\someReader.h" />
+    <ClInclude Include="Source\someReaderThread.h" />
     <ClInclude Include="Source\someThreads.h" />
     <ClInclude Include="Source\someWriter.h" />
     <ClInclude Include="Source\someShare.h" />
-    <ClInclude Include="Source\someThread1.h" />
+    <ClInclude Include="Source\someWriterThread.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

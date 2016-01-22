@@ -16,7 +16,8 @@ namespace Some
 
 Threads::Threads()
 {
-   mThread1=0;
+   mWriterThread=0;
+   mReaderThread=0;
 }
 
 //******************************************************************************
@@ -25,8 +26,11 @@ Threads::Threads()
 
 void Threads::start()
 {
-   mThread1 = new Thread1;
-   mThread1->launchThread();
+   mWriterThread = new WriterThread;
+   mWriterThread->launchThread();
+
+   mReaderThread = new ReaderThread;
+   mReaderThread->launchThread();
 }
 
 //******************************************************************************
@@ -35,11 +39,18 @@ void Threads::start()
 
 void Threads::stop()
 {
-   if (mThread1)
+   if (mWriterThread)
    {
-      mThread1->shutdownThread();
-      delete mThread1;
-      mThread1 = 0;
+      mWriterThread->shutdownThread();
+      delete mWriterThread;
+      mWriterThread = 0;
+   }
+
+   if (mReaderThread)
+   {
+      mReaderThread->shutdownThread();
+      delete mReaderThread;
+      mReaderThread = 0;
    }
 }
 

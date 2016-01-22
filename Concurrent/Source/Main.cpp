@@ -3,11 +3,8 @@
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 
-#include "someThread1.h"
 #include "GSettings.h"
 #include "MainInit.h"
-
-using namespace Some;
 
 //******************************************************************************
 int main(int argc,char** argv)

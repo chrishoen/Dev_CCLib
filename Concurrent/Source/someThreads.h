@@ -7,7 +7,8 @@
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-#include "someThread1.h"
+#include "someWriterThread.h"
+#include "someReaderThread.h"
 
 
 namespace Some
@@ -24,7 +25,8 @@ public:
    void start();
    void stop();
 
-   Thread1* mThread1;
+   WriterThread* mWriterThread;
+   ReaderThread* mReaderThread;
 };
 
 //******************************************************************************
