@@ -169,21 +169,23 @@
   <ItemGroup>
     <ClCompile Include="Source\CmdLineExec.cpp" />
     <ClCompile Include="Source\GSettings.cpp" />
+    <ClCompile Include="Source\LFIntQueue.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
     <ClCompile Include="Source\someClass1.cpp" />
     <ClCompile Include="Source\someMessage.cpp" />
-    <ClCompile Include="Source\somePart.cpp" />
+    <ClCompile Include="Source\someWriter.cpp" />
     <ClCompile Include="Source\someShare.cpp" />
     <ClCompile Include="Source\someThread1.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\GSettings.h" />
+    <ClInclude Include="Source\LFIntQueue.h" />
     <ClInclude Include="Source\MainInit.h" />
     <ClInclude Include="Source\someClass1.h" />
     <ClInclude Include="Source\someMessage.h" />
-    <ClInclude Include="Source\somePart.h" />
+    <ClInclude Include="Source\someWriter.h" />
     <ClInclude Include="Source\someShare.h" />
     <ClInclude Include="Source\someThread1.h" />
   </ItemGroup>

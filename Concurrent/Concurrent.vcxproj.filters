@@ -28,10 +28,13 @@
     <ClCompile Include="Source\someClass1.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\somePart.cpp">
+    <ClCompile Include="Source\someMessage.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\someMessage.cpp">
+    <ClCompile Include="Source\someWriter.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LFIntQueue.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -54,10 +57,13 @@
     <ClInclude Include="Source\someClass1.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\somePart.h">
+    <ClInclude Include="Source\someMessage.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\someMessage.h">
+    <ClInclude Include="Source\someWriter.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LFIntQueue.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
