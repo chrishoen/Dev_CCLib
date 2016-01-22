@@ -52,6 +52,7 @@ void Share::update()
 
 void Share::show()
 {
+   Prn::print(0,"");
    Prn::print(0,"TOTAL");
    Prn::print(0,"");
    Prn::print(0,"Writer.mPassCount %llu",mWriterPassCount);

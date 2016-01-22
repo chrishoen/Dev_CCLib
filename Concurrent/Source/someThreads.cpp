@@ -5,6 +5,8 @@ Description:
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+#include "prnPrint.h"
+
 #define  _SOMETHREADS_CPP_
 #include "someThreads.h"
 namespace Some
@@ -27,6 +29,8 @@ Threads::Threads()
 
 void Threads::start()
 {
+   Prn::print(0,"Threads::start*******************************");
+
    mReaderThread = new ReaderThread;
    mReaderThread->launchThread();
 
@@ -43,6 +47,9 @@ void Threads::start()
 
 void Threads::stop()
 {
+   Prn::print(0,"Threads::stopping****************************");
+   Prn::print(0,"");
+
    if (mStatusThread)
    {
       mStatusThread->shutdownThread();
@@ -64,6 +71,7 @@ void Threads::stop()
       mReaderThread = 0;
    }
 
+   Prn::print(0,"Threads::stopped*****************************");
 }
 
 }//namespace
