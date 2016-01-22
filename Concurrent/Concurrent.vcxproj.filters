@@ -43,6 +43,9 @@
     <ClCompile Include="Source\someReaderThread.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\someStatusThread.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h">
@@ -76,6 +79,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\someReaderThread.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\someStatusThread.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

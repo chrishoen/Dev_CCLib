@@ -18,6 +18,7 @@ Threads::Threads()
 {
    mWriterThread=0;
    mReaderThread=0;
+   mStatusThread=0;
 }
 
 //******************************************************************************
@@ -31,6 +32,9 @@ void Threads::start()
 
    mReaderThread = new ReaderThread;
    mReaderThread->launchThread();
+
+   mStatusThread = new StatusThread;
+   mStatusThread->launchThread();
 }
 
 //******************************************************************************
@@ -51,6 +55,13 @@ void Threads::stop()
       mReaderThread->shutdownThread();
       delete mReaderThread;
       mReaderThread = 0;
+   }
+
+   if (mStatusThread)
+   {
+      mStatusThread->shutdownThread();
+      delete mStatusThread;
+      mStatusThread = 0;
    }
 }
 

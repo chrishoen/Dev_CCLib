@@ -9,8 +9,8 @@
 #include "someShare.h"
 #include "GSettings.h"
 
-#define  _SOMEWRITERTHREAD_CPP_
-#include "someWriterThread.h"
+#define  _SOMESTATUSTHREAD_CPP_
+#include "someStatusThread.h"
 
 namespace Some
 {
@@ -19,7 +19,7 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 
-WriterThread::WriterThread() 
+StatusThread::StatusThread() 
 {
 #if 0
    // Set thread priority
@@ -30,47 +30,37 @@ WriterThread::WriterThread()
 
    // Thread Members
    mTerminateFlag = false;
-   mSleepLower = 900;
-   mSleepUpper = 1000;
-
-   // Writer Members
-   mWriteLower =  900;
-   mWriteUpper = 1100;
 }
 
 //******************************************************************************
 
-void WriterThread::threadInitFunction()
+void StatusThread::threadInitFunction()
 {
-   Prn::print(0,"WriterThread::threadInitFunction");
+   Prn::print(0,"StatusThread::threadInitFunction");
 }
 
 //******************************************************************************
 
-void WriterThread::threadRunFunction()
+void StatusThread::threadRunFunction()
 {
    while(1)
    {
-      threadSleep(my_irand(mSleepLower,mSleepUpper));
+      threadSleep(1000);
+      Prn::print(Prn::ThreadRun1,"StatusThread::threadRunFunction");
       if (mTerminateFlag) break;
-
-      mWriter.write(my_irand(mWriteLower,mWriteUpper));
-
    }
 }
 
 //******************************************************************************
 
-void WriterThread::threadExitFunction()
+void StatusThread::threadExitFunction()
 {
-   Prn::print(0,"WriterThread::threadExitFunction");
-
-   mWriter.show();
+   Prn::print(0,"StatusThread::threadExitFunction");
 }
 
 //******************************************************************************
 
-void WriterThread::shutdownThread()
+void StatusThread::shutdownThread()
 {
    // Set terminate
    mTerminateFlag = true;

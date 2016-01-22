@@ -57,7 +57,7 @@ void main_initialize(int argc,char** argv)
    Prn::setFilter(Prn::ThreadRun1,  true);
    Prn::setFilter(Prn::ThreadRun2,  false);
    Prn::setFilter(Prn::ThreadRun3,  true);
-   Prn::setFilter(Prn::ThreadRun4,  true);
+   Prn::setFilter(Prn::ThreadRun4,  false);
 
    Prn::setFilter(Prn::ProcRun1,    true);
    Prn::setFilter(Prn::ProcRun2,    true);

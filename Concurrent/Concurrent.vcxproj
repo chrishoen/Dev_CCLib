@@ -175,6 +175,7 @@
     <ClCompile Include="Source\someMessage.cpp" />
     <ClCompile Include="Source\someReader.cpp" />
     <ClCompile Include="Source\someReaderThread.cpp" />
+    <ClCompile Include="Source\someStatusThread.cpp" />
     <ClCompile Include="Source\someThreads.cpp" />
     <ClCompile Include="Source\someWriter.cpp" />
     <ClCompile Include="Source\someShare.cpp" />
@@ -188,6 +189,7 @@
     <ClInclude Include="Source\someMessage.h" />
     <ClInclude Include="Source\someReader.h" />
     <ClInclude Include="Source\someReaderThread.h" />
+    <ClInclude Include="Source\someStatusThread.h" />
     <ClInclude Include="Source\someThreads.h" />
     <ClInclude Include="Source\someWriter.h" />
     <ClInclude Include="Source\someShare.h" />

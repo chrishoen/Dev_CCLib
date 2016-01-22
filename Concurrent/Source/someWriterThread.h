@@ -1,46 +1,50 @@
-#ifndef _SOMETHREADS_H_
-#define _SOMETHREADS_H_
+#ifndef _SOMEWRITERTHREAD_H_
+#define _SOMEWRITERTHREAD_H_
 
 /*==============================================================================
+
 ==============================================================================*/
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-#include "someWriterThread.h"
-#include "someReaderThread.h"
-#include "someStatusThread.h"
-
+#include "risThreads.h"
+#include "someWriter.h"
 
 namespace Some
 {
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-class Threads
+class WriterThread : public Ris::Threads::BaseThread
 {
 public:
-   Threads();
 
-   void start();
-   void stop();
+   // Constructor
+   typedef Ris::Threads::BaseThread BaseClass;
+   WriterThread(); 
 
-   WriterThread* mWriterThread;
-   ReaderThread* mReaderThread;
-   StatusThread* mStatusThread;
+   //Base class overloads.
+   void threadInitFunction();
+   void threadRunFunction();
+   void threadExitFunction();
+   void shutdownThread();
+
+   // Writeer Members
+   Writer mWriter;
+   int    mWriteLower;
+   int    mWriteUpper;
+
+   // Thread Members
+   bool  mTerminateFlag;
+   int   mSleepLower;
+   int   mSleepUpper;
 };
-
-//******************************************************************************
-// Global instance
-
-#ifdef _SOMETHREADS_CPP_
-          Threads gThreads;
-#else
-   extern Threads gThreads;
-#endif
 
 //******************************************************************************
 }//namespace
 
 #endif
+
