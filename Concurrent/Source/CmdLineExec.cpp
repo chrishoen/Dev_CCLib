@@ -35,11 +35,14 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   IntMessage tMsg1;
-   tMsg1.mIdent  = 3;
-   tMsg1.mSeqNum = 5;
-   Prn::print(0, "sizeof %d", sizeof(IntMessage));
-   Prn::print(0, "%08X", *tMsg1.ptr());
+   aCmd->setArgDefault(1,100);
+   aCmd->setArgDefault(2,100);
+
+   gShare.mWriter.write (aCmd->argInt(1));
+   gShare.mReader.read  (aCmd->argInt(2));
+
+   gShare.mWriter.show();
+   gShare.mReader.show();
 
 }
 

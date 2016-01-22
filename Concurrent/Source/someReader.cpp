@@ -9,7 +9,7 @@ Description:
 #include <prnPrint.h>
 
 #include "LFIntQueue.h"
-#include "someWriter.h"
+#include "someReader.h"
 
 // Global instance of the block pool
 
@@ -21,22 +21,19 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 
-Writer::Writer()
+Reader::Reader()
 {
-   initialize(0);
+   initialize();
 }
 
-void Writer::initialize(unsigned aIdent)
+void Reader::initialize()
 {
-   mIdent = aIdent;
-   mCode = 0;
-
    mPassCount = 0;
    mFailCount = 0;
    mCodeSum   = 0;
 }
 
-void Writer::finalize()
+void Reader::finalize()
 {
 }
 
@@ -44,11 +41,11 @@ void Writer::finalize()
 //******************************************************************************
 //******************************************************************************
 
-void Writer::show()
+void Reader::show()
 {
-   Prn::print(0,"Writer.mPassCount %d",mPassCount);
-   Prn::print(0,"Writer.mFailCount %d",mFailCount);
-   Prn::print(0,"Writer.mCodeSum   %d",mCodeSum);
+   Prn::print(0,"Reader.mPassCount %d",mPassCount);
+   Prn::print(0,"Reader.mFailCount %d",mFailCount);
+   Prn::print(0,"Reader.mCodeSum   %d",mCodeSum);
    Prn::print(0,"");
 }
   
@@ -56,17 +53,16 @@ void Writer::show()
 //******************************************************************************
 //******************************************************************************
 
-void Writer::write(int aNumWrites)
+void Reader::read(int aNumReads)
 {
-   for (int i = 0; i < aNumWrites; i++)
+   for (int i = 0; i < aNumReads; i++)
    {
-      mCode++;
-      IntMessage tMsg(mIdent,mCode);
+      IntMessage tMsg;
 
-      if (LFIntQueue::tryWrite(tMsg.aint()))
+      if (LFIntQueue::tryRead(&tMsg.aint()))
       {
          mPassCount++;
-         mCodeSum += mCode;
+         mCodeSum += tMsg.mCode;
       }
       else
       {

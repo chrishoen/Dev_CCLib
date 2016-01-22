@@ -26,8 +26,8 @@ public:
    //--------------------------------------------------------------------------
    // Members
 
-   unsigned short mIdent;  
-   unsigned short mSeqNum;  
+   unsigned short mIdent;
+   unsigned short mCode;
 
    //--------------------------------------------------------------------------
    // Methods
@@ -35,10 +35,18 @@ public:
    IntMessage()
    {
       mIdent=0;
-      mSeqNum=0;
+      mCode=0;
+   }
+
+   IntMessage(unsigned short aIdent,unsigned short aCode)
+   {
+      mIdent = aIdent;
+      mCode  = aCode;
    }
 
    int* ptr() { return (int*)&mIdent; }
+
+   int& aint() { return *(int*)&mIdent; }
 };
 
 //******************************************************************************

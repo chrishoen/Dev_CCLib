@@ -22,7 +22,7 @@ namespace LFIntQueue
       atomic<int> mListNext;
    } QueueListNode;
 
-   static const int cInvalid = 999;
+   static const int cInvalid = 0x8000000;
 
    //***************************************************************************
    //***************************************************************************
@@ -49,7 +49,7 @@ namespace LFIntQueue
    // Memory Members
 
    // Node array
-   static QueueListNode mNode[1000];
+   static QueueListNode* mNode = 0;
 
    // Number of blocks allocated
    static int mAllocate = 0;
@@ -67,6 +67,8 @@ namespace LFIntQueue
       mQueueAllocate = aAllocate + 1;
       mListAllocate  = aAllocate + 2;
 
+      mNode = new QueueListNode[mListAllocate];
+
       for (int i = 0; i < mListAllocate - 1; i++)
       {
          mNode[i].mValue = 0;
@@ -83,6 +85,11 @@ namespace LFIntQueue
 
       listPop((int*)&mQueueHead);
       mQueueTail = mQueueHead.load();
+   }
+
+   void finalize()
+   {
+      if (mNode) free(mNode);
    }
 
    //***************************************************************************

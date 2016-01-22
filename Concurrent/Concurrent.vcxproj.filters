@@ -25,9 +25,6 @@
     <ClCompile Include="Source\someThread1.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\someClass1.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\someMessage.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -35,6 +32,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\LFIntQueue.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\someReader.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -54,9 +54,6 @@
     <ClInclude Include="Source\someThread1.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\someClass1.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\someMessage.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -64,6 +61,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\LFIntQueue.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\someReader.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
