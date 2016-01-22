@@ -15,8 +15,8 @@ static const int cTimerPeriod = 10;
 void enterProcessHigh()
 {
    // Set process priority class
-   SetPriorityClass(GetCurrentProcess(), REALTIME_PRIORITY_CLASS);
-   SetProcessAffinityMask(GetCurrentProcess(), 0x20);
+// SetPriorityClass(GetCurrentProcess(), REALTIME_PRIORITY_CLASS);
+// SetProcessAffinityMask(GetCurrentProcess(), 0x20);
 
    // Set process timer resolution to one millisecond
    timeBeginPeriod(cTimerPeriod);

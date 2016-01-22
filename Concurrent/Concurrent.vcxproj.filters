@@ -25,6 +25,15 @@
     <ClCompile Include="Source\someThread1.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\someClass1.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\somePart.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\someMessage.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h">
@@ -40,6 +49,15 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\someThread1.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\someClass1.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\somePart.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\someMessage.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
