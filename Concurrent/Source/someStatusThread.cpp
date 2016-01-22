@@ -48,7 +48,7 @@ void StatusThread::threadRunFunction()
       threadSleep(1000);
       if (mTerminateFlag) break;
       Prn::print(Prn::ThreadRun1,"Status %8llu %8llu",
-         gShare.mWriter.mPassCount,
+         gShare.mWriter[0].mPassCount,
          gShare.mReader.mPassCount);
    }
 }

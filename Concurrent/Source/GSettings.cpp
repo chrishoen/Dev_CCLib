@@ -28,6 +28,7 @@ GSettings::GSettings()
    mWriteUpper = 1100;
    mReadLower  =  900;
    mReadUpper  = 1100;
+   mNumWriters =    1;
 }
 
 //******************************************************************************
@@ -41,6 +42,7 @@ void GSettings::show()
    printf("GSettings   WriteUpper    %9d\n", mWriteUpper);
    printf("GSettings   ReadLower     %9d\n", mReadLower);
    printf("GSettings   ReadUpper     %9d\n", mReadUpper);
+   printf("GSettings   NumWriters    %9d\n", mNumWriters);
 }
 
 //******************************************************************************
@@ -58,6 +60,7 @@ void GSettings::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("WriteUpper"))   mWriteUpper  = aCmd->argInt (1)*1000;
    if(aCmd->isCmd("ReadLower"))    mReadLower   = aCmd->argInt (1)*1000;
    if(aCmd->isCmd("ReadUpper"))    mReadUpper   = aCmd->argInt (1)*1000;
+   if(aCmd->isCmd("NumWriters"))   mNumWriters  = aCmd->argInt (1);
 }
 
 //******************************************************************************

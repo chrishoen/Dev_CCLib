@@ -23,7 +23,7 @@ public:
 
    // Constructor
    typedef Ris::Threads::BaseThread BaseClass;
-   WriterThread(); 
+   WriterThread(int aIdent); 
 
    //Base class overloads.
    void threadInitFunction();
@@ -31,9 +31,10 @@ public:
    void threadExitFunction();
    void shutdownThread();
 
-   // Writeer Members
+   // Writer Members
    int    mWriteLower;
    int    mWriteUpper;
+   int    mIdent;
 
    // Thread Members
    bool  mTerminateFlag;

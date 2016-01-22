@@ -23,10 +23,14 @@ class Threads
 public:
    Threads();
 
+   void reset();
    void start();
    void stop();
 
-   WriterThread* mWriterThread;
+   static const int cMaxNumWriters = 10;
+   WriterThread* mWriterThread[cMaxNumWriters];
+   int mNumWriters;
+
    ReaderThread* mReaderThread;
    StatusThread* mStatusThread;
 };

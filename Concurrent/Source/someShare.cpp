@@ -27,7 +27,15 @@ Share::Share()
 void Share::initialize()
 {
    LFIntQueue::initialize(gGSettings.mAllocate);
-   mWriter.initialize(0);
+
+   mNumWriters = gGSettings.mNumWriters;
+   if (mNumWriters > cMaxNumWriters) mNumWriters = cMaxNumWriters;
+
+   for (int i = 0; i < mNumWriters; i++)
+   {
+      mWriter[i].initialize(i);
+   }
+
    mReader.initialize();
 }
 
@@ -37,9 +45,16 @@ void Share::initialize()
 
 void Share::update()
 {
-   mWriterPassCount = mWriter.mPassCount;
-   mWriterFailCount = mWriter.mFailCount;
-   mWriterCodeSum   = mWriter.mCodeSum;
+   mWriterPassCount = 0;
+   mWriterFailCount = 0;
+   mWriterCodeSum   = 0;
+
+   for (int i = 0; i < mNumWriters; i++)
+   {
+      mWriterPassCount += mWriter[i].mPassCount;
+      mWriterFailCount += mWriter[i].mFailCount;
+      mWriterCodeSum   += mWriter[i].mCodeSum;
+   }
 
    mReaderPassCount = mReader.mPassCount;
    mReaderFailCount = mReader.mFailCount;

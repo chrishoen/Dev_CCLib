@@ -19,7 +19,7 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 
-WriterThread::WriterThread() 
+WriterThread::WriterThread(int aIdent) 
 {
 #if 0
    // Set thread priority
@@ -36,6 +36,7 @@ WriterThread::WriterThread()
    // Writer Members
    mWriteLower = gGSettings.mWriteLower;
    mWriteUpper = gGSettings.mWriteUpper;
+   mIdent = aIdent;
 }
 
 //******************************************************************************
@@ -54,7 +55,7 @@ void WriterThread::threadRunFunction()
       threadSleep(my_irand(mSleepLower,mSleepUpper));
       if (mTerminateFlag) break;
 
-      gShare.mWriter.write(my_irand(mWriteLower,mWriteUpper));
+      gShare.mWriter[mIdent].write(my_irand(mWriteLower,mWriteUpper));
 
    }
 }
@@ -63,7 +64,7 @@ void WriterThread::threadRunFunction()
 
 void WriterThread::threadExitFunction()
 {
-   gShare.mWriter.show();
+   gShare.mWriter[mIdent].show();
 }
 
 //******************************************************************************

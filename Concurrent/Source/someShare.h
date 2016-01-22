@@ -26,7 +26,10 @@ public:
    void update();
    void show();
 
-   Writer mWriter;
+   static const int cMaxNumWriters = 10;
+   Writer   mWriter[cMaxNumWriters];
+   int      mNumWriters;
+
    Reader mReader;
 
    unsigned long long  mWriterPassCount;

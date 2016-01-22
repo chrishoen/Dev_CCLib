@@ -24,6 +24,8 @@ public:
    int   mSleepLower;
    int   mSleepUpper;
 
+   int   mNumWriters;
+
    int   mWriteLower;
    int   mWriteUpper;
 

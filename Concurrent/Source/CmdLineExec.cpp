@@ -49,10 +49,10 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
    aCmd->setArgDefault(1, 100);
    aCmd->setArgDefault(2, 100);
 
-   gShare.mWriter.write(aCmd->argInt(1));
+   gShare.mWriter[0].write(aCmd->argInt(1));
    gShare.mReader.read(aCmd->argInt(2));
 
-   gShare.mWriter.show();
+   gShare.mWriter[0].show();
    gShare.mReader.show();
 }
 
@@ -62,8 +62,8 @@ void CmdLineExec::executeWrite(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1,100);
 
-   gShare.mWriter.write (aCmd->argInt(1));
-   gShare.mWriter.show();
+   gShare.mWriter[0].write (aCmd->argInt(1));
+   gShare.mWriter[0].show();
 }
 
 //******************************************************************************
