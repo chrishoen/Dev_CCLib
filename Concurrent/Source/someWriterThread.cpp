@@ -34,8 +34,8 @@ WriterThread::WriterThread()
    mSleepUpper = 1000;
 
    // Writer Members
-   mWriteLower =  900;
-   mWriteUpper = 1100;
+   mWriteLower =  9000;
+   mWriteUpper = 11000;
 }
 
 //******************************************************************************
@@ -63,8 +63,6 @@ void WriterThread::threadRunFunction()
 
 void WriterThread::threadExitFunction()
 {
-   Prn::print(0,"WriterThread::threadExitFunction");
-
    gShare.mWriter.show();
 }
 

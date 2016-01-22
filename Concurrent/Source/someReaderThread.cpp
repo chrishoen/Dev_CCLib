@@ -34,8 +34,8 @@ ReaderThread::ReaderThread()
    mSleepUpper = 1000;
 
    // Reader Members
-   mReadLower =  900;
-   mReadUpper = 1100;
+   mReadLower =  9000;
+   mReadUpper = 11000;
 }
 
 //******************************************************************************
@@ -63,8 +63,7 @@ void ReaderThread::threadRunFunction()
 
 void ReaderThread::threadExitFunction()
 {
-   Prn::print(0,"ReaderThread::threadExitFunction");
-   gShare.mReader.read(0);
+   gShare.mReader.read();
    gShare.mReader.show();
 }
 

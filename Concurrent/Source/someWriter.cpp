@@ -46,9 +46,9 @@ void Writer::finalize()
 
 void Writer::show()
 {
-   Prn::print(0,"Writer.mPassCount %d",mPassCount);
-   Prn::print(0,"Writer.mFailCount %d",mFailCount);
-   Prn::print(0,"Writer.mCodeSum   %d",mCodeSum);
+   Prn::print(0,"Writer.mPassCount %u",mPassCount);
+   Prn::print(0,"Writer.mFailCount %u",mFailCount);
+   Prn::print(0,"Writer.mCodeSum   %u",mCodeSum);
    Prn::print(0,"");
 }
   

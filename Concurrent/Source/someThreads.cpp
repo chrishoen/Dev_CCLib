@@ -27,11 +27,11 @@ Threads::Threads()
 
 void Threads::start()
 {
-   mWriterThread = new WriterThread;
-   mWriterThread->launchThread();
-
    mReaderThread = new ReaderThread;
    mReaderThread->launchThread();
+
+   mWriterThread = new WriterThread;
+   mWriterThread->launchThread();
 
    mStatusThread = new StatusThread;
    mStatusThread->launchThread();
@@ -43,6 +43,13 @@ void Threads::start()
 
 void Threads::stop()
 {
+   if (mStatusThread)
+   {
+      mStatusThread->shutdownThread();
+      delete mStatusThread;
+      mStatusThread = 0;
+   }
+
    if (mWriterThread)
    {
       mWriterThread->shutdownThread();
@@ -57,12 +64,6 @@ void Threads::stop()
       mReaderThread = 0;
    }
 
-   if (mStatusThread)
-   {
-      mStatusThread->shutdownThread();
-      delete mStatusThread;
-      mStatusThread = 0;
-   }
 }
 
 }//namespace

@@ -23,7 +23,7 @@ Share::Share()
 
 void Share::initialize()
 {
-   LFIntQueue::initialize(1000);
+   LFIntQueue::initialize(10000);
    mWriter.initialize(0);
    mReader.initialize();
 }

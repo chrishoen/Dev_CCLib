@@ -33,6 +33,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("R"     ))  executeRead  (aCmd);
    if(aCmd->isCmd("START" ))  executeStart (aCmd);
    if(aCmd->isCmd("STOP"  ))  executeStop  (aCmd);
+   if(aCmd->isCmd("X"     ))  executeStop  (aCmd);
 
 
    if(aCmd->isCmd("GO2"   ))  executeGo2   (aCmd);
@@ -78,6 +79,7 @@ void CmdLineExec::executeRead(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeStart(Ris::CmdLineCmd* aCmd)
 {
+   gShare.initialize();
    gThreads.start();
 }
 
