@@ -19,8 +19,12 @@ public:
   void executeGo2    (Ris::CmdLineCmd* aCmd);
   void executeGo3    (Ris::CmdLineCmd* aCmd);
   void executeGo4    (Ris::CmdLineCmd* aCmd);
+
   void executeWrite  (Ris::CmdLineCmd* aCmd);
   void executeRead   (Ris::CmdLineCmd* aCmd);
+
+  void executeStart  (Ris::CmdLineCmd* aCmd);
+  void executeStop   (Ris::CmdLineCmd* aCmd);
 
 };
 //******************************************************************************

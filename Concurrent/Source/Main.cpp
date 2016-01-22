@@ -18,24 +18,12 @@ int main(int argc,char** argv)
    main_initialize(argc,argv);
 
    //--------------------------------------------------------------------
-   // Launch threads
-
-   gThread1 = new Thread1;
-   gThread1->launchThread();
-
-   //--------------------------------------------------------------------
    // Start user command line executive,
    // It returns when user exits
 
    CmdLineExec* tExec = new CmdLineExec;
    Ris::executeCmdLineConsole(tExec);
    delete tExec;
-
-   //--------------------------------------------------------------------
-   // Shutdown threads
-
-   gThread1->shutdownThread();
-   delete gThread1;
 
    //--------------------------------------------------------------------
    // Exit

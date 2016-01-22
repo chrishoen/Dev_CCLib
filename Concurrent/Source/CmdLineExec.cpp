@@ -7,8 +7,7 @@
 
 #include "CmdLineExec.h"
 
-#include "someMessage.h"
-#include "someThread1.h"
+#include "someThreads.h"
 #include "someShare.h"
 
 using namespace Some;
@@ -32,6 +31,8 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("GO1"   ))  executeGo1   (aCmd);
    if(aCmd->isCmd("W"     ))  executeWrite (aCmd);
    if(aCmd->isCmd("R"     ))  executeRead  (aCmd);
+   if(aCmd->isCmd("START" ))  executeStart (aCmd);
+   if(aCmd->isCmd("STOP"  ))  executeStop  (aCmd);
 
 
    if(aCmd->isCmd("GO2"   ))  executeGo2   (aCmd);
@@ -71,6 +72,20 @@ void CmdLineExec::executeRead(Ris::CmdLineCmd* aCmd)
 
    gShare.mReader.read  (aCmd->argInt(1));
    gShare.mReader.show();
+}
+
+//******************************************************************************
+
+void CmdLineExec::executeStart(Ris::CmdLineCmd* aCmd)
+{
+   gThreads.start();
+}
+
+//******************************************************************************
+
+void CmdLineExec::executeStop(Ris::CmdLineCmd* aCmd)
+{
+   gThreads.stop();
 }
 
 //******************************************************************************

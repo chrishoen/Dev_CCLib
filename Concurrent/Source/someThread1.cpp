@@ -34,6 +34,7 @@ Thread1::Thread1()
 
 void Thread1::threadInitFunction()
 {
+   Prn::print(0,"Thread1::threadInitFunction");
 }
 
 //******************************************************************************
@@ -42,7 +43,8 @@ void Thread1::threadRunFunction()
 {
    while(1)
    {
-      threadSleep(100);
+      threadSleep(1000);
+      Prn::print(Prn::ThreadRun1,"Thread1::threadRunFunction");
       if (mTerminateFlag) break;
    }
 }
@@ -51,6 +53,7 @@ void Thread1::threadRunFunction()
 
 void Thread1::threadExitFunction()
 {
+   Prn::print(0,"Thread1::threadExitFunction");
 }
 
 //******************************************************************************
