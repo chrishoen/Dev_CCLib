@@ -13,32 +13,32 @@ namespace LFIntQueue
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // SList Members
+   // Node for a combined Free List and Queue
 
    typedef struct
-   { 
+   {
       int         mValue;
       atomic<int> mQueueNext;
       atomic<int> mListNext;
-   } SListNode;
+   } QueueListNode;
 
    static const int cInvalid = 999;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Queue State Members
+   // Queue Members
 
-   atomic<int> mQueueHead;  
-   atomic<int> mQueueTail;  
+   atomic<int> mQueueHead;
+   atomic<int> mQueueTail;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Free List Members
 
-   bool listPush  (int  aIndex);
-   bool listPop   (int* aIndex);
+   bool listPush(int  aIndex);
+   bool listPop(int* aIndex);
 
    atomic<int> mListHead;
    atomic<int> mListSize;
@@ -49,7 +49,7 @@ namespace LFIntQueue
    // Memory Members
 
    // Node array
-   static SListNode mNode[1000];
+   static QueueListNode mNode[1000];
 
    // Number of blocks allocated
    static int mAllocate = 0;
@@ -61,28 +61,28 @@ namespace LFIntQueue
    //***************************************************************************
    // Initialize
 
-   void initialize (int aAllocate)
+   void initialize(int aAllocate)
    {
       mAllocate      = aAllocate;
       mQueueAllocate = aAllocate + 1;
       mListAllocate  = aAllocate + 2;
 
-      for (int i=0; i<mListAllocate-1; i++)
+      for (int i = 0; i < mListAllocate - 1; i++)
       {
          mNode[i].mValue = 0;
          mNode[i].mQueueNext = cInvalid;
-         mNode[i].mListNext  = i + 1;
+         mNode[i].mListNext = i + 1;
       }
 
-      mNode[mListAllocate-1].mValue = 0;
-      mNode[mListAllocate-1].mQueueNext = cInvalid;
-      mNode[mListAllocate-1].mListNext = cInvalid;
+      mNode[mListAllocate - 1].mValue = 0;
+      mNode[mListAllocate - 1].mQueueNext = cInvalid;
+      mNode[mListAllocate - 1].mListNext = cInvalid;
 
-      mListSize  = mListAllocate-1;
+      mListSize = mListAllocate - 1;
       mListHead = 0;
 
       listPop((int*)&mQueueHead);
-      mQueueTail = mQueueHead.load(); 
+      mQueueTail = mQueueHead.load();
    }
 
    //***************************************************************************
@@ -94,7 +94,7 @@ namespace LFIntQueue
    // is to be written is stored in the new node. The new node is then attached
    // to the queue tail node and the tail index is updated.
 
-   bool tryWrite (int aWriteValue)
+   bool tryWrite(int aValue)
    {
       // Try to allocate a node from the free list.
       // Exit if it is empty.
@@ -102,7 +102,7 @@ namespace LFIntQueue
       if (!listPop(&tNode)) return false;
 
       // Initialize the node with the value.
-      mNode[tNode].mValue = aWriteValue;
+      mNode[tNode].mValue = aValue;
       mNode[tNode].mQueueNext = cInvalid;
 
       // Attach the node to the queue tail.
@@ -130,7 +130,7 @@ namespace LFIntQueue
    // node, pushes the previous head node back onto the free list and updates the
    // head index.
 
-   bool tryRead (int* aReadValue) 
+   bool tryRead(int* aReadValue)
    {
       // Store the head node in a temp.
       int tQueueHead = mQueueHead;
@@ -158,19 +158,19 @@ namespace LFIntQueue
    // Insert a node into the list before the list tail node.
    // There can be no concurrent calls to this.
 
-   bool listPush (int aNode)
+   bool listPush(int aNode)
    {
       // Exit if the list is full.
       if (mListSize >= mAllocate) return false;
 
-      // Store the node the tail is attached to in a temp.
+      // Store the node that is after the head in a temp.
       int tNextNode = mNode[mListHead].mListNext;
       while (true)
       {
-         // Attach the node to the node that the tail is attached to.
+         // Attach the node that is after the head to the node.
          mNode[aNode].mListNext = tNextNode;
 
-         // Attach the tail node to the node.
+         // Attach the node to the head.
          if (mNode[mListHead].mListNext.compare_exchange_weak(tNextNode, aNode)) break;
       }
 
@@ -185,36 +185,58 @@ namespace LFIntQueue
    // This detaches the node that is before the tail list node.
    // There can be concurrent calls to this.
 
-   bool listPop (int* aNode) 
+   bool listPop(int* aNode)
    {
-      // Store the node that is before the tail in a temp.
-      int tNextNode = mNode[mListHead].mListNext;
+      // Store the node that is after the head in a temp.
+      // This is the node that will be detached.
+      int tNode = mNode[mListHead].mListNext;
       while (true)
       {
          // Exit if the queue is empty.
-         if (tNextNode == cInvalid) return false;
+         if (tNode == cInvalid) return false;
 
-         // Attempt to detach the node.
-         if (mNode[mListHead].mListNext.compare_exchange_weak(tNextNode, mNode[tNextNode].mListNext)) break;
+         // Detach the node.
+         if (mNode[mListHead].mListNext.compare_exchange_weak(tNode, mNode[tNode].mListNext)) break;
       }
 
       // Reset the detached node.
-      mNode[tNextNode].mValue = 0;
-      mNode[tNextNode].mQueueNext = cInvalid;
-      mNode[tNextNode].mListNext  = cInvalid;
+      mNode[tNode].mValue = 0;
+      mNode[tNode].mQueueNext = cInvalid;
+      mNode[tNode].mListNext = cInvalid;
 
       // Return result.
-      *aNode = tNextNode;
+      *aNode = tNode;
 
       // Done.
       mListSize--;
       return true;
    }
-}
 
-
+}//namespace
 
 #if 0
+
+   FOR REFERENCE, HERE IS THE ABOVE CODE WITHOUT THE ATOMICS
+
+   bool tryWrite (int aValue)
+   {
+      // Try to allocate a node from the free list.
+      // Exit if it is empty.
+      int tNode;
+      if (!listPop(&tNode)) return false;
+
+      // Initialize the node with the value.
+      mNode[tNode].mValue = aValue;
+      mNode[tNode].mQueueNext = cInvalid;
+
+      // Attach the node to the queue tail node and update the tail index.
+      mNode[mQueueTail].mQueueNext = tNode;
+      mQueueTail = tNode;
+
+      // Done
+      return true;
+   }
+
    bool tryRead (int* aReadValue) 
    {
       // Store the read node index in a temp.
@@ -235,4 +257,48 @@ namespace LFIntQueue
       // Done.
       return true;
    }
+
+
+   bool listPush (int aNode)
+   {
+      // Exit if the list is full.
+      if (mListSize >= mAllocate) return false;
+
+      // Attach the node that is after the head to the node.
+      mNode[aNode].mListNext = mNode[mListHead].mListNext.load();
+
+      // Attach the node to the head.
+      mNode[mListHead].mListNext = aNode;
+
+      // Done.
+      mListSize++;
+      return true;
+   }
+
+   bool listPop (int* aNode)
+   {
+      // Store the node that is after the head in a temp.
+      // This is the node that will be detached.
+      int tNode = mNode[mListHead].mListNext;
+
+      // Exit if the queue is empty.
+      if (tNode == cInvalid) return false;
+
+      // Detach the node.
+      mNode[mListHead].mListNext = mNode[tNode].mListNext.load();
+
+      // Reset the detached node.
+      mNode[tNode].mValue = 0;
+      mNode[tNode].mQueueNext = cInvalid;
+      mNode[tNode].mListNext  = cInvalid;
+
+      // Return result.
+      *aNode = tNode;
+
+      // Done.
+      mListSize--;
+      return true;
+   }
+}
+
 #endif
