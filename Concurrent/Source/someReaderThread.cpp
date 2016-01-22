@@ -30,12 +30,12 @@ ReaderThread::ReaderThread()
 
    // Thread Members
    mTerminateFlag = false;
-   mSleepLower =  900;
-   mSleepUpper = 1000;
+   mSleepLower = gGSettings.mSleepLower;
+   mSleepUpper = gGSettings.mSleepUpper;
 
-   // Reader Members
-   mReadLower =  9000;
-   mReadUpper = 11000;
+   // Writer Members
+   mReadLower = gGSettings.mReadLower;
+   mReadUpper = gGSettings.mReadUpper;
 }
 
 //******************************************************************************

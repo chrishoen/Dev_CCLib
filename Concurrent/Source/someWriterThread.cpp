@@ -30,12 +30,12 @@ WriterThread::WriterThread()
 
    // Thread Members
    mTerminateFlag = false;
-   mSleepLower = 900;
-   mSleepUpper = 1000;
+   mSleepLower = gGSettings.mSleepLower;
+   mSleepUpper = gGSettings.mSleepUpper;
 
    // Writer Members
-   mWriteLower =  9000;
-   mWriteUpper = 11000;
+   mWriteLower = gGSettings.mWriteLower;
+   mWriteUpper = gGSettings.mWriteUpper;
 }
 
 //******************************************************************************

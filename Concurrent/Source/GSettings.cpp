@@ -21,17 +21,26 @@
 
 GSettings::GSettings()
 {
-   mTestThread = 1;
-   mTestNumber = 1;
+   mAllocate   = 1000;
+   mSleepLower =  900;
+   mSleepUpper = 1100;
+   mWriteLower =  900;
+   mWriteUpper = 1100;
+   mReadLower  =  900;
+   mReadUpper  = 1100;
 }
 
 //******************************************************************************
 
 void GSettings::show()
 {
-   printf("GSettings   TestThread   %d\n",mTestThread);
-   printf("GSettings   TimerThread  %d\n",mTimerThread);
-   printf("GSettings   TestNumber   %d\n",mTestNumber);
+   printf("GSettings   SleepLower    %9d\n", mSleepLower);
+   printf("GSettings   SleepUpper    %9d\n", mSleepUpper);
+   printf("GSettings   Allocate      %9d\n", mAllocate);
+   printf("GSettings   WriteLower    %9d\n", mWriteLower);
+   printf("GSettings   WriteUpper    %9d\n", mWriteUpper);
+   printf("GSettings   ReadLower     %9d\n", mReadLower);
+   printf("GSettings   ReadUpper     %9d\n", mReadUpper);
 }
 
 //******************************************************************************
@@ -39,10 +48,16 @@ void GSettings::show()
 
 void GSettings::execute(Ris::CmdLineCmd* aCmd)
 {
+
+
    // Read variables
-   if(aCmd->isCmd("TESTTHREAD"))   mTestThread  = aCmd->argInt (1);
-   if(aCmd->isCmd("TIMERTHREAD"))  mTimerThread = aCmd->argInt (1);
-   if(aCmd->isCmd("TESTNUMBER"))   mTestNumber  = aCmd->argInt (1);
+   if(aCmd->isCmd("SleepLower"))   mSleepLower  = aCmd->argInt (1);
+   if(aCmd->isCmd("SleepUpper"))   mSleepUpper  = aCmd->argInt (1);
+   if(aCmd->isCmd("Allocate"))     mAllocate    = aCmd->argInt (1)*1000;
+   if(aCmd->isCmd("WriteLower"))   mWriteLower  = aCmd->argInt (1)*1000;
+   if(aCmd->isCmd("WriteUpper"))   mWriteUpper  = aCmd->argInt (1)*1000;
+   if(aCmd->isCmd("ReadLower"))    mReadLower   = aCmd->argInt (1)*1000;
+   if(aCmd->isCmd("ReadUpper"))    mReadUpper   = aCmd->argInt (1)*1000;
 }
 
 //******************************************************************************
@@ -61,7 +76,7 @@ void GSettings::readFromFileName(char* aFileName)
    }
    else
    {
-      strcat(tFilePath, "ThreadTestSettings.txt");
+      strcat(tFilePath, "ConcurrentSettings.txt");
    }
 
    readFromFilePath(tFilePath);

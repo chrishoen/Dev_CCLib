@@ -6,6 +6,7 @@ Description:
 //******************************************************************************
 //******************************************************************************
 #include "LFIntQueue.h"
+#include "GSettings.h"
 
 #define  _SOMESHARE_CPP_
 #include "someShare.h"
@@ -23,7 +24,7 @@ Share::Share()
 
 void Share::initialize()
 {
-   LFIntQueue::initialize(10000);
+   LFIntQueue::initialize(gGSettings.mAllocate);
    mWriter.initialize(0);
    mReader.initialize();
 }

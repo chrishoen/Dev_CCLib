@@ -19,21 +19,16 @@ public:
    //---------------------------------------------------------------------------
    // Settings
 
-   static const int   cTestThread_None           = 0;
-   static const int   cTimerThread_None          = 0;
+   int   mAllocate;
 
-   static const int   cTestThread_Thread1        = 1;
-   static const int   cTestThread_ApcThread      = 2;
-   static const int   cTestThread_QCallThread1   = 3;
+   int   mSleepLower;
+   int   mSleepUpper;
 
-   static const int   cTimerThread_Thread1        = 1;
-   static const int   cTimerThread_Thread2        = 2;
-   static const int   cTimerThread_Thread3        = 3;
-   static const int   cTimerThread_ApcThread      = 4;
+   int   mWriteLower;
+   int   mWriteUpper;
 
-   int   mTestNumber;
-   int   mTestThread;
-   int   mTimerThread;
+   int   mReadLower;
+   int   mReadUpper;
 
    // Settings
    //---------------------------------------------------------------------------
