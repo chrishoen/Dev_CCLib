@@ -38,9 +38,9 @@ public:
    //---------------------------------------------------------------------------
    // Members
 
-   unsigned  mPassCount;
-   unsigned  mFailCount;
-   unsigned  mCodeSum;
+   unsigned long long mPassCount;
+   unsigned long long mFailCount;
+   unsigned long long mCodeSum;
 };
 
 //******************************************************************************
