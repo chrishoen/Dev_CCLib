@@ -279,6 +279,40 @@ namespace LFIntQueue
 
    FOR REFERENCE, HERE IS THE ABOVE CODE WITHOUT THE ATOMICS
 
+   bool tryWrite(int aValue)
+   {
+      // Try to allocate a node from the free list.
+      // Exit if it is empty.
+      int tNode;
+      if (!listPop(&tNode)) return false;
+
+      // Initialize the node with the value.
+      mNode[tNode].mValue = aValue;
+      mNode[tNode].mQueueNext = cInvalid;
+
+      // Attach the node to the queue tail.
+      int tQueueTail;
+      mWriteRetry--;
+      while (true)
+      {
+         mWriteRetry++;
+         tQueueTail = mQueueTail;
+
+         // Update the tail next index to point to the node. It should be
+         // invalid, if not then there was a collision.
+         int tInvalid = cInvalid;
+         if (mNode[tQueueTail].mQueueNext.compare_exchange_weak(tInvalid, tNode)) break;
+         // If the above line fails then the tail next index was not updated, 
+         // so advance the tail.
+         mQueueTail.compare_exchange_weak(tQueueTail, mNode[tQueueTail].mQueueNext);
+      }
+      // Update the tail index so that the node is the new tail.
+      mQueueTail.compare_exchange_strong(tQueueTail, tNode);
+
+      // Done
+      return true;
+   }
+
    bool tryWrite (int aValue)
    {
       // Try to allocate a node from the free list.
