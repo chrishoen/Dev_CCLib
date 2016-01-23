@@ -24,9 +24,6 @@ public:
   void executeWriteInt (Ris::CmdLineCmd* aCmd);
   void executeReadInt  (Ris::CmdLineCmd* aCmd);
 
-  void executeWriteBlock (Ris::CmdLineCmd* aCmd);
-  void executeReadBlock  (Ris::CmdLineCmd* aCmd);
-
   int mCount;
 };
 

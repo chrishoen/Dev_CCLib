@@ -37,6 +37,12 @@
     <ClCompile Include="Source\LFPointerQueue.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\LFBlockQueue.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LFIntQueue.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h">
@@ -67,6 +73,12 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\LFPointerQueue.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LFBlockQueue.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LFIntQueue.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
