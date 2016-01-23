@@ -129,6 +129,7 @@ namespace LFIntQueue
       printf("ReadRetry   %d\n",mReadRetry);
       printf("PushRetry   %d\n",mPushRetry);
       printf("PopRetry    %d\n",mPopRetry);
+      printf("ListSize    %d\n",mListSize);
    }
 
    //***************************************************************************
