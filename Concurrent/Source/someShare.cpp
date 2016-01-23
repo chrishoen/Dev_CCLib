@@ -22,12 +22,13 @@ namespace Some
 
 Share::Share()
 {
-   mMode = 2;
    initialize();
 }
 
 void Share::initialize()
 {
+   mMode = gGSettings.mMode;
+
    switch (mMode)
    {
    case 1:

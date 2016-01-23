@@ -22,7 +22,7 @@ namespace Some
 
 Writer::Writer()
 {
-   initialize(0);
+   initialize();
 }
 
 void Writer::initialize(unsigned aIdent)

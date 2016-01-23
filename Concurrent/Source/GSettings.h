@@ -19,6 +19,8 @@ public:
    //---------------------------------------------------------------------------
    // Settings
 
+   int   mMode;
+
    int   mAllocate;
 
    int   mSleepLower;

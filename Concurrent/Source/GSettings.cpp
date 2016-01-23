@@ -21,6 +21,7 @@
 
 GSettings::GSettings()
 {
+   mMode       =    1;
    mAllocate   = 1000;
    mSleepLower =  900;
    mSleepUpper = 1100;
@@ -35,6 +36,7 @@ GSettings::GSettings()
 
 void GSettings::show()
 {
+   printf("GSettings   Mode          %9d\n", mMode);
    printf("GSettings   SleepLower    %9d\n", mSleepLower);
    printf("GSettings   SleepUpper    %9d\n", mSleepUpper);
    printf("GSettings   Allocate      %9d\n", mAllocate);
@@ -53,6 +55,7 @@ void GSettings::execute(Ris::CmdLineCmd* aCmd)
 
 
    // Read variables
+   if(aCmd->isCmd("Mode"))         mMode        = aCmd->argInt (1);
    if(aCmd->isCmd("SleepLower"))   mSleepLower  = aCmd->argInt (1);
    if(aCmd->isCmd("SleepUpper"))   mSleepUpper  = aCmd->argInt (1);
    if(aCmd->isCmd("Allocate"))     mAllocate    = aCmd->argInt (1)*1000;
