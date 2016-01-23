@@ -8,14 +8,13 @@ Description:
 
 #include <prnPrint.h>
 
+#include "someShare.h"
 #include "LFIntQueue.h"
+#include "RisIntQueue.h"
 #include "someReader.h"
-
-// Global instance of the block pool
 
 namespace Some
 {
-
 
 //******************************************************************************
 //******************************************************************************
@@ -53,7 +52,7 @@ void Reader::show()
 //******************************************************************************
 //******************************************************************************
 
-bool Reader::readOne(int aMode)
+bool Reader::readOne1()
 {
    IntMessage tMsg;
 
@@ -65,9 +64,44 @@ bool Reader::readOne(int aMode)
    }
    else
    {
-      if (aMode == 1) mFailCount++;
+      if (mFailFlag) mFailCount++;
       return false;
    }
+}
+   
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+bool Reader::readOne2()
+{
+   IntMessage tMsg;
+
+   if (RisIntQueue::tryRead(&tMsg.aint()))
+   {
+      mPassCount++;
+      mCodeSum += tMsg.mCode;
+      return true;
+   }
+   else
+   {
+      if (mFailFlag) mFailCount++;
+      return false;
+   }
+}
+   
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+bool Reader::readOne()
+{
+   switch (gShare.mMode)
+   {
+   case 1: return readOne1();
+   case 2: return readOne2();
+   }
+   return false;
 }
    
 //******************************************************************************
@@ -78,16 +112,18 @@ void Reader::read(int aNumReads)
 {
    if (aNumReads > 0)
    {
+      mFailFlag=true;
       for (int i = 0; i < aNumReads; i++)
       {
-         readOne(1);
+         readOne();
       }
    }
    else
    {
+      mFailFlag=false;
       while(true)
       {
-         if (!readOne(2))
+         if (!readOne())
          {
             return;
          }

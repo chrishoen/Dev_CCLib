@@ -172,6 +172,7 @@
     <ClCompile Include="Source\LFIntQueue.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
+    <ClCompile Include="Source\RisIntQueue.cpp" />
     <ClCompile Include="Source\someMessage.cpp" />
     <ClCompile Include="Source\someReader.cpp" />
     <ClCompile Include="Source\someReaderThread.cpp" />
@@ -186,6 +187,7 @@
     <ClInclude Include="Source\GSettings.h" />
     <ClInclude Include="Source\LFIntQueue.h" />
     <ClInclude Include="Source\MainInit.h" />
+    <ClInclude Include="Source\RisIntQueue.h" />
     <ClInclude Include="Source\someMessage.h" />
     <ClInclude Include="Source\someReader.h" />
     <ClInclude Include="Source\someReaderThread.h" />

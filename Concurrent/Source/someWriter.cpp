@@ -9,13 +9,12 @@ Description:
 #include <prnPrint.h>
 
 #include "LFIntQueue.h"
+#include "RisIntQueue.h"
+#include "someShare.h"
 #include "someWriter.h"
-
-// Global instance of the block pool
 
 namespace Some
 {
-
 
 //******************************************************************************
 //******************************************************************************
@@ -57,7 +56,7 @@ void Writer::show()
 //******************************************************************************
 //******************************************************************************
 
-void Writer::write(int aNumWrites)
+void Writer::write1(int aNumWrites)
 {
    for (int i = 0; i < aNumWrites; i++)
    {
@@ -75,6 +74,43 @@ void Writer::write(int aNumWrites)
       }
    }
 }
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void Writer::write2(int aNumWrites)
+{
+   for (int i = 0; i < aNumWrites; i++)
+   {
+      mCode++;
+      IntMessage tMsg(mIdent,mCode);
+
+      if (RisIntQueue::tryWrite(tMsg.aint()))
+      {
+         mPassCount++;
+         mCodeSum += mCode;
+      }
+      else
+      {
+         mFailCount++;
+      }
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void Writer::write(int aNumWrites)
+{
+   switch (gShare.mMode)
+   {
+   case 1: return write1(aNumWrites);
+   case 2: return write2(aNumWrites);
+   }
+}
+   
 
 
    
