@@ -7,6 +7,7 @@
 #include "prnPrint.h"
 #include "Timing.h"
 #include "LFIntQueue.h"
+#include "LFBlockQueue.h"
 
 #include "CmdLineExec.h"
 
@@ -16,6 +17,7 @@ CmdLineExec::CmdLineExec()
 {
    mCount=0;
    LFIntQueue::initialize(4);
+   LFBlockQueue::initialize(4);
 }
 
 //******************************************************************************
@@ -25,18 +27,21 @@ void CmdLineExec::reset()
    for (int i=0;i<100;i++) printf("\n",i);
    mCount=0;
    LFIntQueue::initialize(4);
+   LFBlockQueue::initialize(4);
 }
 
 //******************************************************************************
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
    if(aCmd->isCmd("RESET"  ))  reset();
-   if(aCmd->isCmd("GO1"    ))  executeGo1   (aCmd);
-   if(aCmd->isCmd("GO2"    ))  executeGo2   (aCmd);
-   if(aCmd->isCmd("GO3"    ))  executeGo3   (aCmd);
-   if(aCmd->isCmd("SHOW"   ))  executeShow  (aCmd);
-   if(aCmd->isCmd("W"      ))  executeWrite (aCmd);
-   if(aCmd->isCmd("R"      ))  executeRead  (aCmd);
+   if(aCmd->isCmd("GO1"    ))  executeGo1        (aCmd);
+   if(aCmd->isCmd("GO2"    ))  executeGo2        (aCmd);
+   if(aCmd->isCmd("GO3"    ))  executeGo3        (aCmd);
+   if(aCmd->isCmd("SHOW"   ))  executeShow       (aCmd);
+   if(aCmd->isCmd("WI"     ))  executeWriteInt   (aCmd);
+   if(aCmd->isCmd("RI"     ))  executeReadInt    (aCmd);
+   if(aCmd->isCmd("W"      ))  executeWriteBlock (aCmd);
+   if(aCmd->isCmd("R"      ))  executeReadBlock  (aCmd);
 }
 
 //******************************************************************************
@@ -72,7 +77,7 @@ void CmdLineExec::executeShow(Ris::CmdLineCmd* aCmd)
 
 //******************************************************************************
 
-void CmdLineExec::executeWrite(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeWriteInt(Ris::CmdLineCmd* aCmd)
 {
    if (LFIntQueue::tryWrite(++mCount))
    {
@@ -86,7 +91,7 @@ void CmdLineExec::executeWrite(Ris::CmdLineCmd* aCmd)
 
 //******************************************************************************
 
-void CmdLineExec::executeRead(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeReadInt(Ris::CmdLineCmd* aCmd)
 {
    int tCount=0;
    if (LFIntQueue::tryRead(&tCount))
@@ -97,4 +102,45 @@ void CmdLineExec::executeRead(Ris::CmdLineCmd* aCmd)
    {
       Prn::print(0, "READ            FAIL");
    }
+}
+
+//******************************************************************************
+
+void CmdLineExec::executeWriteBlock(Ris::CmdLineCmd* aCmd)
+{
+   mCount++;
+   int tNode;
+
+   if (!LFBlockQueue::startWrite(&tNode))
+   {
+      Prn::print(0, "WRITE FAIL");
+      return;
+   }
+
+   Prn::print(0, "WRITE PASS  $$ %d", mCount);
+
+   LFBlockQueue::BlockT* tBlock = (LFBlockQueue::BlockT*)LFBlockQueue::element(tNode);
+   tBlock->mCode1 = mCount;
+   LFBlockQueue::finishWrite(tNode);
+
+}
+
+//******************************************************************************
+
+void CmdLineExec::executeReadBlock(Ris::CmdLineCmd* aCmd)
+{
+   int tCount=0;
+   int tNode;
+
+   if (!LFBlockQueue::startRead(&tNode))
+   {
+      Prn::print(0, "READ            FAIL");
+      return;
+   }
+
+   LFBlockQueue::BlockT* tBlock = (LFBlockQueue::BlockT*)LFBlockQueue::element(tNode);
+   tCount = tBlock->mCode1;
+   LFBlockQueue::finishRead(tNode);
+
+   Prn::print(0, "READ            PASS  $$ %d", tCount);
 }

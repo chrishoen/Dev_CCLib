@@ -83,16 +83,16 @@ namespace LFBlockQueue
 
       mNode = new QueueListNode[mListAllocate];
 
-      mMemory = malloc(mAllocate*cBlockSize);
+      mMemory = malloc(mListAllocate*cBlockSize);
 
       for (int i = 0; i < mListAllocate - 1; i++)
       {
-         mNode[i].mValue = 0;
+         mNode[i].mValue = i;
          mNode[i].mQueueNext = cInvalid;
          mNode[i].mListNext = i + 1;
       }
 
-      mNode[mListAllocate - 1].mValue = 0;
+      mNode[mListAllocate - 1].mValue = mListAllocate - 1;
       mNode[mListAllocate - 1].mQueueNext = cInvalid;
       mNode[mListAllocate - 1].mListNext = cInvalid;
 
@@ -128,7 +128,7 @@ namespace LFBlockQueue
    //******************************************************************************
    // Return a pointer to a block, based on block array index
 
-   void* element(unsigned aIndex)
+   void* element(int aIndex)
    {
       return (void*)((char*)mMemory + cBlockSize*aIndex);
    }
@@ -142,17 +142,25 @@ namespace LFBlockQueue
    // is to be written is stored in the new node. The new node is then attached
    // to the queue tail node and the tail index is updated.
 
-   bool tryWrite(int aValue)
+   bool startWrite(int* aNode)
    {
       // Try to allocate a node from the free list.
       // Exit if it is empty.
       int tNode;
       if (!listPop(&tNode)) return false;
 
-      // Initialize the node with the value.
-      mNode[tNode].mValue = aValue;
+      // Initialize the node.
       mNode[tNode].mQueueNext = cInvalid;
 
+      // Return the node index as the value.
+      *aNode = tNode;
+
+      // Done.
+      return true;
+   }
+
+   void finishWrite(int aNode)
+   {
       // Attach the node to the queue tail.
       int tQueueTail;
       mWriteRetry--;
@@ -164,16 +172,13 @@ namespace LFBlockQueue
          // Update the tail next index to point to the node. It should be
          // invalid, if not then there was a collision.
          int tInvalid = cInvalid;
-         if (mNode[tQueueTail].mQueueNext.compare_exchange_weak(tInvalid, tNode)) break;
+         if (mNode[tQueueTail].mQueueNext.compare_exchange_weak(tInvalid, aNode)) break;
          // If the above line fails then the tail next index was not updated, 
          // so advance the tail.
          mQueueTail.compare_exchange_weak(tQueueTail, mNode[tQueueTail].mQueueNext);
       }
       // Update the tail index so that the node is the new tail.
-      mQueueTail.compare_exchange_strong(tQueueTail, tNode);
-
-      // Done
-      return true;
+      mQueueTail.compare_exchange_strong(tQueueTail, aNode);
    }
 
    //******************************************************************************
@@ -185,25 +190,28 @@ namespace LFBlockQueue
    // node, pushes the previous head node back onto the free list and updates the
    // head index.
 
-   bool tryRead (int* aReadValue) 
+   bool startRead(int* aNode)
    {
       // Store the read node index in a temp.
-      int tReadNode = mNode[mQueueHead].mQueueNext;
+      int tNode = mNode[mQueueHead].mQueueNext;
 
       // Exit if the queue is empty.
-      if (tReadNode == cInvalid) return false;
+      if (tNode == cInvalid) return false;
 
-      // Extract the value from the read node.
-      *aReadValue = mNode[tReadNode].mValue;
+      // Return the node.
+      *aNode = tNode;
 
+      // Done.
+      return true;
+   }
+
+   void finishRead (int aNode) 
+   {
       // Push the previous head node back onto the free list.
       listPush(mQueueHead);
 
       // Update the head node to be the one that was just read from.
-      mQueueHead = tReadNode;
-
-      // Done.
-      return true;
+      mQueueHead = aNode;
    }
 
    //***************************************************************************

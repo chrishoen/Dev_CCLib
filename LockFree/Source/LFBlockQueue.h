@@ -1,5 +1,5 @@
-#ifndef _LFINTQUEUE_H_
-#define _LFINTQUEUE_H_
+#ifndef _LFBLOCKQUEUE_H_
+#define _LFBLOCKQUEUE_H_
 
 //******************************************************************************
 //******************************************************************************
@@ -16,13 +16,13 @@ namespace LFBlockQueue
 
    void  initialize  (int  aAllocate);
 
-   bool  startWrite  (int* aIndex);
-   void  finishWrite (int  aIndex);
+   bool  startWrite  (int* aNode);
+   void  finishWrite (int  aNode);
 
-   bool  startRead   (int* aIndex);
-   void  finishRead  (int  aIndex);
+   bool  startRead   (int* aNode);
+   void  finishRead  (int  aNode);
 
-   void* element (int  aIndex);
+   void* element (int  aNode);
 
    void show();
 }

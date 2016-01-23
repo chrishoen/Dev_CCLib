@@ -20,9 +20,12 @@ public:
   void executeGo2(Ris::CmdLineCmd* aCmd);
   void executeGo3(Ris::CmdLineCmd* aCmd);
 
-  void executeShow  (Ris::CmdLineCmd* aCmd);
-  void executeWrite (Ris::CmdLineCmd* aCmd);
-  void executeRead  (Ris::CmdLineCmd* aCmd);
+  void executeShow     (Ris::CmdLineCmd* aCmd);
+  void executeWriteInt (Ris::CmdLineCmd* aCmd);
+  void executeReadInt  (Ris::CmdLineCmd* aCmd);
+
+  void executeWriteBlock (Ris::CmdLineCmd* aCmd);
+  void executeReadBlock  (Ris::CmdLineCmd* aCmd);
 
   int mCount;
 };
