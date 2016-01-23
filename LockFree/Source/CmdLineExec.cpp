@@ -38,10 +38,10 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("GO2"    ))  executeGo2        (aCmd);
    if(aCmd->isCmd("GO3"    ))  executeGo3        (aCmd);
    if(aCmd->isCmd("SHOW"   ))  executeShow       (aCmd);
-   if(aCmd->isCmd("WI"     ))  executeWriteInt   (aCmd);
-   if(aCmd->isCmd("RI"     ))  executeReadInt    (aCmd);
-   if(aCmd->isCmd("W"      ))  executeWriteBlock (aCmd);
-   if(aCmd->isCmd("R"      ))  executeReadBlock  (aCmd);
+   if(aCmd->isCmd("W"      ))  executeWriteInt   (aCmd);
+   if(aCmd->isCmd("R"      ))  executeReadInt    (aCmd);
+   if(aCmd->isCmd("WB"     ))  executeWriteBlock (aCmd);
+   if(aCmd->isCmd("RB"     ))  executeReadBlock  (aCmd);
 }
 
 //******************************************************************************
