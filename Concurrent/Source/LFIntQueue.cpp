@@ -168,22 +168,22 @@ namespace LFIntQueue
    // node, pushes the previous head node back onto the free list and updates the
    // head index.
 
-   bool tryRead (int* aReadValue) 
+   bool tryRead (int* aValue) 
    {
       // Store the read node index in a temp.
-      int tReadNode = mNode[mQueueHead].mQueueNext;
+      int tNode = mNode[mQueueHead].mQueueNext;
 
       // Exit if the queue is empty.
-      if (tReadNode == cInvalid) return false;
+      if (tNode == cInvalid) return false;
 
       // Extract the value from the read node.
-      *aReadValue = mNode[tReadNode].mValue;
+      *aValue = mNode[tNode].mValue;
 
       // Push the previous head node back onto the free list.
       listPush(mQueueHead);
 
       // Update the head node to be the one that was just read from.
-      mQueueHead = tReadNode;
+      mQueueHead = tNode;
 
       // Done.
       return true;
