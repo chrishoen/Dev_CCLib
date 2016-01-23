@@ -168,25 +168,22 @@ namespace LFIntQueue
    // node, pushes the previous head node back onto the free list and updates the
    // head index.
 
-   bool tryRead(int* aReadValue)
+   bool tryRead (int* aReadValue) 
    {
-      // Store the head node in a temp.
-      int tQueueHead = mQueueHead;
-      mReadRetry--;
-      while (true)
-      {
-         mReadRetry++;
-         // Exit if the queue is empty.
-         if (mNode[tQueueHead].mQueueNext == cInvalid) return false;
+      // Store the read node index in a temp.
+      int tReadNode = mNode[mQueueHead].mQueueNext;
 
-         if (mQueueHead.compare_exchange_weak(tQueueHead, mNode[tQueueHead].mQueueNext)) break;
-      }
-      // Extract the read value from the head block.
-      int tReadNode = mNode[tQueueHead].mQueueNext;
+      // Exit if the queue is empty.
+      if (tReadNode == cInvalid) return false;
+
+      // Extract the value from the read node.
       *aReadValue = mNode[tReadNode].mValue;
 
       // Push the previous head node back onto the free list.
-      listPush(tQueueHead);
+      listPush(mQueueHead);
+
+      // Update the head node to be the one that was just read from.
+      mQueueHead = tReadNode;
 
       // Done.
       return true;
@@ -278,6 +275,30 @@ namespace LFIntQueue
       mQueueTail = tNode;
 
       // Done
+      return true;
+   }
+
+   bool tryRead(int* aReadValue)
+   {
+      // Store the head node in a temp.
+      int tQueueHead = mQueueHead;
+      mReadRetry--;
+      while (true)
+      {
+         mReadRetry++;
+         // Exit if the queue is empty.
+         if (mNode[tQueueHead].mQueueNext == cInvalid) return false;
+
+         if (mQueueHead.compare_exchange_weak(tQueueHead, mNode[tQueueHead].mQueueNext)) break;
+      }
+      // Extract the read value from the head block.
+      int tReadNode = mNode[tQueueHead].mQueueNext;
+      *aReadValue = mNode[tReadNode].mValue;
+
+      // Push the previous head node back onto the free list.
+      listPush(tQueueHead);
+
+      // Done.
       return true;
    }
 
