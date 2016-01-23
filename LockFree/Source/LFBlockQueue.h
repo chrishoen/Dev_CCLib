@@ -15,6 +15,7 @@ namespace LFBlockQueue
    } BlockT;
 
    void  initialize  (int  aAllocate);
+   void  finalize    ();
 
    bool  startWrite  (int* aNode);
    void  finishWrite (int  aNode);

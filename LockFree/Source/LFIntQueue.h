@@ -7,6 +7,7 @@
 namespace LFIntQueue
 {
    void initialize (int aAllocate);
+   void finalize   ();
 
    bool tryWrite  (int  aWriteValue);
    bool tryRead   (int* aReadValue);

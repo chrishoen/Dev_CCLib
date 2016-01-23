@@ -81,8 +81,10 @@ namespace LFBlockQueue
       mQueueAllocate = aAllocate + 1;
       mListAllocate  = aAllocate + 2;
 
+      if (mNode) free(mNode);
       mNode = new QueueListNode[mListAllocate];
 
+      if (mMemory) free(mNode);
       mMemory = malloc(mListAllocate*cBlockSize);
 
       for (int i = 0; i < mListAllocate - 1; i++)
@@ -108,11 +110,29 @@ namespace LFBlockQueue
       mPopRetry   = 0;
    }
 
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Finalize
+
    void finalize()
    {
-      if (mNode) free(mNode);
-      if (mMemory) free(mMemory);
+      if (mNode)
+      {
+         free(mNode);
+         mNode = 0;
+      }
+      if (mMemory)
+      {
+         free(mMemory);
+         mMemory = 0;
+      }
    }
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Show
 
    void show()
    {
