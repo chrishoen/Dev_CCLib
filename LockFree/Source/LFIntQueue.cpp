@@ -142,7 +142,7 @@ namespace LFIntQueue
    // is to be written is stored in the new node. The new node is then attached
    // to the queue tail node and the tail index is updated.
 
-   bool tryWrite(int aValue)
+   bool tryWrite2(int aValue)
    {
       // Try to allocate a node from the free list.
       // Exit if it is empty.
@@ -176,6 +176,46 @@ namespace LFIntQueue
       return true;
    }
 
+   bool tryWrite(int aValue)
+   {
+      // Try to allocate a node from the free list.
+      // Exit if it is empty.
+      int tNode;
+      if (!listPop(&tNode)) return false;
+
+      // Initialize the node with the value.
+      mNode[tNode].mValue = aValue;
+      mNode[tNode].mQueueNext = cInvalid;
+
+      // Attach the node to the queue tail.
+      int tTail;
+      int tNext;
+      mWriteRetry--;
+      while (true)
+      {
+         mWriteRetry++;
+         tTail = mQueueTail;
+         tNext = mNode[mQueueTail].mQueueNext;
+
+         if (tTail == mQueueTail)
+         {
+            if (tNext == cInvalid)
+            {
+               if (mNode[tTail].mQueueNext.compare_exchange_weak(tNext, tNode)) break;
+            }
+            else
+            {
+               mQueueTail.compare_exchange_weak(tTail, tNext);
+            }
+         }
+      }
+      // Update the tail index so that the node is the new tail.
+      mQueueTail.compare_exchange_strong(tTail, tNode);
+
+      // Done
+      return true;
+   }
+
    //******************************************************************************
    //******************************************************************************
    //******************************************************************************
@@ -185,7 +225,7 @@ namespace LFIntQueue
    // node, pushes the previous head node back onto the free list and updates the
    // head index.
 
-   bool tryRead(int* aValue)
+   bool tryRead2(int* aValue)
    {
       // Store the head node in a temp.
       int tQueueHead = mQueueHead;
@@ -204,6 +244,39 @@ namespace LFIntQueue
 
       // Push the previous head node back onto the free list.
       listPush(tQueueHead);
+
+      // Done.
+      return true;
+   }
+
+   bool tryRead(int* aValue)
+   {
+      // Store the head node in a temp.
+      int tHead, tTail, tNext;
+      mReadRetry--;
+      while (true)
+      {
+         mReadRetry++;
+
+         tHead = mQueueHead;
+         tTail = mQueueTail;
+         tNext = mNode[tHead].mQueueNext;
+
+         if (tHead == mQueueHead)
+         {
+            if (tHead == tTail)
+            {
+               if (tNext == cInvalid) return false;
+               mQueueTail.compare_exchange_weak(tTail, tNext);
+            }
+            else
+            {
+               *aValue = mNode[tNext].mValue;
+               if (mQueueHead.compare_exchange_weak(tHead, tNext))break;
+            }
+         }
+      }
+      listPush(tHead);
 
       // Done.
       return true;
