@@ -31,11 +31,12 @@ void CmdLineExec::reset()
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
    if(aCmd->isCmd("RESET"  ))  reset();
-   if(aCmd->isCmd("GO1"    ))  executeGo1  (aCmd);
-   if(aCmd->isCmd("GO2"    ))  executeGo2  (aCmd);
-   if(aCmd->isCmd("GO3"    ))  executeGo3  (aCmd);
-   if(aCmd->isCmd("W"      ))  executeWrite(aCmd);
-   if(aCmd->isCmd("R"      ))  executeRead(aCmd);
+   if(aCmd->isCmd("GO1"    ))  executeGo1   (aCmd);
+   if(aCmd->isCmd("GO2"    ))  executeGo2   (aCmd);
+   if(aCmd->isCmd("GO3"    ))  executeGo3   (aCmd);
+   if(aCmd->isCmd("SHOW"   ))  executeShow  (aCmd);
+   if(aCmd->isCmd("W"      ))  executeWrite (aCmd);
+   if(aCmd->isCmd("R"      ))  executeRead  (aCmd);
 }
 
 //******************************************************************************
@@ -60,6 +61,13 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
+}
+
+//******************************************************************************
+
+void CmdLineExec::executeShow(Ris::CmdLineCmd* aCmd)
+{
+   LFIntQueue::show();
 }
 
 //******************************************************************************

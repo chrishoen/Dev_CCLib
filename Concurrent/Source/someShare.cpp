@@ -78,6 +78,7 @@ void Share::show()
    Prn::print(0,"Reader.mFailCount %llu",mReaderFailCount);
    Prn::print(0,"Reader.mCodeSum   %llu",mReaderCodeSum);
    Prn::print(0,"");
+   LFIntQueue::show();
 }
   
 }//namespace

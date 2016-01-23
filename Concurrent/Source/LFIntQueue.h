@@ -10,6 +10,8 @@ namespace LFIntQueue
 
    bool tryWrite  (int  aWriteValue);
    bool tryRead   (int* aReadValue);
+
+   void show();
 }
 #endif
 

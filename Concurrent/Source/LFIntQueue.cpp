@@ -59,6 +59,16 @@ namespace LFIntQueue
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
+   // Metrics Members
+
+   atomic<int> mWriteRetry;
+   atomic<int> mReadRetry;
+   atomic<int> mPushRetry;
+   atomic<int> mPopRetry;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Initialize
 
    void initialize(int aAllocate)
@@ -85,11 +95,25 @@ namespace LFIntQueue
 
       listPop((int*)&mQueueHead);
       mQueueTail = mQueueHead.load();
+
+      mWriteRetry = 0;
+      mReadRetry  = 0;
+      mPushRetry  = 0;
+      mPopRetry   = 0;
    }
 
    void finalize()
    {
       if (mNode) free(mNode);
+   }
+
+   void show()
+   {
+      printf("LFIntQueue\n");
+      printf("WriteRetry  %d\n",mWriteRetry);
+      printf("ReadRetry   %d\n",mReadRetry);
+      printf("PushRetry   %d\n",mPushRetry);
+      printf("PopRetry    %d\n",mPopRetry);
    }
 
    //***************************************************************************
@@ -114,8 +138,10 @@ namespace LFIntQueue
 
       // Attach the node to the queue tail.
       int tQueueTail;
+      mWriteRetry--;
       while (true)
       {
+         mWriteRetry++;
          tQueueTail = mQueueTail;
 
          // Update the tail next index to point to the node. It should be
@@ -146,8 +172,10 @@ namespace LFIntQueue
    {
       // Store the head node in a temp.
       int tQueueHead = mQueueHead;
+      mReadRetry--;
       while (true)
       {
+         mReadRetry++;
          // Exit if the queue is empty.
          if (mNode[tQueueHead].mQueueNext == cInvalid) return false;
 
@@ -177,8 +205,10 @@ namespace LFIntQueue
 
       // Store the node that is after the head in a temp.
       int tNextNode = mNode[mListHead].mListNext;
+      mPushRetry--;
       while (true)
       {
+         mPushRetry++;
          // Attach the node that is after the head to the node.
          mNode[aNode].mListNext = tNextNode;
 
@@ -202,8 +232,10 @@ namespace LFIntQueue
       // Store the node that is after the head in a temp.
       // This is the node that will be detached.
       int tNode = mNode[mListHead].mListNext;
+      mPopRetry--;
       while (true)
       {
+         mPopRetry++;
          // Exit if the queue is empty.
          if (tNode == cInvalid) return false;
 
