@@ -61,10 +61,10 @@ namespace LFIntQueue
    //***************************************************************************
    // Metrics Members
 
-   atomic<int> mWriteRetry;
-   atomic<int> mReadRetry;
-   atomic<int> mPushRetry;
-   atomic<int> mPopRetry;
+   atomic<unsigned long long> mWriteRetry;
+   atomic<unsigned long long> mReadRetry;
+   atomic<unsigned long long> mPushRetry;
+   atomic<unsigned long long> mPopRetry;
 
    //***************************************************************************
    //***************************************************************************
@@ -125,10 +125,10 @@ namespace LFIntQueue
    void show()
    {
       printf("LFIntQueue\n");
-      printf("WriteRetry  %d\n",mWriteRetry);
-      printf("ReadRetry   %d\n",mReadRetry);
-      printf("PushRetry   %d\n",mPushRetry);
-      printf("PopRetry    %d\n",mPopRetry);
+      printf("WriteRetry  %llu\n",mWriteRetry);
+      printf("ReadRetry   %llu\n",mReadRetry);
+      printf("PushRetry   %llu\n",mPushRetry);
+      printf("PopRetry    %llu\n",mPopRetry);
       printf("ListSize    %d\n",mListSize);
    }
 
@@ -184,22 +184,25 @@ namespace LFIntQueue
    // node, pushes the previous head node back onto the free list and updates the
    // head index.
 
-   bool tryRead (int* aValue) 
+   bool tryRead(int* aReadValue)
    {
-      // Store the read node index in a temp.
-      int tNode = mNode[mQueueHead].mQueueNext;
+      // Store the head node in a temp.
+      int tQueueHead = mQueueHead;
+      mReadRetry--;
+      while (true)
+      {
+         mReadRetry++;
+         // Exit if the queue is empty.
+         if (mNode[tQueueHead].mQueueNext == cInvalid) return false;
 
-      // Exit if the queue is empty.
-      if (tNode == cInvalid) return false;
-
-      // Extract the value from the read node.
-      *aValue = mNode[tNode].mValue;
+         if (mQueueHead.compare_exchange_weak(tQueueHead, mNode[tQueueHead].mQueueNext)) break;
+      }
+      // Extract the read value from the head block.
+      int tReadNode = mNode[tQueueHead].mQueueNext;
+      *aReadValue = mNode[tReadNode].mValue;
 
       // Push the previous head node back onto the free list.
-      listPush(mQueueHead);
-
-      // Update the head node to be the one that was just read from.
-      mQueueHead = tNode;
+      listPush(tQueueHead);
 
       // Done.
       return true;
