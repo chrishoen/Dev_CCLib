@@ -75,7 +75,7 @@ namespace LFIntQueue
    {
       mAllocate      = aAllocate;
       mQueueAllocate = aAllocate + 1;
-      mListAllocate  = aAllocate + 2;
+      mListAllocate  = aAllocate + 1;
 
       if (mNode) free(mNode);
       mNode = new QueueListNode[mListAllocate];
@@ -92,6 +92,7 @@ namespace LFIntQueue
       mNode[mListAllocate - 1].mListNext = cInvalid;
 
       mListSize = mListAllocate - 1;
+      mListSize = mListAllocate;
       mListHead = 0;
 
       listPop((int*)&mQueueHead);
@@ -184,7 +185,7 @@ namespace LFIntQueue
    // node, pushes the previous head node back onto the free list and updates the
    // head index.
 
-   bool tryRead(int* aReadValue)
+   bool tryRead(int* aValue)
    {
       // Store the head node in a temp.
       int tQueueHead = mQueueHead;
@@ -198,8 +199,8 @@ namespace LFIntQueue
          if (mQueueHead.compare_exchange_weak(tQueueHead, mNode[tQueueHead].mQueueNext)) break;
       }
       // Extract the read value from the head block.
-      int tReadNode = mNode[tQueueHead].mQueueNext;
-      *aReadValue = mNode[tReadNode].mValue;
+      int tNode = mNode[tQueueHead].mQueueNext;
+      *aValue = mNode[tNode].mValue;
 
       // Push the previous head node back onto the free list.
       listPush(tQueueHead);
@@ -219,17 +220,17 @@ namespace LFIntQueue
       // Exit if the list is full.
       if (mListSize >= mAllocate) return false;
 
-      // Store the node that is after the head in a temp.
-      int tNextNode = mNode[mListHead].mListNext;
+      // Store the head node in a temp.
+      int tHead = mListHead;
       mPushRetry--;
       while (true)
       {
          mPushRetry++;
-         // Attach the node that is after the head to the node.
-         mNode[aNode].mListNext = tNextNode;
+         // Attach the head node to the pushed node .
+         mNode[aNode].mListNext = tHead;
 
-         // Attach the node to the head.
-         if (mNode[mListHead].mListNext.compare_exchange_weak(tNextNode, aNode)) break;
+         // The pushed node is the new head node.
+         if (mListHead.compare_exchange_weak(tHead, aNode)) break;
       }
 
       // Done.
@@ -245,27 +246,27 @@ namespace LFIntQueue
 
    bool listPop(int* aNode)
    {
-      // Store the node that is after the head in a temp.
+      // Store the head node in a temp.
       // This is the node that will be detached.
-      int tNode = mNode[mListHead].mListNext;
+      int tHead = mListHead;
       mPopRetry--;
       while (true)
       {
          mPopRetry++;
          // Exit if the queue is empty.
-         if (tNode == cInvalid) return false;
+         if (tHead == cInvalid) return false;
 
-         // Detach the node.
-         if (mNode[mListHead].mListNext.compare_exchange_weak(tNode, mNode[tNode].mListNext)) break;
+         // Set the head node to be the node that is after the head node.
+         if (mListHead.compare_exchange_weak(tHead, mNode[tHead].mListNext)) break;
       }
 
       // Reset the detached node.
-      mNode[tNode].mValue = 0;
-      mNode[tNode].mQueueNext = cInvalid;
-      mNode[tNode].mListNext = cInvalid;
+      mNode[tHead].mValue = 0;
+      mNode[tHead].mQueueNext = cInvalid;
+      mNode[tHead].mListNext = cInvalid;
 
       // Return result.
-      *aNode = tNode;
+      *aNode = tHead;
 
       // Done.
       mListSize--;
