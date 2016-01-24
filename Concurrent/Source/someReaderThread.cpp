@@ -21,13 +21,6 @@ namespace Some
 
 ReaderThread::ReaderThread() 
 {
-#if 0
-   // Set thread priority
-   BaseClass::setThreadPriorityHigh();
-   BaseClass::mThreadAffinityMask = 0x20;
-   BaseClass::mThreadIdealProcessor = 5;
-#endif
-
    // Thread Members
    mTerminateFlag = false;
    mSleepLower = gGSettings.mSleepLower;
@@ -63,7 +56,7 @@ void ReaderThread::threadRunFunction()
 
 void ReaderThread::threadExitFunction()
 {
-   gShare.mReader.read();
+   gShare.mReader.flush();
    gShare.mReader.show();
 }
 

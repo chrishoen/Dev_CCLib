@@ -21,13 +21,6 @@ namespace Some
 
 StatusThread::StatusThread() 
 {
-#if 0
-   // Set thread priority
-   BaseClass::setThreadPriorityHigh();
-   BaseClass::mThreadAffinityMask = 0x20;
-   BaseClass::mThreadIdealProcessor = 5;
-#endif
-
    // Thread Members
    mTerminateFlag = false;
 }
@@ -47,7 +40,8 @@ void StatusThread::threadRunFunction()
    {
       threadSleep(1000);
       if (mTerminateFlag) break;
-      Prn::print(Prn::ThreadRun1,"Status %8llu %8llu",
+      Prn::print(Prn::ThreadRun1,"Status%d %8llu %8llu",
+         gShare.mMode,
          gShare.mWriter[0].mPassCount,
          gShare.mReader.mPassCount);
    }

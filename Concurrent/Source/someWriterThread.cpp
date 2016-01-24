@@ -21,13 +21,6 @@ namespace Some
 
 WriterThread::WriterThread(int aIdent) 
 {
-#if 0
-   // Set thread priority
-   BaseClass::setThreadPriorityHigh();
-   BaseClass::mThreadAffinityMask = 0x20;
-   BaseClass::mThreadIdealProcessor = 5;
-#endif
-
    // Thread Members
    mTerminateFlag = false;
    mSleepLower = gGSettings.mSleepLower;

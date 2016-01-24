@@ -26,6 +26,8 @@ public:
    void update();
    void show();
 
+   int mMode;
+
    static const int cMaxNumWriters = 10;
    Writer   mWriter[cMaxNumWriters];
    int      mNumWriters;

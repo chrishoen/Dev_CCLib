@@ -8,14 +8,13 @@ Description:
 
 #include <prnPrint.h>
 
+#include "someShare.h"
 #include "LFIntQueue.h"
+#include "RisIntQueue.h"
 #include "someReader.h"
-
-// Global instance of the block pool
 
 namespace Some
 {
-
 
 //******************************************************************************
 //******************************************************************************
@@ -53,20 +52,59 @@ void Reader::show()
 //******************************************************************************
 //******************************************************************************
 
-bool Reader::readOne(int aMode)
+void Reader::read1(int aNumReads)
 {
-   IntMessage tMsg;
-
-   if (LFIntQueue::tryRead(&tMsg.aint()))
+   for (int i = 0; i < aNumReads; i++)
    {
-      mPassCount++;
-      mCodeSum += tMsg.mCode;
-      return true;
+      IntMessage tMsg;
+      if (LFIntQueue::tryRead(&tMsg.aint()))
+      {
+         mPassCount++;
+         mCodeSum += tMsg.mCode;
+      }
+      else
+      {
+         mFailCount++;
+      }
    }
-   else
+}
+   
+void Reader::flush1()
+{
+   while(true)
    {
-      if (aMode == 1) mFailCount++;
-      return false;
+      IntMessage tMsg;
+      if (!LFIntQueue::tryRead(&tMsg.aint())) break;
+   }
+}
+   
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void Reader::read2(int aNumReads)
+{
+   for (int i = 0; i < aNumReads; i++)
+   {
+      IntMessage tMsg;
+      if (RisIntQueue::tryRead(&tMsg.aint()))
+      {
+         mPassCount++;
+         mCodeSum += tMsg.mCode;
+      }
+      else
+      {
+         mFailCount++;
+      }
+   }
+}
+   
+void Reader::flush2()
+{
+   while(true)
+   {
+      IntMessage tMsg;
+      if (!RisIntQueue::tryRead(&tMsg.aint())) break;
    }
 }
    
@@ -76,22 +114,19 @@ bool Reader::readOne(int aMode)
 
 void Reader::read(int aNumReads)
 {
-   if (aNumReads > 0)
+   switch (gShare.mMode)
    {
-      for (int i = 0; i < aNumReads; i++)
-      {
-         readOne(1);
-      }
+   case 1: return read1(aNumReads);
+   case 2: return read2(aNumReads);
    }
-   else
+}
+   
+void Reader::flush()
+{
+   switch (gShare.mMode)
    {
-      while(true)
-      {
-         if (!readOne(2))
-         {
-            return;
-         }
-      }
+   case 1: return flush1();
+   case 2: return flush2();
    }
 }
    
