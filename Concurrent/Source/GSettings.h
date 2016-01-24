@@ -20,6 +20,7 @@ public:
    // Settings
 
    int   mMode;
+   int   mTest;
 
    int   mAllocate;
 
