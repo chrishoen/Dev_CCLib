@@ -3,12 +3,16 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <atomic>
 
 #include "prnPrint.h"
 #include "Timing.h"
+#include "LFIndex.h"
 #include "LFIntQueue.h"
 
 #include "CmdLineExec.h"
+
+using namespace std;
 
 //******************************************************************************
 
@@ -43,8 +47,8 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,3);
-   Timing::run1(aCmd->argInt(1));
+   atomic<LFIndex> tIndex;
+   Prn::print(0,"tIndex.is_lock_free %d",tIndex.is_lock_free());
 }
 
 //******************************************************************************
