@@ -47,8 +47,19 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   atomic<LFIndex> tIndex;
-   Prn::print(0,"tIndex.is_lock_free %d",tIndex.is_lock_free());
+   LFIndex         tX(1,2);
+   atomic<LFIndex> tA;
+
+   Prn::print(0,"tIndex.is_lock_free %d",tA.is_lock_free());
+   Prn::print(0,"sizeof %d %d",sizeof(LFIndex),sizeof(atomic<LFIndex>));
+
+   tX.mIndex = 100;
+
+   tA.store(tX);
+   int tXI = tA.load().mIndex;
+
+   *tX.index() = 1;
+
 }
 
 //******************************************************************************

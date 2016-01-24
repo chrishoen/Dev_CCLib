@@ -13,8 +13,8 @@ class LFIndex
 {
 public:
 
-   unsigned mIndex;
-   unsigned mCount;
+   int mIndex;
+   int mCount;
 
    LFIndex()
    {
@@ -22,12 +22,22 @@ public:
       mCount=0;
    }
 
-   LFIndex(unsigned aIndex,unsigned aCount)
+   LFIndex(int aIndex,int aCount)
    {
       mIndex = aIndex;
       mCount = aCount;
    }
+
+   int* index() {return &mIndex;}
+   int* count() {return &mCount;}
 };
+
+typedef struct
+{ 
+   int mIndex;
+   int mCount;
+} LFIndexT;
+
 
 #pragma pack( pop, PACK_LFINDEX )
 
