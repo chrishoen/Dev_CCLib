@@ -4,6 +4,7 @@
 #include <atomic>
 #include "prnPrint.h"
 
+#include "LFIndex.h"
 #include "LFIntQueue.h"
 
 using namespace std;
@@ -17,9 +18,9 @@ namespace LFIntQueue
 
    typedef struct
    {
-      int         mValue;
-      atomic<int> mQueueNext;
-      atomic<int> mListNext;
+      int           mValue;
+      AtomicLFIndex mQueueNext;
+      atomic<int>   mListNext;
    } QueueListNode;
 
    static const int cInvalid = 0x8000000;
@@ -29,8 +30,8 @@ namespace LFIntQueue
    //***************************************************************************
    // Queue Members
 
-   atomic<int> mQueueHead;
-   atomic<int> mQueueTail;
+   AtomicLFIndex mQueueHead;
+   AtomicLFIndex mQueueTail;
 
    //***************************************************************************
    //***************************************************************************
@@ -83,19 +84,19 @@ namespace LFIntQueue
       for (int i = 0; i < mListAllocate - 1; i++)
       {
          mNode[i].mValue = 0;
-         mNode[i].mQueueNext = cInvalid;
+         LFIindex(mNode[i].mQueueNext) = cInvalid;
          mNode[i].mListNext = i + 1;
       }
 
       mNode[mListAllocate - 1].mValue = 0;
-      mNode[mListAllocate - 1].mQueueNext = cInvalid;
+      LFIindex(mNode[mListAllocate - 1].mQueueNext) = cInvalid;
       mNode[mListAllocate - 1].mListNext = cInvalid;
 
       mListSize = mListAllocate - 1;
       mListSize = mListAllocate;
       mListHead = 0;
 
-      listPop((int*)&mQueueHead);
+      listPop(&LFIindex(mQueueHead));
       mQueueTail = mQueueHead.load();
 
       mWriteRetry = 0;
@@ -146,28 +147,28 @@ namespace LFIntQueue
    {
       // Try to allocate a node from the free list.
       // Exit if it is empty.
-      int tNode;
-      if (!listPop(&tNode)) return false;
+      LFIndex tNode;
+      if (!listPop(&tNode.mIndex)) return false;
 
       // Initialize the node with the value.
-      mNode[tNode].mValue = aValue;
-      mNode[tNode].mQueueNext = cInvalid;
+      mNode[tNode.mIndex].mValue = aValue;
+      LFIindex(mNode[tNode.mIndex].mQueueNext) = cInvalid;
 
       // Attach the node to the queue tail.
-      int tTail,tNext;
+      LFIndex tTail,tNext;
       mWriteRetry--;
       while (true)
       {
          mWriteRetry++;
 
          tTail = mQueueTail;
-         tNext = mNode[tTail].mQueueNext;
+         tNext = mNode[tTail.mIndex].mQueueNext;
 
-         if (tTail == mQueueTail)
+         if (tTail == mQueueTail.load())
          {
-            if (tNext == cInvalid)
+            if (tNext.mIndex == cInvalid)
             {
-               if (mNode[tTail].mQueueNext.compare_exchange_strong(tNext, tNode)) break;
+               if (mNode[tTail.mIndex].mQueueNext.compare_exchange_strong(tNext, tNode)) break;
             }
             else
             {
@@ -194,31 +195,31 @@ namespace LFIntQueue
    bool tryRead(int* aValue)
    {
       // Store the head node in a temp.
-      int tHead, tTail, tNext;
+      LFIndex tHead, tTail, tNext;
       mReadRetry--;
       while (true)
       {
          mReadRetry++;
 
-         tHead = mQueueHead;
-         tTail = mQueueTail;
-         tNext = mNode[tHead].mQueueNext;
+         tHead = mQueueHead.load();
+         tTail = mQueueTail.load();
+         tNext = mNode[tHead.mIndex].mQueueNext.load();
 
          if (tHead == mQueueHead)
          {
             if (tHead == tTail)
             {
-               if (tNext == cInvalid) return false;
+               if (tNext.mIndex == cInvalid) return false;
                mQueueTail.compare_exchange_strong(tTail, tNext);
             }
             else
             {
-               *aValue = mNode[tNext].mValue;
+               *aValue = mNode[tNext.mIndex].mValue;
                if (mQueueHead.compare_exchange_strong(tHead, tNext))break;
             }
          }
       }
-      listPush(tHead);
+      listPush(tHead.mIndex);
 
       // Done.
       return true;
@@ -277,7 +278,7 @@ namespace LFIntQueue
 
       // Reset the detached node.
       mNode[tHead].mValue = 0;
-      mNode[tHead].mQueueNext = cInvalid;
+      LFIindex(mNode[tHead].mQueueNext) = cInvalid;
       mNode[tHead].mListNext = cInvalid;
 
       // Return result.
