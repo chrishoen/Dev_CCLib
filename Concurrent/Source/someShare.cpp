@@ -8,7 +8,6 @@ Description:
 #include "prnPrint.h"
 
 #include "LFIntQueue.h"
-#include "RisIntQueue.h"
 #include "GSettings.h"
 
 #define  _SOMESHARE_CPP_
@@ -27,17 +26,7 @@ Share::Share()
 
 void Share::initialize()
 {
-   mMode = gGSettings.mMode;
-
-   switch (mMode)
-   {
-   case 1:
-      LFIntQueue::initialize(gGSettings.mAllocate);
-      break;
-   case 2:
-      RisIntQueue::initialize(gGSettings.mAllocate);
-      break;
-   }
+   LFIntQueue::initialize(gGSettings.mAllocate);
 
    mNumWriters = gGSettings.mNumWriters;
    if (mNumWriters > cMaxNumWriters) mNumWriters = cMaxNumWriters;
@@ -89,12 +78,7 @@ void Share::show()
    Prn::print(0,"Reader.mFailCount %llu",mReaderFailCount);
    Prn::print(0,"Reader.mCodeSum   %llu",mReaderCodeSum);
    Prn::print(0,"");
-
-   switch (mMode)
-   {
-   case 1: LFIntQueue::show(); return;
-   case 2: return;
-   }
+   LFIntQueue::show();
 }
   
 }//namespace

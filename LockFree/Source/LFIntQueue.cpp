@@ -142,40 +142,6 @@ namespace LFIntQueue
    // is to be written is stored in the new node. The new node is then attached
    // to the queue tail node and the tail index is updated.
 
-   bool tryWrite2(int aValue)
-   {
-      // Try to allocate a node from the free list.
-      // Exit if it is empty.
-      int tNode;
-      if (!listPop(&tNode)) return false;
-
-      // Initialize the node with the value.
-      mNode[tNode].mValue = aValue;
-      mNode[tNode].mQueueNext = cInvalid;
-
-      // Attach the node to the queue tail.
-      int tQueueTail;
-      mWriteRetry--;
-      while (true)
-      {
-         mWriteRetry++;
-         tQueueTail = mQueueTail;
-
-         // Update the tail next index to point to the node. It should be
-         // invalid, if not then there was a collision.
-         int tInvalid = cInvalid;
-         if (mNode[tQueueTail].mQueueNext.compare_exchange_weak(tInvalid, tNode)) break;
-         // If the above line fails then the tail next index was not updated, 
-         // so advance the tail.
-         mQueueTail.compare_exchange_weak(tQueueTail, mNode[tQueueTail].mQueueNext);
-      }
-      // Update the tail index so that the node is the new tail.
-      mQueueTail.compare_exchange_strong(tQueueTail, tNode);
-
-      // Done
-      return true;
-   }
-
    bool tryWrite(int aValue)
    {
       // Try to allocate a node from the free list.
@@ -188,24 +154,24 @@ namespace LFIntQueue
       mNode[tNode].mQueueNext = cInvalid;
 
       // Attach the node to the queue tail.
-      int tTail;
-      int tNext;
+      int tTail,tNext;
       mWriteRetry--;
       while (true)
       {
          mWriteRetry++;
+
          tTail = mQueueTail;
-         tNext = mNode[mQueueTail].mQueueNext;
+         tNext = mNode[tTail].mQueueNext;
 
          if (tTail == mQueueTail)
          {
             if (tNext == cInvalid)
             {
-               if (mNode[tTail].mQueueNext.compare_exchange_weak(tNext, tNode)) break;
+               if (mNode[tTail].mQueueNext.compare_exchange_strong(tNext, tNode)) break;
             }
             else
             {
-               mQueueTail.compare_exchange_weak(tTail, tNext);
+               mQueueTail.compare_exchange_strong(tTail, tNext);
             }
          }
       }
@@ -225,30 +191,6 @@ namespace LFIntQueue
    // node, pushes the previous head node back onto the free list and updates the
    // head index.
 
-   bool tryRead2(int* aValue)
-   {
-      // Store the head node in a temp.
-      int tQueueHead = mQueueHead;
-      mReadRetry--;
-      while (true)
-      {
-         mReadRetry++;
-         // Exit if the queue is empty.
-         if (mNode[tQueueHead].mQueueNext == cInvalid) return false;
-
-         if (mQueueHead.compare_exchange_weak(tQueueHead, mNode[tQueueHead].mQueueNext)) break;
-      }
-      // Extract the read value from the head block.
-      int tNode = mNode[tQueueHead].mQueueNext;
-      *aValue = mNode[tNode].mValue;
-
-      // Push the previous head node back onto the free list.
-      listPush(tQueueHead);
-
-      // Done.
-      return true;
-   }
-
    bool tryRead(int* aValue)
    {
       // Store the head node in a temp.
@@ -267,12 +209,12 @@ namespace LFIntQueue
             if (tHead == tTail)
             {
                if (tNext == cInvalid) return false;
-               mQueueTail.compare_exchange_weak(tTail, tNext);
+               mQueueTail.compare_exchange_strong(tTail, tNext);
             }
             else
             {
                *aValue = mNode[tNext].mValue;
-               if (mQueueHead.compare_exchange_weak(tHead, tNext))break;
+               if (mQueueHead.compare_exchange_strong(tHead, tNext))break;
             }
          }
       }

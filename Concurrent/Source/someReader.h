@@ -32,11 +32,8 @@ public:
    void finalize();
    void show();
 
-   bool readOne1();
-   bool readOne2();
-   bool readOne();
+   bool readOne(int aMode);
    void read(int aNumReads = 0);
-
 
    //---------------------------------------------------------------------------
    // Members
@@ -44,8 +41,6 @@ public:
    unsigned long long mPassCount;
    unsigned long long mFailCount;
    unsigned long long mCodeSum;
-
-   bool mFailFlag;
 };
 
 //******************************************************************************
