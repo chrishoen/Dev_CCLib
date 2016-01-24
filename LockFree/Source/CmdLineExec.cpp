@@ -48,32 +48,18 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
    LFIndex         tX(1,2);
-   atomic<LFIndex> tA;
-   AtomicLFIndex   tB;
+   atomic<LFIndex> tA1;
+   atomic<LFIndex> tA2;
 
-   Prn::print(0,"is_lock_free %d",tA.is_lock_free());
-   Prn::print(0,"sizeof %d %d",sizeof(LFIndex),sizeof(AtomicLFIndex));
-
-   AtomicLFIndex   tB1;
-   AtomicLFIndex   tB2(tX);
-   AtomicLFIndex   tB3(LFIndex(4,5));
-
-   Prn::print(0,"tB1 %d %d",LFIindex(tB1));
-   Prn::print(0,"tB2 %d %d",LFIindex(tB2));
-   Prn::print(0,"tB3 %d %d",LFIindex(tB3));
+   Prn::print(0,"is_lock_free %d",tA1.is_lock_free());
+   Prn::print(0,"is_lock_free %d",tA2.is_lock_free());
+   Prn::print(0,"sizeof %d %d",sizeof(LFIndex),sizeof(AtomicLFIndexT));
 }
 
 //******************************************************************************
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   LFIndex tN1(1,2);
-   LFIndex tN2(1,2);
-
-   if (tN1 == tN2)
-   {
-      return;
-   }
 }
 
 //******************************************************************************

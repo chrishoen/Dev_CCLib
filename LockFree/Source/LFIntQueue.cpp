@@ -19,7 +19,7 @@ namespace LFIntQueue
    typedef struct
    {
       int           mValue;
-      AtomicLFIndex mQueueNext;
+      LFIndex       mQueueNext;
       atomic<int>   mListNext;
    } QueueListNode;
 
@@ -30,8 +30,8 @@ namespace LFIntQueue
    //***************************************************************************
    // Queue Members
 
-   AtomicLFIndex mQueueHead;
-   AtomicLFIndex mQueueTail;
+   LFIndex mQueueHead;
+   LFIndex mQueueTail;
 
    //***************************************************************************
    //***************************************************************************
@@ -84,20 +84,22 @@ namespace LFIntQueue
       for (int i = 0; i < mListAllocate - 1; i++)
       {
          mNode[i].mValue = 0;
-         LFIindex(mNode[i].mQueueNext) = cInvalid;
+         mNode[i].mQueueNext.mIndex = cInvalid;
+         mNode[i].mQueueNext.mCount = 0;
          mNode[i].mListNext = i + 1;
       }
 
       mNode[mListAllocate - 1].mValue = 0;
-      LFIindex(mNode[mListAllocate - 1].mQueueNext) = cInvalid;
+      mNode[mListAllocate - 1].mQueueNext.mIndex = cInvalid;
+      mNode[mListAllocate - 1].mQueueNext.mCount = 0;
       mNode[mListAllocate - 1].mListNext = cInvalid;
 
       mListSize = mListAllocate - 1;
       mListSize = mListAllocate;
       mListHead = 0;
 
-      listPop(&LFIindex(mQueueHead));
-      mQueueTail = mQueueHead.load();
+      listPop(&mQueueHead.mIndex);
+      mQueueTail = mQueueHead;
 
       mWriteRetry = 0;
       mReadRetry  = 0;
@@ -131,7 +133,7 @@ namespace LFIntQueue
       printf("ReadRetry   %llu\n",mReadRetry);
       printf("PushRetry   %llu\n",mPushRetry);
       printf("PopRetry    %llu\n",mPopRetry);
-      printf("ListSize    %d\n",mListSize);
+      printf("ListSize    %d\n",  mListSize);
    }
 
    //***************************************************************************
@@ -152,7 +154,7 @@ namespace LFIntQueue
 
       // Initialize the node with the value.
       mNode[tNode.mIndex].mValue = aValue;
-      LFIindex(mNode[tNode.mIndex].mQueueNext) = cInvalid;
+      mNode[tNode.mIndex].mQueueNext.mIndex = cInvalid;
 
       // Attach the node to the queue tail.
       LFIndex tTail,tNext;
@@ -164,20 +166,20 @@ namespace LFIntQueue
          tTail = mQueueTail;
          tNext = mNode[tTail.mIndex].mQueueNext;
 
-         if (tTail == mQueueTail.load())
+         if (tTail == mQueueTail)
          {
             if (tNext.mIndex == cInvalid)
             {
-               if (mNode[tTail.mIndex].mQueueNext.compare_exchange_strong(tNext, tNode)) break;
+               if (AtomicLFIndex(mNode[tTail.mIndex].mQueueNext).compare_exchange_strong(tNext, tNode)) break;
             }
             else
             {
-               mQueueTail.compare_exchange_strong(tTail, tNext);
+               AtomicLFIndex(mQueueTail).compare_exchange_strong(tTail, tNext);
             }
          }
       }
       // Update the tail index so that the node is the new tail.
-      mQueueTail.compare_exchange_strong(tTail, tNode);
+      AtomicLFIndex(mQueueTail).compare_exchange_strong(tTail, tNode);
 
       // Done
       return true;
@@ -201,21 +203,21 @@ namespace LFIntQueue
       {
          mReadRetry++;
 
-         tHead = mQueueHead.load();
-         tTail = mQueueTail.load();
-         tNext = mNode[tHead.mIndex].mQueueNext.load();
+         tHead = mQueueHead;
+         tTail = mQueueTail;
+         tNext = mNode[tHead.mIndex].mQueueNext;
 
          if (tHead == mQueueHead)
          {
             if (tHead == tTail)
             {
                if (tNext.mIndex == cInvalid) return false;
-               mQueueTail.compare_exchange_strong(tTail, tNext);
+               AtomicLFIndex(mQueueTail).compare_exchange_strong(tTail, tNext);
             }
             else
             {
                *aValue = mNode[tNext.mIndex].mValue;
-               if (mQueueHead.compare_exchange_strong(tHead, tNext))break;
+               if (AtomicLFIndex(mQueueHead).compare_exchange_strong(tHead, tNext))break;
             }
          }
       }
@@ -278,7 +280,7 @@ namespace LFIntQueue
 
       // Reset the detached node.
       mNode[tHead].mValue = 0;
-      LFIindex(mNode[tHead].mQueueNext) = cInvalid;
+      mNode[tHead].mQueueNext.mIndex = cInvalid;
       mNode[tHead].mListNext = cInvalid;
 
       // Return result.

@@ -32,34 +32,24 @@ public:
 
 };
 
+
+#pragma pack( pop, PACK_LFINDEX )
+
 inline bool operator==(const LFIndex& lhs, const LFIndex& rhs)
 {
    return lhs.mIndex==rhs.mIndex && lhs.mCount==rhs.mCount;
 }
 
-#pragma pack( pop, PACK_LFINDEX )
-
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-typedef std::atomic<LFIndex> AtomicLFIndex;
+typedef std::atomic<LFIndex> AtomicLFIndexT;
 
-inline int& LFIindex(AtomicLFIndex& tA)
+inline std::atomic<LFIndex>& AtomicLFIndex(LFIndex& aX)
 {
-   return (((LFIndex*)&tA)->mIndex);
+   return *(std::atomic<LFIndex>*)&aX;
 }
-
-inline int& LFIcount(AtomicLFIndex& tA)
-{
-   return (((LFIndex*)&tA)->mCount);
-}
-
-inline void LFIset(AtomicLFIndex& tA,int aIndex,int aCount)
-{
-   tA.store(LFIndex(aIndex,aCount));
-}
-
 
 //******************************************************************************
 //******************************************************************************
