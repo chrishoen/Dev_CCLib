@@ -4,7 +4,6 @@
 #include <atomic>
 #include "prnPrint.h"
 
-#include "LFIndex.h"
 #include "LFIntQueue.h"
 
 using namespace std;
@@ -18,9 +17,9 @@ namespace LFIntQueue
 
    typedef struct
    {
-      int                  mValue;
-      atomic<unsigned>     mQueueNext;
-      atomic<unsigned>     mListNext;
+      int         mValue;
+      atomic<int> mQueueNext;
+      atomic<int> mListNext;
    } QueueListNode;
 
    static const int cInvalid = 0x8000000;
@@ -30,19 +29,19 @@ namespace LFIntQueue
    //***************************************************************************
    // Queue Members
 
-   atomic<unsigned> mQueueHead;
-   atomic<unsigned> mQueueTail;
+   atomic<int> mQueueHead;
+   atomic<int> mQueueTail;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Free List Members
 
-   bool listPush(unsigned  aIndex);
-   bool listPop(unsigned*  aIndex);
+   bool listPush(int  aIndex);
+   bool listPop(int* aIndex);
 
-   atomic<unsigned> mListHead;
-   atomic<unsigned> mListSize;
+   atomic<int> mListHead;
+   atomic<int> mListSize;
 
    //***************************************************************************
    //***************************************************************************
@@ -53,9 +52,9 @@ namespace LFIntQueue
    static QueueListNode* mNode = 0;
 
    // Number of blocks allocated
-   static unsigned mAllocate = 0;
-   static unsigned mQueueAllocate = 0;
-   static unsigned mListAllocate = 0;
+   static int mAllocate = 0;
+   static int mQueueAllocate = 0;
+   static int mListAllocate = 0;
 
    //***************************************************************************
    //***************************************************************************
@@ -74,14 +73,14 @@ namespace LFIntQueue
 
    void initialize(int aAllocate)
    {
-      mAllocate      = (unsigned)aAllocate;
+      mAllocate      = aAllocate;
       mQueueAllocate = aAllocate + 1;
       mListAllocate  = aAllocate + 1;
 
       if (mNode) free(mNode);
       mNode = new QueueListNode[mListAllocate];
 
-      for (unsigned i = 0; i < mListAllocate - 1; i++)
+      for (int i = 0; i < mListAllocate - 1; i++)
       {
          mNode[i].mValue = 0;
          mNode[i].mQueueNext = cInvalid;
@@ -96,7 +95,7 @@ namespace LFIntQueue
       mListSize = mListAllocate;
       mListHead = 0;
 
-      listPop((unsigned*)&mQueueHead);
+      listPop((int*)&mQueueHead);
       mQueueTail = mQueueHead.load();
 
       mWriteRetry = 0;
@@ -147,7 +146,7 @@ namespace LFIntQueue
    {
       // Try to allocate a node from the free list.
       // Exit if it is empty.
-      unsigned tNode;
+      int tNode;
       if (!listPop(&tNode)) return false;
 
       // Initialize the node with the value.
@@ -155,7 +154,7 @@ namespace LFIntQueue
       mNode[tNode].mQueueNext = cInvalid;
 
       // Attach the node to the queue tail.
-      unsigned tTail,tNext;
+      int tTail,tNext;
       mWriteRetry--;
       while (true)
       {
@@ -195,7 +194,7 @@ namespace LFIntQueue
    bool tryRead(int* aValue)
    {
       // Store the head node in a temp.
-      unsigned tHead, tTail, tNext;
+      int tHead, tTail, tNext;
       mReadRetry--;
       while (true)
       {
@@ -231,13 +230,13 @@ namespace LFIntQueue
    // Insert a node into the list before the list tail node.
    // There can be no concurrent calls to this.
 
-   bool listPush(unsigned aNode)
+   bool listPush(int aNode)
    {
       // Exit if the list is full.
       if (mListSize >= mAllocate) return false;
 
       // Store the head node in a temp.
-      unsigned tHead = mListHead;
+      int tHead = mListHead;
       mPushRetry--;
       while (true)
       {
@@ -260,11 +259,11 @@ namespace LFIntQueue
    // This detaches the node that is before the tail list node.
    // There can be concurrent calls to this.
 
-   bool listPop(unsigned* aNode)
+   bool listPop(int* aNode)
    {
       // Store the head node in a temp.
       // This is the node that will be detached.
-      unsigned tHead = mListHead;
+      int tHead = mListHead;
       mPopRetry--;
       while (true)
       {
