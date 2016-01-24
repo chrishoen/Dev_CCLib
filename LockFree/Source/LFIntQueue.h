@@ -9,10 +9,12 @@ namespace LFIntQueue
    void initialize (int aAllocate);
    void finalize   ();
 
-   bool tryWrite  (int  aWriteValue);
-   bool tryRead   (int* aReadValue);
+   bool tryWrite  (int  aValue);
+   bool tryRead   (int* aValue);
 
    void show();
+
+   void test (int  aTest);
 }
 #endif
 
