@@ -4,6 +4,7 @@
 #include <atomic>
 #include "prnPrint.h"
 
+#include "LFIndex.h"
 #include "LFIntQueue.h"
 
 using namespace std;
@@ -17,9 +18,9 @@ namespace LFIntQueue
 
    typedef struct
    {
-      int         mValue;
-      atomic<int> mQueueNext;
-      atomic<int> mListNext;
+      int           mValue;
+      LFIndex       mQueueNext;
+      atomic<int>   mListNext;
    } QueueListNode;
 
    static const int cInvalid = 0x8000000;
@@ -29,8 +30,8 @@ namespace LFIntQueue
    //***************************************************************************
    // Queue Members
 
-   atomic<int> mQueueHead;
-   atomic<int> mQueueTail;
+   LFIndex mQueueHead;
+   LFIndex mQueueTail;
 
    //***************************************************************************
    //***************************************************************************
@@ -75,7 +76,7 @@ namespace LFIntQueue
    {
       mAllocate      = aAllocate;
       mQueueAllocate = aAllocate + 1;
-      mListAllocate  = aAllocate + 2;
+      mListAllocate  = aAllocate + 1;
 
       if (mNode) free(mNode);
       mNode = new QueueListNode[mListAllocate];
@@ -83,19 +84,22 @@ namespace LFIntQueue
       for (int i = 0; i < mListAllocate - 1; i++)
       {
          mNode[i].mValue = 0;
-         mNode[i].mQueueNext = cInvalid;
+         mNode[i].mQueueNext.mIndex = cInvalid;
+         mNode[i].mQueueNext.mCount = 0;
          mNode[i].mListNext = i + 1;
       }
 
       mNode[mListAllocate - 1].mValue = 0;
-      mNode[mListAllocate - 1].mQueueNext = cInvalid;
+      mNode[mListAllocate - 1].mQueueNext.mIndex = cInvalid;
+      mNode[mListAllocate - 1].mQueueNext.mCount = 0;
       mNode[mListAllocate - 1].mListNext = cInvalid;
 
       mListSize = mListAllocate - 1;
+      mListSize = mListAllocate;
       mListHead = 0;
 
-      listPop((int*)&mQueueHead);
-      mQueueTail = mQueueHead.load();
+      listPop(&mQueueHead.mIndex);
+      mQueueTail = mQueueHead;
 
       mWriteRetry = 0;
       mReadRetry  = 0;
@@ -129,7 +133,7 @@ namespace LFIntQueue
       printf("ReadRetry   %llu\n",mReadRetry);
       printf("PushRetry   %llu\n",mPushRetry);
       printf("PopRetry    %llu\n",mPopRetry);
-      printf("ListSize    %d\n",mListSize);
+      printf("ListSize    %d\n",  mListSize);
    }
 
    //***************************************************************************
@@ -140,6 +144,158 @@ namespace LFIntQueue
    // the free list is empty then the queue is full and it exits. The value
    // is to be written is stored in the new node. The new node is then attached
    // to the queue tail node and the tail index is updated.
+
+   bool tryWrite(int aValue)
+   {
+      // Try to allocate a node from the free list.
+      // Exit if it is empty.
+      LFIndex tNode;
+      if (!listPop(&tNode.mIndex)) return false;
+
+      // Initialize the node with the value.
+      mNode[tNode.mIndex].mValue = aValue;
+      mNode[tNode.mIndex].mQueueNext.mIndex = cInvalid;
+
+      // Attach the node to the queue tail.
+      LFIndex tTail,tNext,tLFIndex;
+      mWriteRetry--;
+      while (true)
+      {
+         mWriteRetry++;
+
+         tTail = mQueueTail;
+         tNext = mNode[tTail.mIndex].mQueueNext;
+
+         if (tTail == mQueueTail)
+         {
+            if (tNext.mIndex == cInvalid)
+            {
+               if (AtomicLFIndex(mNode[tTail.mIndex].mQueueNext).compare_exchange_strong(tNext, LFIndex(tNode.mIndex, tNext.mCount+1))) break;
+            }
+            else
+            {
+               AtomicLFIndex(mQueueTail).compare_exchange_strong(tTail, LFIndex(tNext.mIndex, tTail.mCount+1));
+            }
+         }
+      }
+      // Update the tail index so that the node is the new tail.
+      AtomicLFIndex(mQueueTail).compare_exchange_strong(tTail, LFIndex(tNode.mIndex, tTail.mCount+1));
+
+      // Done
+      return true;
+   }
+
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+   // This attempts to read a value from the queue. If the queue is not empty
+   // then it succeeds. The next node in the queue to be read is the one 
+   // immedialtely after the head node. It extracts the read value from the read
+   // node, pushes the previous head node back onto the free list and updates the
+   // head index.
+
+   bool tryRead(int* aValue)
+   {
+      // Store the head node in a temp.
+      LFIndex tHead, tTail, tNext;
+      mReadRetry--;
+      while (true)
+      {
+         mReadRetry++;
+
+         tHead = mQueueHead;
+         tTail = mQueueTail;
+         tNext = mNode[tHead.mIndex].mQueueNext;
+
+         if (tHead == mQueueHead)
+         {
+            if (tHead == tTail)
+            {
+               if (tNext.mIndex == cInvalid) return false;
+               AtomicLFIndex(mQueueTail).compare_exchange_strong(tTail, LFIndex(tNext.mIndex, tTail.mCount+1));
+            }
+            else
+            {
+               *aValue = mNode[tNext.mIndex].mValue;
+               if (AtomicLFIndex(mQueueHead).compare_exchange_strong(tHead, LFIndex(tNext.mIndex, tHead.mCount+1)))break;
+            }
+         }
+      }
+      listPush(tHead.mIndex);
+
+      // Done.
+      return true;
+   }
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Insert a node into the list before the list tail node.
+   // There can be no concurrent calls to this.
+
+   bool listPush(int aNode)
+   {
+      // Exit if the list is full.
+      if (mListSize >= mAllocate) return false;
+
+      // Store the head node in a temp.
+      int tHead = mListHead;
+      mPushRetry--;
+      while (true)
+      {
+         mPushRetry++;
+         // Attach the head node to the pushed node .
+         mNode[aNode].mListNext = tHead;
+
+         // The pushed node is the new head node.
+         if (mListHead.compare_exchange_weak(tHead, aNode)) break;
+      }
+
+      // Done.
+      mListSize++;
+      return true;
+   }
+
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+   // This detaches the node that is before the tail list node.
+   // There can be concurrent calls to this.
+
+   bool listPop(int* aNode)
+   {
+      // Store the head node in a temp.
+      // This is the node that will be detached.
+      int tHead = mListHead;
+      mPopRetry--;
+      while (true)
+      {
+         mPopRetry++;
+         // Exit if the queue is empty.
+         if (tHead == cInvalid) return false;
+
+         // Set the head node to be the node that is after the head node.
+         if (mListHead.compare_exchange_weak(tHead, mNode[tHead].mListNext)) break;
+      }
+
+      // Reset the detached node.
+      mNode[tHead].mValue = 0;
+      mNode[tHead].mQueueNext.mIndex = cInvalid;
+      mNode[tHead].mListNext = cInvalid;
+
+      // Return result.
+      *aNode = tHead;
+
+      // Done.
+      mListSize--;
+      return true;
+   }
+
+}//namespace
+
+#if 0
+
+   FOR REFERENCE, HERE IS THE ABOVE CODE WITHOUT THE ATOMICS
 
    bool tryWrite(int aValue)
    {
@@ -174,109 +330,6 @@ namespace LFIntQueue
       // Done
       return true;
    }
-
-   //******************************************************************************
-   //******************************************************************************
-   //******************************************************************************
-   // This attempts to read a value from the queue. If the queue is not empty
-   // then it succeeds. The next node in the queue to be read is the one 
-   // immedialtely after the head node. It extracts the read value from the read
-   // node, pushes the previous head node back onto the free list and updates the
-   // head index.
-
-   bool tryRead(int* aReadValue)
-   {
-      // Store the head node in a temp.
-      int tQueueHead = mQueueHead;
-      mReadRetry--;
-      while (true)
-      {
-         mReadRetry++;
-         // Exit if the queue is empty.
-         if (mNode[tQueueHead].mQueueNext == cInvalid) return false;
-
-         if (mQueueHead.compare_exchange_weak(tQueueHead, mNode[tQueueHead].mQueueNext)) break;
-      }
-      // Extract the read value from the head block.
-      int tReadNode = mNode[tQueueHead].mQueueNext;
-      *aReadValue = mNode[tReadNode].mValue;
-
-      // Push the previous head node back onto the free list.
-      listPush(tQueueHead);
-
-      // Done.
-      return true;
-   }
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Insert a node into the list before the list tail node.
-   // There can be no concurrent calls to this.
-
-   bool listPush(int aNode)
-   {
-      // Exit if the list is full.
-      if (mListSize >= mAllocate) return false;
-
-      // Store the node that is after the head in a temp.
-      int tNextNode = mNode[mListHead].mListNext;
-      mPushRetry--;
-      while (true)
-      {
-         mPushRetry++;
-         // Attach the node that is after the head to the node.
-         mNode[aNode].mListNext = tNextNode;
-
-         // Attach the node to the head.
-         if (mNode[mListHead].mListNext.compare_exchange_weak(tNextNode, aNode)) break;
-      }
-
-      // Done.
-      mListSize++;
-      return true;
-   }
-
-   //******************************************************************************
-   //******************************************************************************
-   //******************************************************************************
-   // This detaches the node that is before the tail list node.
-   // There can be concurrent calls to this.
-
-   bool listPop(int* aNode)
-   {
-      // Store the node that is after the head in a temp.
-      // This is the node that will be detached.
-      int tNode = mNode[mListHead].mListNext;
-      mPopRetry--;
-      while (true)
-      {
-         mPopRetry++;
-         // Exit if the queue is empty.
-         if (tNode == cInvalid) return false;
-
-         // Detach the node.
-         if (mNode[mListHead].mListNext.compare_exchange_weak(tNode, mNode[tNode].mListNext)) break;
-      }
-
-      // Reset the detached node.
-      mNode[tNode].mValue = 0;
-      mNode[tNode].mQueueNext = cInvalid;
-      mNode[tNode].mListNext = cInvalid;
-
-      // Return result.
-      *aNode = tNode;
-
-      // Done.
-      mListSize--;
-      return true;
-   }
-
-}//namespace
-
-#if 0
-
-   FOR REFERENCE, HERE IS THE ABOVE CODE WITHOUT THE ATOMICS
 
    bool tryWrite (int aValue)
    {

@@ -185,6 +185,7 @@
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\GSettings.h" />
+    <ClInclude Include="Source\LFIndex.h" />
     <ClInclude Include="Source\LFIntQueue.h" />
     <ClInclude Include="Source\MainInit.h" />
     <ClInclude Include="Source\RisIntQueue.h" />
