@@ -30,6 +30,12 @@ public:
       mCount = aCount;
    }
 
+   void set(int aIndex,int aCount)
+   {
+      mIndex = aIndex;
+      mCount = aCount;
+   }
+
 };
 
 

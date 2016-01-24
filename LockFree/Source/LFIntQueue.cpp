@@ -157,7 +157,7 @@ namespace LFIntQueue
       mNode[tNode.mIndex].mQueueNext.mIndex = cInvalid;
 
       // Attach the node to the queue tail.
-      LFIndex tTail,tNext;
+      LFIndex tTail,tNext,tLFIndex;
       mWriteRetry--;
       while (true)
       {
@@ -170,16 +170,16 @@ namespace LFIntQueue
          {
             if (tNext.mIndex == cInvalid)
             {
-               if (AtomicLFIndex(mNode[tTail.mIndex].mQueueNext).compare_exchange_strong(tNext, tNode)) break;
+               if (AtomicLFIndex(mNode[tTail.mIndex].mQueueNext).compare_exchange_strong(tNext, LFIndex(tNode.mIndex, tNext.mCount+1))) break;
             }
             else
             {
-               AtomicLFIndex(mQueueTail).compare_exchange_strong(tTail, tNext);
+               AtomicLFIndex(mQueueTail).compare_exchange_strong(tTail, LFIndex(tNext.mIndex, tTail.mCount+1));
             }
          }
       }
       // Update the tail index so that the node is the new tail.
-      AtomicLFIndex(mQueueTail).compare_exchange_strong(tTail, tNode);
+      AtomicLFIndex(mQueueTail).compare_exchange_strong(tTail, LFIndex(tNode.mIndex, tTail.mCount+1));
 
       // Done
       return true;
@@ -212,12 +212,12 @@ namespace LFIntQueue
             if (tHead == tTail)
             {
                if (tNext.mIndex == cInvalid) return false;
-               AtomicLFIndex(mQueueTail).compare_exchange_strong(tTail, tNext);
+               AtomicLFIndex(mQueueTail).compare_exchange_strong(tTail, LFIndex(tNext.mIndex, tTail.mCount+1));
             }
             else
             {
                *aValue = mNode[tNext.mIndex].mValue;
-               if (AtomicLFIndex(mQueueHead).compare_exchange_strong(tHead, tNext))break;
+               if (AtomicLFIndex(mQueueHead).compare_exchange_strong(tHead, LFIndex(tNext.mIndex, tHead.mCount+1)))break;
             }
          }
       }
