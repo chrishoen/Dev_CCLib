@@ -51,36 +51,52 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 typedef union
 {
-    struct    
+    struct 
     { 
       unsigned short mUShort1;  
       unsigned short mUShort2;  
     };
     unsigned mULong;
-} MyStruct2;
+
+} MyUnion2;
+
+
+MyUnion2 MyUnionCon(int aN1,int aN2)
+{
+   MyUnion2 tX;
+   tX.mUShort1 = aN1;
+   tX.mUShort2 = aN2;
+   return tX;
+}
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   MyStruct2 tS;
+   MyUnion2 tS;
    tS.mUShort1 = 1;
    tS.mUShort2 = 2;
 
-   Prn::print(0, "sizeof MyStruct2 %d", sizeof(MyStruct2));
+   Prn::print(0, "sizeof MyUnion2 %d", sizeof(MyUnion2));
 
-   Prn::print(0, "MyStruct2 %d %d %08X",
+   Prn::print(0, "MyUnion2 %d %d %08X",
       tS.mUShort1,
       tS.mUShort2,
       tS.mULong);
 
    tS.mULong = 0x00070008;
-   Prn::print(0, "MyStruct2 %d %d %08X",
+   Prn::print(0, "MyUnion2 %d %d %08X",
       tS.mUShort1,
       tS.mUShort2,
       tS.mULong);
 
-   atomic<MyStruct2> tAS;
-   Prn::print(0, "MyStruct2 lockfree %d", tAS.is_lock_free());
+   atomic<MyUnion2> tAS;
+   Prn::print(0, "MyUnion2 lockfree %d", tAS.is_lock_free());
 
+   MyUnion2 tX = MyUnionCon(5,6);
+
+   Prn::print(0, "MyUnion22 %d %d %08X",
+      tX.mUShort1,
+      tX.mUShort2,
+      tX.mULong);
 }
 
 //******************************************************************************
