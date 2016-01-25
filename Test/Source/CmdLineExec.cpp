@@ -30,54 +30,56 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 //******************************************************************************
 
+typedef union
+{
+    struct    
+    { 
+      unsigned short mShort1;  
+      unsigned short mShort2;  
+    } Parms;
+    unsigned mData;
+} MyStruct1;
+
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   atomic<int> tX;
-   int tE,tC;
-
-   tX = 100;
-   tC = 100;
-   tE = 200;
-   Prn::print(0, "L1   %d %d %d",tX,tC,tE);
-
-   tX.compare_exchange_weak(tC,tE);
-   Prn::print(0, "L2   %d %d %d",tX,tC,tE);
-   Prn::print(0, "");
-
-   tX = 100;
-   tC = 101;
-   tE = 200;
-   Prn::print(0, "L3   %d %d %d",tX,tC,tE);
-
-   tX.compare_exchange_weak(tC,tE);
-   Prn::print(0, "L4   %d %d %d",tX,tC,tE);
-   Prn::print(0, "");
-
+   MyStruct1 tS;
+   tS.mData = 0;
+   tS.Parms.mShort1 = 1;
 }
 
 //******************************************************************************
 
+typedef union
+{
+    struct    
+    { 
+      unsigned short mUShort1;  
+      unsigned short mUShort2;  
+    };
+    unsigned mULong;
+} MyStruct2;
+
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   atomic<int> tX;
-   int tE;
-   int tC = 100;
+   MyStruct2 tS;
+   tS.mUShort1 = 1;
+   tS.mUShort2 = 2;
 
-   tX = 100;
-   tE = 200;
-   Prn::print(0, "L1   %d %d %d",tX,tC,tE);
+   Prn::print(0, "sizeof MyStruct2 %d", sizeof(MyStruct2));
 
-   tX.compare_exchange_weak(tC,tE);
-   Prn::print(0, "L2   %d %d %d",tX,tC,tE);
-   Prn::print(0, "");
+   Prn::print(0, "MyStruct2 %d %d %08X",
+      tS.mUShort1,
+      tS.mUShort2,
+      tS.mULong);
 
-   tX = 100;
-   tE = 200;
-   Prn::print(0, "L3   %d %d %d",tX,tC,tE);
+   tS.mULong = 0x00070008;
+   Prn::print(0, "MyStruct2 %d %d %08X",
+      tS.mUShort1,
+      tS.mUShort2,
+      tS.mULong);
 
-   tX.compare_exchange_weak(tC,tE);
-   Prn::print(0, "L4   %d %d %d",tX,tC,tE);
-   Prn::print(0, "");
+   atomic<MyStruct2> tAS;
+   Prn::print(0, "MyStruct2 lockfree %d", tAS.is_lock_free());
 
 }
 
