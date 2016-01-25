@@ -236,9 +236,10 @@ namespace LFIntQueue
 
    bool listPush(int aNode)
    {
+#if 0
       // Exit if the list is full.
       if (mListSize >= mAllocate) return false;
-
+#endif
       // Store the head node in a temp.
       int tHead = mListHead;
       mPushRetry--;
