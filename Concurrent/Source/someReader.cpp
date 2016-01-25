@@ -114,6 +114,7 @@ void Reader::flush2()
 
 void Reader::read9(int aNumReads)
 {
+   return;
    for (int i = 0; i < aNumReads; i++)
    {
       if (LFIntQueue::test())

@@ -126,6 +126,8 @@ namespace LFIntQueue
    //***************************************************************************
    // Show
 
+   int listSize(){ return mListSize; }
+
    void show()
    {
       printf("LFIntQueue\n");
