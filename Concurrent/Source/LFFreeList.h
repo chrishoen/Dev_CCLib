@@ -10,6 +10,9 @@ namespace LFFreeList
    void finalize   ();
    int  listSize();
 
+   bool listPush(int  aIndex);
+   bool listPop(int* aIndex);
+
    void show();
 
    void initializeTest (int aTest);

@@ -184,7 +184,7 @@ namespace LFFreeList
 
    //***************************************************************************
 
-   bool test1()
+   bool test()
    {
       int tNode;
       if (listPop(&tNode))
@@ -197,17 +197,6 @@ namespace LFFreeList
          return false;
       }
 
-      return true;
-   }
-
-   //***************************************************************************
-
-   bool test()
-   {
-      switch (mTest)
-      {
-      case 1: return test1();
-      }
       return true;
    }
 

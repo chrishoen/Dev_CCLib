@@ -5,6 +5,7 @@
 #include "prnPrint.h"
 #include "my_functions.h"
 
+#include "LFFreeList.h"
 #include "CmdLineExec.h"
 
 #include "someThreads.h"
@@ -46,14 +47,15 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1, 100);
-   aCmd->setArgDefault(2, 100);
-
-   gShare.mWriter[0].write(aCmd->argInt(1));
-   gShare.mReader.read(aCmd->argInt(2));
-
-   gShare.mWriter[0].show();
-   gShare.mReader.show();
+   int tNode=0;
+   if (LFFreeList::listPop(&tNode))
+   {
+      Prn::print(0, "POP PASS %d",tNode);
+   }
+   else
+   {
+      Prn::print(0, "POP FAIL");
+   }
 }
 
 //******************************************************************************
