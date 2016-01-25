@@ -295,14 +295,49 @@ namespace LFIntQueue
    //***************************************************************************
    // Test
 
-   void test(int aTest)
+   //***************************************************************************
+
+   int mTest = 1;
+
+   void initializeTest(int aTest)
    {
-      switch (aTest)
+      mTest = aTest;
+   }
+
+   //***************************************************************************
+
+   bool test1()
+   {
+      mWriteRetry++;
+      return true;
+   }
+
+   //***************************************************************************
+
+   bool test2()
+   {
+      int tNode;
+      if (listPop(&tNode))
       {
-      case 1:
-         mWriteRetry++;
-         break;
+         listPush(tNode);
+         return true;
       }
+      else
+      {
+         return false;
+      }
+
+      return true;
+   }
+
+   bool test()
+   {
+      switch (mTest)
+      {
+      case 1: return test1();
+      case 2: return test2();
+      }
+      return true;
    }
 
 }//namespace

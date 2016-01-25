@@ -14,7 +14,8 @@ namespace LFIntQueue
 
    void show();
 
-   void test (int  aTest);
+   void initializeTest (int aTest);
+   bool test ();
 }
 #endif
 

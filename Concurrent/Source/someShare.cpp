@@ -37,6 +37,10 @@ void Share::initialize()
    case 2:
       RisIntQueue::initialize(gGSettings.mAllocate);
       break;
+   case 9:
+      LFIntQueue::initialize(gGSettings.mAllocate);
+      LFIntQueue::initializeTest(gGSettings.mTest);
+      break;
    }
 
    mNumWriters = gGSettings.mNumWriters;

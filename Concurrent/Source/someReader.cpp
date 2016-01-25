@@ -112,12 +112,25 @@ void Reader::flush2()
 //******************************************************************************
 //******************************************************************************
 
+void Reader::read9(int aNumReads)
+{
+}
+   
+void Reader::flush9()
+{
+}
+   
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void Reader::read(int aNumReads)
 {
    switch (gShare.mMode)
    {
    case 1: return read1(aNumReads);
    case 2: return read2(aNumReads);
+   case 9: return read9(aNumReads);
    }
 }
    
@@ -126,7 +139,7 @@ void Reader::flush()
    switch (gShare.mMode)
    {
    case 1: return flush1();
-   case 2: return flush2();
+   case 9: return flush9();
    }
 }
    

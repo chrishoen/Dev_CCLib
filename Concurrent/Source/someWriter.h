@@ -34,6 +34,7 @@ public:
 
    void write1(int aNumWrites);
    void write2(int aNumWrites);
+   void write9(int aNumWrites);
    void write(int aNumWrites);
 
    //---------------------------------------------------------------------------
