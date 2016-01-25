@@ -231,26 +231,20 @@ namespace LFIntQueue
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Insert a node into the list before the list tail node.
-   // There can be no concurrent calls to this.
+   // Insert a node into the list before the list head node.
 
    bool listPush(int aNode)
    {
-#if 0
-      // Exit if the list is full.
-      if (mListSize >= mAllocate) return false;
-#endif
       // Store the head node in a temp.
       int tHead = mListHead;
-      mPushRetry--;
       while (true)
       {
-         mPushRetry++;
          // Attach the head node to the pushed node .
          mNode[aNode].mListNext = tHead;
 
          // The pushed node is the new head node.
          if (mListHead.compare_exchange_weak(tHead, aNode)) break;
+         mPushRetry++;
       }
 
       // Done.
@@ -269,15 +263,14 @@ namespace LFIntQueue
       // Store the head node in a temp.
       // This is the node that will be detached.
       int tHead = mListHead;
-      mPopRetry--;
       while (true)
       {
-         mPopRetry++;
          // Exit if the queue is empty.
          if (tHead == cInvalid) return false;
 
          // Set the head node to be the node that is after the head node.
          if (mListHead.compare_exchange_weak(tHead, mNode[tHead].mListNext)) break;
+         mPopRetry++;
       }
 
       // Reset the detached node.
@@ -332,6 +325,8 @@ namespace LFIntQueue
 
       return true;
    }
+
+   //***************************************************************************
 
    bool test()
    {
