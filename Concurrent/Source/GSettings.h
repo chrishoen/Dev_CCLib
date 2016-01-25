@@ -10,7 +10,7 @@ Global application settings
 
 //******************************************************************************
 //******************************************************************************
-//******************************************************************************
+//******************************************************************************st
 
 
 class GSettings : public Ris::BaseCmdLineExec
@@ -21,19 +21,18 @@ public:
 
    int   mMode;
    int   mTest;
+   int   mNumWriters;
 
+   int   mMultiplier;
    int   mAllocate;
+   int   mWriteLower;
+   int   mWriteUpper;
+   int   mReadLower;
+   int   mReadUpper;
 
    int   mSleepLower;
    int   mSleepUpper;
 
-   int   mNumWriters;
-
-   int   mWriteLower;
-   int   mWriteUpper;
-
-   int   mReadLower;
-   int   mReadUpper;
 
    // Settings
    //---------------------------------------------------------------------------
