@@ -47,15 +47,6 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   int tNode=0;
-   if (LFFreeList::listPop(&tNode))
-   {
-      Prn::print(0, "POP PASS %d",tNode);
-   }
-   else
-   {
-      Prn::print(0, "POP FAIL");
-   }
 }
 
 //******************************************************************************

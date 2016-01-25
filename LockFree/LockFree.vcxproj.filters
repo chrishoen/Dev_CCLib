@@ -16,6 +16,9 @@
     <ClCompile Include="Source\Timing.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\LFFreeList.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
@@ -39,6 +42,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\LFIndex.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LFFreeList.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
