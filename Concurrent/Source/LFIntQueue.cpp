@@ -273,11 +273,6 @@ namespace LFIntQueue
          mPopRetry++;
       }
 
-      // Reset the detached node.
-      mNode[tHead].mValue = 0;
-      mNode[tHead].mQueueNext.mIndex = cInvalid;
-      mNode[tHead].mListNext = cInvalid;
-
       // Return result.
       *aNode = tHead;
 
