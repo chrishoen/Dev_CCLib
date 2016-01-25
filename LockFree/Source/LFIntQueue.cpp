@@ -160,11 +160,8 @@ namespace LFIntQueue
 
       // Attach the node to the queue tail.
       LFIndex tTail,tNext,tLFIndex;
-      mWriteRetry--;
       while (true)
       {
-         mWriteRetry++;
-
          tTail = mQueueTail;
          tNext = mNode[tTail.mIndex].mQueueNext;
 
@@ -179,6 +176,7 @@ namespace LFIntQueue
                AtomicLFIndex(mQueueTail).compare_exchange_strong(tTail, LFIndex(tNext.mIndex, tTail.mCount+1));
             }
          }
+         mWriteRetry++;
       }
       AtomicLFIndex(mQueueTail).compare_exchange_strong(tTail, LFIndex(tNode.mIndex, tTail.mCount+1));
 
@@ -199,11 +197,8 @@ namespace LFIntQueue
    {
       // Store the head node in a temp.
       LFIndex tHead, tTail, tNext;
-      mReadRetry--;
       while (true)
       {
-         mReadRetry++;
-
          tHead = mQueueHead;
          tTail = mQueueTail;
          tNext = mNode[tHead.mIndex].mQueueNext;
@@ -221,6 +216,7 @@ namespace LFIntQueue
                if (AtomicLFIndex(mQueueHead).compare_exchange_strong(tHead, LFIndex(tNext.mIndex, tHead.mCount+1)))break;
             }
          }
+         mReadRetry++;
       }
       listPush(tHead.mIndex);
 
