@@ -127,6 +127,7 @@ void Writer::write(int aNumWrites)
    {
    case 1: return write1(aNumWrites);
    case 2: return write2(aNumWrites);
+   case 9: return write9(aNumWrites);
    }
 }
    

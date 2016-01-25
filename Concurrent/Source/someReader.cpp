@@ -114,6 +114,17 @@ void Reader::flush2()
 
 void Reader::read9(int aNumReads)
 {
+   for (int i = 0; i < aNumReads; i++)
+   {
+      if (LFIntQueue::test())
+      {
+         mPassCount++;
+      }
+      else
+      {
+         mFailCount++;
+      }
+   }
 }
    
 void Reader::flush9()

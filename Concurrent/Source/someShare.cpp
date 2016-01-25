@@ -98,6 +98,7 @@ void Share::show()
    {
    case 1: LFIntQueue::show(); return;
    case 2: return;
+   case 9: LFIntQueue::show(); return;
    }
 }
   
