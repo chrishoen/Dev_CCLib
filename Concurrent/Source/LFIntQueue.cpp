@@ -23,7 +23,7 @@ namespace LFIntQueue
       atomic<int>   mListNext;
    } QueueListNode;
 
-   static const int cInvalid = 0x8000000;
+   static const int cInvalid = 0x80000000;
 
    //***************************************************************************
    //***************************************************************************
