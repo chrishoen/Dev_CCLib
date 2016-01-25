@@ -11,46 +11,30 @@
 //******************************************************************************
 #pragma pack( push, PACK_LFINDEX,1 )
 
-class LFIndex
+typedef union
 {
-public:
+    struct 
+    { 
+      int mIndex;  
+      int mCount;  
+    };
+    unsigned long long mPack;
 
-   int mIndex;
-   int mCount;
-
-   LFIndex()
-   {
-      mIndex=0;
-      mCount=0;
-   }
-
-   LFIndex(int aIndex,int aCount)
-   {
-      mIndex = aIndex;
-      mCount = aCount;
-   }
-
-   void set(int aIndex,int aCount)
-   {
-      mIndex = aIndex;
-      mCount = aCount;
-   }
-
-};
-
+} LFIndex;
 
 #pragma pack( pop, PACK_LFINDEX )
 
-inline bool operator==(const LFIndex& lhs, const LFIndex& rhs)
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+inline LFIndex LFIndexCon(int aIndex,int aCount)
 {
-   return lhs.mIndex==rhs.mIndex && lhs.mCount==rhs.mCount;
+   LFIndex tX;
+   tX.mIndex = aIndex;
+   tX.mCount = aCount;
+   return tX;
 }
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-typedef std::atomic<LFIndex> AtomicLFIndexT;
 
 inline std::atomic<LFIndex>& AtomicLFIndex(LFIndex& aX)
 {

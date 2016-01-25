@@ -99,6 +99,7 @@ namespace LFIntQueue
       mListHead = 0;
 
       listPop(&mQueueHead.mIndex);
+      mQueueHead.mCount = 0;
       mQueueTail = mQueueHead;
 
       mWriteRetry = 0;
@@ -159,26 +160,26 @@ namespace LFIntQueue
       mNode[tNode.mIndex].mQueueNext.mIndex = cInvalid;
 
       // Attach the node to the queue tail.
-      LFIndex tTail,tNext,tLFIndex;
+      LFIndex tTail,tNext;
       while (true)
       {
          tTail = mQueueTail;
          tNext = mNode[tTail.mIndex].mQueueNext;
 
-         if (tTail == mQueueTail)
+         if (tTail.mPack == mQueueTail.mPack)
          {
             if (tNext.mIndex == cInvalid)
             {
-               if (AtomicLFIndex(mNode[tTail.mIndex].mQueueNext).compare_exchange_strong(tNext, LFIndex(tNode.mIndex, tNext.mCount+1))) break;
+               if (AtomicLFIndex(mNode[tTail.mIndex].mQueueNext).compare_exchange_strong(tNext, LFIndexCon(tNode.mIndex, tNext.mCount+1))) break;
             }
             else
             {
-               AtomicLFIndex(mQueueTail).compare_exchange_strong(tTail, LFIndex(tNext.mIndex, tTail.mCount+1));
+               AtomicLFIndex(mQueueTail).compare_exchange_strong(tTail, LFIndexCon(tNext.mIndex, tTail.mCount+1));
             }
          }
          mWriteRetry++;
       }
-      AtomicLFIndex(mQueueTail).compare_exchange_strong(tTail, LFIndex(tNode.mIndex, tTail.mCount+1));
+      AtomicLFIndex(mQueueTail).compare_exchange_strong(tTail, LFIndexCon(tNode.mIndex, tTail.mCount+1));
 
       // Done
       return true;
@@ -203,17 +204,17 @@ namespace LFIntQueue
          tTail = mQueueTail;
          tNext = mNode[tHead.mIndex].mQueueNext;
 
-         if (tHead == mQueueHead)
+         if (tHead.mPack == mQueueHead.mPack)
          {
             if (tHead.mIndex == tTail.mIndex)
             {
                if (tNext.mIndex == cInvalid) return false;
-               AtomicLFIndex(mQueueTail).compare_exchange_strong(tTail, LFIndex(tNext.mIndex, tTail.mCount+1));
+               AtomicLFIndex(mQueueTail).compare_exchange_strong(tTail, LFIndexCon(tNext.mIndex, tTail.mCount+1));
             }
             else
             {
                *aValue = mNode[tNext.mIndex].mValue;
-               if (AtomicLFIndex(mQueueHead).compare_exchange_strong(tHead, LFIndex(tNext.mIndex, tHead.mCount+1)))break;
+               if (AtomicLFIndex(mQueueHead).compare_exchange_strong(tHead, LFIndexCon(tNext.mIndex, tHead.mCount+1)))break;
             }
          }
          mReadRetry++;
