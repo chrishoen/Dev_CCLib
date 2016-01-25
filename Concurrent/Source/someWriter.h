@@ -32,10 +32,11 @@ public:
    void finalize();
    void show();
 
-   void write1(int aNumWrites);
-   void write2(int aNumWrites);
-   void write9(int aNumWrites);
-   void write(int aNumWrites);
+   void write1 (int aNumWrites);
+   void write2 (int aNumWrites);
+   void write8 (int aNumWrites);
+   void write9 (int aNumWrites);
+   void write  (int aNumWrites);
 
    //---------------------------------------------------------------------------
    // Members

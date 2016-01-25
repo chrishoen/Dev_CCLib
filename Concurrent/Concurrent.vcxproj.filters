@@ -49,6 +49,9 @@
     <ClCompile Include="Source\RisIntQueue.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\LFFreeList.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h">
@@ -91,6 +94,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\LFIndex.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LFFreeList.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

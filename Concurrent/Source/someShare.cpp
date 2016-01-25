@@ -8,6 +8,7 @@ Description:
 #include "prnPrint.h"
 
 #include "LFIntQueue.h"
+#include "LFFreeList.h"
 #include "RisIntQueue.h"
 #include "GSettings.h"
 
@@ -36,6 +37,10 @@ void Share::initialize()
       break;
    case 2:
       RisIntQueue::initialize(gGSettings.mAllocate);
+      break;
+   case 8:
+      LFFreeList::initialize(gGSettings.mAllocate);
+      LFFreeList::initializeTest(gGSettings.mTest);
       break;
    case 9:
       LFIntQueue::initialize(gGSettings.mAllocate);
@@ -98,6 +103,7 @@ void Share::show()
    {
    case 1: LFIntQueue::show(); return;
    case 2: return;
+   case 8: LFFreeList::show(); return;
    case 9: LFIntQueue::show(); return;
    }
 }

@@ -6,6 +6,8 @@
 //******************************************************************************
 #include "prnPrint.h"
 #include "my_functions.h"
+
+#include "LFFreeList.h"
 #include "LFIntQueue.h"
 #include "someShare.h"
 #include "GSettings.h"
@@ -41,11 +43,24 @@ void StatusThread::threadRunFunction()
    {
       threadSleep(1000);
       if (mTerminateFlag) break;
-      Prn::print(Prn::ThreadRun1,"Status%d %8llu %8llu %8d",
-         gShare.mMode,
-         gShare.mWriter[0].mPassCount,
-         gShare.mReader.mPassCount,
-         LFIntQueue::listSize());
+
+      if (gShare.mMode != 8)
+      {
+         Prn::print(Prn::ThreadRun1, "Status%d %8llu %8llu %8d",
+            gShare.mMode,
+            gShare.mWriter[0].mPassCount,
+            gShare.mReader.mPassCount,
+            LFIntQueue::listSize());
+      }
+      else
+      {
+         Prn::print(Prn::ThreadRun1, "Status%d %8llu %8llu %8d",
+            gShare.mMode,
+            gShare.mWriter[0].mPassCount,
+            gShare.mWriter[0].mFailCount,
+            LFFreeList::listSize());
+      }
+
    }
 }
 

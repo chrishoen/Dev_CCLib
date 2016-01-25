@@ -112,37 +112,12 @@ void Reader::flush2()
 //******************************************************************************
 //******************************************************************************
 
-void Reader::read9(int aNumReads)
-{
-   return;
-   for (int i = 0; i < aNumReads; i++)
-   {
-      if (LFIntQueue::test())
-      {
-         mPassCount++;
-      }
-      else
-      {
-         mFailCount++;
-      }
-   }
-}
-   
-void Reader::flush9()
-{
-}
-   
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
 void Reader::read(int aNumReads)
 {
    switch (gShare.mMode)
    {
    case 1: return read1(aNumReads);
    case 2: return read2(aNumReads);
-   case 9: return read9(aNumReads);
    }
 }
    
@@ -151,7 +126,7 @@ void Reader::flush()
    switch (gShare.mMode)
    {
    case 1: return flush1();
-   case 9: return flush9();
+   case 2: return flush2();
    }
 }
    

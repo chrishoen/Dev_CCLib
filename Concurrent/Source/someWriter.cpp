@@ -8,6 +8,7 @@ Description:
 
 #include <prnPrint.h>
 
+#include "LFFreeList.h"
 #include "LFIntQueue.h"
 #include "RisIntQueue.h"
 #include "someShare.h"
@@ -102,6 +103,25 @@ void Writer::write2(int aNumWrites)
 //******************************************************************************
 //******************************************************************************
 
+void Writer::write8(int aNumWrites)
+{
+   for (int i = 0; i < aNumWrites; i++)
+   {
+      if (LFFreeList::test())
+      {
+         mPassCount++;
+      }
+      else
+      {
+         mFailCount++;
+      }
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void Writer::write9(int aNumWrites)
 {
    for (int i = 0; i < aNumWrites; i++)
@@ -125,9 +145,10 @@ void Writer::write(int aNumWrites)
 {
    switch (gShare.mMode)
    {
-   case 1: return write1(aNumWrites);
-   case 2: return write2(aNumWrites);
-   case 9: return write9(aNumWrites);
+   case 1: return write1 (aNumWrites);
+   case 2: return write2 (aNumWrites);
+   case 8: return write8 (aNumWrites);
+   case 9: return write9 (aNumWrites);
    }
 }
    
