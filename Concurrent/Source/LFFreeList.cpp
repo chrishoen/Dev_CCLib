@@ -78,8 +78,6 @@ namespace LFFreeList
 
       mPushRetry  = 0;
       mPopRetry   = 0;
-
-      printf("LFFreeList::initialize %d\n",listSize());
    }
 
    //***************************************************************************
@@ -156,9 +154,6 @@ namespace LFFreeList
          if (mListHead.compare_exchange_weak(tHead, mNode[tHead].mListNext)) break;
          mPopRetry++;
       }
-
-      // Reset the detached node.
-      mNode[tHead].mListNext = cInvalid;
 
       // Return result.
       *aNode = tHead;

@@ -39,14 +39,14 @@ void GSettings::show()
 {
    printf("GSettings   Mode          %9d\n", mMode);
    printf("GSettings   Test          %9d\n", mTest);
+   printf("GSettings   NumWriters    %9d\n", mNumWriters);
+   printf("GSettings   Allocate      %9d\n", mAllocate);
    printf("GSettings   SleepLower    %9d\n", mSleepLower);
    printf("GSettings   SleepUpper    %9d\n", mSleepUpper);
-   printf("GSettings   Allocate      %9d\n", mAllocate);
    printf("GSettings   WriteLower    %9d\n", mWriteLower);
    printf("GSettings   WriteUpper    %9d\n", mWriteUpper);
    printf("GSettings   ReadLower     %9d\n", mReadLower);
    printf("GSettings   ReadUpper     %9d\n", mReadUpper);
-   printf("GSettings   NumWriters    %9d\n", mNumWriters);
 }
 
 //******************************************************************************
