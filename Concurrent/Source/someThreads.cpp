@@ -65,6 +65,7 @@ void Threads::stop()
 
    if (mStatusThread)
    {
+      Prn::print(0,"Threads::stopping**************************** Status");
       mStatusThread->shutdownThread();
       delete mStatusThread;
       mStatusThread = 0;
@@ -74,6 +75,7 @@ void Threads::stop()
    {
       if (mWriterThread[i])
       {
+         Prn::print(0,"Threads::stopping**************************** Writer%d",i);
          mWriterThread[i]->shutdownThread();
          delete mWriterThread[i];
          mWriterThread[i] = 0;
@@ -82,6 +84,7 @@ void Threads::stop()
 
    if (mReaderThread)
    {
+      Prn::print(0,"Threads::stopping**************************** Reader");
       mReaderThread->shutdownThread();
       delete mReaderThread;
       mReaderThread = 0;
