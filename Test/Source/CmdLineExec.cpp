@@ -29,74 +29,64 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 }
 
 //******************************************************************************
-
-typedef union
-{
-    struct    
-    { 
-      unsigned short mShort1;  
-      unsigned short mShort2;  
-    } Parms;
-    unsigned mData;
-} MyStruct1;
-
-void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
-{
-   MyStruct1 tS;
-   tS.mData = 0;
-   tS.Parms.mShort1 = 1;
-}
-
+//******************************************************************************
 //******************************************************************************
 
 typedef union
 {
     struct 
     { 
-      unsigned short mUShort1;  
-      unsigned short mUShort2;  
+      short mShort1;  
+      short mShort2;  
     };
-    unsigned mULong;
+    int mLong;
 
-} MyUnion2;
+} MyUnion1;
 
 
-MyUnion2 MyUnionCon(int aN1,int aN2)
+MyUnion1 MyUnion1Con(int aN1,int aN2)
 {
-   MyUnion2 tX;
-   tX.mUShort1 = aN1;
-   tX.mUShort2 = aN2;
+   MyUnion1 tX;
+   tX.mShort1 = aN1;
+   tX.mShort2 = aN2;
    return tX;
 }
 
+void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
+{
+   MyUnion1 tS;
+   tS.mShort1 = 1;
+   tS.mShort2 = 2;
+
+   Prn::print(0, "sizeof MyUnion1 %d", sizeof(MyUnion1));
+
+   Prn::print(0, "MyUnion1 %d %d %08X",
+      tS.mShort1,
+      tS.mShort2,
+      tS.mLong);
+
+   tS.mLong = 0x00070008;
+   Prn::print(0, "MyUnion1 %d %d %08X",
+      tS.mShort1,
+      tS.mShort2,
+      tS.mLong);
+
+   atomic<MyUnion1> tAS;
+   Prn::print(0, "MyUnion1 lockfree %d", tAS.is_lock_free());
+
+   MyUnion1 tX = MyUnion1Con(5,6);
+
+   Prn::print(0, "MyUnion11 %d %d %08X",
+      tX.mShort1,
+      tX.mShort2,
+      tX.mLong);
+}
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   MyUnion2 tS;
-   tS.mUShort1 = 1;
-   tS.mUShort2 = 2;
-
-   Prn::print(0, "sizeof MyUnion2 %d", sizeof(MyUnion2));
-
-   Prn::print(0, "MyUnion2 %d %d %08X",
-      tS.mUShort1,
-      tS.mUShort2,
-      tS.mULong);
-
-   tS.mULong = 0x00070008;
-   Prn::print(0, "MyUnion2 %d %d %08X",
-      tS.mUShort1,
-      tS.mUShort2,
-      tS.mULong);
-
-   atomic<MyUnion2> tAS;
-   Prn::print(0, "MyUnion2 lockfree %d", tAS.is_lock_free());
-
-   MyUnion2 tX = MyUnionCon(5,6);
-
-   Prn::print(0, "MyUnion22 %d %d %08X",
-      tX.mUShort1,
-      tX.mUShort2,
-      tX.mULong);
 }
 
 //******************************************************************************
