@@ -7,6 +7,8 @@
 #include "prnPrint.h"
 #include "CmdLineExec.h"
 
+#include "LFIndex2.h"
+
 using namespace std;
 
 //******************************************************************************
@@ -32,54 +34,18 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-typedef union
-{
-    struct 
-    { 
-      short mShort1;  
-      short mShort2;  
-    };
-    int mLong;
-
-} MyUnion1;
-
-
-MyUnion1 MyUnion1Con(int aN1,int aN2)
-{
-   MyUnion1 tX;
-   tX.mShort1 = aN1;
-   tX.mShort2 = aN2;
-   return tX;
-}
-
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   MyUnion1 tS;
-   tS.mShort1 = 1;
-   tS.mShort2 = 2;
+   LFIndex tY = LFIndexCon(1,2);
+   int tI = tY.mIndex;
+   AtomicLFIndex tX;
 
-   Prn::print(0, "sizeof MyUnion1 %d", sizeof(MyUnion1));
+   tY = tX.load();
+   tI = tX.load().mCount;
 
-   Prn::print(0, "MyUnion1 %d %d %08X",
-      tS.mShort1,
-      tS.mShort2,
-      tS.mLong);
-
-   tS.mLong = 0x00070008;
-   Prn::print(0, "MyUnion1 %d %d %08X",
-      tS.mShort1,
-      tS.mShort2,
-      tS.mLong);
-
-   atomic<MyUnion1> tAS;
-   Prn::print(0, "MyUnion1 lockfree %d", tAS.is_lock_free());
-
-   MyUnion1 tX = MyUnion1Con(5,6);
-
-   Prn::print(0, "MyUnion11 %d %d %08X",
-      tX.mShort1,
-      tX.mShort2,
-      tX.mLong);
+   Prn::print(0, "MyUnion11 %d %d",
+      tY.mIndex,
+      tY.mCount);
 }
 //******************************************************************************
 //******************************************************************************
@@ -87,27 +53,12 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   int tN = 0x7FFFFFFF;
-   Prn::print(0, "%08X %d",tN,tN);
-   tN++;
-   Prn::print(0, "%08X %d",tN,tN);
-   tN++;
-   Prn::print(0, "%08X %d",tN,tN);
-
 }
 
 //******************************************************************************
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
-   unsigned tN = 0xFFFFFFFE;
-   Prn::print(0, "%08X %d",tN,tN);
-   tN++;
-   Prn::print(0, "%08X %d",tN,tN);
-   tN++;
-   Prn::print(0, "%08X %d",tN,tN);
-   tN++;
-   Prn::print(0, "%08X %d",tN,tN);
 }
 
 //******************************************************************************
