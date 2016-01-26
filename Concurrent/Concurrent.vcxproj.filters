@@ -28,9 +28,6 @@
     <ClCompile Include="Source\someWriter.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\LFIntQueue.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\someReader.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -49,7 +46,10 @@
     <ClCompile Include="Source\RisIntQueue.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\LFFreeList.cpp">
+    <ClCompile Include="..\LockFree\Source\LFFreeList.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\LockFree\Source\LFIntQueue.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -72,9 +72,6 @@
     <ClInclude Include="Source\someWriter.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\LFIntQueue.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\someReader.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -93,10 +90,13 @@
     <ClInclude Include="Source\RisIntQueue.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\LFIndex.h">
+    <ClInclude Include="..\LockFree\Source\LFFreeList.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\LFFreeList.h">
+    <ClInclude Include="..\LockFree\Source\LFIndex.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\LockFree\Source\LFIntQueue.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

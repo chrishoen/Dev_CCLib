@@ -87,12 +87,27 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
+   int tN = 0x7FFFFFFF;
+   Prn::print(0, "%08X %d",tN,tN);
+   tN++;
+   Prn::print(0, "%08X %d",tN,tN);
+   tN++;
+   Prn::print(0, "%08X %d",tN,tN);
+
 }
 
 //******************************************************************************
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
+   unsigned tN = 0xFFFFFFFE;
+   Prn::print(0, "%08X %d",tN,tN);
+   tN++;
+   Prn::print(0, "%08X %d",tN,tN);
+   tN++;
+   Prn::print(0, "%08X %d",tN,tN);
+   tN++;
+   Prn::print(0, "%08X %d",tN,tN);
 }
 
 //******************************************************************************
