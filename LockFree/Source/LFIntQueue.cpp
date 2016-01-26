@@ -165,8 +165,8 @@ namespace LFIntQueue
       while (true)
       {
          if (++tLoopCount==1000) throw 101;
-         tTail = mQueueTail;
-         tNext = mNode[tTail.mIndex].mQueueNext;
+         tTail.mPack = mQueueTail.mPack;
+         tNext.mPack = mNode[tTail.mIndex].mQueueNext.mPack;
 
          if (tTail.mPack == mQueueTail.mPack)
          {
@@ -204,9 +204,9 @@ namespace LFIntQueue
       while (true)
       {
          if (++tLoopCount==1000) throw 101;
-         tHead = mQueueHead;
-         tTail = mQueueTail;
-         tNext = mNode[tHead.mIndex].mQueueNext;
+         tHead.mPack = mQueueHead.mPack;
+         tTail.mPack = mQueueTail.mPack;
+         tNext.mPack = mNode[tHead.mIndex].mQueueNext.mPack;
 
          if (tHead.mPack == mQueueHead.mPack)
          {
