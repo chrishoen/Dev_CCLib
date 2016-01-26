@@ -36,7 +36,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   LFIndex tY = LFIndexCon(1,2);
+   LFIndex tY = LFIndex(1,2);
    int tI = tY.mIndex;
    AtomicLFIndex tX;
 
