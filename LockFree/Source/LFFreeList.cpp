@@ -125,7 +125,7 @@ namespace LFFreeList
          mNode[aNode].mListNext = tHead;
 
          // The pushed node is the new head node.
-         if (mListHead.compare_exchange_weak(tHead, aNode)) break;
+         if (mListHead.compare_exchange_strong(tHead, aNode)) break;
          mPushRetry++;
       }
 
@@ -137,8 +137,7 @@ namespace LFFreeList
    //******************************************************************************
    //******************************************************************************
    //******************************************************************************
-   // This detaches the node that is before the tail list node.
-   // There can be concurrent calls to this.
+   // This detaches the head node.
 
    bool listPop(int* aNode)
    {
@@ -151,7 +150,7 @@ namespace LFFreeList
          if (tHead == cInvalid) return false;
 
          // Set the head node to be the node that is after the head node.
-         if (mListHead.compare_exchange_weak(tHead, mNode[tHead].mListNext)) break;
+         if (mListHead.compare_exchange_strong(tHead, mNode[tHead].mListNext)) break;
          mPopRetry++;
       }
 
