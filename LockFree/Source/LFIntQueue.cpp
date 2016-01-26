@@ -236,11 +236,11 @@ namespace LFIntQueue
    bool listPush(int aNode)
    {
       // Store the head node in a temp.
-      int tHead = mListHead;
+      int tHead = mListHead.load();
       while (true)
       {
          // Attach the head node to the pushed node .
-         mNode[aNode].mListNext = tHead;
+         mNode[aNode].mListNext.store(tHead);
 
          // The pushed node is the new head node.
          if (mListHead.compare_exchange_strong(tHead, aNode)) break;
@@ -261,7 +261,7 @@ namespace LFIntQueue
    {
       // Store the head node in a temp.
       // This is the node that will be detached.
-      int tHead = mListHead;
+      int tHead = mListHead.load();
       while (true)
       {
          // Exit if the queue is empty.
