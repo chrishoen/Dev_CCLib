@@ -43,13 +43,19 @@ void WriterThread::threadInitFunction()
 
 void WriterThread::threadRunFunction()
 {
-   while(1)
+   try
    {
-      threadSleep(my_irand(mSleepLower,mSleepUpper));
-      if (mTerminateFlag) break;
+      while (1)
+      {
+         threadSleep(my_irand(mSleepLower, mSleepUpper));
+         if (mTerminateFlag) break;
 
-      gShare.mWriter[mIdent].write(my_irand(mWriteLower,mWriteUpper));
-
+         gShare.mWriter[mIdent].write(my_irand(mWriteLower, mWriteUpper));
+      }
+   }
+   catch (...)
+   {
+      Ris::Threads::halt("WriterThread::exception");
    }
 }
 

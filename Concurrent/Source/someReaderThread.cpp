@@ -43,12 +43,19 @@ void ReaderThread::threadInitFunction()
 
 void ReaderThread::threadRunFunction()
 {
-   while(1)
+   try
    {
-      threadSleep(my_irand(mSleepLower,mSleepUpper));
-      if (mTerminateFlag) break;
+      while (1)
+      {
+         threadSleep(my_irand(mSleepLower, mSleepUpper));
+         if (mTerminateFlag) break;
 
-      gShare.mReader.read(my_irand(mReadLower,mReadUpper));
+         gShare.mReader.read(my_irand(mReadLower, mReadUpper));
+      }
+   }
+   catch (...)
+   {
+      Ris::Threads::halt("ReaderThread::exception");
    }
 }
 

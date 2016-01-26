@@ -161,8 +161,10 @@ namespace LFIntQueue
 
       // Attach the node to the queue tail.
       LFIndex tTail,tNext;
+      int tLoopCount=0;
       while (true)
       {
+         if (++tLoopCount==1000) throw 101;
          tTail = mQueueTail;
          tNext = mNode[tTail.mIndex].mQueueNext;
 
@@ -198,8 +200,10 @@ namespace LFIntQueue
    {
       // Store the head node in a temp.
       LFIndex tHead, tTail, tNext;
+      int tLoopCount=0;
       while (true)
       {
+         if (++tLoopCount==1000) throw 101;
          tHead = mQueueHead;
          tTail = mQueueTail;
          tNext = mNode[tHead.mIndex].mQueueNext;
