@@ -164,7 +164,7 @@ namespace LFIntQueue
       int tLoopCount=0;
       while (true)
       {
-         if (++tLoopCount==1000000) throw 101;
+         if (++tLoopCount==10000000) throw 101;
          tTail.mPack = mQueueTail.mPack;
          tNext.mPack = mNode[tTail.mIndex].mQueueNext.mPack;
 
@@ -203,7 +203,7 @@ namespace LFIntQueue
       int tLoopCount=0;
       while (true)
       {
-         if (++tLoopCount==1000000) throw 101;
+         if (++tLoopCount==10000000) throw 101;
          tHead.mPack = mQueueHead.mPack;
          tTail.mPack = mQueueTail.mPack;
          tNext.mPack = mNode[tHead.mIndex].mQueueNext.mPack;
