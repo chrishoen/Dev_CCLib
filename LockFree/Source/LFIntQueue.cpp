@@ -41,8 +41,11 @@ namespace LFIntQueue
    bool listPush(int  aIndex);
    bool listPop(int* aIndex);
 
-   AtomicLFIndex mListHead;
    atomic<int>   mListSize;
+   AtomicLFIndex mListHead;
+   
+   atomic<int>* mListHeadIndexPtr = (atomic<int>*)&mListHead;
+   atomic<int>& mListHeadIndexRef = (atomic<int>&)*mListHeadIndexPtr;
 
    //***************************************************************************
    //***************************************************************************
@@ -235,7 +238,7 @@ namespace LFIntQueue
    //***************************************************************************
    // Insert a node into the list before the list head node.
 
-   bool listPush(int aNode)
+   bool listPush2(int aNode)
    {
       LFIndex tHead;
 
@@ -252,6 +255,31 @@ namespace LFIntQueue
 
          // The pushed node is the new head node.
          if (mListHead.compare_exchange_strong(tHead, LFIndex(aNode, tHead.mCount+1))) break;
+         mPushRetry++;
+      }
+
+      // Done.
+      mListSize++;
+      return true;
+   }
+
+   bool listPush(int aNode)
+   {
+      LFIndex tHead;
+
+      int tLoopCount=0;
+      while (true)
+      {
+         if (++tLoopCount == 10000) throw 103;
+
+         // Store the head node in a temp.
+         tHead = mListHead.load();
+
+         // Attach the head node to the pushed node .
+         mNode[aNode].mListNext.store(tHead);
+
+         // The pushed node is the new head node.
+         if (mListHeadIndexRef.compare_exchange_strong(tHead.mIndex, aNode)) break;
          mPushRetry++;
       }
 

@@ -24,7 +24,7 @@
     <ClInclude Include="Source\MainInit.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\LFIndex2.h">
+    <ClInclude Include="Source\LFIndex.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

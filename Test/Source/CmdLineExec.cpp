@@ -7,7 +7,7 @@
 #include "prnPrint.h"
 #include "CmdLineExec.h"
 
-#include "LFIndex2.h"
+#include "LFIndex.h"
 
 using namespace std;
 
@@ -53,6 +53,33 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
+   LFIndex tY(1,2);
+   AtomicLFIndex tX = tY;
+
+   Prn::print(0, "tY %d %d",
+      tY.mIndex,
+      tY.mCount);
+
+   Prn::print(0, "tX %d %d",
+      tX.load().mIndex,
+      tX.load().mCount);
+
+   int* tPI = (int*)&tX;
+   int& tRI = (int&)*tPI;
+   atomic<int>& tARI = (atomic<int>&)*tPI;
+
+
+   atomic<int>* tAPI1 = (atomic<int>*)&tX;
+   atomic<int>& tARI2 = (atomic<int>&)*tAPI1;
+
+   Prn::print(0, "tARI2 %d",tARI2);
+
+   tARI2 = 8;
+   Prn::print(0, "tARI2 %d",tARI2);
+
+   Prn::print(0, "tX %d %d",
+      tX.load().mIndex,
+      tX.load().mCount);
 }
 
 //******************************************************************************
