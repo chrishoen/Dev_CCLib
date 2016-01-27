@@ -164,6 +164,7 @@ namespace LFIntQueue
       while (true)
       {
          if (++tLoopCount==10000000) throw 101;
+
          tTail = mQueueTail.load();
          tNext = mNode[tTail.mIndex].mQueueNext.load();
 
@@ -197,12 +198,13 @@ namespace LFIntQueue
 
    bool tryRead(int* aValue)
    {
-      // Store the head node in a temp.
       LFIndex tHead, tTail, tNext;
+
       int tLoopCount=0;
       while (true)
       {
-         if (++tLoopCount==10000000) throw 101;
+         if (++tLoopCount==10000000) throw 102;
+
          tHead = mQueueHead.load();
          tTail = mQueueTail.load();
          tNext = mNode[tHead.mIndex].mQueueNext.load();
@@ -236,11 +238,15 @@ namespace LFIntQueue
    bool listPush(int aNode)
    {
       // Store the head node in a temp.
-      int tHead = mListHead.load(memory_order_seq_cst);
+      int tHead = mListHead.load();
+
+      int tLoopCount=0;
       while (true)
       {
+         if (++tLoopCount==10000000) throw 103;
+
          // Attach the head node to the pushed node .
-         mNode[aNode].mListNext.store(tHead,memory_order_seq_cst);
+         mNode[aNode].mListNext.store(tHead);
 
          // The pushed node is the new head node.
          if (mListHead.compare_exchange_strong(tHead, aNode)) break;
@@ -261,9 +267,13 @@ namespace LFIntQueue
    {
       // Store the head node in a temp.
       // This is the node that will be detached.
-      int tHead = mListHead.load(memory_order_seq_cst);
+      int tHead = mListHead.load();
+
+      int tLoopCount=0;
       while (true)
       {
+         if (++tLoopCount==10000000) throw 104;
+
          // Exit if the queue is empty.
          if (tHead == cInvalid) return false;
 
