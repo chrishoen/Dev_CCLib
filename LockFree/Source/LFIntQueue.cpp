@@ -336,12 +336,29 @@ namespace LFIntQueue
 
    //***************************************************************************
 
+   bool test3()
+   {
+      int tNode1,tNode2;
+      bool tPass1,tPass2;
+
+      tPass1 = listPop(&tNode1);
+      tPass2 = listPop(&tNode2);
+
+      if (tPass2) listPush(tNode2);
+      if (tPass1) listPush(tNode1);
+
+      return tPass1 && tPass2;
+   }
+
+   //***************************************************************************
+
    bool test()
    {
       switch (mTest)
       {
       case 1: return test1();
       case 2: return test2();
+      case 3: return test3();
       }
       return true;
    }
