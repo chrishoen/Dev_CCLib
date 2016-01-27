@@ -20,7 +20,7 @@ namespace LFIntQueue
    {
       int            mValue;
       AtomicLFIndex  mQueueNext;
-      atomic<int>    mListNext;
+      AtomicLFIndex  mListNext;
    } QueueListNode;
 
    static const int cInvalid = 0x80000000;
@@ -41,8 +41,7 @@ namespace LFIntQueue
    bool listPush(int  aIndex);
    bool listPop(int* aIndex);
 
-   atomic<int> mListHead;
-   atomic<int> mListSize;
+   AtomicLFIndex mListHead;
 
    //***************************************************************************
    //***************************************************************************
@@ -81,20 +80,18 @@ namespace LFIntQueue
       if (mNode) free(mNode);
       mNode = new QueueListNode[mListAllocate];
 
-      for (int i = 0; i < mListAllocate - 1; i++)
+      for (int i = 0; i < mListAllocate-1; i++)
       {
          mNode[i].mValue = 0;
          mNode[i].mQueueNext.store(LFIndex(cInvalid,0));
-         mNode[i].mListNext = i + 1;
+         mNode[i].mListNext.store(LFIndex(i+1,0));
       }
 
-      mNode[mListAllocate - 1].mValue = 0;
-      mNode[mListAllocate - 1].mQueueNext.store(LFIndex(cInvalid,0));
-      mNode[mListAllocate - 1].mListNext = cInvalid;
+      mNode[mListAllocate-1].mValue = 0;
+      mNode[mListAllocate-1].mQueueNext.store(LFIndex(cInvalid,0));
+      mNode[mListAllocate-1].mListNext.store(LFIndex(cInvalid,0));
 
-      mListSize = mListAllocate - 1;
-      mListSize = mListAllocate;
-      mListHead = 0;
+      mListHead.store(LFIndex(0,mListAllocate));
 
       int tIndex;
       listPop(&tIndex);
@@ -126,7 +123,7 @@ namespace LFIntQueue
    //***************************************************************************
    // Show
 
-   int listSize(){ return mListSize; }
+   int listSize(){ return mListHead.load().mCount; }
 
    void show()
    {
@@ -135,7 +132,7 @@ namespace LFIntQueue
       printf("ReadRetry   %llu\n",mReadRetry);
       printf("PushRetry   %llu\n",mPushRetry);
       printf("PopRetry    %llu\n",mPopRetry);
-      printf("ListSize    %d\n",  mListSize);
+      printf("ListSize    %d\n",  listSize());
    }
 
    //***************************************************************************
@@ -237,7 +234,7 @@ namespace LFIntQueue
 
    bool listPush(int aNode)
    {
-      int tHead;
+      LFIndex tHead;
 
       int tLoopCount=0;
       while (true)
@@ -251,12 +248,11 @@ namespace LFIntQueue
          mNode[aNode].mListNext.store(tHead);
 
          // The pushed node is the new head node.
-         if (mListHead.compare_exchange_strong(tHead, aNode)) break;
+         if (mListHead.compare_exchange_strong(tHead, LFIndex(aNode, tHead.mCount+1))) break;
          mPushRetry++;
       }
 
       // Done.
-      mListSize++;
       return true;
    }
 
@@ -267,7 +263,7 @@ namespace LFIntQueue
 
    bool listPop(int* aNode)
    {
-      int tHead;
+      LFIndex tHead;
 
       int tLoopCount=0;
       while (true)
@@ -279,18 +275,17 @@ namespace LFIntQueue
          tHead = mListHead.load();
 
          // Exit if the list is empty.
-         if (tHead == cInvalid) return false;
+         if (tHead.mIndex == cInvalid) return false;
 
          // Set the head node to be the node that is after the head node.
-         if (mListHead.compare_exchange_strong(tHead, mNode[tHead].mListNext)) break;
+         if (mListHead.compare_exchange_strong(tHead, LFIndex(mNode[tHead.mIndex].mListNext.load().mIndex,tHead.mCount-1))) break;
          mPopRetry++;
       }
 
       // Return the detached original head node.
-      *aNode = tHead;
+      *aNode = tHead.mIndex;
 
       // Done.
-      mListSize--;
       return true;
    }
 
