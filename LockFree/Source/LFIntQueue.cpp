@@ -465,22 +465,19 @@ D20: return TRUE                                                       # Queue w
 
 Non-blocking stack [Treiber’s algorithm]
 
-proc push(new)
+proc push(node)
 do
-  old = top
-  new.next = old
-while not CAS(top, old, new)
+  old = head
+  node.next = old
+while not CAS(head, old, node)
 end
 
 proc pop
 do
-  old = top
+  old = head
   return null if old == null
-  new = old.next
-while not CAS(top, old, new)
-return old
+while not CAS(head, old, <old.next,head.count+1>)
+return head
 end
-
-
 
 ==============================================================================*/
