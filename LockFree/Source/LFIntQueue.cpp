@@ -42,6 +42,7 @@ namespace LFIntQueue
    bool listPop(int* aIndex);
 
    AtomicLFIndex mListHead;
+   atomic<int>   mListSize;
 
    //***************************************************************************
    //***************************************************************************
@@ -91,7 +92,8 @@ namespace LFIntQueue
       mNode[mListAllocate-1].mQueueNext.store(LFIndex(cInvalid,0));
       mNode[mListAllocate-1].mListNext.store(LFIndex(cInvalid,0));
 
-      mListHead.store(LFIndex(0,mListAllocate));
+      mListHead.store(LFIndex(0,0));
+      mListSize = mListAllocate;
 
       int tIndex;
       listPop(&tIndex);
@@ -123,7 +125,8 @@ namespace LFIntQueue
    //***************************************************************************
    // Show
 
-   int listSize(){ return mListHead.load().mCount; }
+// int listSize(){ return mListHead.load().mCount; }
+   int listSize(){ return mListSize; }
 
    void show()
    {
@@ -253,6 +256,7 @@ namespace LFIntQueue
       }
 
       // Done.
+      mListSize++;
       return true;
    }
 
@@ -278,14 +282,16 @@ namespace LFIntQueue
          if (tHead.mIndex == cInvalid) return false;
 
          // Set the head node to be the node that is after the head node.
-         if (mListHead.compare_exchange_strong(tHead, LFIndex(mNode[tHead.mIndex].mListNext.load().mIndex,tHead.mCount-1))) break;
+         if (mListHead.compare_exchange_strong(tHead, LFIndex(mNode[tHead.mIndex].mListNext.load().mIndex,tHead.mCount+1))) break;
          mPopRetry++;
       }
 
       // Return the detached original head node.
+//    mNode[tHead.mIndex].mListNext.store(LFIndex(cInvalid,0));
       *aNode = tHead.mIndex;
 
       // Done.
+      mListSize--;
       return true;
    }
 
