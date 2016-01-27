@@ -237,13 +237,15 @@ namespace LFIntQueue
 
    bool listPush(int aNode)
    {
-      // Store the head node in a temp.
-      int tHead = mListHead.load();
+      int tHead;
 
       int tLoopCount=0;
       while (true)
       {
          if (++tLoopCount==10000000) throw 103;
+
+         // Store the head node in a temp.
+         tHead = mListHead.load();
 
          // Attach the head node to the pushed node .
          mNode[aNode].mListNext.store(tHead);
@@ -265,16 +267,18 @@ namespace LFIntQueue
 
    bool listPop(int* aNode)
    {
-      // Store the head node in a temp.
-      // This is the node that will be detached.
-      int tHead = mListHead.load();
+      int tHead;
 
       int tLoopCount=0;
       while (true)
       {
          if (++tLoopCount==10000000) throw 104;
 
-         // Exit if the queue is empty.
+         // Store the head node in a temp.
+         // This is the node that will be detached.
+         tHead = mListHead.load();
+
+         // Exit if the list is empty.
          if (tHead == cInvalid) return false;
 
          // Set the head node to be the node that is after the head node.
@@ -282,7 +286,7 @@ namespace LFIntQueue
          mPopRetry++;
       }
 
-      // Return result.
+      // Return the detached original head node.
       *aNode = tHead;
 
       // Done.
