@@ -18,7 +18,7 @@ namespace LFFreeList
 
    typedef struct
    {
-      atomic<int>   mListNext;
+      AtomicLFIndex  mListNext;
    } ListNode;
 
    static const int cInvalid = 0x80000000;
@@ -31,7 +31,7 @@ namespace LFFreeList
    bool listPush(int  aIndex);
    bool listPop(int* aIndex);
 
-   atomic<int> mListHead;
+   AtomicLFIndex mListHead;
    atomic<int> mListSize;
 
    //***************************************************************************
@@ -67,14 +67,13 @@ namespace LFFreeList
 
       for (int i = 0; i < mListAllocate - 1; i++)
       {
-         mNode[i].mListNext = i + 1;
+         mNode[i].mListNext.store(LFIndex(i+1,0));
       }
 
-      mNode[mListAllocate - 1].mListNext = cInvalid;
+      mNode[mListAllocate-1].mListNext.store(LFIndex(cInvalid,0));
 
-      mListSize = mListAllocate - 1;
+      mListHead.store(LFIndex(0,0));
       mListSize = mListAllocate;
-      mListHead = 0;
 
       mPushRetry  = 0;
       mPopRetry   = 0;
@@ -117,15 +116,21 @@ namespace LFFreeList
 
    bool listPush(int aNode)
    {
-      // Store the head node in a temp.
-      int tHead = mListHead;
+      LFIndex tHead;
+
+      int tLoopCount=0;
       while (true)
       {
+         if (++tLoopCount==10000) throw 103;
+
+         // Store the head node in a temp.
+         tHead = mListHead.load();
+
          // Attach the head node to the pushed node .
-         mNode[aNode].mListNext = tHead;
+         mNode[aNode].mListNext.store(tHead);
 
          // The pushed node is the new head node.
-         if (mListHead.compare_exchange_strong(tHead, aNode)) break;
+         if (mListHead.compare_exchange_strong(tHead, LFIndex(aNode, tHead.mCount+1))) break;
          mPushRetry++;
       }
 
@@ -141,26 +146,38 @@ namespace LFFreeList
 
    bool listPop(int* aNode)
    {
-      // Store the head node in a temp.
-      // This is the node that will be detached.
-      int tHead = mListHead;
+      LFIndex tHead;
+
+      int tLoopCount=0;
       while (true)
       {
-         // Exit if the queue is empty.
-         if (tHead == cInvalid) return false;
+         if (++tLoopCount==10000) throw 104;
+
+         // Store the head node in a temp.
+         // This is the node that will be detached.
+         tHead = mListHead.load();
+
+         // Exit if the list is empty.
+         if (tHead.mIndex == cInvalid) return false;
 
          // Set the head node to be the node that is after the head node.
-         if (mListHead.compare_exchange_strong(tHead, mNode[tHead].mListNext)) break;
+         if (mListHead.compare_exchange_strong(tHead, LFIndex(mNode[tHead.mIndex].mListNext.load().mIndex,tHead.mCount+1))) break;
          mPopRetry++;
       }
 
-      // Return result.
-      *aNode = tHead;
+      // Return the detached original head node.
+//    mNode[tHead.mIndex].mListNext.store(LFIndex(cInvalid,0));
+      *aNode = tHead.mIndex;
 
       // Done.
       mListSize--;
       return true;
    }
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Test
 
    //***************************************************************************
    //***************************************************************************
@@ -178,7 +195,15 @@ namespace LFFreeList
 
    //***************************************************************************
 
-   bool test()
+   bool test1()
+   {
+      mPushRetry++;
+      return true;
+   }
+
+   //***************************************************************************
+
+   bool test2()
    {
       int tNode;
       if (listPop(&tNode))
@@ -191,6 +216,35 @@ namespace LFFreeList
          return false;
       }
 
+      return true;
+   }
+
+   //***************************************************************************
+
+   bool test3()
+   {
+      int tNode1,tNode2;
+      bool tPass1,tPass2;
+
+      tPass1 = listPop(&tNode1);
+      tPass2 = listPop(&tNode2);
+
+      if (tPass2) listPush(tNode2);
+      if (tPass1) listPush(tNode1);
+
+      return tPass1 && tPass2;
+   }
+
+   //***************************************************************************
+
+   bool test()
+   {
+      switch (mTest)
+      {
+      case 1: return test1();
+      case 2: return test2();
+      case 3: return test3();
+      }
       return true;
    }
 
