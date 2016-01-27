@@ -163,7 +163,7 @@ namespace LFIntQueue
       int tLoopCount=0;
       while (true)
       {
-         if (++tLoopCount==10000000) throw 101;
+         if (++tLoopCount==10000) throw 101;
 
          tTail = mQueueTail.load();
          tNext = mNode[tTail.mIndex].mQueueNext.load();
@@ -203,7 +203,7 @@ namespace LFIntQueue
       int tLoopCount=0;
       while (true)
       {
-         if (++tLoopCount==10000000) throw 102;
+         if (++tLoopCount==10000) throw 102;
 
          tHead = mQueueHead.load();
          tTail = mQueueTail.load();
@@ -242,7 +242,7 @@ namespace LFIntQueue
       int tLoopCount=0;
       while (true)
       {
-         if (++tLoopCount==10000000) throw 103;
+         if (++tLoopCount==10000) throw 103;
 
          // Store the head node in a temp.
          tHead = mListHead.load();
@@ -272,7 +272,7 @@ namespace LFIntQueue
       int tLoopCount=0;
       while (true)
       {
-         if (++tLoopCount==10000000) throw 104;
+         if (++tLoopCount==10000) throw 104;
 
          // Store the head node in a temp.
          // This is the node that will be detached.
