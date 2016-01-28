@@ -17,7 +17,7 @@ namespace Timing
    //***************************************************************************
    // Regionals
 
-   Ris::TimeMarker mMarker;
+   Ris::TrialTimeMarker mMarker;
    int mWriteCount=0;
    int mReadCount=0;
 
@@ -38,35 +38,34 @@ namespace Timing
    void run1(int aTest)
    {
       int tIterations = 1000000;
-      mMarker.initialize(tIterations);
 
       mWriteCount=0;
       mReadCount=0;
       mAX=0;
 
+      mMarker.startTrial();
+
       for (int i = 0; i < tIterations; i++)
       {
          mMarker.doStart();
-         switch(aTest)
+         switch (aTest)
          {
-            case 1:  test1(); break;
-            case 2:  test2(); break;
-            case 3:  test3(); break;
-            case 4:  test4(); break;
+         case 1:  test1(); break;
+         case 2:  test2(); break;
+         case 3:  test3(); break;
+         case 4:  test4(); break;
          }
          mMarker.doStop();
-
-         if (mMarker.mStatistics.mEndOfPeriod)
-         {
-            Prn::print(0, "TEST %5d $$ %10.3f  %10.3f  %10.3f  %10.3f",
-               mMarker.mStatistics.mSize,
-               mMarker.mStatistics.mMean,
-               mMarker.mStatistics.mStdDev,
-               mMarker.mStatistics.mMinX,
-               mMarker.mStatistics.mMaxX);
-            mMarker.mStatistics.mEndOfPeriod = false;
-         }
       }
+
+      mMarker.finishTrial();
+
+      Prn::print(0, "TEST %5d $$ %10.3f  %10.3f  %10.3f  %10.3f",
+         mMarker.mStatistics.mPutCount,
+         mMarker.mStatistics.mMean,
+         mMarker.mStatistics.mStdDev,
+         mMarker.mStatistics.mMinX,
+         mMarker.mStatistics.mMaxX);
 
       Prn::print(0, "Done");
    }

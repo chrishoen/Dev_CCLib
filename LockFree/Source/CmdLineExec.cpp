@@ -38,6 +38,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("GO1"    ))  executeGo1        (aCmd);
    if(aCmd->isCmd("GO2"    ))  executeGo2        (aCmd);
    if(aCmd->isCmd("GO3"    ))  executeGo3        (aCmd);
+   if(aCmd->isCmd("RUN"    ))  executeRun        (aCmd);
    if(aCmd->isCmd("SHOW"   ))  executeShow       (aCmd);
    if(aCmd->isCmd("W"      ))  executeWriteInt   (aCmd);
    if(aCmd->isCmd("R"      ))  executeReadInt    (aCmd);
@@ -64,6 +65,14 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
+}
+
+//******************************************************************************
+
+void CmdLineExec::executeRun(Ris::CmdLineCmd* aCmd)
+{
+   aCmd->setArgDefault(1,1);
+   Timing::run1(aCmd->argInt(1));
 }
 
 //******************************************************************************
