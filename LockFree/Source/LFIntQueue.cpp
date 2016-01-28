@@ -159,7 +159,7 @@ namespace LFIntQueue
 
       // Initialize the node with the value.
       mNode[tNode.mIndex].mValue = aValue;
-      mNode[tNode.mIndex].mQueueNext.store(LFIndex(cInvalid,0));
+      mNode[tNode.mIndex].mQueueNext.store(LFIndex(cInvalid,0),memory_order_relaxed);
 
       // Attach the node to the queue tail.
       LFIndex tTail,tNext;
@@ -238,31 +238,6 @@ namespace LFIntQueue
    //***************************************************************************
    // Insert a node into the list before the list head node.
 
-   bool listPush2(int aNode)
-   {
-      LFIndex tHead;
-
-      int tLoopCount=0;
-      while (true)
-      {
-         if (++tLoopCount==10000) throw 103;
-
-         // Store the head node in a temp.
-         tHead = mListHead.load(memory_order_relaxed);
-
-         // Attach the head node to the pushed node .
-         mNode[aNode].mListNext.store(tHead,memory_order_relaxed);
-
-         // The pushed node is the new head node.
-         if (mListHead.compare_exchange_strong(tHead, LFIndex(aNode, tHead.mCount+1))) break;
-         mPushRetry++;
-      }
-
-      // Done.
-      mListSize++;
-      return true;
-   }
-
    bool listPush(int aNode)
    {
       LFIndex tHead;
@@ -315,7 +290,6 @@ namespace LFIntQueue
       }
 
       // Return the detached original head node.
-//    mNode[tHead.mIndex].mListNext.store(LFIndex(cInvalid,0));
       *aNode = tHead.mIndex;
 
       // Done.
@@ -481,3 +455,31 @@ return head
 end
 
 ==============================================================================*/
+
+#if 0
+   bool listPush2(int aNode)
+   {
+      LFIndex tHead;
+
+      int tLoopCount=0;
+      while (true)
+      {
+         if (++tLoopCount==10000) throw 103;
+
+         // Store the head node in a temp.
+         tHead = mListHead.load(memory_order_relaxed);
+
+         // Attach the head node to the pushed node .
+         mNode[aNode].mListNext.store(tHead,memory_order_relaxed);
+
+         // The pushed node is the new head node.
+         if (mListHead.compare_exchange_strong(tHead, LFIndex(aNode, tHead.mCount+1))) break;
+         mPushRetry++;
+      }
+
+      // Done.
+      mListSize++;
+      return true;
+   }
+
+#endif
