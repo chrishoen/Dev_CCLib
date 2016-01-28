@@ -27,9 +27,11 @@ Reader::Reader()
 
 void Reader::initialize()
 {
+   mCount     = 0;
    mPassCount = 0;
    mFailCount = 0;
    mCodeSum   = 0;
+   mMeanTime  = 0.0;
 }
 
 void Reader::finalize()
@@ -42,6 +44,7 @@ void Reader::finalize()
 
 void Reader::show()
 {
+   Prn::print(0,"Reader.mCount     %llu",mCount);
    Prn::print(0,"Reader.mPassCount %llu",mPassCount);
    Prn::print(0,"Reader.mFailCount %llu",mFailCount);
    Prn::print(0,"Reader.mCodeSum   %llu",mCodeSum);
@@ -57,6 +60,8 @@ void Reader::read1(int aNumReads)
    for (int i = 0; i < aNumReads; i++)
    {
       IntMessage tMsg;
+
+      mMarker.doStart();
       if (LFIntQueue::tryRead(&tMsg.aint()))
       {
          mPassCount++;
@@ -66,6 +71,7 @@ void Reader::read1(int aNumReads)
       {
          mFailCount++;
       }
+      mMarker.doStop();
    }
 }
    
@@ -87,6 +93,8 @@ void Reader::read2(int aNumReads)
    for (int i = 0; i < aNumReads; i++)
    {
       IntMessage tMsg;
+
+      mMarker.doStart();
       if (RisIntQueue::tryRead(&tMsg.aint()))
       {
          mPassCount++;
@@ -96,6 +104,8 @@ void Reader::read2(int aNumReads)
       {
          mFailCount++;
       }
+      mMarker.doStop();
+
    }
 }
    
@@ -114,19 +124,25 @@ void Reader::flush2()
 
 void Reader::read(int aNumReads)
 {
+   mMarker.startTrial();
+
    switch (gShare.mMode)
    {
-   case 1: return read1(aNumReads);
-   case 2: return read2(aNumReads);
+   case 1: read1(aNumReads); break;
+   case 2: read2(aNumReads); break;
    }
+
+   mCount = mPassCount + mFailCount;
+   mMarker.finishTrial();
+   mMeanTime = mMarker.mStatistics.mMean;
 }
    
 void Reader::flush()
 {
    switch (gShare.mMode)
    {
-   case 1: return flush1();
-   case 2: return flush2();
+   case 1: flush1(); break;
+   case 2: flush2(); break;
    }
 }
    

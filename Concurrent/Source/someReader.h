@@ -6,6 +6,7 @@
 
 #include <stdio.h>
 #include "someMessage.h"
+#include "risTimeMarker.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -40,13 +41,16 @@ public:
    void flush2 ();
    void flush  ();
 
-
    //---------------------------------------------------------------------------
    // Members
 
+   unsigned long long mCount;
    unsigned long long mPassCount;
    unsigned long long mFailCount;
    unsigned long long mCodeSum;
+
+   Ris::TrialTimeMarker mMarker;
+   double               mMeanTime;
 };
 
 //******************************************************************************

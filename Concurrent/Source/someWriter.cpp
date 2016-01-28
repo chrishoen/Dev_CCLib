@@ -31,9 +31,11 @@ void Writer::initialize(unsigned aIdent)
    mIdent = aIdent;
    mCode = 0;
 
+   mCount     = 0;
    mPassCount = 0;
    mFailCount = 0;
    mCodeSum   = 0;
+   mMeanTime  = 0.0;
 }
 
 void Writer::finalize()
@@ -47,6 +49,7 @@ void Writer::finalize()
 void Writer::show()
 {
    Prn::print(0,"Writer.mIdent     %d",  mIdent);
+   Prn::print(0,"Writer.mCount     %llu",mCount);
    Prn::print(0,"Writer.mPassCount %llu",mPassCount);
    Prn::print(0,"Writer.mFailCount %llu",mFailCount);
    Prn::print(0,"Writer.mCodeSum   %llu",mCodeSum);
@@ -64,6 +67,7 @@ void Writer::write1(int aNumWrites)
       mCode++;
       IntMessage tMsg(mIdent,mCode);
 
+      mMarker.doStart();
       if (LFIntQueue::tryWrite(tMsg.aint()))
       {
          mPassCount++;
@@ -73,6 +77,7 @@ void Writer::write1(int aNumWrites)
       {
          mFailCount++;
       }
+      mMarker.doStop();
    }
 }
 
@@ -87,6 +92,7 @@ void Writer::write2(int aNumWrites)
       mCode++;
       IntMessage tMsg(mIdent,mCode);
 
+      mMarker.doStart();
       if (RisIntQueue::tryWrite(tMsg.aint()))
       {
          mPassCount++;
@@ -96,6 +102,7 @@ void Writer::write2(int aNumWrites)
       {
          mFailCount++;
       }
+      mMarker.doStop();
    }
 }
 
@@ -107,6 +114,7 @@ void Writer::write8(int aNumWrites)
 {
    for (int i = 0; i < aNumWrites; i++)
    {
+      mMarker.doStart();
       if (LFFreeList::test())
       {
          mPassCount++;
@@ -115,6 +123,7 @@ void Writer::write8(int aNumWrites)
       {
          mFailCount++;
       }
+      mMarker.doStop();
    }
 }
 
@@ -126,6 +135,7 @@ void Writer::write9(int aNumWrites)
 {
    for (int i = 0; i < aNumWrites; i++)
    {
+      mMarker.doStart();
       if (LFIntQueue::test())
       {
          mPassCount++;
@@ -134,6 +144,7 @@ void Writer::write9(int aNumWrites)
       {
          mFailCount++;
       }
+      mMarker.doStop();
    }
 }
 
@@ -143,13 +154,19 @@ void Writer::write9(int aNumWrites)
 
 void Writer::write(int aNumWrites)
 {
+   mMarker.startTrial();
+
    switch (gShare.mMode)
    {
-   case 1: return write1 (aNumWrites);
-   case 2: return write2 (aNumWrites);
-   case 8: return write8 (aNumWrites);
-   case 9: return write9 (aNumWrites);
+   case 1: write1 (aNumWrites); break;
+   case 2: write2 (aNumWrites); break;
+   case 8: write8 (aNumWrites); break;
+   case 9: write9 (aNumWrites); break;
    }
+
+   mCount = mPassCount + mFailCount;
+   mMarker.finishTrial();
+   mMeanTime = mMarker.mStatistics.mMean;
 }
    
 

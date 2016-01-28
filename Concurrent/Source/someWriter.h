@@ -6,6 +6,7 @@
 
 #include <stdio.h>
 #include "someMessage.h"
+#include "risTimeMarker.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -44,9 +45,13 @@ public:
    unsigned short mIdent;
    unsigned short mCode;
 
-   unsigned long long  mPassCount;
-   unsigned long long  mFailCount;
-   unsigned long long  mCodeSum;
+   unsigned long long mCount;
+   unsigned long long mPassCount;
+   unsigned long long mFailCount;
+   unsigned long long mCodeSum;
+
+   Ris::TrialTimeMarker mMarker;
+   double               mMeanTime;
 };
 
 //******************************************************************************
