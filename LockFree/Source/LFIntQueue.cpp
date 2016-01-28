@@ -168,18 +168,18 @@ namespace LFIntQueue
       {
          if (++tLoopCount==10000) throw 101;
 
-         tTail = mQueueTail.load();
-         tNext = mNode[tTail.mIndex].mQueueNext.load();
+         tTail = mQueueTail.load(memory_order_relaxed);
+         tNext = mNode[tTail.mIndex].mQueueNext.load(memory_order_relaxed);
 
-         if (tTail == mQueueTail.load())
+         if (tTail == mQueueTail.load(memory_order_relaxed))
          {
             if (tNext.mIndex == cInvalid)
             {
-               if (mNode[tTail.mIndex].mQueueNext.compare_exchange_strong(tNext, LFIndex(tNode.mIndex, tNext.mCount+1))) break;
+               if (mNode[tTail.mIndex].mQueueNext.compare_exchange_weak(tNext, LFIndex(tNode.mIndex, tNext.mCount+1))) break;
             }
             else
             {
-               mQueueTail.compare_exchange_strong(tTail, LFIndex(tNext.mIndex, tTail.mCount+1));
+               mQueueTail.compare_exchange_weak(tTail, LFIndex(tNext.mIndex, tTail.mCount+1));
             }
          }
          mWriteRetry++;
@@ -208,21 +208,21 @@ namespace LFIntQueue
       {
          if (++tLoopCount==10000) throw 102;
 
-         tHead = mQueueHead.load();
-         tTail = mQueueTail.load();
-         tNext = mNode[tHead.mIndex].mQueueNext.load();
+         tHead = mQueueHead.load(memory_order_relaxed);
+         tTail = mQueueTail.load(memory_order_relaxed);
+         tNext = mNode[tHead.mIndex].mQueueNext.load(memory_order_relaxed);
 
          if (tHead == mQueueHead.load())
          {
             if (tHead.mIndex == tTail.mIndex)
             {
                if (tNext.mIndex == cInvalid) return false;
-               mQueueTail.compare_exchange_strong(tTail, LFIndex(tNext.mIndex, tTail.mCount+1));
+               mQueueTail.compare_exchange_weak(tTail, LFIndex(tNext.mIndex, tTail.mCount+1));
             }
             else
             {
                *aValue = mNode[tNext.mIndex].mValue;
-               if (mQueueHead.compare_exchange_strong(tHead, LFIndex(tNext.mIndex, tHead.mCount+1)))break;
+               if (mQueueHead.compare_exchange_weak(tHead, LFIndex(tNext.mIndex, tHead.mCount+1)))break;
             }
          }
          mReadRetry++;
@@ -248,10 +248,10 @@ namespace LFIntQueue
          if (++tLoopCount==10000) throw 103;
 
          // Store the head node in a temp.
-         tHead = mListHead.load();
+         tHead = mListHead.load(memory_order_relaxed);
 
          // Attach the head node to the pushed node .
-         mNode[aNode].mListNext.store(tHead);
+         mNode[aNode].mListNext.store(tHead,memory_order_relaxed);
 
          // The pushed node is the new head node.
          if (mListHead.compare_exchange_strong(tHead, LFIndex(aNode, tHead.mCount+1))) break;
@@ -273,10 +273,10 @@ namespace LFIntQueue
          if (++tLoopCount == 10000) throw 103;
 
          // Store the head node in a temp.
-         tHead = mListHead.load();
+         tHead = mListHead.load(memory_order_relaxed);
 
          // Attach the head node to the pushed node .
-         mNode[aNode].mListNext.store(tHead);
+         mNode[aNode].mListNext.store(tHead,memory_order_relaxed);
 
          // The pushed node is the new head node.
          if (mListHeadIndexRef.compare_exchange_strong(tHead.mIndex, aNode)) break;
@@ -304,7 +304,7 @@ namespace LFIntQueue
 
          // Store the head node in a temp.
          // This is the node that will be detached.
-         tHead = mListHead.load();
+         tHead = mListHead.load(memory_order_relaxed);
 
          // Exit if the list is empty.
          if (tHead.mIndex == cInvalid) return false;
