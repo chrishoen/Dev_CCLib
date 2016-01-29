@@ -46,6 +46,7 @@ void Reader::finalize()
 void Reader::show()
 {
    Prn::print(0,"Reader.mCount     %llu",mCount);
+   return;
    Prn::print(0,"Reader.mPassCount %llu",mPassCount);
    Prn::print(0,"Reader.mFailCount %llu",mFailCount);
    Prn::print(0,"Reader.mCheckSum   %llu",mCheckSum);

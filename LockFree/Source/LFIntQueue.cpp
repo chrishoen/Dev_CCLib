@@ -2,6 +2,7 @@
 #include <string.h>
 #include <windows.h>
 #include <atomic>
+#include "my_functions.h"
 #include "prnPrint.h"
 
 #include "LFIndex.h"
@@ -133,12 +134,12 @@ namespace LFIntQueue
 
    void show()
    {
-      printf("LFIntQueue\n");
-      printf("WriteRetry  %llu\n",mWriteRetry);
-      printf("ReadRetry   %llu\n",mReadRetry);
-      printf("PushRetry   %llu\n",mPushRetry);
-      printf("PopRetry    %llu\n",mPopRetry);
-      printf("ListSize    %d\n",  listSize());
+      char tString[40];
+      Prn::print(0,"LFIntQueue\n");
+      Prn::print(0,"WriteRetry         %16s",my_stringLLU(tString,mWriteRetry));
+      Prn::print(0,"ReadRetry          %16s",my_stringLLU(tString,mReadRetry));
+      Prn::print(0,"PopRetry           %16s",my_stringLLU(tString,mPopRetry));
+      Prn::print(0,"PushRetry          %16s",my_stringLLU(tString,mPushRetry));
    }
 
    //***************************************************************************

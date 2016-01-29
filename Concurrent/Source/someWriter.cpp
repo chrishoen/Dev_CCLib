@@ -51,6 +51,7 @@ void Writer::show()
 {
    Prn::print(0,"Writer.mIdent     %d",  mIdent);
    Prn::print(0,"Writer.mCount     %llu",mCount);
+   return;
    Prn::print(0,"Writer.mPassCount %llu",mPassCount);
    Prn::print(0,"Writer.mFailCount %llu",mFailCount);
    Prn::print(0,"Writer.mCheckSum   %llu",mCheckSum);

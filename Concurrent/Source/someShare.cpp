@@ -98,21 +98,22 @@ void Share::show()
 {
    char tString[40];
    Prn::print(0,"");
+   Prn::print(0,"");
+   Prn::print(0,"");
    Prn::print(0,"TOTAL");
    Prn::print(0,"");
-   Prn::print(0,"Writer.mCount      %s",    my_stringLLU(tString,mWriterCount));
-   Prn::print(0,"Writer.mPassCount  %s",    my_stringLLU(tString,mWriterPassCount));
-   Prn::print(0,"Writer.mFailCount  %s",    my_stringLLU(tString,mWriterFailCount));
-   Prn::print(0,"Writer.mCheckSum   %llu",  mWriterCheckSum);
-   Prn::print(0,"Writer.mMeanTime   %6.5f", mWriterMeanTime);
-   Prn::print(0,"Writer.mXMeanTime  %6.5f", mWriterXMeanTime);
+   Prn::print(0,"Writer.mCheckSum   %16llu",  mWriterCheckSum);
+   Prn::print(0,"Reader.mCheckSum   %16llu",  mReaderCheckSum);
    Prn::print(0,"");
-   Prn::print(0,"Reader.mCount      %s",    my_stringLLU(tString,mReaderCount));
-   Prn::print(0,"Reader.mPassCount  %s",    my_stringLLU(tString,mReaderPassCount));
-   Prn::print(0,"Reader.mFailCount  %s",    my_stringLLU(tString,mReaderFailCount));
-   Prn::print(0,"Reader.mCheckSum   %llu",  mReaderCheckSum);
-   Prn::print(0,"Reader.mMeanTime   %6.5f", mReaderMeanTime);
-   Prn::print(0,"Reader.mXMeanTime  %6.5f", mReaderXMeanTime);
+   Prn::print(0,"Writer.mCount      %16s",    my_stringLLU(tString,mWriterCount));
+   Prn::print(0,"Writer.mPassCount  %16s",    my_stringLLU(tString,mWriterPassCount));
+   Prn::print(0,"Writer.mFailCount  %16s",    my_stringLLU(tString,mWriterFailCount));
+   Prn::print(0,"Writer.mMeanTime   %16.5f",  mWriterMeanTime);
+   Prn::print(0,"");
+   Prn::print(0,"Reader.mCount      %16s",    my_stringLLU(tString,mReaderCount));
+   Prn::print(0,"Reader.mPassCount  %16s",    my_stringLLU(tString,mReaderPassCount));
+   Prn::print(0,"Reader.mFailCount  %16s",    my_stringLLU(tString,mReaderFailCount));
+   Prn::print(0,"Reader.mMeanTime   %16.5f",  mReaderMeanTime);
    Prn::print(0,"");
 
    switch (mMode)
