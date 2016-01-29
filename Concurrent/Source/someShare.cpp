@@ -108,21 +108,35 @@ void Share::show()
    Prn::print(0,"Writer.mCount      %16s",    my_stringLLU(tString,mWriterCount));
    Prn::print(0,"Writer.mPassCount  %16s",    my_stringLLU(tString,mWriterPassCount));
    Prn::print(0,"Writer.mFailCount  %16s",    my_stringLLU(tString,mWriterFailCount));
-   Prn::print(0,"Writer.mMeanTime   %16.5f",  mWriterMeanTime);
    Prn::print(0,"");
    Prn::print(0,"Reader.mCount      %16s",    my_stringLLU(tString,mReaderCount));
    Prn::print(0,"Reader.mPassCount  %16s",    my_stringLLU(tString,mReaderPassCount));
    Prn::print(0,"Reader.mFailCount  %16s",    my_stringLLU(tString,mReaderFailCount));
-   Prn::print(0,"Reader.mMeanTime   %16.5f",  mReaderMeanTime);
    Prn::print(0,"");
 
    switch (mMode)
    {
-   case 1: LFIntQueue::show(); return;
-   case 2: return;
-   case 8: LFFreeList::show(); return;
-   case 9: LFIntQueue::show(); return;
+   case 1: LFIntQueue::show(); break;
+   case 2: break;
+   case 8: LFFreeList::show(); break;
+   case 9: LFIntQueue::show(); break;
    }
+
+   double tWriteRetry = (double)LFIntQueue::writeRetry()/(double)mWriterCount;
+   double tReadRetry =  (double)LFIntQueue::readRetry()/ (double)mReaderCount;
+   double tPopRetry =   (double)LFIntQueue::popRetry()/  (double)mWriterPassCount;
+   double tPushRetry =  (double)LFIntQueue::pushRetry()/ (double)mReaderPassCount;
+
+   Prn::print(0,"");
+   Prn::print(0,"Writer.mMeanTime   %16.5f",  mWriterMeanTime);
+   Prn::print(0,"Reader.mMeanTime   %16.5f",  mReaderMeanTime);
+   Prn::print(0,"mMeanTime          %16.5f",  mReaderMeanTime + mWriterMeanTime);
+
+   Prn::print(0,"");
+   Prn::print(0,"writeRetry         %16.5f",  tWriteRetry);
+   Prn::print(0,"readRetry          %16.5f",  tReadRetry);
+   Prn::print(0,"popRetry           %16.5f",  tPopRetry);
+   Prn::print(0,"pushRetry          %16.5f",  tPushRetry);
 }
   
 }//namespace

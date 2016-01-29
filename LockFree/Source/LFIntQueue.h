@@ -17,6 +17,11 @@ namespace LFIntQueue
 
    void initializeTest (int aTest);
    bool test ();
+
+   unsigned long long writeRetry();
+   unsigned long long readRetry();
+   unsigned long long popRetry();
+   unsigned long long pushRetry();
 }
 #endif
 

@@ -68,8 +68,13 @@ namespace LFIntQueue
 
    atomic<unsigned long long> mWriteRetry;
    atomic<unsigned long long> mReadRetry;
-   atomic<unsigned long long> mPushRetry;
    atomic<unsigned long long> mPopRetry;
+   atomic<unsigned long long> mPushRetry;
+
+   unsigned long long writeRetry() {return mWriteRetry.load();}
+   unsigned long long readRetry()  {return mReadRetry.load();}
+   unsigned long long popRetry()   {return mPopRetry.load();}
+   unsigned long long pushRetry()  {return mPushRetry.load();}
 
    //***************************************************************************
    //***************************************************************************
