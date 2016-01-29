@@ -36,6 +36,7 @@ void Writer::initialize(unsigned aIdent)
    mFailCount = 0;
    mCheckSum   = 0;
    mMeanTime  = 0.0;
+   mXMeanTime  = 0.0;
 }
 
 void Writer::finalize()
@@ -167,6 +168,7 @@ void Writer::write(int aNumWrites)
    mCount = mPassCount + mFailCount;
    mMarker.finishTrial();
    mMeanTime = mMarker.mStatistics.mMean;
+   mXMeanTime = mMarker.mStatistics.mXMean;
 }
    
 

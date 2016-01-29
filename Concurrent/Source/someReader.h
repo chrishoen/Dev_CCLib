@@ -51,6 +51,7 @@ public:
 
    Ris::TrialTimeMarker mMarker;
    double               mMeanTime;
+   double               mXMeanTime;
 };
 
 //******************************************************************************
