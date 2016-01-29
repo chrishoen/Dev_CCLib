@@ -48,7 +48,7 @@ public:
    unsigned long long mCount;
    unsigned long long mPassCount;
    unsigned long long mFailCount;
-   unsigned long long mCodeSum;
+   unsigned long long mCheckSum;
 
    Ris::TrialTimeMarker mMarker;
    double               mMeanTime;

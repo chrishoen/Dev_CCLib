@@ -34,7 +34,7 @@ void Writer::initialize(unsigned aIdent)
    mCount     = 0;
    mPassCount = 0;
    mFailCount = 0;
-   mCodeSum   = 0;
+   mCheckSum   = 0;
    mMeanTime  = 0.0;
 }
 
@@ -52,7 +52,7 @@ void Writer::show()
    Prn::print(0,"Writer.mCount     %llu",mCount);
    Prn::print(0,"Writer.mPassCount %llu",mPassCount);
    Prn::print(0,"Writer.mFailCount %llu",mFailCount);
-   Prn::print(0,"Writer.mCodeSum   %llu",mCodeSum);
+   Prn::print(0,"Writer.mCheckSum   %llu",mCheckSum);
    Prn::print(0,"");
 }
   
@@ -71,7 +71,7 @@ void Writer::write1(int aNumWrites)
       if (LFIntQueue::tryWrite(tMsg.aint()))
       {
          mPassCount++;
-         mCodeSum += mCode;
+         mCheckSum += mCode;
       }
       else
       {
@@ -96,7 +96,7 @@ void Writer::write2(int aNumWrites)
       if (RisIntQueue::tryWrite(tMsg.aint()))
       {
          mPassCount++;
-         mCodeSum += mCode;
+         mCheckSum += mCode;
       }
       else
       {

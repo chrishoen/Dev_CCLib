@@ -47,7 +47,7 @@ void StatusThread::threadRunFunction()
 
       if (gShare.mMode != 8)
       {
-         Prn::print(Prn::ThreadRun1, "Status%d %s %s %8d",
+         Prn::print(Prn::ThreadRun1, "Status%d   %s   %s %8d",
             gShare.mMode,
             my_stringLLU(tString,gShare.mWriter[0].mCount),
             my_stringLLU(tString,gShare.mReader.mCount),

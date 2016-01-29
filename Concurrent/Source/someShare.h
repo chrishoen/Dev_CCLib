@@ -37,13 +37,13 @@ public:
    unsigned long long  mWriterCount;
    unsigned long long  mWriterPassCount;
    unsigned long long  mWriterFailCount;
-   unsigned long long  mWriterCodeSum;
+   unsigned long long  mWriterCheckSum;
    double              mWriterMeanTime;
 
    unsigned long long  mReaderCount;
    unsigned long long  mReaderPassCount;
    unsigned long long  mReaderFailCount;
-   unsigned long long  mReaderCodeSum;
+   unsigned long long  mReaderCheckSum;
    double              mReaderMeanTime;
 
 };

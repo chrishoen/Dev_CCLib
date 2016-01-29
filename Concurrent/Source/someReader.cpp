@@ -30,7 +30,7 @@ void Reader::initialize()
    mCount     = 0;
    mPassCount = 0;
    mFailCount = 0;
-   mCodeSum   = 0;
+   mCheckSum   = 0;
    mMeanTime  = 0.0;
 }
 
@@ -47,7 +47,7 @@ void Reader::show()
    Prn::print(0,"Reader.mCount     %llu",mCount);
    Prn::print(0,"Reader.mPassCount %llu",mPassCount);
    Prn::print(0,"Reader.mFailCount %llu",mFailCount);
-   Prn::print(0,"Reader.mCodeSum   %llu",mCodeSum);
+   Prn::print(0,"Reader.mCheckSum   %llu",mCheckSum);
    Prn::print(0,"");
 }
   
@@ -65,7 +65,7 @@ void Reader::read1(int aNumReads)
       if (LFIntQueue::tryRead(&tMsg.aint()))
       {
          mPassCount++;
-         mCodeSum += tMsg.mCode;
+         mCheckSum += tMsg.mCode;
       }
       else
       {
@@ -98,7 +98,7 @@ void Reader::read2(int aNumReads)
       if (RisIntQueue::tryRead(&tMsg.aint()))
       {
          mPassCount++;
-         mCodeSum += tMsg.mCode;
+         mCheckSum += tMsg.mCode;
       }
       else
       {
