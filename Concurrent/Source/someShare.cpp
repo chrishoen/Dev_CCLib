@@ -5,6 +5,7 @@ Description:
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+#include "my_functions.h"
 #include "prnPrint.h"
 
 #include "LFIntQueue.h"
@@ -90,21 +91,21 @@ void Share::update()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-
 void Share::show()
 {
+   char tString[40];
    Prn::print(0,"");
    Prn::print(0,"TOTAL");
    Prn::print(0,"");
-   Prn::print(0,"Writer.mCount     %llu",  mWriterCount);
-   Prn::print(0,"Writer.mPassCount %llu",  mWriterPassCount);
-   Prn::print(0,"Writer.mFailCount %llu",  mWriterFailCount);
+   Prn::print(0,"Writer.mCount     %s",    my_stringLLU(tString,mWriterCount));
+   Prn::print(0,"Writer.mPassCount %s",    my_stringLLU(tString,mWriterPassCount));
+   Prn::print(0,"Writer.mFailCount %s",    my_stringLLU(tString,mWriterFailCount));
    Prn::print(0,"Writer.mCodeSum   %llu",  mWriterCodeSum);
    Prn::print(0,"Writer.mMeanTime  %4.3f", mWriterMeanTime);
    Prn::print(0,"");
-   Prn::print(0,"Reader.mCount     %llu",  mReaderCount);
-   Prn::print(0,"Reader.mPassCount %llu",  mReaderPassCount);
-   Prn::print(0,"Reader.mFailCount %llu",  mReaderFailCount);
+   Prn::print(0,"Reader.mCount     %s",    my_stringLLU(tString,mReaderCount));
+   Prn::print(0,"Reader.mPassCount %s",    my_stringLLU(tString,mReaderPassCount));
+   Prn::print(0,"Reader.mFailCount %s",    my_stringLLU(tString,mReaderFailCount));
    Prn::print(0,"Reader.mCodeSum   %llu",  mReaderCodeSum);
    Prn::print(0,"Reader.mMeanTime  %4.3f", mReaderMeanTime);
    Prn::print(0,"");

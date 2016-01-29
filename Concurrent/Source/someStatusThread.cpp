@@ -39,6 +39,7 @@ void StatusThread::threadInitFunction()
 
 void StatusThread::threadRunFunction()
 {
+   char tString[40];
    while(1)
    {
       threadSleep(1000);
@@ -46,10 +47,10 @@ void StatusThread::threadRunFunction()
 
       if (gShare.mMode != 8)
       {
-         Prn::print(Prn::ThreadRun1, "Status%d %8llu %8llu %8d",
+         Prn::print(Prn::ThreadRun1, "Status%d %s %s %8d",
             gShare.mMode,
-            gShare.mWriter[0].mPassCount,
-            gShare.mReader.mPassCount,
+            my_stringLLU(tString,gShare.mWriter[0].mCount),
+            my_stringLLU(tString,gShare.mReader.mCount),
             LFIntQueue::listSize());
       }
       else
