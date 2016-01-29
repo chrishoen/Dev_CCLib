@@ -113,7 +113,7 @@ namespace LFIntQueue
       mReadRetry  = 0;
       mPushRetry  = 0;
       mPopRetry   = 0;
-   }
+}
 
    //***************************************************************************
    //***************************************************************************
@@ -135,7 +135,7 @@ namespace LFIntQueue
    // Show
 
 // int listSize(){ return mListHead.load().mCount; }
-   int listSize(){ return mListSize; }
+   int listSize(){ return mListSize.load(); }
 
    void show()
    {

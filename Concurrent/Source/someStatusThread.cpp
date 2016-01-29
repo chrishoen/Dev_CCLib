@@ -39,29 +39,18 @@ void StatusThread::threadInitFunction()
 
 void StatusThread::threadRunFunction()
 {
-   char tString[40];
+   char tString1[40];
+   char tString2[40];
    while(1)
    {
       threadSleep(1000);
       if (mTerminateFlag) break;
 
-      if (gShare.mMode != 8)
-      {
-         Prn::print(Prn::ThreadRun1, "Status%d   %s   %s %8d",
-            gShare.mMode,
-            my_stringLLU(tString,gShare.mWriter[0].mCount),
-            my_stringLLU(tString,gShare.mReader.mCount),
-            LFIntQueue::listSize());
-      }
-      else
-      {
-         Prn::print(Prn::ThreadRun1, "Status%d %8llu %8llu %8d",
-            gShare.mMode,
-            gShare.mWriter[0].mPassCount,
-            gShare.mWriter[0].mFailCount,
-            LFFreeList::listSize());
-      }
-
+      Prn::print(Prn::ThreadRun1, "Status%d   %s   %s %8d",
+         gShare.mMode,
+         my_stringLLU(tString1,gShare.mWriter[0].mCount),
+         my_stringLLU(tString2,gShare.mReader.mCount),
+         LFIntQueue::listSize());
    }
 }
 
