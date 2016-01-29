@@ -254,7 +254,7 @@ namespace LFIntQueue
          mNode[aNode].mListNext.store(tHead,memory_order_relaxed);
 
          // The pushed node is the new head node.
-         if (mListHeadIndexRef.compare_exchange_strong(tHead.mIndex, aNode)) break;
+         if (mListHeadIndexRef.compare_exchange_weak(tHead.mIndex, aNode)) break;
          mPushRetry++;
       }
 
@@ -285,7 +285,7 @@ namespace LFIntQueue
          if (tHead.mIndex == cInvalid) return false;
 
          // Set the head node to be the node that is after the head node.
-         if (mListHead.compare_exchange_strong(tHead, LFIndex(mNode[tHead.mIndex].mListNext.load().mIndex,tHead.mCount+1))) break;
+         if (mListHead.compare_exchange_weak(tHead, LFIndex(mNode[tHead.mIndex].mListNext.load().mIndex,tHead.mCount+1))) break;
          mPopRetry++;
       }
 
