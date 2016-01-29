@@ -218,7 +218,7 @@ namespace LFIntQueue
          tTail = mQueueTail.load(memory_order_relaxed);
          tNext = mNode[tHead.mIndex].mQueueNext.load(memory_order_relaxed);
 
-         if (tHead == mQueueHead.load())
+         if (tHead == mQueueHead.load(memory_order_relaxed))
          {
             if (tHead.mIndex == tTail.mIndex)
             {
