@@ -177,6 +177,7 @@
     <ClCompile Include="Source\LFQueue.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
+    <ClCompile Include="Source\Scratch.cpp" />
     <ClCompile Include="Source\SList2Queue.cpp" />
     <ClCompile Include="Source\SListQueue.cpp" />
   </ItemGroup>
@@ -191,6 +192,7 @@
     <ClInclude Include="Source\LFPointerQueue.h" />
     <ClInclude Include="Source\LFQueue.h" />
     <ClInclude Include="Source\MainInit.h" />
+    <ClInclude Include="Source\Scratch.h" />
     <ClInclude Include="Source\SList2Queue.h" />
     <ClInclude Include="Source\SListQueue.h" />
   </ItemGroup>

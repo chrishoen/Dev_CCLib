@@ -43,6 +43,9 @@
     <ClCompile Include="Source\LFIntQueue.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Scratch.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h">
@@ -79,6 +82,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\LFIntQueue.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scratch.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
