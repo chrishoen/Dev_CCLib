@@ -8,6 +8,7 @@ Description:
 
 #include <prnPrint.h>
 
+#include "GSettings.h"
 #include "someShare.h"
 #include "LFIntQueue.h"
 #include "RisIntQueue.h"
@@ -125,7 +126,7 @@ void Reader::flush2()
 
 void Reader::read(int aNumReads)
 {
-   mMarker.startTrial();
+   mMarker.startTrial(gGSettings.mXLimit);
 
    switch (gShare.mMode)
    {

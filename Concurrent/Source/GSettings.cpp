@@ -32,23 +32,25 @@ GSettings::GSettings()
    mReadUpper   = 1100;
    mSleepLower  =  900;
    mSleepUpper  = 1100;
+   mXLimit = 0.0;
 }
 
 //******************************************************************************
 
 void GSettings::show()
 {
-   printf("GSettings   Mode          %9d\n", mMode);
-   printf("GSettings   Test          %9d\n", mTest);
-   printf("GSettings   NumWriters    %9d\n", mNumWriters);
-   printf("GSettings   Multiplier    %9d\n", mMultiplier);
-   printf("GSettings   Allocate      %9d\n", mAllocate);
-   printf("GSettings   WriteLower    %9d\n", mWriteLower);
-   printf("GSettings   WriteUpper    %9d\n", mWriteUpper);
-   printf("GSettings   ReadLower     %9d\n", mReadLower);
-   printf("GSettings   ReadUpper     %9d\n", mReadUpper);
-   printf("GSettings   SleepLower    %9d\n", mSleepLower);
-   printf("GSettings   SleepUpper    %9d\n", mSleepUpper);
+   printf("GSettings   Mode          %9d\n",  mMode);
+   printf("GSettings   Test          %9d\n",  mTest);
+   printf("GSettings   NumWriters    %9d\n",  mNumWriters);
+   printf("GSettings   Multiplier    %9d\n",  mMultiplier);
+   printf("GSettings   Allocate      %9d\n",  mAllocate);
+   printf("GSettings   WriteLower    %9d\n",  mWriteLower);
+   printf("GSettings   WriteUpper    %9d\n",  mWriteUpper);
+   printf("GSettings   ReadLower     %9d\n",  mReadLower);
+   printf("GSettings   ReadUpper     %9d\n",  mReadUpper);
+   printf("GSettings   SleepLower    %9d\n",  mSleepLower);
+   printf("GSettings   SleepUpper    %9d\n",  mSleepUpper);
+   printf("GSettings   XLimit        %9.1\n", mXLimit);
 }
 
 //******************************************************************************
@@ -70,6 +72,7 @@ void GSettings::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("ReadUpper"))    mReadUpper   = aCmd->argInt (1)*mMultiplier;
    if(aCmd->isCmd("SleepLower"))   mSleepLower  = aCmd->argInt (1);
    if(aCmd->isCmd("SleepUpper"))   mSleepUpper  = aCmd->argInt (1);
+   if(aCmd->isCmd("XLimit"))       mXLimit      = aCmd->argDouble (1);
 }
 
 //******************************************************************************

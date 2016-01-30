@@ -33,6 +33,8 @@ public:
    int   mSleepLower;
    int   mSleepUpper;
 
+   double mXLimit;
+
 
    // Settings
    //---------------------------------------------------------------------------

@@ -8,6 +8,7 @@ Description:
 
 #include <prnPrint.h>
 
+#include "GSettings.h"
 #include "LFFreeList.h"
 #include "LFIntQueue.h"
 #include "RisIntQueue.h"
@@ -155,7 +156,7 @@ void Writer::write9(int aNumWrites)
 
 void Writer::write(int aNumWrites)
 {
-   mMarker.startTrial();
+   mMarker.startTrial(gGSettings.mXLimit);
 
    switch (gShare.mMode)
    {
