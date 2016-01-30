@@ -131,12 +131,33 @@ void Share::show()
    Prn::print(0,"Writer.mMeanTime   %16.5f",  mWriterMeanTime);
    Prn::print(0,"Reader.mMeanTime   %16.5f",  mReaderMeanTime);
    Prn::print(0,"mMeanTime          %16.5f",  mReaderMeanTime + mWriterMeanTime);
+   Prn::print(0,"Writer.mXMeanTime  %16.5f",  mWriterXMeanTime);
+   Prn::print(0,"Reader.mXMeanTime  %16.5f",  mReaderXMeanTime);
+   Prn::print(0,"mXMeanTime         %16.5f",  mReaderXMeanTime + mWriterXMeanTime);
 
-   Prn::print(0,"");
-   Prn::print(0,"writeRetry         %16.5f",  tWriteRetry);
-   Prn::print(0,"readRetry          %16.5f",  tReadRetry);
-   Prn::print(0,"popRetry           %16.5f",  tPopRetry);
-   Prn::print(0,"pushRetry          %16.5f",  tPushRetry);
+   if (mMode < 8)
+   {
+      double tWriteRetry = (double)LFIntQueue::writeRetry() / (double)mWriterCount;
+      double tReadRetry = (double)LFIntQueue::readRetry() / (double)mReaderCount;
+      double tPopRetry = (double)LFIntQueue::popRetry() / (double)mWriterPassCount;
+      double tPushRetry = (double)LFIntQueue::pushRetry() / (double)mReaderPassCount;
+
+      Prn::print(0, "");
+      Prn::print(0, "writeRetry         %16.5f", tWriteRetry);
+      Prn::print(0, "readRetry          %16.5f", tReadRetry);
+      Prn::print(0, "popRetry           %16.5f", tPopRetry);
+      Prn::print(0, "pushRetry          %16.5f", tPushRetry);
+   }
+   else
+   {
+      double tPopRetry = (double)LFIntQueue::popRetry() / (double)mWriterCount;
+      double tPushRetry = (double)LFIntQueue::pushRetry() / (double)mWriterPassCount;
+
+      Prn::print(0, "");
+      Prn::print(0, "popRetry           %16.5f", tPopRetry);
+      Prn::print(0, "pushRetry          %16.5f", tPushRetry);
+   }
+
 }
   
 }//namespace
