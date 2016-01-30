@@ -131,6 +131,7 @@ void Share::show()
    Prn::print(0,"Writer.mMeanTime   %16.5f",  mWriterMeanTime);
    Prn::print(0,"Reader.mMeanTime   %16.5f",  mReaderMeanTime);
    Prn::print(0,"mMeanTime          %16.5f",  mReaderMeanTime + mWriterMeanTime);
+   Prn::print(0,"");
    Prn::print(0,"Writer.mXMeanTime  %16.5f",  mWriterXMeanTime);
    Prn::print(0,"Reader.mXMeanTime  %16.5f",  mReaderXMeanTime);
    Prn::print(0,"mXMeanTime         %16.5f",  mReaderXMeanTime + mWriterXMeanTime);
