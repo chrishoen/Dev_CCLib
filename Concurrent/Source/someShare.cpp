@@ -82,7 +82,6 @@ void Share::update()
       mWriterFailCount += mWriter[i].mFailCount;
       mWriterCheckSum  += mWriter[i].mCheckSum;
       mWriterMeanTime  += mWriter[i].mMeanTime/mNumWriters;
-      mWriterXMeanTime += mWriter[i].mXMeanTime/mNumWriters;
    }
 
    mReaderCount     = mReader.mCount;
@@ -90,7 +89,6 @@ void Share::update()
    mReaderFailCount = mReader.mFailCount;
    mReaderCheckSum  = mReader.mCheckSum;
    mReaderMeanTime  = mReader.mMeanTime;
-   mReaderXMeanTime = mReader.mXMeanTime;
 }
   
 //******************************************************************************
@@ -133,19 +131,19 @@ void Share::show()
    Prn::print(0,"Writer.mMeanTime   %16.5f",  mWriterMeanTime);
    Prn::print(0,"Reader.mMeanTime   %16.5f",  mReaderMeanTime);
    Prn::print(0,"mMeanTime          %16.5f",  mReaderMeanTime + mWriterMeanTime);
-   Prn::print(0,"");
-   Prn::print(0,"Writer.mXMeanTime  %16.5f",  mWriterXMeanTime);
-   Prn::print(0,"Reader.mXMeanTime  %16.5f",  mReaderXMeanTime);
-   Prn::print(0,"mXMeanTime         %16.5f",  mReaderXMeanTime + mWriterXMeanTime);
 
    if (mMode < 8)
    {
+      double tWriterPass = (double)mWriterPassCount / (double)mWriterCount;
+      double tReaderPass = (double)mReaderPassCount / (double)mReaderCount;
       double tWriteRetry = (double)LFIntQueue::writeRetry() / (double)mWriterCount;
       double tReadRetry = (double)LFIntQueue::readRetry() / (double)mReaderCount;
       double tPopRetry = (double)LFIntQueue::popRetry() / (double)mWriterPassCount;
       double tPushRetry = (double)LFIntQueue::pushRetry() / (double)mReaderPassCount;
 
       Prn::print(0, "");
+      Prn::print(0, "WriterPass         %16.5f", tWriterPass);
+      Prn::print(0, "ReaderPass         %16.5f", tReaderPass);
       Prn::print(0, "writeRetry         %16.5f", tWriteRetry);
       Prn::print(0, "readRetry          %16.5f", tReadRetry);
       Prn::print(0, "popRetry           %16.5f", tPopRetry);

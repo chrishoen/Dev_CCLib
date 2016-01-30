@@ -32,7 +32,6 @@ void Reader::initialize()
    mFailCount = 0;
    mCheckSum   = 0;
    mMeanTime  = 0.0;
-   mXMeanTime  = 0.0;
 }
 
 void Reader::finalize()
@@ -137,7 +136,6 @@ void Reader::read(int aNumReads)
    mCount = mPassCount + mFailCount;
    mMarker.finishTrial();
    mMeanTime = mMarker.mStatistics.mMean;
-   mXMeanTime = mMarker.mStatistics.mXMean;
 }
    
 void Reader::flush()
