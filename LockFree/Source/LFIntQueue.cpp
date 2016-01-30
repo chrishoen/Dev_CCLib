@@ -189,6 +189,7 @@ namespace LFIntQueue
          if (++tLoopCount==10000) throw 101;
       }
       if (tLoopCount) mWriteRetry += tLoopCount;
+
       mQueueTail.compare_exchange_strong(tTail, LFIndex(tNode.mIndex, tTail.mCount+1));
 
       // Done
