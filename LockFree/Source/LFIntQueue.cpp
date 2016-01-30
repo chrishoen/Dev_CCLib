@@ -165,7 +165,7 @@ namespace LFIntQueue
 
       // Initialize the node with the value.
       mNode[tNode.mIndex].mValue = aValue;
-      mNode[tNode.mIndex].mQueueNext.store(LFIndex(cInvalid,0),memory_order_relaxed);
+      mNode[tNode.mIndex].mQueueNext.store(LFIndex(cInvalid,0),memory_order_release);
 
       // Attach the node to the queue tail.
       LFIndex tTail,tNext;
@@ -174,23 +174,23 @@ namespace LFIntQueue
       {
          if (++tLoopCount==10000) throw 101;
 
-         tTail = mQueueTail.load(memory_order_relaxed);
-         tNext = mNode[tTail.mIndex].mQueueNext.load(memory_order_relaxed);
+         tTail = mQueueTail.load(memory_order_acquire);
+         tNext = mNode[tTail.mIndex].mQueueNext.load(memory_order_acquire);
 
-         if (tTail == mQueueTail.load(memory_order_relaxed))
+         if (tTail == mQueueTail.load(memory_order_acquire))
          {
             if (tNext.mIndex == cInvalid)
             {
-               if (mNode[tTail.mIndex].mQueueNext.compare_exchange_weak(tNext, LFIndex(tNode.mIndex, tNext.mCount+1))) break;
+               if (mNode[tTail.mIndex].mQueueNext.compare_exchange_weak(tNext, LFIndex(tNode.mIndex, tNext.mCount+1),memory_order_acq_rel,memory_order_acquire)) break;
             }
             else
             {
-               mQueueTail.compare_exchange_weak(tTail, LFIndex(tNext.mIndex, tTail.mCount+1));
+               mQueueTail.compare_exchange_weak(tTail, LFIndex(tNext.mIndex, tTail.mCount+1),memory_order_acq_rel,memory_order_acquire);
             }
          }
          mWriteRetry++;
       }
-      mQueueTail.compare_exchange_strong(tTail, LFIndex(tNode.mIndex, tTail.mCount+1));
+      mQueueTail.compare_exchange_strong(tTail, LFIndex(tNode.mIndex, tTail.mCount+1),memory_order_acq_rel,memory_order_acquire);
 
       // Done
       return true;
@@ -214,21 +214,21 @@ namespace LFIntQueue
       {
          if (++tLoopCount==10000) throw 102;
 
-         tHead = mQueueHead.load(memory_order_relaxed);
-         tTail = mQueueTail.load(memory_order_relaxed);
-         tNext = mNode[tHead.mIndex].mQueueNext.load(memory_order_relaxed);
+         tHead = mQueueHead.load(memory_order_acquire);
+         tTail = mQueueTail.load(memory_order_acquire);
+         tNext = mNode[tHead.mIndex].mQueueNext.load(memory_order_acquire);
 
-         if (tHead == mQueueHead.load(memory_order_relaxed))
+         if (tHead == mQueueHead.load(memory_order_acquire))
          {
             if (tHead.mIndex == tTail.mIndex)
             {
                if (tNext.mIndex == cInvalid) return false;
-               mQueueTail.compare_exchange_weak(tTail, LFIndex(tNext.mIndex, tTail.mCount+1));
+               mQueueTail.compare_exchange_weak(tTail, LFIndex(tNext.mIndex, tTail.mCount+1),memory_order_acq_rel,memory_order_acquire);
             }
             else
             {
                *aValue = mNode[tNext.mIndex].mValue;
-               if (mQueueHead.compare_exchange_weak(tHead, LFIndex(tNext.mIndex, tHead.mCount+1)))break;
+               if (mQueueHead.compare_exchange_weak(tHead, LFIndex(tNext.mIndex, tHead.mCount+1),memory_order_acq_rel,memory_order_acquire))break;
             }
          }
          mReadRetry++;
@@ -254,13 +254,13 @@ namespace LFIntQueue
          if (++tLoopCount == 10000) throw 103;
 
          // Store the head node in a temp.
-         tHead = mListHead.load(memory_order_relaxed);
+         tHead = mListHead.load(memory_order_acquire);
 
          // Attach the head node to the pushed node .
-         mNode[aNode].mListNext.store(tHead,memory_order_relaxed);
+         mNode[aNode].mListNext.store(tHead,memory_order_release);
 
          // The pushed node is the new head node.
-         if (mListHeadIndexRef.compare_exchange_weak(tHead.mIndex, aNode)) break;
+         if (mListHeadIndexRef.compare_exchange_weak(tHead.mIndex, aNode),memory_order_acq_rel,memory_order_acquire) break;
          mPushRetry++;
       }
 
@@ -285,13 +285,13 @@ namespace LFIntQueue
 
          // Store the head node in a temp.
          // This is the node that will be detached.
-         tHead = mListHead.load(memory_order_relaxed);
+         tHead = mListHead.load(memory_order_acquire);
 
          // Exit if the list is empty.
          if (tHead.mIndex == cInvalid) return false;
 
          // Set the head node to be the node that is after the head node.
-         if (mListHead.compare_exchange_weak(tHead, LFIndex(mNode[tHead.mIndex].mListNext.load().mIndex,tHead.mCount+1))) break;
+         if (mListHead.compare_exchange_weak(tHead, LFIndex(mNode[tHead.mIndex].mListNext.load().mIndex,tHead.mCount+1),memory_order_acq_rel,memory_order_acquire)) break;
          mPopRetry++;
       }
 
