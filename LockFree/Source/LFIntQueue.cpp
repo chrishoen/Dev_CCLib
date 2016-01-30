@@ -165,17 +165,17 @@ namespace LFIntQueue
 
       // Initialize the node with the value.
       mNode[tNode.mIndex].mValue = aValue;
-      mNode[tNode.mIndex].mQueueNext.store(LFIndex(cInvalid,0),memory_order_release);
+      mNode[tNode.mIndex].mQueueNext.store(LFIndex(cInvalid,0));
 
       // Attach the node to the queue tail.
       LFIndex tTail,tNext;
       int tLoopCount=0;
       while (true)
       {
-         tTail = mQueueTail.load(memory_order_acquire);
-         tNext = mNode[tTail.mIndex].mQueueNext.load(memory_order_acquire);
+         tTail = mQueueTail.load();
+         tNext = mNode[tTail.mIndex].mQueueNext.load();
 
-         if (tTail == mQueueTail.load(memory_order_acquire))
+         if (tTail == mQueueTail.load())
          {
             if (tNext.mIndex == cInvalid)
             {
@@ -212,11 +212,11 @@ namespace LFIntQueue
       int tLoopCount=0;
       while (true)
       {
-         tHead = mQueueHead.load(memory_order_acquire);
-         tTail = mQueueTail.load(memory_order_acquire);
-         tNext = mNode[tHead.mIndex].mQueueNext.load(memory_order_acquire);
+         tHead = mQueueHead.load();
+         tTail = mQueueTail.load();
+         tNext = mNode[tHead.mIndex].mQueueNext.load();
 
-         if (tHead == mQueueHead.load(memory_order_acquire))
+         if (tHead == mQueueHead.load())
          {
             if (tHead.mIndex == tTail.mIndex)
             {
@@ -252,10 +252,10 @@ namespace LFIntQueue
       while (true)
       {
          // Store the head node in a temp.
-         tHead = mListHead.load(memory_order_acquire);
+         tHead = mListHead.load();
 
          // Attach the head node to the pushed node .
-         mNode[aNode].mListNext.store(tHead,memory_order_release);
+         mNode[aNode].mListNext.store(tHead);
 
          // The pushed node is the new head node.
          if (mListHeadIndexRef.compare_exchange_weak(tHead.mIndex, aNode)) break;
@@ -282,13 +282,13 @@ namespace LFIntQueue
       {
          // Store the head node in a temp.
          // This is the node that will be detached.
-         tHead = mListHead.load(memory_order_acquire);
+         tHead = mListHead.load();
 
          // Exit if the list is empty.
          if (tHead.mIndex == cInvalid) return false;
 
          // Set the head node to be the node that is after the head node.
-         if (mListHead.compare_exchange_weak(tHead, LFIndex(mNode[tHead.mIndex].mListNext.load(memory_order_acquire).mIndex,tHead.mCount+1))) break;
+         if (mListHead.compare_exchange_weak(tHead, LFIndex(mNode[tHead.mIndex].mListNext.load().mIndex,tHead.mCount+1))) break;
          if (++tLoopCount==10000) throw 104;
       }
       if (tLoopCount) mPopRetry += tLoopCount;
