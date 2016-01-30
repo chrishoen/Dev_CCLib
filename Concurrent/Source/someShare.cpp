@@ -55,9 +55,11 @@ void Share::initialize()
    for (int i = 0; i < mNumWriters; i++)
    {
       mWriter[i].initialize(i);
+      mWriterProc[i]=0;
    }
 
    mReader.initialize();
+   mReaderProc=0;
 }
 
 //******************************************************************************

@@ -4,6 +4,7 @@
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+#include <Windows.h>
 #include "prnPrint.h"
 #include "my_functions.h"
 #include "someShare.h"
@@ -49,7 +50,7 @@ void ReaderThread::threadRunFunction()
       {
          threadSleep(my_irand(mSleepLower, mSleepUpper));
          if (mTerminateFlag) break;
-
+         gShare.mReaderProc = GetCurrentProcessorNumber();
          gShare.mReader.read(my_irand(mReadLower, mReadUpper));
       }
    }

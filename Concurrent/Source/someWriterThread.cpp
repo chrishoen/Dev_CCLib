@@ -4,6 +4,7 @@
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+#include <Windows.h>
 #include "prnPrint.h"
 #include "my_functions.h"
 #include "someShare.h"
@@ -49,6 +50,7 @@ void WriterThread::threadRunFunction()
       {
          threadSleep(my_irand(mSleepLower, mSleepUpper));
          if (mTerminateFlag) break;
+         gShare.mWriterProc[mIdent] = GetCurrentProcessorNumber();
 
          gShare.mWriter[mIdent].write(my_irand(mWriteLower, mWriteUpper));
       }

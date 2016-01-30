@@ -26,6 +26,10 @@ StatusThread::StatusThread()
 {
    // Thread Members
    mTerminateFlag = false;
+
+   //Support
+   mProcString[0]=0;
+
 }
 
 //******************************************************************************
@@ -46,8 +50,10 @@ void StatusThread::threadRunFunction()
       threadSleep(1000);
       if (mTerminateFlag) break;
 
-      Prn::print(Prn::ThreadRun1, "Status%d   %s   %s %8d",
+      updateProcString();
+      Prn::print(Prn::ThreadRun1, "%d$ %s   %s   %s %8d",
          gShare.mMode,
+         mProcString,
          my_stringLLU(tString1,gShare.mWriter[0].mCount),
          my_stringLLU(tString2,gShare.mReader.mCount),
          LFIntQueue::listSize());
@@ -70,5 +76,17 @@ void StatusThread::shutdownThread()
    waitForThreadTerminate();
 }   
 
+//******************************************************************************
+
+void StatusThread::updateProcString()
+{
+   for (int i = 0; i < gShare.mNumWriters; i++)
+   {
+      mProcString[i] = '0' + gShare.mWriterProc[i];
+   }
+   mProcString[gShare.mNumWriters] = '0' + gShare.mReaderProc;
+   mProcString[gShare.mNumWriters+1] = 0;
+
+}
 }//namespace
 

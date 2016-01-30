@@ -34,6 +34,9 @@ public:
 
    Reader mReader;
 
+   int      mWriterProc[cMaxNumWriters];
+   int      mReaderProc;
+
    unsigned long long  mWriterCount;
    unsigned long long  mWriterPassCount;
    unsigned long long  mWriterFailCount;

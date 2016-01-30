@@ -33,6 +33,10 @@ public:
 
    // Thread Members
    bool  mTerminateFlag;
+
+   // Support
+   void updateProcString();
+   char mProcString[20];
 };
 
 //******************************************************************************
