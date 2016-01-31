@@ -188,7 +188,7 @@ namespace LFIntQueue
          }
          if (++tLoopCount==10000) throw 101;
       }
-      if (tLoopCount) mWriteRetry += tLoopCount;
+      if (tLoopCount) mWriteRetry.fetch_add(tLoopCount,memory_order_relaxed);
 
       mQueueTail.compare_exchange_strong(tTail, LFIndex(tNode.mIndex, tTail.mCount+1));
 
@@ -231,7 +231,7 @@ namespace LFIntQueue
          }
          if (++tLoopCount==10000) throw 102;
       }
-      if (tLoopCount) mReadRetry += tLoopCount;
+      if (tLoopCount) mReadRetry.fetch_add(tLoopCount,memory_order_relaxed);
 
       listPush(tHead.mIndex);
 
@@ -261,7 +261,7 @@ namespace LFIntQueue
          if (mListHeadIndexRef.compare_exchange_weak(tHead.mIndex, aNode)) break;
          if (++tLoopCount == 10000) throw 103;
       }
-      if (tLoopCount) mPushRetry += tLoopCount;
+      if (tLoopCount) mPushRetry.fetch_add(tLoopCount,memory_order_relaxed);
 
       // Done.
       mListSize++;
@@ -291,7 +291,7 @@ namespace LFIntQueue
          if (mListHead.compare_exchange_weak(tHead, LFIndex(mNode[tHead.mIndex].mListNext.load().mIndex,tHead.mCount+1))) break;
          if (++tLoopCount==10000) throw 104;
       }
-      if (tLoopCount) mPopRetry += tLoopCount;
+      if (tLoopCount) mPopRetry.fetch_add(tLoopCount,memory_order_relaxed);
 
       // Return the detached original head node.
       *aNode = tHead.mIndex;
