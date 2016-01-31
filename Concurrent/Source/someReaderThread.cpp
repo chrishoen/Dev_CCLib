@@ -9,6 +9,7 @@
 #include "my_functions.h"
 #include "someShare.h"
 #include "GSettings.h"
+#include "LFBackoff.h"
 
 #define  _SOMEREADERTHREAD_CPP_
 #include "someReaderThread.h"
@@ -37,6 +38,7 @@ ReaderThread::ReaderThread()
 void ReaderThread::threadInitFunction()
 {
    Prn::print(0,"ReaderThread::threadInitFunction");
+   LFBackoff_reset(gGSettings.mBackoff1,gGSettings.mBackoff2);
    gShare.mReader.initialize();
 }
 

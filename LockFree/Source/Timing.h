@@ -6,6 +6,7 @@
 //******************************************************************************
 namespace Timing
 {
+   void initialize(int aTest);
    void run1(int aTest);
 }
 #endif

@@ -34,6 +34,8 @@ public:
    int   mSleepUpper;
 
    double mXLimit;
+   int mBackoff1;
+   int mBackoff2;
 
 
    // Settings

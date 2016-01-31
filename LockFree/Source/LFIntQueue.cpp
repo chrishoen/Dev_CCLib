@@ -6,6 +6,7 @@
 #include "prnPrint.h"
 
 #include "LFIndex.h"
+#include "LFBackoff.h"
 #include "LFIntQueue.h"
 
 using namespace std;
@@ -113,6 +114,8 @@ namespace LFIntQueue
       mReadRetry  = 0;
       mPushRetry  = 0;
       mPopRetry   = 0;
+
+      LFBackoff_reset();
 }
 
    //***************************************************************************
@@ -169,6 +172,7 @@ namespace LFIntQueue
 
       // Attach the node to the queue tail.
       LFIndex tTail,tNext;
+
       int tLoopCount=0;
       while (true)
       {

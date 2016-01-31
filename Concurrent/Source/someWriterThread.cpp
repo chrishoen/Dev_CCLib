@@ -9,6 +9,7 @@
 #include "my_functions.h"
 #include "someShare.h"
 #include "GSettings.h"
+#include "LFBackoff.h"
 
 #define  _SOMEWRITERTHREAD_CPP_
 #include "someWriterThread.h"
@@ -38,6 +39,7 @@ WriterThread::WriterThread(int aIdent)
 void WriterThread::threadInitFunction()
 {
    Prn::print(0,"WriterThread::threadInitFunction");
+   LFBackoff_reset(gGSettings.mBackoff1,gGSettings.mBackoff2);
 }
 
 //******************************************************************************

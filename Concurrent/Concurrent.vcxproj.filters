@@ -52,6 +52,9 @@
     <ClCompile Include="..\LockFree\Source\LFIntQueue.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\LockFree\Source\LFBackoff.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h">
@@ -97,6 +100,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="..\LockFree\Source\LFIntQueue.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\LockFree\Source\LFBackoff.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

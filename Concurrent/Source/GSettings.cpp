@@ -33,6 +33,8 @@ GSettings::GSettings()
    mSleepLower  =  900;
    mSleepUpper  = 1100;
    mXLimit = 0.0;
+   mBackoff1=0;
+   mBackoff2=0;
 }
 
 //******************************************************************************
@@ -51,6 +53,8 @@ void GSettings::show()
    printf("GSettings   SleepLower    %9d\n",  mSleepLower);
    printf("GSettings   SleepUpper    %9d\n",  mSleepUpper);
    printf("GSettings   XLimit        %9.1\n", mXLimit);
+   printf("GSettings   Backoff1      %9d\n",  mBackoff1);
+   printf("GSettings   Backoff2      %9d\n",  mBackoff2);
 }
 
 //******************************************************************************
@@ -58,8 +62,6 @@ void GSettings::show()
 
 void GSettings::execute(Ris::CmdLineCmd* aCmd)
 {
-
-
    // Read variables
    if(aCmd->isCmd("Mode"))         mMode        = aCmd->argInt (1);
    if(aCmd->isCmd("Test"))         mTest        = aCmd->argInt (1);
@@ -73,6 +75,8 @@ void GSettings::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("SleepLower"))   mSleepLower  = aCmd->argInt (1);
    if(aCmd->isCmd("SleepUpper"))   mSleepUpper  = aCmd->argInt (1);
    if(aCmd->isCmd("XLimit"))       mXLimit      = aCmd->argDouble (1);
+   if(aCmd->isCmd("Backoff1"))     mBackoff1    = aCmd->argInt (1);
+   if(aCmd->isCmd("Backoff2"))     mBackoff2    = aCmd->argInt (1);
 }
 
 //******************************************************************************

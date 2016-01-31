@@ -4,8 +4,10 @@
 #include <atomic>
 
 #include "prnPrint.h"
+#include "my_functions.h"
 #include "risTimeMarker.h"
 #include "LFIntQueue.h"
+#include "LFBackoff.h"
 #include "Timing.h"
 
 using namespace std;
@@ -29,14 +31,25 @@ namespace Timing
    void test2();
    void test3();
    void test4();
+   void test5();
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Run1
 
+   void initialize(int aTest)
+   {
+      if (aTest == 5)
+      {
+         LFBackoff_reset(2,6);
+      }
+   }
+
    void run1(int aTest)
    {
+      initialize(aTest);
+
       int tIterations = 1000000;
 
       mWriteCount=0;
@@ -54,6 +67,7 @@ namespace Timing
          case 2:  test2(); break;
          case 3:  test3(); break;
          case 4:  test4(); break;
+         case 5:  test5(); break;
          }
          mMarker.doStop();
       }
@@ -98,6 +112,12 @@ namespace Timing
       mNE = 200;
 
       mAX.compare_exchange_weak(mNC,mNE);
+   }
+
+   void test5()
+   {
+      LFBackoff tBackoff(1);
+      tBackoff.backoff();
    }
 
 
