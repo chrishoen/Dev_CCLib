@@ -10,6 +10,7 @@ Description:
 
 #include "LFIntQueue.h"
 #include "LFFreeList.h"
+#include "LFBackoff.h"
 #include "RisIntQueue.h"
 #include "GSettings.h"
 
@@ -35,6 +36,7 @@ void Share::initialize()
    {
    case 1:
       LFIntQueue::initialize(gGSettings.mAllocate);
+      LFBackoff::initialize(gGSettings.mBackoff1,gGSettings.mBackoff2);
       break;
    case 2:
       RisIntQueue::initialize(gGSettings.mAllocate);
@@ -42,10 +44,12 @@ void Share::initialize()
    case 8:
       LFFreeList::initialize(gGSettings.mAllocate);
       LFFreeList::initializeTest(gGSettings.mTest);
+      LFBackoff::initialize(gGSettings.mBackoff1,gGSettings.mBackoff2);
       break;
    case 9:
       LFIntQueue::initialize(gGSettings.mAllocate);
       LFIntQueue::initializeTest(gGSettings.mTest);
+      LFBackoff::initialize(gGSettings.mBackoff1,gGSettings.mBackoff2);
       break;
    }
 

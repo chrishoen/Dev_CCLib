@@ -4,22 +4,34 @@
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-
-
-void LFBackoff_reset();
-void LFBackoff_reset(int aN1,int aN2);
-
-class LFBackoff
+namespace LFBackoff
 {
-    int mInitial;
-    int mStep;
-    int mThreshold;
-    int mCurrent;
-    int mCount;
-public:
-   LFBackoff(int aMode=1);
-   void backoff();
-   void nop();
-};
+
+
+   //******************************************************************************
+   // Random wait array and index
+
+   static const int cWaitArraySize = 1000;
+#ifdef _LFBACKOFF_CPP_
+   int mWaitArray[cWaitArraySize];
+   int mWaitIndex;
+   int mWaitCount;
+#else
+   extern int mWaitArray[cWaitArraySize];
+   extern int mWaitIndex;
+   extern int mWaitCount;
+#endif
+
+
+   void initialize(int aN1, int aN2);
+
+   inline void wait()
+   {
+      int tLoop = mWaitArray[mWaitIndex];
+      if (++mWaitIndex > cWaitArraySize) mWaitIndex=0;
+      for (int i=0;i<tLoop;i++) mWaitCount++;
+   }
+
+}//namespace
 #endif
 

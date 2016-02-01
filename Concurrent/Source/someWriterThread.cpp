@@ -39,7 +39,6 @@ WriterThread::WriterThread(int aIdent)
 void WriterThread::threadInitFunction()
 {
    Prn::print(0,"WriterThread::threadInitFunction");
-   LFBackoff_reset(gGSettings.mBackoff1,gGSettings.mBackoff2);
 }
 
 //******************************************************************************

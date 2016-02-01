@@ -38,7 +38,7 @@ ReaderThread::ReaderThread()
 void ReaderThread::threadInitFunction()
 {
    Prn::print(0,"ReaderThread::threadInitFunction");
-   LFBackoff_reset(gGSettings.mBackoff1,gGSettings.mBackoff2);
+   LFBackoff::initialize(gGSettings.mBackoff1,gGSettings.mBackoff2);
    gShare.mReader.initialize();
 }
 
