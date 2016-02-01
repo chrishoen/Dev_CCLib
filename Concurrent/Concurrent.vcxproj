@@ -183,6 +183,7 @@
     <ClCompile Include="Source\someWriter.cpp" />
     <ClCompile Include="Source\someShare.cpp" />
     <ClCompile Include="Source\someWriterThread.cpp" />
+    <ClCompile Include="Source\Timing.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\LockFree\Source\LFBackoff.h" />
@@ -201,6 +202,7 @@
     <ClInclude Include="Source\someWriter.h" />
     <ClInclude Include="Source\someShare.h" />
     <ClInclude Include="Source\someWriterThread.h" />
+    <ClInclude Include="Source\Timing.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

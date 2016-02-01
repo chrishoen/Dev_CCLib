@@ -8,6 +8,7 @@
 #include "LFFreeList.h"
 #include "CmdLineExec.h"
 
+#include "Timing.h"
 #include "someThreads.h"
 #include "someShare.h"
 
@@ -36,6 +37,8 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("STOP"  ))  executeStop  (aCmd);
    if(aCmd->isCmd("X"     ))  executeStop  (aCmd);
    if(aCmd->isCmd("SHOW"  ))  executeShow  (aCmd);
+   if(aCmd->isCmd("T1"    ))  executeTime1 (aCmd);
+   if(aCmd->isCmd("T2"    ))  executeTime2 (aCmd);
 
 
    if(aCmd->isCmd("GO2"   ))  executeGo2   (aCmd);
@@ -47,6 +50,22 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
+}
+
+//******************************************************************************
+
+void CmdLineExec::executeTime1(Ris::CmdLineCmd* aCmd)
+{
+   aCmd->setArgDefault(1,1);
+   Timing::run1(aCmd->argInt(1));
+}
+
+//******************************************************************************
+
+void CmdLineExec::executeTime2(Ris::CmdLineCmd* aCmd)
+{
+   aCmd->setArgDefault(1,2);
+   Timing::run2(aCmd->argInt(1));
 }
 
 //******************************************************************************

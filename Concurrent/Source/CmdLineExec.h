@@ -27,6 +27,9 @@ public:
   void executeStop   (Ris::CmdLineCmd* aCmd);
   void executeShow   (Ris::CmdLineCmd* aCmd);
 
+  void executeTime1  (Ris::CmdLineCmd* aCmd);
+  void executeTime2  (Ris::CmdLineCmd* aCmd);
+
 };
 //******************************************************************************
 #endif
