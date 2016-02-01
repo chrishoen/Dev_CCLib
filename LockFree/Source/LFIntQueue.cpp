@@ -6,7 +6,6 @@
 #include "prnPrint.h"
 
 #include "LFIndex.h"
-#include "LFBackoff.h"
 #include "LFIntQueue.h"
 
 using namespace std;
@@ -114,8 +113,6 @@ namespace LFIntQueue
       mReadRetry  = 0;
       mPushRetry  = 0;
       mPopRetry   = 0;
-
-      LFBackoff_reset();
 }
 
    //***************************************************************************
@@ -172,10 +169,11 @@ namespace LFIntQueue
 
       // Attach the node to the queue tail.
       LFIndex tTail,tNext;
-
       int tLoopCount=0;
       while (true)
       {
+         if (++tLoopCount==10000) throw 101;
+
          tTail = mQueueTail.load();
          tNext = mNode[tTail.mIndex].mQueueNext.load();
 
@@ -190,10 +188,8 @@ namespace LFIntQueue
                mQueueTail.compare_exchange_weak(tTail, LFIndex(tNext.mIndex, tTail.mCount+1));
             }
          }
-         if (++tLoopCount==10000) throw 101;
+         mWriteRetry++;
       }
-      if (tLoopCount) mWriteRetry.fetch_add(tLoopCount,memory_order_relaxed);
-
       mQueueTail.compare_exchange_strong(tTail, LFIndex(tNode.mIndex, tTail.mCount+1));
 
       // Done
@@ -216,6 +212,8 @@ namespace LFIntQueue
       int tLoopCount=0;
       while (true)
       {
+         if (++tLoopCount==10000) throw 102;
+
          tHead = mQueueHead.load();
          tTail = mQueueTail.load();
          tNext = mNode[tHead.mIndex].mQueueNext.load();
@@ -233,10 +231,8 @@ namespace LFIntQueue
                if (mQueueHead.compare_exchange_weak(tHead, LFIndex(tNext.mIndex, tHead.mCount+1)))break;
             }
          }
-         if (++tLoopCount==10000) throw 102;
+         mReadRetry++;
       }
-      if (tLoopCount) mReadRetry.fetch_add(tLoopCount,memory_order_relaxed);
-
       listPush(tHead.mIndex);
 
       // Done.
@@ -255,6 +251,8 @@ namespace LFIntQueue
       int tLoopCount=0;
       while (true)
       {
+         if (++tLoopCount == 10000) throw 103;
+
          // Store the head node in a temp.
          tHead = mListHead.load();
 
@@ -263,9 +261,8 @@ namespace LFIntQueue
 
          // The pushed node is the new head node.
          if (mListHeadIndexRef.compare_exchange_weak(tHead.mIndex, aNode)) break;
-         if (++tLoopCount == 10000) throw 103;
+         mPushRetry++;
       }
-      if (tLoopCount) mPushRetry.fetch_add(tLoopCount,memory_order_relaxed);
 
       // Done.
       mListSize++;
@@ -284,6 +281,8 @@ namespace LFIntQueue
       int tLoopCount=0;
       while (true)
       {
+         if (++tLoopCount==10000) throw 104;
+
          // Store the head node in a temp.
          // This is the node that will be detached.
          tHead = mListHead.load();
@@ -293,9 +292,8 @@ namespace LFIntQueue
 
          // Set the head node to be the node that is after the head node.
          if (mListHead.compare_exchange_weak(tHead, LFIndex(mNode[tHead.mIndex].mListNext.load().mIndex,tHead.mCount+1))) break;
-         if (++tLoopCount==10000) throw 104;
+         mPopRetry++;
       }
-      if (tLoopCount) mPopRetry.fetch_add(tLoopCount,memory_order_relaxed);
 
       // Return the detached original head node.
       *aNode = tHead.mIndex;
@@ -464,3 +462,30 @@ end
 
 ==============================================================================*/
 
+#if 0
+   bool listPush2(int aNode)
+   {
+      LFIndex tHead;
+
+      int tLoopCount=0;
+      while (true)
+      {
+         if (++tLoopCount==10000) throw 103;
+
+         // Store the head node in a temp.
+         tHead = mListHead.load(memory_order_relaxed);
+
+         // Attach the head node to the pushed node .
+         mNode[aNode].mListNext.store(tHead,memory_order_relaxed);
+
+         // The pushed node is the new head node.
+         if (mListHead.compare_exchange_strong(tHead, LFIndex(aNode, tHead.mCount+1))) break;
+         mPushRetry++;
+      }
+
+      // Done.
+      mListSize++;
+      return true;
+   }
+
+#endif
