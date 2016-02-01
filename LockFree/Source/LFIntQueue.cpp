@@ -68,8 +68,14 @@ namespace LFIntQueue
 
    atomic<unsigned long long> mWriteRetry;
    atomic<unsigned long long> mReadRetry;
+
    atomic<unsigned long long> mPopRetry;
+   atomic<unsigned long long> mPopRetry1;
+   atomic<unsigned long long> mPopRetry2;
+
    atomic<unsigned long long> mPushRetry;
+   atomic<unsigned long long> mPushRetry1;
+   atomic<unsigned long long> mPushRetry2;
 
    unsigned long long writeRetry() {return mWriteRetry.load();}
    unsigned long long readRetry()  {return mReadRetry.load();}
@@ -111,8 +117,12 @@ namespace LFIntQueue
 
       mWriteRetry = 0;
       mReadRetry  = 0;
-      mPushRetry  = 0;
       mPopRetry   = 0;
+      mPopRetry1   = 0;
+      mPopRetry2   = 0;
+      mPushRetry  = 0;
+      mPushRetry1  = 0;
+      mPushRetry2  = 0;
 }
 
    //***************************************************************************
@@ -140,11 +150,18 @@ namespace LFIntQueue
    void show()
    {
       char tString[40];
-      Prn::print(0,"LFIntQueue\n");
+      Prn::print(0,"LFIntQueue---------------------------\n");
       Prn::print(0,"WriteRetry         %16s",my_stringLLU(tString,mWriteRetry));
       Prn::print(0,"ReadRetry          %16s",my_stringLLU(tString,mReadRetry));
+      Prn::print(0,"");
       Prn::print(0,"PopRetry           %16s",my_stringLLU(tString,mPopRetry));
+      Prn::print(0,"PopRetry1          %16s",my_stringLLU(tString,mPopRetry1));
+      Prn::print(0,"PopRetry2          %16s",my_stringLLU(tString,mPopRetry2));
+      Prn::print(0,"");
       Prn::print(0,"PushRetry          %16s",my_stringLLU(tString,mPushRetry));
+      Prn::print(0,"PushRetry1         %16s",my_stringLLU(tString,mPushRetry1));
+      Prn::print(0,"PushRetry2         %16s",my_stringLLU(tString,mPushRetry2));
+      Prn::print(0,"");
    }
 
    //***************************************************************************
@@ -263,7 +280,12 @@ namespace LFIntQueue
 
          if (++tLoopCount==10000) throw 103;
       }
-      if (tLoopCount!=0) mPopRetry.fetch_add(1,memory_order_relaxed);
+      if (tLoopCount != 0)
+      {
+         mPopRetry++;
+         if (tLoopCount == 1) mPopRetry1++;
+         else if (tLoopCount == 2) mPopRetry2++;
+      }
 
       // Return the detached original head node.
       *aNode = tHead.mIndex;
@@ -296,7 +318,12 @@ namespace LFIntQueue
 
          if (++tLoopCount == 10000) throw 103;
       }
-      if (tLoopCount!=0) mPushRetry.fetch_add(1,memory_order_relaxed);
+      if (tLoopCount != 0)
+      {
+         mPushRetry++;
+         if (tLoopCount == 1) mPushRetry1++;
+         else if (tLoopCount == 2) mPushRetry2++;
+      }
 
       // Done.
       mListSize++;
