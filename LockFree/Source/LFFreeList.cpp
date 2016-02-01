@@ -6,6 +6,7 @@
 #include "prnPrint.h"
 
 #include "LFIndex.h"
+#include "LFBackoff.h"
 #include "LFFreeList.h"
 
 using namespace std;
@@ -273,6 +274,14 @@ namespace LFFreeList
 
    //***************************************************************************
 
+   bool test4()
+   {
+      LFBackoff::wait();
+      return true;
+   }
+
+   //***************************************************************************
+
    bool test()
    {
       switch (mTest)
@@ -280,6 +289,7 @@ namespace LFFreeList
       case 1: return test1();
       case 2: return test2();
       case 3: return test3();
+      case 4: return test4();
       }
       return true;
    }

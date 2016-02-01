@@ -16,20 +16,25 @@ namespace LFBackoff
    int mWaitArray[cWaitArraySize];
    int mWaitIndex;
    int mWaitCount;
+   bool mWaitEnable;
 #else
    extern int mWaitArray[cWaitArraySize];
    extern int mWaitIndex;
    extern int mWaitCount;
+   extern bool mWaitEnable;
 #endif
 
 
    void initialize(int aN1, int aN2);
+   void show();
 
    inline void wait()
    {
+      if (!mWaitEnable)return;
       int tLoop = mWaitArray[mWaitIndex];
-      if (++mWaitIndex > cWaitArraySize) mWaitIndex=0;
-      for (int i=0;i<tLoop;i++) mWaitCount++;
+      if (++mWaitIndex >= cWaitArraySize-10) mWaitIndex=0;
+//    for (int i=0;i<tLoop;i++) mWaitCount++;
+      for (int i = 0; i < tLoop; i++){}
    }
 
 }//namespace

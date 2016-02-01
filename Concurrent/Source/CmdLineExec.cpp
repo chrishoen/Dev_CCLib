@@ -5,6 +5,7 @@
 #include "prnPrint.h"
 #include "my_functions.h"
 
+#include "LFBackoff.h"
 #include "LFFreeList.h"
 #include "CmdLineExec.h"
 
@@ -50,6 +51,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
+   LFBackoff::show();
 }
 
 //******************************************************************************

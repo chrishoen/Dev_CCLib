@@ -52,7 +52,6 @@ void GSettings::show()
    printf("GSettings   ReadUpper     %9d\n",  mReadUpper);
    printf("GSettings   SleepLower    %9d\n",  mSleepLower);
    printf("GSettings   SleepUpper    %9d\n",  mSleepUpper);
-   printf("GSettings   XLimit        %9.1\n", mXLimit);
    printf("GSettings   Backoff1      %9d\n",  mBackoff1);
    printf("GSettings   Backoff2      %9d\n",  mBackoff2);
 }
