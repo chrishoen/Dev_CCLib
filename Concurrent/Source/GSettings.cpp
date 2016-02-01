@@ -30,6 +30,7 @@ GSettings::GSettings()
    mWriteUpper  = 1100;
    mReadLower   =  900;
    mReadUpper   = 1100;
+   mTerminate   = 0;
    mSleepLower  =  900;
    mSleepUpper  = 1100;
    mXLimit = 0.0;
@@ -50,6 +51,7 @@ void GSettings::show()
    printf("GSettings   WriteUpper    %9d\n",  mWriteUpper);
    printf("GSettings   ReadLower     %9d\n",  mReadLower);
    printf("GSettings   ReadUpper     %9d\n",  mReadUpper);
+   printf("GSettings   Terminate     %9d\n",  mTerminate);
    printf("GSettings   SleepLower    %9d\n",  mSleepLower);
    printf("GSettings   SleepUpper    %9d\n",  mSleepUpper);
    printf("GSettings   Backoff1      %9d\n",  mBackoff1);
@@ -71,6 +73,7 @@ void GSettings::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("WriteUpper"))   mWriteUpper  = aCmd->argInt (1)*mMultiplier;
    if(aCmd->isCmd("ReadLower"))    mReadLower   = aCmd->argInt (1)*mMultiplier;
    if(aCmd->isCmd("ReadUpper"))    mReadUpper   = aCmd->argInt (1)*mMultiplier;
+   if(aCmd->isCmd("Terminate"))    mTerminate   = aCmd->argInt (1)*mMultiplier;
    if(aCmd->isCmd("SleepLower"))   mSleepLower  = aCmd->argInt (1);
    if(aCmd->isCmd("SleepUpper"))   mSleepUpper  = aCmd->argInt (1);
    if(aCmd->isCmd("XLimit"))       mXLimit      = aCmd->argDouble (1);

@@ -29,6 +29,7 @@ public:
    int   mWriteUpper;
    int   mReadLower;
    int   mReadUpper;
+   int   mTerminate;
 
    int   mSleepLower;
    int   mSleepUpper;

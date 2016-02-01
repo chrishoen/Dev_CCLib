@@ -49,6 +49,7 @@ void StatusThread::threadRunFunction()
    {
       threadSleep(1000);
       if (mTerminateFlag) break;
+      if (gShare.mTerminateFlag) break;
 
       if (gShare.mMode != 8)
       {

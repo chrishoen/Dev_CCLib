@@ -27,6 +27,7 @@ public:
    void show();
 
    int mMode;
+   bool mTerminateFlag;
 
    static const int cMaxNumWriters = 10;
    Writer   mWriter[cMaxNumWriters];

@@ -31,6 +31,8 @@ Share::Share()
 void Share::initialize()
 {
    mMode = gGSettings.mMode;
+   mTerminateFlag = false;
+
 
    switch (mMode)
    {

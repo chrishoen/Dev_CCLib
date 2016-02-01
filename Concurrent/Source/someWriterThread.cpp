@@ -53,10 +53,20 @@ void WriterThread::threadRunFunction()
       while (1)
       {
          threadSleep(my_irand(mSleepLower, mSleepUpper));
-         if (mTerminateFlag) break;
-         gShare.mWriterProc[mIdent] = GetCurrentProcessorNumber();
 
+         if (gGSettings.mTerminate != 0)
+         {
+            if (gShare.mWriter[mIdent].mCount > gGSettings.mTerminate)
+            {
+               gShare.mTerminateFlag = true;
+            }
+         }
+         if (mTerminateFlag) break;
+         if (gShare.mTerminateFlag) break;
+
+         gShare.mWriterProc[mIdent] = GetCurrentProcessorNumber();
          gShare.mWriter[mIdent].write(my_irand(mWriteLower, mWriteUpper));
+
       }
    }
    catch (...)

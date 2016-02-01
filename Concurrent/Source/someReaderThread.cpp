@@ -54,7 +54,16 @@ void ReaderThread::threadRunFunction()
       while (1)
       {
          threadSleep(my_irand(mSleepLower, mSleepUpper));
+         if (gGSettings.mTerminate != 0)
+         {
+            if (gShare.mReader.mCount > gGSettings.mTerminate)
+            {
+               gShare.mTerminateFlag = true;
+            }
+         }
          if (mTerminateFlag) break;
+         if (gShare.mTerminateFlag) break;
+
          gShare.mReaderProc = GetCurrentProcessorNumber();
          gShare.mReader.read(my_irand(mReadLower, mReadUpper));
       }
