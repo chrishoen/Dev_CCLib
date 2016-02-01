@@ -14,6 +14,10 @@ namespace LFFreeList
 
    void initializeTest (int aTest);
    bool test ();
+
+   unsigned long long popRetry();
+   unsigned long long pushRetry();
+
 }
 #endif
 

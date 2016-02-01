@@ -101,22 +101,40 @@ void Share::update()
 void Share::show()
 {
    char tString[40];
-   Prn::print(0,"");
-   Prn::print(0,"");
-   Prn::print(0,"");
-   Prn::print(0,"TOTAL");
-   Prn::print(0,"");
-   Prn::print(0,"Writer.mCheckSum   %16llu",  mWriterCheckSum);
-   Prn::print(0,"Reader.mCheckSum   %16llu",  mReaderCheckSum);
-   Prn::print(0,"");
-   Prn::print(0,"Writer.mCount      %16s",    my_stringLLU(tString,mWriterCount));
-   Prn::print(0,"Writer.mPassCount  %16s",    my_stringLLU(tString,mWriterPassCount));
-   Prn::print(0,"Writer.mFailCount  %16s",    my_stringLLU(tString,mWriterFailCount));
-   Prn::print(0,"");
-   Prn::print(0,"Reader.mCount      %16s",    my_stringLLU(tString,mReaderCount));
-   Prn::print(0,"Reader.mPassCount  %16s",    my_stringLLU(tString,mReaderPassCount));
-   Prn::print(0,"Reader.mFailCount  %16s",    my_stringLLU(tString,mReaderFailCount));
-   Prn::print(0,"");
+
+
+   if (mMode < 8)
+   {
+      Prn::print(0, "");
+      Prn::print(0, "");
+      Prn::print(0, "");
+      Prn::print(0, "TOTAL");
+      Prn::print(0, "");
+      Prn::print(0, "Writer.mCheckSum   %16llu", mWriterCheckSum);
+      Prn::print(0, "Reader.mCheckSum   %16llu", mReaderCheckSum);
+      Prn::print(0, "");
+      Prn::print(0, "Writer.mCount      %16s", my_stringLLU(tString, mWriterCount));
+      Prn::print(0, "Writer.mPassCount  %16s", my_stringLLU(tString, mWriterPassCount));
+      Prn::print(0, "Writer.mFailCount  %16s", my_stringLLU(tString, mWriterFailCount));
+      Prn::print(0, "");
+      Prn::print(0, "Reader.mCount      %16s", my_stringLLU(tString, mReaderCount));
+      Prn::print(0, "Reader.mPassCount  %16s", my_stringLLU(tString, mReaderPassCount));
+      Prn::print(0, "Reader.mFailCount  %16s", my_stringLLU(tString, mReaderFailCount));
+      Prn::print(0, "");
+   }
+   else
+   {
+      Prn::print(0, "");
+      Prn::print(0, "");
+      Prn::print(0, "");
+      Prn::print(0, "TOTAL");
+      Prn::print(0, "");
+      Prn::print(0, "Writer.mCount      %16s", my_stringLLU(tString, mWriterCount));
+      Prn::print(0, "Writer.mPassCount  %16s", my_stringLLU(tString, mWriterPassCount));
+      Prn::print(0, "Writer.mFailCount  %16s", my_stringLLU(tString, mWriterFailCount));
+      Prn::print(0, "");
+   }
+
 
    switch (mMode)
    {
@@ -126,15 +144,19 @@ void Share::show()
    case 9: LFIntQueue::show(); break;
    }
 
-   double tWriteRetry = (double)LFIntQueue::writeRetry()/(double)mWriterCount;
-   double tReadRetry =  (double)LFIntQueue::readRetry()/ (double)mReaderCount;
-   double tPopRetry =   (double)LFIntQueue::popRetry()/  (double)mWriterPassCount;
-   double tPushRetry =  (double)LFIntQueue::pushRetry()/ (double)mReaderPassCount;
+   if (mMode < 8)
+   {
+      Prn::print(0, "");
+      Prn::print(0, "Writer.mMeanTime   %16.5f", mWriterMeanTime);
+      Prn::print(0, "Reader.mMeanTime   %16.5f", mReaderMeanTime);
+      Prn::print(0, "mMeanTime          %16.5f", mReaderMeanTime + mWriterMeanTime);
+   }
+   else
+   {
+      Prn::print(0, "");
+      Prn::print(0, "Writer.mMeanTime   %16.5f", mWriterMeanTime);
+   }
 
-   Prn::print(0,"");
-   Prn::print(0,"Writer.mMeanTime   %16.5f",  mWriterMeanTime);
-   Prn::print(0,"Reader.mMeanTime   %16.5f",  mReaderMeanTime);
-   Prn::print(0,"mMeanTime          %16.5f",  mReaderMeanTime + mWriterMeanTime);
 
    if (mMode < 8)
    {
@@ -153,7 +175,16 @@ void Share::show()
       Prn::print(0, "popRetry           %16.5f", tPopRetry);
       Prn::print(0, "pushRetry          %16.5f", tPushRetry);
    }
-   else
+   else if (mMode == 8)
+   {
+      double tPopRetry = (double)LFFreeList::popRetry() / (double)mWriterCount;
+      double tPushRetry = (double)LFFreeList::pushRetry() / (double)mWriterPassCount;
+
+      Prn::print(0, "");
+      Prn::print(0, "popRetry           %16.5f", tPopRetry);
+      Prn::print(0, "pushRetry          %16.5f", tPushRetry);
+   }
+   else if (mMode == 9)
    {
       double tPopRetry = (double)LFIntQueue::popRetry() / (double)mWriterCount;
       double tPushRetry = (double)LFIntQueue::pushRetry() / (double)mWriterPassCount;
