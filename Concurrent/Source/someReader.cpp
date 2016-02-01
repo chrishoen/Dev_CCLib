@@ -124,6 +124,25 @@ void Reader::flush2()
 //******************************************************************************
 //******************************************************************************
 
+void Reader::read8(int aNumReads)
+{
+   for (int i = 0; i < aNumReads; i++)
+   {
+      mMarker.doStart();
+      mPassCount++;
+      mFailCount=0;
+      mMarker.doStop();
+   }
+}
+   
+void Reader::flush8()
+{
+}
+   
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void Reader::read(int aNumReads)
 {
    mMarker.startTrial(gGSettings.mXLimit);
@@ -132,6 +151,7 @@ void Reader::read(int aNumReads)
    {
    case 1: read1(aNumReads); break;
    case 2: read2(aNumReads); break;
+   case 8: read8(aNumReads); break;
    }
 
    mCount = mPassCount + mFailCount;
@@ -145,6 +165,7 @@ void Reader::flush()
    {
    case 1: flush1(); break;
    case 2: flush2(); break;
+   case 8: flush2(); break;
    }
 }
    

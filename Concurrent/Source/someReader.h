@@ -35,10 +35,12 @@ public:
 
    void read1 (int aNumReads);
    void read2 (int aNumReads);
+   void read8 (int aNumReads);
    void read  (int aNumReads);
 
    void flush1 ();
    void flush2 ();
+   void flush8 ();
    void flush  ();
 
    //---------------------------------------------------------------------------

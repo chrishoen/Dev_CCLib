@@ -135,6 +135,10 @@ void Share::show()
       Prn::print(0, "Writer.mPassCount  %16s", my_stringLLU(tString, mWriterPassCount));
       Prn::print(0, "Writer.mFailCount  %16s", my_stringLLU(tString, mWriterFailCount));
       Prn::print(0, "");
+      Prn::print(0, "Reader.mCount      %16s", my_stringLLU(tString, mReaderCount));
+      Prn::print(0, "Reader.mPassCount  %16s", my_stringLLU(tString, mReaderPassCount));
+      Prn::print(0, "Reader.mFailCount  %16s", my_stringLLU(tString, mReaderFailCount));
+      Prn::print(0, "");
    }
 
 
@@ -157,6 +161,7 @@ void Share::show()
    {
       Prn::print(0, "");
       Prn::print(0, "Writer.mMeanTime   %16.5f", mWriterMeanTime);
+      Prn::print(0, "Reader.mMeanTime   %16.5f", mReaderMeanTime);
    }
 
 
