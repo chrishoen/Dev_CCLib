@@ -40,10 +40,7 @@ namespace Timing
 
    void initialize(int aTest)
    {
-      if (aTest == 5)
-      {
-         LFBackoff_reset(2,6);
-      }
+      LFIntQueue::initializeTest(2);
    }
 
    void run1(int aTest)
@@ -101,12 +98,6 @@ namespace Timing
 
    void test3()
    {
-      LFIntQueue::tryWrite(++mWriteCount);
-      LFIntQueue::tryRead(&mReadCount);
-   }
-
-   void test4()
-   {
       mAX = 100;
       mNC = 100;
       mNE = 200;
@@ -114,10 +105,15 @@ namespace Timing
       mAX.compare_exchange_weak(mNC,mNE);
    }
 
+   void test4()
+   {
+      LFIntQueue::tryWrite(++mWriteCount);
+      LFIntQueue::tryRead(&mReadCount);
+   }
+
    void test5()
    {
-      LFBackoff tBackoff(1);
-      tBackoff.backoff();
+      LFIntQueue::test();
    }
 
 

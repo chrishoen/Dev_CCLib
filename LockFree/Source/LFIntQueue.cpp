@@ -39,8 +39,8 @@ namespace LFIntQueue
    //***************************************************************************
    // Free List Members
 
-   bool listPush(int  aIndex);
    bool listPop(int* aIndex);
+   bool listPush(int  aIndex);
 
    atomic<int>   mListSize;
    AtomicLFIndex mListHead;
@@ -239,36 +239,6 @@ namespace LFIntQueue
       return true;
    }
 
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Insert a node into the list before the list head node.
-
-   bool listPush(int aNode)
-   {
-      LFIndex tHead;
-
-      int tLoopCount=0;
-      while (true)
-      {
-         if (++tLoopCount == 10000) throw 103;
-
-         // Store the head node in a temp.
-         tHead = mListHead.load();
-
-         // Attach the head node to the pushed node .
-         mNode[aNode].mListNext.store(tHead);
-
-         // The pushed node is the new head node.
-         if (mListHeadIndexRef.compare_exchange_weak(tHead.mIndex, aNode)) break;
-         mPushRetry++;
-      }
-
-      // Done.
-      mListSize++;
-      return true;
-   }
-
    //******************************************************************************
    //******************************************************************************
    //******************************************************************************
@@ -281,8 +251,6 @@ namespace LFIntQueue
       int tLoopCount=0;
       while (true)
       {
-         if (++tLoopCount==10000) throw 104;
-
          // Store the head node in a temp.
          // This is the node that will be detached.
          tHead = mListHead.load();
@@ -292,14 +260,46 @@ namespace LFIntQueue
 
          // Set the head node to be the node that is after the head node.
          if (mListHead.compare_exchange_weak(tHead, LFIndex(mNode[tHead.mIndex].mListNext.load().mIndex,tHead.mCount+1))) break;
-         mPopRetry++;
+
+         if (++tLoopCount==10000) throw 103;
       }
+      if (tLoopCount!=0) mPopRetry.fetch_add(1,memory_order_relaxed);
 
       // Return the detached original head node.
       *aNode = tHead.mIndex;
 
       // Done.
       mListSize--;
+      return true;
+   }
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Insert a node into the list before the list head node.
+
+   bool listPush(int aNode)
+   {
+      LFIndex tHead;
+
+      int tLoopCount=0;
+      while (true)
+      {
+         // Store the head node in a temp.
+         tHead = mListHead.load();
+
+         // Attach the head node to the pushed node .
+         mNode[aNode].mListNext.store(tHead);
+
+         // The pushed node is the new head node.
+         if (mListHeadIndexRef.compare_exchange_weak(tHead.mIndex, aNode)) break;
+
+         if (++tLoopCount == 10000) throw 103;
+      }
+      if (tLoopCount!=0) mPushRetry.fetch_add(1,memory_order_relaxed);
+
+      // Done.
+      mListSize++;
       return true;
    }
 
