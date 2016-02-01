@@ -72,10 +72,12 @@ namespace LFIntQueue
    atomic<unsigned long long> mPopRetry;
    atomic<unsigned long long> mPopRetry1;
    atomic<unsigned long long> mPopRetry2;
+   atomic<unsigned long long> mPopRetry3;
 
    atomic<unsigned long long> mPushRetry;
    atomic<unsigned long long> mPushRetry1;
    atomic<unsigned long long> mPushRetry2;
+   atomic<unsigned long long> mPushRetry3;
 
    unsigned long long writeRetry() {return mWriteRetry.load();}
    unsigned long long readRetry()  {return mReadRetry.load();}
@@ -120,9 +122,11 @@ namespace LFIntQueue
       mPopRetry   = 0;
       mPopRetry1   = 0;
       mPopRetry2   = 0;
+      mPopRetry3   = 0;
       mPushRetry  = 0;
       mPushRetry1  = 0;
       mPushRetry2  = 0;
+      mPushRetry3  = 0;
 }
 
    //***************************************************************************
@@ -157,10 +161,12 @@ namespace LFIntQueue
       Prn::print(0,"PopRetry           %16s",my_stringLLU(tString,mPopRetry));
       Prn::print(0,"PopRetry1          %16s",my_stringLLU(tString,mPopRetry1));
       Prn::print(0,"PopRetry2          %16s",my_stringLLU(tString,mPopRetry2));
+      Prn::print(0,"PopRetry3          %16s",my_stringLLU(tString,mPopRetry3));
       Prn::print(0,"");
       Prn::print(0,"PushRetry          %16s",my_stringLLU(tString,mPushRetry));
       Prn::print(0,"PushRetry1         %16s",my_stringLLU(tString,mPushRetry1));
       Prn::print(0,"PushRetry2         %16s",my_stringLLU(tString,mPushRetry2));
+      Prn::print(0,"PushRetry3         %16s",my_stringLLU(tString,mPushRetry3));
       Prn::print(0,"");
    }
 
@@ -285,6 +291,7 @@ namespace LFIntQueue
          mPopRetry++;
          if (tLoopCount == 1) mPopRetry1++;
          else if (tLoopCount == 2) mPopRetry2++;
+         else if (tLoopCount == 3) mPopRetry3++;
       }
 
       // Return the detached original head node.
@@ -323,6 +330,7 @@ namespace LFIntQueue
          mPushRetry++;
          if (tLoopCount == 1) mPushRetry1++;
          else if (tLoopCount == 2) mPushRetry2++;
+         else if (tLoopCount == 3) mPushRetry3++;
       }
 
       // Done.
