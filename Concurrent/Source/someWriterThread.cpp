@@ -23,6 +23,9 @@ namespace Some
 
 WriterThread::WriterThread(int aIdent) 
 {
+   // BaseClass
+   BaseClass::setThreadPriorityHigh();
+
    // Thread Members
    mTerminateFlag = false;
    mSleepLower = gGSettings.mSleepLower;

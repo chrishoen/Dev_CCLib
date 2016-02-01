@@ -23,6 +23,9 @@ namespace Some
 
 ReaderThread::ReaderThread() 
 {
+   // BaseClass
+   BaseClass::setThreadPriorityHigh();
+
    // Thread Members
    mTerminateFlag = false;
    mSleepLower = gGSettings.mSleepLower;
