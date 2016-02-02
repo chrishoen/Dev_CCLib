@@ -17,7 +17,7 @@ void enterProcessHigh()
 {
    // Set process priority class
    SetPriorityClass(GetCurrentProcess(), REALTIME_PRIORITY_CLASS);
-// SetProcessAffinityMask(GetCurrentProcess(), 0x20);
+   SetProcessAffinityMask(GetCurrentProcess(), 0x3C);
 
    // Set process timer resolution to one millisecond
    timeBeginPeriod(cTimerPeriod);

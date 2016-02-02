@@ -123,6 +123,8 @@ namespace Timing
 
    void test13()
    {
+      mAX.fetch_add(1,memory_order_relaxed);
+      return;
       mAX = 100;
       mNC = 100;
       mNE = 200;

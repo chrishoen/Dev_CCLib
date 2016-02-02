@@ -51,18 +51,21 @@ void StatusThread::threadRunFunction()
       if (mTerminateFlag) break;
       if (gShare.mTerminateFlag) break;
 
+      updateProcString();
       if (gShare.mMode != 8)
       {
-         Prn::print(Prn::ThreadRun1, "%d$   %s   %s %8d",
+         Prn::print(Prn::ThreadRun1, "%d %s$   %s   %s %8d",
             gShare.mMode,
+            mProcString,
             my_stringLLU(tString1, gShare.mWriter[0].mCount),
             my_stringLLU(tString2, gShare.mReader.mCount),
             LFIntQueue::listSize());
       }
       else
       {
-         Prn::print(Prn::ThreadRun1, "%d$   %s   %s %8d",
+         Prn::print(Prn::ThreadRun1, "%d %s$   %s   %s %8d",
             gShare.mMode,
+            mProcString,
             my_stringLLU(tString1, gShare.mWriter[0].mCount),
             my_stringLLU(tString2, gShare.mReader.mCount),
             LFFreeList::listSize());
