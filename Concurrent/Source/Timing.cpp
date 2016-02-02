@@ -6,6 +6,7 @@
 #include "prnPrint.h"
 #include "my_functions.h"
 #include "risTimeMarker.h"
+#include "GSettings.h"
 #include "LFIntQueue.h"
 #include "LFBackoff.h"
 #include "Timing.h"
@@ -46,7 +47,7 @@ namespace Timing
       mReadCount=0;
       mAX=0;
 
-      mMarker.startTrial();
+      mMarker.startTrial(gGSettings.mXLimit);
 
       for (int i = 0; i < tIterations; i++)
       {
@@ -85,7 +86,7 @@ namespace Timing
 
       int tIterations = 1000000;
 
-      mMarker.startTrial();
+      mMarker.startTrial(gGSettings.mXLimit);
 
       for (int i = 0; i < tIterations; i++)
       {
@@ -123,10 +124,10 @@ namespace Timing
 
    void test13()
    {
-      mAX.fetch_add(1,memory_order_relaxed);
-      return;
+//    mAX.fetch_add(1,memory_order_relaxed);
+//    return;
       mAX = 100;
-      mNC = 100;
+      mNC = 200;
       mNE = 200;
 
       mAX.compare_exchange_weak(mNC,mNE);
