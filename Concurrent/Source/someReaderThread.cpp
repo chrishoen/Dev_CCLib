@@ -49,6 +49,7 @@ void ReaderThread::threadInitFunction()
 
 void ReaderThread::threadRunFunction()
 {
+   if (gShare.mMode==8) return;
    try
    {
       while (1)
