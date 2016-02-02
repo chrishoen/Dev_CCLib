@@ -15,8 +15,11 @@ static const int cTimerPeriod = 10;
 
 void enterProcessHigh()
 {
-   // Set process priority class
-   SetPriorityClass(GetCurrentProcess(), REALTIME_PRIORITY_CLASS);
+   // Set process priority class and affinity
+   if (gGSettings.mThreadMode == 1)
+   {
+      SetPriorityClass(GetCurrentProcess(), REALTIME_PRIORITY_CLASS);
+   }
    SetProcessAffinityMask(GetCurrentProcess(), 0x3C);
 
    // Set process timer resolution to one millisecond
@@ -39,6 +42,10 @@ void exitProcess()
 
 void main_initialize(int argc,char** argv)
 {
+   // Read settings file
+   gGSettings.readFromFileName();
+   gGSettings.show();
+
    // Enter process
    enterProcessHigh();
 
@@ -75,9 +82,6 @@ void main_initialize(int argc,char** argv)
    Prn::setFilter(Prn::QCallRun2,  false);
    Prn::setFilter(Prn::QCallRun3,  false);
    Prn::setFilter(Prn::QCallRun4,  false);
-
-   gGSettings.readFromFileName();
-   gGSettings.show();
 
    Prn::print(0,"ThreadTest*******************************************BEGIN");
 }

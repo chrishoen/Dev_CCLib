@@ -19,24 +19,25 @@ public:
    //---------------------------------------------------------------------------
    // Settings
 
-   int   mMode;
-   int   mTest;
-   int   mNumWriters;
+   int     mMode;
+   int     mTest;
+   int     mNumWriters;
 
-   int   mMultiplier;
-   int   mAllocate;
-   int   mWriteLower;
-   int   mWriteUpper;
-   int   mReadLower;
-   int   mReadUpper;
-   int   mTerminate;
+   int     mMultiplier;
+   int     mAllocate;
+   int     mWriteLower;
+   int     mWriteUpper;
+   int     mReadLower;
+   int     mReadUpper;
+   int     mTerminate;
 
-   int   mSleepLower;
-   int   mSleepUpper;
+   int     mSleepLower;
+   int     mSleepUpper;
 
-   double mXLimit;
-   int mBackoff1;
-   int mBackoff2;
+   int     mThreadMode;
+   double  mXLimit;
+   int     mBackoff1;
+   int     mBackoff2;
 
 
    // Settings

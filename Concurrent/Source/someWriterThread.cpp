@@ -24,7 +24,15 @@ namespace Some
 WriterThread::WriterThread(int aIdent) 
 {
    // BaseClass
-   BaseClass::setThreadPriorityHigh();
+   switch (gGSettings.mThreadMode)
+   {
+   case 1:
+      BaseClass::setThreadPriorityHigh();
+      break;
+   case 2:
+      BaseClass::setThreadPriorityLow();
+      break;
+   }
 
    switch (aIdent)
    {
@@ -72,7 +80,10 @@ void WriterThread::threadRunFunction()
    {
       while (1)
       {
-         threadSleep(my_irand(mSleepLower, mSleepUpper));
+         if (gGSettings.mThreadMode == 1)
+         {
+            threadSleep(my_irand(mSleepLower, mSleepUpper));
+         }
 
          if (gGSettings.mTerminate != 0)
          {

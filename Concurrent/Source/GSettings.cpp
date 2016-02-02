@@ -33,6 +33,7 @@ GSettings::GSettings()
    mTerminate   = 0;
    mSleepLower  =  900;
    mSleepUpper  = 1100;
+   mThreadMode  =    1;
    mXLimit = 0.0;
    mBackoff1=0;
    mBackoff2=0;
@@ -42,21 +43,22 @@ GSettings::GSettings()
 
 void GSettings::show()
 {
-   printf("GSettings   Mode          %9d\n",   mMode);
-   printf("GSettings   Test          %9d\n",   mTest);
-   printf("GSettings   NumWriters    %9d\n",   mNumWriters);
-   printf("GSettings   Multiplier    %9d\n",   mMultiplier);
-   printf("GSettings   Allocate      %9d\n",   mAllocate);
-   printf("GSettings   WriteLower    %9d\n",   mWriteLower);
-   printf("GSettings   WriteUpper    %9d\n",   mWriteUpper);
-   printf("GSettings   ReadLower     %9d\n",   mReadLower);
-   printf("GSettings   ReadUpper     %9d\n",   mReadUpper);
-   printf("GSettings   Terminate     %9d\n",   mTerminate);
-   printf("GSettings   SleepLower    %9d\n",   mSleepLower);
-   printf("GSettings   SleepUpper    %9d\n",   mSleepUpper);
-   printf("GSettings   XLimit        %9.1f\n", mXLimit);
-   printf("GSettings   Backoff1      %9d\n",   mBackoff1);
-   printf("GSettings   Backoff2      %9d\n",   mBackoff2);
+   printf("GSettings   Mode          %11d\n",   mMode);
+   printf("GSettings   Test          %11d\n",   mTest);
+   printf("GSettings   NumWriters    %11d\n",   mNumWriters);
+   printf("GSettings   Multiplier    %11d\n",   mMultiplier);
+   printf("GSettings   Allocate      %11d\n",   mAllocate);
+   printf("GSettings   WriteLower    %11d\n",   mWriteLower);
+   printf("GSettings   WriteUpper    %11d\n",   mWriteUpper);
+   printf("GSettings   ReadLower     %11d\n",   mReadLower);
+   printf("GSettings   ReadUpper     %11d\n",   mReadUpper);
+   printf("GSettings   Terminate     %11d\n",   mTerminate);
+   printf("GSettings   SleepLower    %11d\n",   mSleepLower);
+   printf("GSettings   SleepUpper    %11d\n",   mSleepUpper);
+   printf("GSettings   ThreadMode    %11d\n",   mThreadMode);
+   printf("GSettings   XLimit        %11.1f\n", mXLimit);
+   printf("GSettings   Backoff1      %11d\n",    mBackoff1);
+   printf("GSettings   Backoff2      %11d\n",    mBackoff2);
 }
 
 //******************************************************************************
@@ -77,6 +79,7 @@ void GSettings::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("Terminate"))    mTerminate   = aCmd->argInt (1)*mMultiplier;
    if(aCmd->isCmd("SleepLower"))   mSleepLower  = aCmd->argInt (1);
    if(aCmd->isCmd("SleepUpper"))   mSleepUpper  = aCmd->argInt (1);
+   if(aCmd->isCmd("ThreadMode"))   mThreadMode  = aCmd->argInt (1);
    if(aCmd->isCmd("XLimit"))       mXLimit      = aCmd->argDouble (1);
    if(aCmd->isCmd("Backoff1"))     mBackoff1    = aCmd->argInt (1);
    if(aCmd->isCmd("Backoff2"))     mBackoff2    = aCmd->argInt (1);
