@@ -42,20 +42,21 @@ GSettings::GSettings()
 
 void GSettings::show()
 {
-   printf("GSettings   Mode          %9d\n",  mMode);
-   printf("GSettings   Test          %9d\n",  mTest);
-   printf("GSettings   NumWriters    %9d\n",  mNumWriters);
-   printf("GSettings   Multiplier    %9d\n",  mMultiplier);
-   printf("GSettings   Allocate      %9d\n",  mAllocate);
-   printf("GSettings   WriteLower    %9d\n",  mWriteLower);
-   printf("GSettings   WriteUpper    %9d\n",  mWriteUpper);
-   printf("GSettings   ReadLower     %9d\n",  mReadLower);
-   printf("GSettings   ReadUpper     %9d\n",  mReadUpper);
-   printf("GSettings   Terminate     %9d\n",  mTerminate);
-   printf("GSettings   SleepLower    %9d\n",  mSleepLower);
-   printf("GSettings   SleepUpper    %9d\n",  mSleepUpper);
-   printf("GSettings   Backoff1      %9d\n",  mBackoff1);
-   printf("GSettings   Backoff2      %9d\n",  mBackoff2);
+   printf("GSettings   Mode          %9d\n",   mMode);
+   printf("GSettings   Test          %9d\n",   mTest);
+   printf("GSettings   NumWriters    %9d\n",   mNumWriters);
+   printf("GSettings   Multiplier    %9d\n",   mMultiplier);
+   printf("GSettings   Allocate      %9d\n",   mAllocate);
+   printf("GSettings   WriteLower    %9d\n",   mWriteLower);
+   printf("GSettings   WriteUpper    %9d\n",   mWriteUpper);
+   printf("GSettings   ReadLower     %9d\n",   mReadLower);
+   printf("GSettings   ReadUpper     %9d\n",   mReadUpper);
+   printf("GSettings   Terminate     %9d\n",   mTerminate);
+   printf("GSettings   SleepLower    %9d\n",   mSleepLower);
+   printf("GSettings   SleepUpper    %9d\n",   mSleepUpper);
+   printf("GSettings   XLimit        %9.1f\n", mXLimit);
+   printf("GSettings   Backoff1      %9d\n",   mBackoff1);
+   printf("GSettings   Backoff2      %9d\n",   mBackoff2);
 }
 
 //******************************************************************************

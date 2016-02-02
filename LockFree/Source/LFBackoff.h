@@ -33,7 +33,6 @@ namespace LFBackoff
       if (!mWaitEnable)return;
       int tLoop = mWaitArray[mWaitIndex];
       if (++mWaitIndex >= cWaitArraySize-10) mWaitIndex=0;
-//    for (int i=0;i<tLoop;i++) mWaitCount++;
       for (int i = 0; i < tLoop; i++){}
    }
 
