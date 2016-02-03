@@ -175,7 +175,7 @@ namespace LFFreeList
 
          // Set the head node to be the node that is after the head node.
          if (mListHead.compare_exchange_weak(tHead, LFIndex(mNode[tHead.mIndex].mListNext.load().mIndex,tHead.mCount+1))) break;
-         LFBackoff::delay(mBackoff1);
+         LFBackoff::delay2(mBackoff1,mBackoff2);
 
          if (++tLoopCount==10000) throw 103;
       }
@@ -215,7 +215,7 @@ namespace LFFreeList
 
          // The pushed node is the new head node.
          if (mListHeadIndexRef.compare_exchange_weak(tHead.mIndex, aNode)) break;
-         LFBackoff::delay(mBackoff1);
+         LFBackoff::delay2(mBackoff1,mBackoff2);
 
          if (++tLoopCount == 10000) throw 103;
       }
