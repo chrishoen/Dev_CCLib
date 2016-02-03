@@ -121,7 +121,7 @@ namespace Timing
 
    void test12()
    {
-      LFBackoff::delay22(gGSettings.mDelay1);
+      LFBackoff::delay(gGSettings.mBackoff1);
    }
 
    void test13()

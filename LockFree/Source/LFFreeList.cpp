@@ -280,7 +280,6 @@ namespace LFFreeList
 
    bool test4()
    {
-      LFBackoff::wait();
       return true;
    }
 

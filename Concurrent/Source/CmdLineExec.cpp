@@ -51,7 +51,6 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   LFBackoff::show();
 }
 
 //******************************************************************************
