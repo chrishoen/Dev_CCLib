@@ -80,7 +80,7 @@ void WriterThread::threadRunFunction()
    {
       while (1)
       {
-         if (gGSettings.mThreadMode == 1)
+         if (gGSettings.mThreadMode <= 1)
          {
             threadSleep(my_irand(mSleepLower, mSleepUpper));
          }
