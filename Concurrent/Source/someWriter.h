@@ -33,6 +33,9 @@ public:
    void finalize();
    void show();
 
+   void startTrial();
+   void finishTrial();
+
    void write1 (int aNumWrites);
    void write2 (int aNumWrites);
    void write8 (int aNumWrites);
@@ -52,6 +55,11 @@ public:
 
    Ris::TrialTimeMarker mMarker;
    double               mMeanTime;
+
+   Ris::TrialTimeMarker mMarkerPop;
+   double               mMeanTimePop;
+   Ris::TrialTimeMarker mMarkerPush;
+   double               mMeanTimePush;
 };
 
 //******************************************************************************

@@ -79,7 +79,8 @@ void Share::update()
    mWriterFailCount = 0;
    mWriterCheckSum  = 0;
    mWriterMeanTime  = 0.0;
-   mWriterXMeanTime = 0.0;
+   mWriterMeanTimePop  = 0.0;
+   mWriterMeanTimePush  = 0.0;
 
    for (int i = 0; i < mNumWriters; i++)
    {
@@ -88,6 +89,8 @@ void Share::update()
       mWriterFailCount += mWriter[i].mFailCount;
       mWriterCheckSum  += mWriter[i].mCheckSum;
       mWriterMeanTime  += mWriter[i].mMeanTime/mNumWriters;
+      mWriterMeanTimePop   += mWriter[i].mMeanTimePop/mNumWriters;
+      mWriterMeanTimePush  += mWriter[i].mMeanTimePush/mNumWriters;
    }
 
    mReaderCount     = mReader.mCount;
@@ -160,8 +163,8 @@ void Share::show()
    else
    {
       Prn::print(0, "");
-      Prn::print(0, "Writer.mMeanTime   %16.5f", mWriterMeanTime);
-      Prn::print(0, "Reader.mMeanTime   %16.5f", mReaderMeanTime);
+      Prn::print(0, "Writer.mMeanTimePop    %16.5f", mWriterMeanTimePop);
+      Prn::print(0, "Writer.mMeanTimePush   %16.5f", mWriterMeanTimePush);
    }
 
 

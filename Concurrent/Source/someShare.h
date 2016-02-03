@@ -52,6 +52,8 @@ public:
    double              mReaderMeanTime;
    double              mReaderXMeanTime;
 
+   double              mWriterMeanTimePop;
+   double              mWriterMeanTimePush;
 };
 
 //******************************************************************************

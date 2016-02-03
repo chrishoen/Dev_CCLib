@@ -30,8 +30,8 @@ namespace LFFreeList
    //***************************************************************************
    // Free List Members
 
-   bool listPop(int* aIndex);
-   bool listPush(int  aIndex);
+   bool listPop(int* aNode);
+   bool listPush(int aNode);
 
    atomic<int>   mListSize;
    AtomicLFIndex mListHead;
@@ -233,7 +233,7 @@ namespace LFFreeList
 
    bool test1()
    {
-      mPushRetry++;
+      LFBackoff::delay();
       return true;
    }
 
@@ -259,16 +259,24 @@ namespace LFFreeList
 
    bool test3()
    {
-      int tNode1,tNode2;
-      bool tPass1,tPass2;
+      int tNode;
+      bool tPass;
 
-      tPass1 = listPop(&tNode1);
-      tPass2 = listPop(&tNode2);
+      tPass = listPop(&tNode);
+      LFBackoff::delay();
 
-      if (tPass2) listPush(tNode2);
-      if (tPass1) listPush(tNode1);
+      if (tPass)
+      {
+         listPush(tNode);
+         LFBackoff::delay();
+         return true;
+      }
+      else
+      {
+         return false;
+      }
 
-      return tPass1 && tPass2;
+      return true;
    }
 
    //***************************************************************************

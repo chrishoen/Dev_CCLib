@@ -24,37 +24,26 @@ namespace Some
 WriterThread::WriterThread(int aIdent) 
 {
    // BaseClass
-   switch (gGSettings.mThreadMode)
+   BaseClass::setThreadPriorityLow();
+
+   switch (aIdent)
    {
+   case 0:
+      BaseClass::mThreadAffinityMask = 0x04;
+      BaseClass::mThreadIdealProcessor = 2;
+      break;
    case 1:
-      BaseClass::setThreadPriorityHigh();
+      BaseClass::mThreadAffinityMask = 0x08;
+      BaseClass::mThreadIdealProcessor = 3;
       break;
    case 2:
-      BaseClass::setThreadPriorityLow();
+      BaseClass::mThreadAffinityMask = 0x10;
+      BaseClass::mThreadIdealProcessor = 4;
       break;
-   }
-
-   if (gGSettings.mThreadMode != 0)
-   {
-      switch (aIdent)
-      {
-      case 0:
-         BaseClass::mThreadAffinityMask = 0x04;
-         BaseClass::mThreadIdealProcessor = 2;
-         break;
-      case 1:
-         BaseClass::mThreadAffinityMask = 0x08;
-         BaseClass::mThreadIdealProcessor = 3;
-         break;
-      case 2:
-         BaseClass::mThreadAffinityMask = 0x10;
-         BaseClass::mThreadIdealProcessor = 4;
-         break;
-      case 3:
-         BaseClass::mThreadAffinityMask = 0x20;
-         BaseClass::mThreadIdealProcessor = 5;
-         break;
-      }
+   case 3:
+      BaseClass::mThreadAffinityMask = 0x20;
+      BaseClass::mThreadIdealProcessor = 5;
+      break;
    }
 
    // Thread Members
@@ -81,13 +70,10 @@ void WriterThread::threadRunFunction()
 {
    try
    {
+      gShare.mWriter[mIdent].startTrial();
       while (1)
       {
-         if (gGSettings.mThreadMode <= 1)
-         {
-            threadSleep(my_irand(mSleepLower, mSleepUpper));
-         }
-
+         // Thread loop termination
          if (gGSettings.mTerminate != 0)
          {
             if (gShare.mWriter[mIdent].mCount > gGSettings.mTerminate)
@@ -98,10 +84,11 @@ void WriterThread::threadRunFunction()
          if (mTerminateFlag) break;
          if (gShare.mTerminateFlag) break;
 
+         // Write
          gShare.mWriterProc[mIdent] = GetCurrentProcessorNumber();
          gShare.mWriter[mIdent].write(my_irand(mWriteLower, mWriteUpper));
-
       }
+      gShare.mWriter[mIdent].finishTrial();
    }
    catch (...)
    {

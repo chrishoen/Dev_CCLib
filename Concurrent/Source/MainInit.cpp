@@ -16,10 +16,7 @@ static const int cTimerPeriod = 10;
 void enterProcessHigh()
 {
    // Set process priority class and affinity
-   if (gGSettings.mThreadMode == 1)
-   {
-      SetPriorityClass(GetCurrentProcess(), REALTIME_PRIORITY_CLASS);
-   }
+   SetPriorityClass(GetCurrentProcess(), BELOW_NORMAL_PRIORITY_CLASS);
    SetProcessAffinityMask(GetCurrentProcess(), 0x3C);
 
    // Set process timer resolution to one millisecond

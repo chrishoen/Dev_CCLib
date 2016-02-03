@@ -9,6 +9,7 @@ Description:
 #include <prnPrint.h>
 
 #include "GSettings.h"
+#include "LFBackoff.h"
 #include "LFFreeList.h"
 #include "LFIntQueue.h"
 #include "RisIntQueue.h"
@@ -37,6 +38,8 @@ void Writer::initialize(unsigned aIdent)
    mFailCount = 0;
    mCheckSum   = 0;
    mMeanTime  = 0.0;
+   mMeanTimePop  = 0.0;
+   mMeanTimePush  = 0.0;
 }
 
 void Writer::finalize()
@@ -116,16 +119,26 @@ void Writer::write8(int aNumWrites)
 {
    for (int i = 0; i < aNumWrites; i++)
    {
-      mMarker.doStart();
-      if (LFFreeList::test())
+      int tNode;
+      bool tPass;
+
+      mMarkerPop.doStart();
+      tPass = LFFreeList::listPop(&tNode);
+      mMarkerPop.doStop();
+      LFBackoff::delay();
+
+      if (tPass)
       {
+         mMarkerPush.doStart();
+         LFFreeList::listPush(tNode);
+         mMarkerPush.doStop();
+         LFBackoff::delay();
          mPassCount++;
       }
       else
       {
          mFailCount++;
       }
-      mMarker.doStop();
    }
 }
 
@@ -154,10 +167,28 @@ void Writer::write9(int aNumWrites)
 //******************************************************************************
 //******************************************************************************
 
-void Writer::write(int aNumWrites)
+void Writer::startTrial()
 {
    mMarker.startTrial(gGSettings.mXLimit);
+   mMarkerPop.startTrial(gGSettings.mXLimit);
+   mMarkerPush.startTrial(gGSettings.mXLimit);
 
+}
+void Writer::finishTrial()
+{
+   mMarker.finishTrial();
+   mMarkerPop.finishTrial();
+   mMarkerPush.finishTrial();
+
+   mMeanTime = mMarker.mStatistics.mMean;
+   mMeanTimePop = mMarkerPop.mStatistics.mMean;
+   mMeanTimePush = mMarkerPush.mStatistics.mMean;
+
+   mCount = mPassCount + mFailCount;
+}
+
+void Writer::write(int aNumWrites)
+{
    switch (gShare.mMode)
    {
    case 1: write1 (aNumWrites); break;
@@ -167,8 +198,6 @@ void Writer::write(int aNumWrites)
    }
 
    mCount = mPassCount + mFailCount;
-   mMarker.finishTrial();
-   mMeanTime = mMarker.mStatistics.mMean;
 }
    
 

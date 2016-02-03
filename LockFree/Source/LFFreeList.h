@@ -9,7 +9,6 @@ namespace LFFreeList
    void initialize (int aAllocate);
    void finalize   ();
    int  listSize();
-
    void show();
 
    void initializeTest (int aTest);
@@ -18,6 +17,8 @@ namespace LFFreeList
    unsigned long long popRetry();
    unsigned long long pushRetry();
 
+   bool listPop(int* aNode);
+   bool listPush(int aNode);
 }
 #endif
 
