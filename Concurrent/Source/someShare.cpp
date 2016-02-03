@@ -163,8 +163,8 @@ void Share::show()
    else
    {
       Prn::print(0, "");
-      Prn::print(0, "Writer.mMeanTimePop    %16.5f", mWriterMeanTimePop);
-      Prn::print(0, "Writer.mMeanTimePush   %16.5f", mWriterMeanTimePush);
+      Prn::print(0, "mMeanTimePop       %16.5f", mWriterMeanTimePop);
+      Prn::print(0, "mMeanTimePush      %16.5f", mWriterMeanTimePush);
    }
 
 
