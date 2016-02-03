@@ -12,6 +12,7 @@ namespace LFFreeList
    void show();
 
    void initializeTest (int aTest);
+   void initializeBackoff(int aB1, int aB2);
    bool test ();
 
    unsigned long long popRetry();
