@@ -215,7 +215,6 @@ namespace LFFreeList
       return true;
    }
 
-
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -315,6 +314,37 @@ do
 while not CAS(top, old, new)
 return old
 end
+
+   bool listPush(int aNode)
+   {
+      LFIndex tHead;
+
+      int tLoopCount=0;
+      while (true)
+      {
+         // Store the head node in a temp.
+         tHead = mListHead.load();
+
+         // Attach the head node to the pushed node .
+         mNode[aNode].mListNext.store(tHead);
+
+         // The pushed node is the new head node.
+         if (mListHead.compare_exchange_strong(tHead, LFIndex(aNode, tHead.mCount))) break;
+
+         if (++tLoopCount == 10000) throw 103;
+      }
+      if (tLoopCount != 0)
+      {
+         mPushRetry++;
+         if (tLoopCount == 1) mPushRetry1++;
+         else if (tLoopCount == 2) mPushRetry2++;
+         else if (tLoopCount == 3) mPushRetry3++;
+      }
+
+      // Done.
+      mListSize++;
+      return true;
+   }
 
 
 
