@@ -34,24 +34,27 @@ WriterThread::WriterThread(int aIdent)
       break;
    }
 
-   switch (aIdent)
+   if (gGSettings.mThreadMode != 0)
    {
-   case 0:
-      BaseClass::mThreadAffinityMask = 0x04;
-      BaseClass::mThreadIdealProcessor = 2;
-      break;
-   case 1:
-      BaseClass::mThreadAffinityMask = 0x08;
-      BaseClass::mThreadIdealProcessor = 3;
-      break;
-   case 2:
-      BaseClass::mThreadAffinityMask = 0x10;
-      BaseClass::mThreadIdealProcessor = 4;
-      break;
-   case 3:
-      BaseClass::mThreadAffinityMask = 0x20;
-      BaseClass::mThreadIdealProcessor = 5;
-      break;
+      switch (aIdent)
+      {
+      case 0:
+         BaseClass::mThreadAffinityMask = 0x04;
+         BaseClass::mThreadIdealProcessor = 2;
+         break;
+      case 1:
+         BaseClass::mThreadAffinityMask = 0x08;
+         BaseClass::mThreadIdealProcessor = 3;
+         break;
+      case 2:
+         BaseClass::mThreadAffinityMask = 0x10;
+         BaseClass::mThreadIdealProcessor = 4;
+         break;
+      case 3:
+         BaseClass::mThreadAffinityMask = 0x20;
+         BaseClass::mThreadIdealProcessor = 5;
+         break;
+      }
    }
 
    // Thread Members
