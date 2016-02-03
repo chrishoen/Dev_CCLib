@@ -233,7 +233,6 @@ namespace LFFreeList
 
    bool test1()
    {
-      LFBackoff::delay();
       return true;
    }
 
@@ -263,12 +262,10 @@ namespace LFFreeList
       bool tPass;
 
       tPass = listPop(&tNode);
-      LFBackoff::delay();
 
       if (tPass)
       {
          listPush(tNode);
-         LFBackoff::delay();
          return true;
       }
       else

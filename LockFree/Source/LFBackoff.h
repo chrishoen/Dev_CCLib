@@ -38,12 +38,19 @@ namespace LFBackoff
       for (int i = 0; i < tLoop; i++){}
    }
 
-   inline void delay()
+   inline void delay(int aDelay)
+   {
+      if (aDelay==0)return;
+      int tCount=0;
+      int tLoop = my_irand(0, aDelay);
+      for (int i=0;i<tLoop;i++) tCount++;
+   }
+
+   inline void delay22(int aDelay)
    {
       int tCount=0;
-      int tLoop = my_irand(0, 2*750);
+      int tLoop = aDelay;
       for (int i=0;i<tLoop;i++) tCount++;
-
    }
 
 

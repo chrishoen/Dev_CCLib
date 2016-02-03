@@ -38,6 +38,8 @@ public:
    double  mXLimit;
    int     mBackoff1;
    int     mBackoff2;
+   int     mDelay1;
+   int     mDelay2;
 
 
    // Settings

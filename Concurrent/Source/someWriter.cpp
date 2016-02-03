@@ -125,14 +125,14 @@ void Writer::write8(int aNumWrites)
       mMarkerPop.doStart();
       tPass = LFFreeList::listPop(&tNode);
       mMarkerPop.doStop();
-      LFBackoff::delay();
+      LFBackoff::delay(gGSettings.mDelay1);
 
       if (tPass)
       {
          mMarkerPush.doStart();
          LFFreeList::listPush(tNode);
          mMarkerPush.doStop();
-         LFBackoff::delay();
+         LFBackoff::delay(gGSettings.mDelay1);
          mPassCount++;
       }
       else

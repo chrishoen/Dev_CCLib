@@ -116,18 +116,26 @@ namespace Timing
 
    void test11()
    {
-      mWriteCount++;
+      LFBackoff::delay(gGSettings.mDelay1);
    }
 
    void test12()
    {
-      mAX++;
+      LFBackoff::delay22(gGSettings.mDelay1);
    }
 
    void test13()
    {
-//    mAX.fetch_add(1,memory_order_relaxed);
-//    return;
+      mWriteCount++;
+   }
+
+   void test14()
+   {
+      mAX++;
+   }
+
+   void test15()
+   {
       mAX = 100;
       mNC = 200;
       mNE = 200;
@@ -135,22 +143,10 @@ namespace Timing
       mAX.compare_exchange_weak(mNC,mNE);
    }
 
-   void test14()
+   void test16()
    {
       LFIntQueue::tryWrite(++mWriteCount);
       LFIntQueue::tryRead(&mReadCount);
    }
 
-   void test15()
-   {
-      int tCount=0;
-//    int tLoop = my_irand(350, 350);
-      int tLoop = my_irand(0, 2*750);
-      for (int i=0;i<tLoop;i++) tCount++;
-   }
-
-   void test16()
-   {
-      LFBackoff::delay();
-   }
 }

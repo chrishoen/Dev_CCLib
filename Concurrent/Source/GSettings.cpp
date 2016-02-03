@@ -37,6 +37,8 @@ GSettings::GSettings()
    mXLimit = 0.0;
    mBackoff1=0;
    mBackoff2=0;
+   mDelay1=0;
+   mDelay2=0;
 }
 
 //******************************************************************************
@@ -59,6 +61,8 @@ void GSettings::show()
    printf("GSettings   XLimit        %11.1f\n", mXLimit);
    printf("GSettings   Backoff1      %11d\n",    mBackoff1);
    printf("GSettings   Backoff2      %11d\n",    mBackoff2);
+   printf("GSettings   Delay1        %11d\n",    mDelay1);
+   printf("GSettings   Delay2        %11d\n",    mDelay2);
 }
 
 //******************************************************************************
@@ -83,6 +87,8 @@ void GSettings::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("XLimit"))       mXLimit      = aCmd->argDouble (1);
    if(aCmd->isCmd("Backoff1"))     mBackoff1    = aCmd->argInt (1);
    if(aCmd->isCmd("Backoff2"))     mBackoff2    = aCmd->argInt (1);
+   if(aCmd->isCmd("Delay1"))       mDelay1      = aCmd->argInt (1);
+   if(aCmd->isCmd("Delay2"))       mDelay2      = aCmd->argInt (1);
 }
 
 //******************************************************************************
