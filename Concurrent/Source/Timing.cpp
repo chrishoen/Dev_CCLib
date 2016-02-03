@@ -33,6 +33,7 @@ namespace Timing
    void test13();
    void test14();
    void test15();
+   void test16();
 
    //***************************************************************************
    //***************************************************************************
@@ -59,6 +60,7 @@ namespace Timing
          case 3:  test13(); break;
          case 4:  test14(); break;
          case 5:  test15(); break;
+         case 6:  test16(); break;
          }
          mMarker.doStop();
       }
@@ -141,5 +143,14 @@ namespace Timing
 
    void test15()
    {
+      int tCount=0;
+//    int tLoop = my_irand(350, 350);
+      int tLoop = my_irand(0, 2*750);
+      for (int i=0;i<tLoop;i++) tCount++;
+   }
+
+   void test16()
+   {
+      LFBackoff::delay();
    }
 }
