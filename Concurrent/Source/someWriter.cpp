@@ -12,7 +12,6 @@ Description:
 #include "LFBackoff.h"
 #include "LFFreeList.h"
 #include "LFIntQueue.h"
-#include "RisIntQueue.h"
 #include "someShare.h"
 #include "someWriter.h"
 
@@ -98,27 +97,6 @@ void Writer::write1(int aNumWrites)
 
 void Writer::write2(int aNumWrites)
 {
-   for (int i = 0; i < aNumWrites; i++)
-   {
-      bool tPass;
-      mCode++;
-      IntMessage tMsg(mIdent,mCode);
-
-      mMarkerWrite.doStart();
-      tPass = RisIntQueue::tryWrite(tMsg.aint());
-      mMarkerWrite.doStop();
-      LFBackoff::delay(gGSettings.mDelayWrite);
-
-      if (tPass)
-      {
-         mPassCount++;
-         mCheckSum += mCode;
-      }
-      else
-      {
-         mFailCount++;
-      }
-   }
 }
 
 //******************************************************************************

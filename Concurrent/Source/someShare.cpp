@@ -11,7 +11,6 @@ Description:
 #include "LFIntQueue.h"
 #include "LFFreeList.h"
 #include "LFBackoff.h"
-#include "RisIntQueue.h"
 #include "GSettings.h"
 
 #define  _SOMESHARE_CPP_
@@ -40,7 +39,7 @@ void Share::initialize()
       LFIntQueue::initialize(gGSettings.mAllocate);
       break;
    case 2:
-      RisIntQueue::initialize(gGSettings.mAllocate);
+      LFIntQueue::initialize(gGSettings.mAllocate);
       break;
    case 8:
       LFFreeList::initialize(gGSettings.mAllocate);

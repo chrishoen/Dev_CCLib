@@ -13,9 +13,6 @@
     <ClCompile Include="Source\LFIntQueue.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Timing.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\LFFreeList.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -36,9 +33,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\LFIntQueue.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Timing.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\LockFree.h">

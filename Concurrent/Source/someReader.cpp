@@ -12,7 +12,6 @@ Description:
 #include "someShare.h"
 #include "LFBackoff.h"
 #include "LFIntQueue.h"
-#include "RisIntQueue.h"
 #include "someReader.h"
 
 namespace Some
@@ -103,35 +102,10 @@ void Reader::flush1()
 
 void Reader::read2(int aNumReads)
 {
-   for (int i = 0; i < aNumReads; i++)
-   {
-      bool tPass;
-      IntMessage tMsg;
-
-      mMarkerRead.doStart();
-      tPass = RisIntQueue::tryRead(&tMsg.aint());
-      LFBackoff::delay(gGSettings.mDelayRead);
-
-      if (tPass)
-      {
-         mPassCount++;
-         mCheckSum += tMsg.mCode;
-      }
-      else
-      {
-         mFailCount++;
-      }
-      mMarkerRead.doStop();
-   }
 }
    
 void Reader::flush2()
 {
-   while(true)
-   {
-      IntMessage tMsg;
-      if (!RisIntQueue::tryRead(&tMsg.aint())) break;
-   }
 }
    
 //******************************************************************************

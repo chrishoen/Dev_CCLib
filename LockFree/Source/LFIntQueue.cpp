@@ -16,13 +16,14 @@ namespace LFIntQueue
    //***************************************************************************
    //***************************************************************************
    // Node for a combined Free List and Queue
+   typedef unsigned long long int Padding[128];
 
-   typedef struct
-   {
-      int            mValue;
-      AtomicLFIndex  mQueueNext;
-      AtomicLFIndex  mListNext;
-   } QueueListNode;
+   static int*            mValue     = 0;
+   Padding mP1;
+   static AtomicLFIndex*  mQueueNext = 0;
+   Padding mP2;
+   static AtomicLFIndex*  mListNext  = 0;
+   Padding mP3;
 
    static const int cInvalid = 0x80000000;
 
@@ -31,30 +32,34 @@ namespace LFIntQueue
    //***************************************************************************
    // Queue Members
 
+   Padding mP4;
    AtomicLFIndex mQueueHead;
+   Padding mP5;
    AtomicLFIndex mQueueTail;
+   Padding mP6;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Free List Members
 
-   bool listPush(int  aIndex);
-   bool listPop(int* aIndex);
+   bool listPush(int  aNode);
+   bool listPop(int*  aNode);
 
-   atomic<int>   mListSize;
-   AtomicLFIndex mListHead;
+   static atomic<int>   mListSize;
+   Padding mP7;
+   static AtomicLFIndex mListHead;
+   Padding mP8;
    
-   atomic<int>* mListHeadIndexPtr = (atomic<int>*)&mListHead;
-   atomic<int>& mListHeadIndexRef = (atomic<int>&)*mListHeadIndexPtr;
+   static atomic<int>* mListHeadIndexPtr = (atomic<int>*)&mListHead;
+   Padding mP9;
+   static atomic<int>& mListHeadIndexRef = (atomic<int>&)*mListHeadIndexPtr;
+   Padding mP10;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Memory Members
-
-   // Node array
-   static QueueListNode* mNode = 0;
 
    // Number of blocks allocated
    static int mAllocate = 0;
@@ -67,9 +72,13 @@ namespace LFIntQueue
    // Metrics Members
 
    atomic<unsigned long long> mWriteRetry;
+   Padding mP11;
    atomic<unsigned long long> mReadRetry;
+   Padding mP12;
    atomic<unsigned long long> mPopRetry;
+   Padding mP13;
    atomic<unsigned long long> mPushRetry;
+   Padding mP14;
 
    unsigned long long writeRetry() {return mWriteRetry.load();}
    unsigned long long readRetry()  {return mReadRetry.load();}
@@ -83,23 +92,26 @@ namespace LFIntQueue
 
    void initialize(int aAllocate)
    {
+      finalize();
+
       mAllocate      = aAllocate;
       mQueueAllocate = aAllocate + 1;
       mListAllocate  = aAllocate + 1;
 
-      if (mNode) free(mNode);
-      mNode = new QueueListNode[mListAllocate];
+      mValue = new int[mListAllocate];
+      mQueueNext = new AtomicLFIndex[mListAllocate];
+      mListNext = new AtomicLFIndex[mListAllocate];
 
       for (int i = 0; i < mListAllocate-1; i++)
       {
-         mNode[i].mValue = 0;
-         mNode[i].mQueueNext.store(LFIndex(cInvalid,0));
-         mNode[i].mListNext.store(LFIndex(i+1,0));
+         mValue[i] = 0;
+         mQueueNext[i].store(LFIndex(cInvalid,0));
+         mListNext[i].store(LFIndex(i+1,0));
       }
 
-      mNode[mListAllocate-1].mValue = 0;
-      mNode[mListAllocate-1].mQueueNext.store(LFIndex(cInvalid,0));
-      mNode[mListAllocate-1].mListNext.store(LFIndex(cInvalid,0));
+      mValue[mListAllocate-1] = 0;
+      mQueueNext[mListAllocate-1].store(LFIndex(cInvalid,0));
+      mListNext[mListAllocate-1].store(LFIndex(cInvalid,0));
 
       mListHead.store(LFIndex(0,0));
       mListSize = mListAllocate;
@@ -122,11 +134,12 @@ namespace LFIntQueue
 
    void finalize()
    {
-      if (mNode)
-      {
-         free(mNode);
-         mNode = 0;
-      }
+      if (mValue)     free(mValue);
+      if (mQueueNext) free(mQueueNext);
+      if (mListNext)  free(mListNext);
+      mValue     = 0;
+      mQueueNext = 0;
+      mListNext  = 0;
    }
 
    //***************************************************************************
@@ -165,8 +178,8 @@ namespace LFIntQueue
       if (!listPop(&tNode.mIndex)) return false;
 
       // Initialize the node with the value.
-      mNode[tNode.mIndex].mValue = aValue;
-      mNode[tNode.mIndex].mQueueNext.store(LFIndex(cInvalid,0));
+      mValue[tNode.mIndex] = aValue;
+      mQueueNext[tNode.mIndex].store(LFIndex(cInvalid,0));
 
       // Attach the node to the queue tail.
       LFIndex tTail,tNext;
@@ -174,13 +187,13 @@ namespace LFIntQueue
       while (true)
       {
          tTail = mQueueTail.load();
-         tNext = mNode[tTail.mIndex].mQueueNext.load();
+         tNext = mQueueNext[tTail.mIndex].load();
 
          if (tTail == mQueueTail.load())
          {
             if (tNext.mIndex == cInvalid)
             {
-               if (mNode[tTail.mIndex].mQueueNext.compare_exchange_weak(tNext, LFIndex(tNode.mIndex, tNext.mCount+1))) break;
+               if (mQueueNext[tTail.mIndex].compare_exchange_weak(tNext, LFIndex(tNode.mIndex, tNext.mCount+1))) break;
             }
             else
             {
@@ -216,7 +229,7 @@ namespace LFIntQueue
       {
          tHead = mQueueHead.load();
          tTail = mQueueTail.load();
-         tNext = mNode[tHead.mIndex].mQueueNext.load();
+         tNext = mQueueNext[tHead.mIndex].load();
 
          if (tHead == mQueueHead.load())
          {
@@ -227,7 +240,7 @@ namespace LFIntQueue
             }
             else
             {
-               *aValue = mNode[tNext.mIndex].mValue;
+               *aValue = mValue[tNext.mIndex];
                if (mQueueHead.compare_exchange_weak(tHead, LFIndex(tNext.mIndex, tHead.mCount+1)))break;
             }
          }
@@ -260,7 +273,7 @@ namespace LFIntQueue
          tHead = mListHead.load();
 
          // Attach the head node to the pushed node .
-         mNode[aNode].mListNext.store(tHead);
+         mListNext[aNode].store(tHead);
 
          // The pushed node is the new head node.
          if (mListHeadIndexRef.compare_exchange_weak(tHead.mIndex, aNode)) break;
@@ -294,7 +307,7 @@ namespace LFIntQueue
          if (tHead.mIndex == cInvalid) return false;
 
          // Set the head node to be the node that is after the head node.
-         if (mListHead.compare_exchange_weak(tHead, LFIndex(mNode[tHead.mIndex].mListNext.load().mIndex,tHead.mCount+1))) break;
+         if (mListHead.compare_exchange_weak(tHead, LFIndex(mListNext[tHead.mIndex].load().mIndex,tHead.mCount+1))) break;
          mPopRetry++;
       }
 

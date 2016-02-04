@@ -6,7 +6,6 @@
 #include <atomic>
 
 #include "prnPrint.h"
-#include "Timing.h"
 #include "LFIndex.h"
 #include "LFIntQueue.h"
 
@@ -71,8 +70,6 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeRun(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,1);
-   Timing::run1(aCmd->argInt(1));
 }
 
 //******************************************************************************
