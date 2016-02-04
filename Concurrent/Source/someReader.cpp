@@ -152,16 +152,11 @@ void Reader::finishTrial()
 
 void Reader::read(int aNumReads)
 {
-   mMarkerRead.startTrial(gGSettings.mXLimit);
-
    switch (gShare.mMode)
    {
    case 1: read1(aNumReads); break;
    case 2: read2(aNumReads); break;
    }
-
-   mMarkerRead.finishTrial();
-   mMeanTimeRead = mMarkerRead.mStatistics.mMean;
 }
    
 void Reader::flush()
