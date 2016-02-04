@@ -21,6 +21,8 @@ namespace Timing
    // Regionals
 
    Ris::TrialTimeMarker mMarker;
+   Ris::TrialTimeMarker mMarkerWrite;
+   Ris::TrialTimeMarker mMarkerRead;
    int mWriteCount=0;
    int mReadCount=0;
 
@@ -34,6 +36,9 @@ namespace Timing
    void test14();
    void test15();
    void test16();
+
+   void test21();
+   void test22();
 
    //***************************************************************************
    //***************************************************************************
@@ -84,6 +89,42 @@ namespace Timing
 
    void run2(int aTest)
    {
+      int tIterations = 1000000;
+
+      mWriteCount=0;
+      mReadCount=0;
+      mAX=0;
+
+      mMarkerWrite.startTrial(gGSettings.mXLimit);
+      mMarkerRead.startTrial(gGSettings.mXLimit);
+
+      for (int i = 0; i < tIterations; i++)
+      {
+         switch (aTest)
+         {
+         case 1:  test21(); break;
+         case 2:  test22(); break;
+         }
+      }
+
+      mMarkerWrite.finishTrial();
+      mMarkerRead.finishTrial();
+
+      Prn::print(0, "WRITE2 %5d $$ %10.3f  %10.3f  %10.3f  %10.3f",
+         mMarkerWrite.mStatistics.mPutCount,
+         mMarkerWrite.mStatistics.mMean,
+         mMarkerWrite.mStatistics.mStdDev,
+         mMarkerWrite.mStatistics.mMinX,
+         mMarkerWrite.mStatistics.mMaxX);
+
+      Prn::print(0, "READ2  %5d $$ %10.3f  %10.3f  %10.3f  %10.3f",
+         mMarkerRead.mStatistics.mPutCount,
+         mMarkerRead.mStatistics.mMean,
+         mMarkerRead.mStatistics.mStdDev,
+         mMarkerRead.mStatistics.mMinX,
+         mMarkerRead.mStatistics.mMaxX);
+
+      Prn::print(0, "Done");
    }
 
    //***************************************************************************
@@ -109,10 +150,7 @@ namespace Timing
    void test14()
    {
       mAX++;
-   }
 
-   void test15()
-   {
       mAX = 100;
       mNC = 200;
       mNE = 200;
@@ -120,10 +158,43 @@ namespace Timing
       mAX.compare_exchange_weak(mNC,mNE);
    }
 
-   void test16()
+   void test15()
    {
       LFIntQueue::tryWrite(++mWriteCount);
       LFIntQueue::tryRead(&mReadCount);
+   }
+
+   void test16()
+   {
+   }
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Test
+
+   void test21()
+   {
+      mMarkerWrite.doStart();
+      LFIntQueue::tryWrite(++mWriteCount);
+      mMarkerWrite.doStop();
+
+      mMarkerRead.doStart();
+      LFIntQueue::tryRead(&mReadCount);
+      mMarkerRead.doStop();
+   }
+
+   void test22()
+   {
+      mMarkerWrite.doStart();
+      LFIntQueue::tryWrite(++mWriteCount);
+      mMarkerWrite.doStop();
+      LFBackoff::delay(gGSettings.mDelayWrite);
+
+      mMarkerRead.doStart();
+      LFIntQueue::tryRead(&mReadCount);
+      mMarkerRead.doStop();
+      LFBackoff::delay(gGSettings.mDelayRead);
    }
 
 }
