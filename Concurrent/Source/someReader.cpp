@@ -32,7 +32,7 @@ void Reader::initialize()
    mPassCount = 0;
    mFailCount = 0;
    mCheckSum   = 0;
-   mMeanTime  = 0.0;
+   mMeanTimeRead  = 0.0;
 }
 
 void Reader::finalize()
@@ -63,7 +63,7 @@ void Reader::read1(int aNumReads)
    {
       IntMessage tMsg;
 
-      mMarker.doStart();
+      mMarkerRead.doStart();
       if (LFIntQueue::tryRead(&tMsg.aint()))
       {
          mPassCount++;
@@ -73,7 +73,7 @@ void Reader::read1(int aNumReads)
       {
          mFailCount++;
       }
-      mMarker.doStop();
+      mMarkerRead.doStop();
    }
 }
    
@@ -96,7 +96,7 @@ void Reader::read2(int aNumReads)
    {
       IntMessage tMsg;
 
-      mMarker.doStart();
+      mMarkerRead.doStart();
       if (RisIntQueue::tryRead(&tMsg.aint()))
       {
          mPassCount++;
@@ -106,7 +106,7 @@ void Reader::read2(int aNumReads)
       {
          mFailCount++;
       }
-      mMarker.doStop();
+      mMarkerRead.doStop();
 
    }
 }
@@ -124,39 +124,19 @@ void Reader::flush2()
 //******************************************************************************
 //******************************************************************************
 
-void Reader::read8(int aNumReads)
-{
-   for (int i = 0; i < aNumReads; i++)
-   {
-      mMarker.doStart();
-      mPassCount++;
-      mFailCount=0;
-      mMarker.doStop();
-   }
-}
-   
-void Reader::flush8()
-{
-}
-   
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
 void Reader::read(int aNumReads)
 {
-   mMarker.startTrial(gGSettings.mXLimit);
+   mMarkerRead.startTrial(gGSettings.mXLimit);
 
    switch (gShare.mMode)
    {
    case 1: read1(aNumReads); break;
    case 2: read2(aNumReads); break;
-   case 8: read8(aNumReads); break;
    }
 
    mCount = mPassCount + mFailCount;
-   mMarker.finishTrial();
-   mMeanTime = mMarker.mStatistics.mMean;
+   mMarkerRead.finishTrial();
+   mMeanTimeRead = mMarkerRead.mStatistics.mMean;
 }
    
 void Reader::flush()
@@ -165,7 +145,6 @@ void Reader::flush()
    {
    case 1: flush1(); break;
    case 2: flush2(); break;
-   case 8: flush2(); break;
    }
 }
    

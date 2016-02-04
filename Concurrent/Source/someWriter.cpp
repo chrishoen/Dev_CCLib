@@ -37,7 +37,7 @@ void Writer::initialize(unsigned aIdent)
    mPassCount = 0;
    mFailCount = 0;
    mCheckSum   = 0;
-   mMeanTime  = 0.0;
+   mMeanTimeWrite  = 0.0;
    mMeanTimePop  = 0.0;
    mMeanTimePush  = 0.0;
 }
@@ -69,11 +69,15 @@ void Writer::write1(int aNumWrites)
 {
    for (int i = 0; i < aNumWrites; i++)
    {
+      int tPass;
       mCode++;
       IntMessage tMsg(mIdent,mCode);
 
-      mMarker.doStart();
-      if (LFIntQueue::tryWrite(tMsg.aint()))
+      mMarkerWrite.doStart();
+      tPass = LFIntQueue::tryWrite(tMsg.aint());
+      mMarkerWrite.doStop();
+
+      if (tPass)
       {
          mPassCount++;
          mCheckSum += mCode;
@@ -82,7 +86,6 @@ void Writer::write1(int aNumWrites)
       {
          mFailCount++;
       }
-      mMarker.doStop();
    }
 }
 
@@ -94,11 +97,15 @@ void Writer::write2(int aNumWrites)
 {
    for (int i = 0; i < aNumWrites; i++)
    {
+      int tPass;
       mCode++;
       IntMessage tMsg(mIdent,mCode);
 
-      mMarker.doStart();
-      if (RisIntQueue::tryWrite(tMsg.aint()))
+      mMarkerWrite.doStart();
+      tPass = RisIntQueue::tryWrite(tMsg.aint());
+      mMarkerWrite.doStop();
+
+      if (tPass)
       {
          mPassCount++;
          mCheckSum += mCode;
@@ -107,7 +114,6 @@ void Writer::write2(int aNumWrites)
       {
          mFailCount++;
       }
-      mMarker.doStop();
    }
 }
 
@@ -148,18 +154,18 @@ void Writer::write8(int aNumWrites)
 
 void Writer::startTrial()
 {
-   mMarker.startTrial(gGSettings.mXLimit);
+   mMarkerWrite.startTrial(gGSettings.mXLimit);
    mMarkerPop.startTrial(gGSettings.mXLimit);
    mMarkerPush.startTrial(gGSettings.mXLimit);
 
 }
 void Writer::finishTrial()
 {
-   mMarker.finishTrial();
+   mMarkerWrite.finishTrial();
    mMarkerPop.finishTrial();
    mMarkerPush.finishTrial();
 
-   mMeanTime = mMarker.mStatistics.mMean;
+   mMeanTimeWrite = mMarkerWrite.mStatistics.mMean;
    mMeanTimePop = mMarkerPop.mStatistics.mMean;
    mMeanTimePush = mMarkerPush.mStatistics.mMean;
 

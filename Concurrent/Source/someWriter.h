@@ -52,8 +52,8 @@ public:
    unsigned long long mFailCount;
    unsigned long long mCheckSum;
 
-   Ris::TrialTimeMarker mMarker;
-   double               mMeanTime;
+   Ris::TrialTimeMarker mMarkerWrite;
+   double               mMeanTimeWrite;
 
    Ris::TrialTimeMarker mMarkerPop;
    double               mMeanTimePop;

@@ -81,7 +81,7 @@ void Share::update()
       mWriterPassCount += mWriter[i].mPassCount;
       mWriterFailCount += mWriter[i].mFailCount;
       mWriterCheckSum  += mWriter[i].mCheckSum;
-      mWriterMeanTime  += mWriter[i].mMeanTime/mNumWriters;
+      mWriterMeanTime  += mWriter[i].mMeanTimeWrite/mNumWriters;
       mWriterMeanTimePop   += mWriter[i].mMeanTimePop/mNumWriters;
       mWriterMeanTimePush  += mWriter[i].mMeanTimePush/mNumWriters;
    }
@@ -90,7 +90,7 @@ void Share::update()
    mReaderPassCount = mReader.mPassCount;
    mReaderFailCount = mReader.mFailCount;
    mReaderCheckSum  = mReader.mCheckSum;
-   mReaderMeanTime  = mReader.mMeanTime;
+   mReaderMeanTime  = mReader.mMeanTimeRead;
 }
   
 //******************************************************************************
@@ -143,7 +143,6 @@ void Share::show()
    case 1: LFIntQueue::show(); break;
    case 2: break;
    case 8: LFFreeList::show(); break;
-   case 9: LFIntQueue::show(); break;
    }
 
    if (mMode < 8)
@@ -187,16 +186,6 @@ void Share::show()
       Prn::print(0, "popRetry           %16.5f", tPopRetry);
       Prn::print(0, "pushRetry          %16.5f", tPushRetry);
    }
-   else if (mMode == 9)
-   {
-      double tPopRetry = (double)LFIntQueue::popRetry() / (double)mWriterCount;
-      double tPushRetry = (double)LFIntQueue::pushRetry() / (double)mWriterPassCount;
-
-      Prn::print(0, "");
-      Prn::print(0, "popRetry           %16.5f", tPopRetry);
-      Prn::print(0, "pushRetry          %16.5f", tPushRetry);
-   }
-
 }
   
 }//namespace
