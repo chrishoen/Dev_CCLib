@@ -29,6 +29,7 @@ public:
 
   void executeTime1  (Ris::CmdLineCmd* aCmd);
   void executeTime2  (Ris::CmdLineCmd* aCmd);
+  void executeTime8  (Ris::CmdLineCmd* aCmd);
 
 };
 //******************************************************************************

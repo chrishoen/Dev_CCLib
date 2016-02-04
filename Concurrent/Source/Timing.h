@@ -9,6 +9,7 @@ namespace Timing
    void initialize(int aTest);
    void run1(int aTest);
    void run2(int aTest);
+   void run8(int aTest);
 }
 #endif
 

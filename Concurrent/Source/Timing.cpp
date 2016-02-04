@@ -7,6 +7,7 @@
 #include "my_functions.h"
 #include "risTimeMarker.h"
 #include "GSettings.h"
+#include "LFFreeList.h"
 #include "LFIntQueue.h"
 #include "LFBackoff.h"
 #include "Timing.h"
@@ -23,8 +24,12 @@ namespace Timing
    Ris::TrialTimeMarker mMarker;
    Ris::TrialTimeMarker mMarkerWrite;
    Ris::TrialTimeMarker mMarkerRead;
+   Ris::TrialTimeMarker mMarkerPop;
+   Ris::TrialTimeMarker mMarkerPush;
    int mWriteCount=0;
    int mReadCount=0;
+   int mPopCount=0;
+   int mPushCount=0;
 
    atomic<int> mAX=0;
    int mNC=0;
@@ -39,6 +44,8 @@ namespace Timing
 
    void test21();
    void test22();
+
+   void test81();
 
    //***************************************************************************
    //***************************************************************************
@@ -93,7 +100,6 @@ namespace Timing
 
       mWriteCount=0;
       mReadCount=0;
-      mAX=0;
 
       mMarkerWrite.startTrial(gGSettings.mXLimit);
       mMarkerRead.startTrial(gGSettings.mXLimit);
@@ -130,7 +136,50 @@ namespace Timing
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Test
+   // Run8
+
+   void run8(int aTest)
+   {
+      int tIterations = 1000000;
+
+      mPopCount=0;
+      mPushCount=0;
+
+      mMarkerPop.startTrial(gGSettings.mXLimit);
+      mMarkerPush.startTrial(gGSettings.mXLimit);
+
+      for (int i = 0; i < tIterations; i++)
+      {
+         switch (aTest)
+         {
+         case 1:  test81(); break;
+         }
+      }
+
+      mMarkerPop.finishTrial();
+      mMarkerPush.finishTrial();
+
+      Prn::print(0, "POP8   %5d $$ %10.3f  %10.3f  %10.3f  %10.3f",
+         mMarkerPop.mStatistics.mPutCount,
+         mMarkerPop.mStatistics.mMean,
+         mMarkerPop.mStatistics.mStdDev,
+         mMarkerPop.mStatistics.mMinX,
+         mMarkerPop.mStatistics.mMaxX);
+
+      Prn::print(0, "PUSH8  %5d $$ %10.3f  %10.3f  %10.3f  %10.3f",
+         mMarkerPush.mStatistics.mPutCount,
+         mMarkerPush.mStatistics.mMean,
+         mMarkerPush.mStatistics.mStdDev,
+         mMarkerPush.mStatistics.mMinX,
+         mMarkerPush.mStatistics.mMaxX);
+
+      Prn::print(0, "Done");
+   }
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Test1
 
    void test11()
    {
@@ -171,7 +220,7 @@ namespace Timing
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Test
+   // Test2
 
    void test21()
    {
@@ -195,6 +244,30 @@ namespace Timing
       LFIntQueue::tryRead(&mReadCount);
       mMarkerRead.doStop();
       LFBackoff::delay(gGSettings.mDelayRead);
+   }
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Test8
+
+   void test81()
+   {
+      int tNode;
+      bool tPass;
+
+      mMarkerPop.doStart();
+      tPass = LFFreeList::listPop(&tNode);
+      mMarkerPop.doStop();
+      LFBackoff::delay(gGSettings.mDelay1);
+
+      if (tPass)
+      {
+         mMarkerPush.doStart();
+         LFFreeList::listPush(tNode);
+         mMarkerPush.doStop();
+         LFBackoff::delay(gGSettings.mDelay1);
+      }
    }
 
 }

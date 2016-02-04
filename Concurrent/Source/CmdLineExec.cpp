@@ -40,6 +40,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("SHOW"  ))  executeShow  (aCmd);
    if(aCmd->isCmd("T1"    ))  executeTime1 (aCmd);
    if(aCmd->isCmd("T2"    ))  executeTime2 (aCmd);
+   if(aCmd->isCmd("T8"    ))  executeTime8 (aCmd);
 
 
    if(aCmd->isCmd("GO2"   ))  executeGo2   (aCmd);
@@ -67,6 +68,14 @@ void CmdLineExec::executeTime2(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1,2);
    Timing::run2(aCmd->argInt(1));
+}
+
+//******************************************************************************
+
+void CmdLineExec::executeTime8(Ris::CmdLineCmd* aCmd)
+{
+   aCmd->setArgDefault(1,1);
+   Timing::run8(aCmd->argInt(1));
 }
 
 //******************************************************************************
