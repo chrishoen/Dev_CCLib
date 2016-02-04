@@ -181,6 +181,8 @@
     <ClCompile Include="Source\someThreads.cpp" />
     <ClCompile Include="Source\someWriter.cpp" />
     <ClCompile Include="Source\someShare.cpp" />
+    <ClCompile Include="Source\someWriterReader.cpp" />
+    <ClCompile Include="Source\someWriterReaderThread.cpp" />
     <ClCompile Include="Source\someWriterThread.cpp" />
     <ClCompile Include="Source\Timing.cpp" />
   </ItemGroup>
@@ -199,6 +201,8 @@
     <ClInclude Include="Source\someThreads.h" />
     <ClInclude Include="Source\someWriter.h" />
     <ClInclude Include="Source\someShare.h" />
+    <ClInclude Include="Source\someWriterReader.h" />
+    <ClInclude Include="Source\someWriterReaderThread.h" />
     <ClInclude Include="Source\someWriterThread.h" />
     <ClInclude Include="Source\Timing.h" />
   </ItemGroup>

@@ -96,9 +96,9 @@ void StatusThread::updateProcString()
 {
    for (int i = 0; i < gShare.mNumWriters; i++)
    {
-      mProcString[i] = '0' + gShare.mWriterProc[i];
+      mProcString[i] = '0' + gShare.mWriterProcessor[i];
    }
-   mProcString[gShare.mNumWriters] = '0' + gShare.mReaderProc;
+   mProcString[gShare.mNumWriters] = '0' + gShare.mReaderProcessor;
    mProcString[gShare.mNumWriters+1] = 0;
 
 }

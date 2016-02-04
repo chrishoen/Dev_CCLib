@@ -10,6 +10,7 @@
 #include "risTimeMarker.h"
 #include "someWriter.h"
 #include "someReader.h"
+#include "someWriterReader.h"
 
 namespace Some
 {
@@ -23,20 +24,27 @@ public:
    Share();
 
    void initialize();
+
+   void update1();
+   void update2();
    void update();
+
+   void show1();
+   void show8();
    void show();
 
    int mMode;
    bool mTerminateFlag;
 
    static const int cMaxNumWriters = 10;
-   Writer   mWriter[cMaxNumWriters];
-   int      mNumWriters;
+   int            mNumWriters;
 
-   Reader mReader;
+   Writer         mWriter[cMaxNumWriters];
+   WriterReader   mWriterReader[cMaxNumWriters];
+   Reader         mReader;
 
-   int      mWriterProc[cMaxNumWriters];
-   int      mReaderProc;
+   int mWriterProcessor[cMaxNumWriters];
+   int mReaderProcessor;
 
    unsigned long long  mWriterCount;
    unsigned long long  mWriterPassCount;

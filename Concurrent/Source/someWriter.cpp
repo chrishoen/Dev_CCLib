@@ -121,10 +121,13 @@ void Writer::write8(int aNumWrites)
          LFFreeList::listPush(tNode);
          mMarkerPush.doStop();
          LFBackoff::delay(gGSettings.mDelay1);
+
+         mCount++;
          mPassCount++;
       }
       else
       {
+         mCount++;
          mFailCount++;
       }
    }

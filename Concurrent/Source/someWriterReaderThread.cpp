@@ -12,7 +12,7 @@
 #include "LFBackoff.h"
 
 #define  _SOMEWRITERTHREAD_CPP_
-#include "someWriterThread.h"
+#include "someWriterReaderThread.h"
 
 namespace Some
 {
@@ -21,7 +21,7 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 
-WriterThread::WriterThread(int aIdent) 
+WriterReaderThread::WriterReaderThread(int aIdent) 
 {
    // BaseClass
    BaseClass::setThreadPriorityLow();
@@ -53,24 +53,24 @@ WriterThread::WriterThread(int aIdent)
 
 //******************************************************************************
 
-void WriterThread::threadInitFunction()
+void WriterReaderThread::threadInitFunction()
 {
-   Prn::print(0,"WriterThread::threadInitFunction");
+   Prn::print(0,"WriterReaderThread::threadInitFunction");
 }
 
 //******************************************************************************
 
-void WriterThread::threadRunFunction()
+void WriterReaderThread::threadRunFunction()
 {
    try
    {
-      gShare.mWriter[mIdent].startTrial();
+      gShare.mWriterReader[mIdent].startTrial();
       while (1)
       {
          // Thread loop termination
          if (gGSettings.mTerminate != 0)
          {
-            if (gShare.mWriter[mIdent].mCount > gGSettings.mTerminate)
+            if (gShare.mWriterReader[mIdent].mWriteCount > gGSettings.mTerminate)
             {
                gShare.mTerminateFlag = true;
             }
@@ -80,26 +80,26 @@ void WriterThread::threadRunFunction()
 
          // Write
          gShare.mWriterProcessor[mIdent] = GetCurrentProcessorNumber();
-         gShare.mWriter[mIdent].write(10000);
+         gShare.mWriterReader[mIdent].writeread(10000);
       }
-      gShare.mWriter[mIdent].finishTrial();
+      gShare.mWriterReader[mIdent].finishTrial();
    }
    catch (...)
    {
-      Ris::Threads::halt("WriterThread::exception");
+      Ris::Threads::halt("WriterReaderThread::exception");
    }
 }
 
 //******************************************************************************
 
-void WriterThread::threadExitFunction()
+void WriterReaderThread::threadExitFunction()
 {
-   gShare.mWriter[mIdent].show();
+   gShare.mWriterReader[mIdent].show();
 }
 
 //******************************************************************************
 
-void WriterThread::shutdownThread()
+void WriterReaderThread::shutdownThread()
 {
    // Set terminate
    mTerminateFlag = true;

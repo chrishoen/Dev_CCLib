@@ -9,6 +9,7 @@
 //******************************************************************************
 #include "someWriterThread.h"
 #include "someReaderThread.h"
+#include "someWriterReaderThread.h"
 #include "someStatusThread.h"
 
 
@@ -24,15 +25,24 @@ public:
    Threads();
 
    void reset();
+
+   void start1();
+   void start2();
+   void start8();
    void start();
+
+   void stop1();
+   void stop2();
+   void stop8();
    void stop();
 
    static const int cMaxNumWriters = 10;
-   WriterThread* mWriterThread[cMaxNumWriters];
    int mNumWriters;
 
-   ReaderThread* mReaderThread;
-   StatusThread* mStatusThread;
+   WriterThread*       mWriterThread       [cMaxNumWriters];
+   WriterReaderThread* mWriterReaderThread [cMaxNumWriters];
+   ReaderThread*       mReaderThread;
+   StatusThread*       mStatusThread;
 };
 
 //******************************************************************************

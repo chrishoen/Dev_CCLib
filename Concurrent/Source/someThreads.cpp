@@ -7,6 +7,7 @@ Description:
 //******************************************************************************
 #include "prnPrint.h"
 #include "GSettings.h"
+#include "someShare.h"
 
 #define  _SOMETHREADS_CPP_
 #include "someThreads.h"
@@ -27,7 +28,12 @@ void Threads::reset()
    mNumWriters = gGSettings.mNumWriters;
    if (mNumWriters > cMaxNumWriters) mNumWriters = cMaxNumWriters;
 
-   for (int i=0;i<cMaxNumWriters;i++) mWriterThread[i]=0;
+   for (int i = 0; i < cMaxNumWriters; i++)
+   {
+      mWriterThread[i] = 0;
+      mWriterReaderThread[i] = 0;
+   }
+
    mReaderThread=0;
    mStatusThread=0;
 }
@@ -36,9 +42,9 @@ void Threads::reset()
 //******************************************************************************
 //******************************************************************************
 
-void Threads::start()
+void Threads::start1()
 {
-   Prn::print(0,"Threads::start*******************************");
+   Prn::print(0,"Threads::start1*******************************");
    reset();
 
    mReaderThread = new ReaderThread;
@@ -58,9 +64,47 @@ void Threads::start()
 //******************************************************************************
 //******************************************************************************
 
-void Threads::stop()
+void Threads::start2()
 {
-   Prn::print(0,"Threads::stopping****************************");
+   Prn::print(0,"Threads::start2*******************************");
+   reset();
+
+   for (int i = 0; i < mNumWriters; i++)
+   {
+      mWriterReaderThread[i] = new WriterReaderThread(i);
+      mWriterReaderThread[i]->launchThread();
+   }
+
+   mStatusThread = new StatusThread;
+   mStatusThread->launchThread();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void Threads::start8()
+{
+   Prn::print(0,"Threads::start8*******************************");
+   reset();
+
+   for (int i = 0; i < mNumWriters; i++)
+   {
+      mWriterThread[i] = new WriterThread(i);
+      mWriterThread[i]->launchThread();
+   }
+
+   mStatusThread = new StatusThread;
+   mStatusThread->launchThread();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void Threads::stop1()
+{
+   Prn::print(0,"Threads::stopping1****************************");
    Prn::print(0,"");
 
    if (mStatusThread)
@@ -87,7 +131,93 @@ void Threads::stop()
       mReaderThread = 0;
    }
 
-   Prn::print(0,"Threads::stopped*****************************");
+   Prn::print(0,"Threads::stopped1*****************************");
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void Threads::stop2()
+{
+   Prn::print(0,"Threads::stopping2****************************");
+   Prn::print(0,"");
+
+   if (mStatusThread)
+   {
+      mStatusThread->shutdownThread();
+      delete mStatusThread;
+      mStatusThread = 0;
+   }
+
+   for (int i = 0; i < mNumWriters; i++)
+   {
+      if (mWriterReaderThread[i])
+      {
+         mWriterReaderThread[i]->shutdownThread();
+         delete mWriterReaderThread[i];
+         mWriterReaderThread[i] = 0;
+      }
+   }
+
+   Prn::print(0,"Threads::stopped2*****************************");
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void Threads::stop8()
+{
+   Prn::print(0,"Threads::stopping8****************************");
+   Prn::print(0,"");
+
+   if (mStatusThread)
+   {
+      mStatusThread->shutdownThread();
+      delete mStatusThread;
+      mStatusThread = 0;
+   }
+
+   for (int i = 0; i < mNumWriters; i++)
+   {
+      if (mWriterThread[i])
+      {
+         mWriterThread[i]->shutdownThread();
+         delete mWriterThread[i];
+         mWriterThread[i] = 0;
+      }
+   }
+
+   Prn::print(0,"Threads::stopped8*****************************");
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void Threads::start()
+{
+   switch (gShare.mMode)
+   {
+   case 1: start1 (); break;
+   case 2: start2 (); break;
+   case 8: start8 (); break;
+   }
+}
+   
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void Threads::stop()
+{
+   switch (gShare.mMode)
+   {
+   case 1: stop1 (); break;
+   case 2: stop2 (); break;
+   case 8: stop8 (); break;
+   }
+}
+   
 }//namespace
