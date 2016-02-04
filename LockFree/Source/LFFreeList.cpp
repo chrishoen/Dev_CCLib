@@ -175,23 +175,23 @@ namespace LFFreeList
 
          // Set the head node to be the node that is after the head node.
          if (mListHead.compare_exchange_weak(tHead, LFIndex(mNode[tHead.mIndex].mListNext.load().mIndex,tHead.mCount+1))) break;
-         LFBackoff::delay2(mBackoff1,mBackoff2);
 
          if (++tLoopCount==10000) throw 103;
+         LFBackoff::delay2(mBackoff1*tLoopCount,mBackoff2*tLoopCount);
       }
       if (tLoopCount != 0)
       {
-         mPopRetry++;
-         if (tLoopCount == 1) mPopRetry1++;
-         else if (tLoopCount == 2) mPopRetry2++;
-         else if (tLoopCount == 3) mPopRetry3++;
+         mPopRetry.fetch_add(1,memory_order_relaxed);
+         if (tLoopCount == 1) mPopRetry1.fetch_add(1,memory_order_relaxed);
+         else if (tLoopCount == 2) mPopRetry2.fetch_add(1,memory_order_relaxed);
+         else if (tLoopCount == 3) mPopRetry3.fetch_add(1,memory_order_relaxed);
       }
 
       // Return the detached original head node.
       *aNode = tHead.mIndex;
 
       // Done.
-      mListSize--;
+      mListSize.fetch_sub(1,memory_order_relaxed);
       return true;
    }
 
@@ -215,105 +215,24 @@ namespace LFFreeList
 
          // The pushed node is the new head node.
          if (mListHeadIndexRef.compare_exchange_weak(tHead.mIndex, aNode)) break;
-         LFBackoff::delay2(mBackoff1,mBackoff2);
-
          if (++tLoopCount == 10000) throw 103;
+         LFBackoff::delay2(mBackoff1*tLoopCount,mBackoff2*tLoopCount);
+
       }
       if (tLoopCount != 0)
       {
-         mPushRetry++;
-         if (tLoopCount == 1) mPushRetry1++;
-         else if (tLoopCount == 2) mPushRetry2++;
-         else if (tLoopCount == 3) mPushRetry3++;
+         mPushRetry.fetch_add(1,memory_order_relaxed);
+         if (tLoopCount == 1) mPushRetry1.fetch_add(1,memory_order_relaxed);
+         else if (tLoopCount == 2) mPushRetry2.fetch_add(1,memory_order_relaxed);
+         else if (tLoopCount == 3) mPushRetry3.fetch_add(1,memory_order_relaxed);
       }
 
       // Done.
-      mListSize++;
+      mListSize.fetch_add(1,memory_order_relaxed);
       return true;
    }
 
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Test
-
-   //***************************************************************************
-
-   int mTest = 1;
-
-   void initializeTest(int aTest)
-   {
-      mTest = aTest;
-   }
-
-   //***************************************************************************
-
-   bool test1()
-   {
-      return true;
-   }
-
-   //***************************************************************************
-
-   bool test2()
-   {
-      int tNode;
-      if (listPop(&tNode))
-      {
-         listPush(tNode);
-         return true;
-      }
-      else
-      {
-         return false;
-      }
-
-      return true;
-   }
-
-   //***************************************************************************
-
-   bool test3()
-   {
-      int tNode;
-      bool tPass;
-
-      tPass = listPop(&tNode);
-
-      if (tPass)
-      {
-         listPush(tNode);
-         return true;
-      }
-      else
-      {
-         return false;
-      }
-
-      return true;
-   }
-
-   //***************************************************************************
-
-   bool test4()
-   {
-      return true;
-   }
-
-   //***************************************************************************
-
-   bool test()
-   {
-      switch (mTest)
-      {
-      case 1: return test1();
-      case 2: return test2();
-      case 3: return test3();
-      case 4: return test4();
-      }
-      return true;
-   }
-
+   
 }//namespace
 
 /*==============================================================================
@@ -335,38 +254,5 @@ do
 while not CAS(top, old, new)
 return old
 end
-
-   bool listPush(int aNode)
-   {
-      LFIndex tHead;
-
-      int tLoopCount=0;
-      while (true)
-      {
-         // Store the head node in a temp.
-         tHead = mListHead.load();
-
-         // Attach the head node to the pushed node .
-         mNode[aNode].mListNext.store(tHead);
-
-         // The pushed node is the new head node.
-         if (mListHead.compare_exchange_strong(tHead, LFIndex(aNode, tHead.mCount))) break;
-
-         if (++tLoopCount == 10000) throw 103;
-      }
-      if (tLoopCount != 0)
-      {
-         mPushRetry++;
-         if (tLoopCount == 1) mPushRetry1++;
-         else if (tLoopCount == 2) mPushRetry2++;
-         else if (tLoopCount == 3) mPushRetry3++;
-      }
-
-      // Done.
-      mListSize++;
-      return true;
-   }
-
-
 
 ==============================================================================*/

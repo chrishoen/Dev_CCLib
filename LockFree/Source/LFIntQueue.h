@@ -15,9 +15,6 @@ namespace LFIntQueue
 
    void show();
 
-   void initializeTest (int aTest);
-   bool test ();
-
    unsigned long long writeRetry();
    unsigned long long readRetry();
    unsigned long long popRetry();

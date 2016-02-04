@@ -146,27 +146,6 @@ void Writer::write8(int aNumWrites)
 //******************************************************************************
 //******************************************************************************
 
-void Writer::write9(int aNumWrites)
-{
-   for (int i = 0; i < aNumWrites; i++)
-   {
-      mMarker.doStart();
-      if (LFIntQueue::test())
-      {
-         mPassCount++;
-      }
-      else
-      {
-         mFailCount++;
-      }
-      mMarker.doStop();
-   }
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
 void Writer::startTrial()
 {
    mMarker.startTrial(gGSettings.mXLimit);
@@ -194,7 +173,6 @@ void Writer::write(int aNumWrites)
    case 1: write1 (aNumWrites); break;
    case 2: write2 (aNumWrites); break;
    case 8: write8 (aNumWrites); break;
-   case 9: write9 (aNumWrites); break;
    }
 
    mCount = mPassCount + mFailCount;

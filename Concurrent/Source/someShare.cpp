@@ -46,10 +46,6 @@ void Share::initialize()
       LFFreeList::initialize(gGSettings.mAllocate);
       LFFreeList::initializeBackoff(gGSettings.mBackoff1,gGSettings.mBackoff2);
       break;
-   case 9:
-      LFIntQueue::initialize(gGSettings.mAllocate);
-      LFIntQueue::initializeTest(gGSettings.mTest);
-      break;
    }
 
    mNumWriters = gGSettings.mNumWriters;

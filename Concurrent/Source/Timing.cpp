@@ -84,29 +84,6 @@ namespace Timing
 
    void run2(int aTest)
    {
-      LFIntQueue::initializeTest(aTest);
-
-      int tIterations = 1000000;
-
-      mMarker.startTrial(gGSettings.mXLimit);
-
-      for (int i = 0; i < tIterations; i++)
-      {
-         mMarker.doStart();
-         LFIntQueue::test();
-         mMarker.doStop();
-      }
-
-      mMarker.finishTrial();
-
-      Prn::print(0, "TEST2 %5d $$ %10.3f  %10.3f  %10.3f  %10.3f",
-         mMarker.mStatistics.mPutCount,
-         mMarker.mStatistics.mMean,
-         mMarker.mStatistics.mStdDev,
-         mMarker.mStatistics.mMinX,
-         mMarker.mStatistics.mMaxX);
-
-      Prn::print(0, "Done");
    }
 
    //***************************************************************************
