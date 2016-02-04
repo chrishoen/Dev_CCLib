@@ -80,11 +80,13 @@ void Writer::write1(int aNumWrites)
 
       if (tPass)
       {
+         mCount++;
          mPassCount++;
          mCheckSum += mCode;
       }
       else
       {
+         mCount++;
          mFailCount++;
       }
    }
@@ -170,8 +172,6 @@ void Writer::finishTrial()
    mMeanTimeWrite = mMarkerWrite.mStatistics.mMean;
    mMeanTimePop = mMarkerPop.mStatistics.mMean;
    mMeanTimePush = mMarkerPush.mStatistics.mMean;
-
-   mCount = mPassCount + mFailCount;
 }
 
 void Writer::write(int aNumWrites)
@@ -182,8 +182,6 @@ void Writer::write(int aNumWrites)
    case 2: write2 (aNumWrites); break;
    case 8: write8 (aNumWrites); break;
    }
-
-   mCount = mPassCount + mFailCount;
 }
    
 

@@ -55,7 +55,7 @@ void ReaderThread::threadRunFunction()
          if (gShare.mTerminateFlag) break;
 
          gShare.mReaderProc = GetCurrentProcessorNumber();
-         gShare.mReader.read(100);
+         gShare.mReader.read(10000);
       }
       gShare.mReader.finishTrial();
    }

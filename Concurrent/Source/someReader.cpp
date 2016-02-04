@@ -72,11 +72,13 @@ void Reader::read1(int aNumReads)
 
       if (tPass)
       {
+         mCount++;
          mPassCount++;
          mCheckSum += tMsg.mCode;
       }
       else
       {
+         mCount++;
          mFailCount++;
       }
       mMarkerRead.doStop();
@@ -89,6 +91,7 @@ void Reader::flush1()
    {
       IntMessage tMsg;
       if (!LFIntQueue::tryRead(&tMsg.aint())) break;
+      mCount++;
       mPassCount++;
       mCheckSum += tMsg.mCode;
    }
@@ -145,8 +148,6 @@ void Reader::finishTrial()
    mMarkerRead.finishTrial();
 
    mMeanTimeRead = mMarkerRead.mStatistics.mMean;
-
-   mCount = mPassCount + mFailCount;
 }
 
 void Reader::read(int aNumReads)
@@ -159,7 +160,6 @@ void Reader::read(int aNumReads)
    case 2: read2(aNumReads); break;
    }
 
-   mCount = mPassCount + mFailCount;
    mMarkerRead.finishTrial();
    mMeanTimeRead = mMarkerRead.mStatistics.mMean;
 }

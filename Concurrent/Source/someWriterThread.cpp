@@ -80,7 +80,7 @@ void WriterThread::threadRunFunction()
 
          // Write
          gShare.mWriterProc[mIdent] = GetCurrentProcessorNumber();
-         gShare.mWriter[mIdent].write(100);
+         gShare.mWriter[mIdent].write(10000);
       }
       gShare.mWriter[mIdent].finishTrial();
    }
