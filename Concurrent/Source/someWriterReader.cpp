@@ -68,10 +68,22 @@ void WriterReader::show()
 
 void WriterReader::startTrial()
 {
+   int tListSize = LFIntQueue::listSize();
+   for (int i = 0; i < tListSize/2; i++)
+   {
+      mCode++;
+      IntMessage tMsg(mIdent, mCode);
+      LFIntQueue::tryWrite(tMsg.aint());
+
+      mWriteCount++;
+      mWritePassCount++;
+      mWriteCheckSum += mCode;
+   }
+
    mMarkerWrite.startTrial(gGSettings.mXLimit);
    mMarkerRead.startTrial(gGSettings.mXLimit);
-
 }
+
 void WriterReader::finishTrial()
 {
    mMarkerWrite.finishTrial();

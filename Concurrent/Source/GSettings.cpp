@@ -26,6 +26,14 @@ GSettings::GSettings()
    mNumWriters  =    1;
    mAllocate    = 1000;
    mTerminate   = 0;
+
+   mWriteLower  =  900;
+   mWriteUpper  = 1100;
+   mReadLower   =  900;
+   mReadUpper   = 1100;
+   mSleepLower  =  900;
+   mSleepUpper  = 1100;
+
    mXLimit = 0.0;
    mBackoff1=0;
    mBackoff2=0;
@@ -39,12 +47,18 @@ GSettings::GSettings()
 
 void GSettings::show()
 {
-   printf("GSettings   Mode          %11d\n",   mMode);
-   printf("GSettings   Test          %11d\n",   mTest);
-   printf("GSettings   NumWriters    %11d\n",   mNumWriters);
-   printf("GSettings   Allocate      %11d\n",   mAllocate);
-   printf("GSettings   Terminate     %11d\n",   mTerminate);
-   printf("GSettings   XLimit        %11.1f\n", mXLimit);
+   printf("GSettings   Mode          %11d\n",    mMode);
+   printf("GSettings   Test          %11d\n",    mTest);
+   printf("GSettings   NumWriters    %11d\n",    mNumWriters);
+   printf("GSettings   Allocate      %11d\n",    mAllocate);
+   printf("GSettings   Terminate     %11d\n",    mTerminate);
+   printf("GSettings   WriteLower    %11d\n",    mWriteLower);
+   printf("GSettings   WriteUpper    %11d\n",    mWriteUpper);
+   printf("GSettings   ReadLower     %11d\n",    mReadLower);
+   printf("GSettings   ReadUpper     %11d\n",    mReadUpper);
+   printf("GSettings   SleepLower    %11d\n",    mSleepLower);
+   printf("GSettings   SleepUpper    %11d\n",    mSleepUpper);
+   printf("GSettings   XLimit        %11.1f\n",  mXLimit);
    printf("GSettings   Backoff1      %11d\n",    mBackoff1);
    printf("GSettings   Backoff2      %11d\n",    mBackoff2);
    printf("GSettings   Delay1        %11d\n",    mDelay1);
@@ -64,6 +78,13 @@ void GSettings::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("NumWriters"))   mNumWriters  = aCmd->argInt (1);
    if(aCmd->isCmd("Allocate"))     mAllocate    = aCmd->argInt (1);
    if(aCmd->isCmd("Terminate"))    mTerminate   = aCmd->argInt (1);
+   if(aCmd->isCmd("Allocate"))     mAllocate    = aCmd->argInt (1);
+   if(aCmd->isCmd("WriteLower"))   mWriteLower  = aCmd->argInt (1);
+   if(aCmd->isCmd("WriteUpper"))   mWriteUpper  = aCmd->argInt (1);
+   if(aCmd->isCmd("ReadLower"))    mReadLower   = aCmd->argInt (1);
+   if(aCmd->isCmd("ReadUpper"))    mReadUpper   = aCmd->argInt (1);
+   if(aCmd->isCmd("SleepLower"))   mSleepLower  = aCmd->argInt (1);
+   if(aCmd->isCmd("SleepUpper"))   mSleepUpper  = aCmd->argInt (1);
    if(aCmd->isCmd("XLimit"))       mXLimit      = aCmd->argDouble (1);
    if(aCmd->isCmd("Backoff1"))     mBackoff1    = aCmd->argInt (1);
    if(aCmd->isCmd("Backoff2"))     mBackoff2    = aCmd->argInt (1);

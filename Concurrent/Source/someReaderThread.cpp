@@ -23,8 +23,14 @@ namespace Some
 
 ReaderThread::ReaderThread() 
 {
+   // Settings Members
+   mSleepLower = gGSettings.mSleepLower;
+   mSleepUpper = gGSettings.mSleepUpper;
+   mReadLower  = gGSettings.mReadLower;
+   mReadUpper  = gGSettings.mReadUpper;
+
    // BaseClass
-   BaseClass::setThreadPriorityLow();
+   BaseClass::setThreadPriorityHigh();
 
    BaseClass::mThreadAffinityMask = 0x02;
    BaseClass::mThreadIdealProcessor = 1;
@@ -51,11 +57,14 @@ void ReaderThread::threadRunFunction()
       gShare.mReader.startTrial();
       while (1)
       {
+         // Sleep
+         threadSleep(my_irand(mSleepLower, mSleepUpper));
          if (mTerminateFlag) break;
          if (gShare.mTerminateFlag) break;
 
+         // Read 
          gShare.mReaderProcessor = GetCurrentProcessorNumber();
-         gShare.mReader.read(10000);
+         gShare.mReader.read(my_irand(mReadLower, mReadUpper));
       }
       gShare.mReader.finishTrial();
    }

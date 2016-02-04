@@ -52,25 +52,36 @@ void StatusThread::threadRunFunction()
       if (gShare.mTerminateFlag) break;
 
       updateProcString();
-      if (gShare.mMode != 8)
+      switch (gShare.mMode)
       {
-         Prn::print(Prn::ThreadRun1, "%d %s$   %s   %s %8d",
-            gShare.mMode,
-            mProcString,
-            my_stringLLU(tString1, gShare.mWriter[0].mCount),
-            my_stringLLU(tString2, gShare.mReader.mCount),
-            LFIntQueue::listSize());
+         case 1:
+         {
+            Prn::print(Prn::ThreadRun1, "%s$   %s   %s %8d",
+               mProcString,
+               my_stringLLU(tString1, gShare.mWriter[0].mCount),
+               my_stringLLU(tString2, gShare.mReader.mCount),
+               LFIntQueue::listSize());
+         }
+         break;
+         case 2:
+         {
+            Prn::print(Prn::ThreadRun1, "%s$   %s   %s %8d",
+               mProcString,
+               my_stringLLU(tString1, gShare.mWriterReader[0].mWriteCount),
+               my_stringLLU(tString2, gShare.mWriterReader[0].mReadCount),
+               LFIntQueue::listSize());
+         }
+         break;
+         case 8:
+         {
+            Prn::print(Prn::ThreadRun1, "%s$   %s   %s %8d",
+               mProcString,
+               my_stringLLU(tString1, gShare.mWriter[0].mCount),
+               my_stringLLU(tString2, gShare.mReader.mCount),
+               LFFreeList::listSize());
+         }
+         break;
       }
-      else
-      {
-         Prn::print(Prn::ThreadRun1, "%d %s$   %s   %s %8d",
-            gShare.mMode,
-            mProcString,
-            my_stringLLU(tString1, gShare.mWriter[0].mCount),
-            my_stringLLU(tString2, gShare.mReader.mCount),
-            LFFreeList::listSize());
-      }
-
    }
 }
 

@@ -32,14 +32,16 @@ public:
    void shutdownThread();
 
    // Writer Members
-   int    mWriteLower;
-   int    mWriteUpper;
    int    mIdent;
 
    // Thread Members
    bool  mTerminateFlag;
+   int   mWriteLower;
+   int   mWriteUpper;
    int   mSleepLower;
    int   mSleepUpper;
+
+
 };
 
 //******************************************************************************

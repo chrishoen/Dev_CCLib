@@ -36,6 +36,10 @@ public:
 
    // Thread Members
    bool  mTerminateFlag;
+   int   mWriteLower;
+   int   mWriteUpper;
+   int   mSleepLower;
+   int   mSleepUpper;
 };
 
 //******************************************************************************

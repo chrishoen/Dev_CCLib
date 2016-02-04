@@ -23,8 +23,14 @@ namespace Some
 
 WriterThread::WriterThread(int aIdent) 
 {
+   // Settings Members
+   mSleepLower = gGSettings.mSleepLower;
+   mSleepUpper = gGSettings.mSleepUpper;
+   mWriteLower = gGSettings.mWriteLower;
+   mWriteUpper = gGSettings.mWriteUpper;
+
    // BaseClass
-   BaseClass::setThreadPriorityLow();
+   BaseClass::setThreadPriorityHigh();
 
    switch (aIdent)
    {
@@ -67,6 +73,8 @@ void WriterThread::threadRunFunction()
       gShare.mWriter[mIdent].startTrial();
       while (1)
       {
+         // Sleep
+         threadSleep(my_irand(mSleepLower, mSleepUpper));
          // Thread loop termination
          if (gGSettings.mTerminate != 0)
          {
@@ -80,7 +88,7 @@ void WriterThread::threadRunFunction()
 
          // Write
          gShare.mWriterProcessor[mIdent] = GetCurrentProcessorNumber();
-         gShare.mWriter[mIdent].write(10000);
+         gShare.mWriter[mIdent].write(my_irand(mWriteLower, mWriteUpper));
       }
       gShare.mWriter[mIdent].finishTrial();
    }

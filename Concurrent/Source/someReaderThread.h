@@ -32,11 +32,11 @@ public:
    void shutdownThread();
 
    // Reader Members
-   int    mReadLower;
-   int    mReadUpper;
 
    // Thread Members
    bool  mTerminateFlag;
+   int   mReadLower;
+   int   mReadUpper;
    int   mSleepLower;
    int   mSleepUpper;
 };

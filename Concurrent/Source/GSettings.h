@@ -26,6 +26,13 @@ public:
    int     mAllocate;
    int     mTerminate;
 
+   int     mWriteLower;
+   int     mWriteUpper;
+   int     mReadLower;
+   int     mReadUpper;
+   int     mSleepLower;
+   int     mSleepUpper;
+
    double  mXLimit;
    int     mBackoff1;
    int     mBackoff2;
