@@ -48,12 +48,6 @@ WriterThread::WriterThread(int aIdent)
 
    // Thread Members
    mTerminateFlag = false;
-   mSleepLower = gGSettings.mSleepLower;
-   mSleepUpper = gGSettings.mSleepUpper;
-
-   // Writer Members
-   mWriteLower = gGSettings.mWriteLower;
-   mWriteUpper = gGSettings.mWriteUpper;
    mIdent = aIdent;
 }
 
@@ -86,7 +80,7 @@ void WriterThread::threadRunFunction()
 
          // Write
          gShare.mWriterProc[mIdent] = GetCurrentProcessorNumber();
-         gShare.mWriter[mIdent].write(my_irand(mWriteLower, mWriteUpper));
+         gShare.mWriter[mIdent].write(100);
       }
       gShare.mWriter[mIdent].finishTrial();
    }

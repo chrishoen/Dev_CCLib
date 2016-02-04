@@ -23,23 +23,17 @@ public:
    int     mTest;
    int     mNumWriters;
 
-   int     mMultiplier;
    int     mAllocate;
-   int     mWriteLower;
-   int     mWriteUpper;
-   int     mReadLower;
-   int     mReadUpper;
    int     mTerminate;
 
-   int     mSleepLower;
-   int     mSleepUpper;
-
-   int     mThreadMode;
    double  mXLimit;
    int     mBackoff1;
    int     mBackoff2;
+
    int     mDelay1;
    int     mDelay2;
+   int     mDelayWrite;
+   int     mDelayRead;
 
 
    // Settings

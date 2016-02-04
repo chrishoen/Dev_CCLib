@@ -33,6 +33,9 @@ public:
    void finalize();
    void show();
 
+   void startTrial();
+   void finishTrial();
+
    void read1 (int aNumReads);
    void read2 (int aNumReads);
    void read  (int aNumReads);

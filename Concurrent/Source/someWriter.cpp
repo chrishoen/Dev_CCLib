@@ -69,13 +69,14 @@ void Writer::write1(int aNumWrites)
 {
    for (int i = 0; i < aNumWrites; i++)
    {
-      int tPass;
+      bool tPass;
       mCode++;
       IntMessage tMsg(mIdent,mCode);
 
       mMarkerWrite.doStart();
       tPass = LFIntQueue::tryWrite(tMsg.aint());
       mMarkerWrite.doStop();
+      LFBackoff::delay(gGSettings.mDelayWrite);
 
       if (tPass)
       {
@@ -97,13 +98,14 @@ void Writer::write2(int aNumWrites)
 {
    for (int i = 0; i < aNumWrites; i++)
    {
-      int tPass;
+      bool tPass;
       mCode++;
       IntMessage tMsg(mIdent,mCode);
 
       mMarkerWrite.doStart();
       tPass = RisIntQueue::tryWrite(tMsg.aint());
       mMarkerWrite.doStop();
+      LFBackoff::delay(gGSettings.mDelayWrite);
 
       if (tPass)
       {

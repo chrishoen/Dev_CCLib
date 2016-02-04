@@ -10,6 +10,7 @@ Description:
 
 #include "GSettings.h"
 #include "someShare.h"
+#include "LFBackoff.h"
 #include "LFIntQueue.h"
 #include "RisIntQueue.h"
 #include "someReader.h"
@@ -61,10 +62,15 @@ void Reader::read1(int aNumReads)
 {
    for (int i = 0; i < aNumReads; i++)
    {
+      bool tPass;
       IntMessage tMsg;
 
       mMarkerRead.doStart();
-      if (LFIntQueue::tryRead(&tMsg.aint()))
+      tPass = LFIntQueue::tryRead(&tMsg.aint());
+      mMarkerRead.doStop();
+      LFBackoff::delay(gGSettings.mDelayRead);
+
+      if (tPass)
       {
          mPassCount++;
          mCheckSum += tMsg.mCode;
@@ -83,6 +89,8 @@ void Reader::flush1()
    {
       IntMessage tMsg;
       if (!LFIntQueue::tryRead(&tMsg.aint())) break;
+      mPassCount++;
+      mCheckSum += tMsg.mCode;
    }
 }
    
@@ -94,10 +102,14 @@ void Reader::read2(int aNumReads)
 {
    for (int i = 0; i < aNumReads; i++)
    {
+      bool tPass;
       IntMessage tMsg;
 
       mMarkerRead.doStart();
-      if (RisIntQueue::tryRead(&tMsg.aint()))
+      tPass = RisIntQueue::tryRead(&tMsg.aint());
+      LFBackoff::delay(gGSettings.mDelayRead);
+
+      if (tPass)
       {
          mPassCount++;
          mCheckSum += tMsg.mCode;
@@ -107,7 +119,6 @@ void Reader::read2(int aNumReads)
          mFailCount++;
       }
       mMarkerRead.doStop();
-
    }
 }
    
@@ -123,6 +134,20 @@ void Reader::flush2()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+
+void Reader::startTrial()
+{
+   mMarkerRead.startTrial(gGSettings.mXLimit);
+
+}
+void Reader::finishTrial()
+{
+   mMarkerRead.finishTrial();
+
+   mMeanTimeRead = mMarkerRead.mStatistics.mMean;
+
+   mCount = mPassCount + mFailCount;
+}
 
 void Reader::read(int aNumReads)
 {
