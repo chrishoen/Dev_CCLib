@@ -140,11 +140,12 @@ namespace LFIntQueue
    void show()
    {
       char tString[40];
-      Prn::print(0,"LFIntQueue\n");
+      Prn::print(0,"LFIntQueue------------------\n");
       Prn::print(0,"WriteRetry         %16s",my_stringLLU(tString,mWriteRetry));
       Prn::print(0,"ReadRetry          %16s",my_stringLLU(tString,mReadRetry));
       Prn::print(0,"PopRetry           %16s",my_stringLLU(tString,mPopRetry));
       Prn::print(0,"PushRetry          %16s",my_stringLLU(tString,mPushRetry));
+      Prn::print(0,"LFIntQueue------------------\n");
    }
 
    //***************************************************************************
@@ -172,8 +173,6 @@ namespace LFIntQueue
       int tLoopCount=0;
       while (true)
       {
-         if (++tLoopCount==10000) throw 101;
-
          tTail = mQueueTail.load();
          tNext = mNode[tTail.mIndex].mQueueNext.load();
 
@@ -188,8 +187,11 @@ namespace LFIntQueue
                mQueueTail.compare_exchange_weak(tTail, LFIndex(tNext.mIndex, tTail.mCount+1));
             }
          }
-         mWriteRetry++;
+
+         if (++tLoopCount==10000) throw 101;
       }
+      if (tLoopCount) mWriteRetry.fetch_add(1,memory_order_relaxed);
+
       mQueueTail.compare_exchange_strong(tTail, LFIndex(tNode.mIndex, tTail.mCount+1));
 
       // Done
@@ -212,8 +214,6 @@ namespace LFIntQueue
       int tLoopCount=0;
       while (true)
       {
-         if (++tLoopCount==10000) throw 102;
-
          tHead = mQueueHead.load();
          tTail = mQueueTail.load();
          tNext = mNode[tHead.mIndex].mQueueNext.load();
@@ -231,8 +231,11 @@ namespace LFIntQueue
                if (mQueueHead.compare_exchange_weak(tHead, LFIndex(tNext.mIndex, tHead.mCount+1)))break;
             }
          }
-         mReadRetry++;
+
+         if (++tLoopCount==10000) throw 102;
       }
+      if (tLoopCount) mReadRetry.fetch_add(1,memory_order_relaxed);
+
       listPush(tHead.mIndex);
 
       // Done.
