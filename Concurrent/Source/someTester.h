@@ -5,6 +5,7 @@
 ==============================================================================*/
 
 #include <stdio.h>
+#include <atomic>
 #include "someMessage.h"
 #include "risTimeMarker.h"
 
@@ -47,6 +48,11 @@ public:
 
    Ris::TrialTimeMarker mMarkerTest;
    double               mMeanTimeTest;
+
+   std::atomic<int> mAX;
+   int              mNC;
+   int              mNE;
+
 };
 
 //******************************************************************************
