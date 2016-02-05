@@ -9,7 +9,7 @@ Description:
 #include <prnPrint.h>
 
 #include "GSettings.h"
-#include "LFBackoff.h"
+#include "LFDelay.h"
 #include "LFFreeList.h"
 #include "LFIntQueue.h"
 #include "someShare.h"
@@ -55,9 +55,9 @@ void Tester::test1(int aNumIter)
    for (int i = 0; i < aNumIter; i++)
    {
       mMarkerTest.doStart();
-      LFBackoff::delay(gGSettings.mDelay1);
+      LFDelay::delay(gGSettings.mDelay1);
       mMarkerTest.doStop();
-      LFBackoff::delay(gGSettings.mDelay2);
+      LFDelay::delay(gGSettings.mDelay2);
 
       mCount++;
    }
@@ -72,10 +72,10 @@ void Tester::test2(int aNumIter)
    for (int i = 0; i < aNumIter; i++)
    {
       mMarkerTest.doStart();
-      LFBackoff::delay2(gGSettings.mBackoff21,gGSettings.mBackoff22);
-      LFBackoff::delay(gGSettings.mDelay1);
+      LFDelay::delay2(gGSettings.mBackoff21,gGSettings.mBackoff22);
+      LFDelay::delay(gGSettings.mDelay1);
       mMarkerTest.doStop();
-      LFBackoff::delay(gGSettings.mDelay2);
+      LFDelay::delay(gGSettings.mDelay2);
 
       mCount++;
    }

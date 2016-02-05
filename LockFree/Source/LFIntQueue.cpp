@@ -6,7 +6,7 @@
 #include "prnPrint.h"
 
 #include "LFIndex.h"
-#include "LFBackoff.h"
+#include "LFDelay.h"
 #include "LFIntQueue.h"
 
 using namespace std;
@@ -226,7 +226,7 @@ namespace LFIntQueue
          }
 
          if (++tLoopCount==10000) throw 101;
-         LFBackoff::delay2(mBackoff11*tLoopCount,mBackoff12*tLoopCount);
+         LFDelay::delay2(mBackoff11*tLoopCount,mBackoff12*tLoopCount);
       }
       if (tLoopCount) mWriteRetry.fetch_add(1,memory_order_relaxed);
 
@@ -271,7 +271,7 @@ namespace LFIntQueue
          }
 
          if (++tLoopCount==10000) throw 102;
-         LFBackoff::delay2(mBackoff11*tLoopCount,mBackoff12*tLoopCount);
+         LFDelay::delay2(mBackoff11*tLoopCount,mBackoff12*tLoopCount);
       }
       if (tLoopCount) mReadRetry.fetch_add(1,memory_order_relaxed);
 
@@ -304,7 +304,7 @@ namespace LFIntQueue
          if (mListHead.compare_exchange_weak(tHead, LFIndex(mListNext[tHead.mIndex].load().mIndex,tHead.mCount+1))) break;
 
          if (++tLoopCount==10000) throw 103;
-         LFBackoff::delay2(mBackoff21*tLoopCount,mBackoff22*tLoopCount);
+         LFDelay::delay2(mBackoff21*tLoopCount,mBackoff22*tLoopCount);
       }
       if (tLoopCount != 0)
       {
@@ -341,7 +341,7 @@ namespace LFIntQueue
          if (mListHeadIndexRef.compare_exchange_weak(tHead.mIndex, aNode)) break;
 
          if (++tLoopCount == 10000) throw 103;
-         LFBackoff::delay2(mBackoff21*tLoopCount,mBackoff22*tLoopCount);
+         LFDelay::delay2(mBackoff21*tLoopCount,mBackoff22*tLoopCount);
       }
       if (tLoopCount != 0)
       {

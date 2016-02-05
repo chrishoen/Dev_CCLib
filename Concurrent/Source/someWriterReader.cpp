@@ -10,7 +10,7 @@ Description:
 #include "my_functions.h"
 
 #include "GSettings.h"
-#include "LFBackoff.h"
+#include "LFDelay.h"
 #include "LFFreeList.h"
 #include "LFIntQueue.h"
 #include "someShare.h"
@@ -110,7 +110,7 @@ void WriterReader::writeread(int aNumWrites)
          mMarkerWrite.doStart();
          tPass = LFIntQueue::tryWrite(tMsg.aint());
          mMarkerWrite.doStop();
-         LFBackoff::delay(gGSettings.mDelayWrite);
+         LFDelay::delay(gGSettings.mDelayWrite);
 
          if (tPass)
          {
@@ -133,7 +133,7 @@ void WriterReader::writeread(int aNumWrites)
          mMarkerRead.doStart();
          tPass = LFIntQueue::tryRead(&tMsg.aint());
          mMarkerRead.doStop();
-         LFBackoff::delay(gGSettings.mDelayRead);
+         LFDelay::delay(gGSettings.mDelayRead);
 
          if (tPass)
          {

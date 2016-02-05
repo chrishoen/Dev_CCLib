@@ -6,7 +6,7 @@
 #include "prnPrint.h"
 
 #include "LFIndex.h"
-#include "LFBackoff.h"
+#include "LFDelay.h"
 #include "LFFreeList.h"
 
 using namespace std;
@@ -112,7 +112,6 @@ namespace LFFreeList
       mPushRetry1  = 0;
       mPushRetry2  = 0;
       mPushRetry3  = 0;
-      Prn::print(0, "LFFreeList::initialize %d",mListSize.load());
    }
 
    //***************************************************************************
@@ -177,7 +176,7 @@ namespace LFFreeList
          if (mListHead.compare_exchange_weak(tHead, LFIndex(mNode[tHead.mIndex].mListNext.load().mIndex,tHead.mCount+1))) break;
 
          if (++tLoopCount==10000) throw 103;
-         LFBackoff::delay2(mBackoff1*tLoopCount,mBackoff2*tLoopCount);
+         LFDelay::delay2(mBackoff1*tLoopCount,mBackoff2*tLoopCount);
       }
       if (tLoopCount != 0)
       {
@@ -216,7 +215,7 @@ namespace LFFreeList
          // The pushed node is the new head node.
          if (mListHeadIndexRef.compare_exchange_weak(tHead.mIndex, aNode)) break;
          if (++tLoopCount == 10000) throw 103;
-         LFBackoff::delay2(mBackoff1*tLoopCount,mBackoff2*tLoopCount);
+         LFDelay::delay2(mBackoff1*tLoopCount,mBackoff2*tLoopCount);
 
       }
       if (tLoopCount != 0)

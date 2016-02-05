@@ -9,7 +9,7 @@
 #include "my_functions.h"
 #include "someShare.h"
 #include "GSettings.h"
-#include "LFBackoff.h"
+#include "LFDelay.h"
 
 #define  _SOMEWRITERTHREAD_CPP_
 #include "someWriterThread.h"

@@ -9,7 +9,7 @@ Description:
 #include <prnPrint.h>
 
 #include "GSettings.h"
-#include "LFBackoff.h"
+#include "LFDelay.h"
 #include "LFFreeList.h"
 #include "LFIntQueue.h"
 #include "someShare.h"
@@ -75,7 +75,7 @@ void Writer::write1(int aNumWrites)
       mMarkerWrite.doStart();
       tPass = LFIntQueue::tryWrite(tMsg.aint());
       mMarkerWrite.doStop();
-      LFBackoff::delay(gGSettings.mDelayWrite);
+      LFDelay::delay(gGSettings.mDelayWrite);
 
       if (tPass)
       {
@@ -113,14 +113,14 @@ void Writer::write8(int aNumWrites)
       mMarkerPop.doStart();
       tPass = LFFreeList::listPop(&tNode);
       mMarkerPop.doStop();
-      LFBackoff::delay(gGSettings.mDelay1);
+      LFDelay::delay(gGSettings.mDelay1);
 
       if (tPass)
       {
          mMarkerPush.doStart();
          LFFreeList::listPush(tNode);
          mMarkerPush.doStop();
-         LFBackoff::delay(gGSettings.mDelay1);
+         LFDelay::delay(gGSettings.mDelay1);
 
          mCount++;
          mPassCount++;
