@@ -6,6 +6,7 @@
 #include "prnPrint.h"
 
 #include "LFIndex.h"
+#include "LFBackoff.h"
 #include "LFIntQueue.h"
 
 using namespace std;
@@ -56,6 +57,19 @@ namespace LFIntQueue
    static atomic<int>& mListHeadIndexRef = (atomic<int>&)*mListHeadIndexPtr;
    Padding mP10;
 
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Backoff Members
+
+   static int mBackoff1 = 0;
+   static int mBackoff2 = 0;
+
+   void initializeBackoff(int aB1, int aB2)
+   {
+      mBackoff1 = aB1;
+      mBackoff2 = aB2;
+   }
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -125,6 +139,9 @@ namespace LFIntQueue
       mReadRetry  = 0;
       mPushRetry  = 0;
       mPopRetry   = 0;
+
+      mBackoff1 = 0;
+      mBackoff2 = 0;
 }
 
    //***************************************************************************
@@ -255,36 +272,6 @@ namespace LFIntQueue
       return true;
    }
 
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Insert a node into the list before the list head node.
-
-   bool listPush(int aNode)
-   {
-      LFIndex tHead;
-
-      int tLoopCount=0;
-      while (true)
-      {
-         if (++tLoopCount == 10000) throw 103;
-
-         // Store the head node in a temp.
-         tHead = mListHead.load();
-
-         // Attach the head node to the pushed node .
-         mListNext[aNode].store(tHead);
-
-         // The pushed node is the new head node.
-         if (mListHeadIndexRef.compare_exchange_weak(tHead.mIndex, aNode)) break;
-         mPushRetry++;
-      }
-
-      // Done.
-      mListSize++;
-      return true;
-   }
-
    //******************************************************************************
    //******************************************************************************
    //******************************************************************************
@@ -297,8 +284,6 @@ namespace LFIntQueue
       int tLoopCount=0;
       while (true)
       {
-         if (++tLoopCount==10000) throw 104;
-
          // Store the head node in a temp.
          // This is the node that will be detached.
          tHead = mListHead.load();
@@ -308,14 +293,54 @@ namespace LFIntQueue
 
          // Set the head node to be the node that is after the head node.
          if (mListHead.compare_exchange_weak(tHead, LFIndex(mListNext[tHead.mIndex].load().mIndex,tHead.mCount+1))) break;
-         mPopRetry++;
+
+         if (++tLoopCount==10000) throw 103;
+         LFBackoff::delay2(mBackoff1*tLoopCount,mBackoff2*tLoopCount);
+      }
+      if (tLoopCount != 0)
+      {
+         mPopRetry.fetch_add(1,memory_order_relaxed);
       }
 
       // Return the detached original head node.
       *aNode = tHead.mIndex;
 
       // Done.
-      mListSize--;
+      mListSize.fetch_sub(1,memory_order_relaxed);
+      return true;
+   }
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Insert a node into the list before the list head node.
+
+   bool listPush(int aNode)
+   {
+      LFIndex tHead;
+
+      int tLoopCount=0;
+      while (true)
+      {
+         // Store the head node in a temp.
+         tHead = mListHead.load();
+
+         // Attach the head node to the pushed node .
+         mListNext[aNode].store(tHead);
+
+         // The pushed node is the new head node.
+         if (mListHeadIndexRef.compare_exchange_weak(tHead.mIndex, aNode)) break;
+
+         if (++tLoopCount == 10000) throw 103;
+         LFBackoff::delay2(mBackoff1*tLoopCount,mBackoff2*tLoopCount);
+      }
+      if (tLoopCount != 0)
+      {
+         mPushRetry.fetch_add(1,memory_order_relaxed);
+      }
+
+      // Done.
+      mListSize.fetch_add(1,memory_order_relaxed);
       return true;
    }
 
