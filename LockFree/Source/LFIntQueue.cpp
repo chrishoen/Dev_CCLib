@@ -219,6 +219,7 @@ namespace LFIntQueue
          }
 
          if (++tLoopCount==10000) throw 101;
+         LFBackoff::delay2(mBackoff1*tLoopCount,mBackoff2*tLoopCount);
       }
       if (tLoopCount) mWriteRetry.fetch_add(1,memory_order_relaxed);
 
@@ -263,6 +264,7 @@ namespace LFIntQueue
          }
 
          if (++tLoopCount==10000) throw 102;
+         LFBackoff::delay2(mBackoff1*tLoopCount,mBackoff2*tLoopCount);
       }
       if (tLoopCount) mReadRetry.fetch_add(1,memory_order_relaxed);
 
