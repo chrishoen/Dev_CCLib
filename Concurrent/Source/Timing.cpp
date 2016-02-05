@@ -183,7 +183,8 @@ namespace Timing
 
    void test11()
    {
-      LFBackoff::delay(gGSettings.mDelay1);
+//    LFBackoff::delay(gGSettings.mDelay1);
+      LFBackoff::delay2(4000,6000);
    }
 
    void test12()

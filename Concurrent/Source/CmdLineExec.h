@@ -31,6 +31,8 @@ public:
   void executeTime2  (Ris::CmdLineCmd* aCmd);
   void executeTime8  (Ris::CmdLineCmd* aCmd);
 
+  void executeDelay1 (Ris::CmdLineCmd* aCmd);
+  void executeDelay2 (Ris::CmdLineCmd* aCmd);
 };
 //******************************************************************************
 #endif

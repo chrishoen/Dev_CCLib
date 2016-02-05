@@ -41,6 +41,8 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("T1"    ))  executeTime1 (aCmd);
    if(aCmd->isCmd("T2"    ))  executeTime2 (aCmd);
    if(aCmd->isCmd("T8"    ))  executeTime8 (aCmd);
+   if(aCmd->isCmd("D1"    ))  executeDelay1(aCmd);
+   if(aCmd->isCmd("D2"    ))  executeDelay2(aCmd);
 
 
    if(aCmd->isCmd("GO2"   ))  executeGo2   (aCmd);
@@ -141,5 +143,23 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
+}
+
+//******************************************************************************
+
+void CmdLineExec::executeDelay1(Ris::CmdLineCmd* aCmd)
+{
+   double tX = aCmd->argDouble(1);
+   double y = 791.55*tX - 84.245;
+   Prn::print(0, "%8.1f",y);
+}
+
+//******************************************************************************
+
+void CmdLineExec::executeDelay2(Ris::CmdLineCmd* aCmd)
+{
+   double tX = aCmd->argDouble(1);
+   double y = 387.64*tX - 822.93;
+   Prn::print(0, "%8.1f",y);
 }
 

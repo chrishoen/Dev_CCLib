@@ -72,7 +72,8 @@ void Tester::test2(int aNumIter)
    for (int i = 0; i < aNumIter; i++)
    {
       mMarkerTest.doStart();
-      LFBackoff::delay2(gGSettings.mBackoff11,gGSettings.mBackoff12);
+      LFBackoff::delay2(gGSettings.mBackoff21,gGSettings.mBackoff22);
+      LFBackoff::delay(gGSettings.mDelay1);
       mMarkerTest.doStop();
       LFBackoff::delay(gGSettings.mDelay2);
 
