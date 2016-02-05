@@ -177,15 +177,10 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
-   char tString[10];
-   sprintf(tString, "%llu",210LL);
-
-   int tLen = (int)strlen(tString);
-   Prn::print(0, "LEN %d", tLen);
-
-   for (int i = 0; i < strlen(tString); i++)
+   for (int i = 0; i < 1000; i++)
    {
-      Prn::print(0, "%d %c", i, tString[i]);
+      Prn::print(0,"%08X",rand());
+
    }
 }
 

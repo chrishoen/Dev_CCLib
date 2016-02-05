@@ -41,6 +41,7 @@ void Share::initialize()
       break;
    case 2:
       LFIntQueue::initialize(gGSettings.mAllocate);
+      LFIntQueue::initializeBackoff(gGSettings.mBackoff1,gGSettings.mBackoff2);
       break;
    case 8:
       LFFreeList::initialize(gGSettings.mAllocate);
