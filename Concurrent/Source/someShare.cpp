@@ -30,6 +30,7 @@ Share::Share()
 void Share::initialize()
 {
    mMode = gGSettings.mMode;
+   mTest = gGSettings.mTest;
    mTerminateFlag = false;
 
 
@@ -51,6 +52,8 @@ void Share::initialize()
          gGSettings.mBackoff21,
          gGSettings.mBackoff22);
       break;
+   case 7:
+      break;
    case 8:
       LFFreeList::initialize(gGSettings.mAllocate);
       LFFreeList::initializeBackoff(
@@ -71,6 +74,8 @@ void Share::initialize()
 
    mReader.initialize();
    mReaderProcessor=0;
+
+   mTester.initialize();
 }
 
 //******************************************************************************
@@ -141,6 +146,15 @@ void Share::update2()
       mReaderMeanTime  += mWriterReader[i].mMeanTimeRead/mNumWriters;
    }
 }
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void Share::update7()
+{
+   mTesterCount     = mTester.mCount;
+   mTesterMeanTime  = mTester.mMeanTimeTest;
+}
   
 //******************************************************************************
 //******************************************************************************
@@ -152,6 +166,7 @@ void Share::update()
    {
    case 1: update1 (); break;
    case 2: update2 (); break;
+   case 7: update7 (); break;
    case 8: update1 (); break;
    }
 }
@@ -208,6 +223,22 @@ void Share::show1()
 //******************************************************************************
 //******************************************************************************
 
+void Share::show7()
+{
+   char tString[40];
+
+   Prn::print(0, "");
+   Prn::print(0, "");
+   Prn::print(0, "");
+   Prn::print(0, "TOTAL");
+   Prn::print(0, "");
+   Prn::print(0, "Tester.mCount      %16s", my_stringLLU(tString, mTesterCount));
+   Prn::print(0, "mMeanTimeTest      %16.5f", mTesterMeanTime);
+}
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void Share::show8()
 {
    char tString[40];
@@ -250,6 +281,7 @@ void Share::show()
    {
    case 1: show1 (); break;
    case 2: show1 (); break;
+   case 7: show7 (); break;
    case 8: show8 (); break;
    }
 }

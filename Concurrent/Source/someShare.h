@@ -11,6 +11,7 @@
 #include "someWriter.h"
 #include "someReader.h"
 #include "someWriterReader.h"
+#include "someTester.h"
 
 namespace Some
 {
@@ -27,13 +28,16 @@ public:
 
    void update1();
    void update2();
+   void update7();
    void update();
 
    void show1();
+   void show7();
    void show8();
    void show();
 
    int mMode;
+   int mTest;
    bool mTerminateFlag;
 
    static const int cMaxNumWriters = 10;
@@ -42,6 +46,7 @@ public:
    Writer         mWriter[cMaxNumWriters];
    WriterReader   mWriterReader[cMaxNumWriters];
    Reader         mReader;
+   Tester         mTester;
 
    int mWriterProcessor[cMaxNumWriters];
    int mReaderProcessor;
@@ -51,17 +56,18 @@ public:
    unsigned long long  mWriterFailCount;
    unsigned long long  mWriterCheckSum;
    double              mWriterMeanTime;
-   double              mWriterXMeanTime;
 
    unsigned long long  mReaderCount;
    unsigned long long  mReaderPassCount;
    unsigned long long  mReaderFailCount;
    unsigned long long  mReaderCheckSum;
    double              mReaderMeanTime;
-   double              mReaderXMeanTime;
 
    double              mWriterMeanTimePop;
    double              mWriterMeanTimePush;
+
+   unsigned long long  mTesterCount;
+   double              mTesterMeanTime;
 };
 
 //******************************************************************************

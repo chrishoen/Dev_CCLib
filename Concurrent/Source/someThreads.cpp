@@ -35,6 +35,7 @@ void Threads::reset()
    }
 
    mReaderThread=0;
+   mTesterThread=0;
    mStatusThread=0;
 }
 
@@ -74,6 +75,22 @@ void Threads::start2()
       mWriterReaderThread[i] = new WriterReaderThread(i);
       mWriterReaderThread[i]->launchThread();
    }
+
+   mStatusThread = new StatusThread;
+   mStatusThread->launchThread();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void Threads::start7()
+{
+   Prn::print(0,"Threads::start7*******************************");
+   reset();
+
+   mTesterThread = new TesterThread;
+   mTesterThread->launchThread();
 
    mStatusThread = new StatusThread;
    mStatusThread->launchThread();
@@ -167,6 +184,32 @@ void Threads::stop2()
 //******************************************************************************
 //******************************************************************************
 
+void Threads::stop7()
+{
+   Prn::print(0,"Threads::stopping7****************************");
+   Prn::print(0,"");
+
+   if (mStatusThread)
+   {
+      mStatusThread->shutdownThread();
+      delete mStatusThread;
+      mStatusThread = 0;
+   }
+
+   if (mTesterThread)
+   {
+      mTesterThread->shutdownThread();
+      delete mTesterThread;
+      mTesterThread = 0;
+   }
+
+   Prn::print(0,"Threads::stopped7*****************************");
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void Threads::stop8()
 {
    Prn::print(0,"Threads::stopping8****************************");
@@ -202,6 +245,7 @@ void Threads::start()
    {
    case 1: start1 (); break;
    case 2: start2 (); break;
+   case 7: start7 (); break;
    case 8: start8 (); break;
    }
 }
@@ -216,6 +260,7 @@ void Threads::stop()
    {
    case 1: stop1 (); break;
    case 2: stop2 (); break;
+   case 7: stop7 (); break;
    case 8: stop8 (); break;
    }
 }

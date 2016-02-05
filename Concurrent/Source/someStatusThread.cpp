@@ -72,6 +72,14 @@ void StatusThread::threadRunFunction()
                LFIntQueue::listSize());
          }
          break;
+         case 7:
+         {
+            Prn::print(Prn::ThreadRun1, "%s$%d   %s",
+               mProcString,
+               gShare.mTest,
+               my_stringLLU(tString1, gShare.mTester.mCount));
+         }
+         break;
          case 8:
          {
             Prn::print(Prn::ThreadRun1, "%s$   %s   %s %8d",

@@ -10,6 +10,7 @@
 #include "someWriterThread.h"
 #include "someReaderThread.h"
 #include "someWriterReaderThread.h"
+#include "someTesterThread.h"
 #include "someStatusThread.h"
 
 
@@ -28,11 +29,13 @@ public:
 
    void start1();
    void start2();
+   void start7();
    void start8();
    void start();
 
    void stop1();
    void stop2();
+   void stop7();
    void stop8();
    void stop();
 
@@ -42,6 +45,7 @@ public:
    WriterThread*       mWriterThread       [cMaxNumWriters];
    WriterReaderThread* mWriterReaderThread [cMaxNumWriters];
    ReaderThread*       mReaderThread;
+   TesterThread*       mTesterThread;
    StatusThread*       mStatusThread;
 };
 

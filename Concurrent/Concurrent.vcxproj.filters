@@ -61,6 +61,12 @@
     <ClCompile Include="Source\someWriterReaderThread.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\someTester.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\someTesterThread.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h">
@@ -115,6 +121,12 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\someWriterReaderThread.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\someTester.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\someTesterThread.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
