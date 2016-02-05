@@ -34,8 +34,10 @@ public:
    int     mSleepUpper;
 
    double  mXLimit;
-   int     mBackoff1;
-   int     mBackoff2;
+   int     mBackoff11;
+   int     mBackoff12;
+   int     mBackoff21;
+   int     mBackoff22;
 
    int     mDelay1;
    int     mDelay2;

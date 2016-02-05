@@ -35,8 +35,10 @@ GSettings::GSettings()
    mSleepUpper  = 1100;
 
    mXLimit = 0.0;
-   mBackoff1=0;
-   mBackoff2=0;
+   mBackoff11=0;
+   mBackoff12=0;
+   mBackoff21=0;
+   mBackoff22=0;
    mDelay1=0;
    mDelay2=0;
    mDelayWrite=0;
@@ -59,8 +61,10 @@ void GSettings::show()
    printf("GSettings   SleepLower    %11d\n",    mSleepLower);
    printf("GSettings   SleepUpper    %11d\n",    mSleepUpper);
    printf("GSettings   XLimit        %11.1f\n",  mXLimit);
-   printf("GSettings   Backoff1      %11d\n",    mBackoff1);
-   printf("GSettings   Backoff2      %11d\n",    mBackoff2);
+   printf("GSettings   Backoff11     %11d\n",    mBackoff11);
+   printf("GSettings   Backoff12     %11d\n",    mBackoff12);
+   printf("GSettings   Backoff21     %11d\n",    mBackoff21);
+   printf("GSettings   Backoff22     %11d\n",    mBackoff22);
    printf("GSettings   Delay1        %11d\n",    mDelay1);
    printf("GSettings   Delay2        %11d\n",    mDelay2);
    printf("GSettings   DelayWrite    %11d\n",    mDelayWrite);
@@ -86,8 +90,10 @@ void GSettings::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("SleepLower"))   mSleepLower  = aCmd->argInt (1);
    if(aCmd->isCmd("SleepUpper"))   mSleepUpper  = aCmd->argInt (1);
    if(aCmd->isCmd("XLimit"))       mXLimit      = aCmd->argDouble (1);
-   if(aCmd->isCmd("Backoff1"))     mBackoff1    = aCmd->argInt (1);
-   if(aCmd->isCmd("Backoff2"))     mBackoff2    = aCmd->argInt (1);
+   if(aCmd->isCmd("Backoff11"))    mBackoff11   = aCmd->argInt (1);
+   if(aCmd->isCmd("Backoff12"))    mBackoff12   = aCmd->argInt (1);
+   if(aCmd->isCmd("Backoff21"))    mBackoff21   = aCmd->argInt (1);
+   if(aCmd->isCmd("Backoff22"))    mBackoff22   = aCmd->argInt (1);
    if(aCmd->isCmd("Delay1"))       mDelay1      = aCmd->argInt (1);
    if(aCmd->isCmd("Delay2"))       mDelay2      = aCmd->argInt (1);
    if(aCmd->isCmd("DelayWrite"))   mDelayWrite  = aCmd->argInt (1);

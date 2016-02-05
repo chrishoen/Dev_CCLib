@@ -62,14 +62,19 @@ namespace LFIntQueue
    //***************************************************************************
    // Backoff Members
 
-   static int mBackoff1 = 0;
-   static int mBackoff2 = 0;
+   static int mBackoff11 = 0;
+   static int mBackoff12 = 0;
+   static int mBackoff21 = 0;
+   static int mBackoff22 = 0;
 
-   void initializeBackoff(int aB1, int aB2)
+   void initializeBackoff (int aB11, int aB12,int aB21, int aB22)
    {
-      mBackoff1 = aB1;
-      mBackoff2 = aB2;
+      mBackoff11 = aB11;
+      mBackoff12 = aB12;
+      mBackoff21 = aB21;
+      mBackoff22 = aB22;
    }
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -140,8 +145,10 @@ namespace LFIntQueue
       mPushRetry  = 0;
       mPopRetry   = 0;
 
-      mBackoff1 = 0;
-      mBackoff2 = 0;
+      mBackoff11 = 0;
+      mBackoff12 = 0;
+      mBackoff21 = 0;
+      mBackoff22 = 0;
 }
 
    //***************************************************************************
@@ -219,7 +226,7 @@ namespace LFIntQueue
          }
 
          if (++tLoopCount==10000) throw 101;
-         LFBackoff::delay2(mBackoff1*tLoopCount,mBackoff2*tLoopCount);
+         LFBackoff::delay2(mBackoff11*tLoopCount,mBackoff12*tLoopCount);
       }
       if (tLoopCount) mWriteRetry.fetch_add(1,memory_order_relaxed);
 
@@ -264,7 +271,7 @@ namespace LFIntQueue
          }
 
          if (++tLoopCount==10000) throw 102;
-         LFBackoff::delay2(mBackoff1*tLoopCount,mBackoff2*tLoopCount);
+         LFBackoff::delay2(mBackoff11*tLoopCount,mBackoff12*tLoopCount);
       }
       if (tLoopCount) mReadRetry.fetch_add(1,memory_order_relaxed);
 
@@ -297,7 +304,7 @@ namespace LFIntQueue
          if (mListHead.compare_exchange_weak(tHead, LFIndex(mListNext[tHead.mIndex].load().mIndex,tHead.mCount+1))) break;
 
          if (++tLoopCount==10000) throw 103;
-         LFBackoff::delay2(mBackoff1*tLoopCount,mBackoff2*tLoopCount);
+         LFBackoff::delay2(mBackoff21*tLoopCount,mBackoff22*tLoopCount);
       }
       if (tLoopCount != 0)
       {
@@ -334,7 +341,7 @@ namespace LFIntQueue
          if (mListHeadIndexRef.compare_exchange_weak(tHead.mIndex, aNode)) break;
 
          if (++tLoopCount == 10000) throw 103;
-         LFBackoff::delay2(mBackoff1*tLoopCount,mBackoff2*tLoopCount);
+         LFBackoff::delay2(mBackoff21*tLoopCount,mBackoff22*tLoopCount);
       }
       if (tLoopCount != 0)
       {

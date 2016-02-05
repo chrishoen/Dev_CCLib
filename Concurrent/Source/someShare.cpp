@@ -37,15 +37,25 @@ void Share::initialize()
    {
    case 1:
       LFIntQueue::initialize(gGSettings.mAllocate);
-      LFIntQueue::initializeBackoff(gGSettings.mBackoff1,gGSettings.mBackoff2);
+      LFIntQueue::initializeBackoff(
+         gGSettings.mBackoff11,
+         gGSettings.mBackoff12,
+         gGSettings.mBackoff21,
+         gGSettings.mBackoff22);
       break;
    case 2:
       LFIntQueue::initialize(gGSettings.mAllocate);
-      LFIntQueue::initializeBackoff(gGSettings.mBackoff1,gGSettings.mBackoff2);
+      LFIntQueue::initializeBackoff(
+         gGSettings.mBackoff11,
+         gGSettings.mBackoff12,
+         gGSettings.mBackoff21,
+         gGSettings.mBackoff22);
       break;
    case 8:
       LFFreeList::initialize(gGSettings.mAllocate);
-      LFFreeList::initializeBackoff(gGSettings.mBackoff1,gGSettings.mBackoff2);
+      LFFreeList::initializeBackoff(
+         gGSettings.mBackoff21,
+         gGSettings.mBackoff22);
       break;
    }
 
