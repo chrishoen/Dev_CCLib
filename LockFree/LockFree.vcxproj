@@ -168,7 +168,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\CmdLineExec.cpp" />
-    <ClCompile Include="Source\LFBackoff.cpp" />
     <ClCompile Include="Source\LFFreeList.cpp" />
     <ClCompile Include="Source\LFIntQueue.cpp" />
     <ClCompile Include="Source\Main.cpp" />

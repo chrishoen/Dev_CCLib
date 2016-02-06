@@ -6,7 +6,7 @@
 #include "prnPrint.h"
 
 #include "LFIndex.h"
-#include "LFDelay.h"
+#include "LFBackoff.h"
 #include "LFFreeList.h"
 
 using namespace std;
@@ -16,14 +16,16 @@ namespace LFFreeList
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Node for a combined Free List and Queue
-
-   typedef struct
-   {
-      AtomicLFIndex  mListNext;
-   } ListNode;
+   // Support
 
    static const int cInvalid = 0x80000000;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Node members
+
+   static AtomicLFIndex*  mListNext  = 0;
 
    //***************************************************************************
    //***************************************************************************
@@ -44,9 +46,6 @@ namespace LFFreeList
    //***************************************************************************
    // Memory Members
 
-   // Node array
-   static ListNode* mNode = 0;
-
    // Number of blocks allocated
    static int mListAllocate = 0;
 
@@ -55,14 +54,13 @@ namespace LFFreeList
    //***************************************************************************
    // Backoff Members
 
-   // Node array
-   static int mBackoff1 = 0;
-   static int mBackoff2 = 0;
+   static int mBackoffList1;
+   static int mBackoffList2;
 
-   void initializeBackoff(int aB1, int aB2)
+   void setBackoff(double aList1, double aList2)
    {
-      mBackoff1 = aB1;
-      mBackoff2 = aB2;
+      mBackoffList1  = LFBackoff::convertFromUsec(aList1);
+      mBackoffList2  = LFBackoff::convertFromUsec(aList2);
    }
 
    //***************************************************************************
@@ -82,6 +80,7 @@ namespace LFFreeList
 
    unsigned long long popRetry()   {return mPopRetry.load();}
    unsigned long long pushRetry()  {return mPushRetry.load();}
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -89,17 +88,18 @@ namespace LFFreeList
 
    void initialize(int aAllocate)
    {
+      finalize();
+
       mListAllocate  = aAllocate;
 
-      if (mNode) free(mNode);
-      mNode = new ListNode[mListAllocate];
+      mListNext = new AtomicLFIndex[mListAllocate];
 
       for (int i = 0; i < mListAllocate - 1; i++)
       {
-         mNode[i].mListNext.store(LFIndex(i+1,0));
+         mListNext[i].store(LFIndex(i+1,0));
       }
 
-      mNode[mListAllocate-1].mListNext.store(LFIndex(cInvalid,0));
+      mListNext[mListAllocate-1].store(LFIndex(cInvalid,0));
 
       mListHead.store(LFIndex(0,0));
       mListSize = mListAllocate;
@@ -121,10 +121,10 @@ namespace LFFreeList
 
    void finalize()
    {
-      if (mNode)
+      if (mListNext)
       {
-         free(mNode);
-         mNode = 0;
+         free(mListNext);
+         mListNext = 0;
       }
    }
 
@@ -149,7 +149,6 @@ namespace LFFreeList
       Prn::print(0,"PushRetry2         %16s",my_stringLLU(tString,mPushRetry2));
       Prn::print(0,"PushRetry3         %16s",my_stringLLU(tString,mPushRetry3));
       Prn::print(0,"");
-
    }
 
 
@@ -162,6 +161,7 @@ namespace LFFreeList
    {
       LFIndex tHead;
 
+      LFBackoff tBackoff(mBackoffList1,mBackoffList2);
       int tLoopCount=0;
       while (true)
       {
@@ -173,10 +173,10 @@ namespace LFFreeList
          if (tHead.mIndex == cInvalid) return false;
 
          // Set the head node to be the node that is after the head node.
-         if (mListHead.compare_exchange_weak(tHead, LFIndex(mNode[tHead.mIndex].mListNext.load().mIndex,tHead.mCount+1))) break;
+         if (mListHead.compare_exchange_weak(tHead, LFIndex(mListNext[tHead.mIndex].load().mIndex,tHead.mCount+1))) break;
 
          if (++tLoopCount==10000) throw 103;
-         LFDelay::delay2(mBackoff1*tLoopCount,mBackoff2*tLoopCount);
+         tBackoff.backoff();
       }
       if (tLoopCount != 0)
       {
@@ -203,6 +203,7 @@ namespace LFFreeList
    {
       LFIndex tHead;
 
+      LFBackoff tBackoff(mBackoffList1,mBackoffList2);
       int tLoopCount=0;
       while (true)
       {
@@ -210,13 +211,12 @@ namespace LFFreeList
          tHead = mListHead.load();
 
          // Attach the head node to the pushed node .
-         mNode[aNode].mListNext.store(tHead);
+         mListNext[aNode].store(tHead);
 
          // The pushed node is the new head node.
          if (mListHeadIndexRef.compare_exchange_weak(tHead.mIndex, aNode)) break;
          if (++tLoopCount == 10000) throw 103;
-         LFDelay::delay2(mBackoff1*tLoopCount,mBackoff2*tLoopCount);
-
+         tBackoff.backoff();
       }
       if (tLoopCount != 0)
       {

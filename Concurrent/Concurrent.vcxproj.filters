@@ -49,9 +49,6 @@
     <ClCompile Include="..\LockFree\Source\LFIntQueue.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\LockFree\Source\LFBackoff.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Timing.cpp">
       <Filter>Source</Filter>
     </ClCompile>

@@ -16,9 +16,6 @@
     <ClCompile Include="Source\LFFreeList.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\LFBackoff.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">

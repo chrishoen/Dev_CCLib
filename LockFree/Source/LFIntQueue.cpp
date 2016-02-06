@@ -6,7 +6,7 @@
 #include "prnPrint.h"
 
 #include "LFIndex.h"
-#include "LFDelay.h"
+#include "LFBackoff.h"
 #include "LFIntQueue.h"
 
 using namespace std;
@@ -16,28 +16,27 @@ namespace LFIntQueue
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Node for a combined Free List and Queue
-   typedef unsigned long long int Padding[128];
-
-   static int*            mValue     = 0;
-   Padding mP1;
-   static AtomicLFIndex*  mQueueNext = 0;
-   Padding mP2;
-   static AtomicLFIndex*  mListNext  = 0;
-   Padding mP3;
+   // Support
 
    static const int cInvalid = 0x80000000;
+   typedef unsigned long long int Padding[128];
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Node Members
+
+   static int*            mValue     = 0;
+   static AtomicLFIndex*  mQueueNext = 0;
+   static AtomicLFIndex*  mListNext  = 0;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Queue Members
 
-   Padding mP4;
    AtomicLFIndex mQueueHead;
-   Padding mP5;
    AtomicLFIndex mQueueTail;
-   Padding mP6;
 
    //***************************************************************************
    //***************************************************************************
@@ -48,14 +47,28 @@ namespace LFIntQueue
    bool listPop(int*  aNode);
 
    static atomic<int>   mListSize;
-   Padding mP7;
    static AtomicLFIndex mListHead;
-   Padding mP8;
    
    static atomic<int>* mListHeadIndexPtr = (atomic<int>*)&mListHead;
-   Padding mP9;
    static atomic<int>& mListHeadIndexRef = (atomic<int>&)*mListHeadIndexPtr;
-   Padding mP10;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Backoff Members
+
+   static int mBackoffQueue1;
+   static int mBackoffQueue2;
+   static int mBackoffList1;
+   static int mBackoffList2;
+
+   void setBackoff(double aQueue1, double aQueue2,double aList1, double aList2)
+   {
+      mBackoffQueue1 = LFBackoff::convertFromUsec(aQueue1);
+      mBackoffQueue2 = LFBackoff::convertFromUsec(aQueue2);
+      mBackoffList1  = LFBackoff::convertFromUsec(aList1);
+      mBackoffList2  = LFBackoff::convertFromUsec(aList2);
+   }
 
    //***************************************************************************
    //***************************************************************************
@@ -91,13 +104,9 @@ namespace LFIntQueue
    // Metrics Members
 
    atomic<unsigned long long> mWriteRetry;
-   Padding mP11;
    atomic<unsigned long long> mReadRetry;
-   Padding mP12;
    atomic<unsigned long long> mPopRetry;
-   Padding mP13;
    atomic<unsigned long long> mPushRetry;
-   Padding mP14;
 
    unsigned long long writeRetry() {return mWriteRetry.load();}
    unsigned long long readRetry()  {return mReadRetry.load();}
@@ -207,6 +216,8 @@ namespace LFIntQueue
 
       // Attach the node to the queue tail.
       LFIndex tTail,tNext;
+
+      LFBackoff tBackoff(mBackoffQueue1,mBackoffQueue2);
       int tLoopCount=0;
       while (true)
       {
@@ -226,7 +237,7 @@ namespace LFIntQueue
          }
 
          if (++tLoopCount==10000) throw 101;
-         LFDelay::delay2(mBackoff11*tLoopCount,mBackoff12*tLoopCount);
+         tBackoff.backoff();
       }
       if (tLoopCount) mWriteRetry.fetch_add(1,memory_order_relaxed);
 
@@ -249,6 +260,7 @@ namespace LFIntQueue
    {
       LFIndex tHead, tTail, tNext;
 
+      LFBackoff tBackoff(mBackoffQueue1,mBackoffQueue2);
       int tLoopCount=0;
       while (true)
       {
@@ -271,7 +283,7 @@ namespace LFIntQueue
          }
 
          if (++tLoopCount==10000) throw 102;
-         LFDelay::delay2(mBackoff11*tLoopCount,mBackoff12*tLoopCount);
+         tBackoff.backoff();
       }
       if (tLoopCount) mReadRetry.fetch_add(1,memory_order_relaxed);
 
@@ -290,6 +302,7 @@ namespace LFIntQueue
    {
       LFIndex tHead;
 
+      LFBackoff tBackoff(mBackoffList1,mBackoffList2);
       int tLoopCount=0;
       while (true)
       {
@@ -304,7 +317,7 @@ namespace LFIntQueue
          if (mListHead.compare_exchange_weak(tHead, LFIndex(mListNext[tHead.mIndex].load().mIndex,tHead.mCount+1))) break;
 
          if (++tLoopCount==10000) throw 103;
-         LFDelay::delay2(mBackoff21*tLoopCount,mBackoff22*tLoopCount);
+         tBackoff.backoff();
       }
       if (tLoopCount != 0)
       {
@@ -328,6 +341,7 @@ namespace LFIntQueue
    {
       LFIndex tHead;
 
+      LFBackoff tBackoff(mBackoffList1,mBackoffList2);
       int tLoopCount=0;
       while (true)
       {
@@ -341,7 +355,7 @@ namespace LFIntQueue
          if (mListHeadIndexRef.compare_exchange_weak(tHead.mIndex, aNode)) break;
 
          if (++tLoopCount == 10000) throw 103;
-         LFDelay::delay2(mBackoff21*tLoopCount,mBackoff22*tLoopCount);
+         tBackoff.backoff();
       }
       if (tLoopCount != 0)
       {

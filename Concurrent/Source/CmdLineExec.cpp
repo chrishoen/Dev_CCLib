@@ -155,11 +155,14 @@ void CmdLineExec::executeDelay1(Ris::CmdLineCmd* aCmd)
 }
 
 //******************************************************************************
-
+ inline int convertFromUsec(double aDelay)
+   {
+   }
 void CmdLineExec::executeDelay2(Ris::CmdLineCmd* aCmd)
 {
    double tX = aCmd->argDouble(1);
-   double y = 387.64*tX - 822.93;
-   Prn::print(0, "%8.1f",y);
+      int tN = lround(385.79*tX - 38.827);
+      if (tN<0) tN=0;
+   Prn::print(0, "%d",tN);
 }
 

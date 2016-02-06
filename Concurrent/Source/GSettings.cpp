@@ -35,10 +35,12 @@ GSettings::GSettings()
    mSleepUpper  = 1100;
 
    mXLimit = 0.0;
-   mBackoff11=0;
-   mBackoff12=0;
-   mBackoff21=0;
-   mBackoff22=0;
+
+   mBackQueue1=0.0;
+   mBackQueue2=0.0;
+   mBackList1=0.0;
+   mBackList2=0.0;
+
    mDelay1=0;
    mDelay2=0;
    mDelayWrite=0;
@@ -61,10 +63,10 @@ void GSettings::show()
    printf("GSettings   SleepLower    %11d\n",    mSleepLower);
    printf("GSettings   SleepUpper    %11d\n",    mSleepUpper);
    printf("GSettings   XLimit        %11.1f\n",  mXLimit);
-   printf("GSettings   Backoff11     %11d\n",    mBackoff11);
-   printf("GSettings   Backoff12     %11d\n",    mBackoff12);
-   printf("GSettings   Backoff21     %11d\n",    mBackoff21);
-   printf("GSettings   Backoff22     %11d\n",    mBackoff22);
+   printf("GSettings   BackQueue1    %11.1f\n",  mBackQueue1);
+   printf("GSettings   BackQueue2    %11.1f\n",  mBackQueue2);
+   printf("GSettings   BackList1     %11.1f\n",  mBackList1);
+   printf("GSettings   BackList2     %11.1f\n",  mBackList2);
    printf("GSettings   Delay1        %11d\n",    mDelay1);
    printf("GSettings   Delay2        %11d\n",    mDelay2);
    printf("GSettings   DelayWrite    %11d\n",    mDelayWrite);
@@ -90,10 +92,10 @@ void GSettings::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("SleepLower"))   mSleepLower  = aCmd->argInt (1);
    if(aCmd->isCmd("SleepUpper"))   mSleepUpper  = aCmd->argInt (1);
    if(aCmd->isCmd("XLimit"))       mXLimit      = aCmd->argDouble (1);
-   if(aCmd->isCmd("Backoff11"))    mBackoff11   = aCmd->argInt (1);
-   if(aCmd->isCmd("Backoff12"))    mBackoff12   = aCmd->argInt (1);
-   if(aCmd->isCmd("Backoff21"))    mBackoff21   = aCmd->argInt (1);
-   if(aCmd->isCmd("Backoff22"))    mBackoff22   = aCmd->argInt (1);
+   if(aCmd->isCmd("BackQueue1"))   mBackQueue1  = aCmd->argDouble (1);
+   if(aCmd->isCmd("BackQueue2"))   mBackQueue2  = aCmd->argDouble (1);
+   if(aCmd->isCmd("BackList1"))    mBackList1   = aCmd->argDouble (1);
+   if(aCmd->isCmd("BackList2"))    mBackList2   = aCmd->argDouble (1);
    if(aCmd->isCmd("Delay1"))       mDelay1      = aCmd->argInt (1);
    if(aCmd->isCmd("Delay2"))       mDelay2      = aCmd->argInt (1);
    if(aCmd->isCmd("DelayWrite"))   mDelayWrite  = aCmd->argInt (1);

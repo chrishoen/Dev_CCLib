@@ -12,7 +12,6 @@ Global application settings
 //******************************************************************************
 //******************************************************************************st
 
-
 class GSettings : public Ris::BaseCmdLineExec
 {
 public:
@@ -34,10 +33,11 @@ public:
    int     mSleepUpper;
 
    double  mXLimit;
-   int     mBackoff11;
-   int     mBackoff12;
-   int     mBackoff21;
-   int     mBackoff22;
+
+   double  mBackQueue1;
+   double  mBackQueue2;
+   double  mBackList1;
+   double  mBackList2;
 
    int     mDelay1;
    int     mDelay2;

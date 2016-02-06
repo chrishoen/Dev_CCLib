@@ -7,7 +7,7 @@
 namespace LFIntQueue
 {
    void initialize (int aAllocate);
-   void initializeBackoff (int aB11, int aB12,int aB21, int aB22);
+   void setBackoff(double aQueue1, double aQueue2,double aList1, double aList2);
    void finalize();
    int  listSize();
 

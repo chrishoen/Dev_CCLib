@@ -7,7 +7,7 @@
 namespace LFFreeList
 {
    void initialize (int aAllocate);
-   void initializeBackoff(int aB1, int aB2);
+   void setBackoff(double aList1, double aList2);
 
    void finalize   ();
    int  listSize();
