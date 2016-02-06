@@ -52,11 +52,12 @@ void Tester::show()
 
 void Tester::test1(int aNumIter)
 {
+   LFBackoff tBackoff(gGSettings.mDelayA1,gGSettings.mDelayA2);
+
    for (int i = 0; i < aNumIter; i++)
    {
       mMarkerTest.doStart();
-//    LFDelay::delay(gGSettings.mDelay1);
-      LFDelay::delay2(6000,6000);
+      tBackoff.delay();
       mMarkerTest.doStop();
       LFDelay::delay(gGSettings.mDelay2);
 

@@ -23,6 +23,16 @@ public:
    bool mEnable;
 
    //---------------------------------------------------------------------------
+   // Convert from microseconds to counts
+
+   inline static int convertFromUsec(double aDelay)
+   {
+      int tN = lround(385.79*aDelay - 38.827);
+      if (tN<0) tN=0;
+      return tN;
+   }
+
+   //---------------------------------------------------------------------------
    // Constructor
 
    inline LFBackoff()
@@ -45,6 +55,16 @@ public:
       mEnable = mInitial2!=0;
    }
 
+   inline LFBackoff(double aDelayUsec1, double aDelayUsec2)
+   {
+      mInitial1 = convertFromUsec(aDelayUsec1);
+      mInitial2 = convertFromUsec(aDelayUsec2);
+      mDelay1=mInitial1;
+      mDelay2=mInitial2;
+      mCount=0;
+      mEnable = mInitial2!=0;
+   }
+
    //---------------------------------------------------------------------------
    // Set delays
 
@@ -56,13 +76,6 @@ public:
       mDelay2=mInitial2;
       mCount=0;
       mEnable = mInitial2!=0;
-   }
-
-   inline static int convertFromUsec(double aDelay)
-   {
-      int tN = lround(385.79*aDelay - 38.827);
-      if (tN<0) tN=0;
-      return tN;
    }
 
    inline void setDelay(double aDelayUsec1, double aDelayUsec2)
