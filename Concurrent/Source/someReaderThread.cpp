@@ -9,7 +9,6 @@
 #include "my_functions.h"
 #include "someShare.h"
 #include "GSettings.h"
-#include "LFDelay.h"
 
 #define  _SOMEREADERTHREAD_CPP_
 #include "someReaderThread.h"

@@ -9,7 +9,7 @@ Description:
 #include <prnPrint.h>
 
 #include "GSettings.h"
-#include "LFDelay.h"
+#include "LFBackoff.h"
 #include "LFFreeList.h"
 #include "LFIntQueue.h"
 #include "someShare.h"
@@ -52,14 +52,15 @@ void Tester::show()
 
 void Tester::test1(int aNumIter)
 {
-   LFBackoff tBackoff(gGSettings.mDelayA1,gGSettings.mDelayA2);
+   LFBackoff tBackoffA(gGSettings.mDelayA1,gGSettings.mDelayA2);
+   LFBackoff tBackoffB(gGSettings.mDelayB1,gGSettings.mDelayB2);
 
    for (int i = 0; i < aNumIter; i++)
    {
       mMarkerTest.doStart();
-      tBackoff.delay();
+      tBackoffA.delay();
       mMarkerTest.doStop();
-      LFDelay::delay(gGSettings.mDelay2);
+      tBackoffB.delay();
 
       mCount++;
    }
@@ -71,16 +72,16 @@ void Tester::test1(int aNumIter)
 
 void Tester::test2(int aNumIter)
 {
-   LFBackoff tBackoff;
-   tBackoff.setDelay(gGSettings.mBackList1,gGSettings.mBackList2);
+   LFBackoff tBackoffA(gGSettings.mDelayA1,gGSettings.mDelayA2);
+   LFBackoff tDelayB  (gGSettings.mDelayB1,gGSettings.mDelayB2);
 
    for (int i = 0; i < aNumIter; i++)
    {
-      tBackoff.reset();
+      tBackoffA.reset();
       mMarkerTest.doStart();
-      tBackoff.expBackoff();
+      tBackoffA.expBackoff();
       mMarkerTest.doStop();
-      LFDelay::delay(gGSettings.mDelay2);
+      tDelayB.delay();
 
       mCount++;
    }

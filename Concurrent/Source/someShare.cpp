@@ -10,7 +10,6 @@ Description:
 
 #include "LFIntQueue.h"
 #include "LFFreeList.h"
-#include "LFDelay.h"
 #include "GSettings.h"
 
 #define  _SOMESHARE_CPP_

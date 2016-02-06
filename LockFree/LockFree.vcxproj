@@ -176,7 +176,6 @@
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\LFBackoff.h" />
-    <ClInclude Include="Source\LFDelay.h" />
     <ClInclude Include="Source\LFFreeList.h" />
     <ClInclude Include="Source\LFIndex.h" />
     <ClInclude Include="Source\LFIntQueue.h" />

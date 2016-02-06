@@ -9,7 +9,7 @@
 #include "GSettings.h"
 #include "LFFreeList.h"
 #include "LFIntQueue.h"
-#include "LFDelay.h"
+#include "LFBackoff.h"
 #include "Timing.h"
 
 using namespace std;
@@ -183,8 +183,6 @@ namespace Timing
 
    void test11()
    {
-//    LFDelay::delay(gGSettings.mDelay1);
-      LFDelay::delay2(4000,6000);
    }
 
    void test12()
@@ -238,12 +236,10 @@ namespace Timing
       mMarkerWrite.doStart();
       LFIntQueue::tryWrite(++mWriteCount);
       mMarkerWrite.doStop();
-      LFDelay::delay(gGSettings.mDelayWrite);
 
       mMarkerRead.doStart();
       LFIntQueue::tryRead(&mReadCount);
       mMarkerRead.doStop();
-      LFDelay::delay(gGSettings.mDelayRead);
    }
 
    //***************************************************************************
@@ -259,14 +255,12 @@ namespace Timing
       mMarkerPop.doStart();
       tPass = LFFreeList::listPop(&tNode);
       mMarkerPop.doStop();
-      LFDelay::delay(gGSettings.mDelay1);
 
       if (tPass)
       {
          mMarkerPush.doStart();
          LFFreeList::listPush(tNode);
          mMarkerPush.doStop();
-         LFDelay::delay(gGSettings.mDelay1);
       }
    }
 

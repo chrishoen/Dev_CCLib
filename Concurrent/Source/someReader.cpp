@@ -10,7 +10,7 @@ Description:
 
 #include "GSettings.h"
 #include "someShare.h"
-#include "LFDelay.h"
+#include "LFBackoff.h"
 #include "LFIntQueue.h"
 #include "someReader.h"
 
@@ -59,6 +59,8 @@ void Reader::show()
 
 void Reader::read1(int aNumReads)
 {
+   LFBackoff tDelayB(gGSettings.mDelayB1,gGSettings.mDelayB2);
+
    for (int i = 0; i < aNumReads; i++)
    {
       bool tPass;
@@ -67,7 +69,7 @@ void Reader::read1(int aNumReads)
       mMarkerRead.doStart();
       tPass = LFIntQueue::tryRead(&tMsg.aint());
       mMarkerRead.doStop();
-      LFDelay::delay(gGSettings.mDelayRead);
+      tDelayB.delay();
 
       if (tPass)
       {

@@ -44,8 +44,5 @@
     <ClInclude Include="Source\LFBackoff.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\LFDelay.h">
-      <Filter>Source</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

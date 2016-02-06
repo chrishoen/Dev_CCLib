@@ -9,7 +9,7 @@ Description:
 #include <prnPrint.h>
 
 #include "GSettings.h"
-#include "LFDelay.h"
+#include "LFBackoff.h"
 #include "LFFreeList.h"
 #include "LFIntQueue.h"
 #include "someShare.h"
@@ -66,6 +66,8 @@ void Writer::show()
 
 void Writer::write1(int aNumWrites)
 {
+   LFBackoff tDelayA(gGSettings.mDelayA1,gGSettings.mDelayA2);
+
    for (int i = 0; i < aNumWrites; i++)
    {
       bool tPass;
@@ -75,7 +77,7 @@ void Writer::write1(int aNumWrites)
       mMarkerWrite.doStart();
       tPass = LFIntQueue::tryWrite(tMsg.aint());
       mMarkerWrite.doStop();
-      LFDelay::delay(gGSettings.mDelayWrite);
+      tDelayA.delay();
 
       if (tPass)
       {
@@ -105,6 +107,9 @@ void Writer::write2(int aNumWrites)
 
 void Writer::write8(int aNumWrites)
 {
+   LFBackoff tDelayA(gGSettings.mDelayA1,gGSettings.mDelayA2);
+   LFBackoff tDelayB(gGSettings.mDelayB1,gGSettings.mDelayB2);
+
    // Free List pop,push
    if (gShare.mTest == 1)
    {
@@ -116,14 +121,14 @@ void Writer::write8(int aNumWrites)
          mMarkerPop.doStart();
          tPass = LFFreeList::listPop(&tNode);
          mMarkerPop.doStop();
-         LFDelay::delay(gGSettings.mDelay1);
+         tDelayA.delay();
 
          if (tPass)
          {
             mMarkerPush.doStart();
             LFFreeList::listPush(tNode);
             mMarkerPush.doStop();
-            LFDelay::delay(gGSettings.mDelay1);
+            tDelayB.delay();
 
             mCount++;
             mPassCount++;
@@ -144,7 +149,7 @@ void Writer::write8(int aNumWrites)
          mMarkerPop.doStart();
          LFFreeList::listStub();
          mMarkerPop.doStop();
-         LFDelay::delay(gGSettings.mDelay1);
+         tDelayA.delay();
 
          mCount++;
          mPassCount++;
