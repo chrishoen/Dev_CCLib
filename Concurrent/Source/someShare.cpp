@@ -38,11 +38,6 @@ void Share::initialize()
    case 1:
    case 2:
       LFIntQueue::initialize(gGSettings.mAllocate);
-      LFIntQueue::setBackoff(
-         gGSettings.mBackQueue1,
-         gGSettings.mBackQueue2,
-         gGSettings.mBackList1,
-         gGSettings.mBackList2);
       break;
    case 7:
       break;

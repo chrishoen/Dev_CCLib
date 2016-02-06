@@ -55,42 +55,6 @@ namespace LFIntQueue
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Backoff Members
-
-   static int mBackoffQueue1;
-   static int mBackoffQueue2;
-   static int mBackoffList1;
-   static int mBackoffList2;
-
-   void setBackoff(double aQueue1, double aQueue2,double aList1, double aList2)
-   {
-      mBackoffQueue1 = LFBackoff::convertFromUsec(aQueue1);
-      mBackoffQueue2 = LFBackoff::convertFromUsec(aQueue2);
-      mBackoffList1  = LFBackoff::convertFromUsec(aList1);
-      mBackoffList2  = LFBackoff::convertFromUsec(aList2);
-   }
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Backoff Members
-
-   static int mBackoff11 = 0;
-   static int mBackoff12 = 0;
-   static int mBackoff21 = 0;
-   static int mBackoff22 = 0;
-
-   void initializeBackoff (int aB11, int aB12,int aB21, int aB22)
-   {
-      mBackoff11 = aB11;
-      mBackoff12 = aB12;
-      mBackoff21 = aB21;
-      mBackoff22 = aB22;
-   }
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
    // Memory Members
 
    // Number of blocks allocated
@@ -153,11 +117,6 @@ namespace LFIntQueue
       mReadRetry  = 0;
       mPushRetry  = 0;
       mPopRetry   = 0;
-
-      mBackoff11 = 0;
-      mBackoff12 = 0;
-      mBackoff21 = 0;
-      mBackoff22 = 0;
 }
 
    //***************************************************************************
@@ -180,7 +139,6 @@ namespace LFIntQueue
    //***************************************************************************
    // Show
 
-// int listSize(){ return mListHead.load().mCount; }
    int listSize(){ return mListSize.load(); }
 
    void show()
@@ -217,7 +175,6 @@ namespace LFIntQueue
       // Attach the node to the queue tail.
       LFIndex tTail,tNext;
 
-      LFBackoff tBackoff(mBackoffQueue1,mBackoffQueue2);
       int tLoopCount=0;
       while (true)
       {
@@ -237,7 +194,6 @@ namespace LFIntQueue
          }
 
          if (++tLoopCount==10000) throw 101;
-         tBackoff.expBackoff();
       }
       if (tLoopCount) mWriteRetry.fetch_add(1,memory_order_relaxed);
 
@@ -260,7 +216,6 @@ namespace LFIntQueue
    {
       LFIndex tHead, tTail, tNext;
 
-      LFBackoff tBackoff(mBackoffQueue1,mBackoffQueue2);
       int tLoopCount=0;
       while (true)
       {
@@ -283,7 +238,6 @@ namespace LFIntQueue
          }
 
          if (++tLoopCount==10000) throw 102;
-         tBackoff.expBackoff();
       }
       if (tLoopCount) mReadRetry.fetch_add(1,memory_order_relaxed);
 
@@ -302,7 +256,6 @@ namespace LFIntQueue
    {
       LFIndex tHead;
 
-      LFBackoff tBackoff(mBackoffList1,mBackoffList2);
       int tLoopCount=0;
       while (true)
       {
@@ -317,7 +270,6 @@ namespace LFIntQueue
          if (mListHead.compare_exchange_weak(tHead, LFIndex(mListNext[tHead.mIndex].load().mIndex,tHead.mCount+1))) break;
 
          if (++tLoopCount==10000) throw 103;
-         tBackoff.expBackoff();
       }
       if (tLoopCount != 0)
       {
@@ -341,7 +293,6 @@ namespace LFIntQueue
    {
       LFIndex tHead;
 
-      LFBackoff tBackoff(mBackoffList1,mBackoffList2);
       int tLoopCount=0;
       while (true)
       {
@@ -355,7 +306,6 @@ namespace LFIntQueue
          if (mListHeadIndexRef.compare_exchange_weak(tHead.mIndex, aNode)) break;
 
          if (++tLoopCount == 10000) throw 103;
-         tBackoff.expBackoff();
       }
       if (tLoopCount != 0)
       {
