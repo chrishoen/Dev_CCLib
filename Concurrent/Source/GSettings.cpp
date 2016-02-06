@@ -41,6 +41,11 @@ GSettings::GSettings()
    mBackList1=0.0;
    mBackList2=0.0;
 
+   mDelayA1=0.0;
+   mDelayA2=0.0;
+   mDelayB1=0.0;
+   mDelayB2=0.0;
+
    mDelay1=0;
    mDelay2=0;
    mDelayWrite=0;
@@ -67,10 +72,10 @@ void GSettings::show()
    printf("GSettings   BackQueue2    %11.1f\n",  mBackQueue2);
    printf("GSettings   BackList1     %11.1f\n",  mBackList1);
    printf("GSettings   BackList2     %11.1f\n",  mBackList2);
-   printf("GSettings   Delay1        %11d\n",    mDelay1);
-   printf("GSettings   Delay2        %11d\n",    mDelay2);
-   printf("GSettings   DelayWrite    %11d\n",    mDelayWrite);
-   printf("GSettings   DelayRead     %11d\n",    mDelayRead);
+   printf("GSettings   DelayA1       %11.1f\n",  mDelayA1);
+   printf("GSettings   DelayA2       %11.1f\n",  mDelayA2);
+   printf("GSettings   DelayB1       %11.1f\n",  mDelayB1);
+   printf("GSettings   DelayB2       %11.1f\n",  mDelayB2);
 }
 
 //******************************************************************************
@@ -96,10 +101,10 @@ void GSettings::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("BackQueue2"))   mBackQueue2  = aCmd->argDouble (1);
    if(aCmd->isCmd("BackList1"))    mBackList1   = aCmd->argDouble (1);
    if(aCmd->isCmd("BackList2"))    mBackList2   = aCmd->argDouble (1);
-   if(aCmd->isCmd("Delay1"))       mDelay1      = aCmd->argInt (1);
-   if(aCmd->isCmd("Delay2"))       mDelay2      = aCmd->argInt (1);
-   if(aCmd->isCmd("DelayWrite"))   mDelayWrite  = aCmd->argInt (1);
-   if(aCmd->isCmd("DelayRead"))    mDelayRead   = aCmd->argInt (1);
+   if(aCmd->isCmd("DelayA1"))      mDelayA1     = aCmd->argDouble (1);
+   if(aCmd->isCmd("DelayA2"))      mDelayA2     = aCmd->argDouble (1);
+   if(aCmd->isCmd("DelayB1"))      mDelayB1     = aCmd->argDouble (1);
+   if(aCmd->isCmd("DelayB2"))      mDelayB2     = aCmd->argDouble (1);
 }
 
 //******************************************************************************

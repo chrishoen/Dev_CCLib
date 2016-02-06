@@ -39,6 +39,11 @@ public:
    double  mBackList1;
    double  mBackList2;
 
+   double  mDelayA1;
+   double  mDelayA2;
+   double  mDelayB1;
+   double  mDelayB2;
+
    int     mDelay1;
    int     mDelay2;
    int     mDelayWrite;

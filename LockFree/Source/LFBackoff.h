@@ -39,10 +39,10 @@ public:
    {
       mInitial1=aDelay1;
       mInitial2=aDelay2;
-      mDelay1=aDelay1;
-      mDelay2=aDelay2;
+      mDelay1=mInitial1;
+      mDelay2=mInitial2;
       mCount=0;
-      mEnable = aDelay2!=0;
+      mEnable = mInitial2!=0;
    }
 
    //---------------------------------------------------------------------------
@@ -50,18 +50,12 @@ public:
 
    inline void setDelay(int aDelay1, int aDelay2)
    {
-      if (aDelay2 == 0)
-      {
-         mEnable=false;
-         return;
-      }
-
-      mInitial1 = aDelay1;
-      mInitial2 = aDelay2;
-      mDelay1 = mInitial1;
-      mDelay2 = mInitial2;
-      mCount = 0;
-      mEnable = true;
+      mInitial1=aDelay1;
+      mInitial2=aDelay2;
+      mDelay1=mInitial1;
+      mDelay2=mInitial2;
+      mCount=0;
+      mEnable = mInitial2!=0;
    }
 
    inline static int convertFromUsec(double aDelay)
@@ -73,31 +67,29 @@ public:
 
    inline void setDelay(double aDelayUsec1, double aDelayUsec2)
    {
-      if (aDelayUsec2 == 0.0)
-      {
-         mEnable = false;
-         return;
-      }
-
       mInitial1 = convertFromUsec(aDelayUsec1);
       mInitial2 = convertFromUsec(aDelayUsec2);
-      mDelay1 = mInitial1;
-      mDelay2 = mInitial2;
-      mCount = 0;
-      mEnable = true;
+      mDelay1=mInitial1;
+      mDelay2=mInitial2;
+      mCount=0;
+      mEnable = mInitial2!=0;
    }
 
    //---------------------------------------------------------------------------
-   // Backoff
+   // Reset
 
    inline void reset()
    {
+      mDelay1=mInitial1;
+      mDelay2=mInitial2;
       mCount=0;
-      mDelay1 = mInitial1;
-      mDelay2 = mInitial2;
+      mEnable = mInitial2!=0;
    }
 
-   inline void backoff()
+   //---------------------------------------------------------------------------
+   // Exponential backoff
+
+   inline void expBackoff()
    {
       if (!mEnable)return;
 
@@ -107,9 +99,39 @@ public:
 
       if (++mCount < 5)
       {
-         mDelay1 = mDelay1 * 2;
-         mDelay2 = mDelay2 * 2;
+         mDelay1 *= 2;
+         mDelay2 *= 2;
       }
+   }
+
+   //---------------------------------------------------------------------------
+   // Linear backoff
+
+   inline void linearBackoff()
+   {
+      if (!mEnable)return;
+
+      int tDummy=0;
+      int tLoop = my_irand(mDelay1,mDelay2);
+      for (int i=0;i<tLoop;i++) tDummy++;
+
+      if (++mCount < 5)
+      {
+         mDelay1 += mInitial1;
+         mDelay2 += mInitial2;
+      }
+   }
+
+   //---------------------------------------------------------------------------
+   // Constant backoff
+
+   inline void delay()
+   {
+      if (!mEnable)return;
+
+      int tDummy=0;
+      int tLoop = my_irand(mDelay1,mDelay2);
+      for (int i=0;i<tLoop;i++) tDummy++;
    }
 };
 
