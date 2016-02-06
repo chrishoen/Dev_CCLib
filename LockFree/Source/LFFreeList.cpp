@@ -177,7 +177,7 @@ namespace LFFreeList
          if (mListHead.compare_exchange_weak(tHead, LFIndex(mListNext[tHead.mIndex].load().mIndex,tHead.mCount+1))) break;
 
          if (++tLoopCount==10000) throw 103;
-         tBackoff.linearBackoff();
+         tBackoff.expBackoff();
       }
       if (tLoopCount != 0)
       {
@@ -217,7 +217,7 @@ namespace LFFreeList
          // The pushed node is the new head node.
          if (mListHeadIndexRef.compare_exchange_weak(tHead.mIndex, aNode)) break;
          if (++tLoopCount == 10000) throw 103;
-         tBackoff.linearBackoff();
+         tBackoff.expBackoff();
       }
       if (tLoopCount != 0)
       {
