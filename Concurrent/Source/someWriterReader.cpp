@@ -87,6 +87,10 @@ void WriterReader::startTrial()
    mMarkerRead.startTrial(gGSettings.mXLimit);
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void WriterReader::finishTrial()
 {
    mMarkerWrite.finishTrial();
@@ -95,6 +99,10 @@ void WriterReader::finishTrial()
    mMeanTimeWrite = mMarkerWrite.mStatistics.mMean;
    mMeanTimeRead = mMarkerRead.mStatistics.mMean;
 }
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
 void WriterReader::writeread(int aNumWrites)
 {
@@ -150,6 +158,22 @@ void WriterReader::writeread(int aNumWrites)
          }
          mMarkerRead.doStop();
       }
+   }
+}
+   
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void WriterReader::flush()
+{
+   while(true)
+   {
+      IntMessage tMsg;
+      if (!LFIntQueue::tryRead(&tMsg.aint())) break;
+      mReadCount++;
+      mReadPassCount++;
+      mReadCheckSum += tMsg.mCode;
    }
 }
    

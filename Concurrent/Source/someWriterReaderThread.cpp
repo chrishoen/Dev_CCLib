@@ -101,6 +101,7 @@ void WriterReaderThread::threadRunFunction()
 
 void WriterReaderThread::threadExitFunction()
 {
+   gShare.mWriterReader[mIdent].flush();
    gShare.mWriterReader[mIdent].show();
 }
 

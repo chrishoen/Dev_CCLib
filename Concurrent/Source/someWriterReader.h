@@ -38,6 +38,8 @@ public:
 
    void writeread  (int aNumWrites);
 
+   void flush  ();
+
    //---------------------------------------------------------------------------
    // Members
 
