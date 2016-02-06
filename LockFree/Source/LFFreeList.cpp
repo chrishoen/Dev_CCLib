@@ -26,6 +26,7 @@ namespace LFFreeList
    // Node members
 
    static AtomicLFIndex*  mListNext  = 0;
+   static AtomicLFIndex mStub;
 
    //***************************************************************************
    //***************************************************************************
@@ -232,6 +233,36 @@ namespace LFFreeList
    }
 
    
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+   // Stub used for timing tests.
+
+   void listStub()
+   {
+      LFIndex tStub;
+
+      LFBackoff tBackoff(mBackoffList1,mBackoffList2);
+      int tLoopCount=0;
+      while (true)
+      {
+         // Store the stub in a temp.
+         tStub = mStub.load();
+
+         // Increment the modification counter.
+         if (mStub.compare_exchange_weak(tStub, LFIndex(tStub.mIndex,tStub.mCount+1))) break;
+
+         if (++tLoopCount==10000) throw 103;
+         tBackoff.backoff();
+      }
+      if (tLoopCount != 0)
+      {
+         mPopRetry.fetch_add(1,memory_order_relaxed);
+         if (tLoopCount == 1) mPopRetry1.fetch_add(1,memory_order_relaxed);
+         else if (tLoopCount == 2) mPopRetry2.fetch_add(1,memory_order_relaxed);
+         else if (tLoopCount == 3) mPopRetry3.fetch_add(1,memory_order_relaxed);
+      }
+   }
 }//namespace
 
 /*==============================================================================

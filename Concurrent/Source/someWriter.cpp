@@ -105,30 +105,49 @@ void Writer::write2(int aNumWrites)
 
 void Writer::write8(int aNumWrites)
 {
-   for (int i = 0; i < aNumWrites; i++)
+   // Free List pop,push
+   if (gShare.mTest == 1)
    {
-      int tNode;
-      bool tPass;
-
-      mMarkerPop.doStart();
-      tPass = LFFreeList::listPop(&tNode);
-      mMarkerPop.doStop();
-      LFDelay::delay(gGSettings.mDelay1);
-
-      if (tPass)
+      for (int i = 0; i < aNumWrites; i++)
       {
-         mMarkerPush.doStart();
-         LFFreeList::listPush(tNode);
-         mMarkerPush.doStop();
+         int tNode;
+         bool tPass;
+
+         mMarkerPop.doStart();
+         tPass = LFFreeList::listPop(&tNode);
+         mMarkerPop.doStop();
+         LFDelay::delay(gGSettings.mDelay1);
+
+         if (tPass)
+         {
+            mMarkerPush.doStart();
+            LFFreeList::listPush(tNode);
+            mMarkerPush.doStop();
+            LFDelay::delay(gGSettings.mDelay1);
+
+            mCount++;
+            mPassCount++;
+         }
+         else
+         {
+            mCount++;
+            mFailCount++;
+         }
+      }
+   }
+   // Free List stub
+   else if (gShare.mTest == 2)
+   {
+      // Free List pop,push
+      for (int i = 0; i < aNumWrites; i++)
+      {
+         mMarkerPop.doStart();
+         LFFreeList::listStub();
+         mMarkerPop.doStop();
          LFDelay::delay(gGSettings.mDelay1);
 
          mCount++;
          mPassCount++;
-      }
-      else
-      {
-         mCount++;
-         mFailCount++;
       }
    }
 }

@@ -18,6 +18,8 @@ namespace LFFreeList
 
    bool listPop(int* aNode);
    bool listPush(int aNode);
+
+   void listStub();
 }
 #endif
 
