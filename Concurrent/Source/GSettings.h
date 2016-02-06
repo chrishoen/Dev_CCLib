@@ -44,12 +44,6 @@ public:
    double  mDelayB1;
    double  mDelayB2;
 
-   int     mDelay1;
-   int     mDelay2;
-   int     mDelayWrite;
-   int     mDelayRead;
-
-
    // Settings
    //---------------------------------------------------------------------------
 

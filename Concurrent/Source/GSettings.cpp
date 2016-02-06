@@ -46,10 +46,6 @@ GSettings::GSettings()
    mDelayB1=0.0;
    mDelayB2=0.0;
 
-   mDelay1=0;
-   mDelay2=0;
-   mDelayWrite=0;
-   mDelayRead=0;
 }
 
 //******************************************************************************
