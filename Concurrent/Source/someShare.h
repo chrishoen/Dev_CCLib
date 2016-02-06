@@ -67,7 +67,8 @@ public:
    double              mWriterMeanTimePush;
 
    unsigned long long  mTesterCount;
-   double              mTesterMeanTime;
+   double              mTesterMeanTime1;
+   double              mTesterMeanTime2;
 };
 
 //******************************************************************************

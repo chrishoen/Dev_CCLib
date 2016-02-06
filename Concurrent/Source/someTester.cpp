@@ -30,7 +30,8 @@ Tester::Tester()
 void Tester::initialize(unsigned aIdent)
 {
    mCount     = 0;
-   mMeanTimeTest  = 0.0;
+   mMeanTimeTest1  = 0.0;
+   mMeanTimeTest2  = 0.0;
 }
 
 void Tester::finalize()
@@ -52,15 +53,15 @@ void Tester::show()
 
 void Tester::test1(int aNumIter)
 {
-   LFBackoff tBackoffA(gGSettings.mDelayA1,gGSettings.mDelayA2);
-   LFBackoff tBackoffB(gGSettings.mDelayB1,gGSettings.mDelayB2);
+   LFBackoff tDelayA(gGSettings.mDelayA1,gGSettings.mDelayA2);
+   LFBackoff tDelayB(gGSettings.mDelayB1,gGSettings.mDelayB2);
 
    for (int i = 0; i < aNumIter; i++)
    {
-      mMarkerTest.doStart();
-      tBackoffA.delay();
-      mMarkerTest.doStop();
-      tBackoffB.delay();
+      mMarkerTest1.doStart();
+      tDelayA.delay();
+      mMarkerTest1.doStop();
+      tDelayB.delay();
 
       mCount++;
    }
@@ -78,13 +79,27 @@ void Tester::test2(int aNumIter)
    for (int i = 0; i < aNumIter; i++)
    {
       tBackoffA.reset();
-      mMarkerTest.doStart();
+
+      mMarkerTest1.doStart();
       tBackoffA.expBackoff();
-      mMarkerTest.doStop();
+      mMarkerTest1.doStop();
+
+      mMarkerTest2.doStart();
+      tBackoffA.expBackoff();
+      mMarkerTest2.doStop();
+
       tDelayB.delay();
 
       mCount++;
    }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void Tester::test3(int aNumIter)
+{
 }
 
 
@@ -96,20 +111,24 @@ void Tester::test2(int aNumIter)
 
 void Tester::startTrial()
 {
-   mMarkerTest.startTrial(gGSettings.mXLimit);
+   mMarkerTest1.startTrial(gGSettings.mXLimit);
+   mMarkerTest2.startTrial(gGSettings.mXLimit);
 }
 void Tester::finishTrial()
 {
-   mMarkerTest.finishTrial();
-   mMeanTimeTest = mMarkerTest.mStatistics.mMean;
+   mMarkerTest1.finishTrial();
+   mMarkerTest2.finishTrial();
+   mMeanTimeTest1 = mMarkerTest1.mStatistics.mMean;
+   mMeanTimeTest2 = mMarkerTest2.mStatistics.mMean;
 }
 
 void Tester::test(int aNumWrites)
 {
    switch (gShare.mTest)
    {
-   case 1: test1 (aNumWrites); break;
-   case 2: test2 (aNumWrites); break;
+      case 1: test1 (aNumWrites); break;
+      case 2: test2 (aNumWrites); break;
+      case 3: test3 (aNumWrites); break;
    }
 }
    

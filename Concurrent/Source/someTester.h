@@ -40,6 +40,7 @@ public:
 
    void test1 (int aNumIter);
    void test2 (int aNumIter);
+   void test3 (int aNumIter);
    void test  (int aNumIter);
 
    //---------------------------------------------------------------------------
@@ -47,12 +48,11 @@ public:
 
    unsigned long long mCount;
 
-   Ris::TrialTimeMarker mMarkerTest;
-   double               mMeanTimeTest;
+   Ris::TrialTimeMarker mMarkerTest1;
+   Ris::TrialTimeMarker mMarkerTest2;
+   double               mMeanTimeTest1;
+   double               mMeanTimeTest2;
 
-   std::atomic<int> mAX;
-   int              mNC;
-   int              mNE;
 };
 
 //******************************************************************************

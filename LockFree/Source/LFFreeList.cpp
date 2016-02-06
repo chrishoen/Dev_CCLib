@@ -25,16 +25,16 @@ namespace LFFreeList
    //***************************************************************************
    // Node members
 
-   static AtomicLFIndex*  mListNext  = 0;
-   static AtomicLFIndex mStub;
+   static AtomicLFIndex* mListNext  = 0;
+   static AtomicLFIndex  mStub;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Free List Members
 
-   bool listPop(int* aNode);
-   bool listPush(int aNode);
+   bool listPop (int* aNode);
+   bool listPush (int aNode);
 
    atomic<int>   mListSize;
    AtomicLFIndex mListHead;
@@ -177,7 +177,7 @@ namespace LFFreeList
          if (mListHead.compare_exchange_weak(tHead, LFIndex(mListNext[tHead.mIndex].load().mIndex,tHead.mCount+1))) break;
 
          if (++tLoopCount==10000) throw 103;
-         tBackoff.expBackoff();
+         tBackoff.linearBackoff();
       }
       if (tLoopCount != 0)
       {
@@ -217,7 +217,7 @@ namespace LFFreeList
          // The pushed node is the new head node.
          if (mListHeadIndexRef.compare_exchange_weak(tHead.mIndex, aNode)) break;
          if (++tLoopCount == 10000) throw 103;
-         tBackoff.expBackoff();
+         tBackoff.linearBackoff();
       }
       if (tLoopCount != 0)
       {

@@ -36,13 +36,6 @@ void Share::initialize()
    switch (mMode)
    {
    case 1:
-      LFIntQueue::initialize(gGSettings.mAllocate);
-      LFIntQueue::setBackoff(
-         gGSettings.mBackQueue1,
-         gGSettings.mBackQueue2,
-         gGSettings.mBackList1,
-         gGSettings.mBackList2);
-      break;
    case 2:
       LFIntQueue::initialize(gGSettings.mAllocate);
       LFIntQueue::setBackoff(
@@ -152,7 +145,8 @@ void Share::update2()
 void Share::update7()
 {
    mTesterCount     = mTester.mCount;
-   mTesterMeanTime  = mTester.mMeanTimeTest;
+   mTesterMeanTime1  = mTester.mMeanTimeTest1;
+   mTesterMeanTime2  = mTester.mMeanTimeTest2;
 }
   
 //******************************************************************************
@@ -232,7 +226,8 @@ void Share::show7()
    Prn::print(0, "TOTAL");
    Prn::print(0, "");
    Prn::print(0, "Tester.mCount      %16s", my_stringLLU(tString, mTesterCount));
-   Prn::print(0, "mMeanTimeTest      %16.5f", mTesterMeanTime);
+   Prn::print(0, "mMeanTimeTest1     %16.5f", mTesterMeanTime1);
+   Prn::print(0, "mMeanTimeTest2     %16.5f", mTesterMeanTime2);
 }
 //******************************************************************************
 //******************************************************************************
