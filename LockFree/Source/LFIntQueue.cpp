@@ -63,11 +63,11 @@ namespace LFIntQueue
    {
       finalize();
 
-      mAllocate = (unsigned)(aAllocate + 1);
+      mAllocate = (unsigned)(aAllocate);
       mModulo   = mAllocate - 1;
 
-//    mAllocate = 8;
-//    mModulo   = 7;
+      mAllocate = 8;
+      mModulo   = 7;
 
       mArray = new atomic<unsigned>[mAllocate];
 
@@ -121,6 +121,7 @@ namespace LFIntQueue
    {
       unsigned tValue = (((unsigned)aValue)<<1) | 0x80000000;
 
+      int tLoopCount=0;
       while (true)
       {
          unsigned te = mTail.load(memory_order_acquire);
@@ -184,6 +185,7 @@ namespace LFIntQueue
             return true;
          }
       TryAgain:;
+         if (++tLoopCount==10000) throw 101;
       }
 
       // No control path reaches this line!
@@ -196,6 +198,7 @@ namespace LFIntQueue
 
    bool tryRead(int* aValue)
    {
+      int tLoopCount=0;
       while(true)
       {
          unsigned th = mHead.load(memory_order_acquire);
@@ -254,6 +257,7 @@ namespace LFIntQueue
          }
 
       TryAgain:;
+         if (++tLoopCount==10000) throw 101;
       }
 
       // Done.

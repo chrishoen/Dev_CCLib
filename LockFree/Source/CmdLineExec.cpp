@@ -18,7 +18,7 @@ using namespace std;
 CmdLineExec::CmdLineExec()
 {
    mCount=0;
-   LFIntQueue::initialize(4);
+   LFIntQueue::initialize(8);
 }
 
 //******************************************************************************
@@ -27,7 +27,7 @@ void CmdLineExec::reset()
 {
    for (int i=0;i<100;i++) printf("\n",i);
    mCount=0;
-   LFIntQueue::initialize(4);
+   LFIntQueue::initialize(8);
 }
 
 //******************************************************************************
@@ -47,11 +47,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   LFIndex         tX = LFIndex(1,2);
-   atomic<LFIndex> tA1;
-
-   Prn::print(0,"is_lock_free %d",tA1.is_lock_free());
-   Prn::print(0,"sizeof %d %d",sizeof(LFIndex),sizeof(atomic<LFIndex>));
+   mCount = -1;
 }
 
 //******************************************************************************
