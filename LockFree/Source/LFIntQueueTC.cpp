@@ -97,7 +97,7 @@ namespace LFIntQueueTC
    //***************************************************************************
    // Show
 
-   int listSize(){ return mItemCounter.load(); }
+   int size(){ return mItemCounter.load(); }
 
    void show()
    {

@@ -60,7 +60,7 @@ void StatusThread::threadRunFunction()
                mProcString,
                my_stringLLU(tString1, gShare.mWriter[0].mCount),
                my_stringLLU(tString2, gShare.mReader.mCount),
-               LFIntQueue::listSize());
+               LFIntQueue::size());
          }
          break;
          case 2:
@@ -69,7 +69,7 @@ void StatusThread::threadRunFunction()
                mProcString,
                my_stringLLU(tString1, gShare.mWriterReader[0].mWriteCount),
                my_stringLLU(tString2, gShare.mWriterReader[0].mReadCount),
-               LFIntQueue::listSize());
+               LFIntQueue::size());
          }
          break;
          case 7:

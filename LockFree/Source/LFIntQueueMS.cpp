@@ -139,7 +139,7 @@ namespace LFIntQueueMS
    //***************************************************************************
    // Show
 
-   int listSize(){ return mListSize.load(); }
+   int size(){ return mListAllocate = mListSize.load(); }
 
    void show()
    {

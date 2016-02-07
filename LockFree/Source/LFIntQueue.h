@@ -38,12 +38,12 @@ namespace LFIntQueue
       }
    }
 
-   inline int listSize()
+   inline int size()
    {
       switch (gType)
       {
-      case 1: return LFIntQueueMS::listSize();
-      case 2: return LFIntQueueTC::listSize();
+      case 1: return LFIntQueueMS::size();
+      case 2: return LFIntQueueTC::size();
       }
       return 0;
    }

@@ -8,7 +8,7 @@ namespace LFIntQueueMS
 {
    void initialize (int aAllocate);
    void finalize();
-   int  listSize();
+   int  size();
 
    bool tryWrite  (int  aValue);
    bool tryRead   (int* aValue);
