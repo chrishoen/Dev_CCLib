@@ -7,11 +7,11 @@
 
 #include "LFIndex.h"
 #include "LFBackoff.h"
-#include "MSIntQueue.h"
+#include "LFIntQueueMS.h"
 
 using namespace std;
 
-namespace MSIntQueue
+namespace LFIntQueueMS
 {
    //***************************************************************************
    //***************************************************************************
@@ -144,12 +144,12 @@ namespace MSIntQueue
    void show()
    {
       char tString[40];
-      Prn::print(0,"MSIntQueue------------------");
+      Prn::print(0,"LFIntQueueMS------------------");
       Prn::print(0,"WriteRetry         %16s",my_stringLLU(tString,mWriteRetry));
       Prn::print(0,"ReadRetry          %16s",my_stringLLU(tString,mReadRetry));
       Prn::print(0,"PopRetry           %16s",my_stringLLU(tString,mPopRetry));
       Prn::print(0,"PushRetry          %16s",my_stringLLU(tString,mPushRetry));
-      Prn::print(0,"MSIntQueue------------------");
+      Prn::print(0,"LFIntQueueMS------------------");
    }
 
    //***************************************************************************

@@ -46,9 +46,6 @@
     <ClCompile Include="..\LockFree\Source\LFFreeList.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\LockFree\Source\LFIntQueue.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Timing.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -62,6 +59,15 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\someTesterThread.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\LockFree\Source\LFIntQueue.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\LockFree\Source\LFIntQueueMS.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\LockFree\Source\LFIntQueueTC.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -105,9 +111,6 @@
     <ClInclude Include="..\LockFree\Source\LFIndex.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="..\LockFree\Source\LFIntQueue.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="..\LockFree\Source\LFBackoff.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -124,6 +127,15 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\someTesterThread.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\LockFree\Source\LFIntQueue.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\LockFree\Source\LFIntQueueMS.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\LockFree\Source\LFIntQueueTC.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

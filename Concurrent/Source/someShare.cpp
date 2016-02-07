@@ -29,9 +29,11 @@ Share::Share()
 void Share::initialize()
 {
    mMode = gGSettings.mMode;
+   mType = gGSettings.mType;
    mTest = gGSettings.mTest;
    mTerminateFlag = false;
 
+   LFIntQueue::setType(mType);
 
    switch (mMode)
    {

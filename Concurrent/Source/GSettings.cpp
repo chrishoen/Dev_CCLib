@@ -22,8 +22,9 @@
 GSettings::GSettings()
 {
    mMode        =    1;
-   mTest        =    1;
    mNumWriters  =    1;
+   mType        =    1;
+   mTest        =    1;
    mAllocate    = 1000;
    mTerminate   = 0;
 
@@ -53,8 +54,9 @@ GSettings::GSettings()
 void GSettings::show()
 {
    printf("GSettings   Mode          %11d\n",    mMode);
-   printf("GSettings   Test          %11d\n",    mTest);
    printf("GSettings   NumWriters    %11d\n",    mNumWriters);
+   printf("GSettings   Type          %11d\n",    mType);
+   printf("GSettings   Test          %11d\n",    mTest);
    printf("GSettings   Allocate      %11d\n",    mAllocate);
    printf("GSettings   Terminate     %11d\n",    mTerminate);
    printf("GSettings   WriteLower    %11d\n",    mWriteLower);
@@ -81,8 +83,9 @@ void GSettings::execute(Ris::CmdLineCmd* aCmd)
 {
    // Read variables
    if(aCmd->isCmd("Mode"))         mMode        = aCmd->argInt (1);
-   if(aCmd->isCmd("Test"))         mTest        = aCmd->argInt (1);
    if(aCmd->isCmd("NumWriters"))   mNumWriters  = aCmd->argInt (1);
+   if(aCmd->isCmd("Type"))         mType        = aCmd->argInt (1);
+   if(aCmd->isCmd("Test"))         mTest        = aCmd->argInt (1);
    if(aCmd->isCmd("Allocate"))     mAllocate    = aCmd->argInt (1);
    if(aCmd->isCmd("Terminate"))    mTerminate   = aCmd->argInt (1);
    if(aCmd->isCmd("Allocate"))     mAllocate    = aCmd->argInt (1);

@@ -37,6 +37,7 @@ public:
    void show();
 
    int mMode;
+   int mType;
    int mTest;
    bool mTerminateFlag;
 

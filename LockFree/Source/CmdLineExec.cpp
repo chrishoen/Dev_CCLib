@@ -18,6 +18,7 @@ using namespace std;
 CmdLineExec::CmdLineExec()
 {
    mCount=0;
+   LFIntQueue::setType(1);
    LFIntQueue::initialize(8);
 }
 

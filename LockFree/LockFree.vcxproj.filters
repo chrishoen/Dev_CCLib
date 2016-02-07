@@ -10,13 +10,16 @@
     <ClCompile Include="Source\CmdLineExec.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\LFIntQueue.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\LFFreeList.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\MSIntQueue.cpp">
+    <ClCompile Include="Source\LFIntQueue.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LFIntQueueMS.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LFIntQueueTC.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -32,9 +35,6 @@
     <ClInclude Include="Source\CmdLineExec.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\LFIntQueue.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\LockFree.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -47,7 +47,13 @@
     <ClInclude Include="Source\LFBackoff.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\MSIntQueue.h">
+    <ClInclude Include="Source\LFIntQueue.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LFIntQueueMS.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LFIntQueueTC.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

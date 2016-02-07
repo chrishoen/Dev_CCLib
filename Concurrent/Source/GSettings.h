@@ -19,8 +19,9 @@ public:
    // Settings
 
    int     mMode;
-   int     mTest;
    int     mNumWriters;
+   int     mType;
+   int     mTest;
 
    int     mAllocate;
    int     mTerminate;

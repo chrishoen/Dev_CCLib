@@ -1,10 +1,10 @@
-#ifndef _MSINTQUEUE_H_
-#define _MSINTQUEUE_H_
+#ifndef _LFINTQUEUEMS_H_
+#define _LFINTQUEUEMS_H_
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-namespace MSIntQueue
+namespace LFIntQueueMS
 {
    void initialize (int aAllocate);
    void finalize();
