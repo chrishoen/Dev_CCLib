@@ -265,7 +265,7 @@ namespace LFIntQueueMS
          if (tHead.mIndex == cInvalid) return false;
 
          // Set the head node to be the node that is after the head node.
-         if (mListHead.compare_exchange_weak(tHead, LFIndex(mListNext[tHead.mIndex].load().mIndex,tHead.mCount+1))) break;
+         if (mListHead.compare_exchange_weak(tHead, LFIndex(mListNext[tHead.mIndex].load(memory_order_relaxed).mIndex,tHead.mCount+1),memory_order_acquire,memory_order_relaxed)) break;
 
          if (++tLoopCount==10000) throw 103;
       }
@@ -295,12 +295,11 @@ namespace LFIntQueueMS
       int tLoopCount=0;
       while (true)
       {
-         // Attach the head node to the pushed node .
-         mListNext[aNode].store(tHead);
+         // Attach the head node to the pushed node.
+         mListNext[aNode].store(tHead,memory_order_relaxed);
 
          // The pushed node is the new head node.
-         if (mListHeadIndexRef.compare_exchange_weak(tHead.mIndex, aNode)) break;
-
+         if (mListHeadIndexRef.compare_exchange_weak(tHead.mIndex, aNode,memory_order_release,memory_order_relaxed)) break;
          if (++tLoopCount == 10000) throw 103;
       }
       if (tLoopCount != 0)

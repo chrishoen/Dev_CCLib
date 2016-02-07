@@ -160,15 +160,13 @@ namespace LFFreeList
 
    bool listPop(int* aNode)
    {
-      LFIndex tHead;
+      // Store the head node in a temp.
+      // This is the node that will be detached.
+      LFIndex tHead = mListHead.load(memory_order_relaxed);
 
       int tLoopCount=0;
       while (true)
       {
-         // Store the head node in a temp.
-         // This is the node that will be detached.
-         tHead = mListHead.load(memory_order_relaxed);
-
          // Exit if the list is empty.
          if (tHead.mIndex == cInvalid) return false;
 
@@ -200,14 +198,12 @@ namespace LFFreeList
 
    bool listPush(int aNode)
    {
-      LFIndex tHead;
+      // Store the head node in a temp.
+      LFIndex tHead = mListHead.load(memory_order_relaxed);
 
       int tLoopCount=0;
       while (true)
       {
-         // Store the head node in a temp.
-         tHead = mListHead.load(memory_order_relaxed);
-
          // Attach the head node to the pushed node.
          mListNext[aNode].store(tHead,memory_order_relaxed);
 
