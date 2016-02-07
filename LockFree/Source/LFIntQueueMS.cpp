@@ -170,7 +170,7 @@ namespace LFIntQueueMS
 
       // Initialize the node with the value.
       mValue[tNode.mIndex] = aValue;
-      mQueueNext[tNode.mIndex].store(LFIndex(cInvalid,0));
+      mQueueNext[tNode.mIndex].store(LFIndex(cInvalid,0),memory_order_relaxed);
 
       // Attach the node to the queue tail.
       LFIndex tTail,tNext;
@@ -178,18 +178,18 @@ namespace LFIntQueueMS
       int tLoopCount=0;
       while (true)
       {
-         tTail = mQueueTail.load();
-         tNext = mQueueNext[tTail.mIndex].load();
+         tTail = mQueueTail.load(memory_order_relaxed);
+         tNext = mQueueNext[tTail.mIndex].load(memory_order_acquire);
 
-         if (tTail == mQueueTail.load())
+         if (tTail == mQueueTail.load(memory_order_relaxed))
          {
             if (tNext.mIndex == cInvalid)
             {
-               if (mQueueNext[tTail.mIndex].compare_exchange_weak(tNext, LFIndex(tNode.mIndex, tNext.mCount+1))) break;
+               if (mQueueNext[tTail.mIndex].compare_exchange_strong(tNext, LFIndex(tNode.mIndex, tNext.mCount+1),memory_order_release,memory_order_relaxed)) break;
             }
             else
             {
-               mQueueTail.compare_exchange_weak(tTail, LFIndex(tNext.mIndex, tTail.mCount+1));
+               mQueueTail.compare_exchange_weak(tTail, LFIndex(tNext.mIndex, tTail.mCount+1),memory_order_release,memory_order_relaxed);
             }
          }
 
@@ -197,7 +197,7 @@ namespace LFIntQueueMS
       }
       if (tLoopCount) mWriteRetry.fetch_add(1,memory_order_relaxed);
 
-      mQueueTail.compare_exchange_strong(tTail, LFIndex(tNode.mIndex, tTail.mCount+1));
+      mQueueTail.compare_exchange_strong(tTail, LFIndex(tNode.mIndex, tTail.mCount+1),memory_order_release,memory_order_relaxed);
 
       // Done
       return true;
@@ -219,21 +219,21 @@ namespace LFIntQueueMS
       int tLoopCount=0;
       while (true)
       {
-         tHead = mQueueHead.load();
-         tTail = mQueueTail.load();
-         tNext = mQueueNext[tHead.mIndex].load();
+         tHead = mQueueHead.load(memory_order_relaxed);
+         tTail = mQueueTail.load(memory_order_acquire);
+         tNext = mQueueNext[tHead.mIndex].load(memory_order_relaxed);
 
-         if (tHead == mQueueHead.load())
+         if (tHead == mQueueHead.load(memory_order_acquire))
          {
             if (tHead.mIndex == tTail.mIndex)
             {
                if (tNext.mIndex == cInvalid) return false;
-               mQueueTail.compare_exchange_weak(tTail, LFIndex(tNext.mIndex, tTail.mCount+1));
+               mQueueTail.compare_exchange_strong(tTail, LFIndex(tNext.mIndex, tTail.mCount+1),memory_order_release,memory_order_relaxed);
             }
             else
             {
                *aValue = mValue[tNext.mIndex];
-               if (mQueueHead.compare_exchange_weak(tHead, LFIndex(tNext.mIndex, tHead.mCount+1)))break;
+               if (mQueueHead.compare_exchange_strong(tHead, LFIndex(tNext.mIndex, tHead.mCount+1),memory_order_acquire,memory_order_relaxed))break;
             }
          }
 
@@ -256,7 +256,7 @@ namespace LFIntQueueMS
    {
       // Store the head node in a temp.
       // This is the node that will be detached.
-      LFIndex tHead = mListHead.load();
+      LFIndex tHead = mListHead.load(memory_order_relaxed);
 
       int tLoopCount=0;
       while (true)
