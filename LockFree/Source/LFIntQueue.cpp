@@ -66,9 +66,6 @@ namespace LFIntQueue
       mAllocate = (unsigned)(aAllocate);
       mModulo   = mAllocate - 1;
 
-      mAllocate = 8;
-      mModulo   = 7;
-
       mArray = new atomic<unsigned>[mAllocate];
 
       for (unsigned i = 0; i < mAllocate; i++)

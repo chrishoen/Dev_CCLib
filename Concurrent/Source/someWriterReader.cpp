@@ -70,7 +70,7 @@ void WriterReader::startTrial()
 {
    if (mIdent == 0)
    {
-      int tListSize = LFIntQueue::listSize();
+      int tListSize = gGSettings.mAllocate;
       for (int i = 0; i < tListSize / 2; i++)
       {
          mCode++;
