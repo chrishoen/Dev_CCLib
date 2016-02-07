@@ -254,15 +254,13 @@ namespace LFIntQueueMS
 
    bool listPop(int* aNode)
    {
-      LFIndex tHead;
+      // Store the head node in a temp.
+      // This is the node that will be detached.
+      LFIndex tHead = mListHead.load();
 
       int tLoopCount=0;
       while (true)
       {
-         // Store the head node in a temp.
-         // This is the node that will be detached.
-         tHead = mListHead.load();
-
          // Exit if the list is empty.
          if (tHead.mIndex == cInvalid) return false;
 
@@ -291,14 +289,12 @@ namespace LFIntQueueMS
 
    bool listPush(int aNode)
    {
-      LFIndex tHead;
+      // Store the head node in a temp.
+      LFIndex tHead = mListHead.load();
 
       int tLoopCount=0;
       while (true)
       {
-         // Store the head node in a temp.
-         tHead = mListHead.load();
-
          // Attach the head node to the pushed node .
          mListNext[aNode].store(tHead);
 
@@ -407,30 +403,3 @@ end
 
 ==============================================================================*/
 
-#if 0
-   bool listPush2(int aNode)
-   {
-      LFIndex tHead;
-
-      int tLoopCount=0;
-      while (true)
-      {
-         if (++tLoopCount==10000) throw 103;
-
-         // Store the head node in a temp.
-         tHead = mListHead.load(memory_order_relaxed);
-
-         // Attach the head node to the pushed node .
-         mNode[aNode].mListNext.store(tHead,memory_order_relaxed);
-
-         // The pushed node is the new head node.
-         if (mListHead.compare_exchange_strong(tHead, LFIndex(aNode, tHead.mCount+1))) break;
-         mPushRetry++;
-      }
-
-      // Done.
-      mListSize++;
-      return true;
-   }
-
-#endif
