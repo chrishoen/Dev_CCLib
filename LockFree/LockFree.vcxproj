@@ -172,6 +172,7 @@
     <ClCompile Include="Source\LFIntQueue.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
+    <ClCompile Include="Source\MSIntQueue.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h" />
@@ -181,6 +182,7 @@
     <ClInclude Include="Source\LFIntQueue.h" />
     <ClInclude Include="Source\LockFree.h" />
     <ClInclude Include="Source\MainInit.h" />
+    <ClInclude Include="Source\MSIntQueue.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
