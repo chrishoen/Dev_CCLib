@@ -30,7 +30,8 @@ Writer::Writer()
 void Writer::initialize(unsigned aIdent)
 {
    mIdent = aIdent;
-   mCode = 0;
+   mMsg.mCode  = 0;
+   mMsg.mIdent = aIdent;
 
    mCount     = 0;
    mPassCount = 0;
@@ -71,11 +72,10 @@ void Writer::write1(int aNumWrites)
    for (int i = 0; i < aNumWrites; i++)
    {
       bool tPass;
-      mCode++;
-      IntMessage tMsg(mIdent,mCode);
+      mMsg.mCode++;
 
       mMarkerWrite.doStart();
-      tPass = LFIntQueue::tryWrite(tMsg.aint());
+      tPass = LFIntQueue::tryWrite(mMsg.mInt);
       mMarkerWrite.doStop();
       tDelayA.delay();
 
@@ -83,7 +83,7 @@ void Writer::write1(int aNumWrites)
       {
          mCount++;
          mPassCount++;
-         mCheckSum += mCode;
+         mCheckSum += mMsg.mCode;
       }
       else
       {

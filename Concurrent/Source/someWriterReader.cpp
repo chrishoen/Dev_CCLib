@@ -31,7 +31,8 @@ WriterReader::WriterReader()
 void WriterReader::initialize(unsigned aIdent)
 {
    mIdent = aIdent;
-   mCode = 0;
+   mMsg.mCode  = 0;
+   mMsg.mIdent = aIdent;
 
    mWriteCount     = 0;
    mWritePassCount = 0;
@@ -73,13 +74,12 @@ void WriterReader::startTrial()
       int tListSize = gGSettings.mAllocate;
       for (int i = 0; i < tListSize / 2; i++)
       {
-         mCode++;
-         IntMessage tMsg(mIdent, mCode);
-         LFIntQueue::tryWrite(tMsg.aint());
+         mMsg.mCode++;
+         LFIntQueue::tryWrite(mMsg.mInt);
 
          mWriteCount++;
          mWritePassCount++;
-         mWriteCheckSum += mCode;
+         mWriteCheckSum += mMsg.mCode;
       }
    }
 
@@ -114,11 +114,10 @@ void WriterReader::writeread(int aNumWrites)
       if (my_randflag(0.5))
       {
          bool tPass;
-         mCode++;
-         IntMessage tMsg(mIdent, mCode);
+         mMsg.mCode++;
 
          mMarkerWrite.doStart();
-         tPass = LFIntQueue::tryWrite(tMsg.aint());
+         tPass = LFIntQueue::tryWrite(mMsg.mInt);
          mMarkerWrite.doStop();
          tDelayA.delay();
 
@@ -126,7 +125,7 @@ void WriterReader::writeread(int aNumWrites)
          {
             mWriteCount++;
             mWritePassCount++;
-            mWriteCheckSum += mCode;
+            mWriteCheckSum += mMsg.mCode;
          }
          else
          {
@@ -141,7 +140,7 @@ void WriterReader::writeread(int aNumWrites)
          IntMessage tMsg;
 
          mMarkerRead.doStart();
-         tPass = LFIntQueue::tryRead(&tMsg.aint());
+         tPass = LFIntQueue::tryRead(&tMsg.mInt);
          mMarkerRead.doStop();
          tDelayA.delay();
 
@@ -170,7 +169,7 @@ void WriterReader::flush()
    while(true)
    {
       IntMessage tMsg;
-      if (!LFIntQueue::tryRead(&tMsg.aint())) break;
+      if (!LFIntQueue::tryRead(&tMsg.mInt)) break;
       mReadCount++;
       mReadPassCount++;
       mReadCheckSum += tMsg.mCode;

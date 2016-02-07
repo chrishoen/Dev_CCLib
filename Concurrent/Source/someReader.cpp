@@ -67,7 +67,7 @@ void Reader::read1(int aNumReads)
       IntMessage tMsg;
 
       mMarkerRead.doStart();
-      tPass = LFIntQueue::tryRead(&tMsg.aint());
+      tPass = LFIntQueue::tryRead(&tMsg.mInt);
       mMarkerRead.doStop();
       tDelayB.delay();
 
@@ -91,7 +91,7 @@ void Reader::flush1()
    while(true)
    {
       IntMessage tMsg;
-      if (!LFIntQueue::tryRead(&tMsg.aint())) break;
+      if (!LFIntQueue::tryRead(&tMsg.mInt)) break;
       mCount++;
       mPassCount++;
       mCheckSum += tMsg.mCode;

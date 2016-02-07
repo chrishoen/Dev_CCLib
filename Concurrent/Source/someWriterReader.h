@@ -44,7 +44,7 @@ public:
    // Members
 
    unsigned short mIdent;
-   unsigned short mCode;
+   IntMessage mMsg;
 
    unsigned long long mWriteCount;
    unsigned long long mWritePassCount;
