@@ -18,8 +18,8 @@ using namespace std;
 CmdLineExec::CmdLineExec()
 {
    mCount=0;
-   LFIntQueue::setType(1);
-   LFIntQueue::initialize(8);
+   LFIntQueue::setType(2);
+   LFIntQueue::initialize(4);
 }
 
 //******************************************************************************
@@ -28,7 +28,7 @@ void CmdLineExec::reset()
 {
    for (int i=0;i<100;i++) printf("\n",i);
    mCount=0;
-   LFIntQueue::initialize(8);
+   LFIntQueue::initialize(4);
 }
 
 //******************************************************************************
@@ -48,7 +48,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   mCount = -1;
+   Prn::print(0,"%d",sizeof(AtomicLFIndexBlock));;
 }
 
 //******************************************************************************

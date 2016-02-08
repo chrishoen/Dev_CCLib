@@ -19,24 +19,22 @@ namespace LFIntQueueMSCP
    // Support
 
    static const int cInvalid = 0x80000000;
-   typedef unsigned long long int Padding[128];
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Node Members
 
-   static int*            mValue     = 0;
-   static AtomicLFIndex*  mQueueNext = 0;
-   static AtomicLFIndex*  mListNext  = 0;
+   static int*  mValue     = 0;
+   static AtomicLFIndexBlock*  mQueueNext = 0;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Queue Members
 
-   AtomicLFIndex mQueueHead;
-   AtomicLFIndex mQueueTail;
+   AtomicLFIndexBlock  mQueueHead;
+   AtomicLFIndexBlock  mQueueTail;
 
    //***************************************************************************
    //***************************************************************************
@@ -46,10 +44,11 @@ namespace LFIntQueueMSCP
    bool listPush(int  aNode);
    bool listPop(int*  aNode);
 
-   static atomic<int>   mListSize;
-   static AtomicLFIndex mListHead;
+   static atomic<int>  mListSize;
+   static AtomicLFIndexBlock   mListHead;
+   static AtomicLFIndexBlock*  mListNext  = 0;
    
-   static atomic<int>* mListHeadIndexPtr = (atomic<int>*)&mListHead;
+   static atomic<int>* mListHeadIndexPtr = (atomic<int>*)&mListHead.mX;
    static atomic<int>& mListHeadIndexRef = (atomic<int>&)*mListHeadIndexPtr;
 
    //***************************************************************************
@@ -91,27 +90,27 @@ namespace LFIntQueueMSCP
       mListAllocate  = aAllocate + 1;
 
       mValue = new int[mListAllocate];
-      mQueueNext = new AtomicLFIndex[mListAllocate];
-      mListNext = new AtomicLFIndex[mListAllocate];
+      mQueueNext = new AtomicLFIndexBlock[mListAllocate];
+      mListNext = new AtomicLFIndexBlock[mListAllocate];
 
       for (int i = 0; i < mListAllocate-1; i++)
       {
          mValue[i] = 0;
-         mQueueNext[i].store(LFIndex(cInvalid,0));
-         mListNext[i].store(LFIndex(i+1,0));
+         mQueueNext[i].mX.store(LFIndex(cInvalid,0));
+         mListNext[i].mX.store(LFIndex(i+1,0));
       }
 
       mValue[mListAllocate-1] = 0;
-      mQueueNext[mListAllocate-1].store(LFIndex(cInvalid,0));
-      mListNext[mListAllocate-1].store(LFIndex(cInvalid,0));
+      mQueueNext[mListAllocate-1].mX.store(LFIndex(cInvalid,0));
+      mListNext[mListAllocate-1].mX.store(LFIndex(cInvalid,0));
 
-      mListHead.store(LFIndex(0,0));
+      mListHead.mX.store(LFIndex(0,0));
       mListSize = mListAllocate;
 
       int tIndex;
       listPop(&tIndex);
-      mQueueHead.store(LFIndex(tIndex,0));
-      mQueueTail = mQueueHead.load();
+      mQueueHead.mX.store(LFIndex(tIndex,0));
+      mQueueTail.mX = mQueueHead.mX.load();
 
       mWriteRetry = 0;
       mReadRetry  = 0;
@@ -170,7 +169,7 @@ namespace LFIntQueueMSCP
 
       // Initialize the node with the value.
       mValue[tNode.mIndex] = aValue;
-      mQueueNext[tNode.mIndex].store(LFIndex(cInvalid,0),memory_order_relaxed);
+      mQueueNext[tNode.mIndex].mX.store(LFIndex(cInvalid,0),memory_order_relaxed);
 
       // Attach the node to the queue tail.
       LFIndex tTail,tNext;
@@ -178,18 +177,18 @@ namespace LFIntQueueMSCP
       int tLoopCount=0;
       while (true)
       {
-         tTail = mQueueTail.load(memory_order_relaxed);
-         tNext = mQueueNext[tTail.mIndex].load(memory_order_acquire);
+         tTail = mQueueTail.mX.load(memory_order_relaxed);
+         tNext = mQueueNext[tTail.mIndex].mX.load(memory_order_acquire);
 
-         if (tTail == mQueueTail.load(memory_order_relaxed))
+         if (tTail == mQueueTail.mX.load(memory_order_relaxed))
          {
             if (tNext.mIndex == cInvalid)
             {
-               if (mQueueNext[tTail.mIndex].compare_exchange_strong(tNext, LFIndex(tNode.mIndex, tNext.mCount+1),memory_order_release,memory_order_relaxed)) break;
+               if (mQueueNext[tTail.mIndex].mX.compare_exchange_strong(tNext, LFIndex(tNode.mIndex, tNext.mCount+1),memory_order_release,memory_order_relaxed)) break;
             }
             else
             {
-               mQueueTail.compare_exchange_weak(tTail, LFIndex(tNext.mIndex, tTail.mCount+1),memory_order_release,memory_order_relaxed);
+               mQueueTail.mX.compare_exchange_weak(tTail, LFIndex(tNext.mIndex, tTail.mCount+1),memory_order_release,memory_order_relaxed);
             }
          }
 
@@ -197,7 +196,7 @@ namespace LFIntQueueMSCP
       }
       if (tLoopCount) mWriteRetry.fetch_add(1,memory_order_relaxed);
 
-      mQueueTail.compare_exchange_strong(tTail, LFIndex(tNode.mIndex, tTail.mCount+1),memory_order_release,memory_order_relaxed);
+      mQueueTail.mX.compare_exchange_strong(tTail, LFIndex(tNode.mIndex, tTail.mCount+1),memory_order_release,memory_order_relaxed);
 
       // Done
       return true;
@@ -219,21 +218,21 @@ namespace LFIntQueueMSCP
       int tLoopCount=0;
       while (true)
       {
-         tHead = mQueueHead.load(memory_order_relaxed);
-         tTail = mQueueTail.load(memory_order_acquire);
-         tNext = mQueueNext[tHead.mIndex].load(memory_order_relaxed);
+         tHead = mQueueHead.mX.load(memory_order_relaxed);
+         tTail = mQueueTail.mX.load(memory_order_acquire);
+         tNext = mQueueNext[tHead.mIndex].mX.load(memory_order_relaxed);
 
-         if (tHead == mQueueHead.load(memory_order_acquire))
+         if (tHead == mQueueHead.mX.load(memory_order_acquire))
          {
             if (tHead.mIndex == tTail.mIndex)
             {
                if (tNext.mIndex == cInvalid) return false;
-               mQueueTail.compare_exchange_strong(tTail, LFIndex(tNext.mIndex, tTail.mCount+1),memory_order_release,memory_order_relaxed);
+               mQueueTail.mX.compare_exchange_strong(tTail, LFIndex(tNext.mIndex, tTail.mCount+1),memory_order_release,memory_order_relaxed);
             }
             else
             {
                *aValue = mValue[tNext.mIndex];
-               if (mQueueHead.compare_exchange_strong(tHead, LFIndex(tNext.mIndex, tHead.mCount+1),memory_order_acquire,memory_order_relaxed))break;
+               if (mQueueHead.mX.compare_exchange_strong(tHead, LFIndex(tNext.mIndex, tHead.mCount+1),memory_order_acquire,memory_order_relaxed))break;
             }
          }
 
@@ -256,7 +255,7 @@ namespace LFIntQueueMSCP
    {
       // Store the head node in a temp.
       // This is the node that will be detached.
-      LFIndex tHead = mListHead.load(memory_order_relaxed);
+      LFIndex tHead = mListHead.mX.load(memory_order_relaxed);
 
       int tLoopCount=0;
       while (true)
@@ -265,7 +264,7 @@ namespace LFIntQueueMSCP
          if (tHead.mIndex == cInvalid) return false;
 
          // Set the head node to be the node that is after the head node.
-         if (mListHead.compare_exchange_weak(tHead, LFIndex(mListNext[tHead.mIndex].load(memory_order_relaxed).mIndex,tHead.mCount+1),memory_order_acquire,memory_order_relaxed)) break;
+         if (mListHead.mX.compare_exchange_weak(tHead, LFIndex(mListNext[tHead.mIndex].mX.load(memory_order_relaxed).mIndex,tHead.mCount+1),memory_order_acquire,memory_order_relaxed)) break;
 
          if (++tLoopCount==10000) throw 103;
       }
@@ -290,13 +289,13 @@ namespace LFIntQueueMSCP
    bool listPush(int aNode)
    {
       // Store the head node in a temp.
-      LFIndex tHead = mListHead.load();
+      LFIndex tHead = mListHead.mX.load();
 
       int tLoopCount=0;
       while (true)
       {
          // Attach the head node to the pushed node.
-         mListNext[aNode].store(tHead,memory_order_relaxed);
+         mListNext[aNode].mX.store(tHead,memory_order_relaxed);
 
          // The pushed node is the new head node.
          if (mListHeadIndexRef.compare_exchange_weak(tHead.mIndex, aNode,memory_order_release,memory_order_relaxed)) break;
