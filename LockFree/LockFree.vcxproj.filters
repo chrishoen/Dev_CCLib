@@ -19,7 +19,7 @@
     <ClCompile Include="Source\LFIntQueueMS.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\LFIntQueueTC.cpp">
+    <ClCompile Include="Source\LFIntQueueMSCP.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -53,7 +53,7 @@
     <ClInclude Include="Source\LFIntQueueMS.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\LFIntQueueTC.h">
+    <ClInclude Include="Source\LFIntQueueMSCP.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

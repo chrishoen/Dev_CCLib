@@ -171,7 +171,7 @@
     <ClCompile Include="Source\LFFreeList.cpp" />
     <ClCompile Include="Source\LFIntQueue.cpp" />
     <ClCompile Include="Source\LFIntQueueMS.cpp" />
-    <ClCompile Include="Source\LFIntQueueTC.cpp" />
+    <ClCompile Include="Source\LFIntQueueMSCP.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
   </ItemGroup>
@@ -182,7 +182,7 @@
     <ClInclude Include="Source\LFIndex.h" />
     <ClInclude Include="Source\LFIntQueue.h" />
     <ClInclude Include="Source\LFIntQueueMS.h" />
-    <ClInclude Include="Source\LFIntQueueTC.h" />
+    <ClInclude Include="Source\LFIntQueueMSCP.h" />
     <ClInclude Include="Source\LockFree.h" />
     <ClInclude Include="Source\MainInit.h" />
   </ItemGroup>

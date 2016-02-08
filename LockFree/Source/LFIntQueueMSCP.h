@@ -1,10 +1,10 @@
-#ifndef _LFINTQUEUETC_H_
-#define _LFINTQUEUETC_H_
+#ifndef _LFINTQUEUEMSCPMS_H_
+#define _LFINTQUEUEMSCPMS_H_
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-namespace LFIntQueueTC
+namespace LFIntQueueMSCP
 {
    void initialize (int aAllocate);
    void finalize();

@@ -2,7 +2,7 @@
 #define _LFINTQUEUE_H_
 
 #include "LFIntQueueMS.h"
-#include "LFIntQueueTC.h"
+#include "LFIntQueueMSCP.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -25,7 +25,7 @@ namespace LFIntQueue
       switch (gType)
       {
       case 1: return LFIntQueueMS::initialize(aAllocate);
-      case 2: return LFIntQueueTC::initialize(aAllocate);
+      case 2: return LFIntQueueMSCP::initialize(aAllocate);
       }
    }
 
@@ -34,7 +34,7 @@ namespace LFIntQueue
       switch (gType)
       {
       case 1: return LFIntQueueMS::finalize();
-      case 2: return LFIntQueueTC::finalize();
+      case 2: return LFIntQueueMSCP::finalize();
       }
    }
 
@@ -43,7 +43,7 @@ namespace LFIntQueue
       switch (gType)
       {
       case 1: return LFIntQueueMS::size();
-      case 2: return LFIntQueueTC::size();
+      case 2: return LFIntQueueMSCP::size();
       }
       return 0;
    }
@@ -53,7 +53,7 @@ namespace LFIntQueue
       switch (gType)
       {
       case 1: return LFIntQueueMS::tryWrite (aValue);
-      case 2: return LFIntQueueTC::tryWrite (aValue);
+      case 2: return LFIntQueueMSCP::tryWrite (aValue);
       }
       return false;
    }
@@ -63,7 +63,7 @@ namespace LFIntQueue
       switch (gType)
       {
       case 1: return LFIntQueueMS::tryRead (aValue);
-      case 2: return LFIntQueueTC::tryRead (aValue);
+      case 2: return LFIntQueueMSCP::tryRead (aValue);
       }
       return false;
    }
@@ -73,7 +73,7 @@ namespace LFIntQueue
       switch (gType)
       {
       case 1: return LFIntQueueMS::show ();
-      case 2: return LFIntQueueTC::show ();
+      case 2: return LFIntQueueMSCP::show ();
       }
    }
 
@@ -82,7 +82,7 @@ namespace LFIntQueue
       switch (gType)
       {
       case 1: return LFIntQueueMS::writeRetry ();
-      case 2: return LFIntQueueTC::writeRetry ();
+      case 2: return LFIntQueueMSCP::writeRetry ();
       }
       return 0;
    }
@@ -92,7 +92,7 @@ namespace LFIntQueue
       switch (gType)
       {
       case 1: return LFIntQueueMS::readRetry ();
-      case 2: return LFIntQueueTC::readRetry ();
+      case 2: return LFIntQueueMSCP::readRetry ();
       }
       return 0;
    }
@@ -102,7 +102,7 @@ namespace LFIntQueue
       switch (gType)
       {
       case 1: return LFIntQueueMS::popRetry ();
-      case 2: return LFIntQueueTC::popRetry ();
+      case 2: return LFIntQueueMSCP::popRetry ();
       }
       return 0;
    }
@@ -112,7 +112,7 @@ namespace LFIntQueue
       switch (gType)
       {
       case 1: return LFIntQueueMS::pushRetry ();
-      case 2: return LFIntQueueTC::pushRetry ();
+      case 2: return LFIntQueueMSCP::pushRetry ();
       }
       return 0;
    }
