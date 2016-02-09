@@ -168,11 +168,13 @@
   <ItemGroup>
     <ClCompile Include="Source\CmdLineExec.cpp" />
     <ClCompile Include="Source\Main.cpp" />
+    <ClCompile Include="Source\MainInit.cpp" />
     <ClCompile Include="Source\someClass3.cpp" />
     <ClCompile Include="Source\someClass4.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h" />
+    <ClInclude Include="Source\MainInit.h" />
     <ClInclude Include="Source\someClass3.h" />
     <ClInclude Include="Source\someClass4.h" />
   </ItemGroup>
