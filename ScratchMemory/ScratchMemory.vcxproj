@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="Source\ccScratchMemory.h" />
     <ClInclude Include="Source\CmdLineExec.h" />
+    <ClInclude Include="Source\MainInit.h" />
     <ClInclude Include="Source\someClass1.h" />
   </ItemGroup>
   <ItemGroup>
@@ -28,6 +29,7 @@
     <ClCompile Include="Source\ccScratchMemory.cpp" />
     <ClCompile Include="Source\CmdLineExec.cpp" />
     <ClCompile Include="Source\Main.cpp" />
+    <ClCompile Include="Source\MainInit.cpp" />
     <ClCompile Include="Source\someClass1.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

@@ -171,6 +171,7 @@
     <ClCompile Include="Source\CmdLineExec.cpp" />
     <ClCompile Include="Source\GenerateNodeBlocks.cpp" />
     <ClCompile Include="Source\Main.cpp" />
+    <ClCompile Include="Source\MainInit.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\ccNodeBlock.h" />
@@ -179,6 +180,7 @@
     <ClInclude Include="Source\ccSegmentCopier.h" />
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\GenerateNodeBlocks.h" />
+    <ClInclude Include="Source\MainInit.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CCLib\CCLib.vcxproj">

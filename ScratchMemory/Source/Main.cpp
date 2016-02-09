@@ -2,13 +2,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "MainInit.h"
 #include "prnPrint.h"
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 
-#include "ccScratchMemory.h"
-
-void main_initialize();
+void amain_init();
 
 
 //******************************************************************************
@@ -17,10 +16,8 @@ int main(int argc,char** argv)
    //--------------------------------------------------------------------
    // Begin program
 
-   main_initialize();
+   main_initialize(argc,argv);
 
-   Prn::print(0,0,"amain***************************************************BEGIN");
-   
    //--------------------------------------------------------------------
    // Start user command line executive,
    // Wait for user to exit
@@ -32,18 +29,6 @@ int main(int argc,char** argv)
    //--------------------------------------------------------------------
    // End program
 
-   Prn::print(0,0,"amain*****************************************************END");
+   main_finalize();
    return 0;
 }
-//******************************************************************************
-void main_initialize()
-{
-   // Initialize the message heap
-   CC::initializeScratchMemory(1024);
-
-   // Initialize print filters
-   Prn::initializePrint();
-
-   Ris::setConsoleTitle("test");
-}
-
