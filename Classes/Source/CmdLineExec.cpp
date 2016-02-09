@@ -6,8 +6,7 @@
 #include "prnPrint.h"
 #include "risContainers.h"
 
-#include "someClass3.h"
-#include "someClass4.h"
+#include "someClass1.h"
 using namespace Some;
 
 
@@ -36,30 +35,17 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0, 0, "");
+   Prn::print(0,"new Class1A");
+   Class1A* tX = new Class1A;
+   tX->myCall1(101);
+   tX->mMyCallPointer(102);
 
-   Prn::print(0, 0, "new Class3B");
-   Class3B* t3B = new Class3B;
-   Prn::print(0, 0, "");
-
-   Prn::print(0, 0, "new Class3A");
-   Class3A* t3A = new Class3A;
-   Prn::print(0, 0, "");
-
-   Prn::print(0, 0, "delete Class3B");
-   delete t3B;
-   Prn::print(0, 0, "");
-
-   Prn::print(0, 0, "delete Class3A");
-   delete t3A;
-   Prn::print(0, 0, "");
 }
 
 //******************************************************************************
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   Class4A* t4A = new Class4A;
 }
 
 //******************************************************************************

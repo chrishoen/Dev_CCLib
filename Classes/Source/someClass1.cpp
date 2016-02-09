@@ -6,28 +6,31 @@ Description:
 //******************************************************************************
 //******************************************************************************
 
-#include <stdio.h>
+#include "prnPrint.h"
 
-#include "someClass4.h"
+#define  _SOMECLASS1_CPP_
+#include "someClass1.h"
 
 namespace Some
 {
 
-   int Class4A::mCount = 101;
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-Class4A::Class4A()
+Class1A::Class1A() :
+   mMyCallPointer(this,&Class1A::myCall1)
 {
-   printf("Class4A::Class4A %d %d\n",(int)sizeof(this),mCount);
+   // CallPointers
+   mMyCallPointer.bind  (this,&Class1A::myCall1);
 }
 
-Class4A::~Class4A()
+//******************************************************************************
+
+void Class1A::myCall1(int aX)
 {
-   printf("Class4A::~Class4A\n");
+   Prn::print(0,"Class1::myCall1 %d",aX);
 }
 
-   
+void Class1A::myCall2(int aX)
+{
+   Prn::print(0,"Class1::myCall2 %d",aX);
+}
+
 }//namespace

@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{4c88b861-6d03-41d4-96d0-59e218b62002}</ProjectGuid>
+    <ProjectGuid>{d25f2695-bd18-43bc-a09d-9503ad3fcd49}</ProjectGuid>
     <RootNamespace>Test</RootNamespace>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
@@ -169,14 +169,12 @@
     <ClCompile Include="Source\CmdLineExec.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
-    <ClCompile Include="Source\someClass3.cpp" />
-    <ClCompile Include="Source\someClass4.cpp" />
+    <ClCompile Include="Source\someClass1.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\MainInit.h" />
-    <ClInclude Include="Source\someClass3.h" />
-    <ClInclude Include="Source\someClass4.h" />
+    <ClInclude Include="Source\someClass1.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -46,6 +46,8 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
    mIX = mX;
    mIX = *mPX;
+
+   Prn::print(0, "TEST GO1");
 }
 
 //******************************************************************************
