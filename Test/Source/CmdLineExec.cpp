@@ -34,24 +34,18 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-   typedef union
-   {
-       struct    
-       { 
-         unsigned short mCode;  
-         unsigned short mIdent;  
-       };
-       int mInt;
-   } MyUnion;
+static const int cX=101;
+
+int mX;
+
+int mIX;
+
+int* mPX = &mX;
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   MyUnion tX = { 1, 2 };
-
-   Prn::print(0,"%08X",tX.mInt);
-   Prn::print(0,"%d",tX.mCode);
-   Prn::print(0,"%d",tX.mIdent);
-
+   mIX = mX;
+   mIX = *mPX;
 }
 
 //******************************************************************************

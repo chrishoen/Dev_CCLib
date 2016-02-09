@@ -27,7 +27,11 @@ public:
 
    inline static int convertFromUsec(double aDelay)
    {
+#ifdef _DEBUG
       int tN = lround(385.79*aDelay - 38.827);
+#else
+      int tN = lround(513.11*aDelay - 8.46);
+#endif
       if (tN<0) tN=0;
       return tN;
    }
@@ -106,7 +110,7 @@ public:
    {
       if (!mEnable)return;
 
-      int tDummy=0;
+      volatile int tDummy=0;
       int tLoop = my_irand(mDelay1,mDelay2);
       for (int i=0;i<tLoop;i++) tDummy++;
 
@@ -124,7 +128,7 @@ public:
    {
       if (!mEnable)return;
 
-      int tDummy=0;
+      volatile int tDummy=0;
       int tLoop = my_irand(mDelay1,mDelay2);
       for (int i=0;i<tLoop;i++) tDummy++;
 
@@ -142,7 +146,7 @@ public:
    {
       if (!mEnable)return;
 
-      int tDummy=0;
+      volatile int tDummy=0;
       int tLoop = my_irand(mDelay1,mDelay2);
       for (int i=0;i<tLoop;i++) tDummy++;
    }
