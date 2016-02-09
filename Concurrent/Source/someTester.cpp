@@ -25,6 +25,7 @@ namespace Some
 Tester::Tester()
 {
    initialize();
+   mClass1A = new Some::Class1A;
 }
 
 void Tester::initialize(unsigned aIdent)
@@ -74,23 +75,13 @@ void Tester::test1(int aNumIter)
 
 void Tester::test2(int aNumIter)
 {
-   LFBackoff tBackoffA(gGSettings.mDelayA1,gGSettings.mDelayA2);
-   LFBackoff tDelayB  (gGSettings.mDelayB1,gGSettings.mDelayB2);
-
+   LFBackoff tDelayA(gGSettings.mDelayA1,gGSettings.mDelayA2);
    for (int i = 0; i < aNumIter; i++)
    {
-      tBackoffA.reset();
-
       mMarkerTest1.doStart();
-      tBackoffA.expBackoff();
+      mClass1A->myCall1(101);
       mMarkerTest1.doStop();
-
-      mMarkerTest2.doStart();
-      tBackoffA.expBackoff();
-      mMarkerTest2.doStop();
-
-      tDelayB.delay();
-
+      tDelayA.delay();
       mCount++;
    }
 }
@@ -101,6 +92,32 @@ void Tester::test2(int aNumIter)
 
 void Tester::test3(int aNumIter)
 {
+   LFBackoff tDelayA(gGSettings.mDelayA1,gGSettings.mDelayA2);
+   for (int i = 0; i < aNumIter; i++)
+   {
+      mMarkerTest1.doStart();
+      mClass1A->mCallPointer1(101);
+      mMarkerTest1.doStop();
+      tDelayA.delay();
+      mCount++;
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void Tester::test4(int aNumIter)
+{
+   LFBackoff tDelayA(gGSettings.mDelayA1,gGSettings.mDelayA2);
+   for (int i = 0; i < aNumIter; i++)
+   {
+      mMarkerTest1.doStart();
+      mClass1A->mCallPointer2(101);
+      mMarkerTest1.doStop();
+      tDelayA.delay();
+      mCount++;
+   }
 }
 
 
@@ -130,6 +147,7 @@ void Tester::test(int aNumWrites)
       case 1: test1 (aNumWrites); break;
       case 2: test2 (aNumWrites); break;
       case 3: test3 (aNumWrites); break;
+      case 4: test4 (aNumWrites); break;
    }
 }
    

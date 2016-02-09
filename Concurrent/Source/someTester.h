@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <atomic>
 #include "someMessage.h"
+#include "someClass1.h"
 #include "risTimeMarker.h"
 #include "LFBackoff.h"
 
@@ -41,6 +42,7 @@ public:
    void test1 (int aNumIter);
    void test2 (int aNumIter);
    void test3 (int aNumIter);
+   void test4 (int aNumIter);
    void test  (int aNumIter);
 
    //---------------------------------------------------------------------------
@@ -53,6 +55,7 @@ public:
    double               mMeanTimeTest1;
    double               mMeanTimeTest2;
 
+   Some::Class1A*       mClass1A;
 };
 
 //******************************************************************************

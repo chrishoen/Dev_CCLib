@@ -45,6 +45,10 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
    using namespace std::placeholders;
    std::function<void(int)> tF = std::bind( &Class1A::myCall2, tX, _1); 
    tF(104);
+
+   Prn::print(0,"sizeof1 %d",sizeof(Ris::CallPointer1<int>));
+   Prn::print(0,"sizeof2 %d",sizeof(std::function<void(int)>));
+
 }
 
 //******************************************************************************
