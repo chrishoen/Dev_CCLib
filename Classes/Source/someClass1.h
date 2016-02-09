@@ -27,13 +27,14 @@ public:
 
    Class1A();
 
+   int mCount;
+
    //--------------------------------------------------------------
    //--------------------------------------------------------------
    //--------------------------------------------------------------
    // CallPointer:
 
-   typedef Ris::CallPointer1<int>   MyCallPointer;
-   MyCallPointer            mMyCallPointer1;
+   Ris::CallPointer1<int>   mMyCallPointer1;
    std::function<void(int)> mMyCallPointer2;
 
    void myCall1(int aX);
