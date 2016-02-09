@@ -11,14 +11,16 @@ Description:
 #define  _SOMECLASS1_CPP_
 #include "someClass1.h"
 
+using namespace std::placeholders;
+
 namespace Some
 {
 
-Class1A::Class1A() :
-   mMyCallPointer(this,&Class1A::myCall1)
+Class1A::Class1A()
 {
    // CallPointers
-   mMyCallPointer.bind  (this,&Class1A::myCall1);
+   mMyCallPointer1.bind  (this,&Class1A::myCall1);
+   mMyCallPointer2 = std::bind(&Class1A::myCall1,this,_1);
 }
 
 //******************************************************************************

@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <functional>
 
 #include "prnPrint.h"
 #include "risContainers.h"
@@ -38,8 +39,12 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
    Prn::print(0,"new Class1A");
    Class1A* tX = new Class1A;
    tX->myCall1(101);
-   tX->mMyCallPointer(102);
+   tX->mMyCallPointer1(102);
+   tX->mMyCallPointer2(103);
 
+   using namespace std::placeholders;
+   std::function<void(int)> tF = std::bind( &Class1A::myCall2, tX, _1); 
+   tF(104);
 }
 
 //******************************************************************************

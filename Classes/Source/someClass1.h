@@ -10,6 +10,7 @@ QCall test Class class.
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+#include <functional>
 #include "risCallPointer.h"
 
 namespace Some
@@ -32,7 +33,8 @@ public:
    // CallPointer:
 
    typedef Ris::CallPointer1<int>   MyCallPointer;
-   MyCallPointer mMyCallPointer;
+   MyCallPointer            mMyCallPointer1;
+   std::function<void(int)> mMyCallPointer2;
 
    void myCall1(int aX);
    void myCall2(int aX);
