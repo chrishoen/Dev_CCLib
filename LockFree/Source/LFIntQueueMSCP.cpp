@@ -25,16 +25,25 @@ namespace LFIntQueueMSCP
    //***************************************************************************
    // Node Members
 
-   static int*  mValue     = 0;
-   static AtomicLFIndexBlock*  mQueueNext = 0;
+   static int*            mValue     = 0;
+   static AtomicLFIndex*  mQueueNext = 0;
+   static AtomicLFIndex*  mListNext  = 0;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Queue Members
 
-   AtomicLFIndexBlock  mQueueHead;
-   AtomicLFIndexBlock  mQueueTail;
+   typedef struct
+   {
+      AtomicLFIndex mQueueHead;
+      AtomicLFIndex mQueueTail;
+      atomic<int>   mListSize;
+      AtomicLFIndex mListHead;
+   } IndexBlock;
+
+   IndexBlock* mX;
+   static atomic<int>* mListHeadIndexPtr;
 
    //***************************************************************************
    //***************************************************************************
@@ -43,13 +52,6 @@ namespace LFIntQueueMSCP
 
    bool listPush(int  aNode);
    bool listPop(int*  aNode);
-
-   static atomic<int>  mListSize;
-   static AtomicLFIndexBlock   mListHead;
-   static AtomicLFIndexBlock*  mListNext  = 0;
-   
-   static atomic<int>* mListHeadIndexPtr = (atomic<int>*)&mListHead.mX;
-   static atomic<int>& mListHeadIndexRef = (atomic<int>&)*mListHeadIndexPtr;
 
    //***************************************************************************
    //***************************************************************************
@@ -89,28 +91,31 @@ namespace LFIntQueueMSCP
       mQueueAllocate = aAllocate + 1;
       mListAllocate  = aAllocate + 1;
 
-      mValue = new int[mListAllocate];
-      mQueueNext = new AtomicLFIndexBlock[mListAllocate];
-      mListNext = new AtomicLFIndexBlock[mListAllocate];
+      mValue     = (int*)malloc(mListAllocate*sizeof(int));
+      mQueueNext = (AtomicLFIndex*)malloc(mListAllocate*sizeof(AtomicLFIndex));
+      mListNext  = (AtomicLFIndex*)malloc(mListAllocate*sizeof(AtomicLFIndex));
+      mX         = (IndexBlock*)malloc(sizeof(IndexBlock));
 
       for (int i = 0; i < mListAllocate-1; i++)
       {
          mValue[i] = 0;
-         mQueueNext[i].mX.store(LFIndex(cInvalid,0));
-         mListNext[i].mX.store(LFIndex(i+1,0));
+         mQueueNext[i].store(LFIndex(cInvalid,0));
+         mListNext[i].store(LFIndex(i+1,0));
       }
 
       mValue[mListAllocate-1] = 0;
-      mQueueNext[mListAllocate-1].mX.store(LFIndex(cInvalid,0));
-      mListNext[mListAllocate-1].mX.store(LFIndex(cInvalid,0));
+      mQueueNext[mListAllocate-1].store(LFIndex(cInvalid,0));
+      mListNext[mListAllocate-1].store(LFIndex(cInvalid,0));
 
-      mListHead.mX.store(LFIndex(0,0));
-      mListSize = mListAllocate;
+      mListHeadIndexPtr = (atomic<int>*)&mX->mListHead;
+
+      mX->mListHead.store(LFIndex(0,0));
+      mX->mListSize = mListAllocate;
 
       int tIndex;
       listPop(&tIndex);
-      mQueueHead.mX.store(LFIndex(tIndex,0));
-      mQueueTail.mX = mQueueHead.mX.load();
+      mX->mQueueHead.store(LFIndex(tIndex,0));
+      mX->mQueueTail = mX->mQueueHead.load();
 
       mWriteRetry = 0;
       mReadRetry  = 0;
@@ -125,9 +130,11 @@ namespace LFIntQueueMSCP
 
    void finalize()
    {
+      if (mX)         free(mX);
       if (mValue)     free(mValue);
       if (mQueueNext) free(mQueueNext);
       if (mListNext)  free(mListNext);
+      mX         = 0;
       mValue     = 0;
       mQueueNext = 0;
       mListNext  = 0;
@@ -138,7 +145,7 @@ namespace LFIntQueueMSCP
    //***************************************************************************
    // Show
 
-   int size(){ return mListAllocate = mListSize.load(); }
+   int size(){ return mListAllocate = mX->mListSize.load(); }
 
    void show()
    {
@@ -169,7 +176,7 @@ namespace LFIntQueueMSCP
 
       // Initialize the node with the value.
       mValue[tNode.mIndex] = aValue;
-      mQueueNext[tNode.mIndex].mX.store(LFIndex(cInvalid,0),memory_order_relaxed);
+      mQueueNext[tNode.mIndex].store(LFIndex(cInvalid,0),memory_order_relaxed);
 
       // Attach the node to the queue tail.
       LFIndex tTail,tNext;
@@ -177,18 +184,18 @@ namespace LFIntQueueMSCP
       int tLoopCount=0;
       while (true)
       {
-         tTail = mQueueTail.mX.load(memory_order_relaxed);
-         tNext = mQueueNext[tTail.mIndex].mX.load(memory_order_acquire);
+         tTail = mX->mQueueTail.load(memory_order_relaxed);
+         tNext = mQueueNext[tTail.mIndex].load(memory_order_acquire);
 
-         if (tTail == mQueueTail.mX.load(memory_order_relaxed))
+         if (tTail == mX->mQueueTail.load(memory_order_relaxed))
          {
             if (tNext.mIndex == cInvalid)
             {
-               if (mQueueNext[tTail.mIndex].mX.compare_exchange_strong(tNext, LFIndex(tNode.mIndex, tNext.mCount+1),memory_order_release,memory_order_relaxed)) break;
+               if (mQueueNext[tTail.mIndex].compare_exchange_strong(tNext, LFIndex(tNode.mIndex, tNext.mCount+1),memory_order_release,memory_order_relaxed)) break;
             }
             else
             {
-               mQueueTail.mX.compare_exchange_weak(tTail, LFIndex(tNext.mIndex, tTail.mCount+1),memory_order_release,memory_order_relaxed);
+               mX->mQueueTail.compare_exchange_weak(tTail, LFIndex(tNext.mIndex, tTail.mCount+1),memory_order_release,memory_order_relaxed);
             }
          }
 
@@ -196,7 +203,7 @@ namespace LFIntQueueMSCP
       }
       if (tLoopCount) mWriteRetry.fetch_add(1,memory_order_relaxed);
 
-      mQueueTail.mX.compare_exchange_strong(tTail, LFIndex(tNode.mIndex, tTail.mCount+1),memory_order_release,memory_order_relaxed);
+      mX->mQueueTail.compare_exchange_strong(tTail, LFIndex(tNode.mIndex, tTail.mCount+1),memory_order_release,memory_order_relaxed);
 
       // Done
       return true;
@@ -218,21 +225,21 @@ namespace LFIntQueueMSCP
       int tLoopCount=0;
       while (true)
       {
-         tHead = mQueueHead.mX.load(memory_order_relaxed);
-         tTail = mQueueTail.mX.load(memory_order_acquire);
-         tNext = mQueueNext[tHead.mIndex].mX.load(memory_order_relaxed);
+         tHead = mX->mQueueHead.load(memory_order_relaxed);
+         tTail = mX->mQueueTail.load(memory_order_acquire);
+         tNext = mQueueNext[tHead.mIndex].load(memory_order_relaxed);
 
-         if (tHead == mQueueHead.mX.load(memory_order_acquire))
+         if (tHead == mX->mQueueHead.load(memory_order_acquire))
          {
             if (tHead.mIndex == tTail.mIndex)
             {
                if (tNext.mIndex == cInvalid) return false;
-               mQueueTail.mX.compare_exchange_strong(tTail, LFIndex(tNext.mIndex, tTail.mCount+1),memory_order_release,memory_order_relaxed);
+               mX->mQueueTail.compare_exchange_strong(tTail, LFIndex(tNext.mIndex, tTail.mCount+1),memory_order_release,memory_order_relaxed);
             }
             else
             {
                *aValue = mValue[tNext.mIndex];
-               if (mQueueHead.mX.compare_exchange_strong(tHead, LFIndex(tNext.mIndex, tHead.mCount+1),memory_order_acquire,memory_order_relaxed))break;
+               if (mX->mQueueHead.compare_exchange_strong(tHead, LFIndex(tNext.mIndex, tHead.mCount+1),memory_order_acquire,memory_order_relaxed))break;
             }
          }
 
@@ -255,7 +262,7 @@ namespace LFIntQueueMSCP
    {
       // Store the head node in a temp.
       // This is the node that will be detached.
-      LFIndex tHead = mListHead.mX.load(memory_order_relaxed);
+      LFIndex tHead = mX->mListHead.load(memory_order_relaxed);
 
       int tLoopCount=0;
       while (true)
@@ -264,7 +271,7 @@ namespace LFIntQueueMSCP
          if (tHead.mIndex == cInvalid) return false;
 
          // Set the head node to be the node that is after the head node.
-         if (mListHead.mX.compare_exchange_weak(tHead, LFIndex(mListNext[tHead.mIndex].mX.load(memory_order_relaxed).mIndex,tHead.mCount+1),memory_order_acquire,memory_order_relaxed)) break;
+         if (mX->mListHead.compare_exchange_weak(tHead, LFIndex(mListNext[tHead.mIndex].load(memory_order_relaxed).mIndex,tHead.mCount+1),memory_order_acquire,memory_order_relaxed)) break;
 
          if (++tLoopCount==10000) throw 103;
       }
@@ -277,7 +284,7 @@ namespace LFIntQueueMSCP
       *aNode = tHead.mIndex;
 
       // Done.
-      mListSize.fetch_sub(1,memory_order_relaxed);
+      mX->mListSize.fetch_sub(1,memory_order_relaxed);
       return true;
    }
 
@@ -289,16 +296,16 @@ namespace LFIntQueueMSCP
    bool listPush(int aNode)
    {
       // Store the head node in a temp.
-      LFIndex tHead = mListHead.mX.load();
+      LFIndex tHead = mX->mListHead.load();
 
       int tLoopCount=0;
       while (true)
       {
          // Attach the head node to the pushed node.
-         mListNext[aNode].mX.store(tHead,memory_order_relaxed);
+         mListNext[aNode].store(tHead,memory_order_relaxed);
 
          // The pushed node is the new head node.
-         if (mListHeadIndexRef.compare_exchange_weak(tHead.mIndex, aNode,memory_order_release,memory_order_relaxed)) break;
+         if ((*mListHeadIndexPtr).compare_exchange_weak(tHead.mIndex, aNode,memory_order_release,memory_order_relaxed)) break;
          if (++tLoopCount == 10000) throw 103;
       }
       if (tLoopCount != 0)
@@ -307,7 +314,7 @@ namespace LFIntQueueMSCP
       }
 
       // Done.
-      mListSize.fetch_add(1,memory_order_relaxed);
+      mX->mListSize.fetch_add(1,memory_order_relaxed);
       return true;
    }
 
