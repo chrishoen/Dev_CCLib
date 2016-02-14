@@ -290,7 +290,7 @@ namespace LFIntQueueMS
    bool listPush(int aNode)
    {
       // Store the head node in a temp.
-      LFIndex tHead = mListHead.load();
+      LFIndex tHead = mListHead.load(memory_order_relaxed);
 
       int tLoopCount=0;
       while (true)

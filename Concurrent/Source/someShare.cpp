@@ -120,11 +120,11 @@ void Share::update2()
       mWriterMeanTime  += mWriterReader[i].mMeanTimeWrite/mNumWriters;
    }
 
-   mReaderCount     = mReader.mCount;
-   mReaderPassCount = mReader.mPassCount;
-   mReaderFailCount = mReader.mFailCount;
-   mReaderCheckSum  = mReader.mCheckSum;
-   mReaderMeanTime  = mReader.mMeanTimeRead;
+   mReaderCount     = 0;
+   mReaderPassCount = 0;
+   mReaderFailCount = 0;
+   mReaderCheckSum  = 0;
+   mReaderMeanTime  = 0.0;
 
    for (int i = 0; i < mNumWriters; i++)
    {
