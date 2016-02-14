@@ -8,6 +8,7 @@
 #include "risContainers.h"
 
 #include "someClass1.h"
+#include "someClass3.h"
 using namespace Some;
 
 
@@ -36,18 +37,25 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0,"new Class1A");
-   Class1A* tX = new Class1A;
-   tX->myCall1(101);
-   tX->mMyCallPointer1(102);
-   tX->mMyCallPointer2(103);
+   Prn::print(0,"LINE101 new Class3A");
+   Prn::print(0,"");
+   Class3A* tX1 = new Class3A;
+   Prn::print(0,"");
 
-   using namespace std::placeholders;
-   std::function<void(int)> tF = std::bind( &Class1A::myCall2, tX, _1); 
-   tF(104);
+   Prn::print(0,"LINE102 new Class3A[2]");
+   Prn::print(0,"");
+   Class3A* tX2 = new Class3A[2];
+   Prn::print(0,"");
 
-   Prn::print(0,"sizeof1 %d",sizeof(Ris::CallPointer1<int>));
-   Prn::print(0,"sizeof2 %d",sizeof(std::function<void(int)>));
+   Prn::print(0,"LINE103 delete Class3A");
+   Prn::print(0,"");
+   delete tX1;
+   Prn::print(0,"");
+
+   Prn::print(0,"LINE104 delete[] Class3A[2]");
+   Prn::print(0,"");
+   delete[] tX2;
+   Prn::print(0,"");
 
 }
 
