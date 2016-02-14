@@ -33,6 +33,11 @@ inline bool operator==(const LFIndex& lhs, const LFIndex& rhs)
    return lhs.mIndex==rhs.mIndex && lhs.mCount==rhs.mCount;
 }
 
+inline bool operator!=(const LFIndex& lhs, const LFIndex& rhs)
+{
+   return lhs.mIndex!=rhs.mIndex && lhs.mCount!=rhs.mCount;
+}
+
 typedef std::atomic<LFIndex> AtomicLFIndex;
 
 struct AtomicLFIndexBlock 

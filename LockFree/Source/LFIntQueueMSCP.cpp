@@ -34,16 +34,8 @@ namespace LFIntQueueMSCP
    //***************************************************************************
    // Queue Members
 
-   typedef struct
-   {
-      AtomicLFIndex mQueueHead;
-      AtomicLFIndex mQueueTail;
-      atomic<int>   mListSize;
-      AtomicLFIndex mListHead;
-   } IndexBlock;
-
-   IndexBlock* mX;
-   static atomic<int>* mListHeadIndexPtr;
+   AtomicLFIndex mQueueHead;
+   AtomicLFIndex mQueueTail;
 
    //***************************************************************************
    //***************************************************************************
@@ -52,6 +44,12 @@ namespace LFIntQueueMSCP
 
    bool listPush(int  aNode);
    bool listPop(int*  aNode);
+
+   static atomic<int>   mListSize;
+   static AtomicLFIndex mListHead;
+   
+   static atomic<int>* mListHeadIndexPtr = (atomic<int>*)&mListHead;
+   static atomic<int>& mListHeadIndexRef = (atomic<int>&)*mListHeadIndexPtr;
 
    //***************************************************************************
    //***************************************************************************
@@ -90,22 +88,10 @@ namespace LFIntQueueMSCP
       mAllocate      = aAllocate;
       mQueueAllocate = aAllocate + 1;
       mListAllocate  = aAllocate + 1;
-#if 0
-      mValue     = (int*)malloc(mListAllocate*sizeof(int));
-      mQueueNext = (AtomicLFIndex*)malloc(mListAllocate*sizeof(AtomicLFIndex));
-      mListNext  = (AtomicLFIndex*)malloc(mListAllocate*sizeof(AtomicLFIndex));
-      mX         = (IndexBlock*)malloc(sizeof(IndexBlock));
-      printf("LINE101 %d\n",GetLastError());
-#endif
-      mValue     = (int*)VirtualAlloc(0,mListAllocate*sizeof(int),MEM_COMMIT | MEM_RESERVE,PAGE_READWRITE | PAGE_NOCACHE);
-      mQueueNext = (AtomicLFIndex*)VirtualAlloc(0,mListAllocate*sizeof(AtomicLFIndex),MEM_COMMIT | MEM_RESERVE,PAGE_READWRITE | PAGE_NOCACHE);
-      mListNext  = (AtomicLFIndex*)VirtualAlloc(0,mListAllocate*sizeof(AtomicLFIndex),MEM_COMMIT | MEM_RESERVE,PAGE_READWRITE | PAGE_NOCACHE);
-      mX         = (IndexBlock*)VirtualAlloc(0,sizeof(IndexBlock),MEM_COMMIT | MEM_RESERVE,PAGE_READWRITE | PAGE_NOCACHE);
 
-      VirtualLock(mValue,mListAllocate*sizeof(int));
-      VirtualLock(mQueueNext,mListAllocate*sizeof(AtomicLFIndex));
-      VirtualLock(mListNext,mListAllocate*sizeof(AtomicLFIndex));
-      VirtualLock(mX,sizeof(IndexBlock));
+      mValue = new int[mListAllocate];
+      mQueueNext = new AtomicLFIndex[mListAllocate];
+      mListNext = new AtomicLFIndex[mListAllocate];
 
       for (int i = 0; i < mListAllocate-1; i++)
       {
@@ -118,15 +104,13 @@ namespace LFIntQueueMSCP
       mQueueNext[mListAllocate-1].store(LFIndex(cInvalid,0));
       mListNext[mListAllocate-1].store(LFIndex(cInvalid,0));
 
-      mListHeadIndexPtr = (atomic<int>*)&mX->mListHead;
-
-      mX->mListHead.store(LFIndex(0,0));
-      mX->mListSize = mListAllocate;
+      mListHead.store(LFIndex(0,0));
+      mListSize = mListAllocate;
 
       int tIndex;
       listPop(&tIndex);
-      mX->mQueueHead.store(LFIndex(tIndex,0));
-      mX->mQueueTail = mX->mQueueHead.load();
+      mQueueHead.store(LFIndex(tIndex,0));
+      mQueueTail = mQueueHead.load();
 
       mWriteRetry = 0;
       mReadRetry  = 0;
@@ -141,17 +125,9 @@ namespace LFIntQueueMSCP
 
    void finalize()
    {
-#if 0
-      if (mX)         free(mX);
       if (mValue)     free(mValue);
       if (mQueueNext) free(mQueueNext);
       if (mListNext)  free(mListNext);
-#endif
-      if (mX)         VirtualFree(mX,0,MEM_RELEASE);
-      if (mValue)     VirtualFree(mValue,0,MEM_RELEASE);
-      if (mQueueNext) VirtualFree(mQueueNext,0,MEM_RELEASE);
-      if (mListNext)  VirtualFree(mListNext,0,MEM_RELEASE);
-      mX         = 0;
       mValue     = 0;
       mQueueNext = 0;
       mListNext  = 0;
@@ -162,7 +138,7 @@ namespace LFIntQueueMSCP
    //***************************************************************************
    // Show
 
-   int size(){ return mListAllocate = mX->mListSize.load(); }
+   int size(){ return mListAllocate - mListSize.load(memory_order_relaxed); }
 
    void show()
    {
@@ -201,282 +177,63 @@ namespace LFIntQueueMSCP
       int tLoopCount=0;
       while (true)
       {
-         tTail = mX->mQueueTail.load(memory_order_relaxed);
-         tNext = mQueueNext[tTail.mIndex].load(memory_order_relaxed);
-
-         if (tTail == mX->mQueueTail.load(memory_order_relaxed))
-         {
-            if (tNext.mIndex == cInvalid)
-            {
-               if (mQueueNext[tTail.mIndex].compare_exchange_strong(tNext, LFIndex(tNode.mIndex, tNext.mCount+1),memory_order_relaxed,memory_order_relaxed)) break;
-            }
-            else
-            {
-               mX->mQueueTail.compare_exchange_weak(tTail, LFIndex(tNext.mIndex, tTail.mCount+1),memory_order_relaxed,memory_order_relaxed);
-            }
-         }
-
-         if (++tLoopCount==10000) throw 101;
-      }
-      if (tLoopCount) mWriteRetry.fetch_add(1,memory_order_relaxed);
-
-      mX->mQueueTail.compare_exchange_strong(tTail, LFIndex(tNode.mIndex, tTail.mCount+1),memory_order_relaxed,memory_order_relaxed);
-
-      // Done
-      return true;
-   }
-
-   //******************************************************************************
-   //******************************************************************************
-   //******************************************************************************
-   // This attempts to read a value from the queue. If the queue is not empty
-   // then it succeeds. The next node in the queue to be read is the one 
-   // immedialtely after the head node. It extracts the read value from the read
-   // node, pushes the previous head node back onto the free list and updates the
-   // head index.
-
-   bool tryRead(int* aValue)
-   {
-      LFIndex tHead, tTail, tNext;
-
-      int tLoopCount=0;
-      while (true)
-      {
-         tHead = mX->mQueueHead.load(memory_order_relaxed);
-         tTail = mX->mQueueTail.load(memory_order_relaxed);
-         tNext = mQueueNext[tHead.mIndex].load(memory_order_relaxed);
-
-         if (tHead == mX->mQueueHead.load(memory_order_relaxed))
-         {
-            if (tHead.mIndex == tTail.mIndex)
-            {
-               if (tNext.mIndex == cInvalid) return false;
-               mX->mQueueTail.compare_exchange_strong(tTail, LFIndex(tNext.mIndex, tTail.mCount+1),memory_order_relaxed,memory_order_relaxed);
-            }
-            else
-            {
-               *aValue = mValue[tNext.mIndex];
-               if (mX->mQueueHead.compare_exchange_strong(tHead, LFIndex(tNext.mIndex, tHead.mCount+1),memory_order_relaxed,memory_order_relaxed))break;
-            }
-         }
-
-         if (++tLoopCount==10000) throw 102;
-      }
-      if (tLoopCount) mReadRetry.fetch_add(1,memory_order_relaxed);
-
-      listPush(tHead.mIndex);
-
-      // Done.
-      return true;
-   }
-
-   //******************************************************************************
-   //******************************************************************************
-   //******************************************************************************
-   // This detaches the head node.
-
-   bool listPop(int* aNode)
-   {
-      // Store the head node in a temp.
-      // This is the node that will be detached.
-      LFIndex tHead = mX->mListHead.load(memory_order_relaxed);
-
-      int tLoopCount=0;
-      while (true)
-      {
-         // Exit if the list is empty.
-         if (tHead.mIndex == cInvalid) return false;
-
-         // Set the head node to be the node that is after the head node.
-         if (mX->mListHead.compare_exchange_weak(tHead, LFIndex(mListNext[tHead.mIndex].load(memory_order_relaxed).mIndex,tHead.mCount+1),memory_order_relaxed,memory_order_relaxed)) break;
-
-         if (++tLoopCount==10000) throw 103;
-      }
-      if (tLoopCount != 0)
-      {
-         mPopRetry.fetch_add(1,memory_order_relaxed);
-      }
-
-      // Return the detached original head node.
-      *aNode = tHead.mIndex;
-
-      // Done.
-      mX->mListSize.fetch_sub(1,memory_order_relaxed);
-      return true;
-   }
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Insert a node into the list before the list head node.
-
-   bool listPush(int aNode)
-   {
-      // Store the head node in a temp.
-      LFIndex tHead = mX->mListHead.load(memory_order_relaxed);
-
-      int tLoopCount=0;
-      while (true)
-      {
-         // Attach the head node to the pushed node.
-         mListNext[aNode].store(tHead,memory_order_relaxed);
-
-         // The pushed node is the new head node.
-         if ((*mListHeadIndexPtr).compare_exchange_weak(tHead.mIndex, aNode,memory_order_relaxed,memory_order_relaxed)) break;
-         if (++tLoopCount == 10000) throw 103;
-      }
-      if (tLoopCount != 0)
-      {
-         mPushRetry.fetch_add(1,memory_order_relaxed);
-      }
-
-      // Done.
-      mX->mListSize.fetch_add(1,memory_order_relaxed);
-      return true;
-   }
-
-}//namespace
-
-/*==============================================================================
-Non-blocking queue [Michael and Scott algorithm]
-
-structure pointer_t {ptr:   pointer to node_t, count: unsigned integer}
-structure node_t    {value: data_type,         next: pointer_t}
-structure queue_t   {Head:  pointer t,         Tail: pointer_t}
-
-
-initialize(Q: pointer to queue_t)
-      node = new node()                                                # Allocate a free node
-      node–>next.ptr = NULL                                            # Make it the only node in the linked list
-      Q–>Head = Q–>Tail = node                                         # Both Head and Tail point to it
-
-
-
-enqueue(Q: pointer to queue_t, value: data type)
-E1:   node = new node()                                                # Allocate a new node from the free list  
-E2:   node–>value = value                                              # Copy enqueued value into node
-E3:   node–>next.ptr = NULL                                            # Set next pointer of node to NULL
-E4:   loop                                                             # Keep trying until Enqueue is done
-E5:       tail = Q–>Tail                                               # Read Tail.ptr and Tail.count together
-E6:       next = tail.ptr–>next                                        # Read next ptr and count fields together
-E7:       if tail == Q–>Tail                                           # Are tail and next consistent?
-E8:           if next.ptr == NULL                                      # Was Tail pointing to the last node?
-E9:               if CAS(&tail.ptr–>next, next, <node, next.count+1>)  # Try to link node at the end of the linked list
-E10:                  break                                            # Enqueue is done. Exit loop
-E11:              endif
-E12:          else                                                     # Tail was not pointing to the last node
-E13:              CAS(&Q–>Tail, tail, <next.ptr, tail.count+1>)        # Try to swing Tail to the next node
-E14:          endif
-E15:      endif
-E16:    endloop
-E17:    CAS(&Q–>Tail, tail, <node, tail.count+1>)                      # Enqueue is done. Try to swing Tail to the
-
-
-
-
-
-
-dequeue(Q: pointer to queue t, pvalue: pointer to data type): boolean
-D1:   loop                                                             # Keep trying until Dequeue is done
-D2:       head = Q–>Head                                               # Read Head
-D3:       tail = Q–>Tail                                               # Read Tail
-D4:       next = head–>next                                            # Read Head.ptr–>next
-D5:       if head == Q–>Head                                           # Are head, tail, and next consistent?
-D6:           if head.ptr == tail.ptr                                  # Is queue empty or Tail falling behind?
-D7:               if next.ptr == NULL                                  # Is queue empty?
-D8:                   return FALSE                                     # Queue is empty, couldn’t dequeue
-D9:               endif
-D10:              CAS(&Q–>Tail, tail, <next.ptr, tail.count+1>)        # Tail is falling behind. Try to advance it
-D11:          else                                                     # No need to deal with Tail
-D12:              *pvalue = next.ptr–>value                            # Read value before CAS, otherwise another dequeue might free the next node
-D13:              if CAS(&Q–>Head, head, <next.ptr, head.count+1>)     # Try to swing Head to the next node
-D14:                  break                                            # Dequeue is done. Exit loop
-D15:              endif
-D16:          endif
-D17:      endif
-D18:  endloop
-D19: free(head.ptr)                                                    # It is safe now to free the old dummy node
-D20: return TRUE                                                       # Queue was not empty, dequeue succeeded
-
-
-
-
-
-
-
-
-
-Non-blocking stack [Treiber’s algorithm]
-
-proc push(node)
-do
-  old = head
-  node.next = old
-while not CAS(head, old, node)
-end
-
-proc pop
-do
-  old = head
-  return null if old == null
-while not CAS(head, old, <old.next,head.count+1>)
-return head
-end
-
-
-
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // This attempts to write a value to the queue. If the queue is not full
-   // then it succeeds. It attempts to pop a node from the free list. If
-   // the free list is empty then the queue is full and it exits. The value
-   // is to be written is stored in the new node. The new node is then attached
-   // to the queue tail node and the tail index is updated.
-
-   bool tryWrite(int aValue)
-   {
-      // Try to allocate a node from the free list.
-      // Exit if it is empty.
-      LFIndex tNode;
-      if (!listPop(&tNode.mIndex)) return false;
-
-      // Initialize the node with the value.
-      mValue[tNode.mIndex] = aValue;
-      mQueueNext[tNode.mIndex].store(LFIndex(cInvalid,0),memory_order_relaxed);
-
-      // Attach the node to the queue tail.
-      LFIndex tTail,tNext;
-
-      int tLoopCount=0;
-      while (true)
-      {
-         tTail = mX->mQueueTail.load(memory_order_relaxed);
+         tTail = mQueueTail.load();
          tNext = mQueueNext[tTail.mIndex].load(memory_order_acquire);
 
-         if (tTail == mX->mQueueTail.load(memory_order_relaxed))
+         if (tNext.mIndex != cInvalid)
          {
-            if (tNext.mIndex == cInvalid)
-            {
-               if (mQueueNext[tTail.mIndex].compare_exchange_strong(tNext, LFIndex(tNode.mIndex, tNext.mCount+1),memory_order_release,memory_order_relaxed)) break;
-            }
-            else
-            {
-               mX->mQueueTail.compare_exchange_weak(tTail, LFIndex(tNext.mIndex, tTail.mCount+1),memory_order_release,memory_order_relaxed);
-            }
+            mQueueTail.compare_exchange_weak(tTail, LFIndex(tNext.mIndex, tTail.mCount+1),memory_order_release,memory_order_relaxed);
+         }
+         else
+         {
+            if (mQueueNext[tTail.mIndex].compare_exchange_strong(tNext, LFIndex(tNode.mIndex, tNext.mCount + 1), memory_order_release, memory_order_relaxed)) break;
          }
 
-         if (++tLoopCount==10000) throw 101;
+         if (++tLoopCount==10000) my_halt("tryWrite");
       }
       if (tLoopCount) mWriteRetry.fetch_add(1,memory_order_relaxed);
 
-      mX->mQueueTail.compare_exchange_strong(tTail, LFIndex(tNode.mIndex, tTail.mCount+1),memory_order_release,memory_order_relaxed);
+      mQueueTail.compare_exchange_strong(tTail, LFIndex(tNode.mIndex, tTail.mCount+1),memory_order_release,memory_order_relaxed);
 
       // Done
       return true;
    }
+#if 0
+        bool enqueue( value_type& val )
+        {
+            node_type * pNew = node_traits::to_node_ptr( val );
+            link_checker::is_empty( pNew );
 
+            typename gc::Guard guard;
+            back_off bkoff;
+
+            node_type * t;
+            while ( true ) {
+                t = guard.protect( m_pTail, []( node_type * p ) -> value_type * { return node_traits::to_value_ptr( p );});
+
+                node_type * pNext = t->m_pNext.load(memory_model::memory_order_acquire);
+                if ( pNext != nullptr ) {
+                    // Tail is misplaced, advance it
+                    m_pTail.compare_exchange_weak( t, pNext, memory_model::memory_order_release, atomics::memory_order_relaxed );
+                    m_Stat.onBadTail();
+                    continue;
+                }
+
+                node_type * tmp = nullptr;
+                if ( t->m_pNext.compare_exchange_strong( tmp, pNew, memory_model::memory_order_release, atomics::memory_order_relaxed ))
+                    break;
+
+                m_Stat.onEnqueueRace();
+                bkoff();
+            }
+            ++m_ItemCounter;
+            m_Stat.onEnqueue();
+
+            if ( !m_pTail.compare_exchange_strong( t, pNew, memory_model::memory_order_release, atomics::memory_order_relaxed ))
+                m_Stat.onAdvanceTailFailed();
+            return true;
+        }
+#endif
    //******************************************************************************
    //******************************************************************************
    //******************************************************************************
@@ -493,25 +250,28 @@ end
       int tLoopCount=0;
       while (true)
       {
-         tHead = mX->mQueueHead.load(memory_order_relaxed);
-         tTail = mX->mQueueTail.load(memory_order_acquire);
+         tHead = mQueueHead.load(memory_order_acquire);
          tNext = mQueueNext[tHead.mIndex].load(memory_order_relaxed);
 
-         if (tHead == mX->mQueueHead.load(memory_order_acquire))
+         if (tHead != mQueueHead.load(memory_order_acquire))
          {
-            if (tHead.mIndex == tTail.mIndex)
-            {
-               if (tNext.mIndex == cInvalid) return false;
-               mX->mQueueTail.compare_exchange_strong(tTail, LFIndex(tNext.mIndex, tTail.mCount+1),memory_order_release,memory_order_relaxed);
-            }
-            else
-            {
-               *aValue = mValue[tNext.mIndex];
-               if (mX->mQueueHead.compare_exchange_strong(tHead, LFIndex(tNext.mIndex, tHead.mCount+1),memory_order_acquire,memory_order_relaxed))break;
-            }
+            continue;
          }
 
-         if (++tLoopCount==10000) throw 102;
+         if (tNext.mIndex == cInvalid) return false;
+
+         tTail = mQueueTail.load(memory_order_acquire);
+
+         if (tHead.mIndex == tTail.mIndex)
+         {
+            mQueueTail.compare_exchange_strong(tTail, LFIndex(tNext.mIndex, tTail.mCount+1),memory_order_release,memory_order_relaxed);
+            continue;
+         }
+
+         *aValue = mValue[tNext.mIndex];
+         if (mQueueHead.compare_exchange_strong(tHead, LFIndex(tNext.mIndex, tHead.mCount+1),memory_order_acquire,memory_order_relaxed))break;
+
+         if (++tLoopCount==10000) my_halt("tryRead");
       }
       if (tLoopCount) mReadRetry.fetch_add(1,memory_order_relaxed);
 
@@ -520,7 +280,47 @@ end
       // Done.
       return true;
    }
+#if 0
+        bool do_dequeue( dequeue_result& res )
+        {
+            node_type * pNext;
+            back_off bkoff;
 
+            node_type * h;
+            while ( true ) {
+                h = res.guards.protect( 0, m_pHead, []( node_type * p ) -> value_type * { return node_traits::to_value_ptr( p );});
+                pNext = res.guards.protect( 1, h->m_pNext, []( node_type * p ) -> value_type * { return node_traits::to_value_ptr( p );});
+                if ( m_pHead.load(memory_model::memory_order_acquire) != h )
+                    continue;
+
+                if ( pNext == nullptr ) {
+                    m_Stat.onEmptyDequeue();
+                    return false;    // empty queue
+                }
+
+                node_type * t = m_pTail.load(memory_model::memory_order_acquire);
+                if ( h == t ) {
+                    // It is needed to help enqueue
+                    m_pTail.compare_exchange_strong( t, pNext, memory_model::memory_order_release, atomics::memory_order_relaxed );
+                    m_Stat.onBadTail();
+                    continue;
+                }
+
+                if ( m_pHead.compare_exchange_strong( h, pNext, memory_model::memory_order_acquire, atomics::memory_order_relaxed ))
+                    break;
+
+                m_Stat.onDequeueRace();
+                bkoff();
+            }
+
+            --m_ItemCounter;
+            m_Stat.onDequeue();
+
+            res.pHead = h;
+            res.pNext = pNext;
+            return true;
+        }
+#endif
    //******************************************************************************
    //******************************************************************************
    //******************************************************************************
@@ -530,7 +330,7 @@ end
    {
       // Store the head node in a temp.
       // This is the node that will be detached.
-      LFIndex tHead = mX->mListHead.load(memory_order_relaxed);
+      LFIndex tHead = mListHead.load(memory_order_relaxed);
 
       int tLoopCount=0;
       while (true)
@@ -539,9 +339,9 @@ end
          if (tHead.mIndex == cInvalid) return false;
 
          // Set the head node to be the node that is after the head node.
-         if (mX->mListHead.compare_exchange_weak(tHead, LFIndex(mListNext[tHead.mIndex].load(memory_order_relaxed).mIndex,tHead.mCount+1),memory_order_acquire,memory_order_relaxed)) break;
+         if (mListHead.compare_exchange_weak(tHead, LFIndex(mListNext[tHead.mIndex].load(memory_order_relaxed).mIndex,tHead.mCount+1),memory_order_acquire,memory_order_relaxed)) break;
 
-         if (++tLoopCount==10000) throw 103;
+         if (++tLoopCount==10000) my_halt("listPop");
       }
       if (tLoopCount != 0)
       {
@@ -552,7 +352,7 @@ end
       *aNode = tHead.mIndex;
 
       // Done.
-      mX->mListSize.fetch_sub(1,memory_order_relaxed);
+      mListSize.fetch_sub(1,memory_order_relaxed);
       return true;
    }
 
@@ -564,7 +364,7 @@ end
    bool listPush(int aNode)
    {
       // Store the head node in a temp.
-      LFIndex tHead = mX->mListHead.load();
+      LFIndex tHead = mListHead.load(memory_order_relaxed);
 
       int tLoopCount=0;
       while (true)
@@ -574,7 +374,7 @@ end
 
          // The pushed node is the new head node.
          if ((*mListHeadIndexPtr).compare_exchange_weak(tHead.mIndex, aNode,memory_order_release,memory_order_relaxed)) break;
-         if (++tLoopCount == 10000) throw 103;
+         if (++tLoopCount == 10000) my_halt("listPush");
       }
       if (tLoopCount != 0)
       {
@@ -582,10 +382,13 @@ end
       }
 
       // Done.
-      mX->mListSize.fetch_add(1,memory_order_relaxed);
+      mListSize.fetch_add(1,memory_order_relaxed);
       return true;
    }
 
+}//namespace
+
+/*==============================================================================
 
 ==============================================================================*/
 
