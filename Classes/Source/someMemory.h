@@ -22,7 +22,7 @@ namespace Some
 //******************************************************************************
 
 template <class MyClass>
-MyClass* memCreate(int aMemType=0)
+MyClass* memCreate(int aMemType)
 {
    Prn::print(0, "memCreate %d",aMemType);
    void* tPtr = malloc(sizeof(MyClass));
