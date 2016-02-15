@@ -24,6 +24,8 @@ public:
    void method1();
 
    int mCode;
+   int mCode2[127];
+ 
    
 };
 

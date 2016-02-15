@@ -33,7 +33,6 @@ public:
    static void  operator delete[] (void* ptr,int aMode);
 
    int mCode;
-   
 };
 
 //******************************************************************************

@@ -44,6 +44,12 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
+   intializeClass1A();
+
+   gClass1A->function1(101);
+   Prn::print(0,"%d",gClass1A->mCode1);
+
+   finalizeClass1A();
 }
 
 //******************************************************************************
@@ -123,13 +129,15 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 {
-   char* tBuffer1 = new char[(2*sizeof(Class2A))+4];
-   void* tBuffer2 = malloc((2*sizeof(Class2A))+4);
+   Prn::print(0,"sizof  %d",sizeof(Class2A));
+
+   char* tBuffer1 = new char[(2*sizeof(Class2A)) + 4];
+   void* tBuffer2 = malloc((2*sizeof(Class2A)) + 4);
 
    void* tBuffer3 = (void*)tBuffer2;
 
    Class2A* tX2 = new(tBuffer3) Class2A[2];
-   tX2[0].method1();
+   tX2[1].method1();
 
    Prn::print(0,"tBuffer3  %llX",tBuffer3);
    Prn::print(0,"tX2       %llX",tX2);

@@ -11,31 +11,27 @@ Description:
 #define  _SOMECLASS1_CPP_
 #include "someClass1.h"
 
-using namespace std::placeholders;
-
 namespace Some
 {
 
-Class1A::Class1A()
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void intializeClass1A()
 {
-   mCount=0;
-   // CallPointers
-   mMyCallPointer1.bind  (this,&Class1A::myCall1);
-   mMyCallPointer2 = std::bind(&Class1A::myCall1,this,_1);
+   gClass1A = new Class1A;
+}
+
+void finalizeClass1A()
+{
+   if (gClass1A==0) return;
+   delete gClass1A;
+   gClass1A=0;
 }
 
 //******************************************************************************
-
-void Class1A::myCall1(int aX)
-{
-   Prn::print(0,"Class1::myCall1 %d",aX);
-   mCount = aX;
-}
-
-void Class1A::myCall2(int aX)
-{
-   Prn::print(0,"Class1::myCall2 %d",aX);
-   mCount = aX;
-}
+//******************************************************************************
+//******************************************************************************
 
 }//namespace
