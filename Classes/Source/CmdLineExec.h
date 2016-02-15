@@ -16,11 +16,16 @@ public:
   void reset();
   void execute(Ris::CmdLineCmd* aCmd);
 
-  void executeGo1(Ris::CmdLineCmd* aCmd);
-  void executeGo2(Ris::CmdLineCmd* aCmd);
-  void executeGo3(Ris::CmdLineCmd* aCmd);
-  void executeGo4(Ris::CmdLineCmd* aCmd);
-  void executeGo5(Ris::CmdLineCmd* aCmd);
+  void executeGo1  (Ris::CmdLineCmd* aCmd);
+  void executeGo21 (Ris::CmdLineCmd* aCmd);
+  void executeGo22 (Ris::CmdLineCmd* aCmd);
+  void executeGo31 (Ris::CmdLineCmd* aCmd);
+  void executeGo32 (Ris::CmdLineCmd* aCmd);
+  void executeGo4  (Ris::CmdLineCmd* aCmd);
+  void executeGo5  (Ris::CmdLineCmd* aCmd);
+  void executeGo6  (Ris::CmdLineCmd* aCmd);
+  void executeGo7  (Ris::CmdLineCmd* aCmd);
+  void executeGo8  (Ris::CmdLineCmd* aCmd);
 };
 
 //******************************************************************************

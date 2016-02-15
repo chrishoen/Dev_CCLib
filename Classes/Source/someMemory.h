@@ -37,7 +37,7 @@ template <class MyClass>
 MyClass* memCreateArray(int aMemType,int aArraySize)
 {
    Prn::print(0, "memCreateArray %d %d",aMemType,aArraySize);
-   void* tPtr = malloc(sizeof(MyClass)*aArraySize);
+   void* tPtr = malloc(sizeof(MyClass)*aArraySize + 4);
    return new(tPtr)MyClass[aArraySize];
    return (MyClass*)tPtr;
 }
@@ -66,7 +66,8 @@ void memDestroyArray(MyClass* aPtr,int aMemType,int aArraySize)
    {
       aPtr[i].~MyClass();
    }
-   free(aPtr);
+   void* tPtr2 = (void*)((char*)aPtr - 4);
+   free(tPtr2);
 }
 
 //******************************************************************************

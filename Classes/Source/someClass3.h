@@ -7,7 +7,7 @@
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-
+#include <new>
 
 namespace Some
 {
@@ -21,11 +21,12 @@ public:
    Class3A();
   ~Class3A();
 
+#if 0
    static void* operator new      (size_t sz);
    static void* operator new[]    (size_t sz);
    static void  operator delete   (void* ptr);
    static void  operator delete[] (void* ptr);
-
+#endif
    static void* operator new      (size_t sz,int aMode);
    static void* operator new[]    (size_t sz,int aMode);
    static void  operator delete   (void* ptr,int aMode);
