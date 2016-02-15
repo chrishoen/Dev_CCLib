@@ -28,7 +28,9 @@ void CmdLineExec::reset()
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
    if(aCmd->isCmd("RESET"  ))  reset();
-   if(aCmd->isCmd("GO1"    ))  executeGo1  (aCmd);
+   if(aCmd->isCmd("GO11"   ))  executeGo11 (aCmd);
+   if(aCmd->isCmd("GO12"   ))  executeGo12 (aCmd);
+   if(aCmd->isCmd("GO20"   ))  executeGo20 (aCmd);
    if(aCmd->isCmd("GO21"   ))  executeGo21 (aCmd);
    if(aCmd->isCmd("GO22"   ))  executeGo22 (aCmd);
    if(aCmd->isCmd("GO31"   ))  executeGo31 (aCmd);
@@ -41,8 +43,18 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
-void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeGo11(Ris::CmdLineCmd* aCmd)
+{
+   Class1A* tX = new Class1A;
+   delete tX;
+}
+
+//******************************************************************************
+
+void CmdLineExec::executeGo12(Ris::CmdLineCmd* aCmd)
 {
    intializeClass1A();
 
@@ -53,6 +65,14 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo20(Ris::CmdLineCmd* aCmd)
+{
+   Class2A* tX = new Class2A;
+   delete tX;
+}
 
 void CmdLineExec::executeGo21(Ris::CmdLineCmd* aCmd)
 {
