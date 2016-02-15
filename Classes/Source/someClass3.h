@@ -26,6 +26,11 @@ public:
    static void  operator delete   (void* ptr);
    static void  operator delete[] (void* ptr);
 
+   static void* operator new      (size_t sz,int aMode);
+   static void* operator new[]    (size_t sz,int aMode);
+   static void  operator delete   (void* ptr,int aMode);
+   static void  operator delete[] (void* ptr,int aMode);
+
    int mCode;
    
 };

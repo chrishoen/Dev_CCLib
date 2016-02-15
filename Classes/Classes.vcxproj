@@ -170,12 +170,15 @@
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
     <ClCompile Include="Source\someClass1.cpp" />
+    <ClCompile Include="Source\someClass2.cpp" />
     <ClCompile Include="Source\someClass3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\MainInit.h" />
+    <ClInclude Include="Source\someMemory.h" />
     <ClInclude Include="Source\someClass1.h" />
+    <ClInclude Include="Source\someClass2.h" />
     <ClInclude Include="Source\someClass3.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
