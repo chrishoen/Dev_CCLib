@@ -26,7 +26,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
    if(aCmd->isCmd("RESET"  ))  reset();
    if(aCmd->isCmd("START"  ))  executeStart(aCmd);
-   if(aCmd->isCmd("STOP"   ))  executeStop(aCmd);
+   if(aCmd->isCmd("X"      ))  executeStop(aCmd);
    if(aCmd->isCmd("GO1"    ))  executeGo1(aCmd);
    if(aCmd->isCmd("GO2"    ))  executeGo2(aCmd);
    if(aCmd->isCmd("GO3"    ))  executeGo3(aCmd);

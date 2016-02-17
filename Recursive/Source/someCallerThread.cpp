@@ -67,7 +67,6 @@ void CallerThread::threadRunFunction()
 {
    while (!mTerminateFlag)
    {
-      threadSleep(mDelay);
       if (mCallFlag && mCallQueue.isGet())
       {
          RecursiveFunction tFunction;
@@ -77,7 +76,7 @@ void CallerThread::threadRunFunction()
       }
       else
       {
-//       threadSleep(mDelay);
+         threadSleep(mDelay);
       }
    }
 }

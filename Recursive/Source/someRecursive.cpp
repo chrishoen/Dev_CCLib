@@ -23,9 +23,9 @@ void enqueueFunction(RecursiveFunction aFunction)
    gCallerThread->enqueueFunction(aFunction);
 }
 
-void delay(RecursiveFunction aFunction)
+void sleep()
 {
-   gCallerThread->enqueueFunction(aFunction);
+   gCallerThread->threadSleep(gCallerThread->mDelay);
 }
 
 //******************************************************************************
@@ -35,6 +35,7 @@ void delay(RecursiveFunction aFunction)
 void function1(RecursiveAnchor* aAnchor)
 {
    Prn::print(Prn::ThreadRun1, "Recursive::function1 %d",aAnchor->mCount);
+   sleep();
    enqueueFunction(function1);
 }
 
