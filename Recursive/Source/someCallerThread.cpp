@@ -81,6 +81,10 @@ void CallerThread::threadRunFunction()
             threadSleep(mDelay);
          }
       }
+      else
+      {
+         threadSleep(mDelay);
+      }
    }
 }
 

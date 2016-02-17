@@ -19,6 +19,9 @@
     <ClCompile Include="Source\someCallerThread.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\someRecursive.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h">
@@ -28,6 +31,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\someCallerThread.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\someRecursive.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

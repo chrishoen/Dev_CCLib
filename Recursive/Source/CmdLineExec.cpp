@@ -8,8 +8,10 @@
 #include "CmdLineExec.h"
 
 #include "someCallerThread.h"
+#include "someRecursive.h"
 
 using namespace std;
+using namespace Some;
 
 //******************************************************************************
 CmdLineExec::CmdLineExec()
@@ -38,6 +40,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeStart(Ris::CmdLineCmd* aCmd)
 {
+   gCallerThread->callFunction(Recursive::function1);
 }
 
 //******************************************************************************
@@ -46,6 +49,7 @@ void CmdLineExec::executeStart(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeStop(Ris::CmdLineCmd* aCmd)
 {
+   gCallerThread->abortCall();
 }
 
 //******************************************************************************
