@@ -29,6 +29,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Stash", "Stash\Stash.vcxpro
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Classes", "Classes\Classes.vcxproj", "{D25F2695-BD18-43BC-A09D-9503AD3FCD49}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Recursive", "Recursive\Recursive.vcxproj", "{F0123B97-FE0E-48DB-B209-933DB5EC4C21}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -141,6 +143,14 @@ Global
 		{D25F2695-BD18-43BC-A09D-9503AD3FCD49}.Release|Win32.Build.0 = Release|Win32
 		{D25F2695-BD18-43BC-A09D-9503AD3FCD49}.Release|x64.ActiveCfg = Release|x64
 		{D25F2695-BD18-43BC-A09D-9503AD3FCD49}.Release|x64.Build.0 = Release|x64
+		{F0123B97-FE0E-48DB-B209-933DB5EC4C21}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F0123B97-FE0E-48DB-B209-933DB5EC4C21}.Debug|Win32.Build.0 = Debug|Win32
+		{F0123B97-FE0E-48DB-B209-933DB5EC4C21}.Debug|x64.ActiveCfg = Debug|x64
+		{F0123B97-FE0E-48DB-B209-933DB5EC4C21}.Debug|x64.Build.0 = Debug|x64
+		{F0123B97-FE0E-48DB-B209-933DB5EC4C21}.Release|Win32.ActiveCfg = Release|Win32
+		{F0123B97-FE0E-48DB-B209-933DB5EC4C21}.Release|Win32.Build.0 = Release|Win32
+		{F0123B97-FE0E-48DB-B209-933DB5EC4C21}.Release|x64.ActiveCfg = Release|x64
+		{F0123B97-FE0E-48DB-B209-933DB5EC4C21}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
