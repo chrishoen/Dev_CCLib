@@ -18,6 +18,7 @@ public:
 
   void executeStart (Ris::CmdLineCmd* aCmd);
   void executeStop  (Ris::CmdLineCmd* aCmd);
+  void executeTP    (Ris::CmdLineCmd* aCmd);
 
   void executeGo1(Ris::CmdLineCmd* aCmd);
   void executeGo2(Ris::CmdLineCmd* aCmd);

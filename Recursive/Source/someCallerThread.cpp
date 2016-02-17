@@ -18,6 +18,21 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 
+RecursiveAnchor::RecursiveAnchor()
+{
+   reset();
+}
+
+void RecursiveAnchor::reset()
+{
+   mCallType=0;
+   mCallCount=0;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 CallerThread::CallerThread() 
 {
    // BaseClass
@@ -72,7 +87,7 @@ void CallerThread::threadRunFunction()
          RecursiveFunction tFunction;
          mCallQueue.get(tFunction);
          tFunction(&mRecursiveAnchor);
-         mRecursiveAnchor.mCount++;
+         mRecursiveAnchor.mCallCount++;
       }
       else
       {

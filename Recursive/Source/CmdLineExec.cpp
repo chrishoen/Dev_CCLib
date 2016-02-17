@@ -8,6 +8,7 @@
 #include "CmdLineExec.h"
 
 #include "someCallerThread.h"
+#include "someStatusThread.h"
 #include "someRecursive.h"
 
 using namespace std;
@@ -27,6 +28,8 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("RESET"  ))  reset();
    if(aCmd->isCmd("START"  ))  executeStart(aCmd);
    if(aCmd->isCmd("X"      ))  executeStop(aCmd);
+   if(aCmd->isCmd("TP"     ))  executeTP(aCmd);
+
    if(aCmd->isCmd("GO1"    ))  executeGo1(aCmd);
    if(aCmd->isCmd("GO2"    ))  executeGo2(aCmd);
    if(aCmd->isCmd("GO3"    ))  executeGo3(aCmd);
@@ -40,7 +43,8 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeStart(Ris::CmdLineCmd* aCmd)
 {
-   gCallerThread->callFunction(Recursive::function1);
+   gStatusThread->mTPFlag = true;
+   gCallerThread->callFunction(Recursive::function2);
 }
 
 //******************************************************************************
@@ -50,6 +54,16 @@ void CmdLineExec::executeStart(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeStop(Ris::CmdLineCmd* aCmd)
 {
    gCallerThread->abortCall();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeTP(Ris::CmdLineCmd* aCmd)
+{
+   aCmd->setArgDefault(1,true);
+   gStatusThread->mTPFlag = aCmd->argBool(1);
 }
 
 //******************************************************************************

@@ -12,6 +12,7 @@ namespace Recursive
 {
 
    void function1(RecursiveAnchor* aAnchor);
+   void function2(RecursiveAnchor* aAnchor);
 
 }//namespace
 }//namespace

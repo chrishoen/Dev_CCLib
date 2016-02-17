@@ -22,17 +22,11 @@ namespace Some
 class RecursiveAnchor
 {
 public:
-   int mCount;
+   int                 mCallType;
+   unsigned long long  mCallCount;
 
-   inline RecursiveAnchor()
-   {
-      reset();
-   }
-
-   inline void reset()
-   {
-      mCount=0;
-   }
+   RecursiveAnchor();
+   void reset();
 
 };
 

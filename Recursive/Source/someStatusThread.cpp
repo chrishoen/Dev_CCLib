@@ -7,49 +7,53 @@
 #include "prnPrint.h"
 #include "my_functions.h"
 
-#include "someRecursive.h"
+#include "someCallerThread.h"
+
+#define  _SOMESTATUSTHREAD_CPP_
+#include "someStatusThread.h"
 
 namespace Some
 {
-namespace Recursive
-{
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-void enqueueFunction(RecursiveFunction aFunction)
+StatusThread::StatusThread() 
 {
-   gCallerThread->enqueueFunction(aFunction);
-}
+   // Thread Members
+   mTerminateFlag = false;
+   mTPFlag = false;
 
-void sleep()
-{
-   gCallerThread->threadSleep(gCallerThread->mDelay);
 }
 
 //******************************************************************************
-//******************************************************************************
-//******************************************************************************
 
-void function1(RecursiveAnchor* aAnchor)
+void StatusThread::threadRunFunction()
 {
-   Prn::print(Prn::ThreadRun1, "Recursive::function1 %d",aAnchor->mCallCount);
-   aAnchor->mCallType=1001;
-   sleep();
-   enqueueFunction(function1);
+   char tString1[40];
+   while(1)
+   {
+      threadSleep(1000);
+      if (mTerminateFlag) break;
+
+      if (!mTPFlag) continue;
+
+      Prn::print(Prn::ThreadRun1, "%d$   %s",
+         gCallerThread->mRecursiveAnchor.mCallType,
+         my_stringLLU(tString1, gCallerThread->mRecursiveAnchor.mCallCount));
+   }
 }
 
 //******************************************************************************
-//******************************************************************************
-//******************************************************************************
 
-void function2(RecursiveAnchor* aAnchor)
+void StatusThread::shutdownThread()
 {
-   aAnchor->mCallType=1002;
-   enqueueFunction(function2);
-}
+   // Set terminate
+   mTerminateFlag = true;
+   // Wait for terminate
+   waitForThreadTerminate();
+}   
 
-}//namespace
 }//namespace
 
