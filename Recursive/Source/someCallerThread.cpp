@@ -67,23 +67,17 @@ void CallerThread::threadRunFunction()
 {
    while (!mTerminateFlag)
    {
-      if (mCallFlag)
+      threadSleep(mDelay);
+      if (mCallFlag && mCallQueue.isGet())
       {
          RecursiveFunction tFunction;
-         if (mCallQueue.isGet())
-         {
-            mCallQueue.get(tFunction);
-            tFunction(&mRecursiveAnchor);
-            mRecursiveAnchor.mCount++;
-         }
-         else
-         {
-            threadSleep(mDelay);
-         }
+         mCallQueue.get(tFunction);
+         tFunction(&mRecursiveAnchor);
+         mRecursiveAnchor.mCount++;
       }
       else
       {
-         threadSleep(mDelay);
+//       threadSleep(mDelay);
       }
    }
 }

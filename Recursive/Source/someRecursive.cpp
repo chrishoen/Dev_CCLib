@@ -18,9 +18,24 @@ namespace Recursive
 //******************************************************************************
 //******************************************************************************
 
+void enqueueFunction(RecursiveFunction aFunction)
+{
+   gCallerThread->enqueueFunction(aFunction);
+}
+
+void delay(RecursiveFunction aFunction)
+{
+   gCallerThread->enqueueFunction(aFunction);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void function1(RecursiveAnchor* aAnchor)
 {
    Prn::print(Prn::ThreadRun1, "Recursive::function1 %d",aAnchor->mCount);
+   enqueueFunction(function1);
 }
 
 }//namespace
