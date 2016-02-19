@@ -47,8 +47,8 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
    LLogic tY3 = tX1 | tX2;;
    LLogic tY4 = tX1 & ~tX2;
 
-   Prn::print(0,"%4.3f %4.3f",      tX1.mX,tX2.mX);
-   Prn::print(0,"%4.3f %4.3f %4.3f %4.3f",tY1.mX,tY2.mX,tY3.mX,tY4.mX);
+   Prn::print(0,"%s %s",      tX1.str(),tX2.str());
+   Prn::print(0,"%s %s %s %s",tY1.str(),tY2.str(),tY3.str(),tY4.str());
 }
 
 //******************************************************************************
@@ -57,12 +57,20 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
+   LLogic tX1(0.25f);
+   LLogic tX2(0.75f);
+   LLogic tY1 = LLogic::cNull;
+
+   Prn::print(0,"%s %s", tX1.str(),tX2.str());
+   Prn::print(0,"%s",tY1.str());
 }
 
 //******************************************************************************
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
+   LLogic tX1(0.25f);
+   bool tFlag = tX1.isNull();
 }
 
 //******************************************************************************
