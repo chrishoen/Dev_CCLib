@@ -39,16 +39,19 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   LLogic tX1(0.50f);
-   LLogic tX2(0.750f);
+   char tString1[10];
+   char tString2[10];
+   char tString3[10];
+
+   LLogic tX1(50);
+   LLogic tX2(75);
 
    LLogic tY1 = ~tX2;
    LLogic tY2 = tX1 & tX2;
    LLogic tY3 = tX1 | tX2;;
-   LLogic tY4 = tX1 & ~tX2;
 
-   Prn::print(0,"%s %s",      tX1.str(),tX2.str());
-   Prn::print(0,"%s %s %s %s",tY1.str(),tY2.str(),tY3.str(),tY4.str());
+   Prn::print(0,"%s %s",      tX1.str(tString1),tX2.str(tString2));
+   Prn::print(0,"%s %s %s",tY1.str(tString1),tY2.str(tString2),tY3.str(tString3));
 }
 
 //******************************************************************************
@@ -57,24 +60,30 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   LLogic tX1(0.25f);
-   LLogic tX2(0.75f);
+   char tString1[10];
+   char tString2[10];
+
+   LLogic tX1(25);
+   LLogic tX2(75);
    LLogic tY1 = LLogic::cNull;
 
-   Prn::print(0,"%s %s", tX1.str(),tX2.str());
-   Prn::print(0,"%s",tY1.str());
+   Prn::print(0,"%s %s", tX1.str(tString1),tX2.str(tString2));
+   Prn::print(0,"%s",tY1.str(tString1));
 }
 
 //******************************************************************************
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
-   LLogic tX1(0.25f);
-   LLogic tX2(0.75f);
+   char tString1[10];
+   char tString2[10];
+
+   LLogic tX1(25);
+   LLogic tX2(75);
    LLogic tY1 = tX1 >> tX2;
 
-   Prn::print(0,"%s %s", tX1.str(),tX2.str());
-   Prn::print(0,"%s",tY1.str());
+   Prn::print(0,"%s %s", tX1.str(tString1),tX2.str(tString2));
+   Prn::print(0,"%s",tY1.str(tString1));
 }
 
 //******************************************************************************

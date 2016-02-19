@@ -10,9 +10,9 @@ Description:
 
 #include "LLogic.h"
 
-const float LLogic::cTrueX  = 1.0f;
-const float LLogic::cFalseX = 0.0f;
-const float LLogic::cNullX  = -1.0f;
+const int LLogic::cTrueX  = 100;
+const int LLogic::cFalseX = 0;
+const int LLogic::cNullX  = -1;
 
 const LLogic LLogic::cNull;
 const LLogic LLogic::cTrue(LLogic::cTrueX);

@@ -15,23 +15,22 @@ public:
    //--------------------------------------------------------------
    // Support
 
-   static const float cTrueX;
-   static const float cFalseX;
-   static const float cNullX;
+   static const int cTrueX;
+   static const int cFalseX;
+   static const int cNullX;
 
    static const LLogic cNull;
    static const LLogic cTrue;
    static const LLogic cFalse;
 
-   static float fMin (float lhs, float rhs) { return lhs < rhs ? lhs : rhs; }
-   static float fMax (float lhs, float rhs) { return lhs > rhs ? lhs : rhs; }
+   static int iMin (int lhs, int rhs) { return lhs < rhs ? lhs : rhs; }
+   static int iMax (int lhs, int rhs) { return lhs > rhs ? lhs : rhs; }
    bool isNull() const {return mX==cNullX;}
 
    //--------------------------------------------------------------
    // Members
 
-   float mX;
-   char  mString[8];
+   int mX;
 
    //--------------------------------------------------------------
    // Constructor
@@ -39,10 +38,9 @@ public:
    LLogic()
    {
       mX = cNullX;
-      mString[0]=0;
    }
 
-   LLogic(float aX)
+   LLogic(int aX)
    {
       mX = aX;
    }
@@ -50,11 +48,11 @@ public:
    //--------------------------------------------------------------
    // String
 
-   char* str()
+   char* str(char* aString)
    {
-      if (mX == cNullX) strcpy(mString, "NULL");
-      else             sprintf(mString, "%4.3f",mX);
-      return mString;
+      if (mX == cNullX) strcpy(aString, "NULL");
+      else             sprintf(aString, "%3d",mX);
+      return aString;
    }
 
    //--------------------------------------------------------------
@@ -73,7 +71,7 @@ public:
    {
       if (lhs.isNull()) return cNull;
       if (rhs.isNull()) return cNull;
-      return LLogic(fMin(lhs.mX,rhs.mX));
+      return LLogic(iMin(lhs.mX,rhs.mX));
    }
 
    //--------------------------------------------------------------
@@ -83,7 +81,7 @@ public:
    {
       if (lhs.isNull()) return cNull;
       if (rhs.isNull()) return cNull;
-      return LLogic(fMax(lhs.mX,rhs.mX));
+      return LLogic(iMax(lhs.mX,rhs.mX));
    }
 
    //--------------------------------------------------------------
@@ -93,7 +91,7 @@ public:
    {
       if (lhs.isNull()) return cNull;
       if (rhs.isNull()) return cNull;
-      return LLogic(fMin(cTrueX,lhs.mX+rhs.mX));
+      return LLogic(iMin(cTrueX,lhs.mX+rhs.mX));
    }
 
    //--------------------------------------------------------------
