@@ -167,14 +167,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\CmdLineExec.cpp" />
-    <ClCompile Include="Source\LLogic.cpp" />
+    <ClCompile Include="Source\LBool.cpp" />
     <ClCompile Include="Source\LSentence.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h" />
-    <ClInclude Include="Source\LLogic.h" />
+    <ClInclude Include="Source\LBool.h" />
     <ClInclude Include="Source\LSentence.h" />
     <ClInclude Include="Source\MainInit.h" />
   </ItemGroup>

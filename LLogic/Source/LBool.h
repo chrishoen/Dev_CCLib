@@ -1,5 +1,5 @@
-#ifndef _LLOGIC_H_
-#define _LLOGIC_H_
+#ifndef _LBOOL_H_
+#define _LBOOL_H_
 
 /*==============================================================================
 ==============================================================================*/
@@ -8,45 +8,45 @@
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-class LLogic
+class LBool
 {
 public:
 
-   //--------------------------------------------------------------
+   //---------------------------------------------------------------------------
    // Support
 
    static const int cTrueX;
    static const int cFalseX;
    static const int cNullX;
 
-   static const LLogic cNull;
-   static const LLogic cTrue;
-   static const LLogic cFalse;
+   static const LBool cNull;
+   static const LBool cTrue;
+   static const LBool cFalse;
 
    static int iMin (int lhs, int rhs) { return lhs < rhs ? lhs : rhs; }
    static int iMax (int lhs, int rhs) { return lhs > rhs ? lhs : rhs; }
    static int iAbs (int x) { return x >= 0 ? x : -x; }
    bool isNull() const {return mX==cNullX;}
 
-   //--------------------------------------------------------------
+   //---------------------------------------------------------------------------
    // Members
 
    int mX;
 
-   //--------------------------------------------------------------
+   //---------------------------------------------------------------------------
    // Constructor
 
-   LLogic()
+   LBool()
    {
       mX = cNullX;
    }
 
-   LLogic(int aX)
+   LBool(int aX)
    {
       mX = aX;
    }
 
-   //--------------------------------------------------------------
+   //---------------------------------------------------------------------------
    // String
 
    char* str(char* aString)
@@ -56,53 +56,53 @@ public:
       return aString;
    }
 
-   //--------------------------------------------------------------
+   //---------------------------------------------------------------------------
    // Operator NOT
 
-   LLogic operator~()
+   LBool operator~()
    {
       if (isNull()) return cNull;
-      return LLogic(cTrueX - this->mX);
+      return LBool(cTrueX - this->mX);
    }
  
-   //--------------------------------------------------------------
+   //---------------------------------------------------------------------------
    // Operator AND
 
-   friend LLogic operator &(const LLogic& lhs,const LLogic& rhs)
+   friend LBool operator &(const LBool& lhs,const LBool& rhs)
    {
       if (lhs.isNull()) return cNull;
       if (rhs.isNull()) return cNull;
-      return LLogic(iMin(lhs.mX,rhs.mX));
+      return LBool(iMin(lhs.mX,rhs.mX));
    }
 
-   //--------------------------------------------------------------
+   //---------------------------------------------------------------------------
    // Operator OR
 
-   friend LLogic operator |(const LLogic& lhs,const LLogic& rhs)
+   friend LBool operator |(const LBool& lhs,const LBool& rhs)
    {
       if (lhs.isNull()) return cNull;
       if (rhs.isNull()) return cNull;
-      return LLogic(iMax(lhs.mX,rhs.mX));
+      return LBool(iMax(lhs.mX,rhs.mX));
    }
 
-   //--------------------------------------------------------------
+   //---------------------------------------------------------------------------
    // Operator IMPLIES
 
-   friend LLogic operator >>(const LLogic& lhs,const LLogic& rhs)
+   friend LBool operator >>(const LBool& lhs,const LBool& rhs)
    {
       if (lhs.isNull()) return cNull;
       if (rhs.isNull()) return cNull;
-      return LLogic(iMin(cTrueX,cTrueX - lhs.mX + rhs.mX));
+      return LBool(iMin(cTrueX,cTrueX - lhs.mX + rhs.mX));
    }
 
-   //--------------------------------------------------------------
+   //---------------------------------------------------------------------------
    // Operator EQUIVALENCE
 
-   friend LLogic operator %=(const LLogic& lhs,const LLogic& rhs)
+   friend LBool operator %=(const LBool& lhs,const LBool& rhs)
    {
       if (lhs.isNull()) return cNull;
       if (rhs.isNull()) return cNull;
-      return LLogic(cTrueX - iAbs(lhs.mX - rhs.mX));
+      return LBool(cTrueX - iAbs(lhs.mX - rhs.mX));
    }
 };
 

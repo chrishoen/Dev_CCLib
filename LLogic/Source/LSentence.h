@@ -3,7 +3,7 @@
 
 /*==============================================================================
 ==============================================================================*/
-#include "LLogic.h"
+#include "LBool.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -19,10 +19,10 @@ public:
    // Members
 
    int mN;
-   LLogic mX;
+   LBool mX;
 
    int mRefN;
-   LLogic mRefX;
+   LBool mRefX;
 
    //--------------------------------------------------------------
    // Constructor
@@ -38,7 +38,7 @@ public:
       mN = aN;
    }
 
-   LSentence(int aN,LLogic aX)
+   LSentence(int aN,LBool aX)
    {
       mN = aN;
       mX = aX;
@@ -49,7 +49,7 @@ public:
 
    void setRef(LSentence* aRef)
    {
-      mX    = LLogic::cTrue;
+      mX    = LBool::cTrue;
       mRefN = aRef->mN;
       mRefX = aRef->mX;
    }

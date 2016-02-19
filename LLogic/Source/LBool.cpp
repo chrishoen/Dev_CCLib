@@ -8,13 +8,13 @@ Description:
 
 #include <stdio.h>
 
-#include "LLogic.h"
+#include "LBool.h"
 
-const int LLogic::cTrueX  = 100;
-const int LLogic::cFalseX = 0;
-const int LLogic::cNullX  = -1;
+const int LBool::cTrueX  = 100;
+const int LBool::cFalseX = 0;
+const int LBool::cNullX  = -1;
 
-const LLogic LLogic::cNull;
-const LLogic LLogic::cTrue(LLogic::cTrueX);
-const LLogic LLogic::cFalse(LLogic::cFalseX);
+const LBool LBool::cNull;
+const LBool LBool::cTrue(LBool::cTrueX);
+const LBool LBool::cFalse(LBool::cFalseX);
 

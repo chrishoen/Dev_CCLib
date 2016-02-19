@@ -4,9 +4,6 @@
     <ClCompile Include="Source\CmdLineExec.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\LLogic.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Main.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -16,18 +13,21 @@
     <ClCompile Include="Source\LSentence.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\LBool.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\LLogic.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\MainInit.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\LSentence.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LBool.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
