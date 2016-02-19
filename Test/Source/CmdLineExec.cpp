@@ -7,8 +7,6 @@
 #include "prnPrint.h"
 #include "CmdLineExec.h"
 
-#include "LFIndex.h"
-
 using namespace std;
 
 //******************************************************************************
