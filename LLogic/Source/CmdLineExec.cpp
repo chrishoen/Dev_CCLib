@@ -93,10 +93,14 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
+   aCmd->setArgDefault(1,45);
+   aCmd->setArgDefault(2,55);
+
    char tString1[10];
 
-   LBool tX1(55);
-   LBool tX2(45);
+   LBool tX1(aCmd->argInt(1));
+   LBool tX2(aCmd->argInt(2));
+
    LBool tY1 = tX1 %= tX2;
    LBool tY2 = (tX1 >> tX2) & (tX2 >> tX1);
 
@@ -118,13 +122,11 @@ void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
    LBool tX1(aCmd->argInt(1));
    LBool tX2(aCmd->argInt(2));
    LBool tY1 = tX1 >> tX2;
-   LBool tY2 = (~tX1 | tX2);
 
    Prn::print(0,"X1 %s", tX1.str(tString1));
    Prn::print(0,"X2 %s", tX2.str(tString1));
    Prn::print(0,"");
    Prn::print(0,"Y1 %s", tY1.str(tString1));
-   Prn::print(0,"Y2 %s", tY2.str(tString1));
    Prn::print(0,"");
 }
 
@@ -132,20 +134,6 @@ void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo6(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,45);
-   aCmd->setArgDefault(2,55);
-
-   char tString1[10];
-
-   LBool tX1(aCmd->argInt(1));
-   LBool tX2(aCmd->argInt(2));
-   LBool tY1 = (~tX1 | tX2);
-
-   Prn::print(0,"X1 %s", tX1.str(tString1));
-   Prn::print(0,"X2 %s", tX2.str(tString1));
-   Prn::print(0,"");
-   Prn::print(0,"Y1 %s", tY1.str(tString1));
-   Prn::print(0,"");
 }
 
 //******************************************************************************
