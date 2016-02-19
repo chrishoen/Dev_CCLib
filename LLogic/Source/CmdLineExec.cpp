@@ -70,7 +70,11 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
    LLogic tX1(0.25f);
-   bool tFlag = tX1.isNull();
+   LLogic tX2(0.75f);
+   LLogic tY1 = tX1 >> tX2;
+
+   Prn::print(0,"%s %s", tX1.str(),tX2.str());
+   Prn::print(0,"%s",tY1.str());
 }
 
 //******************************************************************************

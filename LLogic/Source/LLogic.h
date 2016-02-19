@@ -57,7 +57,7 @@ public:
    }
 
    //--------------------------------------------------------------
-   // Operator
+   // Operator NOT
 
    LLogic operator~()
    {
@@ -65,6 +65,9 @@ public:
       return LLogic(cTrueX - this->mX);
    }
  
+   //--------------------------------------------------------------
+   // Operator AND
+
    friend LLogic operator &(const LLogic& lhs,const LLogic& rhs)
    {
       if (lhs.isNull()) return cNull;
@@ -72,11 +75,34 @@ public:
       return LLogic(fMin(lhs.mX,rhs.mX));
    }
 
+   //--------------------------------------------------------------
+   // Operator OR
+
    friend LLogic operator |(const LLogic& lhs,const LLogic& rhs)
    {
       if (lhs.isNull()) return cNull;
       if (rhs.isNull()) return cNull;
       return LLogic(fMax(lhs.mX,rhs.mX));
+   }
+
+   //--------------------------------------------------------------
+   // Operator IMPLIES
+
+   friend LLogic operator >>(const LLogic& lhs,const LLogic& rhs)
+   {
+      if (lhs.isNull()) return cNull;
+      if (rhs.isNull()) return cNull;
+      return LLogic(fMin(cTrueX,lhs.mX+rhs.mX));
+   }
+
+   //--------------------------------------------------------------
+   // Operator EQUIVALENCE
+
+   friend LLogic operator %(const LLogic& lhs,const LLogic& rhs)
+   {
+      if (lhs.isNull()) return cNull;
+      if (rhs.isNull()) return cNull;
+      return LLogic(cTrueX - (lhs.mX > rhs.mX ? lhs.mX : rhs.mX));
    }
 };
 
