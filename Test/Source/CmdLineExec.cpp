@@ -34,20 +34,27 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-static const int cX=101;
-
-int mX;
-
-int mIX;
-
-int* mPX = &mX;
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   mIX = mX;
-   mIX = *mPX;
+   aCmd->setArgDefault(1,0.99);
+   aCmd->setArgDefault(2,100);
 
    Prn::print(0, "TEST GO1");
+
+   double tC = aCmd->argDouble(1);
+   int tN = aCmd->argInt(2);
+   double tD = 0.01;
+   double tX = 0.0;
+
+   for (int i = 0; i < tN; i++)
+   {
+      tX = 1.0 - abs(tC - tX);
+      Prn::print(0, "%d %8.7f %8.7f",i,tC,tX);
+   }
 }
 
 //******************************************************************************
@@ -56,6 +63,12 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
+   aCmd->setArgDefault(1,0.99);
+
+   double tC = aCmd->argDouble(1);
+   double tX = (1.0 + tC)/2.0;
+
+   Prn::print(0, "%8.7f %8.7f",tC,tX);
 }
 
 //******************************************************************************

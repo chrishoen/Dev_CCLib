@@ -36,7 +36,7 @@ void RecursiveAnchor::reset()
 CallerThread::CallerThread() 
 {
    // BaseClass
-   BaseClass::setThreadPriorityHigh();
+// BaseClass::setThreadPriorityHigh();
 
    BaseClass::mThreadAffinityMask = 0x20;
    BaseClass::mThreadIdealProcessor = 5;
