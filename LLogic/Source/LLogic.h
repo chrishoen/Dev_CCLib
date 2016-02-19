@@ -23,9 +23,10 @@ public:
    static const LLogic cTrue;
    static const LLogic cFalse;
 
-   inline static float fMin (float lhs, float rhs) { return lhs < rhs ? lhs : rhs; }
-   inline static float fMax (float lhs, float rhs) { return lhs > rhs ? lhs : rhs; }
-   inline bool isNull() const {return mX==cNullX;}
+   static float fMin (float lhs, float rhs) { return lhs < rhs ? lhs : rhs; }
+   static float fMax (float lhs, float rhs) { return lhs > rhs ? lhs : rhs; }
+   bool isNull() const {return mX==cNullX;}
+
    //--------------------------------------------------------------
    // Members
 
