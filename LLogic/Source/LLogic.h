@@ -25,6 +25,7 @@ public:
 
    static int iMin (int lhs, int rhs) { return lhs < rhs ? lhs : rhs; }
    static int iMax (int lhs, int rhs) { return lhs > rhs ? lhs : rhs; }
+   static int iAbs (int x) { return x >= 0 ? x : -x; }
    bool isNull() const {return mX==cNullX;}
 
    //--------------------------------------------------------------
@@ -91,17 +92,17 @@ public:
    {
       if (lhs.isNull()) return cNull;
       if (rhs.isNull()) return cNull;
-      return LLogic(iMin(cTrueX,lhs.mX+rhs.mX));
+      return LLogic(iMin(cTrueX,cTrueX - lhs.mX + rhs.mX));
    }
 
    //--------------------------------------------------------------
    // Operator EQUIVALENCE
 
-   friend LLogic operator %(const LLogic& lhs,const LLogic& rhs)
+   friend LLogic operator %=(const LLogic& lhs,const LLogic& rhs)
    {
       if (lhs.isNull()) return cNull;
       if (rhs.isNull()) return cNull;
-      return LLogic(cTrueX - (lhs.mX > rhs.mX ? lhs.mX : rhs.mX));
+      return LLogic(cTrueX - iAbs(lhs.mX - rhs.mX));
    }
 };
 

@@ -33,15 +33,22 @@ public:
       mRefN = cNullN;
    }
 
+   LSentence(int aN)
+   {
+      mN = aN;
+   }
+
    LSentence(int aN,LLogic aX)
    {
       mN = aN;
       mX = aX;
    }
 
-   LSentence(int aN,LSentence* aRef)
+   //--------------------------------------------------------------
+   // Set reference
+
+   void setRef(LSentence* aRef)
    {
-      mN    = aN;
       mX    = LLogic::cTrue;
       mRefN = aRef->mN;
       mRefX = aRef->mX;

@@ -90,6 +90,17 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
+   char tString1[10];
+
+   LLogic tX1(55);
+   LLogic tX2(45);
+   LLogic tY1 = tX1 %= tX2;
+   LLogic tY2 = (tX1 >> tX2) & (tX2 >> tX1);
+
+   Prn::print(0,"X1 %s", tX1.str(tString1));
+   Prn::print(0,"X2 %s", tX2.str(tString1));
+   Prn::print(0,"Y1 %s", tY1.str(tString1));
+   Prn::print(0,"Y2 %s", tY2.str(tString1));
 }
 
 //******************************************************************************
