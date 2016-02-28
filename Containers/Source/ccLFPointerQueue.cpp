@@ -94,6 +94,16 @@ namespace CC
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
+   // Size
+
+   int LFPointerQueue::size()
+   { 
+      return mListAllocate - mListSize.load(memory_order_relaxed);
+   }
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // This attempts to write a value to the queue. If the queue is not full
    // then it succeeds. It attempts to pop a node from the free list. If
    // the free list is empty then the queue is full and it exits. The value
@@ -240,9 +250,11 @@ namespace CC
       mListSize.fetch_add(1,memory_order_relaxed);
       return true;
    }
+
    //******************************************************************************
    //******************************************************************************
    //******************************************************************************
+   // These are specific to queue pointer access.
 
    bool LFPointerQueue::writePtr (void* aValue)
    {

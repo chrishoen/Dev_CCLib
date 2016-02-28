@@ -4,18 +4,9 @@
 
 Lock Free Pointer Queue. 
 
-This implements a pointer queue. The queue is thread safe. It uses an atomic
-interlocked compare and exchange to guard against concurrency contentions. 
-It is based on a multiple writer, single reader model. A writer starts a write, 
-obtaining a write index to the next queue element that is available to be can 
-written to. If the queue is full then the write start fails. The writer then
-writes to the corresponding queue element. After the write is complete the 
-writer somehow signals the reader to read from the queue. The reader wakes up 
-and starts a read, obtaining a read index to the next queue element that is 
-available to be read from. If the queue is empty, then the read start fails 
-(this should not happen because writer should not signal the reader). The 
-reader then reads from the corresponding queue element and then calls finish 
-read to update the queue state.
+This implements a pointer queue. The queue is thread safe. It uses a atomic
+interlocked compare and exchanges to guard against concurrency contentions.
+It implements the Michael and Scott algorithm with no backoff.
 
 ==============================================================================*/
 #include <atomic>
@@ -42,13 +33,16 @@ public:
    LFPointerQueue();
   ~LFPointerQueue();
 
-   // Allocate memory for the queue array and initialize the queue logic. 
-   // variables. aAllocate is the number of pointers to allocate, the size of
-   // the array.
+   // Allocate memory for the queue and free list arrays and initialize the
+   // queue logic variables. aAllocate is the number of pointers to allocate
+   // memory for.
    void initialize(int aAllocate);
 
-   // Deallocate memory
+   // Deallocate memory.
    void finalize();
+
+   // Queue size
+   int  size();
 
    // Write a pointer to the queue. Return false if the queue is full.
    bool  writePtr(void* aPointer);
@@ -59,43 +53,41 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Queue Members
+   // Queue and Free List Members
 
-   // Number of blocks allocated
+   // Number of values allocated
    int mAllocate;
    int mQueueAllocate;
    int mListAllocate;
 
-   void**          mValue;
-   AtomicLFIndex*  mQueueNext;
+   // Array of values
+   void** mValue;
 
-   AtomicLFIndex   mQueueHead;
-   AtomicLFIndex   mQueueTail;
+   // Queue array and variables
+   AtomicLFIndex*    mQueueNext;
+   AtomicLFIndex     mQueueHead;
+   AtomicLFIndex     mQueueTail;
 
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Free List Members
-
-   AtomicLFIndex*   mListNext;
-   AtomicLFIndex    mListHead;
-   std::atomic<int> mListSize;
+   // Free List array and variables
+   AtomicLFIndex*    mListNext;
+   AtomicLFIndex     mListHead;
+   std::atomic<int>  mListSize;
    
    std::atomic<int>* mListHeadIndexPtr = (std::atomic<int>*)&mListHead;
 
-   static const int cInvalid = 0x80000000;
+   static const int  cInvalid = 0x80000000;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Free List Methods
+   // Queue and Free List Methods. These write or read values from the queue
+   // and pop or push node indices from the free list.
 
-   bool tryWrite  (void*  aValue);
-   bool tryRead   (void** aValue);
+   bool tryWrite (void*  aValue);
+   bool tryRead  (void** aValue);
 
-   bool listPush(int  aNode);
-   bool listPop(int*  aNode);
-
+   bool listPop  (int*   aNode);
+   bool listPush (int    aNode);
 };
 
 //******************************************************************************
