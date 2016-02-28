@@ -9,7 +9,7 @@
 //******************************************************************************
 //******************************************************************************
 #include <functional>
-#include "risThreads.h"
+#include "risThreadsThreads.h"
 #include "risContainers.h"
 
 namespace Some
