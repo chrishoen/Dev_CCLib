@@ -19,21 +19,6 @@
     <ClCompile Include="Source\ccLFBlockQueue.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\LFQueue.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\LFBlockQueue.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ccLFCasLoop.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\LFBlockQueue2.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\LFObjectQueue.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
@@ -54,21 +39,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccLFBlockQueue.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\LFQueue.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\LFBlockQueue.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ccLFCasLoop.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\LFBlockQueue2.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\LFObjectQueue.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
