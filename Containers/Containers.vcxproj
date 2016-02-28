@@ -175,6 +175,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\ccLFBlockQueue.h" />
+    <ClInclude Include="Source\ccLFIndex.h" />
     <ClInclude Include="Source\ccLFPointerQueue.h" />
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\MainInit.h" />
