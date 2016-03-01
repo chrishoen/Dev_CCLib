@@ -6,7 +6,8 @@ Description:
 //******************************************************************************
 //******************************************************************************
 
-#include <prnPrint.h>
+#include <new>
+#include "prnPrint.h"
 
 #include "GSettings.h"
 #include "LFBackoff.h"
@@ -67,10 +68,31 @@ void Writer::write1(int aNumWrites)
       bool tPass;
       int tCount = mCount & 0xFFFF;
 
-      mMarkerWrite.doStart();
-      tPass = LFIntQueue::tryWrite(tCount);
-      mMarkerWrite.doStop();
-      tDelayA.delay();
+      if (gShare.mTest == 1)
+      {
+         mMarkerWrite.doStart();
+         tPass = LFIntQueue::tryWrite(tCount);
+         mMarkerWrite.doStop();
+         tDelayA.delay();
+      }
+
+      if (gShare.mTest == 2)
+      {
+         mMarkerWrite.doStart();
+
+         int tIndex;
+         void* tBlock = gShare.mBlockQueue.startWrite(&tIndex);
+         if (tBlock)
+         {
+            Class1A* tObject = new(tBlock) Class1A;
+            tObject->mCode1 = tCount;
+            gShare.mBlockQueue.finishWrite(tIndex);
+         }
+
+         mMarkerWrite.doStop();
+         tDelayA.delay();
+         tPass = tBlock!=0;
+      }
 
       if (tPass)
       {

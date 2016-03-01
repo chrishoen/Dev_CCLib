@@ -65,10 +65,30 @@ void Reader::read1(int aNumReads)
    {
       bool tPass;
       int tCount;
+      int tIndex;
 
-      mMarkerRead.doStart();
-      tPass = LFIntQueue::tryRead(&tCount);
-      mMarkerRead.doStop();
+      if (gShare.mTest == 1)
+      {
+         mMarkerRead.doStart();
+         tPass = LFIntQueue::tryRead(&tCount);
+         mMarkerRead.doStop();
+      }
+
+      if (gShare.mTest == 2)
+      {
+         mMarkerRead.doStart();
+
+         Class1A* tObject = (Class1A*)gShare.mBlockQueue.startRead(&tIndex);
+         if (tObject)
+         {
+            tCount = tObject->mCode1;
+            gShare.mBlockQueue.finishRead(tIndex);
+         }
+
+         mMarkerRead.doStop();
+         tPass = tObject!=0;
+      }
+
       tDelayB.delay();
 
       if (tPass)

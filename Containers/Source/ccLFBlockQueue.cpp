@@ -123,23 +123,22 @@ namespace CC
    {
       // Try to allocate a node from the free list.
       // Exit if it is empty.
-      LFIndex tNode;
-      if (!listPop(&tNode.mIndex)) return 0;
+      int tNodeIndex;
+      if (!listPop(&tNodeIndex)) return 0;
 
       // Initialize the node.
-      mQueueNext[tNode.mIndex].store(LFIndex(cInvalid, 0), memory_order_relaxed);
+      mQueueNext[tNodeIndex].store(LFIndex(cInvalid, 0), memory_order_relaxed);
 
       // Return a pointer to the node block.
-      *aNodeIndex = tNode.mIndex;
-      return element(tNode.mIndex);
+      *aNodeIndex = tNodeIndex;
+      return element(tNodeIndex);
    }
 
    void LFBlockQueue::finishWrite(int aNodeIndex)
    {
       // Try to allocate a node from the free list.
       // Exit if it is empty.
-      LFIndex tNode;
-      tNode.mIndex = aNodeIndex;
+      int tNodeIndex = aNodeIndex;
 
       // Attach the node to the queue tail.
       LFIndex tTail,tNext;
@@ -154,7 +153,7 @@ namespace CC
          {
             if (tNext.mIndex == cInvalid)
             {
-               if (mQueueNext[tTail.mIndex].compare_exchange_strong(tNext, LFIndex(tNode.mIndex, tNext.mCount+1),memory_order_release,memory_order_relaxed)) break;
+               if (mQueueNext[tTail.mIndex].compare_exchange_strong(tNext, LFIndex(tNodeIndex, tNext.mCount+1),memory_order_release,memory_order_relaxed)) break;
             }
             else
             {
@@ -165,7 +164,7 @@ namespace CC
          if (++tLoopCount==10000) throw 101;
       }
 
-      mQueueTail.compare_exchange_strong(tTail, LFIndex(tNode.mIndex, tTail.mCount+1),memory_order_release,memory_order_relaxed);
+      mQueueTail.compare_exchange_strong(tTail, LFIndex(tNodeIndex, tTail.mCount+1),memory_order_release,memory_order_relaxed);
    }
 
    //******************************************************************************
