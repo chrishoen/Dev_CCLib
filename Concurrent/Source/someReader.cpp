@@ -83,7 +83,6 @@ void Reader::readType1(int aNumReads)
          mCount++;
          mFailCount++;
       }
-      mMarkerRead.doStop();
    }
 }
 //******************************************************************************
@@ -122,7 +121,6 @@ void Reader::readType2(int aNumReads)
          mCount++;
          mFailCount++;
       }
-      mMarkerRead.doStop();
    }
 }
 //******************************************************************************
@@ -164,7 +162,6 @@ void Reader::readType3(int aNumReads)
          mCount++;
          mFailCount++;
       }
-      mMarkerRead.doStop();
    }
 }
    
