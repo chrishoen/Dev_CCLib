@@ -50,7 +50,7 @@ public:
    // Members
 
    unsigned short mIdent;
-   IntMessage mMsg;
+   int mCount;
 
    unsigned long long mWriteCount;
    unsigned long long mWritePassCount;

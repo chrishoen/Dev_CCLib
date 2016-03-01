@@ -32,8 +32,7 @@ WriterReader::WriterReader()
 void WriterReader::initialize(unsigned aIdent)
 {
    mIdent = aIdent;
-   mMsg.mCode  = 0;
-   mMsg.mIdent = aIdent;
+   mCount = 0;
 
    mWriteCount     = 0;
    mWritePassCount = 0;
@@ -75,12 +74,12 @@ void WriterReader::startTrial()
       int tListSize = gGSettings.mAllocate;
       for (int i = 0; i < tListSize / 2; i++)
       {
-         mMsg.mCode++;
-         LFIntQueue::tryWrite(mMsg.mInt);
+         ++mCount &= 0xFFFF;
+         LFIntQueue::tryWrite(mCount);
 
          mWriteCount++;
          mWritePassCount++;
-         mWriteCheckSum += mMsg.mCode;
+         mWriteCheckSum += mCount;
       }
    }
 
@@ -114,11 +113,11 @@ void WriterReader::writeread1(int aNumWrites)
       // Write
       if (my_randflag(0.5))
       {
+         ++mCount &= 0xFFFF;
          bool tPass;
-         mMsg.mCode++;
 
          mMarkerWrite.doStart();
-         tPass = LFIntQueue::tryWrite(mMsg.mInt);
+         tPass = LFIntQueue::tryWrite(mCount);
          mMarkerWrite.doStop();
          tDelayA.delay();
 
@@ -126,7 +125,7 @@ void WriterReader::writeread1(int aNumWrites)
          {
             mWriteCount++;
             mWritePassCount++;
-            mWriteCheckSum += mMsg.mCode;
+            mWriteCheckSum += mCount;
          }
          else
          {
@@ -138,10 +137,9 @@ void WriterReader::writeread1(int aNumWrites)
       else
       {
          bool tPass;
-         IntMessage tMsg;
-
+         int tCount;
          mMarkerRead.doStart();
-         tPass = LFIntQueue::tryRead(&tMsg.mInt);
+         tPass = LFIntQueue::tryRead(&tCount);
          mMarkerRead.doStop();
          tDelayA.delay();
 
@@ -149,7 +147,7 @@ void WriterReader::writeread1(int aNumWrites)
          {
             mReadCount++;
             mReadPassCount++;
-            mReadCheckSum += tMsg.mCode;
+            mReadCheckSum += tCount;
          }
          else
          {
@@ -174,7 +172,7 @@ void WriterReader::writeread2(int aNumWrites)
       // Write
       if (my_randflag(0.5))
       {
-         mMsg.mCode++;
+         ++mCount &= 0xFFFF;
 
          mMarkerWrite.doStart();
 
@@ -183,7 +181,7 @@ void WriterReader::writeread2(int aNumWrites)
          if (tBlock)
          {
             Class1A* tObject = new(tBlock) Class1A;
-            tObject->mCode1 = mMsg.mInt;
+            tObject->mCode1 = mCount;
             gShare.mBlockQueue.finishWrite(tIndex);
          }
 
@@ -194,7 +192,7 @@ void WriterReader::writeread2(int aNumWrites)
          {
             mWriteCount++;
             mWritePassCount++;
-            mWriteCheckSum += mMsg.mCode;
+            mWriteCheckSum += mCount;
          }
          else
          {
@@ -206,13 +204,13 @@ void WriterReader::writeread2(int aNumWrites)
       else
       {
          int tIndex;
-         IntMessage tMsg;
+         int tCount;
 
          mMarkerRead.doStart();
          Class1A* tObject = (Class1A*)gShare.mBlockQueue.startRead(&tIndex);
          if (tObject)
          {
-            tMsg.mInt = tObject->mCode1;
+            tCount = tObject->mCode1;
             gShare.mBlockQueue.finishRead(tIndex);
          }
          mMarkerRead.doStop();
@@ -222,7 +220,7 @@ void WriterReader::writeread2(int aNumWrites)
          {
             mReadCount++;
             mReadPassCount++;
-            mReadCheckSum += tMsg.mCode;
+            mReadCheckSum += tCount;
          }
          else
          {
@@ -255,11 +253,11 @@ void WriterReader::flush1()
 {
    while(true)
    {
-      IntMessage tMsg;
-      if (!LFIntQueue::tryRead(&tMsg.mInt)) break;
+      int tCount;
+      if (!LFIntQueue::tryRead(&tCount)) break;
       mReadCount++;
       mReadPassCount++;
-      mReadCheckSum += tMsg.mCode;
+      mReadCheckSum += tCount;
    }
 }
    
@@ -273,13 +271,13 @@ void WriterReader::flush2()
    int tIndex;
    while(true)
    {
-      IntMessage tMsg;
+      int tCount;
       Class1A* tObject = (Class1A*)gShare.mBlockQueue.startRead(&tIndex);
       if (tObject==0) break;
-      tMsg.mInt = tObject->mCode1;
+      tCount = tObject->mCode1;
       mReadCount++;
       mReadPassCount++;
-      mReadCheckSum += tMsg.mCode;
+      mReadCheckSum += tCount;
    }
 }
    
