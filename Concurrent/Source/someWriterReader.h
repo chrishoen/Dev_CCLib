@@ -34,11 +34,17 @@ public:
    void show();
 
    void startTrial();
+   void startTrial1();
+   void startTrial2();
    void finishTrial();
 
    void writeread  (int aNumWrites);
+   void writeread1 (int aNumWrites);
+   void writeread2 (int aNumWrites);
 
    void flush  ();
+   void flush1 ();
+   void flush2 ();
 
    //---------------------------------------------------------------------------
    // Members

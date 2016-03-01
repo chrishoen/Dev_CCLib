@@ -75,15 +75,6 @@ void Tester::test1(int aNumIter)
 
 void Tester::test2(int aNumIter)
 {
-   LFBackoff tDelayA(gGSettings.mDelayA1,gGSettings.mDelayA2);
-   for (int i = 0; i < aNumIter; i++)
-   {
-      mMarkerTest1.doStart();
-      mClass1A->myCall1(101);
-      mMarkerTest1.doStop();
-      tDelayA.delay();
-      mCount++;
-   }
 }
 
 //******************************************************************************
@@ -92,15 +83,6 @@ void Tester::test2(int aNumIter)
 
 void Tester::test3(int aNumIter)
 {
-   LFBackoff tDelayA(gGSettings.mDelayA1,gGSettings.mDelayA2);
-   for (int i = 0; i < aNumIter; i++)
-   {
-      mMarkerTest1.doStart();
-      mClass1A->mCallPointer1(101);
-      mMarkerTest1.doStop();
-      tDelayA.delay();
-      mCount++;
-   }
 }
 
 //******************************************************************************
@@ -109,15 +91,6 @@ void Tester::test3(int aNumIter)
 
 void Tester::test4(int aNumIter)
 {
-   LFBackoff tDelayA(gGSettings.mDelayA1,gGSettings.mDelayA2);
-   for (int i = 0; i < aNumIter; i++)
-   {
-      mMarkerTest1.doStart();
-      mClass1A->mCallPointer2(101);
-      mMarkerTest1.doStop();
-      tDelayA.delay();
-      mCount++;
-   }
 }
 
 

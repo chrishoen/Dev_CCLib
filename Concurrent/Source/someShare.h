@@ -12,6 +12,7 @@
 #include "someReader.h"
 #include "someWriterReader.h"
 #include "someTester.h"
+#include "ccLFBlockQueue.h"
 
 namespace Some
 {
@@ -70,6 +71,10 @@ public:
    unsigned long long  mTesterCount;
    double              mTesterMeanTime1;
    double              mTesterMeanTime2;
+
+   CC::LFBlockQueue    mBlockQueue;
+
+
 };
 
 //******************************************************************************

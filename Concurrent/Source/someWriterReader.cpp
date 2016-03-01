@@ -6,6 +6,7 @@ Description:
 //******************************************************************************
 //******************************************************************************
 
+#include <new>
 #include "prnPrint.h"
 #include "my_functions.h"
 
@@ -104,7 +105,7 @@ void WriterReader::finishTrial()
 //******************************************************************************
 //******************************************************************************
 
-void WriterReader::writeread(int aNumWrites)
+void WriterReader::writeread1(int aNumWrites)
 {
    LFBackoff tDelayA(gGSettings.mDelayA1,gGSettings.mDelayA2);
 
@@ -164,7 +165,93 @@ void WriterReader::writeread(int aNumWrites)
 //******************************************************************************
 //******************************************************************************
 
-void WriterReader::flush()
+void WriterReader::writeread2(int aNumWrites)
+{
+   LFBackoff tDelayA(gGSettings.mDelayA1,gGSettings.mDelayA2);
+
+   for (int i = 0; i < aNumWrites; i++)
+   {
+      // Write
+      if (my_randflag(0.5))
+      {
+         mMsg.mCode++;
+
+         mMarkerWrite.doStart();
+
+         int tIndex;
+         void* tBlock = gShare.mBlockQueue.startWrite(&tIndex);
+         if (tBlock)
+         {
+            Class1A* tObject = new(tBlock) Class1A;
+            tObject->mCode1 = mMsg.mInt;
+            gShare.mBlockQueue.finishWrite(tIndex);
+         }
+
+         mMarkerWrite.doStop();
+         tDelayA.delay();
+
+         if (tBlock)
+         {
+            mWriteCount++;
+            mWritePassCount++;
+            mWriteCheckSum += mMsg.mCode;
+         }
+         else
+         {
+            mWriteCount++;
+            mWriteFailCount++;
+         }
+      }
+      // Read
+      else
+      {
+         int tIndex;
+         IntMessage tMsg;
+
+         mMarkerRead.doStart();
+         Class1A* tObject = (Class1A*)gShare.mBlockQueue.startRead(&tIndex);
+         if (tObject)
+         {
+            tMsg.mInt = tObject->mCode1;
+            gShare.mBlockQueue.finishRead(tIndex);
+         }
+         mMarkerRead.doStop();
+         tDelayA.delay();
+
+         if (tObject)
+         {
+            mReadCount++;
+            mReadPassCount++;
+            mReadCheckSum += tMsg.mCode;
+         }
+         else
+         {
+            mReadCount++;
+            mReadFailCount++;
+         }
+         mMarkerRead.doStop();
+      }
+   }
+}
+   
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void WriterReader::writeread(int aNumWrites)
+{
+   switch (gShare.mTest)
+   {
+   case 1: writeread1 (aNumWrites); break;
+   case 2: writeread2 (aNumWrites); break;
+   }
+}
+   
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void WriterReader::flush1()
 {
    while(true)
    {
@@ -173,6 +260,39 @@ void WriterReader::flush()
       mReadCount++;
       mReadPassCount++;
       mReadCheckSum += tMsg.mCode;
+   }
+}
+   
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void WriterReader::flush2()
+{
+   int tIndex;
+   while(true)
+   {
+      IntMessage tMsg;
+      Class1A* tObject = (Class1A*)gShare.mBlockQueue.startRead(&tIndex);
+      if (tObject==0) break;
+      tMsg.mInt = tObject->mCode1;
+      mReadCount++;
+      mReadPassCount++;
+      mReadCheckSum += tMsg.mCode;
+   }
+}
+   
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void WriterReader::flush()
+{
+   switch (gShare.mTest)
+   {
+   case 1: flush1 (); break;
+   case 2: flush2 (); break;
    }
 }
    
