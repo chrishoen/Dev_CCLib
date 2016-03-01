@@ -67,7 +67,7 @@ void WriterReader::show()
 //******************************************************************************
 //******************************************************************************
 
-void WriterReader::startTrial()
+void WriterReader::startTrial1()
 {
    if (mIdent == 0)
    {
@@ -87,6 +87,50 @@ void WriterReader::startTrial()
    mMarkerRead.startTrial(gGSettings.mXLimit);
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void WriterReader::startTrial2()
+{
+   if (mIdent == 0)
+   {
+      int tListSize = gGSettings.mAllocate;
+      for (int i = 0; i < tListSize / 2; i++)
+      {
+         ++mCount &= 0xFFFF;
+
+         int tIndex;
+         void* tBlock = gShare.mBlockQueue.startWrite(&tIndex);
+         if (tBlock)
+         {
+            Class1A* tObject = new(tBlock) Class1A;
+            tObject->mCode1 = mCount;
+            gShare.mBlockQueue.finishWrite(tIndex);
+         }
+
+         mWriteCount++;
+         mWritePassCount++;
+         mWriteCheckSum += mCount;
+      }
+   }
+
+   mMarkerWrite.startTrial(gGSettings.mXLimit);
+   mMarkerRead.startTrial(gGSettings.mXLimit);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void WriterReader::startTrial()
+{
+   switch (gShare.mTest)
+   {
+   case 1: startTrial1 (); break;
+   case 2: startTrial2 (); break;
+   }
+}
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
