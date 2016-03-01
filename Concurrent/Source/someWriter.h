@@ -5,7 +5,6 @@
 ==============================================================================*/
 
 #include <stdio.h>
-#include "someMessage.h"
 #include "risTimeMarker.h"
 
 //******************************************************************************
@@ -45,7 +44,6 @@ public:
    // Members
 
    unsigned short mIdent;
-   IntMessage mMsg;
 
    unsigned long long mCount;
    unsigned long long mPassCount;

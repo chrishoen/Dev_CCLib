@@ -30,8 +30,6 @@ Writer::Writer()
 void Writer::initialize(unsigned aIdent)
 {
    mIdent = aIdent;
-   mMsg.mCode  = 0;
-   mMsg.mIdent = aIdent;
 
    mCount     = 0;
    mPassCount = 0;
@@ -54,11 +52,6 @@ void Writer::show()
 {
    Prn::print(0,"Writer.mIdent     %d",  mIdent);
    Prn::print(0,"Writer.mCount     %llu",mCount);
-   return;
-   Prn::print(0,"Writer.mPassCount %llu",mPassCount);
-   Prn::print(0,"Writer.mFailCount %llu",mFailCount);
-   Prn::print(0,"Writer.mCheckSum   %llu",mCheckSum);
-   Prn::print(0,"");
 }
   
 //******************************************************************************
@@ -72,10 +65,10 @@ void Writer::write1(int aNumWrites)
    for (int i = 0; i < aNumWrites; i++)
    {
       bool tPass;
-      mMsg.mCode++;
+      int tCount = mCount & 0xFFFF;
 
       mMarkerWrite.doStart();
-      tPass = LFIntQueue::tryWrite(mMsg.mInt);
+      tPass = LFIntQueue::tryWrite(tCount);
       mMarkerWrite.doStop();
       tDelayA.delay();
 
@@ -83,7 +76,7 @@ void Writer::write1(int aNumWrites)
       {
          mCount++;
          mPassCount++;
-         mCheckSum += mMsg.mCode;
+         mCheckSum += tCount;
       }
       else
       {
