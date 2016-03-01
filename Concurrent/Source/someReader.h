@@ -35,12 +35,14 @@ public:
    void startTrial();
    void finishTrial();
 
-   void read1 (int aNumReads);
-   void read2 (int aNumReads);
-   void read  (int aNumReads);
+   void readType1 (int aNumReads);
+   void readType2 (int aNumReads);
+   void readType3 (int aNumReads);
+   void read      (int aNumReads);
 
-   void flush1 ();
-   void flush2 ();
+   void flushType1 ();
+   void flushType2 ();
+   void flushType3 ();
    void flush  ();
 
    //---------------------------------------------------------------------------

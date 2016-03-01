@@ -57,8 +57,9 @@ void StatusThread::threadRunFunction()
          case 1:
          {
             int tQueueSize;
-            if (gShare.mTest==1) tQueueSize = LFIntQueue::size();
-            if (gShare.mTest==2) tQueueSize = gShare.mBlockQueue.size();
+            if (gShare.mType==1) tQueueSize = LFIntQueue::size();
+            if (gShare.mType==2) tQueueSize = gShare.mPointerQueue.size();
+            if (gShare.mType==3) tQueueSize = gShare.mBlockQueue.size();
             Prn::print(Prn::ThreadRun1, "%s$   %s   %s %8d",
                mProcString,
                my_stringLLU(tString1, gShare.mWriter[0].mCount),
@@ -69,8 +70,9 @@ void StatusThread::threadRunFunction()
          case 2:
          {
             int tQueueSize;
-            if (gShare.mTest==1) tQueueSize = LFIntQueue::size();
-            if (gShare.mTest==2) tQueueSize = gShare.mBlockQueue.size();
+            if (gShare.mType==1) tQueueSize = LFIntQueue::size();
+            if (gShare.mType==2) tQueueSize = gShare.mPointerQueue.size();
+            if (gShare.mType==3) tQueueSize = gShare.mBlockQueue.size();
             Prn::print(Prn::ThreadRun1, "%s$   %s   %s %8d",
                mProcString,
                my_stringLLU(tString1, gShare.mWriterReader[0].mWriteCount),
@@ -78,21 +80,12 @@ void StatusThread::threadRunFunction()
                tQueueSize);
          }
          break;
-         case 7:
+         case 3:
          {
             Prn::print(Prn::ThreadRun1, "%s$%d   %s",
                mProcString,
                gShare.mTest,
                my_stringLLU(tString1, gShare.mTester.mCount));
-         }
-         break;
-         case 8:
-         {
-            Prn::print(Prn::ThreadRun1, "%s$   %s   %s %8d",
-               mProcString,
-               my_stringLLU(tString1, gShare.mWriter[0].mCount),
-               my_stringLLU(tString2, gShare.mReader.mCount),
-               LFFreeList::listSize());
          }
          break;
       }

@@ -57,7 +57,79 @@ void Reader::show()
 //******************************************************************************
 //******************************************************************************
 
-void Reader::read1(int aNumReads)
+void Reader::readType1(int aNumReads)
+{
+   LFBackoff tDelayB(gGSettings.mDelayB1,gGSettings.mDelayB2);
+
+   for (int i = 0; i < aNumReads; i++)
+   {
+      bool tPass;
+      int tCount;
+
+      mMarkerRead.doStart();
+      tPass = LFIntQueue::tryRead(&tCount);
+      mMarkerRead.doStop();
+
+      tDelayB.delay();
+
+      if (tPass)
+      {
+         mCount++;
+         mPassCount++;
+         mCheckSum += tCount;
+      }
+      else
+      {
+         mCount++;
+         mFailCount++;
+      }
+      mMarkerRead.doStop();
+   }
+}
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void Reader::readType2(int aNumReads)
+{
+   LFBackoff tDelayB(gGSettings.mDelayB1,gGSettings.mDelayB2);
+
+   for (int i = 0; i < aNumReads; i++)
+   {
+      bool tPass;
+      int tCount;
+
+      mMarkerRead.doStart();
+      Class1A* tObject = (Class1A*)gShare.mPointerQueue.readPtr();
+      mMarkerRead.doStop();
+      tDelayB.delay();
+
+      tPass = tObject!=0;
+      if (tObject)
+      {
+         tCount = tObject->mCode1;
+         delete tObject;
+      }
+
+      if (tPass)
+      {
+         mCount++;
+         mPassCount++;
+         mCheckSum += tCount;
+      }
+      else
+      {
+         mCount++;
+         mFailCount++;
+      }
+      mMarkerRead.doStop();
+   }
+}
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void Reader::readType3(int aNumReads)
 {
    LFBackoff tDelayB(gGSettings.mDelayB1,gGSettings.mDelayB2);
 
@@ -67,27 +139,17 @@ void Reader::read1(int aNumReads)
       int tCount;
       int tIndex;
 
-      if (gShare.mTest == 1)
+      mMarkerRead.doStart();
+
+      Class1A* tObject = (Class1A*)gShare.mBlockQueue.startRead(&tIndex);
+      if (tObject)
       {
-         mMarkerRead.doStart();
-         tPass = LFIntQueue::tryRead(&tCount);
-         mMarkerRead.doStop();
+         tCount = tObject->mCode1;
+         gShare.mBlockQueue.finishRead(tIndex);
       }
 
-      if (gShare.mTest == 2)
-      {
-         mMarkerRead.doStart();
-
-         Class1A* tObject = (Class1A*)gShare.mBlockQueue.startRead(&tIndex);
-         if (tObject)
-         {
-            tCount = tObject->mCode1;
-            gShare.mBlockQueue.finishRead(tIndex);
-         }
-
-         mMarkerRead.doStop();
-         tPass = tObject!=0;
-      }
+      mMarkerRead.doStop();
+      tPass = tObject!=0;
 
       tDelayB.delay();
 
@@ -106,7 +168,11 @@ void Reader::read1(int aNumReads)
    }
 }
    
-void Reader::flush1()
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void Reader::flushType1()
 {
    while(true)
    {
@@ -118,18 +184,43 @@ void Reader::flush1()
    }
 }
    
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
+void Reader::flushType2()
+{
+   while(true)
+   {
+      Class1A* tObject = (Class1A*)gShare.mPointerQueue.readPtr();
+      if (!tObject) break;
 
-void Reader::read2(int aNumReads)
-{
+      int tCount = tObject->mCode1;
+      delete tObject;
+
+      mCount++;
+      mPassCount++;
+      mCheckSum += tCount;
+   }
 }
    
-void Reader::flush2()
+void Reader::flushType3()
 {
+   int tCount;
+   int tIndex;
+
+   while(true)
+   {
+
+      Class1A* tObject = (Class1A*)gShare.mBlockQueue.startRead(&tIndex);
+      if (!tObject) break;
+
+      tCount = tObject->mCode1;
+      gShare.mBlockQueue.finishRead(tIndex);
+
+      mCount++;
+      mPassCount++;
+      mCheckSum += tCount;
+   }
 }
    
+  
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -148,19 +239,21 @@ void Reader::finishTrial()
 
 void Reader::read(int aNumReads)
 {
-   switch (gShare.mMode)
+   switch (gShare.mType)
    {
-   case 1: read1(aNumReads); break;
-   case 2: read2(aNumReads); break;
+   case 1: readType1(aNumReads); break;
+   case 2: readType1(aNumReads); break;
+   case 3: readType3(aNumReads); break;
    }
 }
    
 void Reader::flush()
 {
-   switch (gShare.mMode)
+   switch (gShare.mType)
    {
-   case 1: flush1(); break;
-   case 2: flush2(); break;
+   case 1: flushType1(); break;
+   case 2: flushType2(); break;
+   case 3: flushType3(); break;
    }
 }
    

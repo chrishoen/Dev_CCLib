@@ -64,12 +64,6 @@
     <ClCompile Include="..\LockFree\Source\LFIntQueue.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\LockFree\Source\LFIntQueueMS.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\LockFree\Source\LFIntQueueMSCP.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="..\Containers\Source\ccLFBlockQueue.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -139,12 +133,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="..\LockFree\Source\LFIntQueue.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\LockFree\Source\LFIntQueueMS.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\LockFree\Source\LFIntQueueMSCP.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="..\Containers\Source\ccLFBlockQueue.h">

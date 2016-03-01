@@ -67,7 +67,7 @@ void WriterReader::show()
 //******************************************************************************
 //******************************************************************************
 
-void WriterReader::startTrial1()
+void WriterReader::startTrialType1()
 {
    if (mIdent == 0)
    {
@@ -91,7 +91,34 @@ void WriterReader::startTrial1()
 //******************************************************************************
 //******************************************************************************
 
-void WriterReader::startTrial2()
+void WriterReader::startTrialType2()
+{
+   if (mIdent == 0)
+   {
+      int tListSize = gGSettings.mAllocate;
+      for (int i = 0; i < tListSize / 2; i++)
+      {
+         ++mCount &= 0xFFFF;
+
+         Class1A* tObject = new Class1A;
+         tObject->mCode1 = mCount;
+         gShare.mPointerQueue.writePtr(tObject);
+
+         mWriteCount++;
+         mWritePassCount++;
+         mWriteCheckSum += mCount;
+      }
+   }
+
+   mMarkerWrite.startTrial(gGSettings.mXLimit);
+   mMarkerRead.startTrial(gGSettings.mXLimit);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void WriterReader::startTrialType3()
 {
    if (mIdent == 0)
    {
@@ -125,10 +152,11 @@ void WriterReader::startTrial2()
 
 void WriterReader::startTrial()
 {
-   switch (gShare.mTest)
+   switch (gShare.mType)
    {
-   case 1: startTrial1 (); break;
-   case 2: startTrial2 (); break;
+   case 1: startTrialType1 (); break;
+   case 2: startTrialType2 (); break;
+   case 3: startTrialType3 (); break;
    }
 }
 //******************************************************************************
@@ -148,7 +176,7 @@ void WriterReader::finishTrial()
 //******************************************************************************
 //******************************************************************************
 
-void WriterReader::writeread1(int aNumWrites)
+void WriterReader::writereadType1(int aNumWrites)
 {
    LFBackoff tDelayA(gGSettings.mDelayA1,gGSettings.mDelayA2);
 
@@ -198,7 +226,6 @@ void WriterReader::writeread1(int aNumWrites)
             mReadCount++;
             mReadFailCount++;
          }
-         mMarkerRead.doStop();
       }
    }
 }
@@ -207,7 +234,75 @@ void WriterReader::writeread1(int aNumWrites)
 //******************************************************************************
 //******************************************************************************
 
-void WriterReader::writeread2(int aNumWrites)
+void WriterReader::writereadType2(int aNumWrites)
+{
+   LFBackoff tDelayA(gGSettings.mDelayA1,gGSettings.mDelayA2);
+
+   for (int i = 0; i < aNumWrites; i++)
+   {
+      // Write
+      if (my_randflag(0.5))
+      {
+         ++mCount &= 0xFFFF;
+
+         Class1A* tObject = new Class1A;
+         tObject->mCode1 = mCount;
+
+         mMarkerWrite.doStart();
+         bool tPass = gShare.mPointerQueue.writePtr(tObject);
+         mMarkerWrite.doStop();
+         tDelayA.delay();
+
+         if (tPass)
+         {
+            mWriteCount++;
+            mWritePassCount++;
+            mWriteCheckSum += mCount;
+         }
+         else
+         {
+            delete tObject;
+            mWriteCount++;
+            mWriteFailCount++;
+         }
+      }
+      // Read
+      else
+      {
+         bool tPass;
+         int tCount;
+
+         mMarkerRead.doStart();
+         Class1A* tObject = (Class1A*)gShare.mPointerQueue.readPtr();
+         mMarkerRead.doStop();
+         tDelayA.delay();
+
+         tPass = tObject!=0;
+         if (tObject)
+         {
+            tCount = tObject->mCode1;
+            delete tObject;
+         }
+
+         if (tPass)
+         {
+            mReadCount++;
+            mReadPassCount++;
+            mReadCheckSum += tCount;
+         }
+         else
+         {
+            mReadCount++;
+            mReadFailCount++;
+         }
+      }
+   }
+}
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void WriterReader::writereadType3(int aNumWrites)
 {
    LFBackoff tDelayA(gGSettings.mDelayA1,gGSettings.mDelayA2);
 
@@ -271,7 +366,6 @@ void WriterReader::writeread2(int aNumWrites)
             mReadCount++;
             mReadFailCount++;
          }
-         mMarkerRead.doStop();
       }
    }
 }
@@ -282,10 +376,10 @@ void WriterReader::writeread2(int aNumWrites)
 
 void WriterReader::writeread(int aNumWrites)
 {
-   switch (gShare.mTest)
+   switch (gShare.mType)
    {
-   case 1: writeread1 (aNumWrites); break;
-   case 2: writeread2 (aNumWrites); break;
+   case 1: writereadType1 (aNumWrites); break;
+   case 2: writereadType2 (aNumWrites); break;
    }
 }
    
@@ -293,7 +387,7 @@ void WriterReader::writeread(int aNumWrites)
 //******************************************************************************
 //******************************************************************************
 
-void WriterReader::flush1()
+void WriterReader::flushType1()
 {
    while(true)
    {
@@ -310,7 +404,26 @@ void WriterReader::flush1()
 //******************************************************************************
 //******************************************************************************
 
-void WriterReader::flush2()
+void WriterReader::flushType2()
+{
+   while(true)
+   {
+      int tCount;
+      Class1A* tObject = (Class1A*)gShare.mPointerQueue.readPtr();
+      if (tObject==0) break;
+      tCount = tObject->mCode1;
+      delete tObject;
+      mReadCount++;
+      mReadPassCount++;
+      mReadCheckSum += tCount;
+   }
+}
+   
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void WriterReader::flushType3()
 {
    int tIndex;
    while(true)
@@ -331,10 +444,11 @@ void WriterReader::flush2()
 
 void WriterReader::flush()
 {
-   switch (gShare.mTest)
+   switch (gShare.mType)
    {
-   case 1: flush1 (); break;
-   case 2: flush2 (); break;
+   case 1: flushType1 (); break;
+   case 2: flushType2 (); break;
+   case 3: flushType3 (); break;
    }
 }
    

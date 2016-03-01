@@ -33,18 +33,21 @@ public:
    void finalize();
    void show();
 
-   void startTrial();
-   void startTrial1();
-   void startTrial2();
+   void startTrialType1();
+   void startTrialType2();
+   void startTrialType3();
+   void startTrial     ();
    void finishTrial();
 
-   void writeread  (int aNumWrites);
-   void writeread1 (int aNumWrites);
-   void writeread2 (int aNumWrites);
+   void writereadType1 (int aNumWrites);
+   void writereadType2 (int aNumWrites);
+   void writereadType3 (int aNumWrites);
+   void writeread      (int aNumWrites);
 
-   void flush  ();
-   void flush1 ();
-   void flush2 ();
+   void flushType1 ();
+   void flushType2 ();
+   void flushType3 ();
+   void flush      ();
 
    //---------------------------------------------------------------------------
    // Members

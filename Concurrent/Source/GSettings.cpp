@@ -54,9 +54,9 @@ GSettings::GSettings()
 void GSettings::show()
 {
    printf("GSettings   Mode          %11d\n",    mMode);
-   printf("GSettings   NumWriters    %11d\n",    mNumWriters);
    printf("GSettings   Type          %11d\n",    mType);
    printf("GSettings   Test          %11d\n",    mTest);
+   printf("GSettings   NumWriters    %11d\n",    mNumWriters);
    printf("GSettings   Allocate      %11d\n",    mAllocate);
    printf("GSettings   Terminate     %11d\n",    mTerminate);
    printf("GSettings   WriteLower    %11d\n",    mWriteLower);

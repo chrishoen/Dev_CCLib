@@ -12,6 +12,7 @@
 #include "someReader.h"
 #include "someWriterReader.h"
 #include "someTester.h"
+#include "ccLFPointerQueue.h"
 #include "ccLFBlockQueue.h"
 
 namespace Some
@@ -29,12 +30,11 @@ public:
 
    void update1();
    void update2();
-   void update7();
+   void update3();
    void update();
 
-   void show1();
-   void show7();
-   void show8();
+   void show12();
+   void show3();
    void show();
 
    int mMode;
@@ -72,6 +72,7 @@ public:
    double              mTesterMeanTime1;
    double              mTesterMeanTime2;
 
+   CC::LFPointerQueue  mPointerQueue;
    CC::LFBlockQueue    mBlockQueue;
 
 

@@ -33,22 +33,15 @@ void Share::initialize()
    mTest = gGSettings.mTest;
    mTerminateFlag = false;
 
-   LFIntQueue::setType(mType);
-
    switch (mMode)
    {
    case 1:
    case 2:
-      if (mTest==1) LFIntQueue::initialize(gGSettings.mAllocate);
-      if (mTest==2) mBlockQueue.initialize(gGSettings.mAllocate,sizeof(Class1A));
+      if (mType==1) LFIntQueue::initialize(gGSettings.mAllocate);
+      if (mType==2) mPointerQueue.initialize(gGSettings.mAllocate);
+      if (mType==3) mBlockQueue.initialize(gGSettings.mAllocate,sizeof(Class1A));
       break;
-   case 7:
-      break;
-   case 8:
-      LFFreeList::initialize(gGSettings.mAllocate);
-      LFFreeList::setBackoff(
-         gGSettings.mBackList1,
-         gGSettings.mBackList2);
+   case 3:
       break;
    }
 
@@ -140,7 +133,7 @@ void Share::update2()
 //******************************************************************************
 //******************************************************************************
 
-void Share::update7()
+void Share::update3()
 {
    mTesterCount     = mTester.mCount;
    mTesterMeanTime1  = mTester.mMeanTimeTest1;
@@ -157,8 +150,7 @@ void Share::update()
    {
    case 1: update1 (); break;
    case 2: update2 (); break;
-   case 7: update7 (); break;
-   case 8: update1 (); break;
+   case 7: update3 (); break;
    }
 }
    
@@ -166,7 +158,7 @@ void Share::update()
 //******************************************************************************
 //******************************************************************************
 
-void Share::show1()
+void Share::show12()
 {
    char tString[40];
 
@@ -214,7 +206,7 @@ void Share::show1()
 //******************************************************************************
 //******************************************************************************
 
-void Share::show7()
+void Share::show3()
 {
    char tString[40];
 
@@ -227,41 +219,6 @@ void Share::show7()
    Prn::print(0, "mMeanTimeTest1     %16.5f", mTesterMeanTime1);
    Prn::print(0, "mMeanTimeTest2     %16.5f", mTesterMeanTime2);
 }
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void Share::show8()
-{
-   char tString[40];
-
-   Prn::print(0, "");
-   Prn::print(0, "");
-   Prn::print(0, "");
-   Prn::print(0, "TOTAL");
-   Prn::print(0, "");
-   Prn::print(0, "Writer.mCount      %16s", my_stringLLU(tString, mWriterCount));
-   Prn::print(0, "Writer.mPassCount  %16s", my_stringLLU(tString, mWriterPassCount));
-   Prn::print(0, "Writer.mFailCount  %16s", my_stringLLU(tString, mWriterFailCount));
-   Prn::print(0, "");
-   Prn::print(0, "Reader.mCount      %16s", my_stringLLU(tString, mReaderCount));
-   Prn::print(0, "Reader.mPassCount  %16s", my_stringLLU(tString, mReaderPassCount));
-   Prn::print(0, "Reader.mFailCount  %16s", my_stringLLU(tString, mReaderFailCount));
-   Prn::print(0, "");
-
-   LFFreeList::show();
-
-   Prn::print(0, "");
-   Prn::print(0, "mMeanTimePop       %16.5f", mWriterMeanTimePop);
-   Prn::print(0, "mMeanTimePush      %16.5f", mWriterMeanTimePush);
-
-   double tPopRetry = (double)LFFreeList::popRetry() / (double)mWriterCount;
-   double tPushRetry = (double)LFFreeList::pushRetry() / (double)mWriterPassCount;
-
-   Prn::print(0, "");
-   Prn::print(0, "popRetry           %16.5f", tPopRetry);
-   Prn::print(0, "pushRetry          %16.5f", tPushRetry);
-}
   
 //******************************************************************************
 //******************************************************************************
@@ -271,10 +228,9 @@ void Share::show()
 {
    switch (gShare.mMode)
    {
-   case 1: show1 (); break;
-   case 2: show1 (); break;
-   case 7: show7 (); break;
-   case 8: show8 (); break;
+   case 1: show12 (); break;
+   case 2: show12 (); break;
+   case 3: show3  (); break;
    }
 }
    

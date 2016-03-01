@@ -84,32 +84,13 @@ void Threads::start2()
 //******************************************************************************
 //******************************************************************************
 
-void Threads::start7()
+void Threads::start3()
 {
    Prn::print(0,"Threads::start7*******************************");
    reset();
 
    mTesterThread = new TesterThread;
    mTesterThread->launchThread();
-
-   mStatusThread = new StatusThread;
-   mStatusThread->launchThread();
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void Threads::start8()
-{
-   Prn::print(0,"Threads::start8*******************************");
-   reset();
-
-   for (int i = 0; i < mNumWriters; i++)
-   {
-      mWriterThread[i] = new WriterThread(i);
-      mWriterThread[i]->launchThread();
-   }
 
    mStatusThread = new StatusThread;
    mStatusThread->launchThread();
@@ -184,9 +165,9 @@ void Threads::stop2()
 //******************************************************************************
 //******************************************************************************
 
-void Threads::stop7()
+void Threads::stop3()
 {
-   Prn::print(0,"Threads::stopping7****************************");
+   Prn::print(0,"Threads::stopping3****************************");
    Prn::print(0,"");
 
    if (mStatusThread)
@@ -203,36 +184,7 @@ void Threads::stop7()
       mTesterThread = 0;
    }
 
-   Prn::print(0,"Threads::stopped7*****************************");
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void Threads::stop8()
-{
-   Prn::print(0,"Threads::stopping8****************************");
-   Prn::print(0,"");
-
-   if (mStatusThread)
-   {
-      mStatusThread->shutdownThread();
-      delete mStatusThread;
-      mStatusThread = 0;
-   }
-
-   for (int i = 0; i < mNumWriters; i++)
-   {
-      if (mWriterThread[i])
-      {
-         mWriterThread[i]->shutdownThread();
-         delete mWriterThread[i];
-         mWriterThread[i] = 0;
-      }
-   }
-
-   Prn::print(0,"Threads::stopped8*****************************");
+   Prn::print(0,"Threads::stopped3*****************************");
 }
 
 //******************************************************************************
@@ -245,8 +197,7 @@ void Threads::start()
    {
    case 1: start1 (); break;
    case 2: start2 (); break;
-   case 7: start7 (); break;
-   case 8: start8 (); break;
+   case 3: start3 (); break;
    }
 }
    
@@ -260,8 +211,7 @@ void Threads::stop()
    {
    case 1: stop1 (); break;
    case 2: stop2 (); break;
-   case 7: stop7 (); break;
-   case 8: stop8 (); break;
+   case 3: stop3 (); break;
    }
 }
    

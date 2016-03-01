@@ -35,9 +35,9 @@ public:
    void startTrial();
    void finishTrial();
 
-   void write1 (int aNumWrites);
-   void write2 (int aNumWrites);
-   void write8 (int aNumWrites);
+   void writeType1 (int aNumWrites);
+   void writeType2 (int aNumWrites);
+   void writeType3 (int aNumWrites);
    void write  (int aNumWrites);
 
    //---------------------------------------------------------------------------

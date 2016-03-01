@@ -59,7 +59,7 @@ void Writer::show()
 //******************************************************************************
 //******************************************************************************
 
-void Writer::write1(int aNumWrites)
+void Writer::writeType1(int aNumWrites)
 {
    LFBackoff tDelayA(gGSettings.mDelayA1,gGSettings.mDelayA2);
 
@@ -68,31 +68,10 @@ void Writer::write1(int aNumWrites)
       bool tPass;
       int tCount = mCount & 0xFFFF;
 
-      if (gShare.mTest == 1)
-      {
-         mMarkerWrite.doStart();
-         tPass = LFIntQueue::tryWrite(tCount);
-         mMarkerWrite.doStop();
-         tDelayA.delay();
-      }
-
-      if (gShare.mTest == 2)
-      {
-         mMarkerWrite.doStart();
-
-         int tIndex;
-         void* tBlock = gShare.mBlockQueue.startWrite(&tIndex);
-         if (tBlock)
-         {
-            Class1A* tObject = new(tBlock) Class1A;
-            tObject->mCode1 = tCount;
-            gShare.mBlockQueue.finishWrite(tIndex);
-         }
-
-         mMarkerWrite.doStop();
-         tDelayA.delay();
-         tPass = tBlock!=0;
-      }
+      mMarkerWrite.doStart();
+      tPass = LFIntQueue::tryWrite(tCount);
+      mMarkerWrite.doStop();
+      tDelayA.delay();
 
       if (tPass)
       {
@@ -112,65 +91,80 @@ void Writer::write1(int aNumWrites)
 //******************************************************************************
 //******************************************************************************
 
-void Writer::write2(int aNumWrites)
-{
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void Writer::write8(int aNumWrites)
+void Writer::writeType2(int aNumWrites)
 {
    LFBackoff tDelayA(gGSettings.mDelayA1,gGSettings.mDelayA2);
-   LFBackoff tDelayB(gGSettings.mDelayB1,gGSettings.mDelayB2);
 
-   // Free List pop,push
-   if (gShare.mTest == 1)
+   for (int i = 0; i < aNumWrites; i++)
    {
-      for (int i = 0; i < aNumWrites; i++)
+      bool tPass;
+      int tCount = mCount & 0xFFFF;
+
+      Class1A* tObject = new Class1A;
+      tObject->mCode1 = tCount;
+
+      mMarkerWrite.doStart();
+      tPass = gShare.mPointerQueue.writePtr(tObject);
+      mMarkerWrite.doStop();
+      tDelayA.delay();
+
+      if (tPass)
       {
-         int tNode;
-         bool tPass;
-
-         mMarkerPop.doStart();
-         tPass = LFFreeList::listPop(&tNode);
-         mMarkerPop.doStop();
-         tDelayA.delay();
-
-         if (tPass)
-         {
-            mMarkerPush.doStart();
-            LFFreeList::listPush(tNode);
-            mMarkerPush.doStop();
-            tDelayB.delay();
-
-            mCount++;
-            mPassCount++;
-         }
-         else
-         {
-            mCount++;
-            mFailCount++;
-         }
-      }
-   }
-   // Free List stub
-   else if (gShare.mTest == 2)
-   {
-      // Free List pop,push
-      for (int i = 0; i < aNumWrites; i++)
-      {
-         mMarkerPop.doStart();
-         LFFreeList::listStub();
-         mMarkerPop.doStop();
-         tDelayA.delay();
-
          mCount++;
          mPassCount++;
+         mCheckSum += tCount;
+      }
+      else
+      {
+         delete tObject;
+         mCount++;
+         mFailCount++;
       }
    }
 }
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void Writer::writeType3(int aNumWrites)
+{
+   LFBackoff tDelayA(gGSettings.mDelayA1,gGSettings.mDelayA2);
+
+   for (int i = 0; i < aNumWrites; i++)
+   {
+      bool tPass;
+      int tCount = mCount & 0xFFFF;
+
+      mMarkerWrite.doStart();
+
+      int tIndex;
+      void* tBlock = gShare.mBlockQueue.startWrite(&tIndex);
+      if (tBlock)
+      {
+         Class1A* tObject = new(tBlock) Class1A;
+         tObject->mCode1 = tCount;
+         gShare.mBlockQueue.finishWrite(tIndex);
+      }
+
+      mMarkerWrite.doStop();
+      tDelayA.delay();
+      tPass = tBlock!=0;
+
+      if (tPass)
+      {
+         mCount++;
+         mPassCount++;
+         mCheckSum += tCount;
+      }
+      else
+      {
+         mCount++;
+         mFailCount++;
+      }
+   }
+}
+
 
 //******************************************************************************
 //******************************************************************************
@@ -196,11 +190,11 @@ void Writer::finishTrial()
 
 void Writer::write(int aNumWrites)
 {
-   switch (gShare.mMode)
+   switch (gShare.mType)
    {
-   case 1: write1 (aNumWrites); break;
-   case 2: write2 (aNumWrites); break;
-   case 8: write8 (aNumWrites); break;
+   case 1: writeType1 (aNumWrites); break;
+   case 2: writeType2 (aNumWrites); break;
+   case 8: writeType3 (aNumWrites); break;
    }
 }
    
