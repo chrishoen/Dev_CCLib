@@ -166,6 +166,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\ccLFBlockQueue.cpp" />
     <ClCompile Include="Source\ccLFBounded.cpp" />
     <ClCompile Include="Source\ccTokenStack.cpp" />
     <ClCompile Include="Source\CmdLineExec.cpp" />
@@ -182,6 +183,7 @@
     <ClCompile Include="Source\SListQueue.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\ccLFBlockQueue.h" />
     <ClInclude Include="Source\ccLFBounded.h" />
     <ClInclude Include="Source\ccTokenStack.h" />
     <ClInclude Include="Source\CmdLineExec.h" />

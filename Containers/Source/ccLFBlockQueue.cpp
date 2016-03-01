@@ -14,6 +14,8 @@ Description:
 
 #include "ccLFBlockQueue.h"
 
+using namespace std;
+
 namespace CC
 {
    //******************************************************************************
@@ -24,29 +26,68 @@ namespace CC
    {
       // All null
       mMemory = 0;
+      mQueueNext = 0;
+      mListNext = 0;
       mAllocate = 0;
-      mParms.mPacked = 0;
+      mQueueAllocate = 0;
+      mListAllocate = 0;
    }
 
    LFBlockQueue::~LFBlockQueue()
    {
-      // Deallocate the array
-      if (mMemory) delete mMemory;
+      finalize();
    }
 
-   //******************************************************************************
-   //******************************************************************************
-   //******************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Initialize
 
    void LFBlockQueue::initialize(int aAllocate,int aBlockSize)
    {
-      // Initialize variables
-      mAllocate = aAllocate;
-      mBlockSize = aBlockSize;
-      mParms.mPacked = 0;
+      finalize();
 
-      // Allocate memory for the array
-      mMemory = malloc(mAllocate*mBlockSize);
+      mBlockSize     = aBlockSize;
+      mAllocate      = aAllocate;
+      mQueueAllocate = aAllocate + 1;
+      mListAllocate  = aAllocate + 1;
+
+      mMemory = malloc(mListAllocate*mBlockSize);
+      mQueueNext = new AtomicLFIndex[mListAllocate];
+      mListNext = new AtomicLFIndex[mListAllocate];
+
+      for (int i = 0; i < mListAllocate-1; i++)
+      {
+         mQueueNext[i].store(LFIndex(cInvalid,0));
+         mListNext[i].store(LFIndex(i+1,0));
+      }
+
+      mQueueNext[mListAllocate-1].store(LFIndex(cInvalid,0));
+      mListNext[mListAllocate-1].store(LFIndex(cInvalid,0));
+
+      mListHead.store(LFIndex(0,0));
+      mListSize = mListAllocate;
+
+      int tIndex;
+      listPop(&tIndex);
+      mQueueHead.store(LFIndex(tIndex,0));
+      mQueueTail = mQueueHead.load();
+
+   }
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Finalize
+
+   void LFBlockQueue::finalize()
+   {
+      if (mMemory)    free(mMemory);
+      if (mQueueNext) free(mQueueNext);
+      if (mListNext)  free(mListNext);
+      mMemory    = 0;
+      mQueueNext = 0;
+      mListNext  = 0;
    }
 
    //******************************************************************************
@@ -59,119 +100,178 @@ namespace CC
       return (void*)((char*)mMemory + mBlockSize*aIndex);
    }
 
-   //******************************************************************************
-   //******************************************************************************
-   //******************************************************************************
-   // This is called to start a write operation. If the queue is not full then
-   // it succeeds. It updates the variable pointed by the input pointer with the 
-   // WriteIndex that is to be used to access queue memory for the write, it
-   // increments ReadAvailable and returns true. If it fails because the queue is 
-   // full then it returns false.
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Size
 
-   bool LFBlockQueue::tryStartWrite(int* aWriteIndex)
+   int LFBlockQueue::size()
+   { 
+      return mListAllocate - mListSize.load(memory_order_relaxed);
+   }
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // This attempts to write a value to the queue. If the queue is not full
+   // then it succeeds. It attempts to pop a node from the free list. If
+   // the free list is empty then the queue is full and it exits. The value
+   // is to be written is stored in the new node. The new node is then attached
+   // to the queue tail node and the tail index is updated.
+
+   void* LFBlockQueue::startWrite(int* aNodeIndex)
    {
-      // Locals
-      LFQueueParms tCompare, tExchange, tOriginal;
-      int tWriteIndex;
+      // Try to allocate a node from the free list.
+      // Exit if it is empty.
+      LFIndex tNode;
+      if (!listPop(&tNode.mIndex)) return 0;
 
+      // Initialize the node.
+      mQueueNext[tNode.mIndex].store(LFIndex(cInvalid, 0), memory_order_relaxed);
+
+      // Return a pointer to the node block.
+      *aNodeIndex = tNode.mIndex;
+      return element(tNode.mIndex);
+   }
+
+   void LFBlockQueue::finishWrite(int aNodeIndex)
+   {
+      // Try to allocate a node from the free list.
+      // Exit if it is empty.
+      LFIndex tNode;
+      tNode.mIndex = aNodeIndex;
+
+      // Attach the node to the queue tail.
+      LFIndex tTail,tNext;
+
+      int tLoopCount=0;
       while (true)
       {
-         // Get the current value, it will be used in the compare exchange.
-         tCompare = mParms;
-         // Exit if the queue is full
-         if (tCompare.Parms.mReadAvailable==mAllocate) return false;
+         tTail = mQueueTail.load(memory_order_relaxed);
+         tNext = mQueueNext[tTail.mIndex].load(memory_order_acquire);
 
-         // Update queue parameters for the exchange variable
-         tExchange = tCompare;
-         tExchange.Parms.mReadAvailable++;
-         tWriteIndex = tExchange.Parms.mWriteIndex;
-         if (++tExchange.Parms.mWriteIndex == mAllocate) tExchange.Parms.mWriteIndex=0;
+         if (tTail == mQueueTail.load(memory_order_relaxed))
+         {
+            if (tNext.mIndex == cInvalid)
+            {
+               if (mQueueNext[tTail.mIndex].compare_exchange_strong(tNext, LFIndex(tNode.mIndex, tNext.mCount+1),memory_order_release,memory_order_relaxed)) break;
+            }
+            else
+            {
+               mQueueTail.compare_exchange_weak(tTail, LFIndex(tNext.mIndex, tTail.mCount+1),memory_order_release,memory_order_relaxed);
+            }
+         }
 
-         // This call atomically reads the value and compares it to what was
-         // previously read at the first line of this loop. If they are the
-         // same then this was not concurrently preempted and so the original
-         // value is replaced with the exchange value. It returns the
-         // original value from before the compare.
-         tOriginal.mPacked = InterlockedCompareExchange((PLONG)(&mParms.mPacked), tExchange.mPacked, tCompare.mPacked);
-
-         // If the original and the compare values are the same then there
-         // was no preemption and the exchange was a success, so exit the 
-         // loop. If they were not the same then retry.
-         if (tOriginal.mPacked == tCompare.mPacked) break;
+         if (++tLoopCount==10000) throw 101;
       }
 
-      // Store results
-      *aWriteIndex = tWriteIndex;
+      mQueueTail.compare_exchange_strong(tTail, LFIndex(tNode.mIndex, tTail.mCount+1),memory_order_release,memory_order_relaxed);
+   }
+
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+   // This attempts to read a value from the queue. If the queue is not empty
+   // then it succeeds. The next node in the queue to be read is the one 
+   // immedialtely after the head node. It extracts the read value from the read
+   // node, pushes the previous head node back onto the free list and updates the
+   // head index.
+
+   void* LFBlockQueue::startRead(int* aNodeIndex)
+   {
+      void* tBlockPtr = 0;
+      LFIndex tHead, tTail, tNext;
+
+      int tLoopCount=0;
+      while (true)
+      {
+         tHead = mQueueHead.load(memory_order_relaxed);
+         tTail = mQueueTail.load(memory_order_acquire);
+         tNext = mQueueNext[tHead.mIndex].load(memory_order_relaxed);
+
+         if (tHead == mQueueHead.load(memory_order_acquire))
+         {
+            if (tHead.mIndex == tTail.mIndex)
+            {
+               if (tNext.mIndex == cInvalid) return 0;
+               mQueueTail.compare_exchange_strong(tTail, LFIndex(tNext.mIndex, tTail.mCount+1),memory_order_release,memory_order_relaxed);
+            }
+            else
+            {
+               tBlockPtr = element(tNext.mIndex);
+               if (mQueueHead.compare_exchange_strong(tHead, LFIndex(tNext.mIndex, tHead.mCount+1),memory_order_acquire,memory_order_relaxed))break;
+            }
+         }
+
+         if (++tLoopCount==10000) throw 102;
+      }
+
+      *aNodeIndex = tHead.mIndex;
+
+      // Done.
+      return tBlockPtr;
+   }
+
+   void LFBlockQueue::finishRead(int aNodeIndex)
+   {
+      listPush(aNodeIndex);
+   }
+
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+   // This detaches the head node.
+
+   bool LFBlockQueue::listPop(int* aNode)
+   {
+      // Store the head node in a temp.
+      // This is the node that will be detached.
+      LFIndex tHead = mListHead.load(memory_order_relaxed);
+
+      int tLoopCount=0;
+      while (true)
+      {
+         // Exit if the list is empty.
+         if (tHead.mIndex == cInvalid) return false;
+
+         // Set the head node to be the node that is after the head node.
+         if (mListHead.compare_exchange_weak(tHead, LFIndex(mListNext[tHead.mIndex].load(memory_order_relaxed).mIndex,tHead.mCount+1),memory_order_acquire,memory_order_relaxed)) break;
+
+         if (++tLoopCount==10000) throw 103;
+      }
+
+      // Return the detached original head node.
+      *aNode = tHead.mIndex;
+
+      // Done.
+      mListSize.fetch_sub(1,memory_order_relaxed);
       return true;
    }
 
-   //******************************************************************************
-   //******************************************************************************
-   //******************************************************************************
-   // This is a place holder.
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Insert a node into the list before the list head node.
 
-   void LFBlockQueue::finishWrite()
+   bool LFBlockQueue::listPush(int aNode)
    {
-   }
+      // Store the head node in a temp.
+      LFIndex tHead = mListHead.load(memory_order_relaxed);
 
-   //******************************************************************************
-   //******************************************************************************
-   //******************************************************************************
-   // This is called to start a read operation. If the queue is not empty then it 
-   // succeeds, it  updates the variable pointed by the input pointer with the 
-   // ReadIndex that is to be used to access queue memory for the read and returns 
-   // true. If it fails because the queue is empty then it returns false.
-
-   bool LFBlockQueue::tryStartRead(int* aReadIndex)
-   {
-      // Store the current parms in a temp. This doesn't need to be atomic
-      // because it is assumed to run on a 32 bit architecture.
-      LFQueueParms tParms;
-      tParms.mPacked = mParms.mPacked;
-
-      // Exit if the queue is empty.
-      if (tParms.Parms.mReadAvailable == 0) return false;
-
-      // Update the read index
-      int tReadIndex = tParms.Parms.mWriteIndex - tParms.Parms.mReadAvailable;
-      if (tReadIndex < 0) tReadIndex = tReadIndex + mAllocate;
-
-      // Store result
-      *aReadIndex = tReadIndex;
-      return true;
-   }
-
-   //******************************************************************************
-   //******************************************************************************
-   //******************************************************************************
-   // This is called to finish a read operation. It decrements ReadAvailable.
-
-   void LFBlockQueue::finishRead()
-   {
-      // Locals
-      LFQueueParms tCompare, tExchange, tOriginal;
-
+      int tLoopCount=0;
       while (true)
       {
-         // Get the current value, it will be used in the compare exchange.
-         tCompare = mParms;
+         // Attach the head node to the pushed node.
+         mListNext[aNode].store(tHead,memory_order_relaxed);
 
-         // Update queue parameters for the exchange variable
-         tExchange = tCompare;
-         tExchange.Parms.mReadAvailable--;
-
-         // This call atomically reads the value and compares it to what was
-         // previously read at the first line of this loop. If they are the
-         // same then this was not concurrently preempted and so the original
-         // value is replaced with the exchange value. It returns the
-         // original value from before the compare.
-         tOriginal.mPacked = InterlockedCompareExchange((PLONG)(&mParms.mPacked), tExchange.mPacked, tCompare.mPacked);
-
-         // If the original and the compare values are the same then there
-         // was no preemption and the exchange was a success, so exit the 
-         // loop. If they were not the same then retry.
-         if (tOriginal.mPacked == tCompare.mPacked) break;
+         // The pushed node is the new head node.
+         if ((*mListHeadIndexPtr).compare_exchange_weak(tHead.mIndex, aNode,memory_order_release,memory_order_relaxed)) break;
+         if (++tLoopCount == 10000) throw 103;
       }
+
+      // Done.
+      mListSize.fetch_add(1,memory_order_relaxed);
+      return true;
    }
 
 }//namespace

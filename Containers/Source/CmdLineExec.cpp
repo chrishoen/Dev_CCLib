@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <new>
 
 #include "prnPrint.h"
 #include "someClass1.h"
@@ -15,7 +16,7 @@ using namespace Some;
 CmdLineExec::CmdLineExec()
 {
    mCount=0;
-   mQueue.initialize(4);
+   mPointerQueue.initialize(4);
 }
 
 //******************************************************************************
@@ -23,18 +24,21 @@ CmdLineExec::CmdLineExec()
 void CmdLineExec::reset()
 {
    mCount=0;
-   mQueue.initialize(4);
+   mPointerQueue.initialize(4);
+   mBlockQueue.initialize(4,sizeof(Class1A));
 }
 
 //******************************************************************************
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
    if(aCmd->isCmd("RESET"  ))  reset();
-   if(aCmd->isCmd("GO1"    ))  executeGo1  (aCmd);
-   if(aCmd->isCmd("GO2"    ))  executeGo2  (aCmd);
-   if(aCmd->isCmd("GO3"    ))  executeGo3  (aCmd);
-   if(aCmd->isCmd("W"      ))  executeWrite(aCmd);
-   if(aCmd->isCmd("R"      ))  executeRead(aCmd);
+   if(aCmd->isCmd("GO1"    ))  executeGo1    (aCmd);
+   if(aCmd->isCmd("GO2"    ))  executeGo2    (aCmd);
+   if(aCmd->isCmd("GO3"    ))  executeGo3    (aCmd);
+   if(aCmd->isCmd("WP"     ))  executeWriteP (aCmd);
+   if(aCmd->isCmd("RP"     ))  executeReadP  (aCmd);
+   if(aCmd->isCmd("W"      ))  executeWriteB (aCmd);
+   if(aCmd->isCmd("R"      ))  executeReadB  (aCmd);
 }
 
 //******************************************************************************
@@ -69,14 +73,16 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
-void CmdLineExec::executeWrite(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeWriteP(Ris::CmdLineCmd* aCmd)
 {
    mCount++;
    Class1A* tObject = new Class1A;
    tObject->mCode1 = mCount;
 
-   bool tStatus = mQueue.writePtr(tObject);
+   bool tStatus = mPointerQueue.writePtr(tObject);
    if (tStatus)
    {
       Prn::print(0, "WRITE PASS      $$ %d", mCount);
@@ -90,14 +96,55 @@ void CmdLineExec::executeWrite(Ris::CmdLineCmd* aCmd)
 
 //******************************************************************************
 
-void CmdLineExec::executeRead(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeReadP(Ris::CmdLineCmd* aCmd)
 {
-   Class1A* tObject = (Class1A*)mQueue.readPtr();
+   Class1A* tObject = (Class1A*)mPointerQueue.readPtr();
 
    if (tObject)
    {
       Prn::print(0, "READ  PASS      $$ %d", tObject->mCode1);
       delete tObject;
+   }
+   else
+   {
+      Prn::print(0, "READ  FAIL");
+   }
+}
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeWriteB(Ris::CmdLineCmd* aCmd)
+{
+   mCount++;
+
+   int tIndex;
+   void* tBlock = mBlockQueue.startWrite(&tIndex);
+   if (tBlock)
+   {
+      Class1A* tObject = new(tBlock) Class1A;
+      tObject->mCode1 = mCount;
+      mBlockQueue.finishWrite(tIndex);
+
+      Prn::print(0, "WRITE PASS      $$ %d", mCount);
+   }
+   else
+   {
+      Prn::print(0, "WRITE FAIL");
+   }
+}
+
+//******************************************************************************
+
+void CmdLineExec::executeReadB(Ris::CmdLineCmd* aCmd)
+{
+   int tIndex;
+   Class1A* tObject = (Class1A*)mBlockQueue.startRead(&tIndex);
+
+   if (tObject)
+   {
+      Prn::print(0, "READ  PASS      $$ %d", tObject->mCode1);
+      mBlockQueue.finishRead(tIndex);
    }
    else
    {
