@@ -143,7 +143,7 @@ void CmdLineExec::executeReadB(Ris::CmdLineCmd* aCmd)
 
    if (tObject)
    {
-      Prn::print(0, "READ  PASS      $$ %d", tObject->mCode1);
+      Prn::print(0, "READ  PASS      $$ %d        %d", tObject->mCode1,tObject->mCode2);
       mBlockQueue.finishRead(tIndex);
    }
    else

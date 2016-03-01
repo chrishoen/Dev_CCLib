@@ -35,10 +35,10 @@ public:
 
    Class1A()
    {
-      mCode1=0;
-      mCode2=0;
-      mCode3=0;
-      mCode4=0;
+      mCode1=101;
+      mCode2=102;
+      mCode3=103;
+      mCode4=104;
    }
    
   
