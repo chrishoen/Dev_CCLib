@@ -239,7 +239,7 @@ void Reader::read(int aNumReads)
    switch (gShare.mType)
    {
    case 1: readType1(aNumReads); break;
-   case 2: readType1(aNumReads); break;
+   case 2: readType2(aNumReads); break;
    case 3: readType3(aNumReads); break;
    }
 }
