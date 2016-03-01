@@ -56,11 +56,14 @@ void StatusThread::threadRunFunction()
       {
          case 1:
          {
+            int tQueueSize;
+            if (gShare.mTest==1) tQueueSize = LFIntQueue::size();
+            if (gShare.mTest==2) tQueueSize = gShare.mBlockQueue.size();
             Prn::print(Prn::ThreadRun1, "%s$   %s   %s %8d",
                mProcString,
                my_stringLLU(tString1, gShare.mWriter[0].mCount),
                my_stringLLU(tString2, gShare.mReader.mCount),
-               LFIntQueue::size());
+               tQueueSize);
          }
          break;
          case 2:

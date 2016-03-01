@@ -39,6 +39,7 @@ void Share::initialize()
    {
    case 1:
       LFIntQueue::initialize(gGSettings.mAllocate);
+      break;
    case 2:
       if (mTest==1) LFIntQueue::initialize(gGSettings.mAllocate);
       if (mTest==2) mBlockQueue.initialize(gGSettings.mAllocate,sizeof(Class1A));
