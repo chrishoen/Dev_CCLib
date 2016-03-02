@@ -342,6 +342,7 @@ void WriterReader::writereadType3(int aNumWrites)
       // Read
       else
       {
+         bool tPass = false;
          int tIndex;
          int tCount;
 
@@ -351,11 +352,12 @@ void WriterReader::writereadType3(int aNumWrites)
          {
             tCount = tObject->mCode1;
             gShare.mBlockQueue.finishRead(tIndex);
+            tPass = true;
          }
          mMarkerRead.doStop();
          tDelayA.delay();
 
-         if (tObject)
+         if (tPass)
          {
             mReadCount++;
             mReadPassCount++;
@@ -426,13 +428,18 @@ void WriterReader::flushType2()
 
 void WriterReader::flushType3()
 {
+   int tCount;
    int tIndex;
+
    while(true)
    {
-      int tCount;
+
       Class1A* tObject = (Class1A*)gShare.mBlockQueue.startRead(&tIndex);
-      if (tObject==0) break;
+      if (!tObject) break;
+
       tCount = tObject->mCode1;
+      gShare.mBlockQueue.finishRead(tIndex);
+
       mReadCount++;
       mReadPassCount++;
       mReadCheckSum += tCount;

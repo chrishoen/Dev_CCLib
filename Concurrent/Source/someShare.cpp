@@ -179,7 +179,7 @@ void Share::show12()
    Prn::print(0, "Reader.mFailCount  %16s", my_stringLLU(tString, mReaderFailCount));
    Prn::print(0, "");
 
-   LFIntQueue::show();
+   if (mType==1) LFIntQueue::show();
 
    Prn::print(0, "");
    Prn::print(0, "Writer.mMeanTime   %16.5f", mWriterMeanTime);
