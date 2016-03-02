@@ -126,9 +126,6 @@ namespace CC
       int tNodeIndex;
       if (!listPop(&tNodeIndex)) return 0;
 
-      // Initialize the node.
-      mQueueNext[tNodeIndex].store(LFIndex(cInvalid, 0), memory_order_relaxed);
-
       // Return a pointer to the node block.
       *aNodeIndex = tNodeIndex;
       return element(tNodeIndex);
@@ -136,9 +133,9 @@ namespace CC
 
    void LFBlockQueue::finishWrite(int aNodeIndex)
    {
-      // Try to allocate a node from the free list.
-      // Exit if it is empty.
+      // Initialize the node.
       int tNodeIndex = aNodeIndex;
+      mQueueNext[tNodeIndex].store(LFIndex(cInvalid, 0), memory_order_relaxed);
 
       // Attach the node to the queue tail.
       LFIndex tTail,tNext;

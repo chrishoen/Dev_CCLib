@@ -114,12 +114,12 @@ namespace CC
    {
       // Try to allocate a node from the free list.
       // Exit if it is empty.
-      LFIndex tNode;
-      if (!listPop(&tNode.mIndex)) return false;
+      int tNodeIndex;
+      if (!listPop(&tNodeIndex)) return false;
 
       // Initialize the node with the value.
-      mValue[tNode.mIndex] = aValue;
-      mQueueNext[tNode.mIndex].store(LFIndex(cInvalid,0),memory_order_relaxed);
+      mValue[tNodeIndex] = aValue;
+      mQueueNext[tNodeIndex].store(LFIndex(cInvalid,0),memory_order_relaxed);
 
       // Attach the node to the queue tail.
       LFIndex tTail,tNext;
@@ -134,7 +134,7 @@ namespace CC
          {
             if (tNext.mIndex == cInvalid)
             {
-               if (mQueueNext[tTail.mIndex].compare_exchange_strong(tNext, LFIndex(tNode.mIndex, tNext.mCount+1),memory_order_release,memory_order_relaxed)) break;
+               if (mQueueNext[tTail.mIndex].compare_exchange_strong(tNext, LFIndex(tNodeIndex, tNext.mCount+1),memory_order_release,memory_order_relaxed)) break;
             }
             else
             {
@@ -145,7 +145,7 @@ namespace CC
          if (++tLoopCount==10000) throw 101;
       }
 
-      mQueueTail.compare_exchange_strong(tTail, LFIndex(tNode.mIndex, tTail.mCount+1),memory_order_release,memory_order_relaxed);
+      mQueueTail.compare_exchange_strong(tTail, LFIndex(tNodeIndex, tTail.mCount+1),memory_order_release,memory_order_relaxed);
 
       // Done
       return true;
