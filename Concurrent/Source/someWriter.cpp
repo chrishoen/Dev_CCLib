@@ -133,7 +133,7 @@ void Writer::writeType3(int aNumWrites)
 
    for (int i = 0; i < aNumWrites; i++)
    {
-      bool tPass;
+      bool tPass = false;
       int tCount = mCount & 0xFFFF;
 
       mMarkerWrite.doStart();
@@ -145,11 +145,11 @@ void Writer::writeType3(int aNumWrites)
          Class1A* tObject = new(tBlock) Class1A;
          tObject->mCode1 = tCount;
          gShare.mBlockQueue.finishWrite(tIndex);
+         tPass=true;
       }
 
       mMarkerWrite.doStop();
       tDelayA.delay();
-      tPass = tBlock!=0;
 
       if (tPass)
       {
@@ -194,7 +194,7 @@ void Writer::write(int aNumWrites)
    {
    case 1: writeType1 (aNumWrites); break;
    case 2: writeType2 (aNumWrites); break;
-   case 8: writeType3 (aNumWrites); break;
+   case 3: writeType3 (aNumWrites); break;
    }
 }
    

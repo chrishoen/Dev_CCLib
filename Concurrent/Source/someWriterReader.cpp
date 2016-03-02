@@ -380,6 +380,7 @@ void WriterReader::writeread(int aNumWrites)
    {
    case 1: writereadType1 (aNumWrites); break;
    case 2: writereadType2 (aNumWrites); break;
+   case 3: writereadType3 (aNumWrites); break;
    }
 }
    
