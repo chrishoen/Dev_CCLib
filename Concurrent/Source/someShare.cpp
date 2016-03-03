@@ -37,11 +37,22 @@ void Share::initialize()
    {
    case 1:
    case 2:
-      if (mType==1) LFIntQueue::initialize(gGSettings.mAllocate);
-      if (mType==2) mPointerQueue.initialize(gGSettings.mAllocate);
-      if (mType==3) mBlockQueue.initialize(gGSettings.mAllocate,sizeof(Class1A));
-      break;
-   case 3:
+      switch (mType)
+      {
+      case 1:
+         LFIntQueue::initialize(gGSettings.mAllocate);
+         break;
+      case 2:
+         mPointerQueue.initialize(gGSettings.mAllocate);
+         break;
+      case 3:
+         mBlockQueue.initialize(gGSettings.mAllocate, sizeof(Class1A));
+         break;
+      case 4:
+         mBlockFreeList.initialize(gGSettings.mAllocate, sizeof(Class1A));
+         mPointerQueue.initialize(gGSettings.mAllocate);
+         break;
+      }
       break;
    }
 

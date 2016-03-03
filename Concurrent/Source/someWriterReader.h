@@ -36,17 +36,20 @@ public:
    void startTrialType1();
    void startTrialType2();
    void startTrialType3();
+   void startTrialType4();
    void startTrial     ();
    void finishTrial();
 
    void writereadType1 (int aNumWrites);
    void writereadType2 (int aNumWrites);
    void writereadType3 (int aNumWrites);
+   void writereadType4 (int aNumWrites);
    void writeread      (int aNumWrites);
 
    void flushType1 ();
    void flushType2 ();
    void flushType3 ();
+   void flushType4 ();
    void flush      ();
 
    //---------------------------------------------------------------------------

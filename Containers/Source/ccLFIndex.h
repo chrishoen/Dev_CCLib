@@ -50,13 +50,13 @@ typedef std::atomic<LFIndex> AtomicLFIndex;
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Base class that has an LFIndex member. This is inherited by classes that
+// Base class for lock free container blocks. This is inherited by classes that
 // are contained in intrusive lock free containers.
 
-class BaseHasLFIndex
+class BaseLFBlock
 {
 public:
-   LFIndex mLFIndex;
+   int mLFNodeIndex;
 };
 
 //******************************************************************************

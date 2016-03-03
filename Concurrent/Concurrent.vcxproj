@@ -167,6 +167,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\Containers\Source\ccLFBlockFreeList.cpp" />
     <ClCompile Include="..\Containers\Source\ccLFBlockQueue.cpp" />
     <ClCompile Include="..\Containers\Source\ccLFPointerQueue.cpp" />
     <ClCompile Include="..\Containers\Source\someClass1.cpp" />
@@ -191,6 +192,7 @@
     <ClCompile Include="Source\Timing.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Containers\Source\ccLFBlockFreeList.h" />
     <ClInclude Include="..\Containers\Source\ccLFBlockQueue.h" />
     <ClInclude Include="..\Containers\Source\ccLFIndex.h" />
     <ClInclude Include="..\Containers\Source\ccLFPointerQueue.h" />

@@ -19,7 +19,7 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 
-class Class1A : public CC::BaseHasLFIndex
+class Class1A : public CC::BaseLFBlock
 {
 public:
 

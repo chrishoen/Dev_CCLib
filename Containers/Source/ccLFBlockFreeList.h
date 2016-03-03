@@ -1,12 +1,12 @@
-#ifndef _CCLFBLOCKQUEUE_H_
-#define _CCLFBLOCKQUEUE_H_
+#ifndef _CCLFBLOCKFREELIST_H_
+#define _CCLFBLOCKFREELIST_H_
 /*==============================================================================
 
-Lock Free Block Queue. 
+Lock Free Block Free List. 
 
-This implements a fixed size queue. The queue is thread safe. It uses a atomic
+This implements a fixed size free list. The free list is thread safe. It uses a atomic
 interlocked compare and exchanges to guard against concurrency contentions.
-It implements the Michael and Scott algorithm with no backoff.
+It implements the Trieber algorithm with no backoff.
 
 ==============================================================================*/
 #include <atomic>
@@ -75,8 +75,8 @@ public:
    //***************************************************************************
    //***************************************************************************
 
-   bool  listPop  (BaseHasLFIndex** aBlock);
-   bool  listPush (BaseHasLFIndex*  aBlock);
+   bool  listPop  (BaseLFBlock** aBlock);
+   bool  listPush (BaseLFBlock*  aBlock);
 };
 
 //******************************************************************************

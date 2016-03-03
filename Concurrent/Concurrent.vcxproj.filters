@@ -73,6 +73,9 @@
     <ClCompile Include="..\Containers\Source\someClass1.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\Containers\Source\ccLFBlockFreeList.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h">
@@ -145,6 +148,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="..\Containers\Source\someClass1.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Containers\Source\ccLFBlockFreeList.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

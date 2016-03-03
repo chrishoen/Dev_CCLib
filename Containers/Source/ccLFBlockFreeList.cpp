@@ -60,7 +60,7 @@ void LFBlockFreeList::initialize(int aAllocate,int aBlockSize)
    mListHead.store(LFIndex(0,0));
    mListSize = mListAllocate;
 
-   BaseHasLFIndex* tDummyBlock;
+   BaseLFBlock* tDummyBlock;
    listPop(&tDummyBlock);
 }
 
@@ -102,7 +102,7 @@ int LFBlockFreeList::size()
 //******************************************************************************
 // This detaches the head node.
 
-bool LFBlockFreeList::listPop(BaseHasLFIndex** aBlock)
+bool LFBlockFreeList::listPop(BaseLFBlock** aBlock)
 {
    // Store the head node in a temp.
    // This is the node that will be detached.
@@ -122,8 +122,8 @@ bool LFBlockFreeList::listPop(BaseHasLFIndex** aBlock)
 
    // Return the detached original head node.
    int tNodeIndex = tHead.mIndex;
-   BaseHasLFIndex* tBlock = (BaseHasLFIndex*)element(tNodeIndex);
-   tBlock->mLFIndex = tHead;
+   BaseLFBlock* tBlock = (BaseLFBlock*)element(tNodeIndex);
+   tBlock->mLFNodeIndex = tHead.mIndex;
    *aBlock = tBlock;
 
    // Done.
@@ -136,9 +136,9 @@ bool LFBlockFreeList::listPop(BaseHasLFIndex** aBlock)
 //***************************************************************************
 // Insert a node into the list before the list head node.
 
-bool LFBlockFreeList::listPush(BaseHasLFIndex* aBlock)
+bool LFBlockFreeList::listPush(BaseLFBlock* aBlock)
 {
-   int tNodeIndex = aBlock->mLFIndex.mIndex;
+   int tNodeIndex = aBlock->mLFNodeIndex;
 
    // Store the head node in a temp.
    LFIndex tHead = mListHead.load(memory_order_relaxed);

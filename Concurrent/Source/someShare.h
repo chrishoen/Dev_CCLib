@@ -14,6 +14,7 @@
 #include "someTester.h"
 #include "ccLFPointerQueue.h"
 #include "ccLFBlockQueue.h"
+#include "ccLFBlockFreeList.h"
 
 namespace Some
 {
@@ -73,8 +74,8 @@ public:
    double              mTesterMeanTime2;
 
    CC::LFPointerQueue  mPointerQueue;
+   CC::LFBlockQueue    mBlockFreeList;
    CC::LFBlockQueue    mBlockQueue;
-
 
 };
 
