@@ -254,7 +254,7 @@ namespace CC
    //******************************************************************************
    //******************************************************************************
    //******************************************************************************
-   // These are specific to queue pointer access.
+   // These simplify queue access.
 
    bool LFPointerQueue::writePtr (void* aValue)
    {
@@ -267,7 +267,5 @@ namespace CC
       if (!tryRead(&tValue)) return NULL;
       return tValue;
    }
-
-
 
 }//namespace
