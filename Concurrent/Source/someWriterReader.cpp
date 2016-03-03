@@ -159,7 +159,8 @@ void WriterReader::startTrialType4()
       {
          ++mCount &= 0xFFFF;
 
-         Class1A* tObject = new Class1A;
+         CC::BaseLFBlock* tBlock = gShare.mBlockFreeList.listPop();
+         Class1A* tObject = new(tBlock) Class1A;
          tObject->mCode1 = mCount;
          gShare.mPointerQueue.writePtr(tObject);
 
@@ -416,7 +417,8 @@ void WriterReader::writereadType4(int aNumWrites)
       {
          ++mCount &= 0xFFFF;
 
-         Class1A* tObject = new Class1A;
+         CC::BaseLFBlock* tBlock = gShare.mBlockFreeList.listPop();
+         Class1A* tObject = new(tBlock) Class1A;
          tObject->mCode1 = mCount;
 
          mMarkerWrite.doStart();
@@ -432,7 +434,7 @@ void WriterReader::writereadType4(int aNumWrites)
          }
          else
          {
-            delete tObject;
+            gShare.mBlockFreeList.listPush(tObject);
             mWriteCount++;
             mWriteFailCount++;
          }
@@ -452,7 +454,7 @@ void WriterReader::writereadType4(int aNumWrites)
          if (tObject)
          {
             tCount = tObject->mCode1;
-            delete tObject;
+            gShare.mBlockFreeList.listPush(tObject);
          }
 
          if (tPass)
@@ -557,7 +559,7 @@ void WriterReader::flushType4()
       Class1A* tObject = (Class1A*)gShare.mPointerQueue.readPtr();
       if (tObject==0) break;
       tCount = tObject->mCode1;
-      delete tObject;
+      gShare.mBlockFreeList.listPush(tObject);
       mReadCount++;
       mReadPassCount++;
       mReadCheckSum += tCount;

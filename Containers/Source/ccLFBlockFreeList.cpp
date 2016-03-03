@@ -60,8 +60,7 @@ void LFBlockFreeList::initialize(int aAllocate,int aBlockSize)
    mListHead.store(LFIndex(0,0));
    mListSize = mListAllocate;
 
-   BaseLFBlock* tDummyBlock;
-   listPop(&tDummyBlock);
+   BaseLFBlock* tDummyBlock = listPop();
 }
 
 //***************************************************************************
@@ -102,7 +101,7 @@ int LFBlockFreeList::size()
 //******************************************************************************
 // This detaches the head node.
 
-bool LFBlockFreeList::listPop(BaseLFBlock** aBlock)
+BaseLFBlock* LFBlockFreeList::listPop()
 {
    // Store the head node in a temp.
    // This is the node that will be detached.
@@ -112,23 +111,20 @@ bool LFBlockFreeList::listPop(BaseLFBlock** aBlock)
    while (true)
    {
       // Exit if the list is empty.
-      if (tHead.mIndex == cInvalid) return false;
+      if (tHead.mIndex == cInvalid) return 0;
 
       // Set the head node to be the node that is after the head node.
       if (mListHead.compare_exchange_weak(tHead, LFIndex(mListNext[tHead.mIndex].load(memory_order_relaxed).mIndex,tHead.mCount+1),memory_order_acquire,memory_order_relaxed)) break;
 
       if (++tLoopCount==10000) throw 103;
    }
+   mListSize.fetch_sub(1,memory_order_relaxed);
 
    // Return the detached original head node.
    int tNodeIndex = tHead.mIndex;
    BaseLFBlock* tBlock = (BaseLFBlock*)element(tNodeIndex);
    tBlock->mLFNodeIndex = tHead.mIndex;
-   *aBlock = tBlock;
-
-   // Done.
-   mListSize.fetch_sub(1,memory_order_relaxed);
-   return true;
+   return tBlock;
 }
 
 //***************************************************************************

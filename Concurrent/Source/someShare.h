@@ -74,8 +74,8 @@ public:
    double              mTesterMeanTime2;
 
    CC::LFPointerQueue  mPointerQueue;
-   CC::LFBlockQueue    mBlockFreeList;
    CC::LFBlockQueue    mBlockQueue;
+   CC::LFBlockFreeList mBlockFreeList;
 
 };
 
