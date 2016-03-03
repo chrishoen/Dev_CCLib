@@ -113,3 +113,63 @@ public:
 }//namespace
 #endif
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Example
+
+#if 0
+   //---------------------------------------------------------------------------
+   // Management
+
+   // includes
+   #include <new>
+   #include "ccLFBlockQueue.h"
+
+   // Declare block queue
+   CC::LFBlockQueue mBlockQueue;
+   // Initialize block queue
+   mBlockQueue.initialize(100,sizeof(Class1A));
+
+   //---------------------------------------------------------------------------
+   // Enqueue a block
+
+   // Example counter
+   int tWriteCount;
+   // This is passed between StartWrite and FinishWrite
+   int tWriteIndex;
+
+   // Try to start a write to allocate a block
+   void* tBlock = mBlockQueue.startWrite(&tWriteIndex);
+   // If the queue is not full
+   if (tBlock)
+   {
+      // Create a new object with placement new on the allocated block.
+      // Placement new must be used with any classes that use vtables.
+      Class1A* tObject = new(tBlock) Class1A;
+      // Access the new object
+      tObject->mCode1 = tWriteCount;
+      // Finish the write
+      mBlockQueue.finishWrite(tWriteIndex);
+   }
+
+   //---------------------------------------------------------------------------
+   // Dequeue a block 
+
+   // Example counter
+   int tReadCount;
+   // This is passed between StartRead and FinishRead
+   int tReadIndex;
+
+   // Try to start a block read, returns a pointer to an object
+   Class1A* tObject = (Class1A*)mBlockQueue.startRead(&tReadIndex);
+   // If the queue is not empty
+   if (tObject)
+   {
+      // Access the object
+      tReadCount = tObject->mCode1;
+      // Finish the read
+      mBlockQueue.finishRead(tReadIndex);
+   }
+#endif
+
