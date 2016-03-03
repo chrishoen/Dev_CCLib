@@ -166,6 +166,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\ccLFBlockFreeList.cpp" />
     <ClCompile Include="Source\ccLFBlockQueue.cpp" />
     <ClCompile Include="Source\ccLFPointerQueue.cpp" />
     <ClCompile Include="Source\CmdLineExec.cpp" />
@@ -174,6 +175,7 @@
     <ClCompile Include="Source\someClass1.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\ccLFBlockFreeList.h" />
     <ClInclude Include="Source\ccLFBlockQueue.h" />
     <ClInclude Include="Source\ccLFIndex.h" />
     <ClInclude Include="Source\ccLFPointerQueue.h" />

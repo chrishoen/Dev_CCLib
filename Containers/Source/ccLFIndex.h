@@ -15,36 +15,49 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Index used by lock free container classes.
 
-   struct LFIndex
+struct LFIndex
+{
+   int mIndex;
+   int mCount;
+
+   LFIndex()
    {
-      int mIndex;
-      int mCount;
-
-      LFIndex()
-      {
-         mIndex = 0;
-         mCount = 0;
-      }
-
-      LFIndex(int aIndex, int aCount)
-      {
-         mIndex = aIndex;
-         mCount = aCount;
-      }
-   };
-
-   inline bool operator==(const LFIndex& lhs, const LFIndex& rhs)
-   {
-      return lhs.mIndex == rhs.mIndex && lhs.mCount == rhs.mCount;
+      mIndex = 0;
+      mCount = 0;
    }
 
-   inline bool operator!=(const LFIndex& lhs, const LFIndex& rhs)
+   LFIndex(int aIndex, int aCount)
    {
-      return lhs.mIndex != rhs.mIndex && lhs.mCount != rhs.mCount;
+      mIndex = aIndex;
+      mCount = aCount;
    }
+};
 
-   typedef std::atomic<LFIndex> AtomicLFIndex;
+inline bool operator==(const LFIndex& lhs, const LFIndex& rhs)
+{
+   return lhs.mIndex == rhs.mIndex && lhs.mCount == rhs.mCount;
+}
+
+inline bool operator!=(const LFIndex& lhs, const LFIndex& rhs)
+{
+   return lhs.mIndex != rhs.mIndex && lhs.mCount != rhs.mCount;
+}
+
+typedef std::atomic<LFIndex> AtomicLFIndex;
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Base class that has an LFIndex member. This is inherited by classes that
+// are contained in intrusive lock free containers.
+
+class BaseHasLFIndex
+{
+public:
+   LFIndex mLFIndex;
+};
 
 //******************************************************************************
 //******************************************************************************
