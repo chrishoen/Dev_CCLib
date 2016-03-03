@@ -38,11 +38,13 @@ public:
    void readType1 (int aNumReads);
    void readType2 (int aNumReads);
    void readType3 (int aNumReads);
+   void readType4 (int aNumReads);
    void read      (int aNumReads);
 
    void flushType1 ();
    void flushType2 ();
    void flushType3 ();
+   void flushType4 ();
    void flush  ();
 
    //---------------------------------------------------------------------------

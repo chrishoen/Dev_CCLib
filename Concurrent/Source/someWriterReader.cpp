@@ -417,13 +417,13 @@ void WriterReader::writereadType4(int aNumWrites)
       {
          ++mCount &= 0xFFFF;
 
+         mMarkerWrite.doStart();
          CC::BaseLFBlock* tBlock = gShare.mBlockFreeList.listPop();
+         mMarkerWrite.doStop();
          Class1A* tObject = new(tBlock) Class1A;
          tObject->mCode1 = mCount;
 
-         mMarkerWrite.doStart();
          bool tPass = gShare.mPointerQueue.writePtr(tObject);
-         mMarkerWrite.doStop();
          tDelayA.delay();
 
          if (tPass)
@@ -445,16 +445,16 @@ void WriterReader::writereadType4(int aNumWrites)
          bool tPass;
          int tCount;
 
-         mMarkerRead.doStart();
          Class1A* tObject = (Class1A*)gShare.mPointerQueue.readPtr();
-         mMarkerRead.doStop();
          tDelayA.delay();
 
          tPass = tObject!=0;
          if (tObject)
          {
             tCount = tObject->mCode1;
+            mMarkerRead.doStart();
             gShare.mBlockFreeList.listPush(tObject);
+            mMarkerRead.doStop();
          }
 
          if (tPass)

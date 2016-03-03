@@ -85,6 +85,7 @@ void Reader::readType1(int aNumReads)
       }
    }
 }
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -123,6 +124,7 @@ void Reader::readType2(int aNumReads)
       }
    }
 }
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -165,6 +167,47 @@ void Reader::readType3(int aNumReads)
    }
 }
    
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void Reader::readType4(int aNumReads)
+{
+   LFBackoff tDelayB(gGSettings.mDelayB1,gGSettings.mDelayB2);
+
+   for (int i = 0; i < aNumReads; i++)
+   {
+      bool tPass;
+      int tCount;
+
+      mMarkerRead.doStart();
+      Class1A* tObject = (Class1A*)gShare.mPointerQueue.readPtr();
+      mMarkerRead.doStop();
+      tDelayB.delay();
+
+      tPass = tObject!=0;
+      if (tObject)
+      {
+         tCount = tObject->mCode1;
+         mMarkerRead.doStart();
+         gShare.mBlockFreeList.listPush(tObject);
+         mMarkerRead.doStop();
+      }
+
+      if (tPass)
+      {
+         mCount++;
+         mPassCount++;
+         mCheckSum += tCount;
+      }
+      else
+      {
+         mCount++;
+         mFailCount++;
+      }
+   }
+}
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -224,8 +267,27 @@ void Reader::flushType3()
       mCheckSum += tCount;
    }
 }
-   
   
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void Reader::flushType4()
+{
+   while(true)
+   {
+      Class1A* tObject = (Class1A*)gShare.mPointerQueue.readPtr();
+      if (!tObject) break;
+
+      int tCount = tObject->mCode1;
+      gShare.mBlockFreeList.listPush(tObject);
+
+      mCount++;
+      mPassCount++;
+      mCheckSum += tCount;
+   }
+}
+   
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -249,6 +311,7 @@ void Reader::read(int aNumReads)
    case 1: readType1(aNumReads); break;
    case 2: readType2(aNumReads); break;
    case 3: readType3(aNumReads); break;
+   case 4: readType4(aNumReads); break;
    }
 }
    
@@ -259,6 +322,7 @@ void Reader::flush()
    case 1: flushType1(); break;
    case 2: flushType2(); break;
    case 3: flushType3(); break;
+   case 4: flushType4(); break;
    }
 }
    
