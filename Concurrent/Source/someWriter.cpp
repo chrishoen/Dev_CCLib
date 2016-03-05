@@ -144,6 +144,7 @@ void Writer::writeType3(int aNumWrites)
       {
          Class1A* tObject = new(tBlock) Class1A;
          tObject->mCode1 = tCount;
+         tDelayA.delay();
          gShare.mBlockQueue.finishWrite(tIndex);
          tPass=true;
       }

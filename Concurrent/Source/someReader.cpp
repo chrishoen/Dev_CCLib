@@ -145,6 +145,7 @@ void Reader::readType3(int aNumReads)
       if (tObject)
       {
          tCount = tObject->mCode1;
+         tDelayB.delay();
          gShare.mBlockQueue.finishRead(tIndex);
       }
 
