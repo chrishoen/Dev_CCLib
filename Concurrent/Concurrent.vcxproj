@@ -105,7 +105,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>C:\MyLib\RisLib\include;..\LockFree\Source;..\Containers\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\CCLib\Source;..\LockFree\Source;C:\MyLib\RisLib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -155,7 +155,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
-      <AdditionalIncludeDirectories>C:\MyLib\RisLib\include;..\LockFree\Source;..\Containers\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\MyLib\RisLib\include;..\LockFree\Source;..\CCLib\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
@@ -167,16 +167,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\Containers\Source\ccLFBlockFreeList.cpp" />
-    <ClCompile Include="..\Containers\Source\ccLFBlockQueue.cpp" />
-    <ClCompile Include="..\Containers\Source\ccLFPointerQueue.cpp" />
-    <ClCompile Include="..\Containers\Source\someClass1.cpp" />
     <ClCompile Include="..\LockFree\Source\LFFreeList.cpp" />
     <ClCompile Include="..\LockFree\Source\LFIntQueue.cpp" />
     <ClCompile Include="Source\CmdLineExec.cpp" />
     <ClCompile Include="Source\GSettings.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
+    <ClCompile Include="Source\someClass1.cpp" />
     <ClCompile Include="Source\someMessage.cpp" />
     <ClCompile Include="Source\someReader.cpp" />
     <ClCompile Include="Source\someReaderThread.cpp" />
@@ -192,11 +189,6 @@
     <ClCompile Include="Source\Timing.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Containers\Source\ccLFBlockFreeList.h" />
-    <ClInclude Include="..\Containers\Source\ccLFBlockQueue.h" />
-    <ClInclude Include="..\Containers\Source\ccLFIndex.h" />
-    <ClInclude Include="..\Containers\Source\ccLFPointerQueue.h" />
-    <ClInclude Include="..\Containers\Source\someClass1.h" />
     <ClInclude Include="..\LockFree\Source\LFBackoff.h" />
     <ClInclude Include="..\LockFree\Source\LFFreeList.h" />
     <ClInclude Include="..\LockFree\Source\LFIndex.h" />
@@ -204,6 +196,7 @@
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\GSettings.h" />
     <ClInclude Include="Source\MainInit.h" />
+    <ClInclude Include="Source\someClass1.h" />
     <ClInclude Include="Source\someMessage.h" />
     <ClInclude Include="Source\someReader.h" />
     <ClInclude Include="Source\someReaderThread.h" />
@@ -217,6 +210,11 @@
     <ClInclude Include="Source\someWriterReaderThread.h" />
     <ClInclude Include="Source\someWriterThread.h" />
     <ClInclude Include="Source\Timing.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CCLib\CCLib.vcxproj">
+      <Project>{1909118a-707c-47e4-80bc-84130e1c951b}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

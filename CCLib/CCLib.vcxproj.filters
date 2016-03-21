@@ -48,6 +48,15 @@
     <ClCompile Include="Source\cc_functions.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\ccLFBlockFreeList.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ccLFBlockQueue.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ccLFPointerQueue.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\ccBlockArray.h">
@@ -120,6 +129,18 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccValueQueue.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ccLFBlockFreeList.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ccLFBlockQueue.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ccLFIndex.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ccLFPointerQueue.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

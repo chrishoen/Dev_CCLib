@@ -64,16 +64,7 @@
     <ClCompile Include="..\LockFree\Source\LFIntQueue.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\Containers\Source\ccLFBlockQueue.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Containers\Source\ccLFPointerQueue.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Containers\Source\someClass1.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Containers\Source\ccLFBlockFreeList.cpp">
+    <ClCompile Include="Source\someClass1.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -138,19 +129,7 @@
     <ClInclude Include="..\LockFree\Source\LFIntQueue.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="..\Containers\Source\ccLFBlockQueue.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Containers\Source\ccLFIndex.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Containers\Source\ccLFPointerQueue.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Containers\Source\someClass1.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Containers\Source\ccLFBlockFreeList.h">
+    <ClInclude Include="Source\someClass1.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
