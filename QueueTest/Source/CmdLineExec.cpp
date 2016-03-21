@@ -5,6 +5,7 @@
 #include <atomic>
 
 #include "ccValueQueue.h"
+#include "ccFreeList.h"
 
 #include "prnPrint.h"
 #include "CmdLineExec.h"
@@ -75,6 +76,8 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
+   CC::FreeList<int> tFreeList;
+   tFreeList.initialize(10);
 }
 
 //******************************************************************************

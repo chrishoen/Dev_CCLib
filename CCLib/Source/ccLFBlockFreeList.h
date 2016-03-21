@@ -4,8 +4,8 @@
 
 Lock Free Block Free List. 
 
-This implements a fixed size free list. The free list is thread safe. It uses a atomic
-interlocked compare and exchanges to guard against concurrency contentions.
+This implements a fixed size free list. The free list is thread safe. It uses
+atomic compare and exchanges to guard against concurrency contentions.
 It implements the Trieber algorithm with no backoff.
 
 ==============================================================================*/
