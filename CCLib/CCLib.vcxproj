@@ -56,6 +56,7 @@
     <ClInclude Include="Source\ccTreeNodeRxQueue.h" />
     <ClInclude Include="Source\ccTreeNodeTxQueue.h" />
     <ClInclude Include="Source\ccTreeNodeVisitor.h" />
+    <ClInclude Include="Source\ccValueQueue.h" />
     <ClInclude Include="Source\cc_functions.h" />
     <ClInclude Include="Source\GenerateTreeNodes.h" />
   </ItemGroup>
