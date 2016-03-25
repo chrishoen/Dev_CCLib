@@ -7,6 +7,7 @@
 #include "risContainers.h"
 
 #include "someClass1.h"
+#include "someVariableOne.h"
 using namespace Some;
 
 #include "CmdLineExec.h"
@@ -15,6 +16,7 @@ using namespace Some;
 CmdLineExec::CmdLineExec()
 {
    Class1A::initializeShortTermBlockPool(1000);
+   VariableOne::initializeLongTermBlockPool(1000);
 }
 //******************************************************************************
 void CmdLineExec::reset()
