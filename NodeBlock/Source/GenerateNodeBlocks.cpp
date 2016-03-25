@@ -42,7 +42,7 @@ void generateTreeNodes1(CC::NodeBlock* tRootNode)
    tRootNode->attachAfterLastChild(tNode);
 
    tNode = new CC::NodeBlock(4);
-   tRootNode->attachAfterLastChildAsLastInStructure(tNode);
+   tRootNode->attachAfterLastChild(tNode);
 }
 
 //******************************************************************************
@@ -93,7 +93,7 @@ void generateTreeNodes2(CC::NodeBlock* tRootNode)
    tRootNode->mLastChildNode->attachAfterLastChild(tNode);
 
    tNode = CC::NodeBlock::create( 44 );
-   tRootNode->mLastChildNode->attachAfterLastChildAsLastInStructure(tNode);
+   tRootNode->mLastChildNode->attachAfterLastChild(tNode);
 
 }
 
@@ -123,7 +123,7 @@ void generateTreeNodes3(CC::NodeBlock* tRootNode)
    tRootNode->mLastChildNode->mLastChildNode->mLastChildNode->attachAfterLastChild(tNode);
 
    tNode = CC::NodeBlock::create( 22 );
-   tRootNode->mLastChildNode->attachAfterLastChildAsLastInStructure(tNode);
+   tRootNode->mLastChildNode->attachAfterLastChild(tNode);
 
 }
 

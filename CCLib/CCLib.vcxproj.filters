@@ -83,9 +83,6 @@
     <ClInclude Include="Source\ccLabelledTreeNode.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccLabelledTreeNodeChannel.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\ccLabelledTreeNodeVisitor.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -102,12 +99,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccTreeNodeDestroyer.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ccTreeNodeRxQueue.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ccTreeNodeTxQueue.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccTreeNodeVisitor.h">

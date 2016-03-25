@@ -27,16 +27,10 @@
     <ClInclude Include="Source\ccNodeBlock.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccNodeBlockChannel.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\ccNodeBlockVisitor.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\GenerateNodeBlocks.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ccSegmentCopier.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\MainInit.h">

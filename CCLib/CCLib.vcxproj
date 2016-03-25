@@ -49,7 +49,6 @@
     <ClInclude Include="Source\ccDiagrams.h" />
     <ClInclude Include="Source\ccFreeList.h" />
     <ClInclude Include="Source\ccLabelledTreeNode.h" />
-    <ClInclude Include="Source\ccLabelledTreeNodeChannel.h" />
     <ClInclude Include="Source\ccLabelledTreeNodeVisitor.h" />
     <ClInclude Include="Source\ccLFBlockFreeList.h" />
     <ClInclude Include="Source\ccLFBlockQueue.h" />
@@ -61,8 +60,6 @@
     <ClInclude Include="Source\ccTreeNode.h" />
     <ClInclude Include="Source\ccTreeNodeCollection.h" />
     <ClInclude Include="Source\ccTreeNodeDestroyer.h" />
-    <ClInclude Include="Source\ccTreeNodeRxQueue.h" />
-    <ClInclude Include="Source\ccTreeNodeTxQueue.h" />
     <ClInclude Include="Source\ccTreeNodeVisitor.h" />
     <ClInclude Include="Source\ccValueQueue.h" />
     <ClInclude Include="Source\cc_functions.h" />

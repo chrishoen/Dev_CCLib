@@ -330,30 +330,18 @@ TreeNode* getNextNode(
    }
 
    //--------------------------------------------------------------------------
-   // The transmit attach level starts at the subject node level
-
-   int tTxAttachLevel = aSubjectNode->mTxAttachLevel;
-
-   //--------------------------------------------------------------------------
    // If the subject node has child nodes
 
    if (aSubjectNode->mFirstChildNode)
    {
       // The next node will be the first child node of the subject node
       tNextNode = aSubjectNode->mFirstChildNode;
-
-      // Update the transmit attachment level, going down one level
-      tTxAttachLevel++;
-      tNextNode->mTxAttachLevel = tTxAttachLevel;
    }
    // Else if the subject node has a node after it
    else if (aSubjectNode->mAfterNode)
    {
       // The next node will be the node after it
       tNextNode = aSubjectNode->mAfterNode;
-
-      // Update the transmit attachment level
-      tNextNode->mTxAttachLevel = tTxAttachLevel;
    }
    // Else the subject node has no child nodes and no nodes after it
    else
@@ -363,9 +351,6 @@ TreeNode* getNextNode(
       {
          // Set the next node to the ancestor after node
          tNextNode = aSubjectNode->mAncestorWithAfter->mAfterNode;
-
-         // Update the transmit attachment level
-         tNextNode->mTxAttachLevel = aSubjectNode->mAncestorWithAfter->mTxAttachLevel;
       }
    }
    // Return the next node

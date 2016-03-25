@@ -10,9 +10,6 @@
 #include "ccTreeNodeDestroyer.h"
 #include "ccNodeBlock.h"
 #include "ccNodeBlockVisitor.h"
-#include "ccNodeBlockChannel.h"
-#include "ccTreeNodeTxQueue.h"
-#include "ccTreeNodeRxQueue.h"
 #include "GenerateNodeBlocks.h"
 
 #include "CmdLineExec.h"
@@ -140,91 +137,6 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
-   //---------------------------------------------------------------------------
-   aCmd->setArgDefault(1,3);
-   int tStage = aCmd->argInt(1);
-
-   printf("**********************************go4\n");
-   printf("**********************************go4\n");
-   printf("**********************************go4\n");
-   printf("\n");
-
-
-   //---------------------------------------------------------------------------
-   //---------------------------------------------------------------------------
-   //---------------------------------------------------------------------------
-
-   CC::TreeNodeTxQueue<CC::NodeBlock> tTxQueue;
-   CC::TreeNodeRxQueue<CC::NodeBlock> tRxQueue;
-
-   CC::NodeBlock* tRootNode1 = new CC::NodeBlock(1000);
-   CC::NodeBlock* tRootNode2 = new CC::NodeBlock(2000);
-   CC::NodeBlock* tRootNode3 = new CC::NodeBlock(3000);
-
-   //---------------------------------------------------------------------------
-   //---------------------------------------------------------------------------
-   //---------------------------------------------------------------------------
-
-   if (tStage >= 1)
-   {
-      printf("**********************************generateTreeNodes1(tRootNode1)\n");
-      generateTreeNodes3(tRootNode1);
-   }
-
-   if (tStage >= 2)
-   {
-      printf("**********************************generateTreeNodes1(tRootNode2)\n");
-      generateTreeNodes3(tRootNode2);
-   }
-
-   if (tStage >= 3)
-   {
-      printf("**********************************generateTreeNodes1(tRootNode3)\n");
-      generateTreeNodes3(tRootNode3);
-   }
-
-   //---------------------------------------------------------------------------
-   //---------------------------------------------------------------------------
-   //---------------------------------------------------------------------------
-
-   if (tStage >= 1)
-   {
-      printf("**********************************tTxQueue.putTxNode(tRootNode1)\n");
-      tTxQueue.putTxNode(tRootNode1);
-   }
-
-   if (tStage >= 2)
-   {
-      printf("**********************************tTxQueue.putTxNode(tRootNode2)\n");
-      tTxQueue.putTxNode(tRootNode2);
-   }
-
-   if (tStage >= 3)
-   {
-      printf("**********************************tTxQueue.putTxNode(tRootNode3)\n");
-      tTxQueue.putTxNode(tRootNode3);
-   }
-
-   //---------------------------------------------------------------------------
-   //---------------------------------------------------------------------------
-   //---------------------------------------------------------------------------
-
-   printf("**********************************printNodeBlockTxQueue\n");
-   printf("\n");
-   CC::printNodeBlockTxQueue(&tTxQueue);
-   printf("\n");
-
-   //---------------------------------------------------------------------------
-   //---------------------------------------------------------------------------
-   //---------------------------------------------------------------------------
-
-   printf("**********************************transferNodeBlockQueues\n");
-   CC::transferNodeBlockQueues(&tTxQueue, &tRxQueue);
-   printf("\n");
-
-   printf("**********************************printNodeBlockRxQueue\n");
-   CC::printNodeBlockRxQueue(&tRxQueue);
-   printf("\n");
 }
 
 //******************************************************************************

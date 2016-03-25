@@ -175,9 +175,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\ccNodeBlock.h" />
-    <ClInclude Include="Source\ccNodeBlockChannel.h" />
     <ClInclude Include="Source\ccNodeBlockVisitor.h" />
-    <ClInclude Include="Source\ccSegmentCopier.h" />
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\GenerateNodeBlocks.h" />
     <ClInclude Include="Source\MainInit.h" />
