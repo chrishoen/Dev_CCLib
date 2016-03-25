@@ -27,6 +27,7 @@
     <ClCompile Include="Source\ccLFBlockFreeList.cpp" />
     <ClCompile Include="Source\ccLFBlockQueue.cpp" />
     <ClCompile Include="Source\ccLFPointerQueue.cpp" />
+    <ClCompile Include="Source\ccLogic.cpp" />
     <ClCompile Include="Source\ccPointerCircular.cpp" />
     <ClCompile Include="Source\ccPointerShiftRegister.cpp" />
     <ClCompile Include="Source\ccPointerStack.cpp" />
@@ -54,6 +55,7 @@
     <ClInclude Include="Source\ccLFBlockQueue.h" />
     <ClInclude Include="Source\ccLFIndex.h" />
     <ClInclude Include="Source\ccLFPointerQueue.h" />
+    <ClInclude Include="Source\ccLogic.h" />
     <ClInclude Include="Source\ccPointerCircular.h" />
     <ClInclude Include="Source\ccPointerShiftRegister.h" />
     <ClInclude Include="Source\ccPointerStack.h" />
