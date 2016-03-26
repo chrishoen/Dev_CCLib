@@ -80,9 +80,6 @@ void TreeNode::attachBeforeFirstChild (TreeNode* aObjectNode)
       this->mFirstChildNode->mBeforeNode = aObjectNode;
       this->mFirstChildNode              = aObjectNode;
    }
-
-   // Notify the object node that it is attached to this node
-   aObjectNode->onAttached();
 }
 
 //****************************************************************************
@@ -123,9 +120,6 @@ void TreeNode::attachAfterLastChild  (TreeNode* aObjectNode)
       this->mLastChildNode->mAfterNode = aObjectNode;
       this->mLastChildNode             = aObjectNode;
    }
-
-   // Notify the object node that it is attached to this node
-   aObjectNode->onAttached();
 }
 
 //****************************************************************************
@@ -256,8 +250,6 @@ void TreeNode::attachBefore (TreeNode* aObjectNode)
    }
    // The object node inherits this nodes's parent node
    aObjectNode->mParentNode = this->mParentNode;
-   // Notify the object node that it is attached to this node
-   aObjectNode->onAttached();
 }
 
 //****************************************************************************
@@ -292,8 +284,6 @@ void TreeNode::attachAfter (TreeNode* aObjectNode)
    }
    // The object node inherits this node's parent node
    aObjectNode->mParentNode = this->mParentNode;
-   // Notify the object node that it is attached to this node
-   aObjectNode->onAttached();
 }
 
 //****************************************************************************

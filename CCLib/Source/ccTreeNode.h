@@ -116,10 +116,6 @@ public:
    //--------------------------------------------------------------------------
    // Methods provided by inheritors
 
-   // This is called on an object node after it is attached to this subject
-   // node
-   virtual void onAttached() {}
-
    // This method calls the class destructor and then deallocates the object
    // from system memory or from block universe short term or long term
    // memory block pools. It is analogous to delete. It is overloaded by
