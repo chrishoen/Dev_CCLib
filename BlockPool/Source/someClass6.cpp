@@ -13,6 +13,9 @@ Description:
 // Global instance of the block pool
 CC::BlockPool Some::Class6A::mBlockPool;
 
+// Global instance of the block pool
+CC::BlockPool Some::Class6B::mBlockPool;
+
 namespace Some
 {
 
