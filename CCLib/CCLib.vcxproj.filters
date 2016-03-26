@@ -12,12 +12,6 @@
     <ClCompile Include="Source\ccCriticalSection_win.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ccLabelledTreeNode.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ccLabelledTreeNodeVisitor.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\ccPointerCircular.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -34,9 +28,6 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\ccTreeNodeVisitor.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\GenerateTreeNodes.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\ccBlockPool.cpp">
@@ -83,12 +74,6 @@
     <ClInclude Include="Source\ccDiagrams.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccLabelledTreeNode.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ccLabelledTreeNodeVisitor.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\ccPointerCircular.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -105,9 +90,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccTreeNodeVisitor.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GenerateTreeNodes.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccBlockPool.h">

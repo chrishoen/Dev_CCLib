@@ -3,45 +3,44 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "ccNodeBlock.h"
-#include "GenerateTreeNodes.h"
+#include "GenerateLabelledTreeNodes.h"
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-void generateTreeNodes1(CC::NodeBlock* tRootNode)
+void generateLabelledTreeNodes1(CC::LabelledTreeNode* tRootNode)
 {
    CC::TreeNode* tNode = 0;
 
-   tNode = new CC::NodeBlock(1);
+   tNode = new CC::LabelledTreeNode(1, "node1");
    tRootNode->attachAfterLastChild(tNode);
 
-   tNode = new CC::NodeBlock(2);
+   tNode = new CC::LabelledTreeNode(2, "node2");
    tRootNode->attachAfterLastChild(tNode);
 
-   tNode = new CC::NodeBlock(21);
+   tNode = new CC::LabelledTreeNode(21, "node21");
    tRootNode->mLastChildNode->attachAfterLastChild(tNode);
 
-   tNode = new CC::NodeBlock(22);
+   tNode = new CC::LabelledTreeNode(22, "node22");
    tRootNode->mLastChildNode->attachAfterLastChild(tNode);
 
-   tNode = new CC::NodeBlock(221);
+   tNode = new CC::LabelledTreeNode(221, "node221");
    tRootNode->mLastChildNode->mLastChildNode->attachAfterLastChild(tNode);
 
-   tNode = new CC::NodeBlock(222);
+   tNode = new CC::LabelledTreeNode(222, "node222");
    tRootNode->mLastChildNode->mLastChildNode->attachAfterLastChild(tNode);
 
-   tNode = new CC::NodeBlock(23);
+   tNode = new CC::LabelledTreeNode(23, "node23");
    tRootNode->mLastChildNode->attachAfterLastChild(tNode);
 
-   tNode = new CC::NodeBlock(24);
+   tNode = new CC::LabelledTreeNode(24, "node24");
    tRootNode->mLastChildNode->attachAfterLastChild(tNode);
 
-   tNode = new CC::NodeBlock(3);
+   tNode = new CC::LabelledTreeNode(3, "node3");
    tRootNode->attachAfterLastChild(tNode);
 
-   tNode = new CC::NodeBlock(4);
+   tNode = new CC::LabelledTreeNode(4, "node4");
    tRootNode->attachAfterLastChild(tNode);
 }
 
@@ -49,50 +48,50 @@ void generateTreeNodes1(CC::NodeBlock* tRootNode)
 //******************************************************************************
 //******************************************************************************
 
-void generateTreeNodes2(CC::NodeBlock* tRootNode)
+void generateLabelledTreeNodes2(CC::LabelledTreeNode* tRootNode)
 {
    CC::TreeNode* tNode = 0;
 
-   tNode = CC::NodeBlock::create( 1 );
+   tNode = CC::LabelledTreeNode::create( 1,   "node1" );
    tRootNode->attachAfterLastChild(tNode);
 
-   tNode = CC::NodeBlock::create( 2 );
+   tNode = CC::LabelledTreeNode::create( 2,   "node2" );
    tRootNode->attachAfterLastChild(tNode);
 
-   tNode = CC::NodeBlock::create( 21 );
+   tNode = CC::LabelledTreeNode::create( 21,  "node21" );
    tRootNode->mLastChildNode->attachAfterLastChild(tNode);
 
-   tNode = CC::NodeBlock::create( 22 );
+   tNode = CC::LabelledTreeNode::create( 22,  "node22" );
    tRootNode->mLastChildNode->attachAfterLastChild(tNode);
 
-   tNode = CC::NodeBlock::create( 221 );
+   tNode = CC::LabelledTreeNode::create( 221, "node221" );
    tRootNode->mLastChildNode->mLastChildNode->attachAfterLastChild(tNode);
 
-   tNode = CC::NodeBlock::create( 222 );
+   tNode = CC::LabelledTreeNode::create( 222, "node222" );
    tRootNode->mLastChildNode->mLastChildNode->attachAfterLastChild(tNode);
 
-   tNode = CC::NodeBlock::create( 23 );
+   tNode = CC::LabelledTreeNode::create( 23,  "node23" );
    tRootNode->mLastChildNode->attachAfterLastChild(tNode);
 
-   tNode = CC::NodeBlock::create( 24 );
+   tNode = CC::LabelledTreeNode::create( 24,  "node24" );
    tRootNode->mLastChildNode->attachAfterLastChild(tNode);
 
-   tNode = CC::NodeBlock::create( 3 );
+   tNode = CC::LabelledTreeNode::create( 3,   "node3" );
    tRootNode->attachAfterLastChild(tNode);
 
-   tNode = CC::NodeBlock::create( 4 );
+   tNode = CC::LabelledTreeNode::create( 4,   "node4" );
    tRootNode->attachAfterLastChild(tNode);
 
-   tNode = CC::NodeBlock::create( 41 );
+   tNode = CC::LabelledTreeNode::create( 41,  "node41" );
    tRootNode->mLastChildNode->attachAfterLastChild(tNode);
 
-   tNode = CC::NodeBlock::create( 42 );
+   tNode = CC::LabelledTreeNode::create( 42,  "node42" );
    tRootNode->mLastChildNode->attachAfterLastChild(tNode);
 
-   tNode = CC::NodeBlock::create( 43 );
+   tNode = CC::LabelledTreeNode::create( 43,  "node43" );
    tRootNode->mLastChildNode->attachAfterLastChild(tNode);
 
-   tNode = CC::NodeBlock::create( 44 );
+   tNode = CC::LabelledTreeNode::create( 44,  "node44" );
    tRootNode->mLastChildNode->attachAfterLastChild(tNode);
 
 }
@@ -101,28 +100,28 @@ void generateTreeNodes2(CC::NodeBlock* tRootNode)
 //******************************************************************************
 //******************************************************************************
 
-void generateTreeNodes3(CC::NodeBlock* tRootNode)
+void generateLabelledTreeNodes3(CC::LabelledTreeNode* tRootNode)
 {
    CC::TreeNode* tNode = 0;
 
-   tNode = CC::NodeBlock::create( 1 );
+   tNode = CC::LabelledTreeNode::create( 1,   "node1" );
    tRootNode->attachAfterLastChild(tNode);
 
-   tNode = CC::NodeBlock::create( 2 );
+   tNode = CC::LabelledTreeNode::create( 2,   "node2" );
    tRootNode->attachAfterLastChild(tNode);
 
-   tNode = CC::NodeBlock::create( 21 );
+   tNode = CC::LabelledTreeNode::create( 21,  "node21" );
    tRootNode->mLastChildNode->attachAfterLastChild(tNode);
 
 
-   tNode = CC::NodeBlock::create( 211 );
+   tNode = CC::LabelledTreeNode::create( 211,  "node211" );
    tRootNode->mLastChildNode->mLastChildNode->attachAfterLastChild(tNode);
 
 
-   tNode = CC::NodeBlock::create( 2111 );
+   tNode = CC::LabelledTreeNode::create( 2111,  "node2111" );
    tRootNode->mLastChildNode->mLastChildNode->mLastChildNode->attachAfterLastChild(tNode);
 
-   tNode = CC::NodeBlock::create( 22 );
+   tNode = CC::LabelledTreeNode::create( 22,  "node22" );
    tRootNode->mLastChildNode->attachAfterLastChild(tNode);
 
 }

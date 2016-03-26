@@ -22,8 +22,6 @@
     <ClCompile Include="Source\ccBlockArray.cpp" />
     <ClCompile Include="Source\ccBlockPool.cpp" />
     <ClCompile Include="Source\ccCriticalSection_win.cpp" />
-    <ClCompile Include="Source\ccLabelledTreeNode.cpp" />
-    <ClCompile Include="Source\ccLabelledTreeNodeVisitor.cpp" />
     <ClCompile Include="Source\ccLFBlockFreeList.cpp" />
     <ClCompile Include="Source\ccLFBlockQueue.cpp" />
     <ClCompile Include="Source\ccLFPointerQueue.cpp" />
@@ -36,7 +34,6 @@
     <ClCompile Include="Source\ccTreeNodeDestroyer.cpp" />
     <ClCompile Include="Source\ccTreeNodeVisitor.cpp" />
     <ClCompile Include="Source\cc_functions.cpp" />
-    <ClCompile Include="Source\GenerateTreeNodes.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\ccBlockArray.h" />
@@ -49,8 +46,6 @@
     <ClInclude Include="Source\ccDefs.h" />
     <ClInclude Include="Source\ccDiagrams.h" />
     <ClInclude Include="Source\ccFreeList.h" />
-    <ClInclude Include="Source\ccLabelledTreeNode.h" />
-    <ClInclude Include="Source\ccLabelledTreeNodeVisitor.h" />
     <ClInclude Include="Source\ccLFBlockFreeList.h" />
     <ClInclude Include="Source\ccLFBlockQueue.h" />
     <ClInclude Include="Source\ccLFIndex.h" />
@@ -65,7 +60,6 @@
     <ClInclude Include="Source\ccTreeNodeVisitor.h" />
     <ClInclude Include="Source\ccValueQueue.h" />
     <ClInclude Include="Source\cc_functions.h" />
-    <ClInclude Include="Source\GenerateTreeNodes.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1909118A-707C-47E4-80BC-84130E1C951B}</ProjectGuid>

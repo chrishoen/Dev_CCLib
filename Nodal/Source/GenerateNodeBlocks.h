@@ -1,7 +1,6 @@
-#ifndef _GENERATETREENODES_H_
-#define _GENERATETREENODES_H_
+#ifndef _GENERATENODEBLOCKS_H_
+#define _GENERATENODEBLOCKS_H_
 
-#include "ccTreeNode.h"
 #include "ccNodeBlock.h"
 
 

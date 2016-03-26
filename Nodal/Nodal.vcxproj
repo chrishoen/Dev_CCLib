@@ -166,12 +166,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\ccNodeBlock.cpp" />
+    <ClCompile Include="Source\ccNodeBlockVisitor.cpp" />
     <ClCompile Include="Source\CmdLineExec.cpp" />
+    <ClCompile Include="Source\GenerateNodeBlocks.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\ccNodeBlock.h" />
+    <ClInclude Include="Source\ccNodeBlockVisitor.h" />
     <ClInclude Include="Source\CmdLineExec.h" />
+    <ClInclude Include="Source\GenerateNodeBlocks.h" />
     <ClInclude Include="Source\MainInit.h" />
   </ItemGroup>
   <ItemGroup>
