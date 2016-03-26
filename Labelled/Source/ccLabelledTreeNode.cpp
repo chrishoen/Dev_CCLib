@@ -83,35 +83,27 @@ void LabelledTreeNode::setLabel(char* aLabel)
    strncpy(mLabel, aLabel, MaxLabelSize);
 }
 
-void LabelledTreeNode::setFullPath(char* aFullPath)
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This gets the full path label of a subject node
+
+char* LabelledTreeNode::getFullPath()
 {
-   strncpy(mFullPath, aFullPath, MaxFullPathSize);
-}
+   if (mParentNode == 0)
+   {
+      strncpy(mFullPath, mLabel, MaxFullPathSize);
+      return mFullPath;
+   }
+   else
+   {
+      LabelledTreeNode* tParentNode = static_cast<LabelledTreeNode*>(mParentNode);
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// This is called on an object node after it is attached to a subject node
-
-void LabelledTreeNode::onAttached()
-{
-   if (mParentNode==0) return;
-   LabelledTreeNode* tParentNode = static_cast<LabelledTreeNode*>(mParentNode);
-
-   strncpy(mFullPath, tParentNode->mFullPath, MaxFullPathSize);
-   strncat(mFullPath, ".", MaxFullPathSize);
-   strncat(mFullPath, mLabel, MaxFullPathSize);
-#if 0
-   printf("objectNodeOnAttached %5d %s\n", 
-      this->mIdentifier,
-      this->mFullPath);
-#endif
+      strncpy(mFullPath, tParentNode->getFullPath(), MaxFullPathSize);
+      strncat(mFullPath, ".", MaxFullPathSize);
+      strncat(mFullPath, mLabel, MaxFullPathSize);
+      return mFullPath;
+   }
 }
 
 //******************************************************************************

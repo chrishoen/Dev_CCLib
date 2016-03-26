@@ -40,14 +40,12 @@ public:
    char mLabel[MaxLabelSize];
    void setLabel(char* aLabel);
 
+   // This gets the full path label of a subject node
+   char* getFullPath();
 
    // Full path
    enum { MaxFullPathSize = 200 };
    char mFullPath[MaxFullPathSize];
-   void setFullPath(char* aFullPath);
-
-   // This is called on a subject node after it is attached to an object node
-   virtual void onAttached();
 };
 
 //****************************************************************************

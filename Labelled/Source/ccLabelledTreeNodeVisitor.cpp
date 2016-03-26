@@ -24,7 +24,8 @@ void visitLabelledTreeNodeForPrint (TreeNode* aSubjectNode, RecursiveAnchor* aRe
       aRecursiveAnchor->mFirstInLevel,
       aRecursiveAnchor->mLevel,
       tSubjectNode->mIdentifier,
-      tSubjectNode->mFullPath);
+      tSubjectNode->getFullPath());
+//    tSubjectNode->mFullPath);
 }
 
 void printAllLabelledTreeNodes1(LabelledTreeNode* aSubjectNode)
