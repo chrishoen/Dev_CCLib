@@ -16,13 +16,13 @@
     <ClCompile Include="Source\MainInit.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ccNodeBlock.cpp">
+    <ClCompile Include="Source\someNodeBlock.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ccNodeBlockVisitor.cpp">
+    <ClCompile Include="Source\someNodeBlockVisitor.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\GenerateNodeBlocks.cpp">
+    <ClCompile Include="Source\someGenerateBlocks.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -33,13 +33,13 @@
     <ClInclude Include="Source\MainInit.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccNodeBlock.h">
+    <ClInclude Include="Source\someNodeBlock.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccNodeBlockVisitor.h">
+    <ClInclude Include="Source\someNodeBlockVisitor.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GenerateNodeBlocks.h">
+    <ClInclude Include="Source\someGenerateBlocks.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

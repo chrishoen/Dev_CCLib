@@ -1,18 +1,18 @@
-#ifndef _CCNODEBLOCK_H_
-#define _CCNODEBLOCK_H_
+#ifndef _SOMENODEBLOCK_H_
+#define _SOMENODEBLOCK_H_
 
 #include "ccTreeNode.h"
 #include "ccDefs.h"
 #include "ccBlockPoolBlock.h"
 
-namespace CC
+namespace Some
 {
 
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
 
-class NodeBlock : public TreeNode, public CC::BlockPoolBlock<NodeBlock>
+class NodeBlock : public CC::TreeNode, public CC::BlockPoolBlock<NodeBlock>
 {
 public:
 
