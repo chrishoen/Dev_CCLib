@@ -1,5 +1,5 @@
 #ifndef _SOMEMYBLOCK_H_
-#define _SOMEMYLOCK_H_
+#define _SOMEMYBLOCK_H_
 
 #include "ccTreeBlock.h"
 #include "ccDefs.h"

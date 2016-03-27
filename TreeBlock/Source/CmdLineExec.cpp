@@ -7,10 +7,9 @@
 #include "prnPrint.h"
 
 #include "someMyBlock.h"
+#include "someGenerateMyBlocks.h"
 
 #include "CmdLineExec.h"
-
-using namespace std;
 
 //******************************************************************************
 CmdLineExec::CmdLineExec()
@@ -42,6 +41,22 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
+   aCmd->setArgDefault(1,2);
+
+   Some::MyBlock::mBlockPool.show();
+
+   Some::MyBlock* tRootNode = Some::MyBlock::create(1);
+
+   if (aCmd->argInt(1) == 1)
+   {
+      Some::generateMyBlocks1(tRootNode);
+   }
+   else if (aCmd->argInt(1) == 2)
+   {
+      Some::generateMyBlocks2(tRootNode);
+   }
+
+   Some::MyBlock::mBlockPool.show();
 }
 
 //******************************************************************************
