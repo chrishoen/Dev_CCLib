@@ -10,6 +10,7 @@
 #include "someClass1.h"
 #include "someClass2.h"
 #include "someClass3.h"
+#include "someClass4.h"
 #include "someMemory.h"
 using namespace Some;
 
@@ -19,6 +20,7 @@ using namespace Some;
 //******************************************************************************
 CmdLineExec::CmdLineExec()
 {
+   Some::Class4B::mCode1=101;
 }
 //******************************************************************************
 void CmdLineExec::reset()
@@ -35,11 +37,45 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("GO22"   ))  executeGo22 (aCmd);
    if(aCmd->isCmd("GO31"   ))  executeGo31 (aCmd);
    if(aCmd->isCmd("GO32"   ))  executeGo32 (aCmd);
-   if(aCmd->isCmd("GO4"    ))  executeGo4  (aCmd);
+   if(aCmd->isCmd("GO41"   ))  executeGo41 (aCmd);
+   if(aCmd->isCmd("GO42"   ))  executeGo42 (aCmd);
+   if(aCmd->isCmd("GO43"   ))  executeGo43 (aCmd);
+   if(aCmd->isCmd("GO44"   ))  executeGo44 (aCmd);
    if(aCmd->isCmd("GO5"    ))  executeGo5  (aCmd);
    if(aCmd->isCmd("GO6"    ))  executeGo6  (aCmd);
    if(aCmd->isCmd("GO7"    ))  executeGo7  (aCmd);
    if(aCmd->isCmd("GO8"    ))  executeGo8  (aCmd);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo41(Ris::CmdLineCmd* aCmd)
+{
+   Class4B* tX = new Class4B;
+   tX->method4A();
+   tX->method4B();
+}
+
+//******************************************************************************
+
+void CmdLineExec::executeGo42(Ris::CmdLineCmd* aCmd)
+{
+   Class4B* tX = new Class4B;
+   testClass4A(tX);
+}
+
+//******************************************************************************
+
+void CmdLineExec::executeGo43(Ris::CmdLineCmd* aCmd)
+{
+}
+
+//******************************************************************************
+
+void CmdLineExec::executeGo44(Ris::CmdLineCmd* aCmd)
+{
 }
 
 //******************************************************************************
@@ -119,30 +155,6 @@ void CmdLineExec::executeGo32(Ris::CmdLineCmd* aCmd)
 {
    Class3A* tX2 = new(1)Class3A[2];
    Class3A::operator delete[](tX2,1);
-}
-
-//******************************************************************************
-
-void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
-{
-   char* tBuffer1 = new char[(2*sizeof(Class2A))+4];
-   void* tBuffer2 = malloc((2*sizeof(Class2A))+4);
-
-   void* tBuffer3 = (void*)tBuffer2;
-
-   Class2A* tX1 = new(tBuffer3) Class2A;
-   tX1->method1();
-
-   Prn::print(0,"tBuffer3  %llX",tBuffer3);
-   Prn::print(0,"tX1       %llX",tX1);
-
-   free(tX1);
-// delete tX1;
-
-
-
-
-
 }
 
 //******************************************************************************
