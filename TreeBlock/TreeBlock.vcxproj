@@ -171,15 +171,18 @@
     <ClCompile Include="Source\MainInit.cpp" />
     <ClCompile Include="Source\someGenerateMyBlocks.cpp" />
     <ClCompile Include="Source\someMyBlock.cpp" />
+    <ClCompile Include="Source\someMyBlockScratch.cpp" />
     <ClCompile Include="Source\someMyBlockVisitor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\ccTreeBlock.h" />
+    <ClInclude Include="Source\ccTreeBlockScratch.h" />
     <ClInclude Include="Source\ccTreeBlockVisitor.h" />
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\MainInit.h" />
     <ClInclude Include="Source\someGenerateMyBlocks.h" />
     <ClInclude Include="Source\someMyBlock.h" />
+    <ClInclude Include="Source\someMyBlockScratch.h" />
     <ClInclude Include="Source\someMyBlockVisitor.h" />
   </ItemGroup>
   <ItemGroup>
