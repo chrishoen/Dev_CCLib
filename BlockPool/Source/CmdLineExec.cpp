@@ -14,7 +14,7 @@ using namespace Some;
 //******************************************************************************
 CmdLineExec::CmdLineExec()
 {
-   Class6A::initializeShortTermBlockPool(1000);
+   Class6A::initializeLongTermBlockPool(1000);
    Class6B::initializeLongTermBlockPool(1000);
 }
 //******************************************************************************
@@ -54,6 +54,28 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
+   Class6A::mBlockPool.show();
+   Class6B::mBlockPool.show();
+
+   Class6A* t6A = Class6A::allocate();
+
+   Class6A::mBlockPool.show();
+   Class6B::mBlockPool.show();
+
+   Class6B* t6B = Class6B::allocate();
+
+   Class6A::mBlockPool.show();
+   Class6B::mBlockPool.show();
+
+   t6A->deallocate();
+
+   Class6A::mBlockPool.show();
+   Class6B::mBlockPool.show();
+
+   t6B->deallocate();
+
+   Class6A::mBlockPool.show();
+   Class6B::mBlockPool.show();
 }
 
 //******************************************************************************

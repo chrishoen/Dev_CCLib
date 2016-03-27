@@ -50,6 +50,7 @@ void PointerStack::initialize(int aAllocate)
    // initialize variables
    mIndex    = 0;
    mAllocate = aAllocate;
+   mCount    = 0;
 }
 
 //******************************************************************************
@@ -69,8 +70,8 @@ bool PointerStack::push (void* aPointer)
    mArray[mIndex] = aPointer;
    // Increment the index
    ++mIndex;
-   // Decrement the usage counter
-   mCount--;
+   // Increment the usage counter
+   mCount++;
 
    // Critical section
    leaveCriticalSection();
@@ -96,8 +97,8 @@ void* PointerStack::pop ()
    void* tPointer = mArray[mIndex - 1];
    // Decrement the index
    --mIndex;
-   // Increment the usage counter
-   mCount++;
+   // Decrement the usage counter
+   mCount--;
 
    // Critical section
    leaveCriticalSection();
