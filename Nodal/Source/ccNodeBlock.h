@@ -21,27 +21,10 @@ public:
    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
    // Class members
 
-   typedef union BlockData
-   {
-      // Flags
-      struct
-      {
-         unsigned short mBlockType;
-         unsigned short mBlockSubType;
-         unsigned short mDataSize;
-         unsigned short mTreeNodeTxFlags;
-         unsigned short mTreeNodeTxAttachLevel;
-      };
-      // Binary value
-      enum {MaxDataSize=200};
-      unsigned short mData[MaxDataSize/2];
-   } BlockData;
-
-   BlockData mBlockData;
-
-
-   // Label
-   int mData;
+   int mCode1;
+   int mCode2;
+   int mCode3;
+   int mCode4;
 
    // Class members
    //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

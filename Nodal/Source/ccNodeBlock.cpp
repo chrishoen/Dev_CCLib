@@ -58,7 +58,10 @@ void NodeBlock::destroy()
 
 NodeBlock::NodeBlock()
 {
-   mData = 101;
+   mCode1=101;
+   mCode2=102;
+   mCode3=103;
+   mCode4=104;
 }
 
 // Constructor, it is called by create after allocation of a new block.
