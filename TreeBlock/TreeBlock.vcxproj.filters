@@ -30,5 +30,8 @@
     <ClInclude Include="Source\someMyBlock.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="Source\ccTreeBlock.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

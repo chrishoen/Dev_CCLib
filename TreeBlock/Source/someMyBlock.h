@@ -1,9 +1,8 @@
 #ifndef _SOMEMYBLOCK_H_
 #define _SOMEMYLOCK_H_
 
-#include "ccTreeNode.h"
+#include "ccTreeBlock.h"
 #include "ccDefs.h"
-#include "ccBlockPoolBlock.h"
 
 namespace Some
 {
@@ -12,7 +11,7 @@ namespace Some
 //****************************************************************************
 //****************************************************************************
 
-class MyBlock : public CC::TreeNode, public CC::BlockPoolBlock<MyBlock>
+class MyBlock : public CC::TreeBlock<MyBlock>
 {
 public:
 

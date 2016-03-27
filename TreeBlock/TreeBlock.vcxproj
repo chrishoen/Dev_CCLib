@@ -172,6 +172,7 @@
     <ClCompile Include="Source\someMyBlock.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\ccTreeBlock.h" />
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\MainInit.h" />
     <ClInclude Include="Source\someMyBlock.h" />

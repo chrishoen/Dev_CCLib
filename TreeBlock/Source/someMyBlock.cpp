@@ -48,7 +48,7 @@ MyBlock* MyBlock::create (int aIdentifier)
 
 void MyBlock::destroy()
 {
-   CC::BlockPoolBlock<MyBlock>::deallocate();
+   CC::TreeBlock<MyBlock>::deallocate();
 }
 
 //****************************************************************************
