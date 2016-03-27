@@ -41,6 +41,19 @@ void visitTest102(
    aTestVisitorCall(aSubjectNode);
 }
 
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+
+template <class T>
+void visitTest103(
+   TreeBlock<T>*    aSubjectNode, 
+   void (*aTestVisitorCall)(TreeBlock<T>*))
+{
+   printf("visitTest103 %d\n",aSubjectNode->mIdentifier);
+   aTestVisitorCall(aSubjectNode);
+}
+
 
 
 //****************************************************************************

@@ -13,6 +13,7 @@ namespace Some
 
 void visitMyBlockTest101(MyBlock* aSubjectNode);
 void visitMyBlockTest102(MyBlock* aSubjectNode);
+void visitMyBlockTest103(MyBlock* aSubjectNode);
 
 //****************************************************************************
 //****************************************************************************

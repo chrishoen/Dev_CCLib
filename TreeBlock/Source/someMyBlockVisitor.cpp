@@ -27,11 +27,23 @@ void functionMyBlockForTest102 (void* aSubjectNode)
    printf("visitMyBlockForTest102 %d\n",tSubjectNode->mIdentifier);
 }
 
+void functionMyBlockForTest103 (CC::TreeBlock<MyBlock>* aSubjectNode)
+{
+   printf("visitMyBlockForTest103 %d\n",aSubjectNode->mIdentifier);
+}
+
 void visitMyBlockTest102(MyBlock* aSubjectNode)
 {
    CC::visitTest102(
       aSubjectNode,
       functionMyBlockForTest102);
+}
+
+void visitMyBlockTest103(MyBlock* aSubjectNode)
+{
+   CC::visitTest103(
+      aSubjectNode,
+      functionMyBlockForTest103);
 }
 
 
