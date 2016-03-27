@@ -63,6 +63,7 @@ void CmdLineExec::executeGo41(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeGo42(Ris::CmdLineCmd* aCmd)
 {
    Class4B* tX = new Class4B;
+   testBase4(tX);
    testClass4A(tX);
 }
 

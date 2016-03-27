@@ -105,9 +105,16 @@ public:
 //******************************************************************************
 //******************************************************************************
 
-inline void testClass4A(Base4* aX)
+inline void testBase4(Base4* aX)
 {
    aX->base_method1();
+   aX->base_method2();
+}
+
+template <class BlockClass>
+inline void testClass4A(Class4A<BlockClass>* aX)
+{
+   aX->method4A();
    aX->base_method2();
 }
 
