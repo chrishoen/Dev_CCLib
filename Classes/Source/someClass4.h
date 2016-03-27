@@ -9,7 +9,7 @@
 //******************************************************************************
 
 #include "prnPrint.h"
-#include "risCallPointer.h"
+#include "ccCallPointer.h"
 
 namespace Some
 {
@@ -17,6 +17,8 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+
+typedef CC::CallPointer0<> Method2Call;
 
 class Base4
 {
@@ -27,12 +29,25 @@ public:
       mBaseCode1=0;
    }
 
-   virtual void base_method()
+   virtual void base_method1()
    {
-      Prn::print(0, "Base4::base_method %d",mBaseCode1);
+      Prn::print(0, "Base4::base_method1 %d",mBaseCode1);
+   }
+
+   void base_method2()
+   {
+      if (mMethod2Call.isValid())
+      {
+         mMethod2Call();
+      }
+      else
+      {
+         Prn::print(0, "Base4::base_method2 default %d", mBaseCode1);
+      }
    }
 
    int mBaseCode1;
+   Method2Call mMethod2Call;
 };
 
 //******************************************************************************
@@ -48,9 +63,9 @@ public:
    {
    }
 
-   void base_method()
+   void base_method1()
    {
-      Prn::print(0, "Class4A::base_method %d",mBaseCode1);
+      Prn::print(0, "Class4A::base_method1 %d",mBaseCode1);
    }
 
    void method4A()
@@ -69,9 +84,21 @@ class Class4B : public Class4A<Class4B>
 {
 public:
 
-   Class4B();
-   void method4B();
+   Class4B()
+   {
+      Base4::mMethod2Call.bind(this,&Class4B::base_method2);
 
+   }
+
+   void method4B()
+   {
+      Prn::print(0, "Class4B::method4B %d",mCode1);
+   }
+
+   void base_method2()
+   {
+      Prn::print(0, "Class4B::base_method2 %d", mBaseCode1);
+   }
 };
 
 //******************************************************************************
@@ -80,7 +107,8 @@ public:
 
 inline void testClass4A(Base4* aX)
 {
-   aX->base_method();
+   aX->base_method1();
+   aX->base_method2();
 }
 
 //******************************************************************************
