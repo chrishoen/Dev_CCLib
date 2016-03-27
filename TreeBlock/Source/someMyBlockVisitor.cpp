@@ -15,32 +15,23 @@ namespace Some
 //****************************************************************************
 //****************************************************************************
 
-void visitMyBlockForPrint (MyBlock* aSubjectNode, CC::RecursiveAnchor* aRecursiveAnchor)
-{
-   printf("visitMyBlockForPrint %3d %d %d %5d\n",
-      aRecursiveAnchor->mIndex,
-      aRecursiveAnchor->mFirstInLevel,
-      aRecursiveAnchor->mLevel,
-      aSubjectNode->mIdentifier);
-}
-
-void test101(MyBlock* aSubjectNode)
+void visitMyBlockTest101(MyBlock* aSubjectNode)
 {
    CC::visitTest101(
-      aSubjectNode,
-      new CC::RecursiveAnchor());
+      aSubjectNode);
 }
 
-void visitMyBlockForTest (void* aSubjectNode)
+void functionMyBlockForTest102 (void* aSubjectNode)
 {
+   MyBlock* tSubjectNode = (MyBlock*)aSubjectNode;
+   printf("visitMyBlockForTest102 %d\n",tSubjectNode->mIdentifier);
 }
 
-void test102(MyBlock* aSubjectNode)
+void visitMyBlockTest102(MyBlock* aSubjectNode)
 {
    CC::visitTest102(
       aSubjectNode,
-      new CC::RecursiveAnchor(),
-      visitMyBlockForTest);
+      functionMyBlockForTest102);
 }
 
 

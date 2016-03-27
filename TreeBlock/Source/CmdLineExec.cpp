@@ -7,6 +7,7 @@
 #include "prnPrint.h"
 
 #include "someMyBlock.h"
+#include "someMyBlockVisitor.h"
 #include "someGenerateMyBlocks.h"
 
 #include "CmdLineExec.h"
@@ -65,6 +66,8 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
+   Some::MyBlock* tRootNode = Some::MyBlock::create(1);
+   Some::visitMyBlockTest102(tRootNode);
 }
 
 //******************************************************************************
