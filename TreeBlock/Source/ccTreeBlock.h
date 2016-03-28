@@ -3,7 +3,7 @@
 
 #include <new>
 #include <stdio.h>
-#include "ccBlockPool.h"
+#include "ccTreeBlockPool.h"
 
 namespace CC
 {
@@ -48,7 +48,7 @@ public:
    // Static member which provides a global variable for the memory block 
    // pool.
 
-   static CC::BlockPool mBlockPool;
+   static CC::TreeBlockPool<TreeBlock<BlockClass>> mBlockPool;
 
    //***************************************************************************
    //***************************************************************************
