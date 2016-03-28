@@ -32,6 +32,14 @@ void printAllMyBlocks1(MyBlock* aSubjectNode)
       visitMyBlockForPrint);
 }
 
+void printAllMyBlocks2(MyBlock* aSubjectNode)
+{
+   CC::visitAllNodes2(
+      aSubjectNode,
+      new CC::RecursiveAnchor(),
+      visitMyBlockForPrint);
+}
+
 
 
 }//namespace

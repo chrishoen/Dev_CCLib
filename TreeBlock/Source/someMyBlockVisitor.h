@@ -13,6 +13,8 @@ namespace Some
 
 void printAllMyBlocks1(MyBlock* aSubjectNode);
 
+void printAllMyBlocks2(MyBlock* aSubjectNode);
+
 
 //****************************************************************************
 //****************************************************************************

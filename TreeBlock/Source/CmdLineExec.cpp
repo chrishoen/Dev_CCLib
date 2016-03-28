@@ -76,9 +76,7 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
    Some::MyBlock* tRootNode = Some::MyBlock::create(1);
-
    Some::generateMyBlocks1(tRootNode);
-
    Some::printAllMyBlocks1(tRootNode);
 }
 
@@ -86,6 +84,9 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
+   Some::MyBlock* tRootNode = Some::MyBlock::create(1);
+   Some::generateMyBlocks1(tRootNode);
+   Some::printAllMyBlocks2(tRootNode);
 }
 
 //******************************************************************************
