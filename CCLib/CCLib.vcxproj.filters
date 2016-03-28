@@ -128,5 +128,8 @@
     <ClInclude Include="Source\ccValueStack.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="Source\ccRecursiveAnchor.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

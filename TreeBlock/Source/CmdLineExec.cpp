@@ -68,7 +68,7 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   Some::MyBlock* tRootNode = Some::MyBlock::create(1);
+   Some::MyBlock* tRootNode = Some::MyBlock::create(9999);
    Some::scratchMyBlockTest103(tRootNode);
 }
 
@@ -76,7 +76,7 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
-   Some::MyBlock* tRootNode = Some::MyBlock::create(1);
+   Some::MyBlock* tRootNode = Some::MyBlock::create(9999);
    Some::generateMyBlocks1(tRootNode);
    Some::printAllMyBlocks1(tRootNode);
 }
@@ -85,8 +85,9 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
-   Some::MyBlock* tRootNode = Some::MyBlock::create(1);
+   Some::MyBlock* tRootNode = Some::MyBlock::create(9999);
    Some::generateMyBlocks1(tRootNode);
+   Some::printAllMyBlocks1(tRootNode);
    Some::printAllMyBlocks2(tRootNode);
 
    Some::MyBlock::mBlockPool.show();

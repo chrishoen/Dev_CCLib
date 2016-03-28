@@ -26,18 +26,26 @@ void visitMyBlockForPrint (CC::TreeBlock<MyBlock>* aSubjectNode,CC::RecursiveAnc
 
 void printAllMyBlocks1(MyBlock* aSubjectNode)
 {
+   printf("\n");
+   printf("printAllMyBlocks1**************************** %5d\n",aSubjectNode->mIdentifier);
+
    CC::visitAllNodes1(
       aSubjectNode,
       new CC::RecursiveAnchor(),
       visitMyBlockForPrint);
+   printf("\n");
 }
 
 void printAllMyBlocks2(MyBlock* aSubjectNode)
 {
+   printf("\n");
+   printf("printAllMyBlocks2**************************** %5d\n",aSubjectNode->mIdentifier);
+
    CC::visitAllNodes2(
       aSubjectNode,
       new CC::RecursiveAnchor(),
       visitMyBlockForPrint);
+   printf("\n");
 }
 
 

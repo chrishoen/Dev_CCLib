@@ -3,6 +3,7 @@
 
 #include "ccCallPointer.h"
 #include "ccTreeNode.h"
+#include "ccRecursiveAnchor.h"
 
 /*==============================================================================
 
@@ -16,28 +17,6 @@ nodes).
 ==============================================================================*/
 namespace CC
 {
-
-//****************************************************************************
-//****************************************************************************
-//****************************************************************************
-// This is the recursive anchor class. Instances of it are passed to 
-// recursive functions that visit tree nodes. It is used to maintain state
-// between the recursive visit calls.
-
-class RecursiveAnchor
-{
-public:
-   // Constructor
-   RecursiveAnchor();
-
-   // Members
-   // This is incremented for each recursive call
-   int   mIndex;
-   // This is the recursive level
-   int   mLevel;
-   // If true the the current visitation is the first in its level
-   bool  mFirstInLevel;
-};
 
 //****************************************************************************
 //****************************************************************************

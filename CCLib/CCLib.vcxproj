@@ -54,6 +54,7 @@
     <ClInclude Include="Source\ccPointerCircular.h" />
     <ClInclude Include="Source\ccPointerShiftRegister.h" />
     <ClInclude Include="Source\ccPointerStack.h" />
+    <ClInclude Include="Source\ccRecursiveAnchor.h" />
     <ClInclude Include="Source\ccTreeNode.h" />
     <ClInclude Include="Source\ccTreeNodeCollection.h" />
     <ClInclude Include="Source\ccTreeNodeDestroyer.h" />
