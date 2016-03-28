@@ -15,7 +15,7 @@ namespace Some
 //****************************************************************************
 //****************************************************************************
 
-void visitMyBlockForPrint (CC::TreeBlock<MyBlock>* aSubjectNode, CC::RecursiveAnchor* aRecursiveAnchor)
+void visitMyBlockForPrint (CC::TreeBlock<MyBlock>* aSubjectNode,CC::RecursiveAnchor* aRecursiveAnchor)
 {
    printf("visitMyBlockForPrint %3d %d %d %5d\n",
       aRecursiveAnchor->mIndex,

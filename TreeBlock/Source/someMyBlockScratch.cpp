@@ -15,12 +15,6 @@ namespace Some
 //****************************************************************************
 //****************************************************************************
 
-void scratchMyBlockTest101(MyBlock* aSubjectNode)
-{
-   CC::scratchTest101(
-      aSubjectNode);
-}
-
 void functionMyBlockForScratch102 (void* aSubjectNode)
 {
    MyBlock* tSubjectNode = (MyBlock*)aSubjectNode;
@@ -30,6 +24,14 @@ void functionMyBlockForScratch102 (void* aSubjectNode)
 void functionMyBlockForScratch103 (CC::TreeBlock<MyBlock>* aSubjectNode)
 {
    printf("scratchMyBlockForTest103 %d\n",aSubjectNode->mIdentifier);
+}
+
+//****************************************************************************
+
+void scratchMyBlockTest101(MyBlock* aSubjectNode)
+{
+   CC::scratchTest101(
+      aSubjectNode);
 }
 
 void scratchMyBlockTest102(MyBlock* aSubjectNode)

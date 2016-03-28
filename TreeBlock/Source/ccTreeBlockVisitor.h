@@ -59,13 +59,12 @@ void visitAllNodes1(
 {
    // Visit the subject node
    (*aNodeVisitorCall)(aSubjectNode, aRecursiveAnchor);
-#if 0
+
    // Visit all nodes below the subject node
    visitAllNodesBelow1<T>(
       aSubjectNode,
       aRecursiveAnchor,
       aNodeVisitorCall);
-#endif
 }
 
 // This visits all nodes below a given subject root node. It is called 
