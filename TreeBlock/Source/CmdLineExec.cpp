@@ -10,6 +10,7 @@
 #include "someMyBlockVisitor.h"
 #include "someMyBlockScratch.h"
 #include "someGenerateMyBlocks.h"
+#include "ccTreeBlockDestroyer.h"
 
 #include "CmdLineExec.h"
 
@@ -87,6 +88,10 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
    Some::MyBlock* tRootNode = Some::MyBlock::create(1);
    Some::generateMyBlocks1(tRootNode);
    Some::printAllMyBlocks2(tRootNode);
+
+   Some::MyBlock::mBlockPool.show();
+   CC::destroyAllTreeBlocks(tRootNode);
+   Some::MyBlock::mBlockPool.show();
 }
 
 //******************************************************************************

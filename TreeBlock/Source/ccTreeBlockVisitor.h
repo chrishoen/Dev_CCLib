@@ -187,8 +187,96 @@ void visitAllNodesBelow2(
    aRecursiveAnchor->mLevel--;
 }
 
-//****************************************************************************
-//****************************************************************************
-//****************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Iteratively visit a colletion. This can be called in a loop that visits all
+// tree nodes in a collection. It is passed a subject node to visit, a
+// recursive anchor, and a call pointer to a fuction to be applied when the
+// node is visited.
+
+template <class T>
+TreeBlock<T>* visitNode(
+   TreeBlock<T>*    aSubjectNode, 
+   RecursiveAnchor* aRecursiveAnchor,
+   void (*aNodeVisitorCall)(TreeBlock<T>*,RecursiveAnchor*))
+{
+   //--------------------------------------------------------------------------
+   // Visit the subject node
+
+   (*aNodeVisitorCall)(aSubjectNode, aRecursiveAnchor);
+
+   //--------------------------------------------------------------------------
+   // Set the subject node ancestor with after node
+
+   // If the subject node has no parent
+   if (aSubjectNode->mParentNode == 0)
+   {
+      // Then it has no ancestor with after node
+      aSubjectNode->mAncestorWithAfter = 0;
+   }
+   // Else if the parent of the subject node has a node after it
+   else if (aSubjectNode->mParentNode->mAfterNode !=0)
+   {
+      // Then the subject node ancestor with after node is its parent
+      aSubjectNode->mAncestorWithAfter = aSubjectNode->mParentNode;
+   }
+   // Else the subject node has no parent with an after node
+   else
+   {
+      // Copy the subject node's parent ancestor after node to it.
+      // That will be the closest ancestor that has a node after it.
+      // This is used recursively by calls to getNextNode.
+      aSubjectNode->mAncestorWithAfter = aSubjectNode->mParentNode->mAncestorWithAfter;
+   }
+
+   //--------------------------------------------------------------------------
+   // Update the recursive index
+
+   aRecursiveAnchor->mIndex++;
+
+   //--------------------------------------------------------------------------
+   // Pointer to the next node
+
+   TreeBlock<T>* tNextNode = 0;
+
+   //--------------------------------------------------------------------------
+   // Determine the next node
+
+   // If the subject node has child nodes
+   if (aSubjectNode->mFirstChildNode)
+   {
+      // The next node will be the first child node of the subject node
+      tNextNode = aSubjectNode->mFirstChildNode;
+      // The next node level will increase
+      aRecursiveAnchor->mLevel++;
+      // The next node will be the first in its level
+      aRecursiveAnchor->mFirstInLevel = true;
+   }
+   // Else if the subject node has a node after it
+   else if (aSubjectNode->mAfterNode)
+   {
+      // The next node will be the node after it
+      tNextNode = aSubjectNode->mAfterNode;
+      // The next node will not be the first in its level
+      aRecursiveAnchor->mFirstInLevel = false;
+   }
+   // Else the subject node has no child nodes and no nodes after it
+   else
+   {
+      // If the subject node has an ancestor after node
+      if (aSubjectNode->mAncestorWithAfter)
+      {
+         // Set the next node to the ancestor after node
+         tNextNode = aSubjectNode->mAncestorWithAfter->mAfterNode;
+      }
+   }
+   // Return the next node
+   return tNextNode;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 }//namespace
 #endif

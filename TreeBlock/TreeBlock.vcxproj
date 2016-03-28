@@ -176,6 +176,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\ccTreeBlock.h" />
+    <ClInclude Include="Source\ccTreeBlockDestroyer.h" />
     <ClInclude Include="Source\ccTreeBlockScratch.h" />
     <ClInclude Include="Source\ccTreeBlockVisitor.h" />
     <ClInclude Include="Source\CmdLineExec.h" />
