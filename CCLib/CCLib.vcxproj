@@ -59,6 +59,7 @@
     <ClInclude Include="Source\ccTreeNodeDestroyer.h" />
     <ClInclude Include="Source\ccTreeNodeVisitor.h" />
     <ClInclude Include="Source\ccValueQueue.h" />
+    <ClInclude Include="Source\ccValueStack.h" />
     <ClInclude Include="Source\cc_functions.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
