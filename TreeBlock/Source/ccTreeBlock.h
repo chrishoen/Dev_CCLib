@@ -112,6 +112,17 @@ public:
       mBlockPool.put(this);
    }
 
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // This method deallocates the object from the block pool.
+
+   void destroy()
+   {
+      printf("TreeBlock::destroy %d\n",mIdentifier);
+      deallocate();
+   }
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -471,18 +482,6 @@ public:
       this->mBeforeNode = 0;
       this->mAfterNode = 0;
    }
-
-   //---------------------------------------------------------------------------
-   //---------------------------------------------------------------------------
-   //---------------------------------------------------------------------------
-   // Methods provided by inheritors
-
-   // This method calls the class destructor and then deallocates the object
-   // from system memory or from block universe short term or long term
-   // memory block pools. It is analogous to delete. It is overloaded by
-   // inheriting classes.
-
-   virtual void destroy(){}
 
    // This member variable specifes the memory type for an instance of this
    // class that has been created: system, short term block pool, or long term

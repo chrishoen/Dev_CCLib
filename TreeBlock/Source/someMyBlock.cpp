@@ -39,18 +39,6 @@ MyBlock* MyBlock::create (int aIdentifier)
       return tPointer;
 }
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// This method calls the class destructor and then deallocates the object
-// from system memory or from block universe short term or long term
-// memory block pools. It is analogous to delete.
-
-void MyBlock::destroy()
-{
-   CC::TreeBlock<MyBlock>::deallocate();
-}
-
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************

@@ -1,6 +1,7 @@
 #ifndef _CCTREEBLOCKDESTROYER_H_
 #define _CCTREEBLOCKDESTROYER_H_
 
+#include <stdio.h>
 #include "ccTreeBlockVisitor.h"
 #include "ccTreeBlock.h"
 
