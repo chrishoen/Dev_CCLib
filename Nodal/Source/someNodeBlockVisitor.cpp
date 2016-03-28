@@ -31,7 +31,7 @@ void printAllNodeBlocks1(NodeBlock* aSubjectNode)
    CC::visitAllNodes1(
       aSubjectNode,
       new CC::RecursiveAnchor(),
-      new CC::NodeVistorCall(visitNodeBlockForPrint));
+      new CC::NodeVisitorCall(visitNodeBlockForPrint));
 }
 
 void printAllNodeBlocks2(NodeBlock* aSubjectNode)
@@ -39,12 +39,12 @@ void printAllNodeBlocks2(NodeBlock* aSubjectNode)
    CC::visitAllNodes2(
       aSubjectNode,
       new CC::RecursiveAnchor(),
-      new CC::NodeVistorCall(visitNodeBlockForPrint));
+      new CC::NodeVisitorCall(visitNodeBlockForPrint));
 }
 
 void printAllNodeBlocks3(NodeBlock* aSubjectNode)
 {
-   CC::NodeVistorCall tNodeVisitorCall;
+   CC::NodeVisitorCall tNodeVisitorCall;
    tNodeVisitorCall.bind(visitNodeBlockForPrint);
    CC::RecursiveAnchor tRecursiveAnchor;
 
@@ -80,7 +80,7 @@ void destroyAllNodeBlocks(NodeBlock* aSubjectNode)
    CC::visitAllNodes2(
       aSubjectNode,
       new CC::RecursiveAnchor(),
-      new CC::NodeVistorCall(visitNodeBlockForDestroy));
+      new CC::NodeVisitorCall(visitNodeBlockForDestroy));
 }
 
 }//namespace

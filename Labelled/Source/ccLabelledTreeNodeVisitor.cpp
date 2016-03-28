@@ -30,23 +30,31 @@ void visitLabelledTreeNodeForPrint (TreeNode* aSubjectNode, RecursiveAnchor* aRe
 
 void printAllLabelledTreeNodes1(LabelledTreeNode* aSubjectNode)
 {
+   NodeVisitorCall tNodeVisitorCall;
+   tNodeVisitorCall.bind(visitLabelledTreeNodeForPrint);
+   RecursiveAnchor tRecursiveAnchor;
+
    visitAllNodes1(
       aSubjectNode,
-      new RecursiveAnchor(),
-      new NodeVistorCall(visitLabelledTreeNodeForPrint));
+      &tRecursiveAnchor,
+      &tNodeVisitorCall);
 }
 
 void printAllLabelledTreeNodes2(LabelledTreeNode* aSubjectNode)
 {
+   NodeVisitorCall tNodeVisitorCall;
+   tNodeVisitorCall.bind(visitLabelledTreeNodeForPrint);
+   RecursiveAnchor tRecursiveAnchor;
+
    visitAllNodes2(
       aSubjectNode,
-      new RecursiveAnchor(),
-      new NodeVistorCall(visitLabelledTreeNodeForPrint));
+      &tRecursiveAnchor,
+      &tNodeVisitorCall);
 }
 
 void printAllLabelledTreeNodes3(LabelledTreeNode* aSubjectNode)
 {
-   NodeVistorCall tNodeVisitorCall;
+   NodeVisitorCall tNodeVisitorCall;
    tNodeVisitorCall.bind(visitLabelledTreeNodeForPrint);
    RecursiveAnchor tRecursiveAnchor;
 
@@ -80,10 +88,14 @@ void visitLabelledTreeNodeForDestroy (TreeNode* aSubjectNode, RecursiveAnchor* a
 
 void destroyAllLabelledTreeNodes(LabelledTreeNode* aSubjectNode)
 {
+   NodeVisitorCall tNodeVisitorCall;
+   tNodeVisitorCall.bind(visitLabelledTreeNodeForDestroy);
+   RecursiveAnchor tRecursiveAnchor;
+
    visitAllNodes2(
       aSubjectNode,
-      new RecursiveAnchor(),
-      new NodeVistorCall(visitLabelledTreeNodeForDestroy));
+      &tRecursiveAnchor,
+      &tNodeVisitorCall);
 }
 
 }//namespace

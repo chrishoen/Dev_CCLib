@@ -25,12 +25,12 @@ void destroyAllTreeNodes(
    }
 
    // Recursive anchor
-   RecursiveAnchor* tRecursiveAnchor = new RecursiveAnchor();
+   RecursiveAnchor tRecursiveAnchor;
 
    // Visit all nodes below the subject node
    destroyAllTreeNodesBelow(
       aSubjectNode,
-      tRecursiveAnchor);
+      &tRecursiveAnchor);
 
    // Destroy the subject node
    aSubjectNode->destroy();

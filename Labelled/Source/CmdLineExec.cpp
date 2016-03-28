@@ -17,7 +17,7 @@
 //******************************************************************************
 CmdLineExec::CmdLineExec()
 {
-   CC::LabelledTreeNode::initializeShortTermBlockPool(1000);
+   CC::LabelledTreeNode::initializeLongTermBlockPool(1000);
 }
 //******************************************************************************
 void CmdLineExec::reset()

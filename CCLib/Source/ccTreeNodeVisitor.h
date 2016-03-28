@@ -23,7 +23,7 @@ namespace CC
 //****************************************************************************
 // Call pointer for functions that visit tree nodes
 
-typedef CC::CallPointer2<TreeNode*,RecursiveAnchor*> NodeVistorCall;
+typedef CC::CallPointer2<TreeNode*,RecursiveAnchor*> NodeVisitorCall;
 
 //****************************************************************************
 //****************************************************************************
@@ -38,17 +38,17 @@ typedef CC::CallPointer2<TreeNode*,RecursiveAnchor*> NodeVistorCall;
 // called on each node visited
 
 void visitAllNodes1(
-   TreeNode*        aSubjectNode, 
-   RecursiveAnchor* aRecursiveAnchor,
-   NodeVistorCall*  aNodeVisitorCall);
+   TreeNode*         aSubjectNode,
+   RecursiveAnchor*  aRecursiveAnchor,
+   NodeVisitorCall*  aNodeVisitorCall);
 
 // This visits all nodes below a given subject root node. It is called 
 // by the above visitAllNodes1.
 
 void visitAllNodesBelow1(
-   TreeNode*        aSubjectNode, 
-   RecursiveAnchor* aRecursiveAnchor,
-   NodeVistorCall*  aNodeVisitorCall);
+   TreeNode*         aSubjectNode,
+   RecursiveAnchor*  aRecursiveAnchor,
+   NodeVisitorCall*  aNodeVisitorCall);
 
 //----------------------------------------------------------------------------
 // Visit collection in destruction order
@@ -59,17 +59,17 @@ void visitAllNodesBelow1(
 // called on each node visited
 
 void visitAllNodes2(
-   TreeNode*        aSubjectNode, 
-   RecursiveAnchor* aRecursiveAnchor,
-   NodeVistorCall*  aNodeVisitorCall);
+   TreeNode*         aSubjectNode,
+   RecursiveAnchor*  aRecursiveAnchor,
+   NodeVisitorCall*  aNodeVisitorCall);
 
 // This visits all nodes below a given subject root node. It is called 
 // by the above visitAllNodes2.
 
 void visitAllNodesBelow2(
-   TreeNode*        aSubjectNode, 
-   RecursiveAnchor* aRecursiveAnchor,
-   NodeVistorCall*  aNodeVisitorCall);
+   TreeNode*         aSubjectNode, 
+   RecursiveAnchor*  aRecursiveAnchor,
+   NodeVisitorCall*  aNodeVisitorCall);
 
 //----------------------------------------------------------------------------
 // Print a collection
@@ -91,9 +91,9 @@ void printAllTreeNodes2(TreeNode* aRootNode);
 // pointer to a fuction to be applied when the node is visited.
 
 TreeNode* visitNode(
-   TreeNode*        aSubjectNode, 
-   RecursiveAnchor* aRecursiveAnchor,
-   NodeVistorCall*  aNodeVisitorCall);
+   TreeNode*         aSubjectNode,
+   RecursiveAnchor*  aRecursiveAnchor,
+   NodeVisitorCall*  aNodeVisitorCall);
 
 // This prints all nodes in a collection in a loop that uses visitNode.
 
@@ -106,7 +106,7 @@ void printAllTreeNodes3(TreeNode* aRootNode);
 // It returns the next node that is to be visited.
 
 TreeNode* getNextNode(
-   TreeNode*        aSubjectNode);
+   TreeNode*         aSubjectNode);
 
 //****************************************************************************
 //****************************************************************************

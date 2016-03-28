@@ -13,9 +13,9 @@ namespace CC
 //****************************************************************************
 
 void visitAllNodes1(
-   TreeNode*        aSubjectNode,
-   RecursiveAnchor* aRecursiveAnchor,
-   NodeVistorCall*  aNodeVisitorCall)
+   TreeNode*         aSubjectNode,
+   RecursiveAnchor*  aRecursiveAnchor,
+   NodeVisitorCall*  aNodeVisitorCall)
 {
    // Visit the subject node
    (*aNodeVisitorCall)(aSubjectNode, aRecursiveAnchor);
@@ -32,9 +32,9 @@ void visitAllNodes1(
 //****************************************************************************
 
 void visitAllNodes2(
-   TreeNode*        aSubjectNode,
-   RecursiveAnchor* aRecursiveAnchor,
-   NodeVistorCall*  aNodeVisitorCall)
+   TreeNode*         aSubjectNode,
+   RecursiveAnchor*  aRecursiveAnchor,
+   NodeVisitorCall*  aNodeVisitorCall)
 {
    // Visit all nodes below the subject node
    visitAllNodesBelow2(
@@ -52,9 +52,9 @@ void visitAllNodes2(
 //****************************************************************************
 
 void visitAllNodesBelow1(
-   TreeNode*        aSubjectNode,
-   RecursiveAnchor* aRecursiveAnchor,
-   NodeVistorCall*  aNodeVisitorCall)
+   TreeNode*         aSubjectNode,
+   RecursiveAnchor*  aRecursiveAnchor,
+   NodeVisitorCall*  aNodeVisitorCall)
 {
    //-------------------------------------------------------------------------
    // Loop for each child node of the subject node
@@ -101,9 +101,9 @@ void visitAllNodesBelow1(
 // Visit all nodes below
 
 void visitAllNodesBelow2(
-   TreeNode*        aSubjectNode,
-   RecursiveAnchor* aRecursiveAnchor,
-   NodeVistorCall*  aNodeVisitorCall)
+   TreeNode*         aSubjectNode,
+   RecursiveAnchor*  aRecursiveAnchor,
+   NodeVisitorCall*  aNodeVisitorCall)
 {
    //-------------------------------------------------------------------------
    // Loop for each child node of the subject node
@@ -159,15 +159,19 @@ void visitNodeForPrint (TreeNode* aNode, RecursiveAnchor* aRecursiveAnchor)
 
 void printAllTreeNodes1(TreeNode* aSubjectNode)
 {
+   NodeVisitorCall tNodeVisitorCall;
+   tNodeVisitorCall.bind(visitNodeForPrint);
+   RecursiveAnchor tRecursiveAnchor;
+
    visitAllNodes1(
       aSubjectNode,
-      new RecursiveAnchor(),
-      new NodeVistorCall(visitNodeForPrint));
+      &tRecursiveAnchor,
+      &tNodeVisitorCall);
 }
 
 void printAllTreeNodes2(TreeNode* aSubjectNode)
 {
-   NodeVistorCall tNodeVisitorCall;
+   NodeVisitorCall tNodeVisitorCall;
    tNodeVisitorCall.bind(visitNodeForPrint);
    RecursiveAnchor tRecursiveAnchor;
 
@@ -183,9 +187,9 @@ void printAllTreeNodes2(TreeNode* aSubjectNode)
 // Visit a node and return a pointer to the next node
 
 TreeNode* visitNode(
-   TreeNode*        aSubjectNode,
-   RecursiveAnchor* aRecursiveAnchor,
-   NodeVistorCall*  aNodeVisitorCall)
+   TreeNode*         aSubjectNode,
+   RecursiveAnchor*  aRecursiveAnchor,
+   NodeVisitorCall*  aNodeVisitorCall)
 {
    //--------------------------------------------------------------------------
    // Visit the subject node
@@ -266,7 +270,7 @@ TreeNode* visitNode(
 //****************************************************************************
 void printAllTreeNodes3(TreeNode* aSubjectNode)
 {
-   NodeVistorCall tNodeVisitorCall;
+   NodeVisitorCall tNodeVisitorCall;
    tNodeVisitorCall.bind(visitNodeForPrint);
    RecursiveAnchor tRecursiveAnchor;
 
