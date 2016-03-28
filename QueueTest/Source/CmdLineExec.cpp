@@ -5,6 +5,7 @@
 #include <atomic>
 
 #include "ccValueQueue.h"
+#include "ccValueStack.h"
 #include "ccFreeList.h"
 
 #include "prnPrint.h"
@@ -44,11 +45,11 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
    CC::ValueQueue<int> tQueue;
    tQueue.initialize(4);
    
-   int tX,tY;
-   tX=101; tQueue.put(tX);
-   tX=102; tQueue.put(tX);
-   tX=103; tQueue.put(tX);
-   tX=104; tQueue.put(tX);
+   int tY;
+   tQueue.put(101);
+   tQueue.put(102);
+   tQueue.put(103);
+   tQueue.put(104);
 
    Prn::print(0, "Queue %d  %d  %d", tQueue.size(), tQueue.isGet(), tQueue.elementToGet());
 
@@ -64,12 +65,22 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,0.99);
+   CC::ValueStack<int> tStack;
+   tStack.initialize(4);
+   
+   int tY;
+   tStack.push(101);
+   tStack.push(102);
+   tStack.push(103);
+   tStack.push(104);
 
-   double tC = aCmd->argDouble(1);
-   double tX = (1.0 + tC)/2.0;
+   Prn::print(0, "Stack %d", tStack.mCount);
 
-   Prn::print(0, "%8.7f %8.7f",tC,tX);
+   tY = tStack.pop();
+
+   Prn::print(0, "Get   %d", tY);
+
+   Prn::print(0, "Stack %d", tStack.mCount);
 }
 
 //******************************************************************************

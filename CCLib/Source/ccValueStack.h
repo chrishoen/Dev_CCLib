@@ -51,10 +51,10 @@ public:
    ValueStack()
    {
       // All null
+      mElement  = 0;
       mAllocate = 0;
-      mPutIndex = 0;
-      mGetIndex = 0;
-      mElement = 0;
+      mIndex    = 0;
+      mCount    = 0;
    }
 
    //***************************************************************************
@@ -90,7 +90,7 @@ public:
    //***************************************************************************
    // Push a value onto the stack. Return false if the stack is full.
 
-   bool push(Element aValue);
+   bool push(Element aValue)
    {
       // Guard
       if (mIndex == mAllocate) return false;
@@ -112,13 +112,13 @@ public:
    //***************************************************************************
    // Pop a value off of the stack. Return null if the stack is empty.
 
-   Element pop();
+   Element pop()
    {
       // Guard
       if (mIndex == 0) return 0;
 
       // Pop the element above the stack index into a temp pointer
-      Element tValue = mArray[mIndex - 1];
+      Element tValue = mElement[mIndex - 1];
       // Decrement the index
       --mIndex;
       // Decrement the usage counter
@@ -127,6 +127,14 @@ public:
       // Return the temp pointer
       return tValue;
    }
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Return size.
+
+   int size() {return mCount;}
+
 };
 
 //******************************************************************************
