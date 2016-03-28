@@ -13,7 +13,7 @@ size.
 
 #include <stdio.h>
 #include "ccBlockArray.h"
-#include "ccPointerStack.h"
+#include "ccValueStack.h"
 #include "ccPointerCircular.h"
 
 namespace CC
@@ -108,7 +108,7 @@ public:
       // Push the addresses of the blocks in the array onto the pointer stack.
       for (int i = 0; i < aAllocate; i++)
       {
-         mLongTermPointerStack.push(mBlocks.e(i));
+         mLongTermPointerStack.push((TreeBlockClass*)mBlocks.e(i));
       }
    }
 
@@ -120,13 +120,13 @@ public:
    // advances the index into the array. If the block pool is long term, it 
    // pops a pointer from the pointer stack.
 
-   void* get()
+   TreeBlockClass* get()
    {
       // If this pool is short term
       if (mBlockPoolType == BlockPoolType_ShortTerm)
       {
          // Get a block from the circular pointer array
-         return mShortTermPointerCircular.get();
+         return (TreeBlockClass*)mShortTermPointerCircular.get();
       }
       // Else if this pool is long term
       else if (mBlockPoolType == BlockPoolType_LongTerm)
@@ -148,7 +148,7 @@ public:
    // is short term, it does nothing. If the block pool is long term, it pushes
    // the pointer back onto the pointer stack.
 
-   void put(void* aBlockPointer)
+   void put(TreeBlockClass* aBlockPointer)
    {
       // If this pool is short term
       if (mBlockPoolType == BlockPoolType_ShortTerm)
@@ -193,6 +193,7 @@ public:
    // allocated memory block array. To allocate a block, a pointer is gotten
    // from the array and its index is incremented. Allocations are locked with
    // critical sections, making them thread safe.
+
    PointerCircular mShortTermPointerCircular;
 
    // This is a stack of pointers. This is used if the block pool has long
@@ -201,7 +202,8 @@ public:
    // To free a block, a pointer is pushed back onto the stack. To deallocate
    // a block, a pointer is pushed back onto the stack. Pushes and Pops are
    // locked with critical sections, making tehm thread safe.
-   PointerStack mLongTermPointerStack;
+
+   ValueStack<TreeBlockClass*> mLongTermPointerStack;
 
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
