@@ -38,20 +38,26 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,0.99);
-   aCmd->setArgDefault(2,100);
+   aCmd->setArgDefault(1,10);
 
-   Prn::print(0, "TEST GO1");
+   int tN = aCmd->argInt(1);
 
-   double tC = aCmd->argDouble(1);
-   int tN = aCmd->argInt(2);
-   double tD = 0.01;
-   double tX = 0.0;
-
+   Prn::print(0, "LOOP FORWARD");
    for (int i = 0; i < tN; i++)
    {
-      tX = 1.0 - abs(tC - tX);
-      Prn::print(0, "%d %8.7f %8.7f",i,tC,tX);
+      Prn::print(0, "%d",i);
+   }
+
+   Prn::print(0, "LOOP BACKWARD");
+   for (int i = tN-1; i >= 0; i--)
+   {
+      Prn::print(0, "%d",i);
+   }
+
+   Prn::print(0, "LOOP BACKWARD");
+   for (int i = tN-1; i >= 1; i--)
+   {
+      Prn::print(0, "%d",i);
    }
 }
 

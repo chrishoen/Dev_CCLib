@@ -17,7 +17,7 @@
 //******************************************************************************
 CmdLineExec::CmdLineExec()
 {
-   Some::MyBlock::initializeLongTermBlockPool(1000);
+   Some::MyBlock::initializeShortTermBlockPool(1000);
 }
 //******************************************************************************
 void CmdLineExec::reset()
@@ -85,6 +85,7 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
+   Some::MyBlock::mBlockPool.show();
    Some::MyBlock* tRootNode = Some::MyBlock::create(9999);
    Some::generateMyBlocks1(tRootNode);
    Some::printAllMyBlocks1(tRootNode);

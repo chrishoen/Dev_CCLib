@@ -50,6 +50,18 @@ public:
 
    static CC::TreeBlockPool<TreeBlock<BlockClass>> mBlockPool;
 
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // This member variable specifes the memory type for an instance of this
+   // class that has been created: system, short term block pool, or long term
+   // block pool. It is set by the create method when it is allocated it is
+   // used by the destroy method to determine how to deallocate the block.
+
+   int mMemoryType;
+
+   int mBlockIndex;
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -482,13 +494,6 @@ public:
       this->mBeforeNode = 0;
       this->mAfterNode = 0;
    }
-
-   // This member variable specifes the memory type for an instance of this
-   // class that has been created: system, short term block pool, or long term
-   // block pool. It is set by the create method when it is allocated it is
-   // used by the destroy method to determine how to deallocate the block.
-
-   int mMemoryType;
 
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------

@@ -14,7 +14,6 @@ size.
 #include <stdio.h>
 #include "ccBlockArray.h"
 #include "ccValueStack.h"
-#include "ccPointerCircular.h"
 
 namespace CC
 {
@@ -73,18 +72,19 @@ public:
       // Set the block pool type
       mBlockPoolType = BlockPoolType_ShortTerm;
 
+      // Set the number of blocks to allocate.
+      mAllocate = aAllocate;
+
       // Allocate memory for the block array
       mBlocks.initialize(aAllocate,aBlockSize);
 
-      // Initialize the pointer circular array
-      mShortTermPointerCircular.initialize(aAllocate);
+      // Initialize the block circular index
+      // An index of zero is reserved for null index.
+      // For aAllocate==10 the indices will range 1,2,3,4,5,6,7,8,9.
+      mShortTermIndex = 1;
 
-      // Push the addresses of the blocks in the array onto the pointer 
-      // circular array.
-      for (int i = 0; i < aAllocate; i++)
-      {
-         mShortTermPointerCircular.put(mBlocks.e(i));
-      }
+      // Counter
+      mShortTermCount = 0;
    }
 
    //---------------------------------------------------------------------------
@@ -99,16 +99,22 @@ public:
       // Set the block pool type
       mBlockPoolType = BlockPoolType_LongTerm;
 
+      // Allocate for one less so that indices range 1..aAllocate-1
+      // An index of zero is reserved for null index.
+      // For aAllocate==10 the indices will range 1,2,3,4,5,6,7,8,9.
+      mAllocate = aAllocate - 1;
+
       // Allocate memory for the block array
-      mBlocks.initialize(aAllocate,aBlockSize);
+      mBlocks.initialize(mAllocate,aBlockSize);
 
       // Initialize the pointer stack
-      mLongTermPointerStack.initialize(aAllocate);
+      mLongTermIndexStack.initialize(mAllocate);
 
-      // Push the addresses of the blocks in the array onto the pointer stack.
-      for (int i = 0; i < aAllocate; i++)
+      // Push the indices of the blocks in the array onto the index stack.
+      // For aAllocate==10 this will push 9,8,7,6,5,4,3,2,1
+      for (int i = mAllocate - 1; i >= 1; i--)
       {
-         mLongTermPointerStack.push((TreeBlockClass*)mBlocks.e(i));
+         mLongTermIndexStack.push(i);
       }
    }
 
@@ -125,14 +131,34 @@ public:
       // If this pool is short term
       if (mBlockPoolType == BlockPoolType_ShortTerm)
       {
-         // Get a block from the circular pointer array
-         return (TreeBlockClass*)mShortTermPointerCircular.get();
+         // Update counter.
+         mShortTermCount++;
+
+         // Advance the block index, circularly.
+         // An index of zero is reserved for null index.
+         // For aAllocate==10 the indices will range 1,2,3,4,5,6,7,8,9.
+         if (++mShortTermIndex==mAllocate) mShortTermIndex = 1;
+
+         // Return a pointer to a block, circularly.
+         return (TreeBlockClass*)mBlocks.e(mShortTermIndex);
       }
       // Else if this pool is long term
       else if (mBlockPoolType == BlockPoolType_LongTerm)
       {
-         // Get a block from the pointer stack
-         return mLongTermPointerStack.pop();
+         // Pop a block index from the index stack
+         int tBlockIndex = mLongTermIndexStack.pop();
+         // Guard for stack empty
+         if (tBlockIndex == 0)
+         {
+            printf("TreeBlockPool STACK EMPTY\n");
+            return 0;
+         }
+         // Get a pointer to the block at that index
+         TreeBlockClass* tBlockPointer = (TreeBlockClass*)mBlocks.e(tBlockIndex);
+         // Set block variables
+         tBlockPointer->mBlockIndex = tBlockIndex;
+         // Return the pointer to the block
+         return tBlockPointer;
       }
       // Else error
       else
@@ -153,14 +179,14 @@ public:
       // If this pool is short term
       if (mBlockPoolType == BlockPoolType_ShortTerm)
       {
-         // Decrement the circular pointer array usage counter
-         mShortTermPointerCircular.done();
+         // Update counter.
+         mShortTermCount--;
       }
       // Else if this pool is long term
       else if (mBlockPoolType == BlockPoolType_LongTerm)
       {
-         // Push the block back onto the stack
-         mLongTermPointerStack.push(aBlockPointer);
+         // Push the block index back onto the stack
+         mLongTermIndexStack.push(aBlockPointer->mBlockIndex);
       }
    }
 
@@ -172,6 +198,9 @@ public:
    // This allocates storage for the blocks on the system heap and provides
    // pointer access to the allocated blocks.
    BlockArray mBlocks;
+
+   // This is the number of blocks allocated.
+   int mAllocate;
 
    // The two types of block pool, short term and long term lifetimes. Short
    // term blocks are non persistent and long term blocks are persistent.
@@ -194,7 +223,8 @@ public:
    // from the array and its index is incremented. Allocations are locked with
    // critical sections, making them thread safe.
 
-   PointerCircular mShortTermPointerCircular;
+   int mShortTermIndex;
+   int mShortTermCount;
 
    // This is a stack of pointers. This is used if the block pool has long
    // term blocks. It is a stack of pointers into the above allocated memory
@@ -203,7 +233,7 @@ public:
    // a block, a pointer is pushed back onto the stack. Pushes and Pops are
    // locked with critical sections, making tehm thread safe.
 
-   ValueStack<TreeBlockClass*> mLongTermPointerStack;
+   ValueStack<int> mLongTermIndexStack;
 
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
@@ -216,11 +246,11 @@ public:
 
       if (mBlockPoolType == BlockPoolType_ShortTerm)
       {
-         tCount = mShortTermPointerCircular.mCount;
+         tCount = mShortTermCount;
       }
       else if (mBlockPoolType == BlockPoolType_LongTerm)
       {
-         tCount = mLongTermPointerStack.mCount;
+         tCount = mLongTermIndexStack.mCount;
       }
 
       printf("BlockPool Count %d\n", tCount);
