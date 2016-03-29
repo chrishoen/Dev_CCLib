@@ -23,14 +23,21 @@ struct MemHandle
    unsigned short mBlockIndex;
 
    // Constructor
-   MemHandle()
+   inline MemHandle()
    {
       mPoolIndex = 0;
       mBlockIndex = 0;
    }
 
    // Constructor
-   MemHandle(unsigned short aPoolIndex, unsigned short aBlockIndex)
+   inline MemHandle(unsigned short aPoolIndex, unsigned short aBlockIndex)
+   {
+      mPoolIndex = aPoolIndex;
+      mBlockIndex = aBlockIndex;
+   }
+
+   // Set
+   inline void set(unsigned short aPoolIndex, unsigned short aBlockIndex)
    {
       mPoolIndex = aPoolIndex;
       mBlockIndex = aBlockIndex;
