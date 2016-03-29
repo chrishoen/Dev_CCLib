@@ -39,9 +39,8 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,10);
-
    Some::Class1A tX1;
+   Prn::print(0, "sizeof %d",sizeof(tX1));
 }
 
 //******************************************************************************
@@ -50,12 +49,8 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,0.99);
-
-   double tC = aCmd->argDouble(1);
-   double tX = (1.0 + tC)/2.0;
-
-   Prn::print(0, "%8.7f %8.7f",tC,tX);
+   Some::Class1B tX2;
+   Prn::print(0, "sizeof %d",sizeof(tX2));
 }
 
 //******************************************************************************

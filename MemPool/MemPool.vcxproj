@@ -166,12 +166,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\ccMemBlockArray.cpp" />
     <ClCompile Include="Source\CmdLineExec.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
     <ClCompile Include="Source\someClass1.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\ccMemBlockArray.h" />
+    <ClInclude Include="Source\ccMemHandle.h" />
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\MainInit.h" />
     <ClInclude Include="Source\someClass1.h" />

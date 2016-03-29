@@ -1,7 +1,5 @@
-#ifndef _CCLFINDEX_H_
-#define _CCLFINDEX_H_
-
-#include <atomic>
+#ifndef _CCMEMHANDLE_H_
+#define _CCMEMHANDLE_H_
 
 /*==============================================================================
 ==============================================================================*/
@@ -15,55 +13,52 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Lock Free Index used by CAS based algorithms.
+// Memory handle.
 
-struct LFIndex
+struct MemHandle
 {
-   // Used as a node index.
-   int mIndex;
-   // Used to overcome the ABA problem.
-   int mCount;
+   // Memory pool index, specifies which memory pool a block is in.
+   unsigned short mPoolIndex;
+   // Memory block index, specifies which block within the memory pool.
+   unsigned short mBlockIndex;
 
    // Constructor
-   LFIndex()
+   MemHandle()
    {
-      mIndex = 0;
-      mCount = 0;
+      mPoolIndex = 0;
+      mBlockIndex = 0;
    }
 
    // Constructor
-   LFIndex(int aIndex, int aCount)
+   MemHandle(unsigned short aPoolIndex, unsigned short aBlockIndex)
    {
-      mIndex = aIndex;
-      mCount = aCount;
+      mPoolIndex = aPoolIndex;
+      mBlockIndex = aBlockIndex;
    }
 };
 
 // Operator
-inline bool operator==(const LFIndex& lhs, const LFIndex& rhs)
+inline bool operator==(const MemHandle& lhs, const MemHandle& rhs)
 {
-   return lhs.mIndex == rhs.mIndex && lhs.mCount == rhs.mCount;
+   return lhs.mPoolIndex == rhs.mPoolIndex && lhs.mBlockIndex == rhs.mBlockIndex;
 }
 
 // Operator
-inline bool operator!=(const LFIndex& lhs, const LFIndex& rhs)
+inline bool operator!=(const MemHandle& lhs, const MemHandle& rhs)
 {
-   return lhs.mIndex != rhs.mIndex && lhs.mCount != rhs.mCount;
+   return lhs.mPoolIndex != rhs.mPoolIndex && lhs.mBlockIndex != rhs.mBlockIndex;
 }
 
-// Atomic
-typedef std::atomic<LFIndex> AtomicLFIndex;
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Base class for classes whose storage is managed by memory pools.
+// Inheriting classes contain a memory handle.
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Base class for lock free container blocks. This is inherited by classes that
-// are contained in intrusive lock free containers.
-
-class BaseLFBlock
+class HasMemHandle
 {
 public:
-   int mLFNodeIndex;
+   MemHandle mMemHandle;
 };
 
 //******************************************************************************
