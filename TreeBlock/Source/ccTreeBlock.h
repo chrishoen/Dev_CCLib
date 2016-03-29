@@ -46,9 +46,21 @@ public:
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
    // Static member which provides a global variable for the memory block 
-   // pool.
+   // pool. Memory management for all instances of this templated class
+   // can only be done via this block pool.
 
    static CC::TreeBlockPool<TreeBlock<BlockClass>> mBlockPool;
+
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // This member variable is used to specify the index of the block within
+   // the global block pool. It is used by block pool get and put methods,
+   // which are called when a block is allocated or deallocated. This variable 
+   // must not be set in a constructor, the allocation and deallocation methods
+   // set it.
+
+   int mBlockIndex;
 
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
@@ -59,9 +71,7 @@ public:
    // used by the destroy method to determine how to deallocate the block.
 
    int mMemoryType;
-
-   int mBlockIndex;
-
+ 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************

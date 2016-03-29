@@ -55,7 +55,7 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
    }
 
    Prn::print(0, "LOOP BACKWARD");
-   for (int i = tN-1; i >= 1; i--)
+   for (int i = tN; i >= 1; i--)
    {
       Prn::print(0, "%d",i);
    }
