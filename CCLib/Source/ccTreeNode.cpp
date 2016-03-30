@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include "ccBlockPoolList.h"
 #include "ccTreeNode.h"
 
 namespace CC
@@ -331,6 +332,18 @@ void TreeNode::detachFromAll()
    this->mParentNode = 0;
    this->mBeforeNode = 0;
    this->mAfterNode = 0;
+}
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+// This method deallocates the object from the block pool from which it was
+// created. It does not call a class destructor.
+
+void TreeNode::destroy()
+{
+   // Deallocate the block back to the block pool
+   deallocateBlockPoolBlock(this->mBlockHandle);
 }
 
 //****************************************************************************

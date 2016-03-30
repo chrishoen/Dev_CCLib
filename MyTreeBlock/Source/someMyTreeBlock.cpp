@@ -42,19 +42,6 @@ MyTreeBlock* MyTreeBlock::create (int aIdentifier)
    return tBlockPointer;
 }
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// This method calls the class destructor and then deallocates the object
-// from system memory or from block universe short term or long term
-// memory block pools. It is analogous to delete.
-
-void MyTreeBlock::destroy()
-{
-   // Deallocate the block back to the block pool
-   CC::deallocateBlockPoolBlock(this->mBlockHandle);
-}
-
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
