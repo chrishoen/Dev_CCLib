@@ -82,7 +82,7 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockB);
 
    t1A1->deallocate();
-   t1B1->deallocate();
+   Some::MyBlockB::deallocate(t1B1);
 
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockA);
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockB);

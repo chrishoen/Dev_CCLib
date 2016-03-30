@@ -7,9 +7,9 @@
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-#include <new>
 #include "ccBlockHandle.h"
-#include "ccBlockPoolList.h"
+#include "ccBlockPoolBlock.h"
+#include "someBlockPoolIndex.h"
 
 namespace Some
 {
@@ -18,7 +18,7 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 
-class MyBlockB : public CC::HasBlockHandle
+class MyBlockB : public CC::HasBlockHandle, public CC::BlockPoolBlock<Some::MyBlockB,Some::cBlockPoolIndex_MyBlockB>
 {
 public:
 
@@ -28,22 +28,7 @@ public:
    void method1B();
 
    int mCode1B;
-  
-   //--------------------------------------------------------------------------
-   //--------------------------------------------------------------------------
-   //--------------------------------------------------------------------------
-   // This allocates a block from the block pool and uses placement new
-   // to call the class constructor. It is analogous to new.
-
-   static MyBlockB* allocate();
-
-   //--------------------------------------------------------------------------
-   //--------------------------------------------------------------------------
-   //--------------------------------------------------------------------------
-   // This deallocates the object back to the block pool. It does not call
-   // a destructor for the object.
-   void deallocate();
-
+ 
 };
 
 //******************************************************************************
