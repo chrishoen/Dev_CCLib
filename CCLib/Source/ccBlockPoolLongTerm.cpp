@@ -103,6 +103,7 @@ void BlockPoolLongTerm::allocate(void** aBlockPointer,BlockHandle* aBlockHandle)
    if (aBlockHandle)
    {
       aBlockHandle->set(BaseClass::mPoolIndex, tBlockIndex);
+//    printf("BlockPoolLongTerm::allocate %d %d\n",aBlockHandle->mPoolIndex,aBlockHandle->mBlockIndex);
    }
 }
 

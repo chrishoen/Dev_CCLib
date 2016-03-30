@@ -31,6 +31,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MyTreeBlock", "MyTreeBlock\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Labelled", "Labelled\Labelled.vcxproj", "{D365963F-A682-45E8-A18E-B154F8266EB0}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MyTestBlock", "MyTestBlock\MyTestBlock.vcxproj", "{BE903426-17F7-4085-A0B5-0A5796E5D1B7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -151,6 +153,14 @@ Global
 		{D365963F-A682-45E8-A18E-B154F8266EB0}.Release|Win32.Build.0 = Release|Win32
 		{D365963F-A682-45E8-A18E-B154F8266EB0}.Release|x64.ActiveCfg = Release|x64
 		{D365963F-A682-45E8-A18E-B154F8266EB0}.Release|x64.Build.0 = Release|x64
+		{BE903426-17F7-4085-A0B5-0A5796E5D1B7}.Debug|Win32.ActiveCfg = Debug|Win32
+		{BE903426-17F7-4085-A0B5-0A5796E5D1B7}.Debug|Win32.Build.0 = Debug|Win32
+		{BE903426-17F7-4085-A0B5-0A5796E5D1B7}.Debug|x64.ActiveCfg = Debug|x64
+		{BE903426-17F7-4085-A0B5-0A5796E5D1B7}.Debug|x64.Build.0 = Debug|x64
+		{BE903426-17F7-4085-A0B5-0A5796E5D1B7}.Release|Win32.ActiveCfg = Release|Win32
+		{BE903426-17F7-4085-A0B5-0A5796E5D1B7}.Release|Win32.Build.0 = Release|Win32
+		{BE903426-17F7-4085-A0B5-0A5796E5D1B7}.Release|x64.ActiveCfg = Release|x64
+		{BE903426-17F7-4085-A0B5-0A5796E5D1B7}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

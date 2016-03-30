@@ -46,16 +46,6 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0, "sizeofA %d",sizeof(Some::MyBlockA));
-   Prn::print(0, "sizeofB %d",sizeof(Some::MyBlockB));
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
-{
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockA);
 
    Some::MyBlockA* t1A = Some::MyBlockA::allocate();
@@ -70,19 +60,23 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 //******************************************************************************
 
-void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockA);
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockB);
 
    Some::MyBlockA* t1A1 = Some::MyBlockA::allocate();
+   Some::MyBlockA* t1A2 = Some::MyBlockA::allocate();
    Some::MyBlockB* t1B1 = Some::MyBlockB::allocate();
+   Some::MyBlockB* t1B2 = Some::MyBlockB::allocate();
 
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockA);
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockB);
 
    t1A1->deallocate();
+   t1A2->deallocate();
    Some::MyBlockB::deallocate(t1B1);
+   Some::MyBlockB::deallocate(t1B2);
 
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockA);
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockB);
@@ -90,10 +84,10 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
 //******************************************************************************
 
-void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
    Some::MyBlockA* t1A1 = Some::MyBlockA::allocate();
-   Some::MyBlockA* t1A2 = (Some::MyBlockA*)CC::getBlockPoolBlockPtr(t1A1->mBlockHandle);
+   Some::MyBlockA* t1A2 = (Some::MyBlockA*)CC::BlockHandle::ptr(t1A1->mBlockHandle);
 
    t1A1->method1A();
    t1A2->method1A();
@@ -104,7 +98,17 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 
 //******************************************************************************
 
+void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
+{
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 {
+   Prn::print(0, "sizeofA %d",sizeof(Some::MyBlockA));
+   Prn::print(0, "sizeofB %d",sizeof(Some::MyBlockB));
 }
 

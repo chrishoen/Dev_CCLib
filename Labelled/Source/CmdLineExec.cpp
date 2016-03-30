@@ -46,7 +46,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,2);
+   aCmd->setArgDefault(1,1);
 
    LabelledTreeNode* tRootNode = new LabelledTreeNode(0,"root");
 

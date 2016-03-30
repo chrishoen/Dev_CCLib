@@ -17,33 +17,82 @@ namespace CC
 
 struct BlockHandle
 {
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
    // Memory pool index, specifies which memory pool a block is in.
+
    unsigned short mPoolIndex;
    // Memory block index, specifies which block within the memory pool.
    unsigned short mBlockIndex;
 
-   // Reset
-   inline void reset()
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // Constructor
+
+   BlockHandle::BlockHandle()
+   {
+      mPoolIndex = 0;
+      mBlockIndex = 0;
+   }
+
+   BlockHandle::BlockHandle(unsigned short aPoolIndex, unsigned short aBlockIndex)
+   {
+      mPoolIndex = aPoolIndex;
+      mBlockIndex = aBlockIndex;
+   }
+
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // Set
+
+   void setNull()
    {
       mPoolIndex = 0;
       mBlockIndex = 0;
    }
 
    // Set
-   inline void set(unsigned short aPoolIndex, unsigned short aBlockIndex)
+   void set(unsigned short aPoolIndex, unsigned short aBlockIndex)
    {
       mPoolIndex = aPoolIndex;
       mBlockIndex = aBlockIndex;
    }
 
-   inline bool isNull()
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // Null
+
+   bool isNull()
    {
-      return mBlockIndex==0;
+      return mPoolIndex==0 || mBlockIndex==0;
    }
 
+   static BlockHandle null()
+   {
+      BlockHandle tTemp;
+      tTemp.setNull();
+      return tTemp;
+   }
+
+   static BlockHandle nullH;
+
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   // Handle to pointer conversions.
+
+   static void* ptr(BlockHandle aBlockHandle);
 };
 
-// Operator
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Operators
+
 inline bool operator==(const BlockHandle& lhs, const BlockHandle& rhs)
 {
    return lhs.mPoolIndex == rhs.mPoolIndex && lhs.mBlockIndex == rhs.mBlockIndex;

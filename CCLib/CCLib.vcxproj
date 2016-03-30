@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\ccBlockBoxArray.cpp" />
+    <ClCompile Include="Source\ccBlockHandle.cpp" />
     <ClCompile Include="Source\ccBlockPoolBase.cpp" />
     <ClCompile Include="Source\ccBlockPoolList.cpp" />
     <ClCompile Include="Source\ccBlockPoolLongTerm.cpp" />

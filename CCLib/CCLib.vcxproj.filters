@@ -57,6 +57,9 @@
     <ClCompile Include="Source\ccBlockPoolLongTerm.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\ccBlockHandle.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\ccCallPointer.h">
