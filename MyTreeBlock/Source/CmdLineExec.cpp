@@ -8,6 +8,7 @@
 #include "ccBlockPoolList.h"
 #include "someBlockPoolIndex.h"
 #include "someMyTreeBlock.h"
+#include "someGenerateMyTreeBlocks.h"
 #include "CmdLineExec.h"
 
 using namespace std;
@@ -44,9 +45,12 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   Some::MyTreeBlock tX1;
-   Prn::print(0, "sizeof %d",sizeof(tX1));
+   CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
 
+   Some::MyTreeBlock* tRootNode = Some::MyTreeBlock::create(1);
+   Some::generateMyTreeBlocks1(tRootNode);
+
+   CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
 }
 
 //******************************************************************************
