@@ -1,5 +1,5 @@
-#ifndef _SOMEMYBLOCK_H_
-#define _SOMEMYBLOCK_H_
+#ifndef _SOMEMYBLOCKB_H_
+#define _SOMEMYBLOCKB_H_
 
 /*==============================================================================
 ==============================================================================*/
@@ -18,16 +18,16 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 
-class MyBlock : public CC::HasBlockHandle
+class MyBlockB : public CC::HasBlockHandle
 {
 public:
 
-   MyBlock();
-  ~MyBlock();
+   MyBlockB();
+  ~MyBlockB();
 
-   void method1A();
+   void method1B();
 
-   int mCode1A;
+   int mCode1B;
   
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
@@ -35,7 +35,7 @@ public:
    // This allocates a block from the block pool and uses placement new
    // to call the class constructor. It is analogous to new.
 
-   static MyBlock* allocate();
+   static MyBlockB* allocate();
 
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
