@@ -83,7 +83,23 @@ void LongTermBlockPool::finalize()
 
 HasMemHandle* LongTermBlockPool::get()
 {
-   return 0;
+   // Pop a block index from the index stack, free list style.
+   int tBlockIndex = mIndexStack.pop();
+
+   // Guard for stack empty.
+   if (tBlockIndex == 0)
+   {
+      printf("LongTermBlockPool STACK EMPTY %d\n",BaseClass::mMemPoolIndex);
+      return 0;
+   }
+   // Get a pointer to the block at that index.
+   HasMemHandle* tBlockPointer = (HasMemHandle*)mBlocks.block(tBlockIndex);
+
+   // Set block variables.
+   tBlockPointer->mMemHandle.set(BaseClass::mMemPoolIndex,tBlockIndex);
+
+   // Return the pointer to the block.
+   return tBlockPointer;
 }
 
 //******************************************************************************
@@ -95,6 +111,8 @@ HasMemHandle* LongTermBlockPool::get()
 
 void LongTermBlockPool::put(HasMemHandle* aBlockPointer)
 {
+   // Push the block index back onto the stack
+   mIndexStack.push(aBlockPointer->mMemHandle.mBlockIndex);
 }
 
 
