@@ -62,6 +62,7 @@ void MyTreeBlock::destroy()
 
 MyTreeBlock::MyTreeBlock()
 {
+   mIdentifier = 0;
    mCode1=101;
    mCode2=102;
    mCode3=103;
@@ -72,9 +73,7 @@ MyTreeBlock::MyTreeBlock()
 
 MyTreeBlock::MyTreeBlock(int aIdentifier)
 {
-   // Identifier
    mIdentifier = aIdentifier;
-   // Members
    mCode1=101;
    mCode2=102;
    mCode3=103;
