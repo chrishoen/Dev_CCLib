@@ -39,22 +39,12 @@ void visitAllNodesAfter1(
    //-------------------------------------------------------------------------
    // Loop for each child node of the subject node
 
-   // Recursive local variable for first in level flag, 
-   bool tFirstInLevel=true;
-
-   // Before the loop, increment the recursive level
-   aRecursiveAnchor->mLevel++;
-
    // Start the loop at the first child node
    TestNode* tAfterNode = aSubjectNode->mAfterNode;
 
    // Loop through the child nodes
    while (tAfterNode != 0)
    {
-      // Update the recursive first in level flag
-      aRecursiveAnchor->mFirstInLevel = tFirstInLevel;
-      tFirstInLevel = false;
-
       // Update the recursive index
       aRecursiveAnchor->mIndex++;
 
