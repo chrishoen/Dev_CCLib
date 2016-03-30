@@ -56,8 +56,8 @@ public:
 
    // Allocate memory for the block array. It is passed the number of blocks to
    // allocate, the size of the block body, and the memory pool index for the
-   // block aarray.
-   void initialize(int aNumBlocks,int aBlockBodySize);
+   // block array.
+   void initialize(int aNumBlocks,int aBlockSize,int aMemPoolIndex);
 
    // Deallocate memory for the block array.
    void finalize();
@@ -67,13 +67,13 @@ public:
    // short term, it gets a pointer from the circular array of pointers and 
    // advances the index into the array. If the block pool is long term, it 
    // pops a pointer from the pointer stack.
-   void* get();
+   HasMemHandle* get();
 
    //---------------------------------------------------------------------------
    // Put a block back to the pool, this deallocates a block. If the block pool
    // is short term, it does nothing. If the block pool is long term, it pushes
    // the pointer back onto the pointer stack.
-   void put(void* aBlockPointer);
+   void put(HasMemHandle* aBlockPointer);
 
 
    // This is a stack of pointers. This is used if the block pool has long
@@ -83,7 +83,7 @@ public:
    // a block, a pointer is pushed back onto the stack. Pushes and Pops are
    // locked with critical sections, making tehm thread safe.
 
-   ValueStack<int> mBlockIndexStack;
+   ValueStack<int> mIndexStack;
 
 };
 

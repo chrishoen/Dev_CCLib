@@ -52,8 +52,8 @@ public:
 
    // Allocate memory for the block array. It is passed the number of blocks to
    // allocate, the size of the block body, and the memory pool index for the
-   // block aarray.
-   void initialize(int aNumBlocks,int aBlockSize,int aMemPoolIndex);
+   // block array.
+   virtual void initialize(int aNumBlocks,int aBlockSize,int aMemPoolIndex);
 
    // Deallocate memory for the block array.
    virtual void finalize();
@@ -63,13 +63,13 @@ public:
    // short term, it gets a pointer from the circular array of pointers and 
    // advances the index into the array. If the block pool is long term, it 
    // pops a pointer from the pointer stack.
-   virtual void* get()=0;
+   virtual HasMemHandle* get()=0;
 
    //---------------------------------------------------------------------------
    // Put a block back to the pool, this deallocates a block. If the block pool
    // is short term, it does nothing. If the block pool is long term, it pushes
    // the pointer back onto the pointer stack.
-   virtual void put(void* aBlockPointer)=0;
+   virtual void put(HasMemHandle* aBlockPointer)=0;
 
    //---------------------------------------------------------------------------
    // Members

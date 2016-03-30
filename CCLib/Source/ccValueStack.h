@@ -64,8 +64,8 @@ public:
 
   ~ValueStack()
    {
-     // Deallocate the array
-     if (mElement) delete mElement;
+      // Deallocate the array
+      if (mElement) delete mElement;
    }
 
    //***************************************************************************
@@ -78,11 +78,22 @@ public:
 
    void initialize(int aMaxNumOfElements)
    {
+      finalize();
       // Initialize variables
       mIndex = 0;
       mAllocate = aMaxNumOfElements;
       // Allocate memory for the array
       mElement = new Element[mAllocate];
+   }
+
+   void finalize()
+   {
+      // Deallocate the array
+      if (mElement)
+      {
+         delete mElement;
+         mElement = 0;
+      }
    }
 
    //***************************************************************************
