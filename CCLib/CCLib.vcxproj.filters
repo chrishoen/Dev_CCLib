@@ -45,6 +45,18 @@
     <ClCompile Include="Source\ccLogic.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\ccBlockBoxArray.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ccBlockPoolBase.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ccBlockPoolList.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ccBlockPoolLongTerm.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\ccCallPointer.h">
@@ -114,6 +126,24 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccRecursiveAnchor.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ccBlockBoxArray.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ccBlockHandle.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ccBlockPoolBase.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ccBlockPoolIndex.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ccBlockPoolList.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ccBlockPoolLongTerm.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

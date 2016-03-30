@@ -166,22 +166,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source\ccBlockPoolBase.cpp" />
-    <ClCompile Include="Source\ccBlockBoxArray.cpp" />
-    <ClCompile Include="Source\ccBlockPoolLongTerm.cpp" />
-    <ClCompile Include="Source\ccBlockPoolList.cpp" />
     <ClCompile Include="Source\CmdLineExec.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
     <ClCompile Include="Source\someMyBlock.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\ccBlockPoolBase.h" />
-    <ClInclude Include="Source\ccBlockBoxArray.h" />
-    <ClInclude Include="Source\ccBlockHandle.h" />
-    <ClInclude Include="Source\ccBlockPoolLongTerm.h" />
-    <ClInclude Include="Source\ccBlockPoolList.h" />
-    <ClInclude Include="Source\ccBlockPoolIndex.h" />
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\MainInit.h" />
     <ClInclude Include="Source\someMyBlock.h" />
