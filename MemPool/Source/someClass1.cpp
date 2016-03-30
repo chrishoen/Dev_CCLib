@@ -42,16 +42,21 @@ void Class1A::method1A()
 Class1A* Class1A::allocate()
 {
    // Block pointer.
-   Class1A* tPointer = 0;
+   Class1A* tBlockPointer = 0;
+   // Block handle.
+   CC::MemHandle tMemHandle;
 
    // Allocate a block from the block pool.
-   tPointer = (Class1A*)CC::getMemPoolBlock(CC::cMemPoolIndex_Class1A);
+   CC::getMemPoolBlock(CC::cMemPoolIndex_Class1A,(void**)&tBlockPointer,&tMemHandle);
 
    // Call the constructor on the allocated block using placement new.
-   new(tPointer)Class1A();
+   new(tBlockPointer)Class1A();
+
+   // Set the allocated block memory handle.
+   tBlockPointer->mMemHandle = tMemHandle;
 
    // Return the pointer to the allocated block.
-   return tPointer;
+   return tBlockPointer;
 }
 
 //--------------------------------------------------------------------------
@@ -62,7 +67,7 @@ Class1A* Class1A::allocate()
 void Class1A::deallocate()
 {
    // Deallocate the block back to the block pool
-   putMemPoolBlock(this);
+   putMemPoolBlock(this->mMemHandle);
 }
 
 //******************************************************************************

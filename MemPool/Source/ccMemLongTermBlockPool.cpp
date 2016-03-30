@@ -81,25 +81,29 @@ void LongTermBlockPool::finalize()
 // advances the index into the array. If the block pool is long term, it 
 // pops a pointer from the pointer stack.
 
-HasMemHandle* LongTermBlockPool::get()
+void LongTermBlockPool::get(void** aBlockPointer,MemHandle* aMemHandle)
 {
-   // Pop a block index from the index stack, free list style.
+   // Pop a block index from the index stack, as a free list.
    int tBlockIndex = mIndexStack.pop();
-
+    
    // Guard for stack empty.
    if (tBlockIndex == 0)
    {
       printf("LongTermBlockPool STACK EMPTY %d\n",BaseClass::mMemPoolIndex);
-      return 0;
+      return;
    }
-   // Get a pointer to the block at that index.
-   HasMemHandle* tBlockPointer = (HasMemHandle*)mBlocks.block(tBlockIndex);
 
-   // Set block variables.
-   tBlockPointer->mMemHandle.set(BaseClass::mMemPoolIndex,tBlockIndex);
+   // Return a pointer to the block at that index.
+   if (aBlockPointer)
+   {
+      *aBlockPointer = mBlocks.block(tBlockIndex);
+   }
 
-   // Return the pointer to the block.
-   return tBlockPointer;
+   // Return the memory handle for the block.
+   if (aMemHandle)
+   {
+      aMemHandle->set(BaseClass::mMemPoolIndex, tBlockIndex);
+   }
 }
 
 //******************************************************************************
@@ -109,10 +113,10 @@ HasMemHandle* LongTermBlockPool::get()
 // is short term, it does nothing. If the block pool is long term, it pushes
 // the pointer back onto the pointer stack.
 
-void LongTermBlockPool::put(HasMemHandle* aBlockPointer)
+void LongTermBlockPool::put(MemHandle aMemHandle)
 {
    // Push the block index back onto the stack
-   mIndexStack.push(aBlockPointer->mMemHandle.mBlockIndex);
+   mIndexStack.push(aMemHandle.mBlockIndex);
 }
 
 

@@ -63,13 +63,13 @@ public:
    // short term, it gets a pointer from the circular array of pointers and 
    // advances the index into the array. If the block pool is long term, it 
    // pops a pointer from the pointer stack.
-   virtual HasMemHandle* get()=0;
+   virtual void get(void** aBlockPointer,MemHandle* aMemHandle)=0;
 
    //---------------------------------------------------------------------------
    // Put a block back to the pool, this deallocates a block. If the block pool
    // is short term, it does nothing. If the block pool is long term, it pushes
    // the pointer back onto the pointer stack.
-   virtual void put(HasMemHandle* aBlockPointer)=0;
+   virtual void put(MemHandle aMemHandle)=0;
 
    //---------------------------------------------------------------------------
    // Members

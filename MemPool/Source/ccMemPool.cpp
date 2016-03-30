@@ -85,28 +85,28 @@ void finalizeMemPool()
 //****************************************************************************
 //****************************************************************************
 
-HasMemHandle* getMemPoolBlock(int aMemPoolIndex)
+void getMemPoolBlock(int aMemPoolIndex,void** aBlockPointer,MemHandle* aMemHandle)
 {
    // Guard
-   if (aMemPoolIndex<1) return 0;
-   if (aMemPoolIndex>=cMaxNumBlockPools) return 0;
+   if (aMemPoolIndex<1) return;
+   if (aMemPoolIndex>=cMaxNumBlockPools) return;
    if (mBlockPool[aMemPoolIndex]==0)
    {
       printf("ERROR BlockPool doesn't exists %d\n", aMemPoolIndex);
-      return 0;
+      return;
    }
-   return mBlockPool[aMemPoolIndex]->get();
+   // Get block from specific pool.
+   mBlockPool[aMemPoolIndex]->get(aBlockPointer,aMemHandle);
 }
 
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
 
-void putMemPoolBlock(HasMemHandle* aBlockPointer)
+void putMemPoolBlock(MemHandle aMemHandle)
 {
-// printf("putMemPoolBlock %d %d\n", aBlockPointer->mMemHandle.mPoolIndex,aBlockPointer->mMemHandle.mBlockIndex);
-   int tMemPoolIndex = aBlockPointer->mMemHandle.mPoolIndex;
-   mBlockPool[tMemPoolIndex]->put(aBlockPointer);
+// printf("putMemPoolBlock %d %d\n", aMemHandle.mPoolIndex,aMemHandle.mBlockIndex);
+   mBlockPool[aMemHandle.mPoolIndex]->put(aMemHandle);
 }
 
 //****************************************************************************
