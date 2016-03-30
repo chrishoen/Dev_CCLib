@@ -61,8 +61,6 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
    Some::Class1A* t1A = Some::Class1A::allocate();
 
-   CC::showMemPool(CC::cMemPoolIndex_Class1A);
-
    t1A->method1A();
    t1A->~Class1A();
    t1A->deallocate();
@@ -75,6 +73,17 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
+   CC::showMemPool(CC::cMemPoolIndex_Class1A);
+
+   Some::Class1A* t1A1 = Some::Class1A::allocate();
+   Some::Class1A* t1A2 = Some::Class1A::allocate();
+
+   CC::showMemPool(CC::cMemPoolIndex_Class1A);
+
+   t1A1->deallocate();
+   t1A2->deallocate();
+
+   CC::showMemPool(CC::cMemPoolIndex_Class1A);
 }
 
 //******************************************************************************

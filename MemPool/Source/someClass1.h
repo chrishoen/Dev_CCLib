@@ -59,7 +59,7 @@ public:
    void deallocate()
    {
       // Deallocate the block back to the block pool
-      putMemPoolBlock(CC::cMemPoolIndex_Class1A,this);
+      putMemPoolBlock(this);
    }
 
 };

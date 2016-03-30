@@ -22,20 +22,6 @@ struct MemHandle
    // Memory block index, specifies which block within the memory pool.
    unsigned short mBlockIndex;
 
-   // Constructor
-   inline MemHandle()
-   {
-      mPoolIndex = 0;
-      mBlockIndex = 0;
-   }
-
-   // Constructor
-   inline MemHandle(unsigned short aPoolIndex, unsigned short aBlockIndex)
-   {
-      mPoolIndex = aPoolIndex;
-      mBlockIndex = aBlockIndex;
-   }
-
    // Set
    inline void set(unsigned short aPoolIndex, unsigned short aBlockIndex)
    {

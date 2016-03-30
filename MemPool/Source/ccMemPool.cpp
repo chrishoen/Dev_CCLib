@@ -23,7 +23,8 @@ namespace CC
 //****************************************************************************
 // Regional variables
 
-static MemBaseBlockPool* mBlockPool=0;
+static const int cMaxNumBlockPools=100;
+static MemBaseBlockPool* mBlockPool[cMaxNumBlockPools];
 
 //****************************************************************************
 //****************************************************************************
@@ -31,19 +32,54 @@ static MemBaseBlockPool* mBlockPool=0;
 
 void resetMemPool()
 {
-   mBlockPool = new LongTermBlockPool;
+   for (int i = 0; i < cMaxNumBlockPools; i++)
+   {
+      mBlockPool[i]=0;
+   }
 }
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
 
 void addBlockPool(int aNumBlocks, int aBlockSize, int aMemPoolIndex)
 {
-   mBlockPool->initialize(aNumBlocks,aBlockSize,aMemPoolIndex);
+   // Guard
+   if (aMemPoolIndex<1) return;
+   if (aMemPoolIndex>=cMaxNumBlockPools) return;
+   if (mBlockPool[aMemPoolIndex])
+   {
+      printf("ERROR BlockPool already exists %d", aMemPoolIndex);
+      return;
+   }
+   // Create and initialize block pool
+   mBlockPool[aMemPoolIndex] = new LongTermBlockPool;
+   mBlockPool[aMemPoolIndex]->initialize(aNumBlocks,aBlockSize,aMemPoolIndex);
 }
 
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+
 void initializeMemPool()
-{}
+{
+}
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
 
 void finalizeMemPool()
-{}
+{
+   for (int i = 0; i < cMaxNumBlockPools; i++)
+   {
+      if (mBlockPool[i])
+      {
+         mBlockPool[i]->finalize();
+         delete mBlockPool[i];
+      }
+   }
+}
 
 //****************************************************************************
 //****************************************************************************
@@ -51,17 +87,43 @@ void finalizeMemPool()
 
 HasMemHandle* getMemPoolBlock(int aMemPoolIndex)
 {
-   return mBlockPool->get();
+   // Guard
+   if (aMemPoolIndex<1) return 0;
+   if (aMemPoolIndex>=cMaxNumBlockPools) return 0;
+   if (mBlockPool[aMemPoolIndex]==0)
+   {
+      printf("ERROR BlockPool doesn't exists %d\n", aMemPoolIndex);
+      return 0;
+   }
+   return mBlockPool[aMemPoolIndex]->get();
 }
 
-void putMemPoolBlock(int aMemPoolIndex,HasMemHandle* aBlockPointer)
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+
+void putMemPoolBlock(HasMemHandle* aBlockPointer)
 {
-   mBlockPool->put(aBlockPointer);
+// printf("putMemPoolBlock %d %d\n", aBlockPointer->mMemHandle.mPoolIndex,aBlockPointer->mMemHandle.mBlockIndex);
+   int tMemPoolIndex = aBlockPointer->mMemHandle.mPoolIndex;
+   mBlockPool[tMemPoolIndex]->put(aBlockPointer);
 }
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
 
 void showMemPool(int aMemPoolIndex)
 {
-   mBlockPool->show();
+   // Guard
+   if (aMemPoolIndex<1) return;
+   if (aMemPoolIndex>=cMaxNumBlockPools) return;
+   if (mBlockPool[aMemPoolIndex]==0)
+   {
+      printf("ERROR BlockPool doesn't exists %d\n", aMemPoolIndex);
+      return;
+   }
+   mBlockPool[aMemPoolIndex]->show();
 }
 
 } //namespace
