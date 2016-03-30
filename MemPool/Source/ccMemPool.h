@@ -23,8 +23,8 @@ namespace CC
    void finalizeMemPool    ();
 
    
-   void getMemPoolBlock(int aMemPoolIndex,void** aBlockPointer,MemHandle* aMemHandle);
-   void putMemPoolBlock(MemHandle aMemHandle);
+   void allocateMemPoolBlock(int aMemPoolIndex,void** aBlockPointer,MemHandle* aMemHandle);
+   void deallocateMemPoolBlock(MemHandle aMemHandle);
 
    void showMemPool(int aMemPoolIndex);
 

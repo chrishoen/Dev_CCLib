@@ -85,7 +85,7 @@ void finalizeMemPool()
 //****************************************************************************
 //****************************************************************************
 
-void getMemPoolBlock(int aMemPoolIndex,void** aBlockPointer,MemHandle* aMemHandle)
+void allocateMemPoolBlock(int aMemPoolIndex,void** aBlockPointer,MemHandle* aMemHandle)
 {
    // Guard
    if (aMemPoolIndex<1) return;
@@ -96,17 +96,17 @@ void getMemPoolBlock(int aMemPoolIndex,void** aBlockPointer,MemHandle* aMemHandl
       return;
    }
    // Get block from specific pool.
-   mBlockPool[aMemPoolIndex]->get(aBlockPointer,aMemHandle);
+   mBlockPool[aMemPoolIndex]->allocate(aBlockPointer,aMemHandle);
 }
 
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
 
-void putMemPoolBlock(MemHandle aMemHandle)
+void deallocateMemPoolBlock(MemHandle aMemHandle)
 {
-// printf("putMemPoolBlock %d %d\n", aMemHandle.mPoolIndex,aMemHandle.mBlockIndex);
-   mBlockPool[aMemHandle.mPoolIndex]->put(aMemHandle);
+// printf("deallocateMemPoolBlock %d %d\n", aMemHandle.mPoolIndex,aMemHandle.mBlockIndex);
+   mBlockPool[aMemHandle.mPoolIndex]->deallocate(aMemHandle);
 }
 
 //****************************************************************************

@@ -67,13 +67,13 @@ public:
    // short term, it gets a pointer from the circular array of pointers and 
    // advances the index into the array. If the block pool is long term, it 
    // pops a pointer from the pointer stack.
-   void get(void** aBlockPointer,MemHandle* aMemHandle);
+   void allocate(void** aBlockPointer,MemHandle* aMemHandle);
 
    //---------------------------------------------------------------------------
    // Put a block back to the pool, this deallocates a block. If the block pool
    // is short term, it does nothing. If the block pool is long term, it pushes
    // the pointer back onto the pointer stack.
-   void put(MemHandle aMemHandle);
+   void deallocate(MemHandle aMemHandle);
 
 
    // This is a stack of pointers. This is used if the block pool has long

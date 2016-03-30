@@ -81,7 +81,7 @@ void LongTermBlockPool::finalize()
 // advances the index into the array. If the block pool is long term, it 
 // pops a pointer from the pointer stack.
 
-void LongTermBlockPool::get(void** aBlockPointer,MemHandle* aMemHandle)
+void LongTermBlockPool::allocate(void** aBlockPointer,MemHandle* aMemHandle)
 {
    // Pop a block index from the index stack, as a free list.
    int tBlockIndex = mIndexStack.pop();
@@ -113,7 +113,7 @@ void LongTermBlockPool::get(void** aBlockPointer,MemHandle* aMemHandle)
 // is short term, it does nothing. If the block pool is long term, it pushes
 // the pointer back onto the pointer stack.
 
-void LongTermBlockPool::put(MemHandle aMemHandle)
+void LongTermBlockPool::deallocate(MemHandle aMemHandle)
 {
    // Push the block index back onto the stack
    mIndexStack.push(aMemHandle.mBlockIndex);
