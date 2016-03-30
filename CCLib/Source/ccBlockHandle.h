@@ -22,12 +22,25 @@ struct BlockHandle
    // Memory block index, specifies which block within the memory pool.
    unsigned short mBlockIndex;
 
+   // Reset
+   inline void reset()
+   {
+      mPoolIndex = 0;
+      mBlockIndex = 0;
+   }
+
    // Set
    inline void set(unsigned short aPoolIndex, unsigned short aBlockIndex)
    {
       mPoolIndex = aPoolIndex;
       mBlockIndex = aBlockIndex;
    }
+
+   inline bool isNull()
+   {
+      return mBlockIndex==0;
+   }
+
 };
 
 // Operator

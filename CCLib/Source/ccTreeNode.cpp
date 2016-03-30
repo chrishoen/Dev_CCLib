@@ -46,6 +46,16 @@ TreeNode::TreeNode(int aIdentifier)
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
+// Get a pointer from a block handle.
+
+TreeNode* TreeNode::ptr(BlockHandle aBlockHandle)
+{
+   return static_cast<TreeNode*>(getBlockPoolBlockPtr(aBlockHandle));
+}
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
 // Attach an object node to the first child of this subject node, before it.
 // The object node becomes this subject node's first child.
 
