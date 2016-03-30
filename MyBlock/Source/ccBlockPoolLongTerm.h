@@ -1,5 +1,5 @@
-#ifndef _CCMEMLONGTERMBLOCKPOOL_H_
-#define _CCMEMLONGTERMBLOCKPOOL_H_
+#ifndef _CCBLOCKPOOLLONGTERM_H_
+#define _CCBLOCKPOOLLONGTERM_H_
 /*==============================================================================
 
 This defines a memory pool of a fixed number of blocks that are of a fixed
@@ -11,7 +11,7 @@ size.
 //******************************************************************************
 //******************************************************************************
 
-#include "ccMemBaseBlockPool.h"
+#include "ccBlockPoolBase.h"
 #include "ccValueStack.h"
 
 namespace CC
@@ -41,23 +41,23 @@ namespace CC
 // their lifetimes have expired. Blocks that are allocated from short term 
 // pools are not deallocated, they are simply reused. 
 
-class LongTermBlockPool : public MemBaseBlockPool
+class BlockPoolLongTerm : public BlockPoolBase
 {
 public:
-   typedef MemBaseBlockPool BaseClass;
+   typedef BlockPoolBase BaseClass;
 
    //---------------------------------------------------------------------------
    // Methods
 
    //---------------------------------------------------------------------------
    // Constructor
-   LongTermBlockPool();
-  ~LongTermBlockPool();
+   BlockPoolLongTerm();
+  ~BlockPoolLongTerm();
 
    // Allocate memory for the block array. It is passed the number of blocks to
    // allocate, the size of the block body, and the memory pool index for the
    // block array.
-   void initialize(int aNumBlocks,int aBlockSize,int aMemPoolIndex);
+   void initialize(int aNumBlocks,int aBlockSize,int aPoolIndex);
 
    // Deallocate memory for the block array.
    void finalize();
@@ -67,17 +67,17 @@ public:
    // short term, it gets a pointer from the circular array of pointers and 
    // advances the index into the array. If the block pool is long term, it 
    // pops a pointer from the pointer stack.
-   void allocate(void** aBlockPointer,MemHandle* aMemHandle);
+   void allocate(void** aBlockPointer,BlockHandle* aBlockHandle);
 
    //---------------------------------------------------------------------------
    // Put a block back to the pool, this deallocates a block. If the block pool
    // is short term, it does nothing. If the block pool is long term, it pushes
    // the pointer back onto the pointer stack.
-   void deallocate(MemHandle aMemHandle);
+   void deallocate(BlockHandle aBlockHandle);
 
    //---------------------------------------------------------------------------
    // Return a pointer to a block, given its memory handle.
-   void* getBlockPtr(MemHandle aMemHandle);
+   void* getBlockPtr(BlockHandle aBlockHandle);
 
    //---------------------------------------------------------------------------
    // This is a stack of pointers. This is used if the block pool has long
@@ -87,9 +87,9 @@ public:
    // a block, a pointer is pushed back onto the stack. Pushes and Pops are
    // locked with critical sections, making tehm thread safe.
 
-   ValueStack<int> mIndexStack;
+   ValueStack<int> mBlockIndexStack;
 
-   int size(){ return mIndexStack.mCount; }
+   int size(){ return mBlockIndexStack.mCount; }
 };
 
 //******************************************************************************

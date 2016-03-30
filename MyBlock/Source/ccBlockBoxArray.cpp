@@ -11,7 +11,7 @@ Description:
 #include <math.h>
 #include <string.h>
 
-#include "ccMemBlockBoxArray.h"
+#include "ccBlockBoxArray.h"
 
 namespace CC
 {
@@ -20,18 +20,18 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 
-MemBlockBoxArray::MemBlockBoxArray()
+BlockBoxArray::BlockBoxArray()
 {
    // All null
    mNumBlocks=0;
    mBlockSize=0;
    mHeaderSize=0;
    mBlockBoxSize=0;
-   mMemPoolIndex=0;
+   mPoolIndex=0;
    mMemory=0;
 }
 
-MemBlockBoxArray::~MemBlockBoxArray()
+BlockBoxArray::~BlockBoxArray()
 {
    // Deallocate the array
    if (mMemory) free(mMemory);
@@ -43,7 +43,7 @@ MemBlockBoxArray::~MemBlockBoxArray()
 // Allocate memory for the block array. It is passed the number of blocks to 
 // allocate and the size of the blocks.
 
-void MemBlockBoxArray::initialize(int aNumBlocks,int aBlockSize,int aMemPoolIndex)
+void BlockBoxArray::initialize(int aNumBlocks,int aBlockSize,int aPoolIndex)
 {
    finalize();
    // Store members.
@@ -51,7 +51,7 @@ void MemBlockBoxArray::initialize(int aNumBlocks,int aBlockSize,int aMemPoolInde
    mBlockSize    = aBlockSize;
    mHeaderSize   = cHeaderSize;
    mBlockBoxSize = aBlockSize + cHeaderSize;;
-   mMemPoolIndex = aMemPoolIndex;
+   mPoolIndex = aPoolIndex;
 
    // Allocate memory for the array.
    mMemory = (char*)malloc(mNumBlocks*mBlockBoxSize);
@@ -59,12 +59,12 @@ void MemBlockBoxArray::initialize(int aNumBlocks,int aBlockSize,int aMemPoolInde
    // Initialize block headers.
    for (int i = 0; i < mNumBlocks; i++)
    {
-      MemBlockHeader* tHeader = header(i);
-      tHeader->mMemHandle.set(mMemPoolIndex,i);
+      BlockHeader* tHeader = header(i);
+      tHeader->mBlockHandle.set(mPoolIndex,i);
    }
 }
 
-void MemBlockBoxArray::finalize()
+void BlockBoxArray::finalize()
 {
    // Deallocate the array
    if (mMemory)
@@ -79,7 +79,7 @@ void MemBlockBoxArray::finalize()
 //******************************************************************************
 // Return a pointer to a block, based on block array index
 
-char* MemBlockBoxArray::blockBox(int aIndex)
+char* BlockBoxArray::blockBox(int aIndex)
 {
    char*  tBlockBox = &mMemory[mBlockBoxSize*aIndex];
    return tBlockBox;
@@ -90,10 +90,10 @@ char* MemBlockBoxArray::blockBox(int aIndex)
 //******************************************************************************
 // Return a pointer to a header, based on block array index
 
-MemBlockHeader* MemBlockBoxArray::header(int aIndex)
+BlockHeader* BlockBoxArray::header(int aIndex)
 {
    char*  tBlockBox = &mMemory[mBlockBoxSize*aIndex];
-   MemBlockHeader* tHeader = (MemBlockHeader*)tBlockBox;
+   BlockHeader* tHeader = (BlockHeader*)tBlockBox;
    return tHeader;
 }
 
@@ -102,7 +102,7 @@ MemBlockHeader* MemBlockBoxArray::header(int aIndex)
 //******************************************************************************
 // Return a pointer to a body, based on block array index
 
-char* MemBlockBoxArray::block(int aIndex)
+char* BlockBoxArray::block(int aIndex)
 {
    char*  tBlockBox = &mMemory[mBlockBoxSize*aIndex];
    char*  tBlock = tBlockBox + cHeaderSize;

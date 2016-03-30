@@ -1,5 +1,5 @@
-#ifndef _CCMEMHANDLE_H_
-#define _CCMEMHANDLE_H_
+#ifndef _CCBLOCKHANDLE_H_
+#define _CCBLOCKHANDLE_H_
 
 /*==============================================================================
 ==============================================================================*/
@@ -15,7 +15,7 @@ namespace CC
 //******************************************************************************
 // Memory handle.
 
-struct MemHandle
+struct BlockHandle
 {
    // Memory pool index, specifies which memory pool a block is in.
    unsigned short mPoolIndex;
@@ -31,13 +31,13 @@ struct MemHandle
 };
 
 // Operator
-inline bool operator==(const MemHandle& lhs, const MemHandle& rhs)
+inline bool operator==(const BlockHandle& lhs, const BlockHandle& rhs)
 {
    return lhs.mPoolIndex == rhs.mPoolIndex && lhs.mBlockIndex == rhs.mBlockIndex;
 }
 
 // Operator
-inline bool operator!=(const MemHandle& lhs, const MemHandle& rhs)
+inline bool operator!=(const BlockHandle& lhs, const BlockHandle& rhs)
 {
    return lhs.mPoolIndex != rhs.mPoolIndex && lhs.mBlockIndex != rhs.mBlockIndex;
 }
@@ -48,10 +48,10 @@ inline bool operator!=(const MemHandle& lhs, const MemHandle& rhs)
 // Base class for classes whose storage is managed by memory pools.
 // Inheriting classes contain a memory handle.
 
-class HasMemHandle
+class HasBlockHandle
 {
 public:
-   MemHandle mMemHandle;
+   BlockHandle mBlockHandle;
 };
 
 //******************************************************************************

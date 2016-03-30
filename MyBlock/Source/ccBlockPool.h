@@ -1,5 +1,5 @@
-#ifndef _CCMEMPOOL_H_
-#define _CCMEMPOOL_H_
+#ifndef _CCBLOCKPOOL_H_
+#define _CCBLOCKPOOL_H_
 
 /*==============================================================================
 ==============================================================================*/
@@ -7,7 +7,7 @@
 //******************************************************************************
 //******************************************************************************
 
-#include "ccMemHandle.h"
+#include "ccBlockHandle.h"
 
 namespace CC
 {
@@ -15,20 +15,20 @@ namespace CC
    //***************************************************************************
    //***************************************************************************
 
-   void resetMemPool       ();
+   void resetBlockPool       ();
 
-   void addBlockPool(int aNumBlocks,int aBlockSize,int aMemPoolIndex);
+   void addBlockPool(int aNumBlocks,int aBlockSize,int aPoolIndex);
 
-   void initializeMemPool  ();
-   void finalizeMemPool    ();
+   void initializeBlockPool  ();
+   void finalizeBlockPool    ();
 
    
-   void allocateMemPoolBlock(int aMemPoolIndex,void** aBlockPointer,MemHandle* aMemHandle);
-   void deallocateMemPoolBlock(MemHandle aMemHandle);
+   void allocateBlockPoolBlock(int aPoolIndex,void** aBlockPointer,BlockHandle* aBlockHandle);
+   void deallocateBlockPoolBlock(BlockHandle aBlockHandle);
 
-   void showMemPool(int aMemPoolIndex);
+   void showBlockPool(int aPoolIndex);
 
-   void* getMemPoolBlockPtr(MemHandle aMemHandle);
+   void* getBlockPoolBlockPtr(BlockHandle aBlockHandle);
 
 }//namespace
 #endif

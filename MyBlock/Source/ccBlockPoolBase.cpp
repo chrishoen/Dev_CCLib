@@ -11,7 +11,7 @@ Description:
 #include <math.h>
 #include <string.h>
 
-#include "ccMemBaseBlockPool.h"
+#include "ccBlockPoolBase.h"
 
 namespace CC
 {
@@ -21,12 +21,12 @@ namespace CC
 //******************************************************************************
 // Constructor
 
-MemBaseBlockPool::MemBaseBlockPool()
+BlockPoolBase::BlockPoolBase()
 {
    // All null.
    mNumBlocks=0;
    mBlockSize=0;
-   mMemPoolIndex=0;
+   mPoolIndex=0;
    mCount=0;
 }
 
@@ -38,19 +38,19 @@ MemBaseBlockPool::MemBaseBlockPool()
 // allocate, the size of the block body, and the memory pool index for the
 // block aarray.
 
-void MemBaseBlockPool::initialize(int aNumBlocks, int aBlockSize, int aMemPoolIndex)
+void BlockPoolBase::initialize(int aNumBlocks, int aBlockSize, int aPoolIndex)
 {
    // Store.
    mNumBlocks    = aNumBlocks; 
    mBlockSize     = aBlockSize; 
-   mMemPoolIndex = aMemPoolIndex;
+   mPoolIndex = aPoolIndex;
    mCount=0;
    // Initialize.
-   mBlocks.initialize(aNumBlocks,aBlockSize,aMemPoolIndex);
+   mBlocks.initialize(aNumBlocks,aBlockSize,aPoolIndex);
 }
 
    // Deallocate memory for the block array.
-void MemBaseBlockPool::finalize()
+void BlockPoolBase::finalize()
 {
    mBlocks.finalize();
    mCount=0;
@@ -62,7 +62,7 @@ void MemBaseBlockPool::finalize()
 //******************************************************************************
 // Helpers
 
-void MemBaseBlockPool::show()
+void BlockPoolBase::show()
 {
    printf("MemBlockPool size %d\n", size());
 }

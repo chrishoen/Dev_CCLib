@@ -5,8 +5,8 @@
 #include <atomic>
 
 #include "prnPrint.h"
-#include "ccMemPool.h"
-#include "ccMemPoolIndex.h"
+#include "ccBlockPool.h"
+#include "ccBlockPoolIndex.h"
 #include "someMyBlock.h"
 #include "CmdLineExec.h"
 
@@ -15,9 +15,9 @@ using namespace std;
 //******************************************************************************
 CmdLineExec::CmdLineExec()
 {
-   CC::resetMemPool();
-   CC::addBlockPool(1000, sizeof(Some::MyBlock),CC::cMemPoolIndex_MyBlock);
-   CC::initializeMemPool();
+   CC::resetBlockPool();
+   CC::addBlockPool(1000, sizeof(Some::MyBlock),CC::cBlockPoolIndex_MyBlock);
+   CC::initializeBlockPool();
 }
 //******************************************************************************
 void CmdLineExec::reset()
@@ -55,7 +55,7 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   CC::showMemPool(CC::cMemPoolIndex_MyBlock);
+   CC::showBlockPool(CC::cBlockPoolIndex_MyBlock);
 
    Some::MyBlock* t1A = Some::MyBlock::allocate();
 
@@ -63,7 +63,7 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
    t1A->~MyBlock();
    t1A->deallocate();
 
-   CC::showMemPool(CC::cMemPoolIndex_MyBlock);
+   CC::showBlockPool(CC::cBlockPoolIndex_MyBlock);
 
 }
 
@@ -71,17 +71,17 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
-   CC::showMemPool(CC::cMemPoolIndex_MyBlock);
+   CC::showBlockPool(CC::cBlockPoolIndex_MyBlock);
 
    Some::MyBlock* t1A1 = Some::MyBlock::allocate();
    Some::MyBlock* t1A2 = Some::MyBlock::allocate();
 
-   CC::showMemPool(CC::cMemPoolIndex_MyBlock);
+   CC::showBlockPool(CC::cBlockPoolIndex_MyBlock);
 
    t1A1->deallocate();
    t1A2->deallocate();
 
-   CC::showMemPool(CC::cMemPoolIndex_MyBlock);
+   CC::showBlockPool(CC::cBlockPoolIndex_MyBlock);
 }
 
 //******************************************************************************
@@ -89,13 +89,13 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
    Some::MyBlock* t1A1 = Some::MyBlock::allocate();
-   Some::MyBlock* t1A2 = (Some::MyBlock*)CC::getMemPoolBlockPtr(t1A1->mMemHandle);
+   Some::MyBlock* t1A2 = (Some::MyBlock*)CC::getBlockPoolBlockPtr(t1A1->mBlockHandle);
 
    t1A1->method1A();
    t1A2->method1A();
    t1A1->deallocate();
 
-   CC::showMemPool(CC::cMemPoolIndex_MyBlock);
+   CC::showBlockPool(CC::cBlockPoolIndex_MyBlock);
 }
 
 //******************************************************************************

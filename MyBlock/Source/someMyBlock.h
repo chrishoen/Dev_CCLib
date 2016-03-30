@@ -8,9 +8,9 @@
 //******************************************************************************
 //******************************************************************************
 #include <new>
-#include "ccMemHandle.h"
-#include "ccMemPoolIndex.h"
-#include "ccMemPool.h"
+#include "ccBlockHandle.h"
+#include "ccBlockPoolIndex.h"
+#include "ccBlockPool.h"
 
 namespace Some
 {
@@ -19,7 +19,7 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 
-class MyBlock : public CC::HasMemHandle
+class MyBlock : public CC::HasBlockHandle
 {
 public:
 

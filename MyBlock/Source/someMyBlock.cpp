@@ -44,16 +44,16 @@ MyBlock* MyBlock::allocate()
    // Block pointer.
    MyBlock* tBlockPointer = 0;
    // Block handle.
-   CC::MemHandle tMemHandle;
+   CC::BlockHandle tBlockHandle;
 
    // Allocate a block from the block pool.
-   CC::allocateMemPoolBlock(CC::cMemPoolIndex_MyBlock,(void**)&tBlockPointer,&tMemHandle);
+   CC::allocateBlockPoolBlock(CC::cBlockPoolIndex_MyBlock,(void**)&tBlockPointer,&tBlockHandle);
 
    // Call the constructor on the allocated block using placement new.
    new(tBlockPointer)MyBlock();
 
    // Set the allocated block memory handle.
-   tBlockPointer->mMemHandle = tMemHandle;
+   tBlockPointer->mBlockHandle = tBlockHandle;
 
    // Return the pointer to the allocated block.
    return tBlockPointer;
@@ -67,7 +67,7 @@ MyBlock* MyBlock::allocate()
 void MyBlock::deallocate()
 {
    // Deallocate the block back to the block pool
-   deallocateMemPoolBlock(this->mMemHandle);
+   deallocateBlockPoolBlock(this->mBlockHandle);
 }
 
 }//namespace
