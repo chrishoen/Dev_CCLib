@@ -62,20 +62,11 @@ public:
    // first child node and ends at the last child node. The linked list can be
    // traversed via the before and after pointers of the child nodes.
 
-   // The parent node of this node
-   TestNode* mParentNode;
-
    // The node before this node
    TestNode* mBeforeNode;
 
    // The node after this node
    TestNode* mAfterNode;
-
-   // The first child node of this node
-   TestNode* mFirstChildNode;
-
-   // The last child node of this node
-   TestNode* mLastChildNode;
 
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
@@ -87,36 +78,7 @@ public:
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
-   // These attach an object node to this subject node, as a child node
-
-   // Attach an object node to the first child of this subject node, before it.
-   // The object node becomes this subject node's first child.
-   void attachBeforeFirstChild (TestNode* aObjectNode);
-
-   // Attach an object node to the last child of this subject node, after it.
-   // The object node becomes this subject node's last child.
-   void attachAfterLastChild (TestNode* aObjectNode);
-
-   //--------------------------------------------------------------------------
-   //--------------------------------------------------------------------------
-   //--------------------------------------------------------------------------
-   // These detach attached object nodes from this parent subject node.
-
-   // Detach the first child node of this parent subject node. Return a
-   // pointer to the detached child node.
-   TestNode* detachFirstChild ();
-
-   // Detach the last child node of this parent subject node. Return a
-   // pointer to the detached child node.
-   TestNode* detachLastChild ();
-
-   //--------------------------------------------------------------------------
-   //--------------------------------------------------------------------------
-   //--------------------------------------------------------------------------
    // These attach an object node to this subject node.
-
-   // Attach an object node to this subject node, before it
-   void attachBefore (TestNode* aObjectNode);
 
    // Attach an object node to this subject node, after it
    void attachAfter (TestNode* aObjectNode);
@@ -133,32 +95,6 @@ public:
    // This method deallocates the object from the block pool from which it was
    // created. It does not call a class destructor.
    void destroy();
-
-   // This member variable specifes the memory type for an instance of this
-   // class that has been created: system, short term block pool, or long term
-   // block pool. It is set by the create method when it is allocated it is
-   // used by the destroy method to determine how to deallocate the block.
-
-   int mMemoryType;
-
-   //--------------------------------------------------------------------------
-   //--------------------------------------------------------------------------
-   //--------------------------------------------------------------------------
-   // This is a pointer to the closest ancestor of this node that has a node
-   // after it. It is used by transmit and receive queues to deconstruct and
-   // reconstruct tree node structures that are transmitted over a 
-   // communications channel.
-   //
-   // This variable should be considered as a sort of temporary variable.
-   // It is changed by various actions done by node queues. It should not
-   // be used as a node level and it is not set by the attachment methods.
-   // It is set by a transmit queue prior to transmission and is used
-   // by a receive queue to reconstruct node structures.
-   //
-   // Use of this variable is mainly via the getNextNode visitor call,
-   // which assumes a tree node structure traversal in construction order.
-
-   TestNode* mAncestorWithAfter;
 };
 
 //****************************************************************************

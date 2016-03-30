@@ -6,6 +6,7 @@
 
 #include "prnPrint.h"
 #include "ccBlockPoolList.h"
+#include "ccTestNodeVisitor.h"
 #include "someBlockPoolIndex.h"
 #include "someMyTestBlock.h"
 #include "someGenerateMyTestBlocks.h"
@@ -47,14 +48,7 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
    Some::MyTestBlock* tRootNode = Some::MyTestBlock::create(1);
 
-   if (aCmd->argInt(1) == 1)
-   {
-      Some::generateMyTestBlocks1(tRootNode);
-   }
-   else if (aCmd->argInt(1) == 2)
-   {
-      Some::generateMyTestBlocks2(tRootNode);
-   }
+   Some::generateMyTestBlocks1(tRootNode);
 
    CC::showBlockPool(Some::cBlockPoolIndex_MyTestBlock);
 }
@@ -66,6 +60,10 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
    Some::MyTestBlock* tRootNode = Some::MyTestBlock::create(1);
+
+   Some::generateMyTestBlocks1(tRootNode);
+
+   CC::printAllTestNodes1(tRootNode);
 }
 
 //******************************************************************************
