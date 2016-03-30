@@ -39,6 +39,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TreeBlock", "TreeBlock\Tree
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MemPool", "MemPool\MemPool.vcxproj", "{583FD9C6-04DE-4DFC-8449-6D57E5FAA208}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MyBlock", "MyBlock\MyBlock.vcxproj", "{32DE6A74-4C92-4412-8769-326BA84DE1C8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -191,6 +193,14 @@ Global
 		{583FD9C6-04DE-4DFC-8449-6D57E5FAA208}.Release|Win32.Build.0 = Release|Win32
 		{583FD9C6-04DE-4DFC-8449-6D57E5FAA208}.Release|x64.ActiveCfg = Release|x64
 		{583FD9C6-04DE-4DFC-8449-6D57E5FAA208}.Release|x64.Build.0 = Release|x64
+		{32DE6A74-4C92-4412-8769-326BA84DE1C8}.Debug|Win32.ActiveCfg = Debug|Win32
+		{32DE6A74-4C92-4412-8769-326BA84DE1C8}.Debug|Win32.Build.0 = Debug|Win32
+		{32DE6A74-4C92-4412-8769-326BA84DE1C8}.Debug|x64.ActiveCfg = Debug|x64
+		{32DE6A74-4C92-4412-8769-326BA84DE1C8}.Debug|x64.Build.0 = Debug|x64
+		{32DE6A74-4C92-4412-8769-326BA84DE1C8}.Release|Win32.ActiveCfg = Release|Win32
+		{32DE6A74-4C92-4412-8769-326BA84DE1C8}.Release|Win32.Build.0 = Release|Win32
+		{32DE6A74-4C92-4412-8769-326BA84DE1C8}.Release|x64.ActiveCfg = Release|x64
+		{32DE6A74-4C92-4412-8769-326BA84DE1C8}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
