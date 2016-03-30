@@ -25,7 +25,7 @@ MemBaseBlockPool::MemBaseBlockPool()
 {
    // All null.
    mNumBlocks=0;
-   mBodySize=0;
+   mBlockSize=0;
    mMemPoolIndex=0;
    mCount=0;
 }
@@ -38,15 +38,15 @@ MemBaseBlockPool::MemBaseBlockPool()
 // allocate, the size of the block body, and the memory pool index for the
 // block aarray.
 
-void MemBaseBlockPool::initialize(int aNumBlocks, int aBlockBodySize, int aMemPoolIndex)
+void MemBaseBlockPool::initialize(int aNumBlocks, int aBlockSize, int aMemPoolIndex)
 {
    // Store.
    mNumBlocks    = aNumBlocks; 
-   mBodySize     = aBlockBodySize; 
+   mBlockSize     = aBlockSize; 
    mMemPoolIndex = aMemPoolIndex;
    mCount=0;
    // Initialize.
-   mBlocks.initialize(aNumBlocks,aBlockBodySize,aMemPoolIndex);
+   mBlocks.initialize(aNumBlocks,aBlockSize,aMemPoolIndex);
 }
 
    // Deallocate memory for the block array.

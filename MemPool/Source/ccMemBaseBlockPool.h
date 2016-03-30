@@ -11,7 +11,7 @@ size.
 //******************************************************************************
 //******************************************************************************
 
-#include "ccMemBlockArray.h"
+#include "ccMemBlockBoxArray.h"
 
 namespace CC
 {
@@ -53,7 +53,7 @@ public:
    // Allocate memory for the block array. It is passed the number of blocks to
    // allocate, the size of the block body, and the memory pool index for the
    // block aarray.
-   void initialize(int aNumBlocks,int aBlockBodySize,int aMemPoolIndex);
+   void initialize(int aNumBlocks,int aBlockSize,int aMemPoolIndex);
 
    // Deallocate memory for the block array.
    virtual void finalize();
@@ -76,13 +76,13 @@ public:
 
    // This allocates storage for the blocks on the system heap and provides
    // pointer access to the allocated blocks.
-   MemBlockArray mBlocks;
+   MemBlockBoxArray mBlocks;
 
    // Number of blocks allocated
    int mNumBlocks;
 
    // Size of each block body
-   int mBodySize;
+   int mBlockSize;
 
    // Memory pool index for the block array
    int mMemPoolIndex;

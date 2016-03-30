@@ -167,7 +167,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\ccMemBaseBlockPool.cpp" />
-    <ClCompile Include="Source\ccMemBlockArray.cpp" />
+    <ClCompile Include="Source\ccMemBlockBoxArray.cpp" />
     <ClCompile Include="Source\ccMemLongTermBlockPool.cpp" />
     <ClCompile Include="Source\CmdLineExec.cpp" />
     <ClCompile Include="Source\Main.cpp" />
@@ -176,7 +176,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\ccMemBaseBlockPool.h" />
-    <ClInclude Include="Source\ccMemBlockArray.h" />
+    <ClInclude Include="Source\ccMemBlockBoxArray.h" />
     <ClInclude Include="Source\ccMemHandle.h" />
     <ClInclude Include="Source\ccMemLongTermBlockPool.h" />
     <ClInclude Include="Source\CmdLineExec.h" />
