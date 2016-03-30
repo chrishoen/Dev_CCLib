@@ -22,6 +22,11 @@ namespace CC
    void initializeMemPool  ();
    void finalizeMemPool    ();
 
+   HasMemHandle* getMemPoolBlock(int aMemPoolIndex);
+   void putMemPoolBlock(int aMemPoolIndex,HasMemHandle* aBlockPointer);
+
+   void showMemPool(int aMemPoolIndex);
+
 }//namespace
 #endif
 

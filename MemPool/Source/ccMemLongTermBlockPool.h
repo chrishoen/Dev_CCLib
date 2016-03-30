@@ -85,6 +85,7 @@ public:
 
    ValueStack<int> mIndexStack;
 
+   int size(){ return mIndexStack.mCount; }
 };
 
 //******************************************************************************

@@ -64,7 +64,7 @@ void MemBaseBlockPool::finalize()
 
 void MemBaseBlockPool::show()
 {
-   printf("MemBlockPool Count %d\n", mCount);
+   printf("MemBlockPool size %d\n", size());
 }
 
 

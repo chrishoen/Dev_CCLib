@@ -23,10 +23,12 @@ namespace CC
 //****************************************************************************
 // Regional variables
 
+static MemBaseBlockPool* mBlockPool=0;
+
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-   MemBaseBlockPool* mBlockPool=0;
+
 void resetMemPool()
 {
    mBlockPool = new LongTermBlockPool;
@@ -42,6 +44,25 @@ void initializeMemPool()
 
 void finalizeMemPool()
 {}
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+
+HasMemHandle* getMemPoolBlock(int aMemPoolIndex)
+{
+   return mBlockPool->get();
+}
+
+void putMemPoolBlock(int aMemPoolIndex,HasMemHandle* aBlockPointer)
+{
+   mBlockPool->put(aBlockPointer);
+}
+
+void showMemPool(int aMemPoolIndex)
+{
+   mBlockPool->show();
+}
 
 } //namespace
 

@@ -46,6 +46,9 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
    Some::Class1A tX1;
    Prn::print(0, "sizeof %d",sizeof(tX1));
+
+   Some::Class1B tX2;
+   Prn::print(0, "sizeof %d",sizeof(tX2));
 }
 
 //******************************************************************************
@@ -54,8 +57,18 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   Some::Class1B tX2;
-   Prn::print(0, "sizeof %d",sizeof(tX2));
+   CC::showMemPool(CC::cMemPoolIndex_Class1A);
+
+   Some::Class1A* t1A = Some::Class1A::allocate();
+
+   CC::showMemPool(CC::cMemPoolIndex_Class1A);
+
+   t1A->method1A();
+   t1A->~Class1A();
+   t1A->deallocate();
+
+   CC::showMemPool(CC::cMemPoolIndex_Class1A);
+
 }
 
 //******************************************************************************
