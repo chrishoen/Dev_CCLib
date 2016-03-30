@@ -19,8 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\ccBlockArray.cpp" />
-    <ClCompile Include="Source\ccBlockPool.cpp" />
     <ClCompile Include="Source\ccCriticalSection_win.cpp" />
     <ClCompile Include="Source\ccLFBlockFreeList.cpp" />
     <ClCompile Include="Source\ccLFBlockQueue.cpp" />
@@ -36,9 +34,6 @@
     <ClCompile Include="Source\cc_functions.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\ccBlockArray.h" />
-    <ClInclude Include="Source\ccBlockPool.h" />
-    <ClInclude Include="Source\ccBlockPoolBlock.h" />
     <ClInclude Include="Source\ccCallPointer.h" />
     <ClInclude Include="Source\ccContainers.h" />
     <ClInclude Include="Source\ccContainers2.h" />

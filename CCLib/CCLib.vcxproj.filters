@@ -6,9 +6,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\ccBlockArray.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\ccCriticalSection_win.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -28,9 +25,6 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\ccTreeNodeVisitor.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ccBlockPool.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\ccPointerShiftRegister.cpp">
@@ -53,9 +47,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\ccBlockArray.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\ccCallPointer.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -90,12 +81,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccTreeNodeVisitor.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ccBlockPool.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ccBlockPoolBlock.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccPointerShiftRegister.h">
