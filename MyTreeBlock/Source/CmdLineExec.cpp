@@ -5,10 +5,13 @@
 #include <atomic>
 
 #include "prnPrint.h"
+#include "ccTreeNodeVisitor.h"
+#include "ccTreeNodeDestroyer.h"
 #include "ccBlockPoolList.h"
 #include "someBlockPoolIndex.h"
 #include "someMyTreeBlock.h"
 #include "someGenerateMyTreeBlocks.h"
+#include "someMyTreeBlockVisitor.h"
 #include "CmdLineExec.h"
 
 using namespace std;
@@ -39,16 +42,22 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
+   aCmd->setArgDefault(1,2);
+
    CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
 
    Some::MyTreeBlock* tRootNode = Some::MyTreeBlock::create(1);
-   Some::generateMyTreeBlocks1(tRootNode);
+
+   if (aCmd->argInt(1) == 1)
+   {
+      Some::generateMyTreeBlocks1(tRootNode);
+   }
+   else if (aCmd->argInt(1) == 2)
+   {
+      Some::generateMyTreeBlocks2(tRootNode);
+   }
 
    CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
 }
@@ -59,39 +68,31 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
-
-   Some::MyTreeBlock* t1A = Some::MyTreeBlock::create(101);
-
-   t1A->method1A();
-   t1A->~MyTreeBlock();
-   t1A->destroy();
-
-   CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
-
+   Some::MyTreeBlock* tRootNode = Some::MyTreeBlock::create(1);
 }
 
 //******************************************************************************
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
-   CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
-
-   Some::MyTreeBlock* t1A1 = Some::MyTreeBlock::create(101);
-   Some::MyTreeBlock* t1A2 = Some::MyTreeBlock::create(102);
-
-   CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
-
-   t1A1->destroy();
-   t1A2->destroy();
-
-   CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
+   Some::MyTreeBlock* tRootNode = Some::MyTreeBlock::create(1);
+   Some::generateMyTreeBlocks1(tRootNode);
+   Some::printAllMyTreeBlocks1(tRootNode);
 }
 
 //******************************************************************************
 
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
+   CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
+   Some::MyTreeBlock* tRootNode = Some::MyTreeBlock::create(1);
+   Some::generateMyTreeBlocks1(tRootNode);
+   Some::printAllMyTreeBlocks1(tRootNode);
+
+   CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
+// CC::destroyAllTreeNodes(tRootNode);
+   Some::destroyAllMyTreeBlocks(tRootNode);
+   CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
 }
 
 //******************************************************************************

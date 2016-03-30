@@ -176,6 +176,7 @@
     <ClCompile Include="Source\MainInit.cpp" />
     <ClCompile Include="Source\someGenerateMyTreeBlocks.cpp" />
     <ClCompile Include="Source\someMyTreeBlock.cpp" />
+    <ClCompile Include="Source\someMyTreeBlockVisitor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h" />
@@ -183,6 +184,7 @@
     <ClInclude Include="Source\someBlockPoolIndex.h" />
     <ClInclude Include="Source\someGenerateMyTreeBlocks.h" />
     <ClInclude Include="Source\someMyTreeBlock.h" />
+    <ClInclude Include="Source\someMyTreeBlockVisitor.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
