@@ -61,7 +61,7 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
    t1A->method1A();
    t1A->~MyTreeBlock();
-   t1A->deallocate();
+   Some::MyTreeBlock::deallocate(t1A);
 
    CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
 
@@ -78,8 +78,8 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
    CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
 
-   t1A1->deallocate();
-   t1A2->deallocate();
+   Some::MyTreeBlock::deallocate(t1A1);
+   Some::MyTreeBlock::deallocate(t1A2);
 
    CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
 }
@@ -88,14 +88,6 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
-   Some::MyTreeBlock* t1A1 = Some::MyTreeBlock::allocate();
-   Some::MyTreeBlock* t1A2 = (Some::MyTreeBlock*)CC::getBlockPoolBlockPtr(t1A1->mBlockHandle);
-
-   t1A1->method1A();
-   t1A2->method1A();
-   t1A1->deallocate();
-
-   CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
 }
 
 //******************************************************************************
