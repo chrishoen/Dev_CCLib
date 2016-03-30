@@ -13,7 +13,7 @@ Print utility
 #include "ccBlockPoolBase.h"
 #include "ccBlockPoolLongTerm.h"
 
-#include "ccBlockPool.h"
+#include "ccBlockPoolList.h"
 
 namespace CC
 {
@@ -30,7 +30,7 @@ static BlockPoolBase* mBlockPool[cMaxNumBlockPools];
 //****************************************************************************
 //****************************************************************************
 
-void resetBlockPool()
+void resetBlockPoolList()
 {
    for (int i = 0; i < cMaxNumBlockPools; i++)
    {
@@ -42,7 +42,7 @@ void resetBlockPool()
 //****************************************************************************
 //****************************************************************************
 
-void addBlockPool(int aNumBlocks, int aBlockSize, int aPoolIndex)
+void addToBlockPoolList(int aNumBlocks, int aBlockSize, int aPoolIndex)
 {
    // Guard
    if (aPoolIndex<1) return;
@@ -61,7 +61,7 @@ void addBlockPool(int aNumBlocks, int aBlockSize, int aPoolIndex)
 //****************************************************************************
 //****************************************************************************
 
-void initializeBlockPool()
+void initializeBlockPoolList()
 {
 }
 
@@ -69,7 +69,7 @@ void initializeBlockPool()
 //****************************************************************************
 //****************************************************************************
 
-void finalizeBlockPool()
+void finalizeBlockPoolList()
 {
    for (int i = 0; i < cMaxNumBlockPools; i++)
    {

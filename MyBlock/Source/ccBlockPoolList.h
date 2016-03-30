@@ -15,12 +15,12 @@ namespace CC
    //***************************************************************************
    //***************************************************************************
 
-   void resetBlockPool       ();
+   void resetBlockPoolList();
 
-   void addBlockPool(int aNumBlocks,int aBlockSize,int aPoolIndex);
+   void addToBlockPoolList(int aNumBlocks,int aBlockSize,int aPoolIndex);
 
-   void initializeBlockPool  ();
-   void finalizeBlockPool    ();
+   void initializeBlockPoolList();
+   void finalizeBlockPoollist();
 
    
    void allocateBlockPoolBlock(int aPoolIndex,void** aBlockPointer,BlockHandle* aBlockHandle);

@@ -10,7 +10,7 @@
 #include <new>
 #include "ccBlockHandle.h"
 #include "ccBlockPoolIndex.h"
-#include "ccBlockPool.h"
+#include "ccBlockPoolList.h"
 
 namespace Some
 {

@@ -5,7 +5,7 @@
 #include <atomic>
 
 #include "prnPrint.h"
-#include "ccBlockPool.h"
+#include "ccBlockPoolList.h"
 #include "ccBlockPoolIndex.h"
 #include "someMyBlock.h"
 #include "CmdLineExec.h"
@@ -15,9 +15,9 @@ using namespace std;
 //******************************************************************************
 CmdLineExec::CmdLineExec()
 {
-   CC::resetBlockPool();
-   CC::addBlockPool(1000, sizeof(Some::MyBlock),CC::cBlockPoolIndex_MyBlock);
-   CC::initializeBlockPool();
+   CC::resetBlockPoolList();
+   CC::addToBlockPoolList(1000, sizeof(Some::MyBlock),CC::cBlockPoolIndex_MyBlock);
+   CC::initializeBlockPoolList();
 }
 //******************************************************************************
 void CmdLineExec::reset()
