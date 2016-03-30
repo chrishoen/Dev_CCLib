@@ -169,6 +169,7 @@
     <ClCompile Include="Source\ccMemBaseBlockPool.cpp" />
     <ClCompile Include="Source\ccMemBlockBoxArray.cpp" />
     <ClCompile Include="Source\ccMemLongTermBlockPool.cpp" />
+    <ClCompile Include="Source\ccMemPool.cpp" />
     <ClCompile Include="Source\CmdLineExec.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
@@ -179,6 +180,8 @@
     <ClInclude Include="Source\ccMemBlockBoxArray.h" />
     <ClInclude Include="Source\ccMemHandle.h" />
     <ClInclude Include="Source\ccMemLongTermBlockPool.h" />
+    <ClInclude Include="Source\ccMemPool.h" />
+    <ClInclude Include="Source\ccMemPoolIndex.h" />
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\MainInit.h" />
     <ClInclude Include="Source\someClass1.h" />

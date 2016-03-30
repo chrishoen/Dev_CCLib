@@ -5,6 +5,8 @@
 #include <atomic>
 
 #include "prnPrint.h"
+#include "ccMemPool.h"
+#include "ccMemPoolIndex.h"
 #include "someClass1.h"
 #include "CmdLineExec.h"
 
@@ -13,6 +15,9 @@ using namespace std;
 //******************************************************************************
 CmdLineExec::CmdLineExec()
 {
+   CC::resetMemPool();
+   CC::addBlockPool(1000, sizeof(Some::Class1A),CC::cMemPoolIndex_Class1A);
+   CC::initializeMemPool();
 }
 //******************************************************************************
 void CmdLineExec::reset()

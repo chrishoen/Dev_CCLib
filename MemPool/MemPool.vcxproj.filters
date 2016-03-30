@@ -28,6 +28,9 @@
     <ClCompile Include="Source\ccMemBlockBoxArray.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\ccMemPool.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h">
@@ -49,6 +52,12 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccMemBlockBoxArray.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ccMemPool.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ccMemPoolIndex.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
