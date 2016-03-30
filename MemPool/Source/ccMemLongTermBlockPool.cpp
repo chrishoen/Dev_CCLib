@@ -119,5 +119,14 @@ void LongTermBlockPool::deallocate(MemHandle aMemHandle)
    mIndexStack.push(aMemHandle.mBlockIndex);
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Return a pointer to a block, given its memory handle.
+
+void* LongTermBlockPool::getBlockPtr(MemHandle aMemHandle)
+{
+   return mBlocks.block(aMemHandle.mBlockIndex);
+}
 
 }//namespace

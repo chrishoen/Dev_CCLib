@@ -72,6 +72,10 @@ public:
    virtual void deallocate(MemHandle aMemHandle)=0;
 
    //---------------------------------------------------------------------------
+   // Return a pointer to a block, given its memoryhandle.
+   virtual void* getBlockPtr(MemHandle aMemHandle)=0;
+
+   //---------------------------------------------------------------------------
    // Members
 
    // This allocates storage for the blocks on the system heap and provides

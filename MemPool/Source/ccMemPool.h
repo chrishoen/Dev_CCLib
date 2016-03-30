@@ -28,6 +28,8 @@ namespace CC
 
    void showMemPool(int aMemPoolIndex);
 
+   void* getMemPoolBlockPtr(MemHandle aMemHandle);
+
 }//namespace
 #endif
 

@@ -75,7 +75,11 @@ public:
    // the pointer back onto the pointer stack.
    void deallocate(MemHandle aMemHandle);
 
+   //---------------------------------------------------------------------------
+   // Return a pointer to a block, given its memory handle.
+   void* getBlockPtr(MemHandle aMemHandle);
 
+   //---------------------------------------------------------------------------
    // This is a stack of pointers. This is used if the block pool has long
    // term blocks. It is a stack of pointers into the above allocated memory
    // block array. To allocate a block, a pointer is popped off of the stack.

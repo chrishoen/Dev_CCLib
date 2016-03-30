@@ -90,6 +90,14 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
+   Some::Class1A* t1A1 = Some::Class1A::allocate();
+   Some::Class1A* t1A2 = (Some::Class1A*)CC::getMemPoolBlockPtr(t1A1->mMemHandle);
+
+   t1A1->method1A();
+   t1A2->method1A();
+   t1A1->deallocate();
+
+   CC::showMemPool(CC::cMemPoolIndex_Class1A);
 }
 
 //******************************************************************************
