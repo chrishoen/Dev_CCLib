@@ -53,7 +53,7 @@ void main_initialize(int argc,char** argv)
    Prn::setFilter(Prn::QCallRun3,  false);
    Prn::setFilter(Prn::QCallRun4,  false);
 
-   Prn::print(0,"TreeBlock*******************************************BEGIN");
+   Prn::print(0,"MyTreeBlock*******************************************BEGIN");
 
 }
 
@@ -64,7 +64,7 @@ void main_initialize(int argc,char** argv)
 
 void main_finalize()
 {
-   Prn::print(0,"TreeBlock*******************************************END");
+   Prn::print(0,"MyTreeBlock*******************************************END");
 
    // Close print
    Prn::finalizePrint();

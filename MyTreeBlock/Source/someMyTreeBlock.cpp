@@ -9,7 +9,7 @@ Description:
 #include "prnPrint.h"
 
 #include "someBlockPoolIndex.h"
-#include "someMyBlock.h"
+#include "someMyTreeBlock.h"
 
 namespace Some
 {
@@ -18,20 +18,20 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 
-MyBlock::MyBlock()
+MyTreeBlock::MyTreeBlock()
 {
-   Prn::print(0, "MyBlock::MyBlock");
+   Prn::print(0, "MyTreeBlock::MyTreeBlock");
    mCode1A=101;
 }
 
-MyBlock::~MyBlock()
+MyTreeBlock::~MyTreeBlock()
 {
-   Prn::print(0, "MyBlock::~MyBlock");
+   Prn::print(0, "MyTreeBlock::~MyTreeBlock");
 }
 
-void MyBlock::method1A()
+void MyTreeBlock::method1A()
 {
-   Prn::print(0, "MyBlock::method1A %d",mCode1A);
+   Prn::print(0, "MyTreeBlock::method1A %d",mCode1A);
 }
 
 //--------------------------------------------------------------------------
@@ -40,18 +40,18 @@ void MyBlock::method1A()
 // This allocates a block from the block pool and uses placement new
 // to call the class constructor. It is analogous to new.
 
-MyBlock* MyBlock::allocate()
+MyTreeBlock* MyTreeBlock::allocate()
 {
    // Block pointer.
-   MyBlock* tBlockPointer = 0;
+   MyTreeBlock* tBlockPointer = 0;
    // Block handle.
    CC::BlockHandle tBlockHandle;
 
    // Allocate a block from the block pool.
-   CC::allocateBlockPoolBlock(cBlockPoolIndex_MyBlock,(void**)&tBlockPointer,&tBlockHandle);
+   CC::allocateBlockPoolBlock(cBlockPoolIndex_MyTreeBlock,(void**)&tBlockPointer,&tBlockHandle);
 
    // Call the constructor on the allocated block using placement new.
-   new(tBlockPointer)MyBlock();
+   new(tBlockPointer)MyTreeBlock();
 
    // Set the allocated block memory handle.
    tBlockPointer->mBlockHandle = tBlockHandle;
@@ -65,7 +65,7 @@ MyBlock* MyBlock::allocate()
 //--------------------------------------------------------------------------
 // This deallocates the object back to the block pool. It does not call
 // a destructor for the object.
-void MyBlock::deallocate()
+void MyTreeBlock::deallocate()
 {
    // Deallocate the block back to the block pool
    deallocateBlockPoolBlock(this->mBlockHandle);

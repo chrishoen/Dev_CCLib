@@ -137,9 +137,6 @@
     <ClInclude Include="Source\ccBlockPoolBase.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccBlockPoolIndex.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\ccBlockPoolList.h">
       <Filter>Source</Filter>
     </ClInclude>

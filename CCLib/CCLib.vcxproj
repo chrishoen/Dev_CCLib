@@ -41,7 +41,6 @@
     <ClInclude Include="Source\ccBlockBoxArray.h" />
     <ClInclude Include="Source\ccBlockHandle.h" />
     <ClInclude Include="Source\ccBlockPoolBase.h" />
-    <ClInclude Include="Source\ccBlockPoolIndex.h" />
     <ClInclude Include="Source\ccBlockPoolList.h" />
     <ClInclude Include="Source\ccBlockPoolLongTerm.h" />
     <ClInclude Include="Source\ccCallPointer.h" />

@@ -166,31 +166,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source\CmdLineExec.cpp" />
-    <ClCompile Include="Source\Main.cpp" />
-    <ClCompile Include="Source\MainInit.cpp" />
-    <ClCompile Include="Source\someGenerateMyBlocks.cpp" />
-    <ClCompile Include="Source\someMyBlock.cpp" />
-    <ClCompile Include="Source\someMyBlockScratch.cpp" />
-    <ClCompile Include="Source\someMyBlockVisitor.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Source\ccTreeBlock.h" />
-    <ClInclude Include="Source\ccTreeBlockDestroyer.h" />
-    <ClInclude Include="Source\ccTreeBlockPool.h" />
-    <ClInclude Include="Source\ccTreeBlockScratch.h" />
-    <ClInclude Include="Source\ccTreeBlockVisitor.h" />
-    <ClInclude Include="Source\CmdLineExec.h" />
-    <ClInclude Include="Source\MainInit.h" />
-    <ClInclude Include="Source\someGenerateMyBlocks.h" />
-    <ClInclude Include="Source\someMyBlock.h" />
-    <ClInclude Include="Source\someMyBlockScratch.h" />
-    <ClInclude Include="Source\someMyBlockVisitor.h" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\CCLib\CCLib.vcxproj">
       <Project>{1909118a-707c-47e4-80bc-84130e1c951b}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\CmdLineExec.cpp" />
+    <ClCompile Include="Source\Main.cpp" />
+    <ClCompile Include="Source\MainInit.cpp" />
+    <ClCompile Include="Source\someMyTreeBlock.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\CmdLineExec.h" />
+    <ClInclude Include="Source\MainInit.h" />
+    <ClInclude Include="Source\someBlockPoolIndex.h" />
+    <ClInclude Include="Source\someMyTreeBlock.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

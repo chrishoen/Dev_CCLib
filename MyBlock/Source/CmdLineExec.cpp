@@ -6,7 +6,7 @@
 
 #include "prnPrint.h"
 #include "ccBlockPoolList.h"
-#include "ccBlockPoolIndex.h"
+#include "someBlockPoolIndex.h"
 #include "someMyBlock.h"
 #include "CmdLineExec.h"
 
@@ -16,7 +16,7 @@ using namespace std;
 CmdLineExec::CmdLineExec()
 {
    CC::resetBlockPoolList();
-   CC::addToBlockPoolList(1000, sizeof(Some::MyBlock),CC::cBlockPoolIndex_MyBlock);
+   CC::addToBlockPoolList(1000, sizeof(Some::MyBlock),Some::cBlockPoolIndex_MyBlock);
    CC::initializeBlockPoolList();
 }
 //******************************************************************************
@@ -55,7 +55,7 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   CC::showBlockPool(CC::cBlockPoolIndex_MyBlock);
+   CC::showBlockPool(Some::cBlockPoolIndex_MyBlock);
 
    Some::MyBlock* t1A = Some::MyBlock::allocate();
 
@@ -63,7 +63,7 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
    t1A->~MyBlock();
    t1A->deallocate();
 
-   CC::showBlockPool(CC::cBlockPoolIndex_MyBlock);
+   CC::showBlockPool(Some::cBlockPoolIndex_MyBlock);
 
 }
 
@@ -71,17 +71,17 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
-   CC::showBlockPool(CC::cBlockPoolIndex_MyBlock);
+   CC::showBlockPool(Some::cBlockPoolIndex_MyBlock);
 
    Some::MyBlock* t1A1 = Some::MyBlock::allocate();
    Some::MyBlock* t1A2 = Some::MyBlock::allocate();
 
-   CC::showBlockPool(CC::cBlockPoolIndex_MyBlock);
+   CC::showBlockPool(Some::cBlockPoolIndex_MyBlock);
 
    t1A1->deallocate();
    t1A2->deallocate();
 
-   CC::showBlockPool(CC::cBlockPoolIndex_MyBlock);
+   CC::showBlockPool(Some::cBlockPoolIndex_MyBlock);
 }
 
 //******************************************************************************
@@ -95,7 +95,7 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
    t1A2->method1A();
    t1A1->deallocate();
 
-   CC::showBlockPool(CC::cBlockPoolIndex_MyBlock);
+   CC::showBlockPool(Some::cBlockPoolIndex_MyBlock);
 }
 
 //******************************************************************************

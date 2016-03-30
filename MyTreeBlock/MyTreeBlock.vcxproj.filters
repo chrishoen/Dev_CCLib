@@ -16,7 +16,7 @@
     <ClCompile Include="Source\MainInit.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\someMyBlock.cpp">
+    <ClCompile Include="Source\someMyTreeBlock.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -27,10 +27,10 @@
     <ClInclude Include="Source\MainInit.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\someMyBlock.h">
+    <ClInclude Include="Source\someBlockPoolIndex.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\someBlockPoolIndex.h">
+    <ClInclude Include="Source\someMyTreeBlock.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
