@@ -28,24 +28,29 @@ void visitMyTreeBlockForPrint (CC::TreeNode* aSubjectNode, CC::RecursiveAnchor* 
 
 void printAllMyTreeBlocks1(MyTreeBlock* aSubjectNode)
 {
+   CC::RecursiveAnchor tRecursiveAnchor;
+   CC::NodeVisitorCall tNodeVisitorCall(visitMyTreeBlockForPrint);
+
    CC::visitAllNodes1(
       aSubjectNode,
-      new CC::RecursiveAnchor(),
-      new CC::NodeVisitorCall(visitMyTreeBlockForPrint));
+      &tRecursiveAnchor,
+      &tNodeVisitorCall);
 }
 
 void printAllMyTreeBlocks2(MyTreeBlock* aSubjectNode)
 {
+   CC::RecursiveAnchor tRecursiveAnchor;
+   CC::NodeVisitorCall tNodeVisitorCall(visitMyTreeBlockForPrint);
+
    CC::visitAllNodes2(
       aSubjectNode,
-      new CC::RecursiveAnchor(),
-      new CC::NodeVisitorCall(visitMyTreeBlockForPrint));
+      &tRecursiveAnchor,
+      &tNodeVisitorCall);
 }
 
 void printAllMyTreeBlocks3(MyTreeBlock* aSubjectNode)
 {
-   CC::NodeVisitorCall tNodeVisitorCall;
-   tNodeVisitorCall.bind(visitMyTreeBlockForPrint);
+   CC::NodeVisitorCall tNodeVisitorCall(visitMyTreeBlockForPrint);
    CC::RecursiveAnchor tRecursiveAnchor;
 
    CC::TreeNode* tNode = aSubjectNode;
@@ -77,10 +82,13 @@ void visitMyTreeBlockForDestroy (CC::TreeNode* aSubjectNode, CC::RecursiveAnchor
 
 void destroyAllMyTreeBlocks(MyTreeBlock* aSubjectNode)
 {
+   CC::RecursiveAnchor tRecursiveAnchor;
+   CC::NodeVisitorCall tNodeVisitorCall(visitMyTreeBlockForDestroy);
+
    CC::visitAllNodes2(
       aSubjectNode,
-      new CC::RecursiveAnchor(),
-      new CC::NodeVisitorCall(visitMyTreeBlockForDestroy));
+      &tRecursiveAnchor,
+      &tNodeVisitorCall);
 }
 
 }//namespace
