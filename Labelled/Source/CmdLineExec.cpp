@@ -2,29 +2,30 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <atomic>
 
 #include "prnPrint.h"
-
-#include "ccTreeNode.h"
 #include "ccTreeNodeVisitor.h"
 #include "ccTreeNodeDestroyer.h"
-#include "ccLabelledTreeNode.h"
-#include "ccLabelledTreeNodeVisitor.h"
-#include "GenerateLabelledTreeNodes.h"
-
+#include "ccBlockPoolList.h"
+#include "someBlockPoolIndex.h"
+#include "someLabelledTreeNode.h"
+#include "someGenerateLabelledTreeNodes.h"
+#include "someLabelledTreeNodeVisitor.h"
 #include "CmdLineExec.h"
+
+using namespace Some;
 
 //******************************************************************************
 CmdLineExec::CmdLineExec()
 {
-   CC::LabelledTreeNode::initializeLongTermBlockPool(1000);
+   CC::resetBlockPoolList();
+   CC::addToBlockPoolList(1000, sizeof(Some::LabelledTreeNode),Some::cBlockPoolIndex_LabelledTreeNode);
+   CC::initializeBlockPoolList();
 }
 //******************************************************************************
 void CmdLineExec::reset()
 {
-   mRootNode = new CC::LabelledTreeNode(0,"root");
-
-   generateLabelledTreeNodes1(mRootNode);
 }
 //******************************************************************************
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
@@ -47,7 +48,7 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1,2);
 
-   CC::LabelledTreeNode* tRootNode = new CC::LabelledTreeNode(0,"root");
+   LabelledTreeNode* tRootNode = new LabelledTreeNode(0,"root");
 
    if (aCmd->argInt(1) == 1)
    {
@@ -62,7 +63,7 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
       generateLabelledTreeNodes3(tRootNode);
    }
 
-   CC::printAllLabelledTreeNodes3(tRootNode);
+   printAllLabelledTreeNodes3(tRootNode);
 }
 
 //******************************************************************************
@@ -73,20 +74,20 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1,1);
 
-   CC::LabelledTreeNode* tRootNode = new CC::LabelledTreeNode(0,"root");
+   LabelledTreeNode* tRootNode = new LabelledTreeNode(0,"root");
    generateLabelledTreeNodes3(tRootNode);
 
    if (aCmd->argInt(1) == 1)
    {
-      CC::printAllLabelledTreeNodes1(tRootNode);
+      printAllLabelledTreeNodes1(tRootNode);
    }
    else if (aCmd->argInt(1) == 2)
    {
-      CC::printAllLabelledTreeNodes2(tRootNode);
+      printAllLabelledTreeNodes2(tRootNode);
    }
    else if (aCmd->argInt(1) == 3)
    {
-      CC::printAllLabelledTreeNodes3(tRootNode);
+      printAllLabelledTreeNodes3(tRootNode);
    }
 
 }
@@ -99,35 +100,35 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1,5);
 
-   CC::LabelledTreeNode::mBlockPool.show();
+   CC::showBlockPool(Some::cBlockPoolIndex_LabelledTreeNode);
 
-   CC::LabelledTreeNode* tRootNode = CC::LabelledTreeNode::create(0,"root");
+   LabelledTreeNode* tRootNode = LabelledTreeNode::create(0,"root");
    generateLabelledTreeNodes2(tRootNode);
 
-   CC::LabelledTreeNode::mBlockPool.show();
+   CC::showBlockPool(Some::cBlockPoolIndex_LabelledTreeNode);
 
    if (aCmd->argInt(1) == 1)
    {
-      CC::printAllLabelledTreeNodes1(tRootNode);
+      printAllLabelledTreeNodes1(tRootNode);
    }
    else if (aCmd->argInt(1) == 2)
    {
-      CC::printAllLabelledTreeNodes2(tRootNode);
+      printAllLabelledTreeNodes2(tRootNode);
    }
    else if (aCmd->argInt(1) == 3)
    {
-      CC::printAllLabelledTreeNodes3(tRootNode);
+      printAllLabelledTreeNodes3(tRootNode);
    }
    else if (aCmd->argInt(1) == 4)
    {
-      CC::destroyAllLabelledTreeNodes(tRootNode);
+      destroyAllLabelledTreeNodes(tRootNode);
    }
    else if (aCmd->argInt(1) == 5)
    {
       CC::destroyAllTreeNodes(tRootNode);
    }
 
-   CC::LabelledTreeNode::mBlockPool.show();
+   CC::showBlockPool(Some::cBlockPoolIndex_LabelledTreeNode);
 }
 
 
@@ -150,14 +151,14 @@ void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
    printf("**********************************go5\n");
    printf("\n");
 
-   CC::LabelledTreeNode* tRootNode = new CC::LabelledTreeNode(0,"troot");
+   LabelledTreeNode* tRootNode = new LabelledTreeNode(0,"troot");
 
    printf("**********************************generateTreeNodes1(tRootNode1)\n");
-   CC::LabelledTreeNode* tRootNode1 = new CC::LabelledTreeNode(0,"root1");
+   LabelledTreeNode* tRootNode1 = new LabelledTreeNode(0,"root1");
    generateLabelledTreeNodes1(tRootNode1);
 
    printf("**********************************generateTreeNodes1(tRootNode2)\n");
-   CC::LabelledTreeNode* tRootNode2 = new CC::LabelledTreeNode(0,"root2");
+   LabelledTreeNode* tRootNode2 = new LabelledTreeNode(0,"root2");
    generateLabelledTreeNodes1(tRootNode2);
 
    printf("**********************************attachAfterLastChild(tRootNode1)\n");
@@ -167,7 +168,7 @@ void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
    tRootNode->attachAfterLastChild(tRootNode2);
 
    printf("**********************************printAllLabelledTreeNodes1(mRootNode)\n");
-   CC::printAllLabelledTreeNodes1(tRootNode);
+   printAllLabelledTreeNodes1(tRootNode);
 }
 //******************************************************************************
 //******************************************************************************

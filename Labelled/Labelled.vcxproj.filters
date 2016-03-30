@@ -16,13 +16,13 @@
     <ClCompile Include="Source\MainInit.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ccLabelledTreeNode.cpp">
+    <ClCompile Include="Source\someGenerateLabelledTreeNodes.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ccLabelledTreeNodeVisitor.cpp">
+    <ClCompile Include="Source\someLabelledTreeNode.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\GenerateLabelledTreeNodes.cpp">
+    <ClCompile Include="Source\someLabelledTreeNodeVisitor.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -33,13 +33,16 @@
     <ClInclude Include="Source\MainInit.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccLabelledTreeNode.h">
+    <ClInclude Include="Source\someBlockPoolIndex.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccLabelledTreeNodeVisitor.h">
+    <ClInclude Include="Source\someGenerateLabelledTreeNodes.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GenerateLabelledTreeNodes.h">
+    <ClInclude Include="Source\someLabelledTreeNode.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\someLabelledTreeNodeVisitor.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

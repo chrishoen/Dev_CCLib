@@ -166,24 +166,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source\ccLabelledTreeNode.cpp" />
-    <ClCompile Include="Source\ccLabelledTreeNodeVisitor.cpp" />
-    <ClCompile Include="Source\CmdLineExec.cpp" />
-    <ClCompile Include="Source\GenerateLabelledTreeNodes.cpp" />
-    <ClCompile Include="Source\Main.cpp" />
-    <ClCompile Include="Source\MainInit.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Source\ccLabelledTreeNode.h" />
-    <ClInclude Include="Source\ccLabelledTreeNodeVisitor.h" />
-    <ClInclude Include="Source\CmdLineExec.h" />
-    <ClInclude Include="Source\GenerateLabelledTreeNodes.h" />
-    <ClInclude Include="Source\MainInit.h" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\CCLib\CCLib.vcxproj">
       <Project>{1909118a-707c-47e4-80bc-84130e1c951b}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\CmdLineExec.cpp" />
+    <ClCompile Include="Source\Main.cpp" />
+    <ClCompile Include="Source\MainInit.cpp" />
+    <ClCompile Include="Source\someGenerateLabelledTreeNodes.cpp" />
+    <ClCompile Include="Source\someLabelledTreeNode.cpp" />
+    <ClCompile Include="Source\someLabelledTreeNodeVisitor.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\CmdLineExec.h" />
+    <ClInclude Include="Source\MainInit.h" />
+    <ClInclude Include="Source\someBlockPoolIndex.h" />
+    <ClInclude Include="Source\someGenerateLabelledTreeNodes.h" />
+    <ClInclude Include="Source\someLabelledTreeNode.h" />
+    <ClInclude Include="Source\someLabelledTreeNodeVisitor.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -3,9 +3,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "ccLabelledTreeNodeVisitor.h"
+#include "someLabelledTreeNodeVisitor.h"
 
-namespace CC
+namespace Some
 {
 
 //****************************************************************************
@@ -15,7 +15,7 @@ namespace CC
 //****************************************************************************
 //****************************************************************************
 
-void visitLabelledTreeNodeForPrint (TreeNode* aSubjectNode, RecursiveAnchor* aRecursiveAnchor)
+void visitLabelledTreeNodeForPrint (CC::TreeNode* aSubjectNode, CC::RecursiveAnchor* aRecursiveAnchor)
 {
    LabelledTreeNode* tSubjectNode = static_cast<LabelledTreeNode*>(aSubjectNode);
 
@@ -30,9 +30,8 @@ void visitLabelledTreeNodeForPrint (TreeNode* aSubjectNode, RecursiveAnchor* aRe
 
 void printAllLabelledTreeNodes1(LabelledTreeNode* aSubjectNode)
 {
-   NodeVisitorCall tNodeVisitorCall;
-   tNodeVisitorCall.bind(visitLabelledTreeNodeForPrint);
-   RecursiveAnchor tRecursiveAnchor;
+   CC::NodeVisitorCall tNodeVisitorCall(visitLabelledTreeNodeForPrint);
+   CC::RecursiveAnchor tRecursiveAnchor;
 
    visitAllNodes1(
       aSubjectNode,
@@ -42,9 +41,8 @@ void printAllLabelledTreeNodes1(LabelledTreeNode* aSubjectNode)
 
 void printAllLabelledTreeNodes2(LabelledTreeNode* aSubjectNode)
 {
-   NodeVisitorCall tNodeVisitorCall;
-   tNodeVisitorCall.bind(visitLabelledTreeNodeForPrint);
-   RecursiveAnchor tRecursiveAnchor;
+   CC::NodeVisitorCall tNodeVisitorCall(visitLabelledTreeNodeForPrint);
+   CC::RecursiveAnchor tRecursiveAnchor;
 
    visitAllNodes2(
       aSubjectNode,
@@ -54,11 +52,10 @@ void printAllLabelledTreeNodes2(LabelledTreeNode* aSubjectNode)
 
 void printAllLabelledTreeNodes3(LabelledTreeNode* aSubjectNode)
 {
-   NodeVisitorCall tNodeVisitorCall;
-   tNodeVisitorCall.bind(visitLabelledTreeNodeForPrint);
-   RecursiveAnchor tRecursiveAnchor;
+   CC::NodeVisitorCall tNodeVisitorCall(visitLabelledTreeNodeForPrint);
+   CC::RecursiveAnchor tRecursiveAnchor;
 
-   TreeNode* tNode = aSubjectNode;
+   CC::TreeNode* tNode = aSubjectNode;
    while (tNode)
    {
       tNode = visitNode(tNode, &tRecursiveAnchor, &tNodeVisitorCall);
@@ -72,7 +69,7 @@ void printAllLabelledTreeNodes3(LabelledTreeNode* aSubjectNode)
 //****************************************************************************
 //****************************************************************************
 
-void visitLabelledTreeNodeForDestroy (TreeNode* aSubjectNode, RecursiveAnchor* aRecursiveAnchor)
+void visitLabelledTreeNodeForDestroy (CC::TreeNode* aSubjectNode, CC::RecursiveAnchor* aRecursiveAnchor)
 {
    LabelledTreeNode* tSubjectNode = static_cast<LabelledTreeNode*>(aSubjectNode);
 #if 0
@@ -88,9 +85,8 @@ void visitLabelledTreeNodeForDestroy (TreeNode* aSubjectNode, RecursiveAnchor* a
 
 void destroyAllLabelledTreeNodes(LabelledTreeNode* aSubjectNode)
 {
-   NodeVisitorCall tNodeVisitorCall;
-   tNodeVisitorCall.bind(visitLabelledTreeNodeForDestroy);
-   RecursiveAnchor tRecursiveAnchor;
+   CC::NodeVisitorCall tNodeVisitorCall(visitLabelledTreeNodeForPrint);
+   CC::RecursiveAnchor tRecursiveAnchor;
 
    visitAllNodes2(
       aSubjectNode,

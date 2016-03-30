@@ -1,19 +1,21 @@
+/*==============================================================================
+Description:
+==============================================================================*/
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 #include <new>
-#include "ccLabelledTreeNode.h"
+#include "prnPrint.h"
 
-namespace CC
+#include "ccBlockPoolList.h"
+#include "someBlockPoolIndex.h"
+#include "someBlockPoolIndex.h"
+#include "someLabelledTreeNode.h"
+
+namespace Some
 {
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Global instance of the block pool
-
-CC::BlockPool LabelledTreeNode::mBlockPool;
 
 //******************************************************************************
 //******************************************************************************
@@ -23,30 +25,26 @@ CC::BlockPool LabelledTreeNode::mBlockPool;
 LabelledTreeNode* LabelledTreeNode::create (int aIdentifier,char* aLabel)
 { 
    // Block pointer.
-   LabelledTreeNode* tPointer = 0;
+   LabelledTreeNode* tBlockPointer = 0;
+   // Block handle.
+   CC::BlockHandle tBlockHandle;
 
    // Allocate a block from the block pool.
-   tPointer = (LabelledTreeNode*)mBlockPool.get();
+   CC::allocateBlockPoolBlock(cBlockPoolIndex_LabelledTreeNode,(void**)&tBlockPointer,&tBlockHandle);
 
    // Call the constructor on the allocated block using placement new.
-   new(tPointer)LabelledTreeNode(aIdentifier,aLabel);
+   new(tBlockPointer)LabelledTreeNode(aIdentifier,aLabel);
+
+   // Set the allocated block memory handle.
+   tBlockPointer->mBlockHandle = tBlockHandle;
 
    // Return the pointer to the allocated block.
-   return tPointer;
+   return tBlockPointer;
 }
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// This method calls the class destructor and then deallocates the object
-// from system memory or from block universe short term or long term
-// memory block pools. It is analogous to delete.
-
-void LabelledTreeNode::destroy()
-{
-   CC::BlockPoolBlock<LabelledTreeNode>::deallocate();
-}
-
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
@@ -106,7 +104,7 @@ char* LabelledTreeNode::getFullPath()
    }
 }
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
 }//namespace
