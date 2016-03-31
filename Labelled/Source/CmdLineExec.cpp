@@ -63,7 +63,7 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
       generateLabelledTreeNodes3(tRootNode);
    }
 
-   printAllLabelledTreeNodes3(tRootNode);
+   printAllLabelledTreeNodes1(tRootNode);
 }
 
 //******************************************************************************
@@ -75,7 +75,7 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
    aCmd->setArgDefault(1,1);
 
    LabelledTreeNode* tRootNode = new LabelledTreeNode(0,"root");
-   generateLabelledTreeNodes3(tRootNode);
+   generateLabelledTreeNodes1(tRootNode);
 
    if (aCmd->argInt(1) == 1)
    {
@@ -103,7 +103,7 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
    CC::showBlockPool(Some::cBlockPoolIndex_LabelledTreeNode);
 
    LabelledTreeNode* tRootNode = LabelledTreeNode::create(0,"root");
-   generateLabelledTreeNodes2(tRootNode);
+   generateLabelledTreeNodes1(tRootNode);
 
    CC::showBlockPool(Some::cBlockPoolIndex_LabelledTreeNode);
 
@@ -138,6 +138,10 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
+   LabelledTreeNode* tRootNode = new LabelledTreeNode(0,"root");
+
+   generateLabelledTreeNodes1(tRootNode);
+   printAllLabelledTreeNodes1(tRootNode);
 }
 
 //******************************************************************************

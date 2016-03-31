@@ -16,31 +16,31 @@ namespace CC
 TreeNode::TreeNode()
 {
    // All pointers to zero
-   mParentNode = 0;
-   mBeforeNode = 0;
-   mAfterNode = 0;
-   mFirstChildNode = 0;
-   mLastChildNode = 0;
+   mParentNodeH = BlockHandle::nullH;
+   mBeforeNodeH = BlockHandle::nullH;
+   mAfterNodeH = BlockHandle::nullH;
+   mFirstChildNodeH = BlockHandle::nullH;
+   mLastChildNodeH = BlockHandle::nullH;
 
    // Empty state
    mIdentifier=0;
    mMemoryType = 0;
-   mAncestorWithAfter = 0;
+   mAncestorWithAfterH = BlockHandle::nullH;
 }
 
 TreeNode::TreeNode(int aIdentifier)
 {
    // All pointers to zero
-   mParentNode = 0;
-   mBeforeNode = 0;
-   mAfterNode = 0;
-   mFirstChildNode = 0;
-   mLastChildNode = 0;
+   mParentNodeH = BlockHandle::nullH;
+   mBeforeNodeH = BlockHandle::nullH;
+   mAfterNodeH = BlockHandle::nullH;
+   mFirstChildNodeH = BlockHandle::nullH;
+   mLastChildNodeH = BlockHandle::nullH;
 
    // Set state
    mIdentifier = aIdentifier;
    mMemoryType = 0;
-   mAncestorWithAfter = 0;
+   mAncestorWithAfterH = BlockHandle::nullH;
 }
 
 //****************************************************************************
@@ -59,22 +59,22 @@ TreeNode* TreeNode::ptr(BlockHandle aBlockHandle)
 // Attach an object node to the first child of this subject node, before it.
 // The object node becomes this subject node's first child.
 
-void TreeNode::attachBeforeFirstChild (TreeNode* aObjectNode)
+void TreeNode::attachBeforeFirstChild (TreeNode* aObjectNodeP)
 {
    // If this node doesn't have any children
    // Attach the object node as the only child of this node
-   if (this->mFirstChildNode == 0)
+   if (this->mFirstChildNodeH == BlockHandle::nullH)
    {
       // Set object node's parent as this node
       // Set object node's before as null
       // Set object node's after  as null
-      aObjectNode->mParentNode  = this;
-      aObjectNode->mBeforeNode  = 0;
-      aObjectNode->mAfterNode   = 0;
+      aObjectNodeP->mParentNodeH  = this->mBlockHandle;
+      aObjectNodeP->mBeforeNodeH  = BlockHandle::nullH;
+      aObjectNodeP->mAfterNodeH   = BlockHandle::nullH;
 
       // Set the object node as the first and last child of this node
-      this->mFirstChildNode     = aObjectNode;
-      this->mLastChildNode      = aObjectNode;
+      this->mFirstChildNodeH     = aObjectNodeP->mBlockHandle;
+      this->mLastChildNodeH      = aObjectNodeP->mBlockHandle;
    }
    // Else this node does have children
    // Attach the object node after the last child of this node
@@ -83,13 +83,13 @@ void TreeNode::attachBeforeFirstChild (TreeNode* aObjectNode)
       // Set object node's parent as this node
       // Set object node's before as null
       // Set object node's after  as the current first child
-      aObjectNode->mParentNode  = this;
-      aObjectNode->mBeforeNode  = 0;
-      aObjectNode->mAfterNode   = this->mFirstChildNode;
+      aObjectNodeP->mParentNodeH  = this->mBlockHandle;
+      aObjectNodeP->mBeforeNodeH  = BlockHandle::nullH;
+      aObjectNodeP->mAfterNodeH   = this->mFirstChildNodeH;
 
       // Set the object node as this node's new first child
-      this->mFirstChildNode->mBeforeNode = aObjectNode;
-      this->mFirstChildNode              = aObjectNode;
+      this->ptrFirstChildNode()->mBeforeNodeH = aObjectNodeP->mBlockHandle;
+      this->mFirstChildNodeH                  = aObjectNodeP->mBlockHandle;
    }
 }
 
@@ -99,22 +99,22 @@ void TreeNode::attachBeforeFirstChild (TreeNode* aObjectNode)
 // Attach an object node to the last child of this subject node, after it.
 // The object node becomes this subject node's last child.
 
-void TreeNode::attachAfterLastChild  (TreeNode* aObjectNode)
+void TreeNode::attachAfterLastChild  (TreeNode* aObjectNodeP)
 {
    // If this node doesn't have any children
    // Attach the object node as the only child of this node
-   if (this->mFirstChildNode == 0)
+   if (this->mFirstChildNodeH == BlockHandle::nullH)
    {
       // Set object node's parent as this node
       // Set object node's before as null
       // Set object node's after  as null
-      aObjectNode->mParentNode  = this;
-      aObjectNode->mBeforeNode  = 0;
-      aObjectNode->mAfterNode   = 0;
+      aObjectNodeP->mParentNodeH  = this->mBlockHandle;
+      aObjectNodeP->mBeforeNodeH  = BlockHandle::nullH;
+      aObjectNodeP->mAfterNodeH   = BlockHandle::nullH;
 
       // Set the object node as the first and last child of this node
-      this->mFirstChildNode     = aObjectNode;
-      this->mLastChildNode      = aObjectNode;
+      this->mFirstChildNodeH     = aObjectNodeP->mBlockHandle;
+      this->mLastChildNodeH      = aObjectNodeP->mBlockHandle;
    }
    // Else this node does have children
    // Attach the object node after the last child of this node
@@ -123,13 +123,13 @@ void TreeNode::attachAfterLastChild  (TreeNode* aObjectNode)
       // Set object node's parent as this node
       // Set object node's before as the current last child
       // Set object node's after  as null
-      aObjectNode->mParentNode  = this;
-      aObjectNode->mBeforeNode  = this->mLastChildNode;
-      aObjectNode->mAfterNode   = 0;
+      aObjectNodeP->mParentNodeH  = this->mBlockHandle;
+      aObjectNodeP->mBeforeNodeH  = this->mLastChildNodeH;
+      aObjectNodeP->mAfterNodeH   = BlockHandle::nullH;
 
       // Set the object node as this node's new last child
-      this->mLastChildNode->mAfterNode = aObjectNode;
-      this->mLastChildNode             = aObjectNode;
+      this->ptrLastChildNode()->mAfterNodeH = aObjectNodeP->mBlockHandle;
+      this->mLastChildNodeH                 = aObjectNodeP->mBlockHandle;
    }
 }
 
@@ -143,42 +143,42 @@ TreeNode* TreeNode::detachFirstChild ()
 {
    // Pointer to the first child node of this subject parent node, this is
    // the node that is to be be detached.
-   TreeNode* tNodeToDetach = this->mFirstChildNode;
+   TreeNode* tNodeToDetachP = this->ptrFirstChildNode();
 
    // If there is a node to be detached
-   if (tNodeToDetach != 0)
+   if (tNodeToDetachP != 0)
    {
       // If the node to be detached has a node after it
-      if (tNodeToDetach->mAfterNode != 0)
+      if (tNodeToDetachP->mAfterNodeH != BlockHandle::nullH)
       {
          // Because this node is the first child of its parent and therefore has
          // no node before it then set the node after it to also have no node
          // before it.
-         tNodeToDetach->mAfterNode->mBeforeNode = 0;
+         tNodeToDetachP->ptrAfterNode()->mBeforeNodeH = BlockHandle::nullH;
 
          // Set the new first child node of this subject parent node to be the
          // node after the node that is to be detached.
-         this->mFirstChildNode = tNodeToDetach->mAfterNode;
+         this->mFirstChildNodeH = tNodeToDetachP->mAfterNodeH;
       }
       // If the node to be detached does not have a node after it,
       // then it is the only child node of its parent.
       else
       {
          // Set the subect parent node to have no first child node.
-         this->mFirstChildNode = 0;
+         this->mFirstChildNodeH = BlockHandle::nullH;
          // Also, set the subect parent node to have no last child node.
-         this->mLastChildNode = 0;
+         this->mLastChildNodeH  = BlockHandle::nullH;
       }
 
       // Set the detached node to have no node after it. Because it is the 
       // first child node then it already has no node before it.
-      tNodeToDetach->mAfterNode = 0;
+      tNodeToDetachP->mAfterNodeH = BlockHandle::nullH;
 
       // Set the detached node to have no node parent node above it.
-      tNodeToDetach->mParentNode = 0;
+      tNodeToDetachP->mParentNodeH = BlockHandle::nullH;
    }
    // Return the pointer to the detached node.
-   return tNodeToDetach;
+   return tNodeToDetachP;
 }
 
 //****************************************************************************
@@ -191,42 +191,42 @@ TreeNode* TreeNode::detachLastChild()
 {
    // Pointer to the last child node of this subject parent node, this is
    // the node that is to be be detached.
-   TreeNode* tNodeToDetach = this->mLastChildNode;
+   TreeNode* tNodeToDetachP = this->ptrLastChildNode();
 
    // If there is a node to be detached
-   if (tNodeToDetach != 0)
+   if (tNodeToDetachP != 0)
    {
       // If the node to be detached has a node before it
-      if (tNodeToDetach->mBeforeNode != 0)
+      if (tNodeToDetachP->mBeforeNodeH != BlockHandle::nullH)
       {
          // Because this node is the last child of its parent and therefore has
          // no node after it then set the node before it to also have no node
          // after it.
-         tNodeToDetach->mBeforeNode->mAfterNode = 0;
+         tNodeToDetachP->ptrBeforeNode()->mAfterNodeH = BlockHandle::nullH;
 
          // Set the new last child node of this subject parent node to be the
          // node before the node that is to be detached.
-         this->mLastChildNode = tNodeToDetach->mBeforeNode;
+         this->mLastChildNodeH = tNodeToDetachP->mBeforeNodeH;
       }
       // If the node to be detached does not have a node before it,
       // then it is the only child node of its parent.
       else
       {
          // Set the subect parent node to have no last child node.
-         this->mLastChildNode = 0;
+         this->mLastChildNodeH = BlockHandle::nullH;
          // Also, set the subect parent node to have no first child node.
-         this->mFirstChildNode = 0;
+         this->mFirstChildNodeH = BlockHandle::nullH;
       }
 
       // Set the detached node to have no node before it. Because it is the 
       // last child node then it already has no node after it.
-      tNodeToDetach->mBeforeNode = 0;
+      tNodeToDetachP->mBeforeNodeH = BlockHandle::nullH;
 
       // Set the detached node to have no node parent node above it.
-      tNodeToDetach->mParentNode = 0;
+      tNodeToDetachP->mParentNodeH = BlockHandle::nullH;
    }
    // Return the pointer to the detached node.
-   return tNodeToDetach;
+   return tNodeToDetachP;
 }
 
 //****************************************************************************
@@ -234,33 +234,33 @@ TreeNode* TreeNode::detachLastChild()
 //****************************************************************************
 // Attach an object node to this subject node, before it
 
-void TreeNode::attachBefore (TreeNode* aObjectNode)
+void TreeNode::attachBefore (TreeNode* aObjectNodeP)
 {
    // If this node does not have a node before it
-   if (this->mBeforeNode == 0)
+   if (this->mBeforeNodeH == BlockHandle::nullH)
    {
       // This node is its root node's first child
-      if (this->mParentNode != 0)
+      if (this->mParentNodeH != BlockHandle::nullH)
       {
          // Set the object node as this node's parent's new last child
-         this->mParentNode->mFirstChildNode = aObjectNode;
+         this->ptrParentNode()->mFirstChildNodeH = aObjectNodeP->mBlockHandle;
       }
       // Attach the object node before this node
-      aObjectNode->mBeforeNode      = 0;
-      aObjectNode->mAfterNode       = this;
-      this->mBeforeNode       = aObjectNode;
+      aObjectNodeP->mBeforeNodeH      = BlockHandle::nullH;
+      aObjectNodeP->mAfterNodeH       = this->mBlockHandle;
+      this->mBeforeNodeH              = aObjectNodeP->mBlockHandle;
    }
    // If this node does have a node before it
    else
    {
       // Insert the object node between this node and the node before it
-      aObjectNode->mBeforeNode      = this->mBeforeNode;
-      aObjectNode->mAfterNode       = this;
-      this->mBeforeNode->mAfterNode = aObjectNode;
-      this->mBeforeNode             = aObjectNode;
+      aObjectNodeP->mBeforeNodeH      = this->mBeforeNodeH;
+      aObjectNodeP->mAfterNodeH       = this->mBlockHandle;
+      this->ptrBeforeNode()->mAfterNodeH = aObjectNodeP->mBlockHandle;
+      this->mBeforeNodeH                 = aObjectNodeP->mBlockHandle;
    }
    // The object node inherits this nodes's parent node
-   aObjectNode->mParentNode = this->mParentNode;
+   aObjectNodeP->mParentNodeH = this->mParentNodeH;
 }
 
 //****************************************************************************
@@ -268,33 +268,33 @@ void TreeNode::attachBefore (TreeNode* aObjectNode)
 //****************************************************************************
 // Attach an object node to this subject node, after it
 
-void TreeNode::attachAfter (TreeNode* aObjectNode)
+void TreeNode::attachAfter (TreeNode* aObjectNodeP)
 {
    // If this node does not have a node after it
-   if (this->mAfterNode == 0)
+   if (this->mAfterNodeH == BlockHandle::nullH)
    {
       // This node is its root node's last child
-      if (this->mParentNode != 0)
+      if (this->mParentNodeH != BlockHandle::nullH)
       {
          // Set the object node as this node's parent's new last child
-         this->mParentNode->mLastChildNode = aObjectNode;
+         this->ptrParentNode()->mLastChildNodeH = aObjectNodeP->mBlockHandle;
       }
       // Attach the object node after this node
-      aObjectNode->mBeforeNode      = this;
-      aObjectNode->mAfterNode       = 0;
-      this->mAfterNode        = aObjectNode;
+      aObjectNodeP->mBeforeNodeH      = this->mBlockHandle;
+      aObjectNodeP->mAfterNodeH       = BlockHandle::nullH;
+      this->mAfterNodeH               = aObjectNodeP->mBlockHandle;
    }
    // Else this node does have a node after it
    else
    {
       // Insert the object node between this node and the node after it
-      aObjectNode->mBeforeNode      = this;
-      aObjectNode->mAfterNode       = this->mAfterNode;
-      this->mAfterNode->mBeforeNode = aObjectNode;
-      this->mAfterNode              = aObjectNode;
+      aObjectNodeP->mBeforeNodeH      = this->mBlockHandle;
+      aObjectNodeP->mAfterNodeH       = this->mAfterNodeH;
+      this->ptrAfterNode()->mBeforeNodeH = aObjectNodeP->mBlockHandle;
+      this->mAfterNodeH                  = aObjectNodeP->mBlockHandle;
    }
    // The object node inherits this node's parent node
-   aObjectNode->mParentNode = this->mParentNode;
+   aObjectNodeP->mParentNodeH = this->mParentNodeH;
 }
 
 //****************************************************************************
@@ -305,43 +305,43 @@ void TreeNode::attachAfter (TreeNode* aObjectNode)
 void TreeNode::detachFromAll()
 {
    // If this subject node does not have a node before it
-   if (this->mBeforeNode == 0)
+   if (this->mBeforeNodeH == BlockHandle::nullH)
    {
       // If this node has a parent then it's its root node's first child
-      if (this->mParentNode != 0)
+      if (this->mParentNodeH != BlockHandle::nullH)
       {
          // Set the node after this node as the root node's first child
-         this->mParentNode->mFirstChildNode = this->mAfterNode;
+         this->ptrParentNode()->mFirstChildNodeH = this->mAfterNodeH;
       }
    }
    // Else this node has a node before it
    else
    {
       // Set the node before it to point to the node after it
-      this->mBeforeNode->mAfterNode = this->mAfterNode;
+      this->ptrBeforeNode()->mAfterNodeH = this->mAfterNodeH;
    }
 
    // If this node does not have a node after it
-   if (this->mAfterNode == 0)
+   if (this->mAfterNodeH == BlockHandle::nullH)
    {
       // If this node has a parent then it's its root node's last child
-      if (this->mParentNode != 0)
+      if (this->mParentNodeH != BlockHandle::nullH)
       {
          // Set the node before this node as the root node's last child
-         this->mParentNode->mLastChildNode = this->mBeforeNode;
+         this->ptrParentNode()->mLastChildNodeH = this->mBeforeNodeH;
       }
    }
    // Else this node has a node after it
    else
    {
       // Set the node after it to point to the node before it
-      this->mAfterNode->mBeforeNode = this->mBeforeNode;
+      this->ptrAfterNode()->mBeforeNodeH = this->mBeforeNodeH;
    }
 
    // This node no longer has a parent or nodes before and after it
-   this->mParentNode = 0;
-   this->mBeforeNode = 0;
-   this->mAfterNode = 0;
+   this->mParentNodeH = BlockHandle::nullH;
+   this->mBeforeNodeH = BlockHandle::nullH;
+   this->mAfterNodeH  = BlockHandle::nullH;
 }
 
 //****************************************************************************

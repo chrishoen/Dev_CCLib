@@ -23,22 +23,22 @@ void generateMyTreeBlocks1(MyTreeBlock* tRootNode)
    tRootNode->attachAfterLastChild(tNode);
 
    tNode = MyTreeBlock::create(21);
-   tRootNode->mLastChildNode->attachAfterLastChild(tNode);
+   tRootNode->ptrLastChildNode()->attachAfterLastChild(tNode);
 
    tNode = MyTreeBlock::create(22);
-   tRootNode->mLastChildNode->attachAfterLastChild(tNode);
+   tRootNode->ptrLastChildNode()->attachAfterLastChild(tNode);
 
    tNode = MyTreeBlock::create(221);
-   tRootNode->mLastChildNode->mLastChildNode->attachAfterLastChild(tNode);
+   tRootNode->ptrLastChildNode()->ptrLastChildNode()->attachAfterLastChild(tNode);
 
    tNode = MyTreeBlock::create(222);
-   tRootNode->mLastChildNode->mLastChildNode->attachAfterLastChild(tNode);
+   tRootNode->ptrLastChildNode()->ptrLastChildNode()->attachAfterLastChild(tNode);
 
    tNode = MyTreeBlock::create(23);
-   tRootNode->mLastChildNode->attachAfterLastChild(tNode);
+   tRootNode->ptrLastChildNode()->attachAfterLastChild(tNode);
 
    tNode = MyTreeBlock::create(24);
-   tRootNode->mLastChildNode->attachAfterLastChild(tNode);
+   tRootNode->ptrLastChildNode()->attachAfterLastChild(tNode);
 
    tNode = MyTreeBlock::create(3);
    tRootNode->attachAfterLastChild(tNode);
@@ -47,16 +47,16 @@ void generateMyTreeBlocks1(MyTreeBlock* tRootNode)
    tRootNode->attachAfterLastChild(tNode);
 
    tNode = MyTreeBlock::create(41);
-   tRootNode->mLastChildNode->attachAfterLastChild(tNode);
+   tRootNode->ptrLastChildNode()->attachAfterLastChild(tNode);
 
    tNode = MyTreeBlock::create(42);
-   tRootNode->mLastChildNode->attachAfterLastChild(tNode);
+   tRootNode->ptrLastChildNode()->attachAfterLastChild(tNode);
 
    tNode = MyTreeBlock::create(43);
-   tRootNode->mLastChildNode->attachAfterLastChild(tNode);
+   tRootNode->ptrLastChildNode()->attachAfterLastChild(tNode);
 
    tNode = MyTreeBlock::create(44);
-   tRootNode->mLastChildNode->attachAfterLastChild(tNode);
+   tRootNode->ptrLastChildNode()->attachAfterLastChild(tNode);
 
 }
 

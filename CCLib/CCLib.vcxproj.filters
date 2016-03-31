@@ -18,9 +18,6 @@
     <ClCompile Include="Source\ccTreeNode.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ccTreeNodeCollection.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\ccTreeNodeDestroyer.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -87,9 +84,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccTreeNode.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ccTreeNodeCollection.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccTreeNodeDestroyer.h">

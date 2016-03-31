@@ -56,10 +56,10 @@ void destroyAllTreeNodesBelow(
    aRecursiveAnchor->mLevel++;
 
    // Start the loop at the first child node
-   TreeNode* tChildNode = aSubjectNode->mFirstChildNode;
+   TreeNode* tChildNodeP = aSubjectNode->ptrFirstChildNode();
 
    // Loop through the child nodes
-   while (tChildNode != 0)
+   while (tChildNodeP != 0)
    {
       // Update the recursive first in level flag
       aRecursiveAnchor->mFirstInLevel = tFirstInLevel;
@@ -70,7 +70,7 @@ void destroyAllTreeNodesBelow(
       {
          // Recursively call this method for the child node
          destroyAllTreeNodesBelow(
-            tChildNode,
+            tChildNodeP,
             aRecursiveAnchor);
       }
 
@@ -78,16 +78,16 @@ void destroyAllTreeNodesBelow(
       aRecursiveAnchor->mIndex++;
 
       // Store a pointer to the next child node before deleting it
-      TreeNode* tAfterChildNode = tChildNode->mAfterNode;
+      TreeNode* tAfterChildNodeP = tChildNodeP->ptrAfterNode();
 
       // Detach the child node from all nodes to which it is attached
-      tChildNode->detachFromAll();
+      tChildNodeP->detachFromAll();
 
       // Destroy the child node
-      tChildNode->destroy();
+      tChildNodeP->destroy();
 
       // Proceed to the next child node
-      tChildNode = tAfterChildNode;
+      tChildNodeP = tAfterChildNodeP;
    }
 
    // After the loop, decrement the recursive level

@@ -91,7 +91,7 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
    CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
    Some::MyTreeBlock* tRootNode = Some::MyTreeBlock::create(1);
-   Some::generateMyTreeBlocks3(tRootNode);
+   Some::generateMyTreeBlocks1(tRootNode);
    Some::printAllMyTreeBlocks1(tRootNode);
 
    CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);

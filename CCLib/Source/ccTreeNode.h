@@ -51,8 +51,6 @@ public:
 
    BlockHandle mBlockHandle;
 
-   TreeNode* ptr(BlockHandle aBlockHandle);
-
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
@@ -62,20 +60,21 @@ public:
    // first child node and ends at the last child node. The linked list can be
    // traversed via the before and after pointers of the child nodes.
 
+
    // The parent node of this node
-   TreeNode* mParentNode;
+   BlockHandle mParentNodeH;
 
    // The node before this node
-   TreeNode* mBeforeNode;
+   BlockHandle mBeforeNodeH;
 
    // The node after this node
-   TreeNode* mAfterNode;
+   BlockHandle mAfterNodeH;
 
    // The first child node of this node
-   TreeNode* mFirstChildNode;
+   BlockHandle mFirstChildNodeH;
 
    // The last child node of this node
-   TreeNode* mLastChildNode;
+   BlockHandle mLastChildNodeH;
 
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
@@ -91,11 +90,11 @@ public:
 
    // Attach an object node to the first child of this subject node, before it.
    // The object node becomes this subject node's first child.
-   void attachBeforeFirstChild (TreeNode* aObjectNode);
+   void attachBeforeFirstChild (TreeNode* aObjectNodeP);
 
    // Attach an object node to the last child of this subject node, after it.
    // The object node becomes this subject node's last child.
-   void attachAfterLastChild (TreeNode* aObjectNode);
+   void attachAfterLastChild (TreeNode* aObjectNodeP);
 
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
@@ -116,10 +115,10 @@ public:
    // These attach an object node to this subject node.
 
    // Attach an object node to this subject node, before it
-   void attachBefore (TreeNode* aObjectNode);
+   void attachBefore (TreeNode* aObjectNodeP);
 
    // Attach an object node to this subject node, after it
-   void attachAfter (TreeNode* aObjectNode);
+   void attachAfter (TreeNode* aObjectNodeP);
 
    // Detach this subject node from all of the nodes to which it is attached.
    // This is used when a node is destroyed.
@@ -158,7 +157,21 @@ public:
    // Use of this variable is mainly via the getNextNode visitor call,
    // which assumes a tree node structure traversal in construction order.
 
-   TreeNode* mAncestorWithAfter;
+   BlockHandle mAncestorWithAfterH;
+
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   // Handle to pointer conversions.
+
+   static TreeNode* ptr(BlockHandle aBlockHandle);
+
+   TreeNode* ptrParentNode()        { return ptr(mParentNodeH); }
+   TreeNode* ptrBeforeNode()        { return ptr(mBeforeNodeH); }
+   TreeNode* ptrAfterNode()         { return ptr(mAfterNodeH); }
+   TreeNode* ptrFirstChildNode()    { return ptr(mFirstChildNodeH); }
+   TreeNode* ptrLastChildNode()     { return ptr(mLastChildNodeH); }
+   TreeNode* ptrAncestorWithAfter() { return ptr(mAncestorWithAfterH); }
 };
 
 //****************************************************************************

@@ -38,7 +38,7 @@ typedef CC::CallPointer2<TreeNode*,RecursiveAnchor*> NodeVisitorCall;
 // called on each node visited
 
 void visitAllNodes1(
-   TreeNode*         aSubjectNode,
+   TreeNode*         aSubjectNodeP,
    RecursiveAnchor*  aRecursiveAnchor,
    NodeVisitorCall*  aNodeVisitorCall);
 
@@ -46,7 +46,7 @@ void visitAllNodes1(
 // by the above visitAllNodes1.
 
 void visitAllNodesBelow1(
-   TreeNode*         aSubjectNode,
+   TreeNode*         aSubjectNodeP,
    RecursiveAnchor*  aRecursiveAnchor,
    NodeVisitorCall*  aNodeVisitorCall);
 
@@ -59,7 +59,7 @@ void visitAllNodesBelow1(
 // called on each node visited
 
 void visitAllNodes2(
-   TreeNode*         aSubjectNode,
+   TreeNode*         aSubjectNodeP,
    RecursiveAnchor*  aRecursiveAnchor,
    NodeVisitorCall*  aNodeVisitorCall);
 
@@ -67,7 +67,7 @@ void visitAllNodes2(
 // by the above visitAllNodes2.
 
 void visitAllNodesBelow2(
-   TreeNode*         aSubjectNode, 
+   TreeNode*         aSubjectNodeP, 
    RecursiveAnchor*  aRecursiveAnchor,
    NodeVisitorCall*  aNodeVisitorCall);
 
@@ -91,7 +91,7 @@ void printAllTreeNodes2(TreeNode* aRootNode);
 // pointer to a fuction to be applied when the node is visited.
 
 TreeNode* visitNode(
-   TreeNode*         aSubjectNode,
+   TreeNode*         aSubjectNodeP,
    RecursiveAnchor*  aRecursiveAnchor,
    NodeVisitorCall*  aNodeVisitorCall);
 
@@ -106,7 +106,7 @@ void printAllTreeNodes3(TreeNode* aRootNode);
 // It returns the next node that is to be visited.
 
 TreeNode* getNextNode(
-   TreeNode*         aSubjectNode);
+   TreeNode*         aSubjectNodeP);
 
 //****************************************************************************
 //****************************************************************************

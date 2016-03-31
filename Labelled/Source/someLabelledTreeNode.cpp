@@ -88,14 +88,14 @@ void LabelledTreeNode::setLabel(char* aLabel)
 
 char* LabelledTreeNode::getFullPath()
 {
-   if (mParentNode == 0)
+   if (mParentNodeH == CC::BlockHandle::nullH)
    {
       strncpy(mFullPath, mLabel, MaxFullPathSize);
       return mFullPath;
    }
    else
    {
-      LabelledTreeNode* tParentNode = static_cast<LabelledTreeNode*>(mParentNode);
+      LabelledTreeNode* tParentNode = static_cast<LabelledTreeNode*>(this->ptrParentNode());
 
       strncpy(mFullPath, tParentNode->getFullPath(), MaxFullPathSize);
       strncat(mFullPath, ".", MaxFullPathSize);

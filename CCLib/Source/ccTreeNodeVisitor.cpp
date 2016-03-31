@@ -13,16 +13,16 @@ namespace CC
 //****************************************************************************
 
 void visitAllNodes1(
-   TreeNode*         aSubjectNode,
+   TreeNode*         aSubjectNodeP,
    RecursiveAnchor*  aRecursiveAnchor,
    NodeVisitorCall*  aNodeVisitorCall)
 {
    // Visit the subject node
-   (*aNodeVisitorCall)(aSubjectNode, aRecursiveAnchor);
+   (*aNodeVisitorCall)(aSubjectNodeP, aRecursiveAnchor);
 
    // Visit all nodes below the subject node
    visitAllNodesBelow1(
-      aSubjectNode,
+      aSubjectNodeP,
       aRecursiveAnchor,
       aNodeVisitorCall);
 }
@@ -32,18 +32,18 @@ void visitAllNodes1(
 //****************************************************************************
 
 void visitAllNodes2(
-   TreeNode*         aSubjectNode,
+   TreeNode*         aSubjectNodeP,
    RecursiveAnchor*  aRecursiveAnchor,
    NodeVisitorCall*  aNodeVisitorCall)
 {
    // Visit all nodes below the subject node
    visitAllNodesBelow2(
-      aSubjectNode,
+      aSubjectNodeP,
       aRecursiveAnchor,
       aNodeVisitorCall);
 
    // Visit the subject node
-   (*aNodeVisitorCall)(aSubjectNode, aRecursiveAnchor);
+   (*aNodeVisitorCall)(aSubjectNodeP, aRecursiveAnchor);
 
 }
 
@@ -52,7 +52,7 @@ void visitAllNodes2(
 //****************************************************************************
 
 void visitAllNodesBelow1(
-   TreeNode*         aSubjectNode,
+   TreeNode*         aSubjectNodeP,
    RecursiveAnchor*  aRecursiveAnchor,
    NodeVisitorCall*  aNodeVisitorCall)
 {
@@ -66,10 +66,10 @@ void visitAllNodesBelow1(
    aRecursiveAnchor->mLevel++;
 
    // Start the loop at the first child node
-   TreeNode* tChildNode = aSubjectNode->mFirstChildNode;
+   TreeNode* tChildNodeP = aSubjectNodeP->ptrFirstChildNode();
 
    // Loop through the child nodes
-   while (tChildNode != 0)
+   while (tChildNodeP != 0)
    {
       // Update the recursive first in level flag
       aRecursiveAnchor->mFirstInLevel = tFirstInLevel;
@@ -79,16 +79,16 @@ void visitAllNodesBelow1(
       aRecursiveAnchor->mIndex++;
 
       // Visit the child node before the recursive call
-      (*aNodeVisitorCall)(tChildNode, aRecursiveAnchor);
+      (*aNodeVisitorCall)(tChildNodeP, aRecursiveAnchor);
 
       // Recursively call this method for the child node
       visitAllNodesBelow1(
-         tChildNode,
+         tChildNodeP,
          aRecursiveAnchor,
          aNodeVisitorCall);
 
       // Proceed to the next child node
-      tChildNode = tChildNode->mAfterNode;
+      tChildNodeP = tChildNodeP->ptrAfterNode();
    }
 
    // After the loop, decrement the recursive level
@@ -101,7 +101,7 @@ void visitAllNodesBelow1(
 // Visit all nodes below
 
 void visitAllNodesBelow2(
-   TreeNode*         aSubjectNode,
+   TreeNode*         aSubjectNodeP,
    RecursiveAnchor*  aRecursiveAnchor,
    NodeVisitorCall*  aNodeVisitorCall)
 {
@@ -115,10 +115,10 @@ void visitAllNodesBelow2(
    aRecursiveAnchor->mLevel++;
 
    // Start the loop at the first child node
-   TreeNode* tChildNode = aSubjectNode->mFirstChildNode;
+   TreeNode* tChildNodeP = aSubjectNodeP->ptrFirstChildNode();
 
    // Loop through the child nodes
-   while (tChildNode != 0)
+   while (tChildNodeP != 0)
    {
       // Update the recursive first in level flag
       aRecursiveAnchor->mFirstInLevel = tFirstInLevel;
@@ -126,7 +126,7 @@ void visitAllNodesBelow2(
 
       // Recursively call this method for the child node
       visitAllNodesBelow2(
-         tChildNode,
+         tChildNodeP,
          aRecursiveAnchor,
          aNodeVisitorCall);
 
@@ -134,10 +134,10 @@ void visitAllNodesBelow2(
       aRecursiveAnchor->mIndex++;
 
       // Visit the child node after the recursive call
-      (*aNodeVisitorCall)(tChildNode, aRecursiveAnchor);
+      (*aNodeVisitorCall)(tChildNodeP, aRecursiveAnchor);
 
       // Proceed to the next child node
-      tChildNode = tChildNode->mAfterNode;
+      tChildNodeP = tChildNodeP->ptrAfterNode();
    }
 
    // After the loop, decrement the recursive level
@@ -157,26 +157,26 @@ void visitNodeForPrint (TreeNode* aNode, RecursiveAnchor* aRecursiveAnchor)
       aNode->mIdentifier);
 }
 
-void printAllTreeNodes1(TreeNode* aSubjectNode)
+void printAllTreeNodes1(TreeNode* aSubjectNodeP)
 {
    NodeVisitorCall tNodeVisitorCall;
    tNodeVisitorCall.bind(visitNodeForPrint);
    RecursiveAnchor tRecursiveAnchor;
 
    visitAllNodes1(
-      aSubjectNode,
+      aSubjectNodeP,
       &tRecursiveAnchor,
       &tNodeVisitorCall);
 }
 
-void printAllTreeNodes2(TreeNode* aSubjectNode)
+void printAllTreeNodes2(TreeNode* aSubjectNodeP)
 {
    NodeVisitorCall tNodeVisitorCall;
    tNodeVisitorCall.bind(visitNodeForPrint);
    RecursiveAnchor tRecursiveAnchor;
 
    visitAllNodes2(
-      aSubjectNode,
+      aSubjectNodeP,
       &tRecursiveAnchor,
       &tNodeVisitorCall);
 }
@@ -187,29 +187,29 @@ void printAllTreeNodes2(TreeNode* aSubjectNode)
 // Visit a node and return a pointer to the next node
 
 TreeNode* visitNode(
-   TreeNode*         aSubjectNode,
+   TreeNode*         aSubjectNodeP,
    RecursiveAnchor*  aRecursiveAnchor,
    NodeVisitorCall*  aNodeVisitorCall)
 {
    //--------------------------------------------------------------------------
    // Visit the subject node
 
-   (*aNodeVisitorCall)(aSubjectNode, aRecursiveAnchor);
+   (*aNodeVisitorCall)(aSubjectNodeP, aRecursiveAnchor);
 
    //--------------------------------------------------------------------------
    // Set the subject node ancestor with after node
 
    // If the subject node has no parent
-   if (aSubjectNode->mParentNode == 0)
+   if (aSubjectNodeP->mParentNodeH == BlockHandle::nullH)
    {
       // Then it has no ancestor with after node
-      aSubjectNode->mAncestorWithAfter = 0;
+      aSubjectNodeP->mAncestorWithAfterH = BlockHandle::nullH;
    }
    // Else if the parent of the subject node has a node after it
-   else if (aSubjectNode->mParentNode->mAfterNode !=0)
+   else if (aSubjectNodeP->ptrParentNode()->mAfterNodeH != BlockHandle::nullH)
    {
       // Then the subject node ancestor with after node is its parent
-      aSubjectNode->mAncestorWithAfter = aSubjectNode->mParentNode;
+      aSubjectNodeP->mAncestorWithAfterH = aSubjectNodeP->mParentNodeH;
    }
    // Else the subject node has no parent with an after node
    else
@@ -217,7 +217,7 @@ TreeNode* visitNode(
       // Copy the subject node's parent ancestor after node to it.
       // That will be the closest ancestor that has a node after it.
       // This is used recursively by calls to getNextNode.
-      aSubjectNode->mAncestorWithAfter = aSubjectNode->mParentNode->mAncestorWithAfter;
+      aSubjectNodeP->mAncestorWithAfterH = aSubjectNodeP->ptrParentNode()->mAncestorWithAfterH;
    }
 
    //--------------------------------------------------------------------------
@@ -228,26 +228,26 @@ TreeNode* visitNode(
    //--------------------------------------------------------------------------
    // Pointer to the next node
 
-   TreeNode* tNextNode = 0;
+   BlockHandle tNextNodeH = BlockHandle::nullH;
 
    //--------------------------------------------------------------------------
    // Determine the next node
 
    // If the subject node has child nodes
-   if (aSubjectNode->mFirstChildNode)
+   if (aSubjectNodeP->mFirstChildNodeH != BlockHandle::nullH)
    {
       // The next node will be the first child node of the subject node
-      tNextNode = aSubjectNode->mFirstChildNode;
+      tNextNodeH = aSubjectNodeP->mFirstChildNodeH;
       // The next node level will increase
       aRecursiveAnchor->mLevel++;
       // The next node will be the first in its level
       aRecursiveAnchor->mFirstInLevel = true;
    }
    // Else if the subject node has a node after it
-   else if (aSubjectNode->mAfterNode)
+   else if (aSubjectNodeP->mAfterNodeH != BlockHandle::nullH)
    {
       // The next node will be the node after it
-      tNextNode = aSubjectNode->mAfterNode;
+      tNextNodeH = aSubjectNodeP->mAfterNodeH;
       // The next node will not be the first in its level
       aRecursiveAnchor->mFirstInLevel = false;
    }
@@ -255,26 +255,26 @@ TreeNode* visitNode(
    else
    {
       // If the subject node has an ancestor after node
-      if (aSubjectNode->mAncestorWithAfter)
+      if (aSubjectNodeP->mAncestorWithAfterH != BlockHandle::nullH)
       {
          // Set the next node to the ancestor after node
-         tNextNode = aSubjectNode->mAncestorWithAfter->mAfterNode;
+         tNextNodeH = aSubjectNodeP->ptrAncestorWithAfter()->mAfterNodeH;
       }
    }
    // Return the next node
-   return tNextNode;
+   return TreeNode::ptr(tNextNodeH);
 }
 
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-void printAllTreeNodes3(TreeNode* aSubjectNode)
+void printAllTreeNodes3(TreeNode* aSubjectNodeP)
 {
    NodeVisitorCall tNodeVisitorCall;
    tNodeVisitorCall.bind(visitNodeForPrint);
    RecursiveAnchor tRecursiveAnchor;
 
-   TreeNode* tNode = aSubjectNode;
+   TreeNode* tNode = aSubjectNodeP;
    while (tNode)
    {
       tNode = visitNode(tNode, &tRecursiveAnchor, &tNodeVisitorCall);
@@ -287,30 +287,30 @@ void printAllTreeNodes3(TreeNode* aSubjectNode)
 // Return a pointer to the next node, in construction order
 
 TreeNode* getNextNode(
-   TreeNode*        aSubjectNode)
+   TreeNode*        aSubjectNodeP)
 {
    // Guard
-   if (aSubjectNode == 0) return 0;
+   if (aSubjectNodeP == 0) return 0;
 
    //--------------------------------------------------------------------------
    // Pointer to the next node
 
-   TreeNode* tNextNode = 0;
+   BlockHandle tNextNodeH = BlockHandle::nullH;
 
    //--------------------------------------------------------------------------
    // Set the subject node ancestor with after node
 
    // If the subject node has no parent
-   if (aSubjectNode->mParentNode == 0)
+   if (aSubjectNodeP->mParentNodeH == BlockHandle::nullH)
    {
       // Then it has no ancestor with after node
-      aSubjectNode->mAncestorWithAfter = 0;
+      aSubjectNodeP->mAncestorWithAfterH = BlockHandle::nullH;
    }
    // Else if the parent of the subject node has a node after it
-   else if (aSubjectNode->mParentNode->mAfterNode !=0)
+   else if (aSubjectNodeP->ptrParentNode()->mAfterNodeH != BlockHandle::nullH)
    {
       // Then the subject node ancestor with after node is its parent
-      aSubjectNode->mAncestorWithAfter = aSubjectNode->mParentNode;
+      aSubjectNodeP->mAncestorWithAfterH = aSubjectNodeP->mParentNodeH;
    }
    // Else the subject node has no parent with an after node
    else
@@ -318,35 +318,35 @@ TreeNode* getNextNode(
       // Copy the subject node's parent ancestor after node to it.
       // That will be the closest ancestor that has a node after it.
       // This is used recursively by calls to getNextNode.
-      aSubjectNode->mAncestorWithAfter = aSubjectNode->mParentNode->mAncestorWithAfter;
+      aSubjectNodeP->mAncestorWithAfterH = aSubjectNodeP->ptrParentNode()->mAncestorWithAfterH;
    }
 
    //--------------------------------------------------------------------------
    // If the subject node has child nodes
 
-   if (aSubjectNode->mFirstChildNode)
+   if (aSubjectNodeP->mFirstChildNodeH != BlockHandle::nullH)
    {
       // The next node will be the first child node of the subject node
-      tNextNode = aSubjectNode->mFirstChildNode;
+      tNextNodeH = aSubjectNodeP->mFirstChildNodeH;
    }
    // Else if the subject node has a node after it
-   else if (aSubjectNode->mAfterNode)
+   else if (aSubjectNodeP->mAfterNodeH != BlockHandle::nullH)
    {
       // The next node will be the node after it
-      tNextNode = aSubjectNode->mAfterNode;
+      tNextNodeH = aSubjectNodeP->mAfterNodeH;
    }
    // Else the subject node has no child nodes and no nodes after it
    else
    {
       // If the subject node has an ancestor after node
-      if (aSubjectNode->mAncestorWithAfter)
+      if (aSubjectNodeP->mAncestorWithAfterH != BlockHandle::nullH)
       {
          // Set the next node to the ancestor after node
-         tNextNode = aSubjectNode->mAncestorWithAfter->mAfterNode;
+         tNextNodeH = aSubjectNodeP->ptrAncestorWithAfter()->mAfterNodeH;
       }
    }
    // Return the next node
-   return tNextNode;
+   return TreeNode::ptr(tNextNodeH);
 }
 
 }//namespace

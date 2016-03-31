@@ -33,7 +33,6 @@
     <ClCompile Include="Source\ccPointerShiftRegister.cpp" />
     <ClCompile Include="Source\ccPointerStack.cpp" />
     <ClCompile Include="Source\ccTreeNode.cpp" />
-    <ClCompile Include="Source\ccTreeNodeCollection.cpp" />
     <ClCompile Include="Source\ccTreeNodeDestroyer.cpp" />
     <ClCompile Include="Source\ccTreeNodeVisitor.cpp" />
     <ClCompile Include="Source\cc_functions.cpp" />
@@ -62,7 +61,6 @@
     <ClInclude Include="Source\ccPointerStack.h" />
     <ClInclude Include="Source\ccRecursiveAnchor.h" />
     <ClInclude Include="Source\ccTreeNode.h" />
-    <ClInclude Include="Source\ccTreeNodeCollection.h" />
     <ClInclude Include="Source\ccTreeNodeDestroyer.h" />
     <ClInclude Include="Source\ccTreeNodeVisitor.h" />
     <ClInclude Include="Source\ccValueQueue.h" />
