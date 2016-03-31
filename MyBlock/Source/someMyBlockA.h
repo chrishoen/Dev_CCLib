@@ -35,14 +35,14 @@ public:
    // This allocates a block from the block pool and uses placement new
    // to call the class constructor. It is analogous to new.
 
-   static MyBlockA* allocate();
+   static MyBlockA* allocateA();
 
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
    // This deallocates the object back to the block pool. It does not call
    // a destructor for the object.
-   void deallocate();
+   void deallocateA();
 
 };
 

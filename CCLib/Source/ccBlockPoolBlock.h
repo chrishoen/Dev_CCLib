@@ -68,7 +68,7 @@ public:
    void deallocate()
    {
       // Deallocate the block back to the block pool
-//    deallocateBlockPoolBlock(this->mBlockHandle);
+ //    deallocateBlockPoolBlock(this->mBlockHandle);
    }
 #endif
 
@@ -83,40 +83,114 @@ public:
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+// This is a function template used to create classes that use the block pool
+// for memory management.
+
+template <class BlockClass,int BlockPoolIndex>
+BlockClass* createBlock()
+{
+   // Block pointer.
+   BlockClass* tBlockPointer = 0;
+   // Block handle.
+   CC::BlockHandle tBlockHandle;
+
+   // Allocate a block from the block pool.
+   CC::allocateBlockPoolBlock(BlockPoolIndex,(void**)&tBlockPointer,&tBlockHandle);
+
+   // Call the constructor on the allocated block using placement new.
+   new(tBlockPointer)BlockClass();
+
+   // Set the allocated block memory handle.
+   tBlockPointer->mBlockHandle = tBlockHandle;
+
+   // Return the pointer to the allocated block.
+   return tBlockPointer;
+}
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+
+template <class BlockClass,int BlockPoolIndex,typename Parm1>
+BlockClass* createBlock(Parm1 P1)
+{
+   // Block pointer.
+   BlockClass* tBlockPointer = 0;
+   // Block handle.
+   CC::BlockHandle tBlockHandle;
+
+   // Allocate a block from the block pool.
+   CC::allocateBlockPoolBlock(BlockPoolIndex,(void**)&tBlockPointer,&tBlockHandle);
+
+   // Call the constructor on the allocated block using placement new.
+   new(tBlockPointer)BlockClass(P1);
+
+   // Set the allocated block memory handle.
+   tBlockPointer->mBlockHandle = tBlockHandle;
+
+   // Return the pointer to the allocated block.
+   return tBlockPointer;
+}
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+
+template <class BlockClass,int BlockPoolIndex,typename Parm1,typename Parm2>
+BlockClass* createBlock(Parm1 P1,Parm1 P2)
+{
+   // Block pointer.
+   BlockClass* tBlockPointer = 0;
+   // Block handle.
+   CC::BlockHandle tBlockHandle;
+
+   // Allocate a block from the block pool.
+   CC::allocateBlockPoolBlock(BlockPoolIndex,(void**)&tBlockPointer,&tBlockHandle);
+
+   // Call the constructor on the allocated block using placement new.
+   new(tBlockPointer)BlockClass(P1,P2);
+
+   // Set the allocated block memory handle.
+   tBlockPointer->mBlockHandle = tBlockHandle;
+
+   // Return the pointer to the allocated block.
+   return tBlockPointer;
+}
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+
+template <class BlockClass,int BlockPoolIndex,typename Parm1,typename Parm2,typename Parm3>
+BlockClass* createBlock(Parm1 P1,Parm1 P2,Parm1 P3)
+{
+   // Block pointer.
+   BlockClass* tBlockPointer = 0;
+   // Block handle.
+   CC::BlockHandle tBlockHandle;
+
+   // Allocate a block from the block pool.
+   CC::allocateBlockPoolBlock(BlockPoolIndex,(void**)&tBlockPointer,&tBlockHandle);
+
+   // Call the constructor on the allocated block using placement new.
+   new(tBlockPointer)BlockClass(P1,P2,P3);
+
+   // Set the allocated block memory handle.
+   tBlockPointer->mBlockHandle = tBlockHandle;
+
+   // Return the pointer to the allocated block.
+   return tBlockPointer;
+}
+
+//****************************************************************************
+
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
 }//namespace
-/*==============================================================================
-
-Here's an example:
-
-   In SomeClass.h>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-   class SomeClass : public CC::BlockPoolBlock<SomeClass>
-   {
-   public:
-
-      SomeClass();
-      {
-         printf("SomeClass::SomeClass\n");
-      }
-
-      void sayHello()
-      { 
-         printf("hello\n"); 
-      }
-
-   };
-
-   In SomeClass.cpp>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-   CC::BlockPool Some::Class6A::mBlockPool;
-
-   In SomeClassCaller.cpp>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-   SomeClass::initializeShortTermBlockPool(1000);
-   SomeClass* object = SomeClass::create();
-   object->sayHello();
-   object->destroy();
-
-==============================================================================*/
 
 #endif

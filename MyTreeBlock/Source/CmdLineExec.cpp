@@ -44,6 +44,21 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
+   CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
+   Some::MyTreeBlock* tRootNode = Some::MyTreeBlock::create(999);
+   Some::generateMyTreeBlocks1(tRootNode);
+   Some::printAllMyTreeBlocks1(tRootNode);
+
+   CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
+// CC::destroyAllTreeNodes(tRootNode);
+   Some::destroyAllMyTreeBlocks(tRootNode);
+   CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
+}
+
+//******************************************************************************
+
+void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
+{
    aCmd->setArgDefault(1,1);
 
    CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
@@ -68,15 +83,6 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 }
 
 //******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
-{
-   Some::MyTreeBlock* tRootNode = Some::MyTreeBlock::create(1);
-}
-
-//******************************************************************************
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
@@ -89,15 +95,6 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
-   CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
-   Some::MyTreeBlock* tRootNode = Some::MyTreeBlock::create(1);
-   Some::generateMyTreeBlocks1(tRootNode);
-   Some::printAllMyTreeBlocks1(tRootNode);
-
-   CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
-// CC::destroyAllTreeNodes(tRootNode);
-   Some::destroyAllMyTreeBlocks(tRootNode);
-   CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
 }
 
 //******************************************************************************

@@ -40,7 +40,7 @@ void MyBlockA::method1A()
 // This allocates a block from the block pool and uses placement new
 // to call the class constructor. It is analogous to new.
 
-MyBlockA* MyBlockA::allocate()
+MyBlockA* MyBlockA::allocateA()
 {
    // Block pointer.
    MyBlockA* tBlockPointer = 0;
@@ -65,7 +65,7 @@ MyBlockA* MyBlockA::allocate()
 //--------------------------------------------------------------------------
 // This deallocates the object back to the block pool. It does not call
 // a destructor for the object.
-void MyBlockA::deallocate()
+void MyBlockA::deallocateA()
 {
    // Deallocate the block back to the block pool
    deallocateBlockPoolBlock(this->mBlockHandle);

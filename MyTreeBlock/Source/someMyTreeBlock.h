@@ -26,7 +26,7 @@ public:
    //--------------------------------------------------------------------------
    // Memory management, constructors and destructors
 
-   // Create with default memory type and specified member variables
+   // Allocate a block from the block pool and call its constructor.
    static MyTreeBlock* create (int aIdentifier);
 
    // Constructor, it is called by create after allocation of a new block.

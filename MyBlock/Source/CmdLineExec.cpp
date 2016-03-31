@@ -48,11 +48,11 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockA);
 
-   Some::MyBlockA* t1A = Some::MyBlockA::allocate();
+   Some::MyBlockA* t1A = Some::MyBlockA::allocateA();
 
    t1A->method1A();
    t1A->~MyBlockA();
-   t1A->deallocate();
+   t1A->deallocateA();
 
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockA);
 
@@ -65,16 +65,16 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockA);
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockB);
 
-   Some::MyBlockA* t1A1 = Some::MyBlockA::allocate();
-   Some::MyBlockA* t1A2 = Some::MyBlockA::allocate();
+   Some::MyBlockA* t1A1 = Some::MyBlockA::allocateA();
+   Some::MyBlockA* t1A2 = Some::MyBlockA::allocateA();
    Some::MyBlockB* t1B1 = Some::MyBlockB::allocate();
    Some::MyBlockB* t1B2 = Some::MyBlockB::allocate();
 
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockA);
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockB);
 
-   t1A1->deallocate();
-   t1A2->deallocate();
+   t1A1->deallocateA();
+   t1A2->deallocateA();
    Some::MyBlockB::deallocate(t1B1);
    Some::MyBlockB::deallocate(t1B2);
 
@@ -86,12 +86,12 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
-   Some::MyBlockA* t1A1 = Some::MyBlockA::allocate();
+   Some::MyBlockA* t1A1 = Some::MyBlockA::allocateA();
    Some::MyBlockA* t1A2 = (Some::MyBlockA*)CC::BlockHandle::ptr(t1A1->mBlockHandle);
 
    t1A1->method1A();
    t1A2->method1A();
-   t1A1->deallocate();
+   t1A1->deallocateA();
 
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockA);
 }
