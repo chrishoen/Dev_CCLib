@@ -51,8 +51,6 @@ public:
 
    BlockHandle mBlockHandle;
 
-   TestNode* ptr(BlockHandle aBlockHandle);
-
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
@@ -63,10 +61,10 @@ public:
    // traversed via the before and after pointers of the child nodes.
 
    // The node before this node
-   TestNode* mBeforeNode;
+   BlockHandle mBeforeNodeH;
 
    // The node after this node
-   TestNode* mAfterNode;
+   BlockHandle mAfterNodeH;
 
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
@@ -81,7 +79,7 @@ public:
    // These attach an object node to this subject node.
 
    // Attach an object node to this subject node, after it
-   void attachAfter (TestNode* aObjectNode);
+   void attachAfter (TestNode* aObjectNodeP);
 
    // Detach this subject node from all of the nodes to which it is attached.
    // This is used when a node is destroyed.
@@ -95,6 +93,17 @@ public:
    // This method deallocates the object from the block pool from which it was
    // created. It does not call a class destructor.
    void destroy();
+
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   // Handle to pointer conversions.
+
+   static TestNode* ptr(BlockHandle aBlockHandle);
+
+   TestNode* ptrBeforeNode()         { return ptr(mBeforeNodeH); }
+   TestNode* ptrAfterNode()          { return ptr(mAfterNodeH); }
+
 };
 
 //****************************************************************************

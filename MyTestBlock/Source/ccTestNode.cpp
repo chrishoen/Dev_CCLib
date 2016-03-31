@@ -16,8 +16,8 @@ namespace CC
 TestNode::TestNode()
 {
    // All pointers to zero
-   mBeforeNode = 0;
-   mAfterNode = 0;
+   mBeforeNodeH = BlockHandle::nullH;
+   mAfterNodeH  = BlockHandle::nullH;
 
    // Empty state
    mIdentifier=0;
@@ -26,8 +26,8 @@ TestNode::TestNode()
 TestNode::TestNode(int aIdentifier)
 {
    // All pointers to zero
-   mBeforeNode = 0;
-   mAfterNode = 0;
+   mBeforeNodeH = BlockHandle::nullH;
+   mAfterNodeH  = BlockHandle::nullH;
 
    // Set state
    mIdentifier = aIdentifier;
@@ -48,24 +48,24 @@ TestNode* TestNode::ptr(BlockHandle aBlockHandle)
 //****************************************************************************
 // Attach an object node to this subject node, after it
 
-void TestNode::attachAfter (TestNode* aObjectNode)
+void TestNode::attachAfter (TestNode* aObjectNodeP)
 {
    // If this node does not have a node after it
-   if (this->mAfterNode == 0)
+   if (this->mAfterNodeH == BlockHandle::nullH)
    {
       // Attach the object node after this node
-      aObjectNode->mBeforeNode      = this;
-      aObjectNode->mAfterNode       = 0;
-      this->mAfterNode        = aObjectNode;
+      aObjectNodeP->mBeforeNodeH     = this->mBlockHandle;
+      aObjectNodeP->mAfterNodeH      = BlockHandle::nullH;
+      this->mAfterNodeH              = aObjectNodeP->mBlockHandle;
    }
    // Else this node does have a node after it
    else
    {
       // Insert the object node between this node and the node after it
-      aObjectNode->mBeforeNode      = this;
-      aObjectNode->mAfterNode       = this->mAfterNode;
-      this->mAfterNode->mBeforeNode = aObjectNode;
-      this->mAfterNode              = aObjectNode;
+      aObjectNodeP->mBeforeNodeH     = this->mBlockHandle;
+      aObjectNodeP->mAfterNodeH      = this->mAfterNodeH;
+      ptr(this->mAfterNodeH)->mBeforeNodeH = aObjectNodeP->mBlockHandle;
+      this->mAfterNodeH              = aObjectNodeP->mBlockHandle;
    }
 }
 
@@ -77,30 +77,30 @@ void TestNode::attachAfter (TestNode* aObjectNode)
 void TestNode::detachFromAll()
 {
    // If this subject node does not have a node before it
-   if (this->mBeforeNode == 0)
+   if (this->mBeforeNodeH == BlockHandle::nullH)
    {
    }
    // Else this node has a node before it
    else
    {
       // Set the node before it to point to the node after it
-      this->mBeforeNode->mAfterNode = this->mAfterNode;
+      ptr(this->mBeforeNodeH)->mAfterNodeH = this->mAfterNodeH;
    }
 
    // If this node does not have a node after it
-   if (this->mAfterNode == 0)
+   if (this->mAfterNodeH == BlockHandle::nullH)
    {
    }
    // Else this node has a node after it
    else
    {
       // Set the node after it to point to the node before it
-      this->mAfterNode->mBeforeNode = this->mBeforeNode;
+      ptr(this->mAfterNodeH)->mBeforeNodeH = this->mBeforeNodeH;
    }
 
    // This node no longer has a parent or nodes before and after it
-   this->mBeforeNode = 0;
-   this->mAfterNode = 0;
+   this->mBeforeNodeH = BlockHandle::nullH;
+   this->mAfterNodeH  = BlockHandle::nullH;
 }
 
 //****************************************************************************

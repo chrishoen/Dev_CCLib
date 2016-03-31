@@ -20,10 +20,10 @@ void generateMyTestBlocks1(MyTestBlock* tRootNode)
    tRootNode->attachAfter(tNode);
 
    tNode = MyTestBlock::create(12);
-   tRootNode->mAfterNode->attachAfter(tNode);
+   tRootNode->ptrAfterNode()->attachAfter(tNode);
 
    tNode = MyTestBlock::create(13);
-   tRootNode->mAfterNode->mAfterNode->attachAfter(tNode);
+   tRootNode->ptrAfterNode()->ptrAfterNode()->attachAfter(tNode);
 }
 
 //******************************************************************************

@@ -18,7 +18,7 @@ Print utility
 //****************************************************************************
 // Static variable instance
 
-static CC::BlockHandle nullH;
+CC::BlockHandle CC::BlockHandle::nullH;
 
 namespace CC
 {

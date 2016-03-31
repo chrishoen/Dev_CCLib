@@ -13,16 +13,16 @@ namespace CC
 //****************************************************************************
 
 void visitAllNodes1(
-   TestNode*         aSubjectNode,
+   TestNode*         aSubjectNodeP,
    RecursiveAnchor*  aRecursiveAnchor,
    NodeVisitorCall*  aNodeVisitorCall)
 {
    // Visit the subject node
-   (*aNodeVisitorCall)(aSubjectNode, aRecursiveAnchor);
+   (*aNodeVisitorCall)(aSubjectNodeP, aRecursiveAnchor);
 
    // Visit all nodes below the subject node
    visitAllNodesAfter1(
-      aSubjectNode,
+      aSubjectNodeP,
       aRecursiveAnchor,
       aNodeVisitorCall);
 }
@@ -32,7 +32,7 @@ void visitAllNodes1(
 //****************************************************************************
 
 void visitAllNodesAfter1(
-   TestNode*         aSubjectNode,
+   TestNode*         aSubjectNodeP,
    RecursiveAnchor*  aRecursiveAnchor,
    NodeVisitorCall*  aNodeVisitorCall)
 {
@@ -40,7 +40,7 @@ void visitAllNodesAfter1(
    // Loop for each child node of the subject node
 
    // Start the loop at the first child node
-   TestNode* tAfterNode = aSubjectNode->mAfterNode;
+   TestNode* tAfterNode = aSubjectNodeP->ptrAfterNode();
 
    // Loop through the child nodes
    while (tAfterNode != 0)
@@ -52,7 +52,7 @@ void visitAllNodesAfter1(
       (*aNodeVisitorCall)(tAfterNode, aRecursiveAnchor);
 
       // Proceed to the next child node
-      tAfterNode = tAfterNode->mAfterNode;
+      tAfterNode = tAfterNode->ptrAfterNode();
    }
 
    // After the loop, decrement the recursive level
@@ -73,13 +73,13 @@ void visitNodeForPrint (TestNode* aNode, RecursiveAnchor* aRecursiveAnchor)
       aNode->mIdentifier);
 }
 
-void printAllTestNodes1(TestNode* aSubjectNode)
+void printAllTestNodes1(TestNode* aSubjectNodeP)
 {
    NodeVisitorCall tNodeVisitorCall(visitNodeForPrint);
    RecursiveAnchor tRecursiveAnchor;
 
    visitAllNodes1(
-      aSubjectNode,
+      aSubjectNodeP,
       &tRecursiveAnchor,
       &tNodeVisitorCall);
 }
