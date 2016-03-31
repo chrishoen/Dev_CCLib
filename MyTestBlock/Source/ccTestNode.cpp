@@ -64,8 +64,9 @@ void TestNode::attachAfter (TestNode* aObjectNodeP)
       // Insert the object node between this node and the node after it
       aObjectNodeP->mBeforeNodeH     = this->mBlockHandle;
       aObjectNodeP->mAfterNodeH      = this->mAfterNodeH;
-      ptr(this->mAfterNodeH)->mBeforeNodeH = aObjectNodeP->mBlockHandle;
+      this->ptrAfterNode()->mBeforeNodeH = aObjectNodeP->mBlockHandle;
       this->mAfterNodeH              = aObjectNodeP->mBlockHandle;
+      printf("LINE101 %d\n",this->mAfterNodeH.mBlockIndex);
    }
 }
 
@@ -95,7 +96,7 @@ void TestNode::detachFromAll()
    else
    {
       // Set the node after it to point to the node before it
-      ptr(this->mAfterNodeH)->mBeforeNodeH = this->mBeforeNodeH;
+      this->ptrAfterNode()->mBeforeNodeH = this->mBeforeNodeH;
    }
 
    // This node no longer has a parent or nodes before and after it

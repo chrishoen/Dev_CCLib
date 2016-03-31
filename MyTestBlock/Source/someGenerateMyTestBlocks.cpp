@@ -32,6 +32,16 @@ void generateMyTestBlocks1(MyTestBlock* tRootNode)
 
 void generateMyTestBlocks2(MyTestBlock* tRootNode)
 {
+   MyTestBlock* tNode = 0;
+
+   tNode = MyTestBlock::create(11);
+   tRootNode->attachAfter(tNode);
+
+   tNode = MyTestBlock::create(12);
+   tRootNode->attachAfter(tNode);
+
+   tNode = MyTestBlock::create(13);
+   tRootNode->attachAfter(tNode);
 }
 
 }//namespace

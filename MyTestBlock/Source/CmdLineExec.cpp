@@ -44,13 +44,11 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1,2);
 
-   CC::showBlockPool(Some::cBlockPoolIndex_MyTestBlock);
-
    Some::MyTestBlock* tRootNode = Some::MyTestBlock::create(1);
 
    Some::generateMyTestBlocks1(tRootNode);
+   CC::printAllTestNodes1(tRootNode);
 
-   CC::showBlockPool(Some::cBlockPoolIndex_MyTestBlock);
 }
 
 //******************************************************************************
@@ -61,8 +59,7 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
    Some::MyTestBlock* tRootNode = Some::MyTestBlock::create(1);
 
-   Some::generateMyTestBlocks1(tRootNode);
-
+   Some::generateMyTestBlocks2(tRootNode);
    CC::printAllTestNodes1(tRootNode);
 }
 
@@ -70,6 +67,7 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
+   CC::showBlockPool(Some::cBlockPoolIndex_MyTestBlock);
 }
 
 //******************************************************************************
