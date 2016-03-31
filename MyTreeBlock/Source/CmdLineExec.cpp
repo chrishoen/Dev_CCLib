@@ -44,7 +44,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,2);
+   aCmd->setArgDefault(1,1);
 
    CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
 
@@ -58,7 +58,12 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
    {
       Some::generateMyTreeBlocks2(tRootNode);
    }
+   else if (aCmd->argInt(1) == 3)
+   {
+      Some::generateMyTreeBlocks3(tRootNode);
+   }
 
+   Some::printAllMyTreeBlocks1(tRootNode);
    CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
 }
 
@@ -86,7 +91,7 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
    CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
    Some::MyTreeBlock* tRootNode = Some::MyTreeBlock::create(1);
-   Some::generateMyTreeBlocks1(tRootNode);
+   Some::generateMyTreeBlocks3(tRootNode);
    Some::printAllMyTreeBlocks1(tRootNode);
 
    CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);

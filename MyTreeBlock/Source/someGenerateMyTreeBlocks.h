@@ -10,6 +10,7 @@ namespace Some
 
    void generateMyTreeBlocks1(MyTreeBlock* tRootNode);
    void generateMyTreeBlocks2(MyTreeBlock* tRootNode);
+   void generateMyTreeBlocks3(MyTreeBlock* tRootNode);
 
 }//namespace
 //******************************************************************************
