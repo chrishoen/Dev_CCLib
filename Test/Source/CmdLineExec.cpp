@@ -42,23 +42,21 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
    int tN = aCmd->argInt(1);
 
-   Prn::print(0, "LOOP FORWARD");
-   for (int i = 0; i < tN; i++)
+   int tM = tN;
+
+   if (((tN & 0xF) != 0) || (tN==0))
    {
-      Prn::print(0, "%d",i);
+      tM = ((tN & ~0xF) + 0x10);
+   }
+   else
+   {
+      tM = tN; 
    }
 
-   Prn::print(0, "LOOP BACKWARD");
-   for (int i = tN-1; i >= 0; i--)
-   {
-      Prn::print(0, "%d",i);
-   }
+   tM = ((tN & 0xF) != 0) ? ((tN & ~0xF) + 0x10) : tN;
 
-   Prn::print(0, "LOOP BACKWARD");
-   for (int i = tN; i >= 1; i--)
-   {
-      Prn::print(0, "%d",i);
-   }
+   Prn::print(0, "N %5d %08X",tN,tN);
+   Prn::print(0, "M %5d %08X",tM,tM);
 }
 
 //******************************************************************************

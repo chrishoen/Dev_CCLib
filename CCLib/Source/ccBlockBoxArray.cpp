@@ -46,11 +46,15 @@ BlockBoxArray::~BlockBoxArray()
 void BlockBoxArray::initialize(int aNumBlocks,int aBlockSize,int aPoolIndex)
 {
    finalize();
+
+   // Round block size to to 16 byte boundary.
+   int tBlockSize = ((aBlockSize & 0xF) != 0) ? ((aBlockSize & ~0xF) + 0x10) : aBlockSize;
+
    // Store members.
    mNumBlocks    = aNumBlocks;
-   mBlockSize    = aBlockSize;
+   mBlockSize    = tBlockSize;
    mHeaderSize   = cHeaderSize;
-   mBlockBoxSize = aBlockSize + cHeaderSize;;
+   mBlockBoxSize = mBlockSize + cHeaderSize;;
    mPoolIndex = aPoolIndex;
 
    // Allocate memory for the array.
