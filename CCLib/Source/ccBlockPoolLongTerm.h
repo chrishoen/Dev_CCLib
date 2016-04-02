@@ -1,10 +1,7 @@
 #ifndef _CCBLOCKPOOLLONGTERM_H_
 #define _CCBLOCKPOOLLONGTERM_H_
 /*==============================================================================
-
-This defines a memory pool of a fixed number of blocks that are of a fixed
-size.
-
+Long term block pool class
 ==============================================================================*/
 
 //******************************************************************************
@@ -19,19 +16,9 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This class encapsulates a pool of memory blocks. At initialization, a fixed
-// number of blocks of fixed size are allocated on the system heap. Methods
-// are provided to allocate and deallocate blocks from the pool. These methods
-// are thread safe because they use critical sections.
-//
-// This is used in programs that will have a bounded number of specific
-// objects allocated at any given time. The memory for the objects is allocated
-// at program initialization and allocation/deallocation of the objects
-// throughout the programs lifetime is much faster than system heap
-// malloc/free operations (new/delete). To use this, the maximum number of 
-// blocks that can be allocated at any given time must be known apriori.
+// This class encapsulates a long term block pool.
 // 
-// There are two types of memory block pool: short term and long term. Short
+// There are two types of block pool: short term and long term. Short
 // term blocks are non persistent and have short term lifetimes. Long term
 // blocks are persistent and have long lifetimes. The type of the block pool
 // is set at initialization and there can only be one type for a specific
@@ -40,6 +27,28 @@ namespace CC
 // Blocks that are allocated from long term pools must be deallocated once
 // their lifetimes have expired. Blocks that are allocated from short term 
 // pools are not deallocated, they are simply reused. 
+//
+// The long term block pool is a free list of blocks. It contains a block
+// array and a stack of indices into the array. When a block is allocated,
+// an index is popped off of the stack. When a block is deallocated, its
+// index is pushed onto the stack.
+   
+// At initialization, all of the indices are pushed onto the stack. The 
+// pool starts out with a full stack.
+//
+// It allocates memory for the block array and initializes the index stack.
+// It is passed the number of blocks to allocate and the size of the blocks. 
+// Memory for one dummy block is allocated because index zero is reserved to
+// indicate a null block.
+//
+// For aNumBlocks==10 blocks will range 0,1,2,3,4,5,6,7,8,9,10
+// An index of zero is reserved for null index, so block 0 is unused.
+// So usable blocks will range 1,2,3,4,5,6,7,8,9,10
+//
+// An index stack is used to manage free list access to the blocks
+// The stack is initialized for a free list by pushing indices onto it.
+// For aAllocate==10 this will push 10,9,8,7,6,5,4,3,2,1
+//
 
 class BlockPoolLongTerm : public BlockPoolBase
 {
@@ -80,15 +89,14 @@ public:
    void* getBlockPtr(BlockHandle aBlockHandle);
 
    //---------------------------------------------------------------------------
-   // This is a stack of pointers. This is used if the block pool has long
-   // term blocks. It is a stack of pointers into the above allocated memory
-   // block array. To allocate a block, a pointer is popped off of the stack.
-   // To free a block, a pointer is pushed back onto the stack. To deallocate
-   // a block, a pointer is pushed back onto the stack. Pushes and Pops are
-   // locked with critical sections, making tehm thread safe.
+   // This is a free list stack of indices into the block array.
+   // When a block is allocated, an index is popped off of the stack.
+   // When a block is deallocated, its index is pushed back onto the stack.
 
    ValueStack<int> mBlockIndexStack;
 
+   //---------------------------------------------------------------------------
+   // Size, the number of blocks that are available to be allocated.
    int size(){ return mBlockIndexStack.mCount; }
 };
 

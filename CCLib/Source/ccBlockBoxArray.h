@@ -6,7 +6,7 @@ This defines an array of memory blocks that are dynamically allocated. It
 provides an initialization method that allocates the blocks and it provides
 an indexing method that is used to access the blocks.
 
-A block box contains a block header and a block.
+A block box contains a block header and a block body.
 
 ==============================================================================*/
 

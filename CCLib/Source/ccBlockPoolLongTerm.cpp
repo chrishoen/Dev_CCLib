@@ -39,13 +39,17 @@ BlockPoolLongTerm::~BlockPoolLongTerm()
 // dummy block is allocated because index zero is reserved to indicate a
 // null block.
 //
-// For aAllocate==10 blocks will range 0,1,2,3,4,5,6,7,8,9,10
+// For aNumBlocks==10 blocks will range 0,1,2,3,4,5,6,7,8,9,10
 // An index of zero is reserved for null index, so block 0 is unused.
 // So usable blocks will range 1,2,3,4,5,6,7,8,9,10
 //
 // An index stack is used to manage free list access to the blocks
 // The stack is initialized for a free list by pushing indices onto it.
 // For aAllocate==10 this will push 10,9,8,7,6,5,4,3,2,1
+//
+// When a block is allocated, an index is popped off of the stack.
+// When a block is deallocated, its index is pushed back onto the stack.
+//
 
 void BlockPoolLongTerm::initialize(int aNumBlocks,int aBlockSize,int aPoolIndex)
 {

@@ -2,6 +2,7 @@
 #define _CCBLOCKHANDLE_H_
 
 /*==============================================================================
+Block handle class.
 ==============================================================================*/
 
 //******************************************************************************
@@ -13,15 +14,24 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Memory handle.
+// Blocks in a block pool are accessed via a block handle. A block handle
+// contains a pool index and a block index. The pool index indicates which pool
+// a block belongs to and a block index indicates which block within the pool 
+// it is. Methods are provided to convert between block pointers and block
+// handles.
+//
+// The pool index value of zero is reserved to indicate a null pool and the
+// block index value of zero is reserved to indicate a null block.
+//
 
 struct BlockHandle
 {
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
    //---------------------------------------------------------------------------
-   // Memory pool index, specifies which memory pool a block is in.
+   // Members
 
+   // Memory pool index, specifies which memory pool a block is in.
    unsigned short mPoolIndex;
    // Memory block index, specifies which block within the memory pool.
    unsigned short mBlockIndex;
