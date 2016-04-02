@@ -1,5 +1,5 @@
-#ifndef _CCBLOCKPOOLLIST_H_
-#define _CCBLOCKPOOLLIST_H_
+#ifndef _CCBLOCKPOOL_H_
+#define _CCBLOCKPOOL_H_
 
 /*==============================================================================
 
@@ -64,34 +64,11 @@ Specific block pool classes inherit from a block pool base class.
 //******************************************************************************
 //******************************************************************************
 
+#include "ccBlockPoolParms.h"
 #include "ccBlockHandle.h"
 
 namespace CC
 {
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Block pool parameters. These are passed to the create block pool call.
-
-class BlockPoolParms
-{
-public:
-
-   //--------------------------------------------------------------------------
-   // Parameters
-   
-   int mPoolIndex;        // Unique index for the block pool.
-   int mBlockPoolType;    // Type of block pool.
-   int mNumBlocks;        // Number of blocks to allocate.
-   int mBlockSize;        // Block size in bytes.
-
-   //--------------------------------------------------------------------------
-   // Constructors
-
-   BlockPoolParms();
-   void reset();
-};
 
 //***************************************************************************
 //***************************************************************************

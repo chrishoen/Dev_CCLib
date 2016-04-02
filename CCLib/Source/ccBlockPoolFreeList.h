@@ -56,7 +56,7 @@ public:
    // Allocate memory for the block array. It is passed the number of blocks to
    // allocate, the size of the block body, and the memory pool index for the
    // block array.
-   void initialize(int aNumBlocks,int aBlockSize,int aPoolIndex);
+   void initialize(BlockPoolParms* aParms);
 
    // Deallocate memory for the block array.
    void finalize();

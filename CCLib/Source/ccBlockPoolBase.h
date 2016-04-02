@@ -10,6 +10,7 @@ This defines a base class for block pools.
 //******************************************************************************
 //******************************************************************************
 
+#include "ccBlockpoolParms.h"
 #include "ccBlockBoxArray.h"
 
 namespace CC
@@ -33,7 +34,7 @@ public:
    // Allocate memory for the block array. It is passed the number of blocks to
    // allocate, the size of the block body, and the memory pool index for the
    // block array.
-   virtual void initialize(int aNumBlocks,int aBlockSize,int aPoolIndex);
+   virtual void initialize(BlockPoolParms* aParms);
 
    // Deallocate memory for the block array.
    virtual void finalize();

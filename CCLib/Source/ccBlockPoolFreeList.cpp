@@ -51,20 +51,20 @@ BlockPoolFreeList::~BlockPoolFreeList()
 // When a block is deallocated, its index is pushed back onto the stack.
 //
 
-void BlockPoolFreeList::initialize(int aNumBlocks,int aBlockSize,int aPoolIndex)
+void BlockPoolFreeList::initialize(BlockPoolParms* aParms)
 {
    // Allocate memory for the block array.
    // For aNumBlocks==10 blocks will range 0,1,2,3,4,5,6,7,8,9,10
    // An index of zero is reserved for null index, so block 0 is unused.
    // So usable blocks will range 1,2,3,4,5,6,7,8,9,10
-   BaseClass::initialize(aNumBlocks + 1,aBlockSize,aPoolIndex);
+   BaseClass::initialize(aParms);
 
    // Initialize the pointer stack
-   mBlockIndexStack.initialize(aNumBlocks);
+   mBlockIndexStack.initialize(aParms->mNumBlocks);
 
    // Push the indices of the blocks in the array onto the index stack.
    // For aAllocate==10 this will push 10,9,8,7,6,5,4,3,2,1
-   for (int i = aNumBlocks; i >= 1; i--)
+   for (int i = aParms->mNumBlocks; i >= 1; i--)
    {
       mBlockIndexStack.push(i);
    }

@@ -38,15 +38,17 @@ BlockPoolBase::BlockPoolBase()
 // allocate, the size of the block body, and the memory pool index for the
 // block aarray.
 
-void BlockPoolBase::initialize(int aNumBlocks, int aBlockSize, int aPoolIndex)
+void BlockPoolBase::initialize(BlockPoolParms* aParms)
 {
-   // Store.
-   mNumBlocks    = aNumBlocks; 
-   mBlockSize     = aBlockSize; 
-   mPoolIndex = aPoolIndex;
+   // Store parameters.
+   mNumBlocks = aParms->mNumBlocks; 
+   mBlockSize = aParms->mBlockSize; 
+   mPoolIndex = aParms->mPoolIndex;
    mCount=0;
-   // Initialize.
-   mBlocks.initialize(aNumBlocks,aBlockSize,aPoolIndex);
+   // Initialize the block box array so that index zero can be used to
+   // indicate a null block and array element zero is a dummy element, it is
+   // never used.
+   mBlocks.initialize(mNumBlocks + 1,mBlockSize,mPoolIndex);
 }
 
    // Deallocate memory for the block array.

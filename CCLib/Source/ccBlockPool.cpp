@@ -18,25 +18,6 @@ Print utility
 namespace CC
 {
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Block pool parameters. These are passed to the create block pool call.
-
-BlockPoolParms::BlockPoolParms()
-{
-   reset();
-}
-
-void BlockPoolParms::reset()
-{
-   // All null
-   mPoolIndex = 0;
-   mBlockPoolType = 0;
-   mNumBlocks = 0;
-   mBlockSize = 0;
-}
-
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
@@ -77,7 +58,7 @@ void createBlockPool(BlockPoolParms* aParms)
    }
    // Create and initialize block pool
    mBlockPool[aParms->mPoolIndex] = new BlockPoolFreeList;
-   mBlockPool[aParms->mPoolIndex]->initialize(aParms->mNumBlocks,aParms->mBlockSize,aParms->mPoolIndex);
+   mBlockPool[aParms->mPoolIndex]->initialize(aParms);
 }
 
 //****************************************************************************
