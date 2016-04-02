@@ -11,7 +11,7 @@ Print utility
 #include <stdarg.h>
 
 #include "ccBlockPoolBase.h"
-#include "ccBlockPoolLongTerm.h"
+#include "ccBlockPoolFreeList.h"
 
 #include "ccBlockPoolList.h"
 
@@ -53,7 +53,7 @@ void addToBlockPoolList(int aNumBlocks, int aBlockSize, int aPoolIndex)
       return;
    }
    // Create and initialize block pool
-   mBlockPool[aPoolIndex] = new BlockPoolLongTerm;
+   mBlockPool[aPoolIndex] = new BlockPoolFreeList;
    mBlockPool[aPoolIndex]->initialize(aNumBlocks,aBlockSize,aPoolIndex);
 }
 

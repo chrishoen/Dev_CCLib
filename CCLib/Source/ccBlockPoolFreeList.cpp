@@ -11,7 +11,7 @@ Description:
 #include <math.h>
 #include <string.h>
 
-#include "ccBlockPoolLongTerm.h"
+#include "ccBlockPoolFreeList.h"
 
 namespace CC
 {
@@ -21,11 +21,11 @@ namespace CC
 //******************************************************************************
 // Constructor
 
-BlockPoolLongTerm::BlockPoolLongTerm()
+BlockPoolFreeList::BlockPoolFreeList()
 {
 }
 
-BlockPoolLongTerm::~BlockPoolLongTerm()
+BlockPoolFreeList::~BlockPoolFreeList()
 {
    finalize();
 }
@@ -51,7 +51,7 @@ BlockPoolLongTerm::~BlockPoolLongTerm()
 // When a block is deallocated, its index is pushed back onto the stack.
 //
 
-void BlockPoolLongTerm::initialize(int aNumBlocks,int aBlockSize,int aPoolIndex)
+void BlockPoolFreeList::initialize(int aNumBlocks,int aBlockSize,int aPoolIndex)
 {
    // Allocate memory for the block array.
    // For aNumBlocks==10 blocks will range 0,1,2,3,4,5,6,7,8,9,10
@@ -71,7 +71,7 @@ void BlockPoolLongTerm::initialize(int aNumBlocks,int aBlockSize,int aPoolIndex)
 }
 
 // Deallocate memory for the block array.
-void BlockPoolLongTerm::finalize()
+void BlockPoolFreeList::finalize()
 {
    BaseClass::finalize();
    mBlockIndexStack.finalize();
@@ -85,7 +85,7 @@ void BlockPoolLongTerm::finalize()
 // advances the index into the array. If the block pool is long term, it 
 // pops a pointer from the pointer stack.
 
-void BlockPoolLongTerm::allocate(void** aBlockPointer,BlockHandle* aBlockHandle)
+void BlockPoolFreeList::allocate(void** aBlockPointer,BlockHandle* aBlockHandle)
 {
    // Pop a block index from the index stack, as a free list.
    int tBlockIndex = mBlockIndexStack.pop();
@@ -93,7 +93,7 @@ void BlockPoolLongTerm::allocate(void** aBlockPointer,BlockHandle* aBlockHandle)
    // Guard for stack empty.
    if (tBlockIndex == 0)
    {
-      printf("BlockPoolLongTerm STACK EMPTY %d\n",BaseClass::mPoolIndex);
+      printf("BlockPoolFreeList STACK EMPTY %d\n",BaseClass::mPoolIndex);
       return;
    }
 
@@ -107,7 +107,7 @@ void BlockPoolLongTerm::allocate(void** aBlockPointer,BlockHandle* aBlockHandle)
    if (aBlockHandle)
    {
       aBlockHandle->set(BaseClass::mPoolIndex, tBlockIndex);
-//    printf("BlockPoolLongTerm::allocate %d %d\n",aBlockHandle->mPoolIndex,aBlockHandle->mBlockIndex);
+//    printf("BlockPoolFreeList::allocate %d %d\n",aBlockHandle->mPoolIndex,aBlockHandle->mBlockIndex);
    }
 }
 
@@ -118,7 +118,7 @@ void BlockPoolLongTerm::allocate(void** aBlockPointer,BlockHandle* aBlockHandle)
 // is short term, it does nothing. If the block pool is long term, it pushes
 // the pointer back onto the pointer stack.
 
-void BlockPoolLongTerm::deallocate(BlockHandle aBlockHandle)
+void BlockPoolFreeList::deallocate(BlockHandle aBlockHandle)
 {
    // Push the block index back onto the stack
    mBlockIndexStack.push(aBlockHandle.mBlockIndex);
@@ -129,7 +129,7 @@ void BlockPoolLongTerm::deallocate(BlockHandle aBlockHandle)
 //******************************************************************************
 // Return a pointer to a block, given its memory handle.
 
-void* BlockPoolLongTerm::getBlockPtr(BlockHandle aBlockHandle)
+void* BlockPoolFreeList::getBlockPtr(BlockHandle aBlockHandle)
 {
    return mBlocks.block(aBlockHandle.mBlockIndex);
 }

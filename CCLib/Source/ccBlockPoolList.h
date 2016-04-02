@@ -24,6 +24,10 @@ There can be different types of block pools. They differ in terms of block
 lifetimes (short term and long term), thread safety and concurrent access,
 and where block memory is located (system heap or shared memory).
 
+Short term blocks are non persistent and have short term lifetimes. Long
+term blocks are persistent and have long lifetimes. Short term blocks are
+not deallocated, they are simply reused. Long term blocks are deallocated.
+
 The block pools for a program are contained in a global store that contains
 an array of block pool pointers. When a block pool is created, a pointer to
 it is stored in the array. Accesses to the block pool (allocate or deallocate

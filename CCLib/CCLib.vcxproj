@@ -23,7 +23,7 @@
     <ClCompile Include="Source\ccBlockHandle.cpp" />
     <ClCompile Include="Source\ccBlockPoolBase.cpp" />
     <ClCompile Include="Source\ccBlockPoolList.cpp" />
-    <ClCompile Include="Source\ccBlockPoolLongTerm.cpp" />
+    <ClCompile Include="Source\ccBlockPoolFreeList.cpp" />
     <ClCompile Include="Source\ccCriticalSection_win.cpp" />
     <ClCompile Include="Source\ccLFBlockFreeList.cpp" />
     <ClCompile Include="Source\ccLFBlockQueue.cpp" />
@@ -43,7 +43,7 @@
     <ClInclude Include="Source\ccBlockPoolBase.h" />
     <ClInclude Include="Source\ccBlockPoolBlock.h" />
     <ClInclude Include="Source\ccBlockPoolList.h" />
-    <ClInclude Include="Source\ccBlockPoolLongTerm.h" />
+    <ClInclude Include="Source\ccBlockPoolFreeList.h" />
     <ClInclude Include="Source\ccCallPointer.h" />
     <ClInclude Include="Source\ccContainers.h" />
     <ClInclude Include="Source\ccContainers2.h" />

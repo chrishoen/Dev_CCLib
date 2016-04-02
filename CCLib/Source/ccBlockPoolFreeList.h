@@ -1,7 +1,7 @@
-#ifndef _CCBLOCKPOOLLONGTERM_H_
-#define _CCBLOCKPOOLLONGTERM_H_
+#ifndef _CCBLOCKPOOLFREELIST_H_
+#define _CCBLOCKPOOLFREELIST_H_
 /*==============================================================================
-Long term block pool class
+Free list block pool class
 ==============================================================================*/
 
 //******************************************************************************
@@ -16,22 +16,12 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This class encapsulates a long term block pool.
-// 
-// There are two types of block pool: short term and long term. Short
-// term blocks are non persistent and have short term lifetimes. Long term
-// blocks are persistent and have long lifetimes. The type of the block pool
-// is set at initialization and there can only be one type for a specific
-// instance.
+// This class encapsulates a block pool that is based on a free list paradigm.
+// It is long term and it is not thread safe.
 //
-// Blocks that are allocated from long term pools must be deallocated once
-// their lifetimes have expired. Blocks that are allocated from short term 
-// pools are not deallocated, they are simply reused. 
-//
-// The long term block pool is a free list of blocks. It contains a block
-// array and a stack of indices into the array. When a block is allocated,
-// an index is popped off of the stack. When a block is deallocated, its
-// index is pushed onto the stack.
+// It caontains a free list of blocks, which is a b lock array and a stack of
+// indices into the array. When a block is allocated, an index is popped off of
+// the stack. When a block is deallocated, its index is pushed onto the stack.
    
 // At initialization, all of the indices are pushed onto the stack. The 
 // pool starts out with a full stack.
@@ -50,7 +40,7 @@ namespace CC
 // For aAllocate==10 this will push 10,9,8,7,6,5,4,3,2,1
 //
 
-class BlockPoolLongTerm : public BlockPoolBase
+class BlockPoolFreeList : public BlockPoolBase
 {
 public:
    typedef BlockPoolBase BaseClass;
@@ -60,8 +50,8 @@ public:
 
    //---------------------------------------------------------------------------
    // Constructor
-   BlockPoolLongTerm();
-  ~BlockPoolLongTerm();
+   BlockPoolFreeList();
+  ~BlockPoolFreeList();
 
    // Allocate memory for the block array. It is passed the number of blocks to
    // allocate, the size of the block body, and the memory pool index for the

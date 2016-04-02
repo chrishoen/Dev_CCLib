@@ -51,10 +51,10 @@
     <ClCompile Include="Source\ccBlockPoolList.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ccBlockPoolLongTerm.cpp">
+    <ClCompile Include="Source\ccBlockHandle.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ccBlockHandle.cpp">
+    <ClCompile Include="Source\ccBlockPoolFreeList.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -137,10 +137,10 @@
     <ClInclude Include="Source\ccBlockPoolList.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccBlockPoolLongTerm.h">
+    <ClInclude Include="Source\ccBlockPoolBlock.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccBlockPoolBlock.h">
+    <ClInclude Include="Source\ccBlockPoolFreeList.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
