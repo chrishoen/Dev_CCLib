@@ -68,12 +68,14 @@ void main_initialize(int argc,char** argv)
 
    tBlockPoolParms.reset();
    tBlockPoolParms.mPoolIndex = Some::cBlockPoolIndex_MyBlockA;
+   tBlockPoolParms.mBlockPoolType = CC::cBlockPoolType_FreeList;
    tBlockPoolParms.mNumBlocks = 1000;
    tBlockPoolParms.mBlockSize = sizeof(Some::MyBlockA);
    CC::createBlockPool(&tBlockPoolParms);
 
    tBlockPoolParms.reset();
    tBlockPoolParms.mPoolIndex = Some::cBlockPoolIndex_MyBlockB;
+   tBlockPoolParms.mBlockPoolType = CC::cBlockPoolType_FreeList;
    tBlockPoolParms.mNumBlocks = 1000;
    tBlockPoolParms.mBlockSize = sizeof(Some::MyBlockB);
    CC::createBlockPool(&tBlockPoolParms);

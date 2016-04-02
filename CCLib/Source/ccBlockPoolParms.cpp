@@ -33,9 +33,11 @@ void BlockPoolParms::reset()
    // All null
    mValidFlag = false;
    mPoolIndex = 0;
-   mBlockPoolType = 0;
    mNumBlocks = 0;
    mBlockSize = 0;
+
+   // Defaults
+   mBlockPoolType = cBlockPoolType_FreeList;
 }
 
 } //namespace
