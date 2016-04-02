@@ -25,6 +25,7 @@ namespace CC
 
 static const int cMaxNumBlockPools=100;
 static BlockPoolBase* mBlockPool[cMaxNumBlockPools];
+static BlockPoolParms mBlockPoolParms[cMaxNumBlockPools];
 
 //****************************************************************************
 //****************************************************************************
@@ -37,6 +38,7 @@ void initializeBlockPoolFacility()
    for (int i = 0; i < cMaxNumBlockPools; i++)
    {
       mBlockPool[i]=0;
+      mBlockPoolParms[i].reset();
    }
 }
 
@@ -48,17 +50,28 @@ void initializeBlockPoolFacility()
 
 void createBlockPool(BlockPoolParms* aParms)
 {
-   // Guard
-   if (aParms->mPoolIndex<1) return;
-   if (aParms->mPoolIndex>=cMaxNumBlockPools) return;
-   if (mBlockPool[aParms->mPoolIndex])
+   // Temp
+   int tPoolIndex = aParms->mPoolIndex;
+
+   // Guard.
+   if (tPoolIndex<1) return;
+   if (tPoolIndex>=cMaxNumBlockPools) return;
+   if (mBlockPool[tPoolIndex])
    {
       printf("ERROR BlockPool already exists %d", aParms->mPoolIndex);
       return;
    }
-   // Create and initialize block pool
-   mBlockPool[aParms->mPoolIndex] = new BlockPoolFreeList;
-   mBlockPool[aParms->mPoolIndex]->initialize(aParms);
+
+   // Create and initialize the block pool.
+   mBlockPool[tPoolIndex] = new BlockPoolFreeList;
+   mBlockPool[tPoolIndex]->initialize(aParms);
+
+   // Mark it valid.
+   aParms->mValidFlag = true;
+
+   // Store parameters.
+   mBlockPoolParms[tPoolIndex] = *aParms;
+
 }
 
 //****************************************************************************
@@ -69,12 +82,17 @@ void createBlockPool(BlockPoolParms* aParms)
 
 void finalizeBlockPoolFacility()
 {
+   // For each block pool that was created
    for (int i = 0; i < cMaxNumBlockPools; i++)
    {
-      if (mBlockPool[i])
+      if (mBlockPoolParms[i].mValidFlag)
       {
+         // Finalize and delete the block pool.
          mBlockPool[i]->finalize();
          delete mBlockPool[i];
+         mBlockPool[i]=0;
+         // Mark it invalid.
+         mBlockPoolParms[i].mValidFlag = false;
       }
    }
 }
@@ -88,9 +106,8 @@ void finalizeBlockPoolFacility()
 void allocateBlockPoolBlock(int aPoolIndex,void** aBlockPointer,BlockHandle* aBlockHandle)
 {
    // Guard
-   if (aPoolIndex<1) return;
-   if (aPoolIndex>=cMaxNumBlockPools) return;
-   if (mBlockPool[aPoolIndex]==0)
+   if (aPoolIndex==0) return;
+   if (!mBlockPoolParms[aPoolIndex].mValidFlag)
    {
       printf("ERROR BlockPool doesn't exists %d\n", aPoolIndex);
       return;
@@ -134,9 +151,7 @@ void* getBlockPoolBlockPtr(BlockHandle aBlockHandle)
 void showBlockPool(int aPoolIndex)
 {
    // Guard
-   if (aPoolIndex<1) return;
-   if (aPoolIndex>=cMaxNumBlockPools) return;
-   if (mBlockPool[aPoolIndex]==0)
+   if (!mBlockPoolParms[aPoolIndex].mValidFlag)
    {
       printf("ERROR BlockPool doesn't exists %d\n", aPoolIndex);
       return;
