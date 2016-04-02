@@ -45,10 +45,8 @@ void BlockPoolBase::initialize(BlockPoolParms* aParms)
    mBlockSize = aParms->mBlockSize; 
    mPoolIndex = aParms->mPoolIndex;
    mCount=0;
-   // Initialize the block box array so that index zero can be used to
-   // indicate a null block and array element zero is a dummy element, it is
-   // never used.
-   mBlocks.initialize(mNumBlocks + 1,mBlockSize,mPoolIndex);
+   // Initialize the block box array.
+   mBlocks.initialize(mNumBlocks,mBlockSize,mPoolIndex);
 }
 
    // Deallocate memory for the block array.

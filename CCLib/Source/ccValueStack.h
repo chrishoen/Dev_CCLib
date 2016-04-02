@@ -38,11 +38,6 @@ public:
    // Size of the array, number of pointers allocated.
    int mAllocate;
 
-   // Count of allocated elements. This is incremented by pop operations and
-   // decremented by push operations. This is a usage counter that is used
-   // to track usage of the stack.
-   int mCount;
-
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -54,7 +49,6 @@ public:
       mElement  = 0;
       mAllocate = 0;
       mIndex    = 0;
-      mCount    = 0;
    }
 
    //***************************************************************************
@@ -107,12 +101,10 @@ public:
       if (mIndex == mAllocate) return false;
 
 
-      //Copy the source element to the element at the stack index
+      // Copy the source element to the element at the stack index
       mElement[mIndex] = aValue;
       // Increment the index
-      ++mIndex;
-      // Increment the usage counter
-      mCount++;
+      mIndex++;
 
       // Done
       return true;
@@ -121,22 +113,20 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Pop a value off of the stack. Return null if the stack is empty.
+   // Pop a value off of the stack. Return false if the stack is empty.
 
-   Element pop()
+   bool pop(Element& aValue)
    {
       // Guard
-      if (mIndex == 0) return 0;
+      if (mIndex == 0) return false;
 
-      // Pop the element above the stack index into a temp pointer
-      Element tValue = mElement[mIndex - 1];
+      // Copy the element below the stack index to the destination element
+      aValue = mElement[mIndex - 1];
       // Decrement the index
-      --mIndex;
-      // Decrement the usage counter
-      mCount--;
+      mIndex--;
 
-      // Return the temp pointer
-      return tValue;
+      // Return success
+      return true;
    }
 
    //***************************************************************************
@@ -144,7 +134,7 @@ public:
    //***************************************************************************
    // Return size.
 
-   int size() {return mCount;}
+   int size() {return mIndex;}
 
 };
 

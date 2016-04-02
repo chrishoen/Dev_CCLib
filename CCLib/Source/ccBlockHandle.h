@@ -26,6 +26,9 @@ namespace CC
 
 struct BlockHandle
 {
+   // Invalid node
+   static const int  cInvalid = 0xFFFF;
+
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
    //---------------------------------------------------------------------------
@@ -43,13 +46,13 @@ struct BlockHandle
 
    BlockHandle::BlockHandle()
    {
-      mPoolIndex = 0;
-      mBlockIndex = 0;
+      mPoolIndex  = cInvalid;
+      mBlockIndex = cInvalid;
    }
 
    BlockHandle::BlockHandle(unsigned short aPoolIndex, unsigned short aBlockIndex)
    {
-      mPoolIndex = aPoolIndex;
+      mPoolIndex  = aPoolIndex;
       mBlockIndex = aBlockIndex;
    }
 
@@ -60,14 +63,14 @@ struct BlockHandle
 
    void setNull()
    {
-      mPoolIndex = 0;
-      mBlockIndex = 0;
+      mPoolIndex  = cInvalid;
+      mBlockIndex = cInvalid;
    }
 
    // Set
    void set(unsigned short aPoolIndex, unsigned short aBlockIndex)
    {
-      mPoolIndex = aPoolIndex;
+      mPoolIndex  = aPoolIndex;
       mBlockIndex = aBlockIndex;
    }
 
@@ -78,7 +81,7 @@ struct BlockHandle
 
    bool isNull()
    {
-      return mPoolIndex==0 || mBlockIndex==0;
+      return mPoolIndex==cInvalid || mBlockIndex==cInvalid;
    }
 
    static BlockHandle null()

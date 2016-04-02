@@ -160,8 +160,7 @@ void deallocateBlockPoolBlock(BlockHandle aBlockHandle)
 void* getBlockPoolBlockPtr(BlockHandle aBlockHandle)
 {
    // Guard
-   if (aBlockHandle.mPoolIndex==0)  return 0;
-   if (aBlockHandle.mBlockIndex==0) return 0;
+   if (aBlockHandle.isNull())  return 0;
    // Return pointer to block.
    return mBlockPool[aBlockHandle.mPoolIndex]->getBlockPtr(aBlockHandle);
 }

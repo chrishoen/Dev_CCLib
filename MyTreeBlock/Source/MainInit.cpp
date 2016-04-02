@@ -65,7 +65,7 @@ void main_initialize(int argc,char** argv)
    // Create block pool.
    CC::BlockPoolParms tBlockPoolParms;
    tBlockPoolParms.mPoolIndex = Some::cBlockPoolIndex_MyTreeBlock;
-   tBlockPoolParms.mBlockPoolType = CC::cBlockPoolType_LFFreeList;
+   tBlockPoolParms.mBlockPoolType = CC::cBlockPoolType_FreeList;
    tBlockPoolParms.mNumBlocks = 1000;
    tBlockPoolParms.mBlockSize = sizeof(Some::MyTreeBlock);
    CC::createBlockPool(&tBlockPoolParms);

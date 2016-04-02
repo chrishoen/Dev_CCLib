@@ -87,7 +87,7 @@ public:
 
    //---------------------------------------------------------------------------
    // Size, the number of blocks that are available to be allocated.
-   int size(){ return mBlockIndexStack.mCount; }
+   int size(){ return mBlockIndexStack.size(); }
 };
 
 //******************************************************************************

@@ -39,13 +39,12 @@ BlockPoolFreeList::~BlockPoolFreeList()
 // dummy block is allocated because index zero is reserved to indicate a
 // null block.
 //
-// For aNumBlocks==10 blocks will range 0,1,2,3,4,5,6,7,8,9,10
-// An index of zero is reserved for null index, so block 0 is unused.
-// So usable blocks will range 1,2,3,4,5,6,7,8,9,10
+// For aNumBlocks==10 blocks will range 0,1,2,3,4,5,6,7,8,9
+// A block index of cInvalid indicates an invalid block.
 //
 // An index stack is used to manage free list access to the blocks
 // The stack is initialized for a free list by pushing indices onto it.
-// For aAllocate==10 this will push 10,9,8,7,6,5,4,3,2,1
+// For aAllocate==10 this will push 9,8,7,6,5,4,3,2,1,0
 //
 // When a block is allocated, an index is popped off of the stack.
 // When a block is deallocated, its index is pushed back onto the stack.
@@ -54,17 +53,15 @@ BlockPoolFreeList::~BlockPoolFreeList()
 void BlockPoolFreeList::initialize(BlockPoolParms* aParms)
 {
    // Allocate memory for the block array.
-   // For aNumBlocks==10 blocks will range 0,1,2,3,4,5,6,7,8,9,10
-   // An index of zero is reserved for null index, so block 0 is unused.
-   // So usable blocks will range 1,2,3,4,5,6,7,8,9,10
+   // For aNumBlocks==10 blocks will range 0,1,2,3,4,5,6,7,8,9
    BaseClass::initialize(aParms);
 
    // Initialize the pointer stack
    mBlockIndexStack.initialize(aParms->mNumBlocks);
 
    // Push the indices of the blocks in the array onto the index stack.
-   // For aAllocate==10 this will push 10,9,8,7,6,5,4,3,2,1
-   for (int i = aParms->mNumBlocks; i >= 1; i--)
+   // For aAllocate==10 this will push 9,8,7,6,5,4,3,2,1,0
+   for (int i = aParms->mNumBlocks-1; i >= 0; i--)
    {
       mBlockIndexStack.push(i);
    }
@@ -80,19 +77,18 @@ void BlockPoolFreeList::finalize()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Get a block from the pool, this allocates a block. If the block pool is 
-// short term, it gets a pointer from the circular array of pointers and 
-// advances the index into the array. If the block pool is long term, it 
-// pops a pointer from the pointer stack.
+// Get a block from the pool, this allocates a block.
 
 void BlockPoolFreeList::allocate(void** aBlockPointer,BlockHandle* aBlockHandle)
 {
+   int tBlockIndex = 0;
+      
    // Pop a block index from the index stack, as a free list.
-   int tBlockIndex = mBlockIndexStack.pop();
-    
-   // Guard for stack empty.
-   if (tBlockIndex == 0)
+   if(!mBlockIndexStack.pop(tBlockIndex))
    {
+      // If empty stack return.
+      *aBlockPointer = 0;
+      aBlockHandle->setNull();
       printf("BlockPoolFreeList STACK EMPTY %d\n",BaseClass::mPoolIndex);
       return;
    }

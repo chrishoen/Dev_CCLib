@@ -74,13 +74,13 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
    tStack.push(103);
    tStack.push(104);
 
-   Prn::print(0, "Stack %d", tStack.mCount);
+   Prn::print(0, "Stack %d", tStack.size());
 
-   tY = tStack.pop();
+   tStack.pop(tY);
 
    Prn::print(0, "Get   %d", tY);
 
-   Prn::print(0, "Stack %d", tStack.mCount);
+   Prn::print(0, "Stack %d", tStack.size());
 }
 
 //******************************************************************************
