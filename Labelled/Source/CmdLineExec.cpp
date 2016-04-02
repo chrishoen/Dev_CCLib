@@ -7,7 +7,7 @@
 #include "prnPrint.h"
 #include "ccTreeNodeVisitor.h"
 #include "ccTreeNodeDestroyer.h"
-#include "ccBlockPoolList.h"
+#include "ccBlockPool.h"
 #include "someBlockPoolIndex.h"
 #include "someLabelledTreeNode.h"
 #include "someGenerateLabelledTreeNodes.h"
@@ -19,9 +19,6 @@ using namespace Some;
 //******************************************************************************
 CmdLineExec::CmdLineExec()
 {
-   CC::resetBlockPoolList();
-   CC::addToBlockPoolList(1000, sizeof(Some::LabelledTreeNode),Some::cBlockPoolIndex_LabelledTreeNode);
-   CC::initializeBlockPoolList();
 }
 //******************************************************************************
 void CmdLineExec::reset()

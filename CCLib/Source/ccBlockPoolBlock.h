@@ -5,7 +5,7 @@
 #include <stdio.h>
 
 #include "ccBlockhandle.h"
-#include "ccBlockPoolList.h"
+#include "ccBlockPool.h"
 
 /*==============================================================================
 

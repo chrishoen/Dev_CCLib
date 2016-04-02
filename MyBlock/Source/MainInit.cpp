@@ -3,7 +3,12 @@
 #include "prnPrint.h"
 #include "risThreadsProcess.h"
 #include "risCmdLineConsole.h"
-#include "CmdLineExec.h"
+
+#include "ccBlockPool.h"
+#include "someBlockPoolIndex.h"
+#include "someMyBlockA.h"
+#include "someMyBlockB.h"
+
 
 //******************************************************************************
 //******************************************************************************
@@ -53,8 +58,25 @@ void main_initialize(int argc,char** argv)
    Prn::setFilter(Prn::QCallRun3,  false);
    Prn::setFilter(Prn::QCallRun4,  false);
 
-   Prn::print(0,"MyBlock*******************************************BEGIN");
+   Prn::print(0,"MyTreeBlock*******************************************BEGIN");
 
+   // Initialize block pools.
+   CC::initializeBlockPoolFacility();
+
+   // Create block pool.
+   CC::BlockPoolParms tBlockPoolParms;
+
+   tBlockPoolParms.reset();
+   tBlockPoolParms.mPoolIndex = Some::cBlockPoolIndex_MyBlockA;
+   tBlockPoolParms.mNumBlocks = 1000;
+   tBlockPoolParms.mBlockSize = sizeof(Some::MyBlockA);
+   CC::createBlockPool(&tBlockPoolParms);
+
+   tBlockPoolParms.reset();
+   tBlockPoolParms.mPoolIndex = Some::cBlockPoolIndex_MyBlockB;
+   tBlockPoolParms.mNumBlocks = 1000;
+   tBlockPoolParms.mBlockSize = sizeof(Some::MyBlockB);
+   CC::createBlockPool(&tBlockPoolParms);
 }
 
 //******************************************************************************
@@ -64,10 +86,13 @@ void main_initialize(int argc,char** argv)
 
 void main_finalize()
 {
-   Prn::print(0,"MyBlock*******************************************END");
+   Prn::print(0,"MyTreeBlock*******************************************END");
 
    // Close print
    Prn::finalizePrint();
+
+   // Finalize block pools.
+   CC::finalizeBlockPoolFacility();
 
    // Exit process
    Ris::Threads::exitProcess();

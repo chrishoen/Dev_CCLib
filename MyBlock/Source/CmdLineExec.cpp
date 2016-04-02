@@ -5,7 +5,7 @@
 #include <atomic>
 
 #include "prnPrint.h"
-#include "ccBlockPoolList.h"
+#include "ccBlockPool.h"
 #include "someBlockPoolIndex.h"
 #include "someMyBlockA.h"
 #include "someMyBlockB.h"
@@ -16,10 +16,6 @@ using namespace std;
 //******************************************************************************
 CmdLineExec::CmdLineExec()
 {
-   CC::resetBlockPoolList();
-   CC::addToBlockPoolList(1000, sizeof(Some::MyBlockA),Some::cBlockPoolIndex_MyBlockA);
-   CC::addToBlockPoolList(1000, sizeof(Some::MyBlockB),Some::cBlockPoolIndex_MyBlockB);
-   CC::initializeBlockPoolList();
 }
 //******************************************************************************
 void CmdLineExec::reset()
@@ -47,22 +43,6 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockA);
-
-   Some::MyBlockA* t1A = Some::MyBlockA::allocateA();
-
-   t1A->method1A();
-   t1A->~MyBlockA();
-   t1A->deallocateA();
-
-   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockA);
-
-}
-
-//******************************************************************************
-
-void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
-{
-   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockA);
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockB);
 
    Some::MyBlockA* t1A1 = Some::MyBlockA::allocateA();
@@ -80,6 +60,22 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockA);
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockB);
+}
+
+//******************************************************************************
+
+void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
+{
+   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockA);
+
+   Some::MyBlockA* t1A = Some::MyBlockA::allocateA();
+
+   t1A->method1A();
+   t1A->~MyBlockA();
+   t1A->deallocateA();
+
+   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockA);
+
 }
 
 //******************************************************************************

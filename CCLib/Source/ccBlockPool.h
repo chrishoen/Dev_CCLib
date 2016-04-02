@@ -68,24 +68,65 @@ Specific block pool classes inherit from a block pool base class.
 
 namespace CC
 {
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
 
-   void resetBlockPoolList();
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Block pool parameters. These are passed to the create block pool call.
 
-   void addToBlockPoolList(int aNumBlocks,int aBlockSize,int aPoolIndex);
+class BlockPoolParms
+{
+public:
 
-   void initializeBlockPoolList();
-   void finalizeBlockPoollist();
-
+   //--------------------------------------------------------------------------
+   // Parameters
    
-   void allocateBlockPoolBlock(int aPoolIndex,void** aBlockPointer,BlockHandle* aBlockHandle);
-   void deallocateBlockPoolBlock(BlockHandle aBlockHandle);
+   int mPoolIndex;        // Unique index for the block pool.
+   int mBlockPoolType;    // Type of block pool.
+   int mNumBlocks;        // Number of blocks to allocate.
+   int mBlockSize;        // Block size in bytes.
 
-   void showBlockPool(int aPoolIndex);
+   //--------------------------------------------------------------------------
+   // Constructors
 
-   void* getBlockPoolBlockPtr(BlockHandle aBlockHandle);
+   BlockPoolParms();
+   void reset();
+};
+
+//***************************************************************************
+//***************************************************************************
+//***************************************************************************
+//***************************************************************************
+//***************************************************************************
+//***************************************************************************
+// Here is a set of calls that manage block pools.
+
+// This initializes the block pool facility. It is called at program
+// initialization, before any block pools are created.
+void initializeBlockPoolFacility();
+
+// This finalizes the block pool facility. It is called at program
+// termination. It destroys all block pools that were created.
+void finalizeBlockPoolFacility();
+
+// This creates a block pool and places a pointer to it into the block
+// pool array. It is passed a set of parameters.
+void createBlockPool(BlockPoolParms* aParms);
+
+// This allocates a block from a block pool. It is passes a pool index and 
+// it returns a pointer to the block and a handle for the block.
+void allocateBlockPoolBlock(int aPoolIndex,void** aBlockPointer,BlockHandle* aBlockHandle);
+
+// This deallocates a block from a block pool. It is passed a handle to the
+// block, which contains the pool index of the block pool to deallocate the 
+// block from.
+void deallocateBlockPoolBlock(BlockHandle aBlockHandle);
+
+// This returns a pointer to a block, given a block handle.
+void* getBlockPoolBlockPtr(BlockHandle aBlockHandle);
+
+// This shows block pool info.
+void showBlockPool(int aPoolIndex);
 
 }//namespace
 #endif
