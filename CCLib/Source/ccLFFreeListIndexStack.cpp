@@ -6,27 +6,54 @@ Description:
 //******************************************************************************
 //******************************************************************************
 
-#include <windows.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <math.h>
-#include <string.h>
+#include <new>
 
+#include "cc_functions.h"
 #include "ccLFFreeListIndexStack.h"
 
 using namespace std;
 
 namespace CC
 {
+
+//***************************************************************************
+//***************************************************************************
+//***************************************************************************
+// Constructor, initialize members for an empty stack of size zero 
+
+LFFreeListIndexStackState::LFFreeListIndexStackState()
+{
+   // All null.
+   mNumElements = 0;
+   mListAllocate = 0;
+}
+
+void LFFreeListIndexStackState::initialize(int aNumElements)
+{
+   // Store.
+   mNumElements  = aNumElements;
+   // Allocate for one extra dummy node.
+   mListAllocate = aNumElements + 1;
+}
+
+int LFFreeListIndexStackState::getSharedMemorySize()
+{
+   return cc_round_upto16(sizeof(LFFreeListIndexStackState));
+}
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
 LFFreeListIndexStack::LFFreeListIndexStack()
 {
-   // All null
+   // All null.
+   mX = 0;
    mListNext = 0;
-   mNumElements = 0;
+   mExternalMemoryFlag = false;
+   mMemory = 0;
 }
 
 LFFreeListIndexStack::~LFFreeListIndexStack()
@@ -34,34 +61,68 @@ LFFreeListIndexStack::~LFFreeListIndexStack()
    finalize();
 }
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Initialize
 
-void LFFreeListIndexStack::initialize(int aNumElements)
+void LFFreeListIndexStack::initialize(int aNumElements,void* aMemory)
 {
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // Initialize memory.
+
+   // Deallocate memory, if any exists.
    finalize();
 
-   // Store.
-   mNumElements  = aNumElements;
-   // Allocate for one extra dummy node.
-   mListAllocate = aNumElements + 1;
+   // If the instance of this class is not to reside in external memory
+   // then allocate memory for it on the system heap.
+   if (aMemory == 0)
+   {
+      mMemory = malloc(LFFreeListIndexStack::getSharedMemorySize(aNumElements));
+      mExternalMemoryFlag = false;
+   }
+   // If the instance of this class is to reside in external memory
+   // then use the memory pointer that was passed in.
+   else
+   {
+      mMemory = aMemory;
+      mExternalMemoryFlag = true;
+   }
 
-   // Allocate linked list array.
-   mListNext = new AtomicLFIndex[mListAllocate];
-   // Initialize it. Each node next node is the one after it.
-   for (int i = 0; i < mListAllocate-1; i++)
+   // Calculate memory sizes.
+   int tStateSize = LFFreeListIndexStackState::getSharedMemorySize();
+   int tArraySize = (aNumElements + 1)*sizeof(AtomicLFIndex);
+
+   // Calculate memory addresses.
+   char* tStateMemory   = (char*)mMemory;
+   char* tArrayMemory = tStateMemory + tStateSize;
+
+   // Initialize state.
+   mX = new(tStateMemory) LFFreeListIndexStackState;
+   mX->initialize(aNumElements);
+
+   // Initialize the linked list array.
+   mListNext = new(tArrayMemory) AtomicLFIndex[mX->mListAllocate];
+
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // Initialize variables.
+
+   // Initialize linked list array. Each node next node is the one after it.
+   for (int i = 0; i < mX->mListAllocate-1; i++)
    {
       mListNext[i].store(LFIndex(i+1,0));
    }
    // The last node has no next node.
-   mListNext[mListAllocate-1].store(LFIndex(cInvalid,0));
+   mListNext[mX->mListAllocate-1].store(LFIndex(cInvalid,0));
 
    // List head points to the first node.
-   mListHead.store(LFIndex(0,0));
-   // List size is initially full.
-   mListSize = mListAllocate;
+   mX->mListHead.store(LFIndex(0,0));
+   // List size is initially a full stack.
+   mX->mListSize = mX->mListAllocate;
 
    // Pop the dummy node.
    int tDummyNode;
@@ -75,11 +136,28 @@ void LFFreeListIndexStack::initialize(int aNumElements)
 
 void LFFreeListIndexStack::finalize()
 {
-   if (mListNext)
+   if (!mExternalMemoryFlag)
    {
-      free(mListNext);
+      if (mMemory)
+      {
+         free(mMemory);
+      }
+      mMemory = 0;
    }
-   mListNext  = 0;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This returns the number of bytes that an instance of this class
+// will need to be allocated for it.
+
+int LFFreeListIndexStack::getSharedMemorySize(int aNumElements)
+{
+   int tStateSize = LFFreeListIndexStackState::getSharedMemorySize();
+   int tArraySize = (aNumElements + 1)*sizeof(AtomicLFIndex);
+   int tMemorySize = tStateSize + tArraySize;
+   return tMemorySize;
 }
 
 //***************************************************************************
@@ -89,7 +167,7 @@ void LFFreeListIndexStack::finalize()
 
 int LFFreeListIndexStack::size()
 { 
-   return mListSize.load(memory_order_relaxed);
+   return mX->mListSize.load(memory_order_relaxed);
 }
 
 //******************************************************************************
@@ -102,7 +180,7 @@ bool LFFreeListIndexStack::pop(int* aNodeIndex)
 {
    // Store the head node in a temp.
    // This is the node that will be detached.
-   LFIndex tHead = mListHead.load(memory_order_relaxed);
+   LFIndex tHead = mX->mListHead.load(memory_order_relaxed);
 
    int tLoopCount=0;
    while (true)
@@ -111,11 +189,11 @@ bool LFFreeListIndexStack::pop(int* aNodeIndex)
       if (tHead.mIndex == cInvalid) return false;
 
       // Set the head node to be the node that is after the head node.
-      if (mListHead.compare_exchange_weak(tHead, LFIndex(mListNext[tHead.mIndex].load(memory_order_relaxed).mIndex,tHead.mCount+1),memory_order_acquire,memory_order_relaxed)) break;
+      if (mX->mListHead.compare_exchange_weak(tHead, LFIndex(mListNext[tHead.mIndex].load(memory_order_relaxed).mIndex,tHead.mCount+1),memory_order_acquire,memory_order_relaxed)) break;
 
       if (++tLoopCount==10000) throw 103;
    }
-   mListSize.fetch_sub(1,memory_order_relaxed);
+   mX->mListSize.fetch_sub(1,memory_order_relaxed);
 
    // Return the detached original head node.
    *aNodeIndex = tHead.mIndex - 1;
@@ -133,7 +211,7 @@ bool LFFreeListIndexStack::push(int aNodeIndex)
    int tNodeIndex = aNodeIndex + 1;
 
    // Store the head node in a temp.
-   LFIndex tHead = mListHead.load(memory_order_relaxed);
+   LFIndex tHead = mX->mListHead.load(memory_order_relaxed);
 
    int tLoopCount=0;
    while (true)
@@ -142,12 +220,13 @@ bool LFFreeListIndexStack::push(int aNodeIndex)
       mListNext[tNodeIndex].store(tHead,memory_order_relaxed);
 
       // The pushed node is the new head node.
-      if ((*mListHeadIndexPtr).compare_exchange_weak(tHead.mIndex, tNodeIndex,memory_order_release,memory_order_relaxed)) break;
+      atomic<int>* tListHeadIndexPtr = (std::atomic<int>*)&mX->mListHead;
+      if ((*tListHeadIndexPtr).compare_exchange_weak(tHead.mIndex, tNodeIndex,memory_order_release,memory_order_relaxed)) break;
       if (++tLoopCount == 10000) throw 103;
    }
 
    // Done.
-   mListSize.fetch_add(1,memory_order_relaxed);
+   mX->mListSize.fetch_add(1,memory_order_relaxed);
    return true;
 }
 

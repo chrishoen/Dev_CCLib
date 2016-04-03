@@ -77,6 +77,20 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
+   aCmd->setArgDefault(1,10);
+   int tN = aCmd->argInt(1);
+
+   for (int i = 0; i < tN; i++)
+   {
+      Prn::print(0, "%d",i);
+   }
+
+   Prn::print(0, "");
+
+   for (int i = tN-1; i >= 0; i--)
+   {
+      Prn::print(0, "%d",i);
+   }
 }
 
 //******************************************************************************

@@ -19,6 +19,46 @@ This is used by containers that use a free list.
 
 namespace CC
 {
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+class LFFreeListIndexStackState
+{
+public:
+
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // Members.
+
+   // Number of values allocated
+   int mNumElements;
+
+   // Number of free list nodes allocated
+   int mListAllocate;
+
+   // Free List array and variables
+   AtomicLFIndex     mListHead;
+   std::atomic<int>  mListSize;
+   
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // Methods.
+
+   // Constructor.
+   LFFreeListIndexStackState();
+
+   // Initialize.
+   void initialize(int aNumElements);
+
+   // This returns the number of bytes that an instance of this class
+   // will need to be allocated for it.
+   static int getSharedMemorySize();
+};
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -41,7 +81,7 @@ public:
    // Initialize the stack to full. Push the indices of the blocks for which 
    // this will be used onto the stack.
    // For aAllocate==10 this will push 0,1,2,3,4,5,6,7,8,9
-   void initialize(int aNumElements);
+   void initialize(int aNumElements,void* aMemory = 0);
 
    // Deallocate memory.
    void finalize();
@@ -60,20 +100,31 @@ public:
    //***************************************************************************
    // Members
 
-   // Number of values allocated
-   int mNumElements;
-
-   // Number of free list nodes allocated
-   int mListAllocate;
-
-   // Free List array and variables
-   AtomicLFIndex*    mListNext;
-   AtomicLFIndex     mListHead;
-   std::atomic<int>  mListSize;
-   
-   std::atomic<int>* mListHeadIndexPtr = (std::atomic<int>*)&mListHead;
-
    static const int  cInvalid = 0x80000000;
+
+   // If this flag is true then the memory for this object was created
+   // externally. If it is false then the memory was allocated at 
+   // initialization and must be freed at finalization.
+   bool mExternalMemoryFlag;
+
+   // Pointer to memory for which the stack resides. This is either created
+   // externally and passed as an initialization parameter or it is created
+   // on the system heap at initialization.
+   void* mMemory;
+
+   // Free List array for treiber stack.
+   AtomicLFIndex*    mListNext;
+   
+   // State variables for the stack.
+   LFFreeListIndexStackState* mX;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // This returns the number of bytes that an instance of this class
+   // will need to be allocated for it.
+
+   static int getSharedMemorySize(int aNumElements);
 };
 
 //******************************************************************************

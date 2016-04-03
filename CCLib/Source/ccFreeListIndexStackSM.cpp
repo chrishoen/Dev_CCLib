@@ -10,6 +10,7 @@ Description:
 #include <stdio.h>
 #include <new>
 
+#include "cc_functions.h"
 #include "ccFreeListIndexStackSM.h"
 
 using namespace std;
@@ -17,9 +18,9 @@ using namespace std;
 namespace CC
 {
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Constructor, initialize members for an empty stack of size zero 
 
 FreeListIndexStackSMState::FreeListIndexStackSMState()
@@ -38,12 +39,12 @@ void FreeListIndexStackSMState::initialize(int aNumElements)
 
 int FreeListIndexStackSMState::getSharedMemorySize()
 {
-   return sizeof(FreeListIndexStackSMState);
+   return cc_round_upto16(sizeof(FreeListIndexStackSMState));
 }
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Constructor, initialize members for an empty stack of size zero 
 
 FreeListIndexStackSM::FreeListIndexStackSM()
@@ -55,9 +56,9 @@ FreeListIndexStackSM::FreeListIndexStackSM()
    mMemory = 0;
 }
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Destructor, deallocate the array
 
 FreeListIndexStackSM::~FreeListIndexStackSM()
@@ -65,14 +66,19 @@ FreeListIndexStackSM::~FreeListIndexStackSM()
    finalize();
 }
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // This initializes the stack to a fixed size. It initializes member
 // variables and and the stack array, given external memory.
 
 void FreeListIndexStackSM::initialize(int aNumElements,void* aMemory)
 {
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // Initialize memory.
+
    // Deallocate memory, if any exists.
    finalize();
 
@@ -93,30 +99,31 @@ void FreeListIndexStackSM::initialize(int aNumElements,void* aMemory)
 
    // Calculate memory sizes.
    int tStateSize = FreeListIndexStackSMState::getSharedMemorySize();
-   int tElementArraySize = aNumElements*sizeof(int);
+   int tArraySize = aNumElements*sizeof(int);
 
    // Calculate memory addresses.
-   char* tStateMemory   = (char*)mMemory;
-   char* tElementMemory = tStateMemory + tStateSize;
+   char* tStateMemory = (char*)mMemory;
+   char* tArrayMemory = tStateMemory + tStateSize;
 
    // Initialize state.
    mX = new(tStateMemory) FreeListIndexStackSMState;
    mX->initialize(aNumElements);
 
    // Initialize the element array.
-   mElement = new(tElementMemory) int[mX->mNumElements];
+   mElement = new(tArrayMemory) int[mX->mNumElements];
 
    // Push the indices of the blocks in the array onto the index stack.
    // For aAllocate==10 this will push 0,1,2,3,4,5,6,7,8,9
-   for (int i=0; i<mX->mNumElements; i++)
+// for (int i=0; i<mX->mNumElements; i++)
+   for (int i = mX->mNumElements-1; i >= 0; i--)
    {
       push(i);
    }
 }
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
 void FreeListIndexStackSM::finalize()
 {
@@ -130,23 +137,23 @@ void FreeListIndexStackSM::finalize()
    }
 }
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // This returns the number of bytes that an instance of this class
 // will need to be allocated for it.
 
 int FreeListIndexStackSM::getSharedMemorySize(int aNumElements)
 {
    int tStateSize = FreeListIndexStackSMState::getSharedMemorySize();
-   int tElementArraySize = aNumElements*sizeof(int);
-   int tSharedMemorySize = tStateSize + tElementArraySize;
-   return tSharedMemorySize;
+   int tArraySize = aNumElements*sizeof(int);
+   int tMemorySize = tStateSize + tArraySize;
+   return tMemorySize;
 }
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Push a value onto the stack. Return false if the stack is full.
 
 bool FreeListIndexStackSM::push(int aValue)
@@ -164,9 +171,9 @@ bool FreeListIndexStackSM::push(int aValue)
    return true;
 }
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Pop a value off of the stack. Return false if the stack is empty.
 
 bool FreeListIndexStackSM::pop(int* aValue)
@@ -183,9 +190,9 @@ bool FreeListIndexStackSM::pop(int* aValue)
    return true;
 }
 
-//***************************************************************************
-//***************************************************************************
-//***************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Return size.
 
 int FreeListIndexStackSM::size()
