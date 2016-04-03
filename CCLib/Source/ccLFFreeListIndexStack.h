@@ -23,7 +23,7 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 
-class LFFreeListStack
+class LFFreeListIndexStack
 {
 public:
 
@@ -33,8 +33,8 @@ public:
    // Methods
 
    // Constructor
-   LFFreeListStack();
-  ~LFFreeListStack();
+   LFFreeListIndexStack();
+  ~LFFreeListIndexStack();
 
    // This initializes the stack to a fixed size. It initializes member
    // variables and allocates system memory for the treiber stack linked 

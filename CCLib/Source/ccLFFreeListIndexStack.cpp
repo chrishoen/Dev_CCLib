@@ -12,7 +12,7 @@ Description:
 #include <math.h>
 #include <string.h>
 
-#include "ccLFFreeListStack.h"
+#include "ccLFFreeListIndexStack.h"
 
 using namespace std;
 
@@ -22,7 +22,7 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 
-LFFreeListStack::LFFreeListStack()
+LFFreeListIndexStack::LFFreeListIndexStack()
 {
    // All null
    mMemory = 0;
@@ -30,7 +30,7 @@ LFFreeListStack::LFFreeListStack()
    mNumElements = 0;
 }
 
-LFFreeListStack::~LFFreeListStack()
+LFFreeListIndexStack::~LFFreeListIndexStack()
 {
    finalize();
 }
@@ -40,7 +40,7 @@ LFFreeListStack::~LFFreeListStack()
 //***************************************************************************
 // Initialize
 
-void LFFreeListStack::initialize(int aNumElements)
+void LFFreeListIndexStack::initialize(int aNumElements)
 {
    finalize();
 
@@ -68,7 +68,7 @@ void LFFreeListStack::initialize(int aNumElements)
 //***************************************************************************
 // Finalize
 
-void LFFreeListStack::finalize()
+void LFFreeListIndexStack::finalize()
 {
    if (mMemory)    free(mMemory);
    if (mListNext)  free(mListNext);
@@ -81,7 +81,7 @@ void LFFreeListStack::finalize()
 //***************************************************************************
 // Size
 
-int LFFreeListStack::size()
+int LFFreeListIndexStack::size()
 { 
    return mListSize.load(memory_order_relaxed);
 }
@@ -91,7 +91,7 @@ int LFFreeListStack::size()
 //******************************************************************************
 // This detaches the head node.
 
-bool LFFreeListStack::pop(int* aNodeIndex)
+bool LFFreeListIndexStack::pop(int* aNodeIndex)
 {
    // Store the head node in a temp.
    // This is the node that will be detached.
@@ -120,7 +120,7 @@ bool LFFreeListStack::pop(int* aNodeIndex)
 //***************************************************************************
 // Insert a node into the list before the list head node.
 
-bool LFFreeListStack::push(int aNodeIndex)
+bool LFFreeListIndexStack::push(int aNodeIndex)
 {
    int tNodeIndex = aNodeIndex;
 

@@ -9,7 +9,7 @@ Description:
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "ccFreeListStack.h"
+#include "ccFreeListIndexStack.h"
 
 using namespace std;
 
@@ -20,7 +20,7 @@ namespace CC
 //***************************************************************************
 // Constructor, initialize members for an empty stack of size zero 
 
-FreeListStack::FreeListStack()
+FreeListIndexStack::FreeListIndexStack()
 {
    // All null.
    mElement     = 0;
@@ -33,7 +33,7 @@ FreeListStack::FreeListStack()
 //***************************************************************************
 // Destructor, deallocate the array
 
-FreeListStack::~FreeListStack()
+FreeListIndexStack::~FreeListIndexStack()
 {
    finalize();
 }
@@ -44,7 +44,7 @@ FreeListStack::~FreeListStack()
 // This initializes the stack to a fixed size. It initializes member
 // variables and allocates system memory for the stack array.
 
-void FreeListStack::initialize(int aNumElements)
+void FreeListIndexStack::initialize(int aNumElements)
 {
    finalize();
    // Initialize variables.
@@ -61,7 +61,7 @@ void FreeListStack::initialize(int aNumElements)
    }
 }
 
-void FreeListStack::finalize()
+void FreeListIndexStack::finalize()
 {
    // Deallocate the array.
    if (mElement)
@@ -76,7 +76,7 @@ void FreeListStack::finalize()
 //***************************************************************************
 // Push a value onto the stack. Return false if the stack is full.
 
-bool FreeListStack::push(int aValue)
+bool FreeListIndexStack::push(int aValue)
 {
    // Guard for stack full.
    if (mIndex == mNumElements) return false;
@@ -96,7 +96,7 @@ bool FreeListStack::push(int aValue)
 //***************************************************************************
 // Pop a value off of the stack. Return false if the stack is empty.
 
-bool FreeListStack::pop(int* aValue)
+bool FreeListIndexStack::pop(int* aValue)
 {
    // Guard
    if (mIndex == 0) return false;
@@ -115,7 +115,7 @@ bool FreeListStack::pop(int* aValue)
 //***************************************************************************
 // Return size.
 
-int FreeListStack::size()
+int FreeListIndexStack::size()
 {
    return mIndex;
 }

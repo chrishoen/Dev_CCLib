@@ -20,7 +20,7 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 
-class FreeListStack
+class FreeListIndexStack
 {
 public:
 
@@ -30,8 +30,8 @@ public:
    // Methods
 
    // Constructor
-   FreeListStack();
-  ~FreeListStack();
+   FreeListIndexStack();
+  ~FreeListIndexStack();
 
    // This initializes the stack to a fixed size. It initializes member
    // variables and allocates system memory for the stack array.
