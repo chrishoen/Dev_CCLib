@@ -76,7 +76,7 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
    Prn::print(0, "Stack %d", tStack.size());
 
-   tStack.pop(tY);
+   tStack.pop(&tY);
 
    Prn::print(0, "Get   %d", tY);
 

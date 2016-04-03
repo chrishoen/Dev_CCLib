@@ -84,7 +84,7 @@ void BlockPoolFreeList::allocate(void** aBlockPointer,BlockHandle* aBlockHandle)
    int tBlockIndex = 0;
       
    // Pop a block index from the index stack, as a free list.
-   if(!mBlockIndexStack.pop(tBlockIndex))
+   if(!mBlockIndexStack.pop(&tBlockIndex))
    {
       // If empty stack return.
       *aBlockPointer = 0;
