@@ -67,6 +67,28 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
+   aCmd->setArgDefault(1,4);
+   int tNumBlocks = aCmd->argInt(1);
+
+   int tSize1 = CC::FreeListIndexStackSMState::getSharedMemorySize();
+   int tSize2 = CC::FreeListIndexStackSM::getSharedMemorySize(tNumBlocks);
+   Prn::print(0, "tSize1 %d", tSize1);
+   Prn::print(0, "tSize2 %d", tSize2);
+
+}
+
+//******************************************************************************
+
+void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
+{
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
+{
    CC::ValueQueue<int> tQueue;
    tQueue.initialize(4);
    
@@ -86,7 +108,7 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 //******************************************************************************
 
-void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 {
    CC::ValueStack<int> tStack;
    tStack.initialize(4);
@@ -104,17 +126,5 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
    Prn::print(0, "Get   %d", tY);
 
    Prn::print(0, "Stack %d", tStack.size());
-}
-
-//******************************************************************************
-
-void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
-{
-}
-
-//******************************************************************************
-
-void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
-{
 }
 

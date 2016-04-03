@@ -35,6 +35,11 @@ void FreeListIndexStackSMState::initialize(int aNumElements)
    mNumElements = aNumElements;
 }
 
+int FreeListIndexStackSMState::getSharedMemorySize()
+{
+   return sizeof(FreeListIndexStackSMState);
+}
+
 //***************************************************************************
 //***************************************************************************
 //***************************************************************************
@@ -95,6 +100,20 @@ void FreeListIndexStackSM::finalize()
       delete mElement;
       mElement = 0;
    }
+}
+
+//***************************************************************************
+//***************************************************************************
+//***************************************************************************
+// This returns the number of bytes that an instance of this class
+// will need to be allocated for it.
+
+int FreeListIndexStackSM::getSharedMemorySize(int aNumElements)
+{
+   int tStateSize = FreeListIndexStackSMState::getSharedMemorySize();
+   int tElementArraySize = aNumElements*sizeof(int);
+   int tSharedMemorySize = tStateSize + tElementArraySize;
+   return tSharedMemorySize;
 }
 
 //***************************************************************************

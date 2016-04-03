@@ -38,6 +38,10 @@ public:
 
    // Size of the array, number of elements allocated.
    int mNumElements;
+
+   // This returns the number of bytes that an instance of this class
+   // will need to be allocated for it.
+   static int getSharedMemorySize();
 };
 
 //******************************************************************************
@@ -86,6 +90,14 @@ public:
    
    // State variables for the stack.
    FreeListIndexStackSMState* mX;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // This returns the number of bytes that an instance of this class
+   // will need to be allocated for it.
+
+   static int getSharedMemorySize(int aNumElements);
 };
 
 //******************************************************************************
