@@ -43,21 +43,27 @@ void LFFreeListIndexStack::initialize(int aNumElements)
 {
    finalize();
 
-   
+   // Store.
    mNumElements  = aNumElements;
+   // Allocate for one extra dummy node.
    mListAllocate = aNumElements + 1;
-   mListNext = new AtomicLFIndex[mListAllocate];
 
+   // Allocate linked list array.
+   mListNext = new AtomicLFIndex[mListAllocate];
+   // Initialize it. Each node next node is the one after it.
    for (int i = 0; i < mListAllocate-1; i++)
    {
       mListNext[i].store(LFIndex(i+1,0));
    }
-
+   // The last node has no next node.
    mListNext[mListAllocate-1].store(LFIndex(cInvalid,0));
 
+   // List head points to the first node.
    mListHead.store(LFIndex(0,0));
+   // List size is initially full.
    mListSize = mListAllocate;
 
+   // Pop the dummy node.
    int tDummyNode;
    pop(&tDummyNode);
 }
@@ -69,7 +75,10 @@ void LFFreeListIndexStack::initialize(int aNumElements)
 
 void LFFreeListIndexStack::finalize()
 {
-   if (mListNext)  free(mListNext);
+   if (mListNext)
+   {
+      free(mListNext);
+   }
    mListNext  = 0;
 }
 
