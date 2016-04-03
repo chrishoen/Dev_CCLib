@@ -11,6 +11,7 @@ Description:
 #include <math.h>
 #include <string.h>
 
+#include "cc_functions.h"
 #include "ccBlockBoxArray.h"
 
 namespace CC
@@ -49,7 +50,7 @@ void BlockBoxArray::initialize(int aNumBlocks,int aBlockSize,int aPoolIndex)
    finalize();
 
    // Round block size to to 16 byte boundary.
-   int tBlockSize = ((aBlockSize & 0xF) != 0) ? ((aBlockSize & ~0xF) + 0x10) : aBlockSize;
+   int tBlockSize = cc_round_upto16(aBlockSize & 0xF);
 
    // Store members.
    mNumBlocks    = aNumBlocks;
