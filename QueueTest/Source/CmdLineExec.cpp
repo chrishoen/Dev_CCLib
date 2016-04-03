@@ -6,6 +6,7 @@
 
 #include "ccValueQueue.h"
 #include "ccValueStack.h"
+#include "ccFreeListIndexStack.h"
 #include "ccFreeList.h"
 
 #include "prnPrint.h"
@@ -42,6 +43,29 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
+   CC::FreeListIndexStack tStack;
+   tStack.initialize(4);
+   
+   int tY = 999;
+
+   Prn::print(0, "Stack %d  %d", tStack.size(),tY);
+
+   tStack.pop(&tY);
+   Prn::print(0, "Pop   %d  %d", tStack.size(),tY);
+
+   tStack.push(tY);
+   Prn::print(0, "Push  %d  %d", tStack.size(),tY);
+
+   tStack.pop(&tY);
+   Prn::print(0, "Pop   %d  %d", tStack.size(),tY);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
+{
    CC::ValueQueue<int> tQueue;
    tQueue.initialize(4);
    
@@ -60,10 +84,8 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 }
 
 //******************************************************************************
-//******************************************************************************
-//******************************************************************************
 
-void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
    CC::ValueStack<int> tStack;
    tStack.initialize(4);
@@ -81,14 +103,6 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
    Prn::print(0, "Get   %d", tY);
 
    Prn::print(0, "Stack %d", tStack.size());
-}
-
-//******************************************************************************
-
-void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
-{
-   CC::FreeList<int> tFreeList;
-   tFreeList.initialize(10);
 }
 
 //******************************************************************************

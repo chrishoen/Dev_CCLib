@@ -173,11 +173,13 @@
     <ClCompile Include="Source\someClass2.cpp" />
     <ClCompile Include="Source\someClass3.cpp" />
     <ClCompile Include="Source\someClass4.cpp" />
+    <ClCompile Include="Source\someClass5.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\MainInit.h" />
     <ClInclude Include="Source\someClass4.h" />
+    <ClInclude Include="Source\someClass5.h" />
     <ClInclude Include="Source\someMemory.h" />
     <ClInclude Include="Source\someClass1.h" />
     <ClInclude Include="Source\someClass2.h" />

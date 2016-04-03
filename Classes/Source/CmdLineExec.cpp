@@ -11,6 +11,7 @@
 #include "someClass2.h"
 #include "someClass3.h"
 #include "someClass4.h"
+#include "someClass5.h"
 #include "someMemory.h"
 using namespace Some;
 
@@ -51,11 +52,36 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
+void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
+{
+   Prn::print(0,"sizeof5A  %d",sizeof(Class5A));
+   Prn::print(0,"sizeof5B  %d",sizeof(Class5B));
+   Prn::print(0,"");
+
+   Class5A* t5A = new Class5A();
+   t5A->method5A1();
+
+
+   Class5A::method5AS1();
+   Prn::print(0,"");
+
+   Class5B::method5BS1();
+   Prn::print(0,"");
+
+   Class5B::method5AS1();
+   Prn::print(0,"");
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void CmdLineExec::executeGo41(Ris::CmdLineCmd* aCmd)
 {
    Class4B* tX = new Class4B;
    tX->method4A();
    tX->method4B();
+
 }
 
 //******************************************************************************
@@ -156,37 +182,6 @@ void CmdLineExec::executeGo32(Ris::CmdLineCmd* aCmd)
 {
    Class3A* tX2 = new(1)Class3A[2];
    Class3A::operator delete[](tX2,1);
-}
-
-//******************************************************************************
-
-void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
-{
-   Prn::print(0,"sizof  %d",sizeof(Class2A));
-
-   char* tBuffer1 = new char[(2*sizeof(Class2A)) + 4];
-   void* tBuffer2 = malloc((2*sizeof(Class2A)) + 4);
-
-   void* tBuffer3 = (void*)tBuffer2;
-
-   Class2A* tX2 = new(tBuffer3) Class2A[2];
-   tX2[1].method1();
-
-   Prn::print(0,"tBuffer3  %llX",tBuffer3);
-   Prn::print(0,"tX2       %llX",tX2);
-
-// free(tBuffer3);
-// delete[] tX2;
-
-   char* tPtr1 = (char*)tX2 - 4;
-   void* tPtr2 = (void*)((char*)tX2 - 4);
-
-   Prn::print(0,"tPtr1     %llX",tPtr1);
-   Prn::print(0,"tPtr2     %llX",tPtr2);
-
-
-
-   free(tPtr2);
 }
 
 //******************************************************************************
