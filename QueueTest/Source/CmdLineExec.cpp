@@ -68,13 +68,29 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1,4);
+
    int tNumBlocks = aCmd->argInt(1);
+   int tSize = CC::FreeListIndexStackSM::getSharedMemorySize(tNumBlocks);
 
-   int tSize1 = CC::FreeListIndexStackSMState::getSharedMemorySize();
-   int tSize2 = CC::FreeListIndexStackSM::getSharedMemorySize(tNumBlocks);
-   Prn::print(0, "tSize1 %d", tSize1);
-   Prn::print(0, "tSize2 %d", tSize2);
+   void* tMemory = malloc(tSize);
+   CC::FreeListIndexStackSM tStack;
+   tStack.initialize(tNumBlocks,tMemory);
 
+
+   int tY = 999;
+
+   Prn::print(0, "Stack %d  %d", tStack.size(),tY);
+
+   tStack.pop(&tY);
+   Prn::print(0, "Pop   %d  %d", tStack.size(),tY);
+
+   tStack.push(tY);
+   Prn::print(0, "Push  %d  %d", tStack.size(),tY);
+
+   tStack.pop(&tY);
+   Prn::print(0, "Pop   %d  %d", tStack.size(),tY);
+
+   free(tMemory);
 }
 
 //******************************************************************************

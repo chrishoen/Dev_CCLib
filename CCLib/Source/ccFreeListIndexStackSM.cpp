@@ -8,6 +8,7 @@ Description:
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <new>
 
 #include "ccFreeListIndexStackSM.h"
 
@@ -59,7 +60,6 @@ FreeListIndexStackSM::FreeListIndexStackSM()
 
 FreeListIndexStackSM::~FreeListIndexStackSM()
 {
-   finalize();
 }
 
 //***************************************************************************
@@ -85,21 +85,42 @@ void FreeListIndexStackSM::initialize(int aNumElements)
    }
 }
 
+//***************************************************************************
+//***************************************************************************
+//***************************************************************************
+// This initializes the stack to a fixed size. It initializes member
+// variables and and the stack array, given external memory.
+
+void FreeListIndexStackSM::initialize(int aNumElements,void* aMemory)
+{
+   // Calculate memory addresses.
+   int tStateSize = FreeListIndexStackSMState::getSharedMemorySize();
+   int tElementArraySize = aNumElements*sizeof(int);
+
+   char* tStateMemory   = (char*)aMemory;
+   char* tElementMemory = tStateMemory + tStateSize;
+
+   // Initialize state.
+   mX = new(tStateMemory) FreeListIndexStackSMState;
+   mX->initialize(aNumElements);
+
+   // Initialize the element array.
+   mElement = new(tElementMemory) int[mX->mNumElements];
+
+   // Push the indices of the blocks in the array onto the index stack.
+   // For aAllocate==10 this will push 0,1,2,3,4,5,6,7,8,9
+   for (int i=0; i<mX->mNumElements; i++)
+   {
+      push(i);
+   }
+}
+
+//***************************************************************************
+//***************************************************************************
+//***************************************************************************
+
 void FreeListIndexStackSM::finalize()
 {
-   // Deallocate the state.
-   if (mX)
-   {
-      delete mX;
-      mX = 0;
-   }
-
-   // Deallocate the array.
-   if (mElement)
-   {
-      delete mElement;
-      mElement = 0;
-   }
 }
 
 //***************************************************************************

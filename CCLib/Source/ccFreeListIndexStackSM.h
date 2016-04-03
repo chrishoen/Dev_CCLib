@@ -67,6 +67,7 @@ public:
    // this will be used onto the stack.
    // For aAllocate==10 this will push 0,1,2,3,4,5,6,7,8,9
    void initialize(int aNumElements);
+   void initialize(int aNumElements,void* aMemory);
 
    // Deallocate memory.
    void finalize();
