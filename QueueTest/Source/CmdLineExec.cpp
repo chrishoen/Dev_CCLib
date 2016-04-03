@@ -226,7 +226,7 @@ void CmdLineExec::executeGo31(Ris::CmdLineCmd* aCmd)
    aCmd->setArgDefault(1,4);
 
    int tNumBlocks = aCmd->argInt(1);
-   int tSize = CC::FreeListIndexStack::getSharedMemorySize(tNumBlocks);
+   int tSize = CC::FreeListIndexStack::getMemorySize(tNumBlocks);
    Prn::print(0, "StackSize %d", tSize);
 
    void* tMemory = malloc(tSize);
@@ -259,7 +259,7 @@ void CmdLineExec::executeGo32(Ris::CmdLineCmd* aCmd)
    aCmd->setArgDefault(1,4);
 
    int tNumBlocks = aCmd->argInt(1);
-   int tSize = CC::LFFreeListIndexStack::getSharedMemorySize(tNumBlocks);
+   int tSize = CC::LFFreeListIndexStack::getMemorySize(tNumBlocks);
    Prn::print(0, "StackSize %d", tSize);
 
    void* tMemory = malloc(tSize);
@@ -292,7 +292,7 @@ void CmdLineExec::executeGo41(Ris::CmdLineCmd* aCmd)
    aCmd->setArgDefault(1,4);
 
    int tNumBlocks = aCmd->argInt(1);
-   int tSize = CC::FreeListIndexStack::getSharedMemorySize(tNumBlocks);
+   int tSize = CC::FreeListIndexStack::getMemorySize(tNumBlocks);
    Prn::print(0, "StackSize %d", tSize);
 
    void* tMemory = malloc(tSize);
@@ -358,7 +358,7 @@ void CmdLineExec::executeGo42(Ris::CmdLineCmd* aCmd)
    aCmd->setArgDefault(1,4);
 
    int tNumBlocks = aCmd->argInt(1);
-   int tSize = CC::LFFreeListIndexStack::getSharedMemorySize(tNumBlocks);
+   int tSize = CC::LFFreeListIndexStack::getMemorySize(tNumBlocks);
    Prn::print(0, "StackSize %d", tSize);
 
    void* tMemory = malloc(tSize);

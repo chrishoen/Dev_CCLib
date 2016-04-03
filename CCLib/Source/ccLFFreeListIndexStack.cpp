@@ -38,7 +38,7 @@ void LFFreeListIndexStackState::initialize(int aNumElements)
    mListAllocate = aNumElements + 1;
 }
 
-int LFFreeListIndexStackState::getSharedMemorySize()
+int LFFreeListIndexStackState::getMemorySize()
 {
    return cc_round_upto16(sizeof(LFFreeListIndexStackState));
 }
@@ -80,7 +80,7 @@ void LFFreeListIndexStack::initialize(int aNumElements,void* aMemory)
    // then allocate memory for it on the system heap.
    if (aMemory == 0)
    {
-      mMemory = malloc(LFFreeListIndexStack::getSharedMemorySize(aNumElements));
+      mMemory = malloc(LFFreeListIndexStack::getMemorySize(aNumElements));
       mExternalMemoryFlag = false;
    }
    // If the instance of this class is to reside in external memory
@@ -92,7 +92,7 @@ void LFFreeListIndexStack::initialize(int aNumElements,void* aMemory)
    }
 
    // Calculate memory sizes.
-   int tStateSize = LFFreeListIndexStackState::getSharedMemorySize();
+   int tStateSize = LFFreeListIndexStackState::getMemorySize();
    int tArraySize = (aNumElements + 1)*sizeof(AtomicLFIndex);
 
    // Calculate memory addresses.
@@ -152,9 +152,9 @@ void LFFreeListIndexStack::finalize()
 // This returns the number of bytes that an instance of this class
 // will need to be allocated for it.
 
-int LFFreeListIndexStack::getSharedMemorySize(int aNumElements)
+int LFFreeListIndexStack::getMemorySize(int aNumElements)
 {
-   int tStateSize = LFFreeListIndexStackState::getSharedMemorySize();
+   int tStateSize = LFFreeListIndexStackState::getMemorySize();
    int tArraySize = (aNumElements + 1)*sizeof(AtomicLFIndex);
    int tMemorySize = tStateSize + tArraySize;
    return tMemorySize;

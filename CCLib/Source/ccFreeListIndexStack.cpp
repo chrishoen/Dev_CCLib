@@ -37,7 +37,7 @@ void FreeListIndexStackState::initialize(int aNumElements)
    mNumElements = aNumElements;
 }
 
-int FreeListIndexStackState::getSharedMemorySize()
+int FreeListIndexStackState::getMemorySize()
 {
    return cc_round_upto16(sizeof(FreeListIndexStackState));
 }
@@ -86,7 +86,7 @@ void FreeListIndexStack::initialize(int aNumElements,void* aMemory)
    // then allocate memory for it on the system heap.
    if (aMemory == 0)
    {
-      mMemory = malloc(FreeListIndexStack::getSharedMemorySize(aNumElements));
+      mMemory = malloc(FreeListIndexStack::getMemorySize(aNumElements));
       mExternalMemoryFlag = false;
    }
    // If the instance of this class is to reside in external memory
@@ -98,7 +98,7 @@ void FreeListIndexStack::initialize(int aNumElements,void* aMemory)
    }
 
    // Calculate memory sizes.
-   int tStateSize = FreeListIndexStackState::getSharedMemorySize();
+   int tStateSize = FreeListIndexStackState::getMemorySize();
    int tArraySize = aNumElements*sizeof(int);
 
    // Calculate memory addresses.
@@ -143,9 +143,9 @@ void FreeListIndexStack::finalize()
 // This returns the number of bytes that an instance of this class
 // will need to be allocated for it.
 
-int FreeListIndexStack::getSharedMemorySize(int aNumElements)
+int FreeListIndexStack::getMemorySize(int aNumElements)
 {
-   int tStateSize = FreeListIndexStackState::getSharedMemorySize();
+   int tStateSize = FreeListIndexStackState::getMemorySize();
    int tArraySize = aNumElements*sizeof(int);
    int tMemorySize = tStateSize + tArraySize;
    return tMemorySize;

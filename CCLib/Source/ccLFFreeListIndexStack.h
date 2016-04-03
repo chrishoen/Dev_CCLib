@@ -23,6 +23,8 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// State variables for the stack. These are located in a separate class
+// so that they can be located in externale memory.
 
 class LFFreeListIndexStackState
 {
@@ -56,7 +58,7 @@ public:
 
    // This returns the number of bytes that an instance of this class
    // will need to be allocated for it.
-   static int getSharedMemorySize();
+   static int getMemorySize();
 };
 
 //******************************************************************************
@@ -76,11 +78,17 @@ public:
    LFFreeListIndexStack();
   ~LFFreeListIndexStack();
 
-   // Initialize the stack for a fixed size. Initialize member variables and
-   // allocate system memory for the treiber linked list node array.
+   // Initialize the stack to either allocate memory from the system heap or
+   // to use external memory that has already been allocated for it.
+   // If aMemory is null then it mallocs from the system heap. If not, then
+   // it uses the memory pointed to by aMemory.
+   // If external memory is used, it must be of a size obtained by a call to
+   // getMemorySize.
+   //
    // Initialize the stack to full. Push the indices of the blocks for which 
    // this will be used onto the stack.
-   // For aAllocate==10 this will push 0,1,2,3,4,5,6,7,8,9
+   // For aAllocate==10 this will push 9,8,7,6,5,4,3,2,1,0 so that element
+   // zero will be the first one poped.
    void initialize(int aNumElements,void* aMemory = 0);
 
    // Deallocate memory.
@@ -115,7 +123,8 @@ public:
    // Free List array for treiber stack.
    AtomicLFIndex*    mListNext;
    
-   // State variables for the stack.
+   // State variables for the stack. These are located in a separate class
+   // so that they can be located in externale memory.
    LFFreeListIndexStackState* mX;
 
    //***************************************************************************
@@ -124,7 +133,7 @@ public:
    // This returns the number of bytes that an instance of this class
    // will need to be allocated for it.
 
-   static int getSharedMemorySize(int aNumElements);
+   static int getMemorySize(int aNumElements);
 };
 
 //******************************************************************************
