@@ -66,6 +66,9 @@
     <ClCompile Include="Source\ccBlockPoolCentral.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\ccFreeListIndexStackSM.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\ccCallPointer.h">
@@ -159,6 +162,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccBlockPoolCentral.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ccFreeListIndexStackSM.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

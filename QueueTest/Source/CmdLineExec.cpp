@@ -7,6 +7,7 @@
 #include "ccValueQueue.h"
 #include "ccValueStack.h"
 #include "ccFreeListIndexStack.h"
+#include "ccFreeListIndexStackSM.h"
 #include "ccFreeList.h"
 
 #include "prnPrint.h"
@@ -43,7 +44,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   CC::FreeListIndexStack tStack;
+   CC::FreeListIndexStackSM tStack;
    tStack.initialize(4);
    
    int tY = 999;

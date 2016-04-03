@@ -1,5 +1,5 @@
-#ifndef _CCFREELISTINDEXSTACK_H_
-#define _CCFREELISTINDEXSTACK_H_
+#ifndef _CCFREELISTINDEXSTACKSM_H_
+#define _CCFREELISTINDEXSTACKSM_H_
 /*==============================================================================
 
 Free List Stack of Indices. 
@@ -17,11 +17,34 @@ This implements a free list stack of indices. It is not thread safe.
 
 namespace CC
 {
+
+   
+class FreeListIndexStackSMState
+{
+public:
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+
+   // Constructor.
+   FreeListIndexStackSMState();
+
+   // Initialize.
+   void initialize(int aNumElements);
+
+   // Index into the array.
+   int mIndex;
+
+   // Size of the array, number of elements allocated.
+   int mNumElements;
+};
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-class FreeListIndexStack
+class FreeListIndexStackSM
 {
 public:
 
@@ -31,8 +54,8 @@ public:
    // Methods
 
    // Constructor
-   FreeListIndexStack();
-  ~FreeListIndexStack();
+   FreeListIndexStackSM();
+  ~FreeListIndexStackSM();
 
    // Initialize the stack for a fixed size. Initialize member variables and
    // allocate system memory for the stack array.
@@ -61,11 +84,8 @@ public:
    // Array of indices, dynamically allocated by initialize.
    int* mElement;
    
-   // Index into the array.
-   int mIndex;
-
-   // Size of the array, number of elements allocated.
-   int mNumElements;
+   // State variables for the stack.
+   FreeListIndexStackSMState* mX;
 };
 
 //******************************************************************************
