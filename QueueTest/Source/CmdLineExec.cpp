@@ -8,6 +8,7 @@
 #include "ccValueStack.h"
 #include "ccFreeListIndexStack.h"
 #include "ccFreeListIndexStackSM.h"
+#include "ccLFFreeListIndexStack.h"
 #include "ccFreeList.h"
 
 #include "prnPrint.h"
@@ -32,6 +33,9 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("GO3"    ))  executeGo3(aCmd);
    if(aCmd->isCmd("GO4"    ))  executeGo4(aCmd);
    if(aCmd->isCmd("GO5"    ))  executeGo5(aCmd);
+   if(aCmd->isCmd("GO6"    ))  executeGo6(aCmd);
+   if(aCmd->isCmd("GO7"    ))  executeGo7(aCmd);
+   if(aCmd->isCmd("GO8"    ))  executeGo8(aCmd);
 }
 
 //******************************************************************************
@@ -44,7 +48,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   CC::FreeListIndexStackSM tStack;
+   CC::FreeListIndexStack tStack;
    tStack.initialize(4);
    
    int tY = 999;
@@ -66,6 +70,71 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
+{
+   CC::LFFreeListIndexStack tStack;
+   tStack.initialize(4);
+   
+   int tY = 999;
+
+   Prn::print(0, "Stack %d", tStack.size());
+
+   if (tStack.pop(&tY))
+   {
+      Prn::print(0, "Pop1   %d  %d", tStack.size(), tY);
+   }
+   else
+   {
+      Prn::print(0, "Pop1   %d  FAIL", tStack.size());
+   }
+
+   if (tStack.pop(&tY))
+   {
+      Prn::print(0, "Pop2   %d  %d", tStack.size(), tY);
+   }
+   else
+   {
+      Prn::print(0, "Pop2   %d  FAIL", tStack.size());
+   }
+
+   if (tStack.pop(&tY))
+   {
+      Prn::print(0, "Pop3   %d  %d", tStack.size(), tY);
+   }
+   else
+   {
+      Prn::print(0, "Pop3   %d  FAIL", tStack.size());
+   }
+
+   if (tStack.pop(&tY))
+   {
+      Prn::print(0, "Pop4   %d  %d", tStack.size(), tY);
+   }
+   else
+   {
+      Prn::print(0, "Pop4   %d  FAIL", tStack.size());
+   }
+
+   if (tStack.pop(&tY))
+   {
+      Prn::print(0, "Pop5   %d  %d", tStack.size(), tY);
+   }
+   else
+   {
+      Prn::print(0, "Pop5   %d  FAIL", tStack.size());
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
+{
+}
+
+//******************************************************************************
+
+void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1,4);
 
@@ -95,7 +164,13 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 //******************************************************************************
 
-void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
+{
+}
+
+//******************************************************************************
+
+void CmdLineExec::executeGo6(Ris::CmdLineCmd* aCmd)
 {
 }
 
@@ -103,7 +178,7 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeGo7(Ris::CmdLineCmd* aCmd)
 {
    CC::ValueQueue<int> tQueue;
    tQueue.initialize(4);
@@ -124,7 +199,7 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 
 //******************************************************************************
 
-void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeGo8(Ris::CmdLineCmd* aCmd)
 {
    CC::ValueStack<int> tStack;
    tStack.initialize(4);

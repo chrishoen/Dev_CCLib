@@ -96,6 +96,7 @@ int LFFreeListIndexStack::size()
 //******************************************************************************
 //******************************************************************************
 // This detaches the head node.
+// Use an offset of one so that pop and push indices range 0..NumElements-1.
 
 bool LFFreeListIndexStack::pop(int* aNodeIndex)
 {
@@ -117,7 +118,7 @@ bool LFFreeListIndexStack::pop(int* aNodeIndex)
    mListSize.fetch_sub(1,memory_order_relaxed);
 
    // Return the detached original head node.
-   *aNodeIndex = tHead.mIndex;
+   *aNodeIndex = tHead.mIndex - 1;
    return true;
 }
 
@@ -125,10 +126,11 @@ bool LFFreeListIndexStack::pop(int* aNodeIndex)
 //***************************************************************************
 //***************************************************************************
 // Insert a node into the list before the list head node.
+// Use an offset of one so that pop and push indices range 0..NumElements-1.
 
 bool LFFreeListIndexStack::push(int aNodeIndex)
 {
-   int tNodeIndex = aNodeIndex;
+   int tNodeIndex = aNodeIndex + 1;
 
    // Store the head node in a temp.
    LFIndex tHead = mListHead.load(memory_order_relaxed);

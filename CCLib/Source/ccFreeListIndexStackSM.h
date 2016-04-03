@@ -66,8 +66,7 @@ public:
    // Initialize the stack to full. Push the indices of the blocks for which 
    // this will be used onto the stack.
    // For aAllocate==10 this will push 0,1,2,3,4,5,6,7,8,9
-   void initialize(int aNumElements);
-   void initialize(int aNumElements,void* aMemory);
+   void initialize(int aNumElements,void* aMemory = 0);
 
    // Deallocate memory.
    void finalize();
@@ -86,7 +85,17 @@ public:
    //***************************************************************************
    // Members
 
-   // Array of indices, dynamically allocated by initialize.
+   // If this flag is true then the memory for this object was created
+   // externally. If it is false then the memory was allocated at 
+   // initialization and must be freed at finalization.
+   bool mExternalMemoryFlag;
+
+   // Pointer to memory for which the stack resides. This is either created
+   // externally and passed as an initialization parameter or it is created
+   // on the system heap at initialization.
+   void* mMemory;
+
+   // Array of indices for the stack.
    int* mElement;
    
    // State variables for the stack.
