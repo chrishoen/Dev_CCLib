@@ -104,9 +104,7 @@ void BlockPoolFreeList::allocate(void** aBlockPointer,BlockHandle* aBlockHandle)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Put a block back to the pool, this deallocates a block. If the block pool
-// is short term, it does nothing. If the block pool is long term, it pushes
-// the pointer back onto the pointer stack.
+// Put a block back to the pool, this deallocates a block.
 
 void BlockPoolFreeList::deallocate(BlockHandle aBlockHandle)
 {
@@ -121,6 +119,7 @@ void BlockPoolFreeList::deallocate(BlockHandle aBlockHandle)
 
 void* BlockPoolFreeList::getBlockPtr(BlockHandle aBlockHandle)
 {
+   // Return the address of the block within the block array.
    return mBlocks.block(aBlockHandle.mBlockIndex);
 }
 
