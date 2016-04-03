@@ -13,7 +13,7 @@ Print utility
 #include "ccBlockPoolBase.h"
 #include "ccBlockPoolFreeList.h"
 
-#include "ccBlockPool.h"
+#include "ccBlockPoolCentral.h"
 
 namespace CC
 {
@@ -33,7 +33,7 @@ static BlockPoolParms mBlockPoolParms[cMaxNumBlockPools];
 // This initializes the block pool facility. It is called at program
 // initialization, before any block pools are created.
 
-void initializeBlockPoolFacility()
+void initializeBlockPoolCentral()
 {
    for (int i = 0; i < cMaxNumBlockPools; i++)
    {
@@ -102,7 +102,7 @@ void createBlockPool(BlockPoolParms* aParms)
 // This finalizes the block pool facility. It is called at program
 // termination. It destroys all block pools that were created.
 
-void finalizeBlockPoolFacility()
+void finalizeBlockPoolCentral()
 {
    // For each block pool that was created
    for (int i = 0; i < cMaxNumBlockPools; i++)

@@ -13,7 +13,7 @@ Print utility
 #include "ccBlockPoolBase.h"
 #include "ccBlockPoolFreeList.h"
 
-#include "ccBlockPool.h"
+#include "ccBlockPoolCentral.h"
 
 namespace CC
 {

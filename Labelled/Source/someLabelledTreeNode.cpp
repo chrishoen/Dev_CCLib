@@ -9,7 +9,7 @@ Description:
 #include <new>
 #include "prnPrint.h"
 
-#include "ccBlockPool.h"
+#include "ccBlockPoolCentral.h"
 #include "someBlockPoolIndex.h"
 #include "someBlockPoolIndex.h"
 #include "someLabelledTreeNode.h"

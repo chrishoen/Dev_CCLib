@@ -22,7 +22,7 @@
     <ClCompile Include="Source\ccBlockBoxArray.cpp" />
     <ClCompile Include="Source\ccBlockHandle.cpp" />
     <ClCompile Include="Source\ccBlockPoolBase.cpp" />
-    <ClCompile Include="Source\ccBlockPool.cpp" />
+    <ClCompile Include="Source\ccBlockPoolCentral.cpp" />
     <ClCompile Include="Source\ccBlockPoolFreeList.cpp" />
     <ClCompile Include="Source\ccBlockPoolParms.cpp" />
     <ClCompile Include="Source\ccCriticalSection_win.cpp" />
@@ -45,7 +45,7 @@
     <ClInclude Include="Source\ccBlockHandle.h" />
     <ClInclude Include="Source\ccBlockPoolBase.h" />
     <ClInclude Include="Source\ccBlockPoolBlock.h" />
-    <ClInclude Include="Source\ccBlockPool.h" />
+    <ClInclude Include="Source\ccBlockPoolCentral.h" />
     <ClInclude Include="Source\ccBlockPoolFreeList.h" />
     <ClInclude Include="Source\ccBlockPoolParms.h" />
     <ClInclude Include="Source\ccCallPointer.h" />

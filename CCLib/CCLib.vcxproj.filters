@@ -54,9 +54,6 @@
     <ClCompile Include="Source\ccBlockPoolFreeList.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ccBlockPool.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\ccBlockPoolParms.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -64,6 +61,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\ccLFFreeListIndexStack.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ccBlockPoolCentral.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -149,9 +149,6 @@
     <ClInclude Include="Source\ccBlockPoolFreeList.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccBlockPool.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\ccBlockPoolParms.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -159,6 +156,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccLFFreeListIndexStack.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ccBlockPoolCentral.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

@@ -2,12 +2,6 @@
 
 #include "prnPrint.h"
 #include "risThreadsProcess.h"
-#include "risCmdLineConsole.h"
-
-#include "ccBlockPool.h"
-#include "someBlockPoolIndex.h"
-#include "someLabelledTreeNode.h"
-
 
 //******************************************************************************
 //******************************************************************************
@@ -58,17 +52,6 @@ void main_initialize(int argc,char** argv)
    Prn::setFilter(Prn::QCallRun4,  false);
 
    Prn::print(0,"MyTreeBlock*******************************************BEGIN");
-
-   // Initialize block pools.
-   CC::initializeBlockPoolFacility();
-
-   // Create block pool.
-   CC::BlockPoolParms tBlockPoolParms;
-   tBlockPoolParms.mPoolIndex = Some::cBlockPoolIndex_LabelledTreeNode;
-   tBlockPoolParms.mBlockPoolType = CC::cBlockPoolType_FreeList;
-   tBlockPoolParms.mNumBlocks = 1000;
-   tBlockPoolParms.mBlockSize = sizeof(Some::LabelledTreeNode);
-   CC::createBlockPool(&tBlockPoolParms);
 }
 
 //******************************************************************************
@@ -82,9 +65,6 @@ void main_finalize()
 
    // Close print
    Prn::finalizePrint();
-
-   // Finalize block pools.
-   CC::finalizeBlockPoolFacility();
 
    // Exit process
    Ris::Threads::exitProcess();

@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "ccBlockPool.h"
+#include "ccBlockPoolCentral.h"
 #include "ccTreeNode.h"
 
 namespace CC

@@ -1,5 +1,5 @@
-#ifndef _CCBLOCKPOOL_H_
-#define _CCBLOCKPOOL_H_
+#ifndef _CCBLOCKPOOLCENTRAL_H_
+#define _CCBLOCKPOOLCENTRAL_H_
 
 /*==============================================================================
 
@@ -80,11 +80,11 @@ namespace CC
 
 // This initializes the block pool facility. It is called at program
 // initialization, before any block pools are created.
-void initializeBlockPoolFacility();
+void initializeBlockPoolCentral();
 
 // This finalizes the block pool facility. It is called at program
 // termination. It destroys all block pools that were created.
-void finalizeBlockPoolFacility();
+void finalizeBlockPoolCentral();
 
 // This creates a block pool and places a pointer to it into the block
 // pool array. It is passed a set of parameters.
