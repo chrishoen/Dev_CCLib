@@ -56,15 +56,9 @@ void BlockPoolFreeList::initialize(BlockPoolParms* aParms)
    // For aNumBlocks==10 blocks will range 0,1,2,3,4,5,6,7,8,9
    BaseClass::initialize(aParms);
 
-   // Initialize the pointer stack
-   mBlockIndexStack.initialize(aParms->mNumBlocks);
-
-   // Push the indices of the blocks in the array onto the index stack.
+   // Initialize the index stack.
    // For aAllocate==10 this will push 9,8,7,6,5,4,3,2,1,0
-   for (int i = aParms->mNumBlocks-1; i >= 0; i--)
-   {
-      mBlockIndexStack.push(i);
-   }
+   mBlockIndexStack.initialize(aParms->mNumBlocks);
 }
 
 // Deallocate memory for the block array.

@@ -24,11 +24,12 @@
     <ClCompile Include="Source\ccBlockPoolBase.cpp" />
     <ClCompile Include="Source\ccBlockPool.cpp" />
     <ClCompile Include="Source\ccBlockPoolFreeList.cpp" />
-    <ClCompile Include="Source\ccBlockPoolLFFreeList.cpp" />
     <ClCompile Include="Source\ccBlockPoolParms.cpp" />
     <ClCompile Include="Source\ccCriticalSection_win.cpp" />
+    <ClCompile Include="Source\ccFreeListStack.cpp" />
     <ClCompile Include="Source\ccLFBlockFreeList.cpp" />
     <ClCompile Include="Source\ccLFBlockQueue.cpp" />
+    <ClCompile Include="Source\ccLFFreeListStack.cpp" />
     <ClCompile Include="Source\ccLFPointerQueue.cpp" />
     <ClCompile Include="Source\ccLogic.cpp" />
     <ClCompile Include="Source\ccPointerCircular.cpp" />
@@ -46,7 +47,6 @@
     <ClInclude Include="Source\ccBlockPoolBlock.h" />
     <ClInclude Include="Source\ccBlockPool.h" />
     <ClInclude Include="Source\ccBlockPoolFreeList.h" />
-    <ClInclude Include="Source\ccBlockPoolLFFreeList.h" />
     <ClInclude Include="Source\ccBlockPoolParms.h" />
     <ClInclude Include="Source\ccCallPointer.h" />
     <ClInclude Include="Source\ccContainers.h" />
@@ -55,9 +55,11 @@
     <ClInclude Include="Source\ccDefs.h" />
     <ClInclude Include="Source\ccDiagrams.h" />
     <ClInclude Include="Source\ccFreeList.h" />
+    <ClInclude Include="Source\ccFreeListStack.h" />
     <ClInclude Include="Source\ccLFBlockFreeList.h" />
     <ClInclude Include="Source\ccLFBlockQueue.h" />
     <ClInclude Include="Source\ccLFIndex.h" />
+    <ClInclude Include="Source\ccLFFreeListStack.h" />
     <ClInclude Include="Source\ccLFPointerQueue.h" />
     <ClInclude Include="Source\ccLogic.h" />
     <ClInclude Include="Source\ccPointerCircular.h" />

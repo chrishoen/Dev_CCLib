@@ -12,7 +12,6 @@ Print utility
 
 #include "ccBlockPoolBase.h"
 #include "ccBlockPoolFreeList.h"
-#include "ccBlockPoolLFFreeList.h"
 
 #include "ccBlockPool.h"
 
@@ -76,7 +75,7 @@ void createBlockPool(BlockPoolParms* aParms)
       // Create and initialize the block pool.
       case cBlockPoolType_LFFreeList :
       {
-         mBlockPool[tPoolIndex] = new BlockPoolLFFreeList;
+         mBlockPool[tPoolIndex] = new BlockPoolFreeList;
          mBlockPool[tPoolIndex]->initialize(aParms);
       }
       break;

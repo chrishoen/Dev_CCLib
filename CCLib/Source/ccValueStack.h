@@ -16,8 +16,7 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This class encapsulates a stack of values. The values can be int or pointer
-// types. It is assumed that zero is used for a null value.
+// This class encapsulates a stack of values that can be copied.
  
 template <class Element>
 class ValueStack
@@ -41,11 +40,11 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Constructor, initialize members for an empty queue of size zero 
+   // Constructor, initialize members for an empty stack of size zero 
 
    ValueStack()
    {
-      // All null
+      // All null.
       mElement     = 0;
       mNumElements = 0;
       mIndex       = 0;
@@ -54,35 +53,32 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Destructor, deallocate the queue array
+   // Destructor, deallocate the array
 
   ~ValueStack()
    {
-      // Deallocate the array
-      if (mElement) delete mElement;
+      finalize();
    }
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // This initializes the queue to a fixed size. It initializes member
-   // variables and allocates heap storage for the queue array. The queue has
-   // a specified maximum number of elements and it allocates memory for the
-   // maximum number of elements plus one, there is an extra element allocated.
+   // This initializes the stack to a fixed size. It initializes member
+   // variables and allocates system memory for the stack array.
 
    void initialize(int aNumElements)
    {
       finalize();
-      // Initialize variables
+      // Initialize variables.
       mIndex = 0;
       mNumElements = aNumElements;
-      // Allocate memory for the array
+      // Allocate memory for the array.
       mElement = new Element[mNumElements];
    }
 
    void finalize()
    {
-      // Deallocate the array
+      // Deallocate the array.
       if (mElement)
       {
          delete mElement;
@@ -97,13 +93,13 @@ public:
 
    bool push(Element aValue)
    {
-      // Guard for stack full
+      // Guard for stack full.
       if (mIndex == mNumElements) return false;
 
 
-      // Copy the source element to the element at the stack index
+      // Copy the source element to the element at the stack index.
       mElement[mIndex] = aValue;
-      // Increment the index
+      // Increment the index.
       mIndex++;
 
       // Done
@@ -120,12 +116,12 @@ public:
       // Guard
       if (mIndex == 0) return false;
 
-      // Copy the element below the stack index to the destination element
+      // Copy the element below the stack index to the destination element.
       *aValue = mElement[mIndex - 1];
-      // Decrement the index
+      // Decrement the index.
       mIndex--;
 
-      // Return success
+      // Return success.
       return true;
    }
 
