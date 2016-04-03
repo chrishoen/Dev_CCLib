@@ -27,7 +27,6 @@
     <ClCompile Include="Source\ccBlockPoolParms.cpp" />
     <ClCompile Include="Source\ccCriticalSection_win.cpp" />
     <ClCompile Include="Source\ccFreeListIndexStack.cpp" />
-    <ClCompile Include="Source\ccFreeListIndexStackSM.cpp" />
     <ClCompile Include="Source\ccLFBlockFreeList.cpp" />
     <ClCompile Include="Source\ccLFBlockQueue.cpp" />
     <ClCompile Include="Source\ccLFFreeListIndexStack.cpp" />
@@ -57,7 +56,6 @@
     <ClInclude Include="Source\ccDiagrams.h" />
     <ClInclude Include="Source\ccFreeList.h" />
     <ClInclude Include="Source\ccFreeListIndexStack.h" />
-    <ClInclude Include="Source\ccFreeListIndexStackSM.h" />
     <ClInclude Include="Source\ccLFBlockFreeList.h" />
     <ClInclude Include="Source\ccLFBlockQueue.h" />
     <ClInclude Include="Source\ccLFIndex.h" />

@@ -7,7 +7,7 @@
 #include "ccValueQueue.h"
 #include "ccValueStack.h"
 #include "ccFreeListIndexStack.h"
-#include "ccFreeListIndexStackSM.h"
+#include "ccFreeListIndexStack.h"
 #include "ccLFFreeListIndexStack.h"
 #include "ccFreeList.h"
 
@@ -53,7 +53,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo11(Ris::CmdLineCmd* aCmd)
 {
-   CC::FreeListIndexStackSM tStack;
+   CC::FreeListIndexStack tStack;
    tStack.initialize(4);
    
    int tY = 999;
@@ -174,7 +174,7 @@ void CmdLineExec::executeGo21(Ris::CmdLineCmd* aCmd)
    aCmd->setArgDefault(1,4);
    int tNumBlocks = aCmd->argInt(1);
 
-   CC::FreeListIndexStackSM tStack;
+   CC::FreeListIndexStack tStack;
    tStack.initialize(tNumBlocks);
 
    int tY = 999;
@@ -226,11 +226,11 @@ void CmdLineExec::executeGo31(Ris::CmdLineCmd* aCmd)
    aCmd->setArgDefault(1,4);
 
    int tNumBlocks = aCmd->argInt(1);
-   int tSize = CC::FreeListIndexStackSM::getSharedMemorySize(tNumBlocks);
+   int tSize = CC::FreeListIndexStack::getSharedMemorySize(tNumBlocks);
    Prn::print(0, "StackSize %d", tSize);
 
    void* tMemory = malloc(tSize);
-   CC::FreeListIndexStackSM tStack;
+   CC::FreeListIndexStack tStack;
    tStack.initialize(tNumBlocks,tMemory);
 
 
@@ -292,11 +292,11 @@ void CmdLineExec::executeGo41(Ris::CmdLineCmd* aCmd)
    aCmd->setArgDefault(1,4);
 
    int tNumBlocks = aCmd->argInt(1);
-   int tSize = CC::FreeListIndexStackSM::getSharedMemorySize(tNumBlocks);
+   int tSize = CC::FreeListIndexStack::getSharedMemorySize(tNumBlocks);
    Prn::print(0, "StackSize %d", tSize);
 
    void* tMemory = malloc(tSize);
-   CC::FreeListIndexStackSM tStack;
+   CC::FreeListIndexStack tStack;
    tStack.initialize(tNumBlocks,tMemory);
    
    int tY = 999;
