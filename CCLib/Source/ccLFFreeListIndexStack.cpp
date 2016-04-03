@@ -25,7 +25,6 @@ namespace CC
 LFFreeListIndexStack::LFFreeListIndexStack()
 {
    // All null
-   mMemory = 0;
    mListNext = 0;
    mNumElements = 0;
 }
@@ -70,9 +69,7 @@ void LFFreeListIndexStack::initialize(int aNumElements)
 
 void LFFreeListIndexStack::finalize()
 {
-   if (mMemory)    free(mMemory);
    if (mListNext)  free(mListNext);
-   mMemory    = 0;
    mListNext  = 0;
 }
 

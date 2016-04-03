@@ -54,8 +54,8 @@ void FreeListIndexStack::initialize(int aNumElements)
    mElement = new int[mNumElements];
 
    // Push the indices of the blocks in the array onto the index stack.
-   // For aAllocate==10 this will push 9,8,7,6,5,4,3,2,1,0
-   for (int i = mNumElements-1; i >= 0; i--)
+   // For aAllocate==10 this will push 0,1,2,3,4,5,6,7,8,9
+   for (int i=0; i<mNumElements; i++)
    {
       push(i);
    }
