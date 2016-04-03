@@ -44,7 +44,7 @@ BlockPoolFreeList::~BlockPoolFreeList()
 //
 // An index stack is used to manage free list access to the blocks
 // The stack is initialized for a free list by pushing indices onto it.
-// For aAllocate==10 this will push 9,8,7,6,5,4,3,2,1,0
+// For aAllocate==10 this will push 0,1,2,3,4,5,6,7,8,9
 //
 // When a block is allocated, an index is popped off of the stack.
 // When a block is deallocated, its index is pushed back onto the stack.
@@ -57,7 +57,7 @@ void BlockPoolFreeList::initialize(BlockPoolParms* aParms)
    BaseClass::initialize(aParms);
 
    // Initialize the index stack.
-   // For aAllocate==10 this will push 9,8,7,6,5,4,3,2,1,0
+   // For aAllocate==10 this will push 0,1,2,3,4,5,6,7,8,9
    mBlockIndexStack.initialize(aParms->mNumBlocks);
 }
 
