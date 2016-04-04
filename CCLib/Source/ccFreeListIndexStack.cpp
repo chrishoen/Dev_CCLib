@@ -105,6 +105,11 @@ void FreeListIndexStack::initialize(int aNumElements,void* aMemory)
    char* tStateMemory = (char*)mMemory;
    char* tArrayMemory = tStateMemory + tStateSize;
 
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // Initialize variables.
+
    // Initialize state.
    mX = new(tStateMemory) FreeListIndexStackState;
    mX->initialize(aNumElements);
@@ -113,8 +118,7 @@ void FreeListIndexStack::initialize(int aNumElements,void* aMemory)
    mElement = new(tArrayMemory) int[mX->mNumElements];
 
    // Push the indices of the blocks in the array onto the index stack.
-   // For aAllocate==10 this will push 0,1,2,3,4,5,6,7,8,9
-// for (int i=0; i<mX->mNumElements; i++)
+   // For aAllocate==10 this will push 9,8,8,6,5,4,3,2,1,0
    for (int i = mX->mNumElements-1; i >= 0; i--)
    {
       push(i);
@@ -146,7 +150,7 @@ void FreeListIndexStack::finalize()
 int FreeListIndexStack::getMemorySize(int aNumElements)
 {
    int tStateSize = FreeListIndexStackState::getMemorySize();
-   int tArraySize = aNumElements*sizeof(int);
+   int tArraySize = cc_round_upto16(aNumElements*sizeof(int));
    int tMemorySize = tStateSize + tArraySize;
    return tMemorySize;
 }

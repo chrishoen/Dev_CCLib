@@ -24,20 +24,20 @@ namespace CC
 class BlockPoolBase
 {
 public:
-   //---------------------------------------------------------------------------
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Abstract Methods
+
    // Constructor
    BlockPoolBase();
 
-   //---------------------------------------------------------------------------
-   // Methods
-
-   // Allocate memory for the block array. It is passed the number of blocks to
-   // allocate, the size of the block body, and the memory pool index for the
-   // block array.
-   virtual void initialize(BlockPoolParms* aParms);
+   // Initialize the block pool. It is passed block pool parameters.
+   virtual void initialize(BlockPoolParms* aParms)=0;
 
    // Deallocate memory for the block array.
-   virtual void finalize();
+   virtual void finalize()=0;
 
    //---------------------------------------------------------------------------
    // Get a block from the pool, this allocates a block.
@@ -51,8 +51,31 @@ public:
    // Return a pointer to a block, given its memory handle.
    virtual void* getBlockPtr(BlockHandle aBlockHandle)=0;
 
-   //---------------------------------------------------------------------------
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods called by inheriting classes
+
+   // Initialize the block pool. It is passed block pool parameters.
+   void initializeBase(BlockPoolParms* aParms,void* aMemory);
+
+   // Deallocate memory for the block array.
+   void finalizeBase();
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Members
+
+   // If this flag is true then the memory for this object was created
+   // externally. If it is false then the memory was allocated at 
+   // initialization and must be freed at finalization.
+   bool mExternalMemoryFlag;
+
+   // Pointer to memory for which the stack resides. This is either created
+   // externally and passed as an initialization parameter or it is created
+   // on the system heap at initialization.
+   void* mMemory;
 
    // This allocates storage for the blocks on the system heap or in shared
    // memory and provides pointer access to the allocated blocks. This is a block
@@ -62,24 +85,24 @@ public:
    // the user as a pointer to the block.
    BlockBoxArray mBlocks;
 
-   // Number of blocks allocated
-   int mNumBlocks;
+   // Copy of parameters that were passed in at initialization.
+   BlockPoolParms* mParms;
 
-   // Size of each block body
-   int mBlockSize;
-
-   // Pool index for the specific block pool contained in the global block
-   // pool array.
-   int mPoolIndex;
-
-   // Block count, remaining blocks available.
-   int mCount;
-
-   //---------------------------------------------------------------------------
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Helpers
 
    void show();
    virtual int size()=0;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // This returns the number of bytes that an instance of this class
+   // will need to be allocated for it.
+
+   static int getMemorySize(BlockPoolParms* aParms);
 };
 
 //******************************************************************************

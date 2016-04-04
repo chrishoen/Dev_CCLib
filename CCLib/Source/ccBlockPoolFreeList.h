@@ -35,15 +35,17 @@ namespace CC
 //
 // An index stack is used to manage free list access to the blocks
 // The stack is initialized for a free list by pushing indices onto it.
-// For aAllocate==10 this will push 0,1,2,3,4,5,6,7,8,9 onto the stack.
-//
+// For aAllocate==10 this will push 9,8,7,6,5,4,3,2,1,0 onto the stack
+// so that block zero will be the first one popped.
 
 class BlockPoolFreeList : public BlockPoolBase
 {
 public:
    typedef BlockPoolBase BaseClass;
 
-   //---------------------------------------------------------------------------
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Methods
 
    //---------------------------------------------------------------------------
@@ -51,11 +53,11 @@ public:
    BlockPoolFreeList();
   ~BlockPoolFreeList();
 
-   // Allocate memory for the block array. It is passed the number of blocks to
-   // allocate, the size of the block body, and the memory pool index for the
-   // block array.
+   //---------------------------------------------------------------------------
+   // Initialize the block pool. It is passed block pool parameters.
    void initialize(BlockPoolParms* aParms);
 
+   //---------------------------------------------------------------------------
    // Deallocate memory for the block array.
    void finalize();
 
@@ -76,16 +78,42 @@ public:
    // Return a pointer to a block, given its memory handle.
    void* getBlockPtr(BlockHandle aBlockHandle);
 
-   //---------------------------------------------------------------------------
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members
+
+   // If this flag is true then the memory for this object was created
+   // externally. If it is false then the memory was allocated at 
+   // initialization and must be freed at finalization.
+   bool mExternalMemoryFlag;
+
+   // Pointer to memory for which the stack resides. This is either created
+   // externally and passed as an initialization parameter or it is created
+   // on the system heap at initialization.
+   void* mMemory;
+
    // This is a free list stack of indices into the block array.
    // When a block is allocated, an index is popped off of the stack.
    // When a block is deallocated, its index is pushed back onto the stack.
 
    FreeListIndexStack mBlockIndexStack;
 
-   //---------------------------------------------------------------------------
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Helpers
+
    // Size, the number of blocks that are available to be allocated.
    int size(){ return mBlockIndexStack.size(); }
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // This returns the number of bytes that an instance of this class
+   // will need to be allocated for it.
+
+   static int getMemorySize(BlockPoolParms* aParms);
 };
 
 //******************************************************************************

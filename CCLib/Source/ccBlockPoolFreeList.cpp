@@ -23,6 +23,9 @@ namespace CC
 
 BlockPoolFreeList::BlockPoolFreeList()
 {
+   // All null.
+   mExternalMemoryFlag = false;
+   mMemory = 0;
 }
 
 BlockPoolFreeList::~BlockPoolFreeList()
@@ -52,20 +55,77 @@ BlockPoolFreeList::~BlockPoolFreeList()
 
 void BlockPoolFreeList::initialize(BlockPoolParms* aParms)
 {
-   // Allocate memory for the block array.
-   // For aNumBlocks==10 blocks will range 0,1,2,3,4,5,6,7,8,9
-   BaseClass::initialize(aParms);
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // Initialize memory.
+
+   // Deallocate memory, if any exists.
+   finalize();
+
+   // If the instance of this class is not to reside in external memory
+   // then allocate memory for it on the system heap.
+   if (aParms->mMemory == 0)
+   {
+      mMemory = malloc(BlockPoolFreeList::getMemorySize(aParms));
+      mExternalMemoryFlag = false;
+   }
+   // If the instance of this class is to reside in external memory
+   // then use the memory pointer that was passed in.
+   else
+   {
+      mMemory = aParms->mMemory;
+      mExternalMemoryFlag = true;
+   }
+
+   // Calculate memory sizes.
+   int tBaseClassSize = BlockPoolBase::getMemorySize(aParms);
+   int tStackSize     = FreeListIndexStack::getMemorySize(aParms->mNumBlocks);
+
+   // Calculate memory addresses.
+   char* tBaseClassMemory = (char*)mMemory;
+   char* tStackMemory = tBaseClassMemory + tBaseClassSize;
+
+   // Initialize the base class variables.
+   BaseClass::initializeBase(aParms,tBaseClassMemory);
 
    // Initialize the index stack.
    // For aAllocate==10 this will push 0,1,2,3,4,5,6,7,8,9
-   mBlockIndexStack.initialize(aParms->mNumBlocks);
+   mBlockIndexStack.initialize(aParms->mNumBlocks,tStackMemory);
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Deallocate memory for the block array.
+
 void BlockPoolFreeList::finalize()
 {
-   BaseClass::finalize();
    mBlockIndexStack.finalize();
+   BaseClass::finalizeBase();
+
+   if (!mExternalMemoryFlag)
+   {
+      if (mMemory)
+      {
+         free(mMemory);
+      }
+      mMemory = 0;
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This returns the number of bytes that an instance of this class
+// will need to be allocated for it.
+
+int BlockPoolFreeList::getMemorySize(BlockPoolParms* aParms)
+{
+   int tBaseClassSize = BlockPoolBase::getMemorySize(aParms);
+   int tStackSize     = FreeListIndexStack::getMemorySize(aParms->mNumBlocks);
+   int tMemorySize = tBaseClassSize + tStackSize;
+   return tMemorySize;
 }
 
 //******************************************************************************
@@ -83,7 +143,7 @@ void BlockPoolFreeList::allocate(void** aBlockPointer,BlockHandle* aBlockHandle)
       // If empty stack return.
       *aBlockPointer = 0;
       aBlockHandle->setNull();
-      printf("BlockPoolFreeList STACK EMPTY %d\n",BaseClass::mPoolIndex);
+      printf("BlockPoolFreeList STACK EMPTY %d\n",BaseClass::mParms->mPoolIndex);
       return;
    }
 
@@ -96,7 +156,7 @@ void BlockPoolFreeList::allocate(void** aBlockPointer,BlockHandle* aBlockHandle)
    // Return the memory handle for the block.
    if (aBlockHandle)
    {
-      aBlockHandle->set(BaseClass::mPoolIndex, tBlockIndex);
+      aBlockHandle->set(BaseClass::mParms->mPoolIndex, tBlockIndex);
 //    printf("BlockPoolFreeList::allocate %d %d\n",aBlockHandle->mPoolIndex,aBlockHandle->mBlockIndex);
    }
 }

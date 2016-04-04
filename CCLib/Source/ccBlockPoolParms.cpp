@@ -7,12 +7,8 @@ Print utility
 //******************************************************************************
 
 #include <stdio.h>
-#include <string.h>
-#include <stdarg.h>
 
-#include "ccBlockPoolBase.h"
-#include "ccBlockPoolFreeList.h"
-
+#include "cc_functions.h"
 #include "ccBlockPoolCentral.h"
 
 namespace CC
@@ -39,6 +35,17 @@ void BlockPoolParms::reset()
 
    // Defaults
    mBlockPoolType = cBlockPoolType_FreeList;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This returns the number of bytes that an instance of this class
+// will need to be allocated for it.
+
+int BlockPoolParms::getMemorySize()
+{
+   return cc_round_upto16(sizeof(BlockPoolParms));
 }
 
 } //namespace
