@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <atomic>
+#include <new>
 
 #include "prnPrint.h"
 #include "ccBlockPoolCentral.h"
@@ -72,7 +72,6 @@ void CmdLineExec::executeGo12(Ris::CmdLineCmd* aCmd)
 {
    // Block pool parameters.
    CC::BlockPoolParms tBlockPoolParms;
-
    // Create block pool.
    tBlockPoolParms.reset();
    tBlockPoolParms.mPoolIndex     = Some::cBlockPoolIndex_MyBlockA;
@@ -80,12 +79,15 @@ void CmdLineExec::executeGo12(Ris::CmdLineCmd* aCmd)
    tBlockPoolParms.mNumBlocks     = 1000;
    tBlockPoolParms.mBlockSize     = sizeof(Some::MyBlockA);
 
-   // Create block pool.
-   CC::BlockPoolBase* tBP = new CC::BlockPoolFreeList;
-   tBP->initialize(&tBlockPoolParms);
-   tBP->finalize();
-   delete tBP;
 
+   int tParmSize   = CC::BlockPoolParms::getMemorySize();
+   void* tParmMemory = malloc(tParmSize);
+   CC::BlockPoolParms* mParms = new(tParmMemory) CC::BlockPoolParms(tBlockPoolParms);
+// mParms = new(tParmMemory)BlockPoolParms(*aParms);
+// mParms = (BlockPoolParms*)tParmMemory;
+// *mParms = *aParms;
+   free(tParmMemory);
+   Prn::print(0, "done");
 }
 
 //******************************************************************************
