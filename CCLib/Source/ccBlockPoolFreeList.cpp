@@ -11,8 +11,8 @@ Description:
 #include <math.h>
 #include <string.h>
 
-#include "ccFreeListIndexStack.h"
-#include "ccLFFreeListIndexStack.h"
+#include "ccBlockPoolIndexStack.h"
+#include "ccBlockPoolLFIndexStack.h"
 #include "ccBlockPoolFreeList.h"
 
 namespace CC
@@ -87,8 +87,8 @@ void BlockPoolFreeList::initialize(BlockPoolParms* aParms)
    int tStackSize = 0;
    switch (aParms->mBlockPoolType)
    {
-   case cBlockPoolType_FreeList   : tStackSize = FreeListIndexStack::getMemorySize(aParms->mNumBlocks); break;
-   case cBlockPoolType_LFFreeList : tStackSize = LFFreeListIndexStack::getMemorySize(aParms->mNumBlocks); break;
+   case cBlockPoolType_FreeList   : tStackSize = BlockPoolIndexStack::getMemorySize(aParms->mNumBlocks); break;
+   case cBlockPoolType_LFFreeList : tStackSize = BlockPoolLFIndexStack::getMemorySize(aParms->mNumBlocks); break;
    }
 
    // Calculate memory addresses.
@@ -101,8 +101,8 @@ void BlockPoolFreeList::initialize(BlockPoolParms* aParms)
    // Create the index stack.
    switch (aParms->mBlockPoolType)
    {
-   case cBlockPoolType_FreeList   : mBlockIndexStack = new FreeListIndexStack; break;
-   case cBlockPoolType_LFFreeList : mBlockIndexStack = new LFFreeListIndexStack; break;
+   case cBlockPoolType_FreeList   : mBlockIndexStack = new BlockPoolIndexStack; break;
+   case cBlockPoolType_LFFreeList : mBlockIndexStack = new BlockPoolLFIndexStack; break;
    }
 
    // Initialize the index stack.
@@ -149,8 +149,8 @@ int BlockPoolFreeList::getMemorySize(BlockPoolParms* aParms)
    int tStackSize     = 0;
    switch (aParms->mBlockPoolType)
    {
-   case cBlockPoolType_FreeList   : tStackSize = FreeListIndexStack::getMemorySize(aParms->mNumBlocks); break;
-   case cBlockPoolType_LFFreeList : tStackSize = LFFreeListIndexStack::getMemorySize(aParms->mNumBlocks); break;
+   case cBlockPoolType_FreeList   : tStackSize = BlockPoolIndexStack::getMemorySize(aParms->mNumBlocks); break;
+   case cBlockPoolType_LFFreeList : tStackSize = BlockPoolLFIndexStack::getMemorySize(aParms->mNumBlocks); break;
    }
 
    int tMemorySize = tBaseClassSize + tStackSize;

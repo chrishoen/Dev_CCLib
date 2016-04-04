@@ -1,5 +1,5 @@
-#ifndef _CCLFFREELISTSTACK_H_
-#define _CCLFFREELISTSTACK_H_
+#ifndef _CCBLOCKPOOLLFINDEXSTACK_H_
+#define _CCBLOCKPOOLLFINDEXSTACK_H_
 /*==============================================================================
 
 Lock Free Free List Stack of Indices. 
@@ -13,7 +13,7 @@ This is used by containers that use a free list.
 ==============================================================================*/
 #include <atomic>
 #include "ccLFIndex.h"
-#include "ccBaseFreeListIndexStack.h"
+#include "ccBlockPoolBaseIndexStack.h"
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -27,7 +27,7 @@ namespace CC
 // State variables for the stack. These are located in a separate class
 // so that they can be located in external memory.
 
-class LFFreeListIndexStackState
+class BlockPoolLFIndexStackState
 {
 public:
 
@@ -52,7 +52,7 @@ public:
    // Methods.
 
    // Constructor.
-   LFFreeListIndexStackState();
+   BlockPoolLFIndexStackState();
 
    // Initialize.
    void initialize(int aNumElements);
@@ -66,7 +66,7 @@ public:
 //******************************************************************************
 //******************************************************************************
 
-class LFFreeListIndexStack : public BaseFreeListIndexStack
+class BlockPoolLFIndexStack : public BlockPoolBaseIndexStack
 {
 public:
 
@@ -76,8 +76,8 @@ public:
    // Methods
 
    // Constructor
-   LFFreeListIndexStack();
-  ~LFFreeListIndexStack();
+   BlockPoolLFIndexStack();
+  ~BlockPoolLFIndexStack();
 
    // Initialize the stack to either allocate memory from the system heap or
    // to use external memory that has already been allocated for it.
@@ -126,7 +126,7 @@ public:
    
    // State variables for the stack. These are located in a separate class
    // so that they can be located in externale memory.
-   LFFreeListIndexStackState* mX;
+   BlockPoolLFIndexStackState* mX;
 
    //***************************************************************************
    //***************************************************************************

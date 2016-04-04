@@ -11,7 +11,7 @@ Description:
 #include <new>
 
 #include "cc_functions.h"
-#include "ccFreeListIndexStack.h"
+#include "ccBlockPoolIndexStack.h"
 
 using namespace std;
 
@@ -23,23 +23,23 @@ namespace CC
 //******************************************************************************
 // Constructor, initialize members for an empty stack of size zero 
 
-FreeListIndexStackState::FreeListIndexStackState()
+BlockPoolIndexStackState::BlockPoolIndexStackState()
 {
    // All null.
    mNumElements = 0;
    mIndex       = 0;
 }
 
-void FreeListIndexStackState::initialize(int aNumElements)
+void BlockPoolIndexStackState::initialize(int aNumElements)
 {
    // Initialize variables.
    mIndex = 0;
    mNumElements = aNumElements;
 }
 
-int FreeListIndexStackState::getMemorySize()
+int BlockPoolIndexStackState::getMemorySize()
 {
-   return cc_round_upto16(sizeof(FreeListIndexStackState));
+   return cc_round_upto16(sizeof(BlockPoolIndexStackState));
 }
 
 //******************************************************************************
@@ -47,7 +47,7 @@ int FreeListIndexStackState::getMemorySize()
 //******************************************************************************
 // Constructor, initialize members for an empty stack of size zero 
 
-FreeListIndexStack::FreeListIndexStack()
+BlockPoolIndexStack::BlockPoolIndexStack()
 {
    // All null.
    mX = 0;
@@ -61,7 +61,7 @@ FreeListIndexStack::FreeListIndexStack()
 //******************************************************************************
 // Destructor, deallocate the array
 
-FreeListIndexStack::~FreeListIndexStack()
+BlockPoolIndexStack::~BlockPoolIndexStack()
 {
    finalize();
 }
@@ -72,7 +72,7 @@ FreeListIndexStack::~FreeListIndexStack()
 // This initializes the stack to a fixed size. It initializes member
 // variables and and the stack array, given external memory.
 
-void FreeListIndexStack::initialize(int aNumElements,void* aMemory)
+void BlockPoolIndexStack::initialize(int aNumElements,void* aMemory)
 {
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
@@ -86,7 +86,7 @@ void FreeListIndexStack::initialize(int aNumElements,void* aMemory)
    // then allocate memory for it on the system heap.
    if (aMemory == 0)
    {
-      mMemory = malloc(FreeListIndexStack::getMemorySize(aNumElements));
+      mMemory = malloc(BlockPoolIndexStack::getMemorySize(aNumElements));
       mExternalMemoryFlag = false;
    }
    // If the instance of this class is to reside in external memory
@@ -98,7 +98,7 @@ void FreeListIndexStack::initialize(int aNumElements,void* aMemory)
    }
 
    // Calculate memory sizes.
-   int tStateSize = FreeListIndexStackState::getMemorySize();
+   int tStateSize = BlockPoolIndexStackState::getMemorySize();
    int tArraySize = aNumElements*sizeof(int);
 
    // Calculate memory addresses.
@@ -111,7 +111,7 @@ void FreeListIndexStack::initialize(int aNumElements,void* aMemory)
    // Initialize variables.
 
    // Initialize state.
-   mX = new(tStateMemory) FreeListIndexStackState;
+   mX = new(tStateMemory) BlockPoolIndexStackState;
    mX->initialize(aNumElements);
 
    // Initialize the element array.
@@ -129,7 +129,7 @@ void FreeListIndexStack::initialize(int aNumElements,void* aMemory)
 //******************************************************************************
 //******************************************************************************
 
-void FreeListIndexStack::finalize()
+void BlockPoolIndexStack::finalize()
 {
    if (!mExternalMemoryFlag)
    {
@@ -147,9 +147,9 @@ void FreeListIndexStack::finalize()
 // This returns the number of bytes that an instance of this class
 // will need to be allocated for it.
 
-int FreeListIndexStack::getMemorySize(int aNumElements)
+int BlockPoolIndexStack::getMemorySize(int aNumElements)
 {
-   int tStateSize = FreeListIndexStackState::getMemorySize();
+   int tStateSize = BlockPoolIndexStackState::getMemorySize();
    int tArraySize = cc_round_upto16(aNumElements*sizeof(int));
    int tMemorySize = tStateSize + tArraySize;
    return tMemorySize;
@@ -160,7 +160,7 @@ int FreeListIndexStack::getMemorySize(int aNumElements)
 //******************************************************************************
 // Push a value onto the stack. Return false if the stack is full.
 
-bool FreeListIndexStack::push(int aValue)
+bool BlockPoolIndexStack::push(int aValue)
 {
    // Guard for stack full.
    if (mX->mIndex == mX->mNumElements) return false;
@@ -180,7 +180,7 @@ bool FreeListIndexStack::push(int aValue)
 //******************************************************************************
 // Pop a value off of the stack. Return false if the stack is empty.
 
-bool FreeListIndexStack::pop(int* aValue)
+bool BlockPoolIndexStack::pop(int* aValue)
 {
    // Guard
    if (mX->mIndex == 0) return false;
@@ -199,7 +199,7 @@ bool FreeListIndexStack::pop(int* aValue)
 //******************************************************************************
 // Return size.
 
-int FreeListIndexStack::size()
+int BlockPoolIndexStack::size()
 {
    return mX->mIndex;
 }

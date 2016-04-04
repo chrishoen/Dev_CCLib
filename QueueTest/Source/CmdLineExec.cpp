@@ -6,8 +6,8 @@
 
 #include "ccValueQueue.h"
 #include "ccValueStack.h"
-#include "ccFreeListIndexStack.h"
-#include "ccLFFreeListIndexStack.h"
+#include "ccBlockPoolIndexStack.h"
+#include "ccBlockPoolLFIndexStack.h"
 #include "ccBlockPoolParms.h"
 #include "ccBlockPoolFreeList.h"
 #include "ccFreeList.h"
@@ -73,7 +73,7 @@ void CmdLineExec::executeGo6(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo11(Ris::CmdLineCmd* aCmd)
 {
-   CC::FreeListIndexStack tStack;
+   CC::BlockPoolIndexStack tStack;
    tStack.initialize(4);
    
    int tY = 999;
@@ -132,7 +132,7 @@ void CmdLineExec::executeGo11(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo12(Ris::CmdLineCmd* aCmd)
 {
-   CC::LFFreeListIndexStack tStack;
+   CC::BlockPoolLFIndexStack tStack;
    tStack.initialize(4);
    
    int tY = 999;
@@ -194,7 +194,7 @@ void CmdLineExec::executeGo21(Ris::CmdLineCmd* aCmd)
    aCmd->setArgDefault(1,4);
    int tNumBlocks = aCmd->argInt(1);
 
-   CC::FreeListIndexStack tStack;
+   CC::BlockPoolIndexStack tStack;
    tStack.initialize(tNumBlocks);
 
    int tY = 999;
@@ -220,7 +220,7 @@ void CmdLineExec::executeGo22(Ris::CmdLineCmd* aCmd)
    aCmd->setArgDefault(1,4);
    int tNumBlocks = aCmd->argInt(1);
 
-   CC::LFFreeListIndexStack tStack;
+   CC::BlockPoolLFIndexStack tStack;
    tStack.initialize(tNumBlocks);
 
    int tY = 999;
@@ -246,11 +246,11 @@ void CmdLineExec::executeGo31(Ris::CmdLineCmd* aCmd)
    aCmd->setArgDefault(1,4);
 
    int tNumBlocks = aCmd->argInt(1);
-   int tSize = CC::FreeListIndexStack::getMemorySize(tNumBlocks);
+   int tSize = CC::BlockPoolIndexStack::getMemorySize(tNumBlocks);
    Prn::print(0, "StackSize %d", tSize);
 
    void* tMemory = malloc(tSize);
-   CC::FreeListIndexStack tStack;
+   CC::BlockPoolIndexStack tStack;
    tStack.initialize(tNumBlocks,tMemory);
 
 
@@ -279,11 +279,11 @@ void CmdLineExec::executeGo32(Ris::CmdLineCmd* aCmd)
    aCmd->setArgDefault(1,4);
 
    int tNumBlocks = aCmd->argInt(1);
-   int tSize = CC::LFFreeListIndexStack::getMemorySize(tNumBlocks);
+   int tSize = CC::BlockPoolLFIndexStack::getMemorySize(tNumBlocks);
    Prn::print(0, "StackSize %d", tSize);
 
    void* tMemory = malloc(tSize);
-   CC::LFFreeListIndexStack tStack;
+   CC::BlockPoolLFIndexStack tStack;
    tStack.initialize(tNumBlocks,tMemory);
 
 
@@ -312,11 +312,11 @@ void CmdLineExec::executeGo41(Ris::CmdLineCmd* aCmd)
    aCmd->setArgDefault(1,4);
 
    int tNumBlocks = aCmd->argInt(1);
-   int tSize = CC::FreeListIndexStack::getMemorySize(tNumBlocks);
+   int tSize = CC::BlockPoolIndexStack::getMemorySize(tNumBlocks);
    Prn::print(0, "StackSize %d", tSize);
 
    void* tMemory = malloc(tSize);
-   CC::FreeListIndexStack tStack;
+   CC::BlockPoolIndexStack tStack;
    tStack.initialize(tNumBlocks,tMemory);
    
    int tY = 999;
@@ -378,11 +378,11 @@ void CmdLineExec::executeGo42(Ris::CmdLineCmd* aCmd)
    aCmd->setArgDefault(1,4);
 
    int tNumBlocks = aCmd->argInt(1);
-   int tSize = CC::LFFreeListIndexStack::getMemorySize(tNumBlocks);
+   int tSize = CC::BlockPoolLFIndexStack::getMemorySize(tNumBlocks);
    Prn::print(0, "StackSize %d", tSize);
 
    void* tMemory = malloc(tSize);
-   CC::LFFreeListIndexStack tStack;
+   CC::BlockPoolLFIndexStack tStack;
    tStack.initialize(tNumBlocks,tMemory);
    
    int tY = 999;

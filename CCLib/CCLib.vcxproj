@@ -24,12 +24,12 @@
     <ClCompile Include="Source\ccBlockPoolBase.cpp" />
     <ClCompile Include="Source\ccBlockPoolCentral.cpp" />
     <ClCompile Include="Source\ccBlockPoolFreeList.cpp" />
+    <ClCompile Include="Source\ccBlockPoolIndexStack.cpp" />
+    <ClCompile Include="Source\ccBlockPoolLFIndexStack.cpp" />
     <ClCompile Include="Source\ccBlockPoolParms.cpp" />
     <ClCompile Include="Source\ccCriticalSection_win.cpp" />
-    <ClCompile Include="Source\ccFreeListIndexStack.cpp" />
     <ClCompile Include="Source\ccLFBlockFreeList.cpp" />
     <ClCompile Include="Source\ccLFBlockQueue.cpp" />
-    <ClCompile Include="Source\ccLFFreeListIndexStack.cpp" />
     <ClCompile Include="Source\ccLFPointerQueue.cpp" />
     <ClCompile Include="Source\ccLogic.cpp" />
     <ClCompile Include="Source\ccPointerCircular.cpp" />
@@ -41,13 +41,15 @@
     <ClCompile Include="Source\cc_functions.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\ccBaseFreeListIndexStack.h" />
     <ClInclude Include="Source\ccBlockBoxArray.h" />
     <ClInclude Include="Source\ccBlockHandle.h" />
     <ClInclude Include="Source\ccBlockPoolBase.h" />
+    <ClInclude Include="Source\ccBlockPoolBaseIndexStack.h" />
     <ClInclude Include="Source\ccBlockPoolBlock.h" />
     <ClInclude Include="Source\ccBlockPoolCentral.h" />
     <ClInclude Include="Source\ccBlockPoolFreeList.h" />
+    <ClInclude Include="Source\ccBlockPoolIndexStack.h" />
+    <ClInclude Include="Source\ccBlockPoolLFIndexStack.h" />
     <ClInclude Include="Source\ccBlockPoolParms.h" />
     <ClInclude Include="Source\ccCallPointer.h" />
     <ClInclude Include="Source\ccContainers.h" />
@@ -56,11 +58,9 @@
     <ClInclude Include="Source\ccDefs.h" />
     <ClInclude Include="Source\ccDiagrams.h" />
     <ClInclude Include="Source\ccFreeList.h" />
-    <ClInclude Include="Source\ccFreeListIndexStack.h" />
     <ClInclude Include="Source\ccLFBlockFreeList.h" />
     <ClInclude Include="Source\ccLFBlockQueue.h" />
     <ClInclude Include="Source\ccLFIndex.h" />
-    <ClInclude Include="Source\ccLFFreeListIndexStack.h" />
     <ClInclude Include="Source\ccLFPointerQueue.h" />
     <ClInclude Include="Source\ccLogic.h" />
     <ClInclude Include="Source\ccPointerCircular.h" />

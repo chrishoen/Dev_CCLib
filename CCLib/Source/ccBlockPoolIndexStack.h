@@ -1,5 +1,5 @@
-#ifndef _CCFREELISTINDEXSTACK_H_
-#define _CCFREELISTINDEXSTACK_H_
+#ifndef _CCBLOCKPOOLINDEXSTACK_H_
+#define _CCBLOCKPOOLINDEXSTACK_H_
 /*==============================================================================
 
 Free List Stack of Indices. 
@@ -7,7 +7,7 @@ Free List Stack of Indices.
 This implements a free list stack of indices. It is not thread safe.
 
 ==============================================================================*/
-#include "ccBaseFreeListIndexStack.h"
+#include "ccBlockPoolBaseIndexStack.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -25,7 +25,7 @@ namespace CC
 // State variables for the stack. These are located in a separate class
 // so that they can be located in external memory.
 
-class FreeListIndexStackState
+class BlockPoolIndexStackState
 {
 public:
 
@@ -46,7 +46,7 @@ public:
    // Methods.
 
    // Constructor.
-   FreeListIndexStackState();
+   BlockPoolIndexStackState();
 
    // Initialize.
    void initialize(int aNumElements);
@@ -60,7 +60,7 @@ public:
 //******************************************************************************
 //******************************************************************************
 
-class FreeListIndexStack : public BaseFreeListIndexStack
+class BlockPoolIndexStack : public BlockPoolBaseIndexStack
 {
 public:
 
@@ -70,8 +70,8 @@ public:
    // Methods
 
    // Constructor
-   FreeListIndexStack();
-  ~FreeListIndexStack();
+   BlockPoolIndexStack();
+  ~BlockPoolIndexStack();
 
    // Initialize the stack to either allocate memory from the system heap or
    // to use external memory that has already been allocated for it.
@@ -118,7 +118,7 @@ public:
    
    // State variables for the stack. These are located in a separate class
    // so that they can be located in externale memory.
-   FreeListIndexStackState* mX;
+   BlockPoolIndexStackState* mX;
 
    //***************************************************************************
    //***************************************************************************

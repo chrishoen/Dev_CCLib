@@ -1,5 +1,5 @@
-#ifndef _CCBASEFREELISTINDEXSTACK_H_
-#define _CCBASEFREELISTINDEXSTACK_H_
+#ifndef _CCBLOCKPOOLBASEINDEXSTACK_H_
+#define _CCBLOCKPOOLBASEINDEXSTACK_H_
 /*==============================================================================
 
 Free List Stack of Indices. 
@@ -24,7 +24,7 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 
-class BaseFreeListIndexStack
+class BlockPoolBaseIndexStack
 {
 public:
 

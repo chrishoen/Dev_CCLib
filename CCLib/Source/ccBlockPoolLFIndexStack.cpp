@@ -11,7 +11,7 @@ Description:
 #include <new>
 
 #include "cc_functions.h"
-#include "ccLFFreeListIndexStack.h"
+#include "ccBlockPoolLFIndexStack.h"
 
 using namespace std;
 
@@ -23,14 +23,14 @@ namespace CC
 //***************************************************************************
 // Constructor, initialize members for an empty stack of size zero 
 
-LFFreeListIndexStackState::LFFreeListIndexStackState()
+BlockPoolLFIndexStackState::BlockPoolLFIndexStackState()
 {
    // All null.
    mNumElements = 0;
    mListAllocate = 0;
 }
 
-void LFFreeListIndexStackState::initialize(int aNumElements)
+void BlockPoolLFIndexStackState::initialize(int aNumElements)
 {
    // Store.
    mNumElements  = aNumElements;
@@ -38,16 +38,16 @@ void LFFreeListIndexStackState::initialize(int aNumElements)
    mListAllocate = aNumElements + 1;
 }
 
-int LFFreeListIndexStackState::getMemorySize()
+int BlockPoolLFIndexStackState::getMemorySize()
 {
-   return cc_round_upto16(sizeof(LFFreeListIndexStackState));
+   return cc_round_upto16(sizeof(BlockPoolLFIndexStackState));
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-LFFreeListIndexStack::LFFreeListIndexStack()
+BlockPoolLFIndexStack::BlockPoolLFIndexStack()
 {
    // All null.
    mX = 0;
@@ -56,7 +56,7 @@ LFFreeListIndexStack::LFFreeListIndexStack()
    mMemory = 0;
 }
 
-LFFreeListIndexStack::~LFFreeListIndexStack()
+BlockPoolLFIndexStack::~BlockPoolLFIndexStack()
 {
    finalize();
 }
@@ -66,7 +66,7 @@ LFFreeListIndexStack::~LFFreeListIndexStack()
 //******************************************************************************
 // Initialize
 
-void LFFreeListIndexStack::initialize(int aNumElements,void* aMemory)
+void BlockPoolLFIndexStack::initialize(int aNumElements,void* aMemory)
 {
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
@@ -80,7 +80,7 @@ void LFFreeListIndexStack::initialize(int aNumElements,void* aMemory)
    // then allocate memory for it on the system heap.
    if (aMemory == 0)
    {
-      mMemory = malloc(LFFreeListIndexStack::getMemorySize(aNumElements));
+      mMemory = malloc(BlockPoolLFIndexStack::getMemorySize(aNumElements));
       mExternalMemoryFlag = false;
    }
    // If the instance of this class is to reside in external memory
@@ -92,7 +92,7 @@ void LFFreeListIndexStack::initialize(int aNumElements,void* aMemory)
    }
 
    // Calculate memory sizes.
-   int tStateSize = LFFreeListIndexStackState::getMemorySize();
+   int tStateSize = BlockPoolLFIndexStackState::getMemorySize();
    int tArraySize = (aNumElements + 1)*sizeof(AtomicLFIndex);
 
    // Calculate memory addresses.
@@ -100,7 +100,7 @@ void LFFreeListIndexStack::initialize(int aNumElements,void* aMemory)
    char* tArrayMemory = tStateMemory + tStateSize;
 
    // Initialize state.
-   mX = new(tStateMemory) LFFreeListIndexStackState;
+   mX = new(tStateMemory) BlockPoolLFIndexStackState;
    mX->initialize(aNumElements);
 
    // Initialize the linked list array.
@@ -134,7 +134,7 @@ void LFFreeListIndexStack::initialize(int aNumElements,void* aMemory)
 //***************************************************************************
 // Finalize
 
-void LFFreeListIndexStack::finalize()
+void BlockPoolLFIndexStack::finalize()
 {
    if (!mExternalMemoryFlag)
    {
@@ -152,9 +152,9 @@ void LFFreeListIndexStack::finalize()
 // This returns the number of bytes that an instance of this class
 // will need to be allocated for it.
 
-int LFFreeListIndexStack::getMemorySize(int aNumElements)
+int BlockPoolLFIndexStack::getMemorySize(int aNumElements)
 {
-   int tStateSize = LFFreeListIndexStackState::getMemorySize();
+   int tStateSize = BlockPoolLFIndexStackState::getMemorySize();
    int tArraySize = (aNumElements + 1)*sizeof(AtomicLFIndex);
    int tMemorySize = tStateSize + tArraySize;
    return tMemorySize;
@@ -165,7 +165,7 @@ int LFFreeListIndexStack::getMemorySize(int aNumElements)
 //***************************************************************************
 // Size
 
-int LFFreeListIndexStack::size()
+int BlockPoolLFIndexStack::size()
 { 
    return mX->mListSize.load(memory_order_relaxed);
 }
@@ -176,7 +176,7 @@ int LFFreeListIndexStack::size()
 // This detaches the head node.
 // Use an offset of one so that pop and push indices range 0..NumElements-1.
 
-bool LFFreeListIndexStack::pop(int* aNodeIndex)
+bool BlockPoolLFIndexStack::pop(int* aNodeIndex)
 {
    // Store the head node in a temp.
    // This is the node that will be detached.
@@ -206,7 +206,7 @@ bool LFFreeListIndexStack::pop(int* aNodeIndex)
 // Insert a node into the list before the list head node.
 // Use an offset of one so that pop and push indices range 0..NumElements-1.
 
-bool LFFreeListIndexStack::push(int aNodeIndex)
+bool BlockPoolLFIndexStack::push(int aNodeIndex)
 {
    int tNodeIndex = aNodeIndex + 1;
 
