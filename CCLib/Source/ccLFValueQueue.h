@@ -58,8 +58,6 @@ public:
    AtomicLFIndex     mListHead;
    std::atomic<int>  mListSize;
 
-   std::atomic<int>* mListHeadIndexPtr = (std::atomic<int>*)&mListHead;
-
    static const int  cInvalid = 0x80000000;
 
    //***************************************************************************
@@ -288,7 +286,8 @@ public:
          mListNext[aNode].store(tHead, std::memory_order_relaxed);
 
          // The pushed node is the new head node.
-         if ((*mListHeadIndexPtr).compare_exchange_weak(tHead.mIndex, aNode, std::memory_order_release, std::memory_order_relaxed)) break;
+         std::atomic<int>* tListHeadIndexPtr = (std::atomic<int>*)&mListHead;
+         if ((*tListHeadIndexPtr).compare_exchange_weak(tHead.mIndex, aNode, std::memory_order_release, std::memory_order_relaxed)) break;
          if (++tLoopCount == 10000) throw 103;
       }
 
