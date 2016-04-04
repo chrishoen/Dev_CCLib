@@ -62,6 +62,7 @@
     <ClInclude Include="Source\ccLFBlockQueue.h" />
     <ClInclude Include="Source\ccLFIndex.h" />
     <ClInclude Include="Source\ccLFPointerQueue.h" />
+    <ClInclude Include="Source\ccLFValueQueue.h" />
     <ClInclude Include="Source\ccLogic.h" />
     <ClInclude Include="Source\ccPointerCircular.h" />
     <ClInclude Include="Source\ccPointerShiftRegister.h" />
