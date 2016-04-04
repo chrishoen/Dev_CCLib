@@ -39,6 +39,7 @@ public:
    void writeType2 (int aNumWrites);
    void writeType3 (int aNumWrites);
    void writeType4 (int aNumWrites);
+   void writeType5 (int aNumWrites);
    void write  (int aNumWrites);
 
    //---------------------------------------------------------------------------

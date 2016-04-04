@@ -12,6 +12,7 @@
 #include "someReader.h"
 #include "someWriterReader.h"
 #include "someTester.h"
+#include "ccLFValueQueue.h"
 #include "ccLFPointerQueue.h"
 #include "ccLFBlockQueue.h"
 #include "ccLFBlockFreeList.h"
@@ -73,9 +74,10 @@ public:
    double              mTesterMeanTime1;
    double              mTesterMeanTime2;
 
-   CC::LFPointerQueue  mPointerQueue;
-   CC::LFBlockQueue    mBlockQueue;
-   CC::LFBlockFreeList mBlockFreeList;
+   CC::LFPointerQueue       mPointerQueue;
+   CC::LFBlockQueue         mBlockQueue;
+   CC::LFBlockFreeList      mBlockFreeList;
+   CC::LFValueQueue<void*>  mValueQueue;
 
 };
 
