@@ -18,6 +18,9 @@ CmdLineExec::CmdLineExec()
    mCount=0;
    mPointerQueue.initialize(4);
    mIntQueue.initialize(4);
+
+// int tSize = CC::LFValueQueue<int>::getMemorySize(4);
+// mIntQueue.initialize(4,malloc(tSize));
 }
 
 //******************************************************************************

@@ -20,6 +20,8 @@ This can be used for Multiple Writer Muliple Reader.
 
 ==============================================================================*/
 #include <atomic>
+#include <new>
+#include "cc_functions.h"
 #include "ccLFIndex.h"
 //******************************************************************************
 //******************************************************************************
@@ -27,6 +29,67 @@ This can be used for Multiple Writer Muliple Reader.
 
 namespace CC
 {
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// State variables for the stack. These are located in a separate class
+// so that they can be located in external memory.
+
+class LFValueQueueState
+{
+public:
+
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // Members.
+
+   // Number of elements allocated.
+   int mNumElements;
+   int mQueueNumElements;
+   int mListNumElements;
+
+   // Queue variables.
+   AtomicLFIndex     mQueueHead;
+   AtomicLFIndex     mQueueTail;
+
+   // Linked list variables.
+   AtomicLFIndex     mListHead;
+   std::atomic<int>  mListSize;
+
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // Methods.
+
+   // Constructor.
+   LFValueQueueState()
+   {
+      // All null
+      mNumElements=0;
+      mQueueNumElements=0;
+      mListNumElements=0;
+   }
+
+   // Initialize.
+   void initialize(int aNumElements)
+   {
+      // Store.
+      mNumElements       = aNumElements;
+      // Allocate for one extra dummy node.
+      mQueueNumElements  = aNumElements + 1;
+      // Allocate for one extra dummy node.
+      mListNumElements   = aNumElements + 1;
+   }
+
+   // This returns the number of bytes that an instance of this class
+   // will need to be allocated for it.
+   static int getMemorySize()
+   {
+      return cc_round_upto16(sizeof(LFValueQueueState));
+   }
+};
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -40,23 +103,28 @@ public:
    //***************************************************************************
    // Members
 
-   // Number of values allocated
-   int mAllocate;
-   int mQueueAllocate;
-   int mListAllocate;
+   // If this flag is true then the memory for this object was created
+   // externally. If it is false then the memory was allocated at 
+   // initialization and must be freed at finalization.
+   bool mExternalMemoryFlag;
 
-   // Array of values
-   Element* mValue;
+   // Pointer to memory for which the queue resides. This is either created
+   // externally and passed as an initialization parameter or it is created
+   // on the system heap at initialization.
+   void* mMemory;
 
-   // Queue array and variables
+   // State variables for the queue. These are located in a separate class
+   // so that they can be located in externale memory.
+   LFValueQueueState* mX;
+
+   // Array of values.
+   Element* mElement;
+
+   // Queue array.
    AtomicLFIndex*    mQueueNext;
-   AtomicLFIndex     mQueueHead;
-   AtomicLFIndex     mQueueTail;
 
-   // Free List array and variables
+   // Free List array.
    AtomicLFIndex*    mListNext;
-   AtomicLFIndex     mListHead;
-   std::atomic<int>  mListSize;
 
    static const int  cInvalid = 0x80000000;
 
@@ -67,13 +135,15 @@ public:
 
    LFValueQueue()
    {
+      // All null.
+      mX = 0;
+      mExternalMemoryFlag = false;
+      mMemory = 0;
+
       // All null
-      mValue = 0;
+      mElement = 0;
       mQueueNext = 0;
       mListNext = 0;
-      mAllocate = 0;
-      mQueueAllocate = 0;
-      mListAllocate = 0;
    }
 
    ~LFValueQueue()
@@ -86,52 +156,120 @@ public:
    //***************************************************************************
    // Initialize
 
-   void initialize(int aAllocate)
+   void initialize(int aNumElements,void* aMemory = 0)
    {
+      //---------------------------------------------------------------------------
+      //---------------------------------------------------------------------------
+      //---------------------------------------------------------------------------
+      // Initialize memory.
+
+      // Deallocate memory, if any exists.
       finalize();
 
-      mAllocate = aAllocate;
-      mQueueAllocate = aAllocate + 1;
-      mListAllocate = aAllocate + 1;
-
-      mValue = new Element[mListAllocate];
-      mQueueNext = new AtomicLFIndex[mListAllocate];
-      mListNext = new AtomicLFIndex[mListAllocate];
-
-      for (int i = 0; i < mListAllocate - 1; i++)
+      // If the instance of this class is not to reside in external memory
+      // then allocate memory for it on the system heap.
+      if (aMemory == 0)
       {
-         mValue[i] = 0;
-         mQueueNext[i].store(LFIndex(cInvalid, 0));
-         mListNext[i].store(LFIndex(i + 1, 0));
+         mMemory = malloc(LFValueQueue<Element>::getMemorySize(aNumElements));
+         mExternalMemoryFlag = false;
+      }
+      // If the instance of this class is to reside in external memory
+      // then use the memory pointer that was passed in.
+      else
+      {
+         mMemory = aMemory;
+         mExternalMemoryFlag = true;
       }
 
-      mValue[mListAllocate - 1] = 0;
-      mQueueNext[mListAllocate - 1].store(LFIndex(cInvalid, 0));
-      mListNext[mListAllocate - 1].store(LFIndex(cInvalid, 0));
+      // Calculate memory sizes.
+      int tStateSize         = LFValueQueueState::getMemorySize();
+      int tQueueArraySize    = (aNumElements + 1)*sizeof(AtomicLFIndex);
+      int tListArraySize     = (aNumElements + 1)*sizeof(AtomicLFIndex);
+      int tElementArraySize  = (aNumElements + 1)*sizeof(Element);
+      int tMemorySize = tStateSize + tQueueArraySize + tListArraySize + tElementArraySize;
 
-      mListHead.store(LFIndex(0, 0));
-      mListSize = mListAllocate;
+      // Calculate memory addresses.
+      char* tStateMemory        = (char*)mMemory;
+      char* tQueueArrayMemory   = tStateMemory      + tStateSize;
+      char* tListArrayMemory    = tQueueArrayMemory + tQueueArraySize;
+      char* tElementArrayMemory = tListArrayMemory  + tListArraySize;
 
-      int tIndex;
-      listPop(&tIndex);
-      mQueueHead.store(LFIndex(tIndex, 0));
-      mQueueTail = mQueueHead.load();
+      // Initialize state.
+      mX = new(tStateMemory) LFValueQueueState;
+      mX->initialize(aNumElements);
 
+      // Initialize the queue array.
+      mQueueNext = new(tQueueArrayMemory) AtomicLFIndex[mX->mQueueNumElements];
+
+      // Initialize the linked list array.
+      mListNext = new(tListArrayMemory) AtomicLFIndex[mX->mListNumElements];
+
+      // Initialize the element array.
+      mElement = new(tElementArrayMemory) Element[mX->mQueueNumElements];
+
+      //---------------------------------------------------------------------------
+      //---------------------------------------------------------------------------
+      //---------------------------------------------------------------------------
+      // Initialize variables.
+
+      // Initialize linked list array. Each node next node is the one after it.
+      for (int i = 0; i < mX->mListNumElements-1; i++)
+      {
+         mListNext[i].store(LFIndex(i+1,0));
+      }
+      // The last node has no next node.
+      mListNext[mX->mListNumElements-1].store(LFIndex(cInvalid,0));
+
+      // List head points to the first node.
+      mX->mListHead.store(LFIndex(0,0));
+      // List size is initially a full stack.
+      mX->mListSize = mX->mListNumElements;
+
+      // Initialize queue array. Each node has no next node.
+      for (int i = 0; i < mX->mListNumElements; i++)
+      {
+         mQueueNext[i].store(LFIndex(cInvalid, 0));
+      }
+
+      // Pop the dummy node.
+      int tDummyNode;
+      listPop(&tDummyNode);
+
+      // initialize queue head and tail.
+      mX->mQueueHead.store(LFIndex(tDummyNode, 0));
+      mX->mQueueTail = mX->mQueueHead.load();
    }
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Finalize
 
    void finalize()
    {
-      if (mValue)     free(mValue);
-      if (mQueueNext) free(mQueueNext);
-      if (mListNext)  free(mListNext);
-      mValue = 0;
-      mQueueNext = 0;
-      mListNext = 0;
+      if (!mExternalMemoryFlag)
+      {
+         if (mMemory)
+         {
+            free(mMemory);
+         }
+         mMemory = 0;
+      }
+   }
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // This returns the number of bytes that an instance of this class
+   // will need to be allocated for it.
+
+   static int getMemorySize(int aNumElements)
+   {
+      int tStateSize         = LFValueQueueState::getMemorySize();
+      int tQueueArraySize    = (aNumElements + 1)*sizeof(AtomicLFIndex);
+      int tListArraySize     = (aNumElements + 1)*sizeof(AtomicLFIndex);
+      int tElementArraySize  = (aNumElements)*sizeof(Element);
+      int tMemorySize = tStateSize + tQueueArraySize + tListArraySize + tElementArraySize;
+      return tMemorySize;
    }
 
    //***************************************************************************
@@ -141,9 +279,8 @@ public:
 
    int size()
    {
-      return mListAllocate - mListSize.load(std::memory_order_relaxed);
+      return mX->mListNumElements - mX->mListSize.load(std::memory_order_relaxed);
    }
-
 
    //***************************************************************************
    //***************************************************************************
@@ -162,7 +299,7 @@ public:
       if (!listPop(&tNodeIndex)) return false;
 
       // Initialize the node with the value.
-      mValue[tNodeIndex] = aValue;
+      mElement[tNodeIndex] = aValue;
       mQueueNext[tNodeIndex].store(LFIndex(cInvalid, 0), std::memory_order_relaxed);
 
       // Attach the node to the queue tail.
@@ -171,10 +308,10 @@ public:
       int tLoopCount = 0;
       while (true)
       {
-         tTail = mQueueTail.load(std::memory_order_relaxed);
+         tTail = mX->mQueueTail.load(std::memory_order_relaxed);
          tNext = mQueueNext[tTail.mIndex].load(std::memory_order_acquire);
 
-         if (tTail == mQueueTail.load(std::memory_order_relaxed))
+         if (tTail == mX->mQueueTail.load(std::memory_order_relaxed))
          {
             if (tNext.mIndex == cInvalid)
             {
@@ -182,14 +319,14 @@ public:
             }
             else
             {
-               mQueueTail.compare_exchange_weak(tTail, LFIndex(tNext.mIndex, tTail.mCount + 1), std::memory_order_release, std::memory_order_relaxed);
+               mX->mQueueTail.compare_exchange_weak(tTail, LFIndex(tNext.mIndex, tTail.mCount + 1), std::memory_order_release, std::memory_order_relaxed);
             }
          }
 
          if (++tLoopCount == 10000) throw 101;
       }
 
-      mQueueTail.compare_exchange_strong(tTail, LFIndex(tNodeIndex, tTail.mCount + 1), std::memory_order_release, std::memory_order_relaxed);
+      mX->mQueueTail.compare_exchange_strong(tTail, LFIndex(tNodeIndex, tTail.mCount + 1), std::memory_order_release, std::memory_order_relaxed);
 
       // Done
       return true;
@@ -211,21 +348,21 @@ public:
       int tLoopCount = 0;
       while (true)
       {
-         tHead = mQueueHead.load(std::memory_order_relaxed);
-         tTail = mQueueTail.load(std::memory_order_acquire);
+         tHead = mX->mQueueHead.load(std::memory_order_relaxed);
+         tTail = mX->mQueueTail.load(std::memory_order_acquire);
          tNext = mQueueNext[tHead.mIndex].load(std::memory_order_relaxed);
 
-         if (tHead == mQueueHead.load(std::memory_order_acquire))
+         if (tHead == mX->mQueueHead.load(std::memory_order_acquire))
          {
             if (tHead.mIndex == tTail.mIndex)
             {
                if (tNext.mIndex == cInvalid) return false;
-               mQueueTail.compare_exchange_strong(tTail, LFIndex(tNext.mIndex, tTail.mCount + 1), std::memory_order_release, std::memory_order_relaxed);
+               mX->mQueueTail.compare_exchange_strong(tTail, LFIndex(tNext.mIndex, tTail.mCount + 1), std::memory_order_release, std::memory_order_relaxed);
             }
             else
             {
-               *aValue = mValue[tNext.mIndex];
-               if (mQueueHead.compare_exchange_strong(tHead, LFIndex(tNext.mIndex, tHead.mCount + 1), std::memory_order_acquire, std::memory_order_relaxed))break;
+               *aValue = mElement[tNext.mIndex];
+               if (mX->mQueueHead.compare_exchange_strong(tHead, LFIndex(tNext.mIndex, tHead.mCount + 1), std::memory_order_acquire, std::memory_order_relaxed))break;
             }
          }
 
@@ -247,7 +384,7 @@ public:
    {
       // Store the head node in a temp.
       // This is the node that will be detached.
-      LFIndex tHead = mListHead.load(std::memory_order_relaxed);
+      LFIndex tHead = mX->mListHead.load(std::memory_order_relaxed);
 
       int tLoopCount = 0;
       while (true)
@@ -256,7 +393,7 @@ public:
          if (tHead.mIndex == cInvalid) return false;
 
          // Set the head node to be the node that is after the head node.
-         if (mListHead.compare_exchange_weak(tHead, LFIndex(mListNext[tHead.mIndex].load(std::memory_order_relaxed).mIndex, tHead.mCount + 1), std::memory_order_acquire, std::memory_order_relaxed)) break;
+         if (mX->mListHead.compare_exchange_weak(tHead, LFIndex(mListNext[tHead.mIndex].load(std::memory_order_relaxed).mIndex, tHead.mCount + 1), std::memory_order_acquire, std::memory_order_relaxed)) break;
 
          if (++tLoopCount == 10000) throw 103;
       }
@@ -265,7 +402,7 @@ public:
       *aNode = tHead.mIndex;
 
       // Done.
-      mListSize.fetch_sub(1, std::memory_order_relaxed);
+      mX->mListSize.fetch_sub(1, std::memory_order_relaxed);
       return true;
    }
 
@@ -277,7 +414,7 @@ public:
    bool listPush(int aNode)
    {
       // Store the head node in a temp.
-      LFIndex tHead = mListHead.load(std::memory_order_relaxed);
+      LFIndex tHead = mX->mListHead.load(std::memory_order_relaxed);
 
       int tLoopCount = 0;
       while (true)
@@ -286,13 +423,13 @@ public:
          mListNext[aNode].store(tHead, std::memory_order_relaxed);
 
          // The pushed node is the new head node.
-         std::atomic<int>* tListHeadIndexPtr = (std::atomic<int>*)&mListHead;
+         std::atomic<int>* tListHeadIndexPtr = (std::atomic<int>*)&mX->mListHead;
          if ((*tListHeadIndexPtr).compare_exchange_weak(tHead.mIndex, aNode, std::memory_order_release, std::memory_order_relaxed)) break;
          if (++tLoopCount == 10000) throw 103;
       }
 
       // Done.
-      mListSize.fetch_add(1, std::memory_order_relaxed);
+      mX->mListSize.fetch_add(1, std::memory_order_relaxed);
       return true;
    }
 };

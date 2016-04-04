@@ -40,7 +40,7 @@ public:
    int mNumElements;
 
    // Number of free list nodes allocated
-   int mListAllocate;
+   int mListNumElements;
 
    // Free List array and variables
    AtomicLFIndex     mListHead;

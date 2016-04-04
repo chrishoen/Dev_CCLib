@@ -548,8 +548,7 @@ void WriterReader::writereadType5(int aNumWrites)
          tPass = gShare.mValueQueue.tryRead((void**)&tObject);
          tDelayA.delay();
 
-         tPass = tObject!=0;
-         if (tObject)
+         if (tPass)
          {
             tCount = tObject->mCode1;
             mMarkerRead.doStart();
@@ -679,7 +678,7 @@ void WriterReader::flushType5()
       bool tPass;
       Class1A* tObject = 0;
       tPass = gShare.mValueQueue.tryRead((void**)&tObject);
-      if (tObject==0) break;
+      if (!tPass) break;
       tCount = tObject->mCode1;
       gShare.mBlockFreeList.listPush(tObject);
       mReadCount++;

@@ -78,6 +78,7 @@ public:
    CC::LFBlockQueue         mBlockQueue;
    CC::LFBlockFreeList      mBlockFreeList;
    CC::LFValueQueue<void*>  mValueQueue;
+// CC::LFPointerQueue       mValueQueue;
 
 };
 

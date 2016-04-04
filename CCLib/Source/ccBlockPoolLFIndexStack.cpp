@@ -26,16 +26,16 @@ namespace CC
 BlockPoolLFIndexStackState::BlockPoolLFIndexStackState()
 {
    // All null.
-   mNumElements = 0;
-   mListAllocate = 0;
+   mNumElements     = 0;
+   mListNumElements = 0;
 }
 
 void BlockPoolLFIndexStackState::initialize(int aNumElements)
 {
    // Store.
-   mNumElements  = aNumElements;
+   mNumElements    = aNumElements;
    // Allocate for one extra dummy node.
-   mListAllocate = aNumElements + 1;
+   mListNumElements = aNumElements + 1;
 }
 
 int BlockPoolLFIndexStackState::getMemorySize()
@@ -104,7 +104,7 @@ void BlockPoolLFIndexStack::initialize(int aNumElements,void* aMemory)
    mX->initialize(aNumElements);
 
    // Initialize the linked list array.
-   mListNext = new(tArrayMemory) AtomicLFIndex[mX->mListAllocate];
+   mListNext = new(tArrayMemory) AtomicLFIndex[mX->mListNumElements];
 
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
@@ -112,17 +112,17 @@ void BlockPoolLFIndexStack::initialize(int aNumElements,void* aMemory)
    // Initialize variables.
 
    // Initialize linked list array. Each node next node is the one after it.
-   for (int i = 0; i < mX->mListAllocate-1; i++)
+   for (int i = 0; i < mX->mListNumElements-1; i++)
    {
       mListNext[i].store(LFIndex(i+1,0));
    }
    // The last node has no next node.
-   mListNext[mX->mListAllocate-1].store(LFIndex(cInvalid,0));
+   mListNext[mX->mListNumElements-1].store(LFIndex(cInvalid,0));
 
    // List head points to the first node.
    mX->mListHead.store(LFIndex(0,0));
    // List size is initially a full stack.
-   mX->mListSize = mX->mListAllocate;
+   mX->mListSize = mX->mListNumElements;
 
    // Pop the dummy node.
    int tDummyNode;
