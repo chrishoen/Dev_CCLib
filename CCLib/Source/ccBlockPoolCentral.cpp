@@ -116,6 +116,30 @@ void finalizeBlockPoolCentral()
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
+// This shows block pool info.
+
+void testBlockPool(int aPoolIndex)
+{
+   printf("testBlockPool BEGIN %d\n", aPoolIndex);
+   // Guard
+   if (!mBlockPoolParms[aPoolIndex].mValidFlag)
+   {
+      printf("ERROR BlockPool doesn't exists %d\n", aPoolIndex);
+      return;
+   }
+ //mBlockPool[aPoolIndex]->show();
+   mBlockPool[aPoolIndex]->finalize();
+   printf("testBlockPool END   %d\n", aPoolIndex);
+   return;
+   delete mBlockPool[aPoolIndex];
+
+   mBlockPool[aPoolIndex]=0;
+   mBlockPoolParms[aPoolIndex].mValidFlag = false;
+}
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
 // This allocates a block from a block pool. It is passes a pool index and 
 // it returns a pointer to the block and a handle for the block.
 

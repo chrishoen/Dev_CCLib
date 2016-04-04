@@ -70,12 +70,12 @@ public:
    // If this flag is true then the memory for this object was created
    // externally. If it is false then the memory was allocated at 
    // initialization and must be freed at finalization.
-   bool mExternalMemoryFlag;
+   bool mBaseClassExternalMemoryFlag;
 
    // Pointer to memory for which the stack resides. This is either created
    // externally and passed as an initialization parameter or it is created
    // on the system heap at initialization.
-   void* mMemory;
+   void* mBaseClassMemory;
 
    // This allocates storage for the blocks on the system heap or in shared
    // memory and provides pointer access to the allocated blocks. This is a block

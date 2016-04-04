@@ -160,6 +160,17 @@ int BlockPoolFreeList::getMemorySize(BlockPoolParms* aParms)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Size, the number of blocks that are available to be allocated.
+
+int BlockPoolFreeList::size()
+{ 
+   if (mBlockIndexStack==0) return 0;
+   return mBlockIndexStack->size();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Get a block from the pool, this allocates a block.
 
 void BlockPoolFreeList::allocate(void** aBlockPointer,BlockHandle* aBlockHandle)

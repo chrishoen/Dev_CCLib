@@ -105,6 +105,9 @@ void* getBlockPoolBlockPtr(BlockHandle aBlockHandle);
 // This shows block pool info.
 void showBlockPool(int aPoolIndex);
 
+// This shows block pool info.
+void testBlockPool(int aPoolIndex);
+
 }//namespace
 #endif
 

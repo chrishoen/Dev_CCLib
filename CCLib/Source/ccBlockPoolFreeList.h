@@ -105,7 +105,7 @@ public:
    // Helpers
 
    // Size, the number of blocks that are available to be allocated.
-   int size(){ return mBlockIndexStack->size(); }
+   int size();
 
    //***************************************************************************
    //***************************************************************************

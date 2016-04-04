@@ -23,9 +23,9 @@ namespace CC
 BlockPoolBase::BlockPoolBase()
 {
    // All null.
-   mExternalMemoryFlag = false;
+   mBaseClassExternalMemoryFlag = false;
+   mBaseClassMemory=0;
    mParms=0;
-   mMemory=0;
 }
 
 //******************************************************************************
@@ -49,15 +49,15 @@ void BlockPoolBase::initializeBase(BlockPoolParms* aParms,void* aMemory)
    // then allocate memory for it on the system heap.
    if (aMemory == 0)
    {
-      mMemory = malloc(BlockPoolBase::getMemorySize(aParms));
-      mExternalMemoryFlag = false;
+      mBaseClassMemory = malloc(BlockPoolBase::getMemorySize(aParms));
+      mBaseClassExternalMemoryFlag = false;
    }
    // If the instance of this class is to reside in external memory
    // then use the memory pointer that was passed in.
    else
    {
-      mMemory = aMemory;
-      mExternalMemoryFlag = true;
+      mBaseClassMemory = aMemory;
+      mBaseClassExternalMemoryFlag = true;
    }
 
    // Calculate memory sizes.
@@ -65,7 +65,7 @@ void BlockPoolBase::initializeBase(BlockPoolParms* aParms,void* aMemory)
    int tArraySize  = BlockBoxArray::getMemorySize(aParms->mNumBlocks,aParms->mBlockSize);
 
    // Calculate memory addresses.
-   char* tParmMemory = (char*)mMemory;
+   char* tParmMemory = (char*)mBaseClassMemory;
    char* tArrayMemory = tParmMemory + tParmSize;
 
    //---------------------------------------------------------------------------
@@ -86,13 +86,13 @@ void BlockPoolBase::initializeBase(BlockPoolParms* aParms,void* aMemory)
 
 void BlockPoolBase::finalizeBase()
 {
-   if (!mExternalMemoryFlag)
+   if (!mBaseClassExternalMemoryFlag)
    {
-      if (mMemory)
+      if (mBaseClassMemory)
       {
-         free(mMemory);
+         free(mBaseClassMemory);
       }
-      mMemory = 0;
+      mBaseClassMemory = 0;
    }
 }
 

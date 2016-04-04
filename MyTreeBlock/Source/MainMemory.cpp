@@ -21,8 +21,11 @@ void main_memory_initialize()
    // Initialize block pool central facility.
    CC::initializeBlockPoolCentral();
 
-   // Create block pool.
+   // Block pool parameters.
    CC::BlockPoolParms tBlockPoolParms;
+
+   // Create block pool.
+   tBlockPoolParms.reset();
    tBlockPoolParms.mPoolIndex     = Some::cBlockPoolIndex_MyTreeBlock;
    tBlockPoolParms.mBlockPoolType = CC::cBlockPoolType_FreeList;
    tBlockPoolParms.mNumBlocks     = 1000;
