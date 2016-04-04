@@ -171,14 +171,14 @@ public:
       if (aMemory == 0)
       {
          mMemory = malloc(LFValueQueue<Element>::getMemorySize(aNumElements));
-         mFreeMemoryFlag = false;
+         mFreeMemoryFlag = true;
       }
       // If the instance of this class is to reside in external memory
       // then use the memory pointer that was passed in.
       else
       {
          mMemory = aMemory;
-         mFreeMemoryFlag = true;
+         mFreeMemoryFlag = false;
       }
 
       // Calculate memory sizes.
@@ -246,16 +246,16 @@ public:
 
    void finalize()
    {
-      if (!mFreeMemoryFlag)
+      if (mFreeMemoryFlag)
       {
          if (mMemory)
          {
             free(mMemory);
          }
-         mMemory = 0;
       }
+      mMemory = 0;
+      mFreeMemoryFlag = false;
    }
-
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
