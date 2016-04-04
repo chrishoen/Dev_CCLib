@@ -122,9 +122,6 @@
     <ClInclude Include="Source\ccLFPointerQueue.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccFreeList.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\ccLogic.h">
       <Filter>Source</Filter>
     </ClInclude>

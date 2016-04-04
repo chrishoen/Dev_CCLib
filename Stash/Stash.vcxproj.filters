@@ -99,5 +99,8 @@
     <ClInclude Include="Source\ccLFBlockQueue.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="Source\ccFreeList.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

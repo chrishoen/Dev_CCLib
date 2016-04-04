@@ -57,7 +57,6 @@
     <ClInclude Include="Source\ccCriticalSection.h" />
     <ClInclude Include="Source\ccDefs.h" />
     <ClInclude Include="Source\ccDiagrams.h" />
-    <ClInclude Include="Source\ccFreeList.h" />
     <ClInclude Include="Source\ccLFBlockFreeList.h" />
     <ClInclude Include="Source\ccLFBlockQueue.h" />
     <ClInclude Include="Source\ccLFIndex.h" />

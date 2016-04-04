@@ -183,6 +183,7 @@
     <ClCompile Include="Source\SListQueue.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\ccFreeList.h" />
     <ClInclude Include="Source\ccLFBlockQueue.h" />
     <ClInclude Include="Source\ccLFBounded.h" />
     <ClInclude Include="Source\ccTokenStack.h" />
