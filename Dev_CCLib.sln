@@ -31,6 +31,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MyTreeBlock", "MyTreeBlock\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Labelled", "Labelled\Labelled.vcxproj", "{D365963F-A682-45E8-A18E-B154F8266EB0}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StackTest", "StackTest\StackTest.vcxproj", "{E7FDD330-7F47-4860-A219-62939D48C36C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -151,6 +153,14 @@ Global
 		{D365963F-A682-45E8-A18E-B154F8266EB0}.Release|Win32.Build.0 = Release|Win32
 		{D365963F-A682-45E8-A18E-B154F8266EB0}.Release|x64.ActiveCfg = Release|x64
 		{D365963F-A682-45E8-A18E-B154F8266EB0}.Release|x64.Build.0 = Release|x64
+		{E7FDD330-7F47-4860-A219-62939D48C36C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E7FDD330-7F47-4860-A219-62939D48C36C}.Debug|Win32.Build.0 = Debug|Win32
+		{E7FDD330-7F47-4860-A219-62939D48C36C}.Debug|x64.ActiveCfg = Debug|x64
+		{E7FDD330-7F47-4860-A219-62939D48C36C}.Debug|x64.Build.0 = Debug|x64
+		{E7FDD330-7F47-4860-A219-62939D48C36C}.Release|Win32.ActiveCfg = Release|Win32
+		{E7FDD330-7F47-4860-A219-62939D48C36C}.Release|Win32.Build.0 = Release|Win32
+		{E7FDD330-7F47-4860-A219-62939D48C36C}.Release|x64.ActiveCfg = Release|x64
+		{E7FDD330-7F47-4860-A219-62939D48C36C}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
