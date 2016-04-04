@@ -7,8 +7,7 @@ Free List Stack of Indices.
 This implements a free list stack of indices. It is not thread safe.
 
 ==============================================================================*/
-#include <atomic>
-#include "ccLFIndex.h"
+#include "ccBaseFreeListIndexStack.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -61,7 +60,7 @@ public:
 //******************************************************************************
 //******************************************************************************
 
-class FreeListIndexStack
+class FreeListIndexStack : public BaseFreeListIndexStack
 {
 public:
 

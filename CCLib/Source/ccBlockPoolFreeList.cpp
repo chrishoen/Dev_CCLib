@@ -11,6 +11,8 @@ Description:
 #include <math.h>
 #include <string.h>
 
+#include "ccFreeListIndexStack.h"
+#include "ccLFFreeListIndexStack.h"
 #include "ccBlockPoolFreeList.h"
 
 namespace CC
@@ -26,6 +28,7 @@ BlockPoolFreeList::BlockPoolFreeList()
    // All null.
    mExternalMemoryFlag = false;
    mMemory = 0;
+   mBlockIndexStack = 0;
 }
 
 BlockPoolFreeList::~BlockPoolFreeList()
@@ -80,7 +83,13 @@ void BlockPoolFreeList::initialize(BlockPoolParms* aParms)
 
    // Calculate memory sizes.
    int tBaseClassSize = BlockPoolBase::getMemorySize(aParms);
-   int tStackSize     = FreeListIndexStack::getMemorySize(aParms->mNumBlocks);
+
+   int tStackSize = 0;
+   switch (aParms->mBlockPoolType)
+   {
+   case cBlockPoolType_FreeList   : tStackSize = FreeListIndexStack::getMemorySize(aParms->mNumBlocks); break;
+   case cBlockPoolType_LFFreeList : tStackSize = LFFreeListIndexStack::getMemorySize(aParms->mNumBlocks); break;
+   }
 
    // Calculate memory addresses.
    char* tBaseClassMemory = (char*)mMemory;
@@ -89,9 +98,16 @@ void BlockPoolFreeList::initialize(BlockPoolParms* aParms)
    // Initialize the base class variables.
    BaseClass::initializeBase(aParms,tBaseClassMemory);
 
+   // Create the index stack.
+   switch (aParms->mBlockPoolType)
+   {
+   case cBlockPoolType_FreeList   : mBlockIndexStack = new FreeListIndexStack; break;
+   case cBlockPoolType_LFFreeList : mBlockIndexStack = new LFFreeListIndexStack; break;
+   }
+
    // Initialize the index stack.
-   // For aAllocate==10 this will push 0,1,2,3,4,5,6,7,8,9
-   mBlockIndexStack.initialize(aParms->mNumBlocks,tStackMemory);
+   mBlockIndexStack->initialize(aParms->mNumBlocks,tStackMemory);
+
 }
 
 //******************************************************************************
@@ -101,8 +117,14 @@ void BlockPoolFreeList::initialize(BlockPoolParms* aParms)
 
 void BlockPoolFreeList::finalize()
 {
-   mBlockIndexStack.finalize();
    BaseClass::finalizeBase();
+
+   if (mBlockIndexStack)
+   {
+      mBlockIndexStack->finalize();
+      delete mBlockIndexStack;
+      mBlockIndexStack = 0;
+   }
 
    if (!mExternalMemoryFlag)
    {
@@ -123,7 +145,14 @@ void BlockPoolFreeList::finalize()
 int BlockPoolFreeList::getMemorySize(BlockPoolParms* aParms)
 {
    int tBaseClassSize = BlockPoolBase::getMemorySize(aParms);
-   int tStackSize     = FreeListIndexStack::getMemorySize(aParms->mNumBlocks);
+
+   int tStackSize     = 0;
+   switch (aParms->mBlockPoolType)
+   {
+   case cBlockPoolType_FreeList   : tStackSize = FreeListIndexStack::getMemorySize(aParms->mNumBlocks); break;
+   case cBlockPoolType_LFFreeList : tStackSize = LFFreeListIndexStack::getMemorySize(aParms->mNumBlocks); break;
+   }
+
    int tMemorySize = tBaseClassSize + tStackSize;
    return tMemorySize;
 }
@@ -138,7 +167,7 @@ void BlockPoolFreeList::allocate(void** aBlockPointer,BlockHandle* aBlockHandle)
    int tBlockIndex = 0;
       
    // Pop a block index from the index stack, as a free list.
-   if(!mBlockIndexStack.pop(&tBlockIndex))
+   if(!mBlockIndexStack->pop(&tBlockIndex))
    {
       // If empty stack return.
       *aBlockPointer = 0;
@@ -169,7 +198,7 @@ void BlockPoolFreeList::allocate(void** aBlockPointer,BlockHandle* aBlockHandle)
 void BlockPoolFreeList::deallocate(BlockHandle aBlockHandle)
 {
    // Push the block index back onto the stack
-   mBlockIndexStack.push(aBlockHandle.mBlockIndex);
+   mBlockIndexStack->push(aBlockHandle.mBlockIndex);
 }
 
 //******************************************************************************

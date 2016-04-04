@@ -9,7 +9,7 @@ Free list block pool class
 //******************************************************************************
 
 #include "ccBlockPoolBase.h"
-#include "ccFreeListIndexStack.h"
+#include "ccBaseFreeListIndexStack.h"
 
 namespace CC
 {
@@ -97,7 +97,7 @@ public:
    // When a block is allocated, an index is popped off of the stack.
    // When a block is deallocated, its index is pushed back onto the stack.
 
-   FreeListIndexStack mBlockIndexStack;
+   BaseFreeListIndexStack* mBlockIndexStack;
 
    //***************************************************************************
    //***************************************************************************
@@ -105,7 +105,7 @@ public:
    // Helpers
 
    // Size, the number of blocks that are available to be allocated.
-   int size(){ return mBlockIndexStack.size(); }
+   int size(){ return mBlockIndexStack->size(); }
 
    //***************************************************************************
    //***************************************************************************

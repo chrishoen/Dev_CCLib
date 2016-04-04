@@ -161,5 +161,8 @@
     <ClInclude Include="Source\ccFreeListIndexStack.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="Source\ccBaseFreeListIndexStack.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

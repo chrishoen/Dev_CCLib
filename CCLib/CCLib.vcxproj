@@ -41,6 +41,7 @@
     <ClCompile Include="Source\cc_functions.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\ccBaseFreeListIndexStack.h" />
     <ClInclude Include="Source\ccBlockBoxArray.h" />
     <ClInclude Include="Source\ccBlockHandle.h" />
     <ClInclude Include="Source\ccBlockPoolBase.h" />
