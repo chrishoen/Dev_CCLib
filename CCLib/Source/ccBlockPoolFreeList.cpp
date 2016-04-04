@@ -26,7 +26,7 @@ namespace CC
 BlockPoolFreeList::BlockPoolFreeList()
 {
    // All null.
-   mExternalMemoryFlag = false;
+   mFreeMemoryFlag = false;
    mMemory = 0;
    mBlockIndexStack = 0;
 }
@@ -71,14 +71,14 @@ void BlockPoolFreeList::initialize(BlockPoolParms* aParms)
    if (aParms->mMemory == 0)
    {
       mMemory = malloc(BlockPoolFreeList::getMemorySize(aParms));
-      mExternalMemoryFlag = false;
+      mFreeMemoryFlag = true;
    }
    // If the instance of this class is to reside in external memory
    // then use the memory pointer that was passed in.
    else
    {
       mMemory = aParms->mMemory;
-      mExternalMemoryFlag = true;
+      mFreeMemoryFlag = false;
    }
 
    // Calculate memory sizes.
@@ -126,14 +126,15 @@ void BlockPoolFreeList::finalize()
       mBlockIndexStack = 0;
    }
 
-   if (!mExternalMemoryFlag)
+   if (mFreeMemoryFlag)
    {
       if (mMemory)
       {
          free(mMemory);
       }
-      mMemory = 0;
    }
+   mMemory = 0;
+   mFreeMemoryFlag = false;
 }
 
 //******************************************************************************

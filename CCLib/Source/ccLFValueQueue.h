@@ -106,7 +106,7 @@ public:
    // If this flag is true then the memory for this object was created
    // externally. If it is false then the memory was allocated at 
    // initialization and must be freed at finalization.
-   bool mExternalMemoryFlag;
+   bool mFreeMemoryFlag;
 
    // Pointer to memory for which the queue resides. This is either created
    // externally and passed as an initialization parameter or it is created
@@ -137,7 +137,7 @@ public:
    {
       // All null.
       mX = 0;
-      mExternalMemoryFlag = false;
+      mFreeMemoryFlag = false;
       mMemory = 0;
 
       // All null
@@ -171,14 +171,14 @@ public:
       if (aMemory == 0)
       {
          mMemory = malloc(LFValueQueue<Element>::getMemorySize(aNumElements));
-         mExternalMemoryFlag = false;
+         mFreeMemoryFlag = false;
       }
       // If the instance of this class is to reside in external memory
       // then use the memory pointer that was passed in.
       else
       {
          mMemory = aMemory;
-         mExternalMemoryFlag = true;
+         mFreeMemoryFlag = true;
       }
 
       // Calculate memory sizes.
@@ -246,7 +246,7 @@ public:
 
    void finalize()
    {
-      if (!mExternalMemoryFlag)
+      if (!mFreeMemoryFlag)
       {
          if (mMemory)
          {

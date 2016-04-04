@@ -23,7 +23,7 @@ namespace CC
 BlockPoolBase::BlockPoolBase()
 {
    // All null.
-   mBaseClassExternalMemoryFlag = false;
+   mBaseClassFreeMemoryFlag = false;
    mBaseClassMemory=0;
    mParms=0;
 }
@@ -50,14 +50,14 @@ void BlockPoolBase::initializeBase(BlockPoolParms* aParms,void* aMemory)
    if (aMemory == 0)
    {
       mBaseClassMemory = malloc(BlockPoolBase::getMemorySize(aParms));
-      mBaseClassExternalMemoryFlag = false;
+      mBaseClassFreeMemoryFlag = true;
    }
    // If the instance of this class is to reside in external memory
    // then use the memory pointer that was passed in.
    else
    {
       mBaseClassMemory = aMemory;
-      mBaseClassExternalMemoryFlag = true;
+      mBaseClassFreeMemoryFlag = false;
    }
 
    // Calculate memory sizes.
@@ -86,14 +86,17 @@ void BlockPoolBase::initializeBase(BlockPoolParms* aParms,void* aMemory)
 
 void BlockPoolBase::finalizeBase()
 {
-   if (!mBaseClassExternalMemoryFlag)
+   mBlocks.finalize();
+
+   if (mBaseClassFreeMemoryFlag)
    {
       if (mBaseClassMemory)
       {
          free(mBaseClassMemory);
       }
-      mBaseClassMemory = 0;
    }
+   mBaseClassMemory = 0;
+   mBaseClassFreeMemoryFlag = false;
 }
 
 //******************************************************************************

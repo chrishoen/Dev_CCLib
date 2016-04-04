@@ -56,7 +56,7 @@ BlockBoxArray::BlockBoxArray()
 {
    // All null
    mX = 0;
-   mExternalMemoryFlag = false;
+   mFreeMemoryFlag = false;
    mMemory = 0;
    mArray=0;
 }
@@ -87,14 +87,14 @@ void BlockBoxArray::initialize(int aNumBlocks,int aBlockSize,int aPoolIndex,void
    if (aMemory == 0)
    {
       mMemory = malloc(BlockBoxArray::getMemorySize(aNumBlocks,aBlockSize));
-      mExternalMemoryFlag = false;
+      mFreeMemoryFlag = true;
    }
    // If the instance of this class is to reside in external memory
    // then use the memory pointer that was passed in.
    else
    {
       mMemory = aMemory;
-      mExternalMemoryFlag = true;
+      mFreeMemoryFlag = false;
    }
 
    // Calculate memory sizes.
@@ -132,14 +132,15 @@ void BlockBoxArray::initialize(int aNumBlocks,int aBlockSize,int aPoolIndex,void
 
 void BlockBoxArray::finalize()
 {
-   if (!mExternalMemoryFlag)
+   if (mFreeMemoryFlag)
    {
       if (mMemory)
       {
          free(mMemory);
       }
-      mMemory = 0;
    }
+   mMemory = 0;
+   mFreeMemoryFlag = false;
 }
 
 //******************************************************************************
