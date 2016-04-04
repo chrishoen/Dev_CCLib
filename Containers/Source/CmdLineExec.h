@@ -2,6 +2,7 @@
 #define _CMDLINEEXEC_H_
 
 #include "ccLFPointerQueue.h"
+#include "ccLFValueQueue.h"
 #include "ccLFBlockQueue.h"
 #include "risCmdLineExec.h"
 
@@ -26,10 +27,13 @@ public:
   void executeReadP  (Ris::CmdLineCmd* aCmd);
   void executeWriteB (Ris::CmdLineCmd* aCmd);
   void executeReadB  (Ris::CmdLineCmd* aCmd);
+  void executeWriteI (Ris::CmdLineCmd* aCmd);
+  void executeReadI  (Ris::CmdLineCmd* aCmd);
 
   int mCount;
-  CC::LFPointerQueue mPointerQueue;
-  CC::LFBlockQueue   mBlockQueue;
+  CC::LFPointerQueue      mPointerQueue;
+  CC::LFValueQueue<int>   mIntQueue;
+  CC::LFBlockQueue        mBlockQueue;
 };
 
 //******************************************************************************

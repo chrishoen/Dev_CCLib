@@ -143,7 +143,7 @@ public:
 
    int size()
    {
-      return mListAllocate - mListSize.load(memory_order_relaxed);
+      return mListAllocate - mListSize.load(std::memory_order_relaxed);
    }
 
 
@@ -165,7 +165,7 @@ public:
 
       // Initialize the node with the value.
       mValue[tNodeIndex] = aValue;
-      mQueueNext[tNodeIndex].store(LFIndex(cInvalid, 0), memory_order_relaxed);
+      mQueueNext[tNodeIndex].store(LFIndex(cInvalid, 0), std::memory_order_relaxed);
 
       // Attach the node to the queue tail.
       LFIndex tTail, tNext;
@@ -173,25 +173,25 @@ public:
       int tLoopCount = 0;
       while (true)
       {
-         tTail = mQueueTail.load(memory_order_relaxed);
-         tNext = mQueueNext[tTail.mIndex].load(memory_order_acquire);
+         tTail = mQueueTail.load(std::memory_order_relaxed);
+         tNext = mQueueNext[tTail.mIndex].load(std::memory_order_acquire);
 
-         if (tTail == mQueueTail.load(memory_order_relaxed))
+         if (tTail == mQueueTail.load(std::memory_order_relaxed))
          {
             if (tNext.mIndex == cInvalid)
             {
-               if (mQueueNext[tTail.mIndex].compare_exchange_strong(tNext, LFIndex(tNodeIndex, tNext.mCount + 1), memory_order_release, memory_order_relaxed)) break;
+               if (mQueueNext[tTail.mIndex].compare_exchange_strong(tNext, LFIndex(tNodeIndex, tNext.mCount + 1), std::memory_order_release, std::memory_order_relaxed)) break;
             }
             else
             {
-               mQueueTail.compare_exchange_weak(tTail, LFIndex(tNext.mIndex, tTail.mCount + 1), memory_order_release, memory_order_relaxed);
+               mQueueTail.compare_exchange_weak(tTail, LFIndex(tNext.mIndex, tTail.mCount + 1), std::memory_order_release, std::memory_order_relaxed);
             }
          }
 
          if (++tLoopCount == 10000) throw 101;
       }
 
-      mQueueTail.compare_exchange_strong(tTail, LFIndex(tNodeIndex, tTail.mCount + 1), memory_order_release, memory_order_relaxed);
+      mQueueTail.compare_exchange_strong(tTail, LFIndex(tNodeIndex, tTail.mCount + 1), std::memory_order_release, std::memory_order_relaxed);
 
       // Done
       return true;
@@ -213,21 +213,21 @@ public:
       int tLoopCount = 0;
       while (true)
       {
-         tHead = mQueueHead.load(memory_order_relaxed);
-         tTail = mQueueTail.load(memory_order_acquire);
-         tNext = mQueueNext[tHead.mIndex].load(memory_order_relaxed);
+         tHead = mQueueHead.load(std::memory_order_relaxed);
+         tTail = mQueueTail.load(std::memory_order_acquire);
+         tNext = mQueueNext[tHead.mIndex].load(std::memory_order_relaxed);
 
-         if (tHead == mQueueHead.load(memory_order_acquire))
+         if (tHead == mQueueHead.load(std::memory_order_acquire))
          {
             if (tHead.mIndex == tTail.mIndex)
             {
                if (tNext.mIndex == cInvalid) return false;
-               mQueueTail.compare_exchange_strong(tTail, LFIndex(tNext.mIndex, tTail.mCount + 1), memory_order_release, memory_order_relaxed);
+               mQueueTail.compare_exchange_strong(tTail, LFIndex(tNext.mIndex, tTail.mCount + 1), std::memory_order_release, std::memory_order_relaxed);
             }
             else
             {
                *aValue = mValue[tNext.mIndex];
-               if (mQueueHead.compare_exchange_strong(tHead, LFIndex(tNext.mIndex, tHead.mCount + 1), memory_order_acquire, memory_order_relaxed))break;
+               if (mQueueHead.compare_exchange_strong(tHead, LFIndex(tNext.mIndex, tHead.mCount + 1), std::memory_order_acquire, std::memory_order_relaxed))break;
             }
          }
 
@@ -249,7 +249,7 @@ public:
    {
       // Store the head node in a temp.
       // This is the node that will be detached.
-      LFIndex tHead = mListHead.load(memory_order_relaxed);
+      LFIndex tHead = mListHead.load(std::memory_order_relaxed);
 
       int tLoopCount = 0;
       while (true)
@@ -258,7 +258,7 @@ public:
          if (tHead.mIndex == cInvalid) return false;
 
          // Set the head node to be the node that is after the head node.
-         if (mListHead.compare_exchange_weak(tHead, LFIndex(mListNext[tHead.mIndex].load(memory_order_relaxed).mIndex, tHead.mCount + 1), memory_order_acquire, memory_order_relaxed)) break;
+         if (mListHead.compare_exchange_weak(tHead, LFIndex(mListNext[tHead.mIndex].load(std::memory_order_relaxed).mIndex, tHead.mCount + 1), std::memory_order_acquire, std::memory_order_relaxed)) break;
 
          if (++tLoopCount == 10000) throw 103;
       }
@@ -267,7 +267,7 @@ public:
       *aNode = tHead.mIndex;
 
       // Done.
-      mListSize.fetch_sub(1, memory_order_relaxed);
+      mListSize.fetch_sub(1, std::memory_order_relaxed);
       return true;
    }
 
@@ -279,21 +279,21 @@ public:
    bool listPush(int aNode)
    {
       // Store the head node in a temp.
-      LFIndex tHead = mListHead.load(memory_order_relaxed);
+      LFIndex tHead = mListHead.load(std::memory_order_relaxed);
 
       int tLoopCount = 0;
       while (true)
       {
          // Attach the head node to the pushed node.
-         mListNext[aNode].store(tHead, memory_order_relaxed);
+         mListNext[aNode].store(tHead, std::memory_order_relaxed);
 
          // The pushed node is the new head node.
-         if ((*mListHeadIndexPtr).compare_exchange_weak(tHead.mIndex, aNode, memory_order_release, memory_order_relaxed)) break;
+         if ((*mListHeadIndexPtr).compare_exchange_weak(tHead.mIndex, aNode, std::memory_order_release, std::memory_order_relaxed)) break;
          if (++tLoopCount == 10000) throw 103;
       }
 
       // Done.
-      mListSize.fetch_add(1, memory_order_relaxed);
+      mListSize.fetch_add(1, std::memory_order_relaxed);
       return true;
    }
 };

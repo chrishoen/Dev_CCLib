@@ -17,6 +17,7 @@ CmdLineExec::CmdLineExec()
 {
    mCount=0;
    mPointerQueue.initialize(4);
+   mIntQueue.initialize(4);
 }
 
 //******************************************************************************
@@ -37,8 +38,12 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("GO3"    ))  executeGo3    (aCmd);
    if(aCmd->isCmd("WP"     ))  executeWriteP (aCmd);
    if(aCmd->isCmd("RP"     ))  executeReadP  (aCmd);
-   if(aCmd->isCmd("W"      ))  executeWriteB (aCmd);
-   if(aCmd->isCmd("R"      ))  executeReadB  (aCmd);
+   if(aCmd->isCmd("WB"     ))  executeWriteB (aCmd);
+   if(aCmd->isCmd("RB"     ))  executeReadB  (aCmd);
+   if(aCmd->isCmd("WI"     ))  executeWriteI (aCmd);
+   if(aCmd->isCmd("RI"     ))  executeReadI  (aCmd);
+   if(aCmd->isCmd("W"      ))  executeWriteI (aCmd);
+   if(aCmd->isCmd("R"      ))  executeReadI  (aCmd);
 }
 
 //******************************************************************************
@@ -151,3 +156,33 @@ void CmdLineExec::executeReadB(Ris::CmdLineCmd* aCmd)
       Prn::print(0, "READ  FAIL");
    }
 }
+
+//******************************************************************************
+
+void CmdLineExec::executeWriteI(Ris::CmdLineCmd* aCmd)
+{
+   if (mIntQueue.tryWrite(++mCount))
+   {
+      Prn::print(0, "WRITE PASS  $$ %d", mCount);
+   }
+   else
+   {
+      Prn::print(0, "WRITE FAIL");
+   }
+}
+
+//******************************************************************************
+
+void CmdLineExec::executeReadI(Ris::CmdLineCmd* aCmd)
+{
+   int tCount=0;
+   if (mIntQueue.tryRead(&tCount))
+   {
+      Prn::print(0, "READ            PASS  $$ %d", tCount);
+   }
+   else
+   {
+      Prn::print(0, "READ            FAIL");
+   }
+}
+
