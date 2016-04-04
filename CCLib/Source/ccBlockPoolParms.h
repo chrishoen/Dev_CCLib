@@ -37,6 +37,7 @@ public:
    int   mBlockPoolType;    // Type of block pool.
    int   mNumBlocks;        // Number of blocks to allocate.
    int   mBlockSize;        // Block size in bytes.
+   void* mMemory;           // Pointer to external memory allocated for the block pool.
 
    //--------------------------------------------------------------------------
    // Constructors

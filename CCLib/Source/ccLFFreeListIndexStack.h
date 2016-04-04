@@ -24,7 +24,7 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 // State variables for the stack. These are located in a separate class
-// so that they can be located in externale memory.
+// so that they can be located in external memory.
 
 class LFFreeListIndexStackState
 {
