@@ -7,8 +7,9 @@
 #include "ccValueQueue.h"
 #include "ccValueStack.h"
 #include "ccFreeListIndexStack.h"
-#include "ccFreeListIndexStack.h"
 #include "ccLFFreeListIndexStack.h"
+#include "ccBlockPoolParms.h"
+#include "ccBlockPoolFreeList.h"
 #include "ccFreeList.h"
 
 #include "prnPrint.h"
@@ -46,6 +47,25 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+
+//******************************************************************************
+
+void CmdLineExec::executeGo6(Ris::CmdLineCmd* aCmd)
+{
+   CC::BlockPoolParms tBlockPoolParms;
+   tBlockPoolParms.mPoolIndex     = 1;
+   tBlockPoolParms.mBlockPoolType = CC::cBlockPoolType_FreeList;
+   tBlockPoolParms.mNumBlocks     = 2;
+   tBlockPoolParms.mBlockSize     = 1;
+
+   int tSize=0;
+   tSize = CC::BlockPoolFreeList::getMemorySize(&tBlockPoolParms);
+   Prn::print(0, "%d",tSize);
+
+   tBlockPoolParms.mBlockPoolType = CC::cBlockPoolType_LFFreeList;
+   tSize = CC::BlockPoolFreeList::getMemorySize(&tBlockPoolParms);
+   Prn::print(0, "%d",tSize);
+}
 
 //******************************************************************************
 //******************************************************************************
@@ -418,12 +438,6 @@ void CmdLineExec::executeGo42(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 
 void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
-{
-}
-
-//******************************************************************************
-
-void CmdLineExec::executeGo6(Ris::CmdLineCmd* aCmd)
 {
 }
 
