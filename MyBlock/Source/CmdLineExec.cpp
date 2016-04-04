@@ -43,6 +43,23 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockA);
+
+   Some::MyBlockA* t1A = Some::MyBlockA::allocateA();
+
+   t1A->method1A();
+   t1A->~MyBlockA();
+   t1A->deallocateA();
+
+   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockA);
+
+}
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
+{
+   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockA);
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockB);
 
    Some::MyBlockA* t1A1 = Some::MyBlockA::allocateA();
@@ -62,21 +79,6 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockB);
 }
 
-//******************************************************************************
-
-void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
-{
-   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockA);
-
-   Some::MyBlockA* t1A = Some::MyBlockA::allocateA();
-
-   t1A->method1A();
-   t1A->~MyBlockA();
-   t1A->deallocateA();
-
-   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockA);
-
-}
 
 //******************************************************************************
 
@@ -96,6 +98,9 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
+   aCmd->setArgDefault(1,1);
+   int tPoolIndex = aCmd->argInt(1);
+   CC::testBlockPool(tPoolIndex);
 }
 
 //******************************************************************************

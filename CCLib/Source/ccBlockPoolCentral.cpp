@@ -127,11 +127,11 @@ void testBlockPool(int aPoolIndex)
       printf("ERROR BlockPool doesn't exists %d\n", aPoolIndex);
       return;
    }
- //mBlockPool[aPoolIndex]->show();
+   mBlockPool[aPoolIndex]->show();
    mBlockPool[aPoolIndex]->finalize();
    printf("testBlockPool END   %d\n", aPoolIndex);
-   return;
    delete mBlockPool[aPoolIndex];
+   return;
 
    mBlockPool[aPoolIndex]=0;
    mBlockPoolParms[aPoolIndex].mValidFlag = false;

@@ -29,7 +29,7 @@ void main_memory_initialize()
    tBlockPoolParms.mNumBlocks     = 1000;
    tBlockPoolParms.mBlockSize     = sizeof(Some::MyBlockA);
    CC::createBlockPool(&tBlockPoolParms);
-
+   return;
    // Create block pool.
    tBlockPoolParms.reset();
    tBlockPoolParms.mPoolIndex     = Some::cBlockPoolIndex_MyBlockB;
