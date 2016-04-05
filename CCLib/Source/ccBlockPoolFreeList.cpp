@@ -184,7 +184,7 @@ void BlockPoolFreeList::allocate(void** aBlockPointer,BlockHandle* aBlockHandle)
       // If empty stack return.
       *aBlockPointer = 0;
       aBlockHandle->setNull();
-      printf("BlockPoolFreeList STACK EMPTY %d\n",BaseClass::mParms->mPoolIndex);
+//    printf("BlockPoolFreeList STACK EMPTY %d\n",BaseClass::mParms->mPoolIndex);
       return;
    }
 
