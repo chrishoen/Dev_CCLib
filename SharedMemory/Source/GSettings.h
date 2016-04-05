@@ -37,6 +37,9 @@ public:
 
    int  mNumBytes;
 
+   bool isServer() {return mMyAppRole==cMemServer;}
+   bool isClient() {return mMyAppRole==cMemClient;}
+
    //---------------------------------------------------------------------------
    // Infrastucture. Constructor and such
 
