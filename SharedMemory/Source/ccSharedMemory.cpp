@@ -6,12 +6,24 @@ Description:
 //******************************************************************************
 //******************************************************************************
 
+#include <Windows.h>
 #include "prnPrint.h"
 
+#include "cc_functions.h"
 #include "ccSharedMemory.h"
 
 namespace CC
 {
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+class SharedMemory::Specific
+{
+public:
+   HANDLE mHandle;
+};
 
 //****************************************************************************
 //****************************************************************************
@@ -20,20 +32,56 @@ namespace CC
 
 SharedMemory::SharedMemory()
 {
-   mIdentifier = 0;
-   mCode1=101;
-   mCode2=102;
-   mCode3=103;
-   mCode4=104;
+   mSpecific = 0;
+   mFreeMemoryFlag = false;
+   mMemory = 0;
+   mNumBytes = 0;
 }
 
-//****************************************************************************
-//****************************************************************************
-//****************************************************************************
-
-void SharedMemory::method1()
+void SharedMemory::initialize(char* aName, int aNumBytes)
 {
-   Prn::print(0, "SharedMemory::method1 %d",mIdentifier);
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // Initialize memory.
+
+   mNumBytes = cc_round_upto16(aNumBytes);
+
+   void* aMemory=0;
+   // Deallocate memory, if any exists.
+   finalize();
+
+   // If the instance of this class is not to reside in external memory
+   // then allocate memory for it on the system heap.
+   if (aMemory == 0)
+   {
+      mMemory = malloc(mNumBytes);
+      mFreeMemoryFlag = true;
+   }
+   // If the instance of this class is to reside in external memory
+   // then use the memory pointer that was passed in.
+   else
+   {
+      mMemory = aMemory;
+      mFreeMemoryFlag = false;
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void SharedMemory::finalize()
+{
+   if (mFreeMemoryFlag)
+   {
+      if (mMemory)
+      {
+         free(mMemory);
+      }
+   }
+   mMemory = 0;
+   mFreeMemoryFlag = false;
 }
 
 }//namespace
