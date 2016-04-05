@@ -8,7 +8,7 @@
 //******************************************************************************
 //******************************************************************************
 #include "ccBlockHandle.h"
-#include "ccBlockPoolBlock.h"
+#include "ccBlockPoolBlockIntrusive.h"
 #include "someBlockPoolIndex.h"
 #include "someMyBlockA.h"
 
@@ -19,7 +19,7 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 
-class MyBlockB : public CC::BlockPoolBlock<Some::MyBlockB,Some::cBlockPoolIndex_MyBlockB>
+class MyBlockB : public CC::BlockPoolBlockIntrusive<Some::MyBlockB,Some::cBlockPoolIndex_MyBlockB>
 {
 public:
 

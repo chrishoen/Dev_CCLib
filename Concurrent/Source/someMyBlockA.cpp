@@ -9,7 +9,7 @@ Description:
 #include "prnPrint.h"
 
 #include "ccBlockPoolCentral.h"
-#include "ccBlockPoolBlock.h"
+#include "ccBlockPoolBlockIntrusive.h"
 #include "someBlockPoolIndex.h"
 #include "someMyBlockA.h"
 

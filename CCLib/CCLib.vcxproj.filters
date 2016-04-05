@@ -140,9 +140,6 @@
     <ClInclude Include="Source\ccBlockPoolBase.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccBlockPoolBlock.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\ccBlockPoolFreeList.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -162,6 +159,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccLFValueQueue.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ccBlockPoolBlockIntrusive.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

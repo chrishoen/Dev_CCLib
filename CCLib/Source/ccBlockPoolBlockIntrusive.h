@@ -1,5 +1,5 @@
-#ifndef _CCBLOCKPOOLBLOCK_H_
-#define _CCBLOCKPOOLBLOCK_H_
+#ifndef _CCBLOCKPOOLBLOCKINTRUSIVE_H_
+#define _CCBLOCKPOOLBLOCKINTRUSIVE_H_
 
 #include <new>
 #include <stdio.h>
@@ -18,6 +18,8 @@ initialize the memory pool, and also methods that provide access to it.
 The static variables establish global variables that instantiate the
 memory pools.
 
+This is used for intrusive blocks, those that must contain a block handle 
+member variable.
 ==============================================================================*/
 
 namespace CC
@@ -27,10 +29,11 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 // This is a class template for classes whose instances use a block pool 
-// for memory management.
+// for memory management. This is used for intrusive blocks, those that must
+// contain a block handle member variable.
 
 template <class BlockClass,int BlockPoolIndex>
-class BlockPoolBlock
+class BlockPoolBlockIntrusive
 {
 public:
 
