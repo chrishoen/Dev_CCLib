@@ -32,6 +32,9 @@ BlockBoxArrayState::BlockBoxArrayState()
 
 void BlockBoxArrayState::initialize(BlockPoolParms* aParms)
 {
+   // Do not initialize, if already initialized.
+   if (!aParms->mConstructorFlag) return;
+
    // Store members.
    mNumBlocks    = aParms->mNumBlocks;
    mBlockSize    = cc_round_upto16(aParms->mBlockSize);
@@ -104,22 +107,37 @@ void BlockBoxArray::initialize(BlockPoolParms* aParms,void* aMemory)
    char* tStateMemory = (char*)mMemory;
    char* tArrayMemory = tStateMemory + tStateSize;
 
+   // Construct the state.
+   if (aParms->mConstructorFlag)
+   {
+      // Call the constructor.
+      mX = new(tStateMemory)BlockBoxArrayState;
+   }
+   else
+   {
+      // The constructor has already been called.
+      mX = (BlockBoxArrayState*)tStateMemory;
+   }
    // Initialize the state.
-   mX = new(tStateMemory) BlockBoxArrayState;
    mX->initialize(aParms);
 
-   // Initialize the array.
+   // Set the array pointer value.
    mArray = tArrayMemory;
 
-   // Initialize block headers.
-   for (int i = 0; i < mX->mNumBlocks; i++)
+   // Initialize the block headers, if they have not
+   // already been initialized.
+   if (aParms->mConstructorFlag)
    {
-      // Header pointer.
-      BlockHeader* tHeader = header(i);
-      // Call Header constructor.
-      new(tHeader) BlockHeader;
-      // Set header variables.
-      tHeader->mBlockHandle.set(mX->mPoolIndex,i);
+      // Initialize block headers.
+      for (int i = 0; i < mX->mNumBlocks; i++)
+      {
+         // Header pointer.
+         BlockHeader* tHeader = header(i);
+         // Call Header constructor.
+         new(tHeader)BlockHeader;
+         // Set header variables.
+         tHeader->mBlockHandle.set(mX->mPoolIndex, i);
+      }
    }
 }
 

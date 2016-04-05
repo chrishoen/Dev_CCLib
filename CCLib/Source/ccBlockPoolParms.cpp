@@ -26,15 +26,17 @@ BlockPoolParms::BlockPoolParms()
 
 void BlockPoolParms::reset()
 {
-   // All null
-   mValidFlag = false;
-   mPoolIndex = 0;
-   mNumBlocks = 0;
-   mBlockSize = 0;
-   mMemory    = 0;
-
-   // Defaults
-   mBlockPoolType = cBlockPoolType_FreeList;
+   mPoolIndex        = 0;
+   mBlockPoolType    = cBlockPoolType_FreeList;
+   mNumBlocks        = 0;
+   mBlockSize        = 0;
+   mMemory           = 0;
+   mConstructorFlag  = true;
+   mValidFlag        = false;
+   mOriginalFlag     = true;
+   mBlockBoxSize     = 0;
+   mBlockHeaderSize  = 0;
+   mBlockArrayPtr    = 0;
 }
 
 //******************************************************************************

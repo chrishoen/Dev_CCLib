@@ -32,6 +32,9 @@ BlockPoolLFIndexStackState::BlockPoolLFIndexStackState()
 
 void BlockPoolLFIndexStackState::initialize(BlockPoolParms* aParms)
 {
+   // Do not initialize, if already initialized.
+   if (!aParms->mConstructorFlag) return;
+
    // Store.
    mNumElements     = aParms->mNumBlocks;
    // Allocate for one extra dummy node.
@@ -99,34 +102,57 @@ void BlockPoolLFIndexStack::initialize(BlockPoolParms* aParms,void* aMemory)
    char* tStateMemory   = (char*)mMemory;
    char* tArrayMemory = tStateMemory + tStateSize;
 
-   // Initialize state.
-   mX = new(tStateMemory) BlockPoolLFIndexStackState;
+   // Construct the state.
+   if (aParms->mConstructorFlag)
+   {
+      // Call the constructor.
+      mX = new(tStateMemory)BlockPoolLFIndexStackState;
+   }
+   else
+   {
+      // The constructor has already been called.
+      mX = (BlockPoolLFIndexStackState*)tStateMemory;
+   }
+   // Initialize the state.
    mX->initialize(aParms);
 
-   // Initialize the linked list array.
-   mListNext = new(tArrayMemory) AtomicLFIndex[mX->mListNumElements];
+   // Construct the linked list array.
+   if (aParms->mConstructorFlag)
+   {
+      // Call the constructor.
+      mListNext = new(tArrayMemory)AtomicLFIndex[mX->mListNumElements];
+   }
+   else
+   {
+      // The constructor has already been called.
+      mListNext = (AtomicLFIndex*)tArrayMemory;
+   }
 
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
    // Initialize variables.
 
-   // Initialize linked list array. Each node next node is the one after it.
-   for (int i = 0; i < mX->mListNumElements-1; i++)
+   // Initialize linked list, if it has not already been initialized.
+   if (aParms->mConstructorFlag)
    {
-      mListNext[i].store(LFIndex(i+1,0));
+      // Initialize linked list array. Each node next node is the one after it.
+      for (int i = 0; i < mX->mListNumElements - 1; i++)
+      {
+         mListNext[i].store(LFIndex(i + 1, 0));
+      }
+      // The last node has no next node.
+      mListNext[mX->mListNumElements - 1].store(LFIndex(cInvalid, 0));
+
+      // List head points to the first node.
+      mX->mListHead.store(LFIndex(0, 0));
+      // List size is initially a full stack.
+      mX->mListSize = mX->mListNumElements;
+
+      // Pop the dummy node.
+      int tDummyNode;
+      pop(&tDummyNode);
    }
-   // The last node has no next node.
-   mListNext[mX->mListNumElements-1].store(LFIndex(cInvalid,0));
-
-   // List head points to the first node.
-   mX->mListHead.store(LFIndex(0,0));
-   // List size is initially a full stack.
-   mX->mListSize = mX->mListNumElements;
-
-   // Pop the dummy node.
-   int tDummyNode;
-   pop(&tDummyNode);
 }
 
 //***************************************************************************

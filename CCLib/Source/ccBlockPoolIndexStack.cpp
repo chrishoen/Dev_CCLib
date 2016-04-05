@@ -32,6 +32,9 @@ BlockPoolIndexStackState::BlockPoolIndexStackState()
 
 void BlockPoolIndexStackState::initialize(BlockPoolParms* aParms)
 {
+   // Do not initialize, if already initialized.
+   if (!aParms->mConstructorFlag) return;
+
    // Initialize variables.
    mIndex = 0;
    mNumElements = aParms->mNumBlocks;
@@ -110,18 +113,41 @@ void BlockPoolIndexStack::initialize(BlockPoolParms* aParms,void* aMemory)
    //---------------------------------------------------------------------------
    // Initialize variables.
 
-   // Initialize state.
-   mX = new(tStateMemory) BlockPoolIndexStackState;
+   // Construct the state.
+   if (aParms->mConstructorFlag)
+   {
+      // Call the constructor.
+      mX = new(tStateMemory)BlockPoolIndexStackState;
+   }
+   else
+   {
+      // The constructor has already been called.
+      mX = (BlockPoolIndexStackState*)tStateMemory;
+   }
+   // Initialize the state.
    mX->initialize(aParms);
 
-   // Initialize the element array.
-   mElement = new(tArrayMemory) int[mX->mNumElements];
-
-   // Push the indices of the blocks in the array onto the index stack.
-   // For aAllocate==10 this will push 9,8,8,6,5,4,3,2,1,0
-   for (int i = mX->mNumElements-1; i >= 0; i--)
+   // Construct the element array.
+   if (aParms->mConstructorFlag)
    {
-      push(i);
+      // Call the constructor.
+      mElement = new(tArrayMemory) int[mX->mNumElements];
+   }
+   else
+   {
+      // The constructor has already been called.
+      mElement = (int*)tArrayMemory;
+   }
+
+   // Initialize the element array, if it has not already been initialized.
+   if (aParms->mConstructorFlag)
+   {
+      // Push the indices of the blocks in the array onto the index stack.
+      // For aAllocate==10 this will push 9,8,8,6,5,4,3,2,1,0
+      for (int i = mX->mNumElements - 1; i >= 0; i--)
+      {
+         push(i);
+      }
    }
 }
 

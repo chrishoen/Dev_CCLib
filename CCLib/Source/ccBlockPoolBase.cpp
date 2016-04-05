@@ -73,8 +73,19 @@ void BlockPoolBase::initializeBase(BlockPoolParms* aParms,void* aMemory)
    //---------------------------------------------------------------------------
    // Initialize variables.
 
-   // Initialize the copy of the parameters.
-   mParms = new(tParmMemory)BlockPoolParms(*aParms);
+   // Construct the copy of the parameters.
+   if (aParms->mConstructorFlag)
+   {
+      // Call the constructor.
+      mParms = new(tParmMemory)BlockPoolParms(*aParms);
+   }
+   else
+   {
+      // The constructor has already been called.
+      mParms = (BlockPoolParms*)tParmMemory;
+   }
+   // Mark that these are not the original parameters, they are a copy.
+   mParms->mOriginalFlag = false;
 
    // Initialize the block box array.
    mBlocks.initialize(aParms,tArrayMemory);
