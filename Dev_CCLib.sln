@@ -33,6 +33,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Labelled", "Labelled\Labell
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StackTest", "StackTest\StackTest.vcxproj", "{E7FDD330-7F47-4860-A219-62939D48C36C}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProtoBlock", "ProtoBlock\ProtoBlock.vcxproj", "{516CB74E-4EE5-4810-A52A-004571A79492}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -161,6 +163,14 @@ Global
 		{E7FDD330-7F47-4860-A219-62939D48C36C}.Release|Win32.Build.0 = Release|Win32
 		{E7FDD330-7F47-4860-A219-62939D48C36C}.Release|x64.ActiveCfg = Release|x64
 		{E7FDD330-7F47-4860-A219-62939D48C36C}.Release|x64.Build.0 = Release|x64
+		{516CB74E-4EE5-4810-A52A-004571A79492}.Debug|Win32.ActiveCfg = Debug|Win32
+		{516CB74E-4EE5-4810-A52A-004571A79492}.Debug|Win32.Build.0 = Debug|Win32
+		{516CB74E-4EE5-4810-A52A-004571A79492}.Debug|x64.ActiveCfg = Debug|x64
+		{516CB74E-4EE5-4810-A52A-004571A79492}.Debug|x64.Build.0 = Debug|x64
+		{516CB74E-4EE5-4810-A52A-004571A79492}.Release|Win32.ActiveCfg = Release|Win32
+		{516CB74E-4EE5-4810-A52A-004571A79492}.Release|Win32.Build.0 = Release|Win32
+		{516CB74E-4EE5-4810-A52A-004571A79492}.Release|x64.ActiveCfg = Release|x64
+		{516CB74E-4EE5-4810-A52A-004571A79492}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
