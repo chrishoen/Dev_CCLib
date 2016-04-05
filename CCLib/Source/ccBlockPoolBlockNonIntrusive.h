@@ -40,9 +40,10 @@ public:
    //***************************************************************************
    //***************************************************************************
    // Create a block. Allocate the block from the block pool and call the
-   // class constructor on the block.
+   // class constructor on the block. This is used for nonintrusive blocks,
+   // those that do not contain a block handle member variable.
 
-   static BlockClass* createBlock()
+   static BlockClass* create()
    {
       // Block pointer.
       BlockClass* tBlockPointer = 0;

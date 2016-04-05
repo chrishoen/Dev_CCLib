@@ -48,9 +48,10 @@ public:
    //***************************************************************************
    //***************************************************************************
    // Create a block. Allocate the block from the block pool and call the
-   // class constructor on the block.
+   // class constructor on the block. This is used for intrusive blocks, those
+   // that must contain a block handle member variable.
 
-   static BlockClass* createBlock()
+   static BlockClass* create()
    {
       // Block pointer.
       BlockClass* tBlockPointer = 0;

@@ -88,8 +88,8 @@ void CmdLineExec::executeGoB1(Ris::CmdLineCmd* aCmd)
 {
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockB);
 
-   Some::MyBlockB* t1B1 = Some::MyBlockB::createBlock();
-   Some::MyBlockB* t1B2 = Some::MyBlockB::createBlock();
+   Some::MyBlockB* t1B1 = Some::MyBlockB::create();
+   Some::MyBlockB* t1B2 = Some::MyBlockB::create();
 
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockB);
 
@@ -141,8 +141,8 @@ void CmdLineExec::executeGoD1(Ris::CmdLineCmd* aCmd)
 {
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockD);
 
-   Some::MyBlockD* tD1 = Some::MyBlockD::createBlock();
-   Some::MyBlockD* tD2 = Some::MyBlockD::createBlock();
+   Some::MyBlockD* tD1 = Some::MyBlockD::create();
+   Some::MyBlockD* tD2 = Some::MyBlockD::create();
 
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockD);
 
