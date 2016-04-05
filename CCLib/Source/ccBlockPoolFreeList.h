@@ -62,20 +62,16 @@ public:
    void finalize();
 
    //---------------------------------------------------------------------------
-   // Get a block from the pool, this allocates a block. If the block pool is 
-   // short term, it gets a pointer from the circular array of pointers and 
-   // advances the index into the array. If the block pool is long term, it 
-   // pops a pointer from the pointer stack.
-   void allocate(void** aBlockPointer,BlockHandle* aBlockHandle);
+   // Get a block from the pool, this allocates a block.
+   // Return true if successful, false if the block pool is empty.
+   bool allocate(void** aBlockPointer,BlockHandle* aBlockHandle);
 
    //---------------------------------------------------------------------------
-   // Put a block back to the pool, this deallocates a block. If the block pool
-   // is short term, it does nothing. If the block pool is long term, it pushes
-   // the pointer back onto the pointer stack.
+   // Put a block back to the pool, this deallocates a block.
    void deallocate(BlockHandle aBlockHandle);
 
    //---------------------------------------------------------------------------
-   // Return a pointer to a block, given its memory handle.
+   // Get a pointer to a block, given its memory handle.
    void* getBlockPtr(BlockHandle aBlockHandle);
 
    //***************************************************************************

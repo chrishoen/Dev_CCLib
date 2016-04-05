@@ -127,18 +127,19 @@ void testBlockPool(int aPoolIndex)
 //****************************************************************************
 // This allocates a block from a block pool. It is passes a pool index and 
 // it returns a pointer to the block and a handle for the block.
+// It returns true if successful, false if the block pool is empty.
 
-void allocateBlockPoolBlock(int aPoolIndex,void** aBlockPointer,BlockHandle* aBlockHandle)
+bool allocateBlockPoolBlock(int aPoolIndex,void** aBlockPointer,BlockHandle* aBlockHandle)
 {
    // Guard
-   if (aPoolIndex==0) return;
+   if (aPoolIndex==0) return false;
    if (!mBlockPoolParms[aPoolIndex].mValidFlag)
    {
       printf("ERROR BlockPool doesn't exists %d\n", aPoolIndex);
-      return;
+      return false;
    }
    // Get block from specific pool.
-   mBlockPool[aPoolIndex]->allocate(aBlockPointer,aBlockHandle);
+   return mBlockPool[aPoolIndex]->allocate(aBlockPointer,aBlockHandle);
 }
 
 //****************************************************************************

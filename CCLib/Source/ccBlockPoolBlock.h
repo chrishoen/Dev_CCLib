@@ -97,16 +97,17 @@ BlockClass* createBlock()
    // Block handle.
    CC::BlockHandle tBlockHandle;
 
-   // Allocate a block from the block pool.
-   CC::allocateBlockPoolBlock(BlockPoolIndex,(void**)&tBlockPointer,&tBlockHandle);
+   // Try to allocate a block from the block pool.
+   if (CC::allocateBlockPoolBlock(BlockPoolIndex, (void**)&tBlockPointer, &tBlockHandle))
+   {
+      // Call the constructor on the allocated block using placement new.
+      new(tBlockPointer)BlockClass();
 
-   // Call the constructor on the allocated block using placement new.
-   new(tBlockPointer)BlockClass();
-
-   // Set the allocated block memory handle.
-   tBlockPointer->mBlockHandle = tBlockHandle;
-
+      // Set the allocated block memory handle.
+      tBlockPointer->mBlockHandle = tBlockHandle;
+   }
    // Return the pointer to the allocated block.
+   // Return null if the block pool is empty.
    return tBlockPointer;
 }
 
@@ -122,16 +123,17 @@ BlockClass* createBlock(Parm1 P1)
    // Block handle.
    CC::BlockHandle tBlockHandle;
 
-   // Allocate a block from the block pool.
-   CC::allocateBlockPoolBlock(BlockPoolIndex,(void**)&tBlockPointer,&tBlockHandle);
+   // Try to allocate a block from the block pool.
+   if (CC::allocateBlockPoolBlock(BlockPoolIndex, (void**)&tBlockPointer, &tBlockHandle))
+   {
+      // Call the constructor on the allocated block using placement new.
+      new(tBlockPointer)BlockClass(P1);
 
-   // Call the constructor on the allocated block using placement new.
-   new(tBlockPointer)BlockClass(P1);
-
-   // Set the allocated block memory handle.
-   tBlockPointer->mBlockHandle = tBlockHandle;
-
+      // Set the allocated block memory handle.
+      tBlockPointer->mBlockHandle = tBlockHandle;
+   }
    // Return the pointer to the allocated block.
+   // Return null if the block pool is empty.
    return tBlockPointer;
 }
 
@@ -147,16 +149,17 @@ BlockClass* createBlock(Parm1 P1,Parm1 P2)
    // Block handle.
    CC::BlockHandle tBlockHandle;
 
-   // Allocate a block from the block pool.
-   CC::allocateBlockPoolBlock(BlockPoolIndex,(void**)&tBlockPointer,&tBlockHandle);
+   // Try to allocate a block from the block pool.
+   if (CC::allocateBlockPoolBlock(BlockPoolIndex, (void**)&tBlockPointer, &tBlockHandle))
+   {
+      // Call the constructor on the allocated block using placement new.
+      new(tBlockPointer)BlockClass(P1,P2);
 
-   // Call the constructor on the allocated block using placement new.
-   new(tBlockPointer)BlockClass(P1,P2);
-
-   // Set the allocated block memory handle.
-   tBlockPointer->mBlockHandle = tBlockHandle;
-
+      // Set the allocated block memory handle.
+      tBlockPointer->mBlockHandle = tBlockHandle;
+   }
    // Return the pointer to the allocated block.
+   // Return null if the block pool is empty.
    return tBlockPointer;
 }
 
@@ -172,16 +175,17 @@ BlockClass* createBlock(Parm1 P1,Parm1 P2,Parm1 P3)
    // Block handle.
    CC::BlockHandle tBlockHandle;
 
-   // Allocate a block from the block pool.
-   CC::allocateBlockPoolBlock(BlockPoolIndex,(void**)&tBlockPointer,&tBlockHandle);
+   // Try to allocate a block from the block pool.
+   if (CC::allocateBlockPoolBlock(BlockPoolIndex, (void**)&tBlockPointer, &tBlockHandle))
+   {
+      // Call the constructor on the allocated block using placement new.
+      new(tBlockPointer)BlockClass(P1,P2,P3);
 
-   // Call the constructor on the allocated block using placement new.
-   new(tBlockPointer)BlockClass(P1,P2,P3);
-
-   // Set the allocated block memory handle.
-   tBlockPointer->mBlockHandle = tBlockHandle;
-
+      // Set the allocated block memory handle.
+      tBlockPointer->mBlockHandle = tBlockHandle;
+   }
    // Return the pointer to the allocated block.
+   // Return null if the block pool is empty.
    return tBlockPointer;
 }
 

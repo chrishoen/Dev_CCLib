@@ -92,7 +92,8 @@ void createBlockPool(BlockPoolParms* aParms);
 
 // This allocates a block from a block pool. It is passes a pool index and 
 // it returns a pointer to the block and a handle for the block.
-void allocateBlockPoolBlock(int aPoolIndex,void** aBlockPointer,BlockHandle* aBlockHandle);
+// It returns true if successful, false if the block pool is empty.
+bool allocateBlockPoolBlock(int aPoolIndex,void** aBlockPointer,BlockHandle* aBlockHandle);
 
 // This deallocates a block from a block pool. It is passed a handle to the
 // block, which contains the pool index of the block pool to deallocate the 

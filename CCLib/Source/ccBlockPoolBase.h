@@ -41,14 +41,15 @@ public:
 
    //---------------------------------------------------------------------------
    // Get a block from the pool, this allocates a block.
-   virtual void allocate(void** aBlockPointer,BlockHandle* aBlockHandle)=0;
+   // Return true if successful, false if the block pool is empty.
+   virtual bool allocate(void** aBlockPointer,BlockHandle* aBlockHandle)=0;
 
    //---------------------------------------------------------------------------
    // Put a block back to the pool, this deallocates a block.
    virtual void deallocate(BlockHandle aBlockHandle)=0;
 
    //---------------------------------------------------------------------------
-   // Return a pointer to a block, given its memory handle.
+   // Get a pointer to a block, given its memory handle.
    virtual void* getBlockPtr(BlockHandle aBlockHandle)=0;
 
    //***************************************************************************

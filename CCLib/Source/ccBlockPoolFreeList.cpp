@@ -173,8 +173,9 @@ int BlockPoolFreeList::size()
 //******************************************************************************
 //******************************************************************************
 // Get a block from the pool, this allocates a block.
+// Return true if successful, false if the block pool is empty.
 
-void BlockPoolFreeList::allocate(void** aBlockPointer,BlockHandle* aBlockHandle)
+bool BlockPoolFreeList::allocate(void** aBlockPointer,BlockHandle* aBlockHandle)
 {
    int tBlockIndex = 0;
       
@@ -185,7 +186,7 @@ void BlockPoolFreeList::allocate(void** aBlockPointer,BlockHandle* aBlockHandle)
       *aBlockPointer = 0;
       aBlockHandle->setNull();
 //    printf("BlockPoolFreeList STACK EMPTY %d\n",BaseClass::mParms->mPoolIndex);
-      return;
+      return false;
    }
 
    // Return a pointer to the block at that index.
@@ -198,8 +199,10 @@ void BlockPoolFreeList::allocate(void** aBlockPointer,BlockHandle* aBlockHandle)
    if (aBlockHandle)
    {
       aBlockHandle->set(BaseClass::mParms->mPoolIndex, tBlockIndex);
-//    printf("BlockPoolFreeList::allocate %d %d\n",aBlockHandle->mPoolIndex,aBlockHandle->mBlockIndex);
    }
+
+   // Done
+   return true;
 }
 
 //******************************************************************************
