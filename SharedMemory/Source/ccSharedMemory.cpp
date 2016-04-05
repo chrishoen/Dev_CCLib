@@ -48,6 +48,8 @@ SharedMemory::SharedMemory()
 
 void SharedMemory::initializeForServer(int aNumBytes)
 {
+   mSpecific = new SharedMemory::Specific;
+
    mSpecific->mShareFileMap=CreateFileMapping(
       INVALID_HANDLE_VALUE,
       NULL,
@@ -112,6 +114,8 @@ void SharedMemory::finalize()
    CloseHandle(mSpecific->mShareFileMap);
    CloseHandle(mSpecific->mSemaphore);
    CloseHandle(mSpecific->mMutex);
+
+   delete mSpecific;
 }
 
 //******************************************************************************
