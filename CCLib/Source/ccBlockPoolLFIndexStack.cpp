@@ -30,12 +30,12 @@ BlockPoolLFIndexStackState::BlockPoolLFIndexStackState()
    mListNumElements = 0;
 }
 
-void BlockPoolLFIndexStackState::initialize(int aNumElements)
+void BlockPoolLFIndexStackState::initialize(BlockPoolParms* aParms)
 {
    // Store.
-   mNumElements    = aNumElements;
+   mNumElements     = aParms->mNumBlocks;
    // Allocate for one extra dummy node.
-   mListNumElements = aNumElements + 1;
+   mListNumElements = aParms->mNumBlocks + 1;
 }
 
 int BlockPoolLFIndexStackState::getMemorySize()
@@ -66,7 +66,7 @@ BlockPoolLFIndexStack::~BlockPoolLFIndexStack()
 //******************************************************************************
 // Initialize
 
-void BlockPoolLFIndexStack::initialize(int aNumElements,void* aMemory)
+void BlockPoolLFIndexStack::initialize(BlockPoolParms* aParms,void* aMemory)
 {
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
@@ -80,7 +80,7 @@ void BlockPoolLFIndexStack::initialize(int aNumElements,void* aMemory)
    // then allocate memory for it on the system heap.
    if (aMemory == 0)
    {
-      mMemory = malloc(BlockPoolLFIndexStack::getMemorySize(aNumElements));
+      mMemory = malloc(BlockPoolLFIndexStack::getMemorySize(aParms));
       mFreeMemoryFlag = true;
    }
    // If the instance of this class is to reside in external memory
@@ -93,7 +93,7 @@ void BlockPoolLFIndexStack::initialize(int aNumElements,void* aMemory)
 
    // Calculate memory sizes.
    int tStateSize = BlockPoolLFIndexStackState::getMemorySize();
-   int tArraySize = (aNumElements + 1)*sizeof(AtomicLFIndex);
+   int tArraySize = (aParms->mNumBlocks + 1)*sizeof(AtomicLFIndex);
 
    // Calculate memory addresses.
    char* tStateMemory   = (char*)mMemory;
@@ -101,7 +101,7 @@ void BlockPoolLFIndexStack::initialize(int aNumElements,void* aMemory)
 
    // Initialize state.
    mX = new(tStateMemory) BlockPoolLFIndexStackState;
-   mX->initialize(aNumElements);
+   mX->initialize(aParms);
 
    // Initialize the linked list array.
    mListNext = new(tArrayMemory) AtomicLFIndex[mX->mListNumElements];
@@ -153,10 +153,10 @@ void BlockPoolLFIndexStack::finalize()
 // This returns the number of bytes that an instance of this class
 // will need to be allocated for it.
 
-int BlockPoolLFIndexStack::getMemorySize(int aNumElements)
+int BlockPoolLFIndexStack::getMemorySize(BlockPoolParms* aParms)
 {
    int tStateSize = BlockPoolLFIndexStackState::getMemorySize();
-   int tArraySize = (aNumElements + 1)*sizeof(AtomicLFIndex);
+   int tArraySize = (aParms->mNumBlocks + 1)*sizeof(AtomicLFIndex);
    int tMemorySize = tStateSize + tArraySize;
    return tMemorySize;
 }

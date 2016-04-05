@@ -11,6 +11,7 @@ A block box contains a block header and a block body.
 ==============================================================================*/
 
 #include "ccBlockHandle.h"
+#include "ccBlockPoolParms.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -55,7 +56,7 @@ public:
    BlockBoxArrayState();
 
    // Initialize.
-   void initialize(int aNumBlocks,int aBlockSize,int aPoolIndex);
+   void initialize(BlockPoolParms* aParms);
 
    // This returns the number of bytes that an instance of this class
    // will need to be allocated for it.
@@ -106,7 +107,7 @@ public:
    // It is passed the number of blocks to allocate, the size of the block 
    // body, the memory pool index for the block box array, and an external
    // memory pointer.
-   void initialize(int aNumBlocks,int aBlockSize,int aPoolIndex,void* aMemory = 0);
+   void initialize(BlockPoolParms* aParms,void* aMemory = 0);
 
    // Deallocate memory for the block array.
    void finalize();
@@ -148,7 +149,7 @@ public:
    // This returns the number of bytes that an instance of this class
    // will need to be allocated for it.
 
-   static int getMemorySize(int aNumBlocks,int aBlockSize);
+   static int getMemorySize(BlockPoolParms* aParms);
 };
 
 //******************************************************************************

@@ -7,8 +7,8 @@ Free List Stack of Indices.
 This implements a free list stack of indices. It is not thread safe.
 
 ==============================================================================*/
-#include <atomic>
-#include "ccLFIndex.h"
+
+#include "ccBlockPoolParms.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -44,7 +44,7 @@ public:
    // this will be used onto the stack.
    // For aAllocate==10 this will push 9,8,7,6,5,4,3,2,1,0 so that element
    // zero will be the first one poped.
-   virtual void initialize(int aNumElements,void* aMemory = 0)=0;
+   virtual void initialize(BlockPoolParms* aParms,void* aMemory = 0)=0;
 
    // Deallocate memory.
    virtual void finalize()=0;

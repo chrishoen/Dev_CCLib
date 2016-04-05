@@ -30,16 +30,13 @@ BlockBoxArrayState::BlockBoxArrayState()
    mPoolIndex=0;
 }
 
-void BlockBoxArrayState::initialize(int aNumBlocks,int aBlockSize,int aPoolIndex)
+void BlockBoxArrayState::initialize(BlockPoolParms* aParms)
 {
-   // Round block size to to 16 byte boundary.
-   int tBlockSize = cc_round_upto16(aBlockSize);
-
    // Store members.
-   mNumBlocks    = aNumBlocks;
-   mBlockSize    = tBlockSize;
+   mNumBlocks    = aParms->mNumBlocks;
+   mBlockSize    = cc_round_upto16(aParms->mBlockSize);
    mBlockBoxSize = mBlockSize + cHeaderSize;;
-   mPoolIndex    = aPoolIndex;
+   mPoolIndex    = aParms->mPoolIndex;
 }
 
 int BlockBoxArrayState::getMemorySize()
@@ -72,7 +69,7 @@ BlockBoxArray::~BlockBoxArray()
 // Allocate memory for the block array. It is passed the number of blocks to 
 // allocate and the size of the blocks.
 
-void BlockBoxArray::initialize(int aNumBlocks,int aBlockSize,int aPoolIndex,void* aMemory)
+void BlockBoxArray::initialize(BlockPoolParms* aParms,void* aMemory)
 {
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
@@ -86,7 +83,7 @@ void BlockBoxArray::initialize(int aNumBlocks,int aBlockSize,int aPoolIndex,void
    // then allocate memory for it on the system heap.
    if (aMemory == 0)
    {
-      mMemory = malloc(BlockBoxArray::getMemorySize(aNumBlocks,aBlockSize));
+      mMemory = malloc(BlockBoxArray::getMemorySize(aParms));
       mFreeMemoryFlag = true;
    }
    // If the instance of this class is to reside in external memory
@@ -99,9 +96,9 @@ void BlockBoxArray::initialize(int aNumBlocks,int aBlockSize,int aPoolIndex,void
 
    // Calculate memory sizes.
    int tStateSize    = BlockBoxArrayState::getMemorySize();
-   int tBlockSize    = cc_round_upto16(aBlockSize);
+   int tBlockSize    = cc_round_upto16(aParms->mBlockSize);
    int tBlockBoxSize = cHeaderSize + tBlockSize;
-   int tArraySize    = aNumBlocks*tBlockBoxSize;
+   int tArraySize    = aParms->mNumBlocks*tBlockBoxSize;
 
    // Calculate memory addresses.
    char* tStateMemory = (char*)mMemory;
@@ -109,7 +106,7 @@ void BlockBoxArray::initialize(int aNumBlocks,int aBlockSize,int aPoolIndex,void
 
    // Initialize the state.
    mX = new(tStateMemory) BlockBoxArrayState;
-   mX->initialize(aNumBlocks,aBlockSize,aPoolIndex);
+   mX->initialize(aParms);
 
    // Initialize the array.
    mArray = tArrayMemory;
@@ -149,13 +146,13 @@ void BlockBoxArray::finalize()
 // This returns the number of bytes that an instance of this class
 // will need to be allocated for it.
 
-int BlockBoxArray::getMemorySize(int aNumBlocks,int aBlockSize)
+int BlockBoxArray::getMemorySize(BlockPoolParms* aParms)
 {
    // Calculate memory sizes.
    int tStateSize    = BlockBoxArrayState::getMemorySize();
-   int tBlockSize    = cc_round_upto16(aBlockSize);
+   int tBlockSize    = cc_round_upto16(aParms->mBlockSize);
    int tBlockBoxSize = cHeaderSize + tBlockSize;
-   int tArraySize    = aNumBlocks*tBlockBoxSize;
+   int tArraySize    = aParms->mNumBlocks*tBlockBoxSize;
    int tMemorySize   = tStateSize + tArraySize;
 
    return tMemorySize;

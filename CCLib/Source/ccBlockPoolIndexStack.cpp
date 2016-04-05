@@ -30,11 +30,11 @@ BlockPoolIndexStackState::BlockPoolIndexStackState()
    mIndex       = 0;
 }
 
-void BlockPoolIndexStackState::initialize(int aNumElements)
+void BlockPoolIndexStackState::initialize(BlockPoolParms* aParms)
 {
    // Initialize variables.
    mIndex = 0;
-   mNumElements = aNumElements;
+   mNumElements = aParms->mNumBlocks;
 }
 
 int BlockPoolIndexStackState::getMemorySize()
@@ -72,7 +72,7 @@ BlockPoolIndexStack::~BlockPoolIndexStack()
 // This initializes the stack to a fixed size. It initializes member
 // variables and and the stack array, given external memory.
 
-void BlockPoolIndexStack::initialize(int aNumElements,void* aMemory)
+void BlockPoolIndexStack::initialize(BlockPoolParms* aParms,void* aMemory)
 {
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
@@ -86,7 +86,7 @@ void BlockPoolIndexStack::initialize(int aNumElements,void* aMemory)
    // then allocate memory for it on the system heap.
    if (aMemory == 0)
    {
-      mMemory = malloc(BlockPoolIndexStack::getMemorySize(aNumElements));
+      mMemory = malloc(BlockPoolIndexStack::getMemorySize(aParms));
       mFreeMemoryFlag = true;
    }
    // If the instance of this class is to reside in external memory
@@ -99,7 +99,7 @@ void BlockPoolIndexStack::initialize(int aNumElements,void* aMemory)
 
    // Calculate memory sizes.
    int tStateSize = BlockPoolIndexStackState::getMemorySize();
-   int tArraySize = aNumElements*sizeof(int);
+   int tArraySize = aParms->mNumBlocks*sizeof(int);
 
    // Calculate memory addresses.
    char* tStateMemory = (char*)mMemory;
@@ -112,7 +112,7 @@ void BlockPoolIndexStack::initialize(int aNumElements,void* aMemory)
 
    // Initialize state.
    mX = new(tStateMemory) BlockPoolIndexStackState;
-   mX->initialize(aNumElements);
+   mX->initialize(aParms);
 
    // Initialize the element array.
    mElement = new(tArrayMemory) int[mX->mNumElements];
@@ -148,10 +148,10 @@ void BlockPoolIndexStack::finalize()
 // This returns the number of bytes that an instance of this class
 // will need to be allocated for it.
 
-int BlockPoolIndexStack::getMemorySize(int aNumElements)
+int BlockPoolIndexStack::getMemorySize(BlockPoolParms* aParms)
 {
    int tStateSize = BlockPoolIndexStackState::getMemorySize();
-   int tArraySize = cc_round_upto16(aNumElements*sizeof(int));
+   int tArraySize = cc_round_upto16(aParms->mNumBlocks*sizeof(int));
    int tMemorySize = tStateSize + tArraySize;
    return tMemorySize;
 }

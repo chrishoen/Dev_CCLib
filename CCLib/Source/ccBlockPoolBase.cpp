@@ -62,7 +62,7 @@ void BlockPoolBase::initializeBase(BlockPoolParms* aParms,void* aMemory)
 
    // Calculate memory sizes.
    int tParmSize   = BlockPoolParms::getMemorySize();
-   int tArraySize  = BlockBoxArray::getMemorySize(aParms->mNumBlocks,aParms->mBlockSize);
+   int tArraySize  = BlockBoxArray::getMemorySize(aParms);
 
    // Calculate memory addresses.
    char* tParmMemory = (char*)mBaseClassMemory;
@@ -77,7 +77,7 @@ void BlockPoolBase::initializeBase(BlockPoolParms* aParms,void* aMemory)
    mParms = new(tParmMemory)BlockPoolParms(*aParms);
 
    // Initialize the block box array.
-   mBlocks.initialize(aParms->mNumBlocks,aParms->mBlockSize,aParms->mPoolIndex,tArrayMemory);
+   mBlocks.initialize(aParms,tArrayMemory);
 }
 
 //******************************************************************************
@@ -108,7 +108,7 @@ void BlockPoolBase::finalizeBase()
 int BlockPoolBase::getMemorySize(BlockPoolParms* aParms)
 {
    int tParmSize   = BlockPoolParms::getMemorySize();
-   int tArraySize  = BlockBoxArray::getMemorySize(aParms->mNumBlocks,aParms->mBlockSize);
+   int tArraySize  = BlockBoxArray::getMemorySize(aParms);
    int tMemorySize = tParmSize + tArraySize;
    return tMemorySize;
 }

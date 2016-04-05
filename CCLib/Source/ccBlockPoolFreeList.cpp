@@ -87,8 +87,8 @@ void BlockPoolFreeList::initialize(BlockPoolParms* aParms)
    int tStackSize = 0;
    switch (aParms->mBlockPoolType)
    {
-   case cBlockPoolType_FreeList   : tStackSize = BlockPoolIndexStack::getMemorySize(aParms->mNumBlocks); break;
-   case cBlockPoolType_LFFreeList : tStackSize = BlockPoolLFIndexStack::getMemorySize(aParms->mNumBlocks); break;
+   case cBlockPoolType_FreeList   : tStackSize = BlockPoolIndexStack::getMemorySize(aParms); break;
+   case cBlockPoolType_LFFreeList : tStackSize = BlockPoolLFIndexStack::getMemorySize(aParms); break;
    }
 
    // Calculate memory addresses.
@@ -106,7 +106,7 @@ void BlockPoolFreeList::initialize(BlockPoolParms* aParms)
    }
 
    // Initialize the index stack.
-   mBlockIndexStack->initialize(aParms->mNumBlocks,tStackMemory);
+   mBlockIndexStack->initialize(aParms,tStackMemory);
 
 }
 
@@ -150,8 +150,8 @@ int BlockPoolFreeList::getMemorySize(BlockPoolParms* aParms)
    int tStackSize     = 0;
    switch (aParms->mBlockPoolType)
    {
-   case cBlockPoolType_FreeList   : tStackSize = BlockPoolIndexStack::getMemorySize(aParms->mNumBlocks); break;
-   case cBlockPoolType_LFFreeList : tStackSize = BlockPoolLFIndexStack::getMemorySize(aParms->mNumBlocks); break;
+   case cBlockPoolType_FreeList   : tStackSize = BlockPoolIndexStack::getMemorySize(aParms); break;
+   case cBlockPoolType_LFFreeList : tStackSize = BlockPoolLFIndexStack::getMemorySize(aParms); break;
    }
 
    int tMemorySize = tBaseClassSize + tStackSize;

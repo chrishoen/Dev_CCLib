@@ -49,7 +49,7 @@ public:
    BlockPoolIndexStackState();
 
    // Initialize.
-   void initialize(int aNumElements);
+   void initialize(BlockPoolParms* aParms);
 
    // This returns the number of bytes that an instance of this class
    // will need to be allocated for it.
@@ -84,7 +84,7 @@ public:
    // this will be used onto the stack.
    // For aAllocate==10 this will push 9,8,7,6,5,4,3,2,1,0 so that element
    // zero will be the first one poped.
-   void initialize(int aNumElements,void* aMemory = 0);
+   void initialize(BlockPoolParms* aParms,void* aMemory = 0);
 
    // Deallocate memory.
    void finalize();
@@ -126,7 +126,7 @@ public:
    // This returns the number of bytes that an instance of this class
    // will need to be allocated for it.
 
-   static int getMemorySize(int aNumElements);
+   static int getMemorySize(BlockPoolParms* aParms);
 };
 
 //******************************************************************************
