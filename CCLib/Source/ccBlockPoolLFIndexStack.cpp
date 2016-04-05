@@ -58,6 +58,7 @@ BlockPoolLFIndexStack::BlockPoolLFIndexStack()
 
 BlockPoolLFIndexStack::~BlockPoolLFIndexStack()
 {
+   return;
    finalize();
 }
 

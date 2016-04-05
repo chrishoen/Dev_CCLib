@@ -56,11 +56,14 @@ void CmdLineExec::executeGo11(Ris::CmdLineCmd* aCmd)
    tBlockPoolParms.mNumBlocks     = 1000;
    tBlockPoolParms.mBlockSize     = sizeof(Some::MyBlockA);
 
+   int tSize = CC::BlockPoolBase::getMemorySize(&tBlockPoolParms);
+   Prn::print(0, "Size %d",tSize);
+
    // Create block pool.
    CC::BlockPoolBase* tBP = new CC::BlockPoolFreeList;
    tBP->initialize(&tBlockPoolParms);
    tBP->finalize();
-   delete tBP;
+// delete tBP;
 
 }
 

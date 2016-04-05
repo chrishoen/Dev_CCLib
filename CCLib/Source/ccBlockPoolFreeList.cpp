@@ -33,6 +33,7 @@ BlockPoolFreeList::BlockPoolFreeList()
 
 BlockPoolFreeList::~BlockPoolFreeList()
 {
+   return;
    finalize();
 }
 

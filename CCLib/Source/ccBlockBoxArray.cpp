@@ -63,6 +63,7 @@ BlockBoxArray::BlockBoxArray()
 
 BlockBoxArray::~BlockBoxArray()
 {
+   return;
    finalize();
 }
 
@@ -101,7 +102,7 @@ void BlockBoxArray::initialize(int aNumBlocks,int aBlockSize,int aPoolIndex,void
    int tStateSize    = BlockBoxArrayState::getMemorySize();
    int tBlockSize    = cc_round_upto16(aBlockSize);
    int tBlockBoxSize = cHeaderSize + tBlockSize;
-   int tArraySize    = aNumBlocks*tBlockBoxSize;
+   int tArraySize    = (aNumBlocks+1)*tBlockBoxSize;
 
    // Calculate memory addresses.
    char* tStateMemory = (char*)mMemory;
@@ -155,7 +156,7 @@ int BlockBoxArray::getMemorySize(int aNumBlocks,int aBlockSize)
    int tStateSize    = BlockBoxArrayState::getMemorySize();
    int tBlockSize    = cc_round_upto16(aBlockSize);
    int tBlockBoxSize = cHeaderSize + tBlockSize;
-   int tArraySize    = aNumBlocks*tBlockBoxSize;
+   int tArraySize    = (aNumBlocks+1)*tBlockBoxSize;
    int tMemorySize   = tStateSize + tArraySize;
 
    return tMemorySize;

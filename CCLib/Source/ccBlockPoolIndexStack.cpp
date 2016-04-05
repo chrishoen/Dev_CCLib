@@ -63,6 +63,7 @@ BlockPoolIndexStack::BlockPoolIndexStack()
 
 BlockPoolIndexStack::~BlockPoolIndexStack()
 {
+   return;
    finalize();
 }
 
