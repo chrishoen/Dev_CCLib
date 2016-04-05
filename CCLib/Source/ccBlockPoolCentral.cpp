@@ -144,14 +144,33 @@ bool allocateBlockPoolBlock(int aPoolIndex,void** aBlockPointer,BlockHandle* aBl
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-// Deallocates a block from a block pool. It is passed a handle to the
+// Deallocate a block from a block pool. It is passed a handle to the
 // block, which contains the pool index of the block pool to deallocate the 
-// block from.
+// block from. This is used for intrusive blocks, those that contain a block
+// handle member variable.
 
 void deallocateBlockPoolBlock(BlockHandle aBlockHandle)
 {
 // printf("deallocateBlockPoolBlock %d %d\n", aBlockHandle.mPoolIndex,aBlockHandle.mBlockIndex);
+   // Deallocate the block.
    mBlockPool[aBlockHandle.mPoolIndex]->deallocate(aBlockHandle);
+}
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+// Deallocate a block from a block pool. It is passed a pointer to the
+// block. It uses the pointer to lookup the block handle, which contains 
+// the pool index of the block pool to deallocate the block from. This is
+// used for nonintrusive blocks, those that do not contain a block handle
+// member variable
+
+void deallocateBlockPoolBlock(void* aBlockPtr)
+{
+   // Get the block handle.
+   BlockHandle tBlockHandle = BlockBoxArray::getBlockHandle(aBlockPtr);
+   // Deallocate the block.
+   mBlockPool[tBlockHandle.mPoolIndex]->deallocate(tBlockHandle);
 }
 
 //****************************************************************************

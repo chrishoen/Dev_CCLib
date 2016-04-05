@@ -97,8 +97,14 @@ bool allocateBlockPoolBlock(int aPoolIndex,void** aBlockPointer,BlockHandle* aBl
 
 // Deallocates a block from a block pool. It is passed a handle to the
 // block, which contains the pool index of the block pool to deallocate the 
-// block from.
+// block from. This is used for intrusive blocks.
 void deallocateBlockPoolBlock(BlockHandle aBlockHandle);
+
+// Deallocates a block from a block pool. It is passed a pointer to the
+// block. It uses the pointer to lookup the block handle, which contains 
+// the pool index of the block pool to deallocate the block from. This is
+// used for nonintrusive blocks.
+void deallocateBlockPoolBlock(void* aBlockPtr);
 
 // Get a pointer to a block, given a block handle.
 void* getBlockPoolBlockPtr(BlockHandle aBlockHandle);

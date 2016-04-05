@@ -173,6 +173,7 @@
     <ClCompile Include="Source\someMyBlockA.cpp" />
     <ClCompile Include="Source\someMyBlockB.cpp" />
     <ClCompile Include="Source\someMyBlockC.cpp" />
+    <ClCompile Include="Source\someMyBlockD.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h" />
@@ -182,6 +183,7 @@
     <ClInclude Include="Source\someMyBlockA.h" />
     <ClInclude Include="Source\someMyBlockB.h" />
     <ClInclude Include="Source\someMyBlockC.h" />
+    <ClInclude Include="Source\someMyBlockD.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CCLib\CCLib.vcxproj">

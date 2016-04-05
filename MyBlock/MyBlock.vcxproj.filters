@@ -28,6 +28,9 @@
     <ClCompile Include="Source\someMyBlockC.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\someMyBlockD.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h">
@@ -49,6 +52,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\someMyBlockC.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\someMyBlockD.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

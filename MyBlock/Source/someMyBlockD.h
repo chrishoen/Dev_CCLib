@@ -1,5 +1,5 @@
-#ifndef _SOMEBLOCKPOOLINDEX_H_
-#define _SOMEBLOCKPOOLINDEX_H_
+#ifndef _SOMEMYBLOCKD_H_
+#define _SOMEMYBLOCKD_H_
 
 /*==============================================================================
 ==============================================================================*/
@@ -7,6 +7,11 @@
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+#include "ccBlockHandle.h"
+#include "ccBlockPoolBlockNonIntrusive.h"
+#include "someBlockPoolIndex.h"
+#include "someMyBlockA.h"
+
 namespace Some
 {
 
@@ -14,13 +19,20 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 
-static const int cBlockPoolIndex_MyBlockA = 1;
-static const int cBlockPoolIndex_MyBlockB = 2;
-static const int cBlockPoolIndex_MyBlockC = 3;
-static const int cBlockPoolIndex_MyBlockD = 4;
+class MyBlockD : public CC::BlockPoolBlockNonIntrusive<Some::MyBlockD,Some::cBlockPoolIndex_MyBlockD>
+{
+public:
+
+   MyBlockD();
+  ~MyBlockD();
+
+   void method1B();
+
+   int mCode1B;
+};
 
 //******************************************************************************
-//******************************************************************************
-//******************************************************************************
 }//namespace
+
 #endif
+

@@ -4,6 +4,7 @@
 #include "someMyBlockA.h"
 #include "someMyBlockB.h"
 #include "someMyBlockC.h"
+#include "someMyBlockD.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -43,8 +44,16 @@ void main_memory_initialize()
    tBlockPoolParms.reset();
    tBlockPoolParms.mPoolIndex     = Some::cBlockPoolIndex_MyBlockC;
    tBlockPoolParms.mBlockPoolType = CC::cBlockPoolType_FreeList;
-   tBlockPoolParms.mNumBlocks     = 65536;
+   tBlockPoolParms.mNumBlocks     = 1000;
    tBlockPoolParms.mBlockSize     = sizeof(Some::MyBlockC);
+   CC::createBlockPool(&tBlockPoolParms);
+
+   // Create block pool.
+   tBlockPoolParms.reset();
+   tBlockPoolParms.mPoolIndex     = Some::cBlockPoolIndex_MyBlockD;
+   tBlockPoolParms.mBlockPoolType = CC::cBlockPoolType_FreeList;
+   tBlockPoolParms.mNumBlocks     = 1000;
+   tBlockPoolParms.mBlockSize     = sizeof(Some::MyBlockD);
    CC::createBlockPool(&tBlockPoolParms);
 }
 
