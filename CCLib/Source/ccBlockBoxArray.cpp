@@ -87,6 +87,7 @@ void BlockBoxArray::initialize(int aNumBlocks,int aBlockSize,int aPoolIndex,void
    // then allocate memory for it on the system heap.
    if (aMemory == 0)
    {
+      printf("BlockBoxArray::malloc\n");
       mMemory = malloc(BlockBoxArray::getMemorySize(aNumBlocks,aBlockSize));
       mFreeMemoryFlag = true;
    }
@@ -137,6 +138,7 @@ void BlockBoxArray::finalize()
    {
       if (mMemory)
       {
+         printf("BlockBoxArray::free\n");
          free(mMemory);
       }
    }

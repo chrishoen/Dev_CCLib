@@ -87,6 +87,7 @@ void BlockPoolIndexStack::initialize(int aNumElements,void* aMemory)
    // then allocate memory for it on the system heap.
    if (aMemory == 0)
    {
+      printf("BlockPoolIndexStack::malloc\n");
       mMemory = malloc(BlockPoolIndexStack::getMemorySize(aNumElements));
       mFreeMemoryFlag = true;
    }
@@ -136,6 +137,7 @@ void BlockPoolIndexStack::finalize()
    {
       if (mMemory)
       {
+         printf("BlockPoolIndexStack::free\n");
          free(mMemory);
       }
    }

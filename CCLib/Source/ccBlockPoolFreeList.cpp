@@ -71,8 +71,9 @@ void BlockPoolFreeList::initialize(BlockPoolParms* aParms)
    // then allocate memory for it on the system heap.
    if (aParms->mMemory == 0)
    {
-      mMemory = malloc(BlockPoolFreeList::getMemorySize(aParms));
+      mMemory = malloc(BlockPoolFreeList::getMemorySize(aParms)+ 1024);
       mFreeMemoryFlag = true;
+      printf("BlockPoolFreeList::malloc %p\n",mMemory);
    }
    // If the instance of this class is to reside in external memory
    // then use the memory pointer that was passed in.
@@ -131,6 +132,7 @@ void BlockPoolFreeList::finalize()
    {
       if (mMemory)
       {
+         printf("BlockPoolFreeList::free   %p\n",mMemory);
          free(mMemory);
       }
    }

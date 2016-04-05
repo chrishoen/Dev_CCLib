@@ -63,7 +63,7 @@ void CmdLineExec::executeGo11(Ris::CmdLineCmd* aCmd)
    CC::BlockPoolBase* tBP = new CC::BlockPoolFreeList;
    tBP->initialize(&tBlockPoolParms);
    tBP->finalize();
-// delete tBP;
+   delete tBP;
 
 }
 

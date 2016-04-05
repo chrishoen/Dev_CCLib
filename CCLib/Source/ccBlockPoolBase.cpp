@@ -49,6 +49,7 @@ void BlockPoolBase::initializeBase(BlockPoolParms* aParms,void* aMemory)
    // then allocate memory for it on the system heap.
    if (aMemory == 0)
    {
+      printf("BlockPoolBase::malloc\n");
       mBaseClassMemory = malloc(BlockPoolBase::getMemorySize(aParms));
       mBaseClassFreeMemoryFlag = true;
    }
@@ -92,6 +93,7 @@ void BlockPoolBase::finalizeBase()
    {
       if (mBaseClassMemory)
       {
+         printf("BlockPoolBase::free\n");
          free(mBaseClassMemory);
       }
    }
