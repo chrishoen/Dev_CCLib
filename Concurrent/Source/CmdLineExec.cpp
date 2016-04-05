@@ -9,7 +9,7 @@
 #include "CmdLineExec.h"
 
 #include "someBlockPoolIndex.h"
-#include "someMyBlockC.h"
+#include "someMyBlockA.h"
 #include "ccBlockPoolCentral.h"
 
 #include "Timing.h"
@@ -57,25 +57,25 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-Some::MyBlockC* gC1[100000];
+Some::MyBlockA* gC1[100000];
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockC);
+   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockA);
 
    for (int i = 0; i < 20000; i++)
    {
-      gC1[i] = Some::MyBlockC::create();
+      gC1[i] = Some::MyBlockA::create();
    }
 
-   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockC);
+   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockA);
 
    for (int i = 0; i < 20000; i++)
    {
       gC1[i]->destroy();
    }
 
-   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockC);
+   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockA);
 }
 
 //******************************************************************************

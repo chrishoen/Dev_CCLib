@@ -120,7 +120,7 @@ int BlockPoolBase::getMemorySize(BlockPoolParms* aParms)
 
 void BlockPoolBase::show()
 {
-   printf("MemBlockPool size %d\n", size());
+   printf("MemBlockPool size %d $ %d\n", mParms->mPoolIndex,size());
 }
 
 

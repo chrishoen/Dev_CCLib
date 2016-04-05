@@ -176,7 +176,7 @@
     <ClCompile Include="Source\MainMemory.cpp" />
     <ClCompile Include="Source\someClass1.cpp" />
     <ClCompile Include="Source\someMessage.cpp" />
-    <ClCompile Include="Source\someMyBlockC.cpp" />
+    <ClCompile Include="Source\someMyBlockA.cpp" />
     <ClCompile Include="Source\someReader.cpp" />
     <ClCompile Include="Source\someReaderThread.cpp" />
     <ClCompile Include="Source\someStatusThread.cpp" />
@@ -202,7 +202,7 @@
     <ClInclude Include="Source\someBlockPoolIndex.h" />
     <ClInclude Include="Source\someClass1.h" />
     <ClInclude Include="Source\someMessage.h" />
-    <ClInclude Include="Source\someMyBlockC.h" />
+    <ClInclude Include="Source\someMyBlockA.h" />
     <ClInclude Include="Source\someReader.h" />
     <ClInclude Include="Source\someReaderThread.h" />
     <ClInclude Include="Source\someStatusThread.h" />

@@ -22,40 +22,28 @@ class MyBlockC : public CC::HasBlockHandle
 {
 public:
 
-   //--------------------------------------------------------------------------
-   //--------------------------------------------------------------------------
-   //--------------------------------------------------------------------------
-   // Memory management, constructors and destructors
-
-   // Allocate a block from the block pool and call its constructor.
-   static MyBlockC* create ();
-   static MyBlockC* create (int aIdentifier);
-
-   // This method deallocates the object from the block pool from which it was
-   // created. It does not call a class destructor.
-   void destroy();
-
-   // Constructor, it is called by create after allocation of a new block.
    MyBlockC();
-   MyBlockC(int aIdentifier);
+  ~MyBlockC();
+
+   void method1C();
+
+   int mCode1A;
+  
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   // This allocates a block from the block pool and uses placement new
+   // to call the class constructor. It is analogous to new.
+
+   static MyBlockC* allocateC();
 
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
-   // Members
+   // This deallocates the object back to the block pool. It does not call
+   // a destructor for the object.
+   void deallocateC();
 
-   int  mIdentifier;
-   int  mCode1;
-   int  mCode2;
-   int  mCode3;
-   int  mCode4;
-
-   //--------------------------------------------------------------------------
-   //--------------------------------------------------------------------------
-   //--------------------------------------------------------------------------
-   // Methods
-
-   void method1();
 };
 
 //******************************************************************************

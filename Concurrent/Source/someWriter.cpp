@@ -13,7 +13,7 @@ Description:
 #include "LFBackoff.h"
 #include "LFFreeList.h"
 #include "LFIntQueue.h"
-#include "someMyBlockC.h"
+#include "someMyBlockA.h"
 #include "someShare.h"
 #include "someWriter.h"
 
@@ -229,12 +229,12 @@ void Writer::writeType5(int aNumWrites)
 
    for (int i = 0; i < aNumWrites; i++)
    {
-      MyBlockC* tObject = 0;
+      MyBlockA* tObject = 0;
       bool tPass = false;
       int tCount = mCount & 0xFFFF;
 
       mMarkerWrite.doStart();
-      tObject = MyBlockC::create();
+      tObject = MyBlockA::create();
       mMarkerWrite.doStop();
 
       if (tObject)

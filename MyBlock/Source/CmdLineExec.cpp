@@ -27,14 +27,19 @@ void CmdLineExec::reset()
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
    if(aCmd->isCmd("RESET"  ))  reset();
-   if(aCmd->isCmd("GO11"    ))  executeGo11(aCmd);
-   if(aCmd->isCmd("GO12"    ))  executeGo12(aCmd);
-   if(aCmd->isCmd("GO21"    ))  executeGo21(aCmd);
-   if(aCmd->isCmd("GO22"    ))  executeGo22(aCmd);
-   if(aCmd->isCmd("GO23"    ))  executeGo23(aCmd);
-   if(aCmd->isCmd("GO24"    ))  executeGo24(aCmd);
-   if(aCmd->isCmd("GO25"    ))  executeGo25(aCmd);
-   if(aCmd->isCmd("GO26"    ))  executeGo26(aCmd);
+   if(aCmd->isCmd("GOA1"    ))  executeGoA1(aCmd);
+   if(aCmd->isCmd("GOA2"    ))  executeGoA2(aCmd);
+
+   if(aCmd->isCmd("GOB1"    ))  executeGoB1(aCmd);
+   if(aCmd->isCmd("GOB2"    ))  executeGoB2(aCmd);
+
+   if(aCmd->isCmd("GOC1"    ))  executeGoC1(aCmd);
+   if(aCmd->isCmd("GOC2"    ))  executeGoC2(aCmd);
+   if(aCmd->isCmd("GOC3"    ))  executeGoC3(aCmd);
+
+   if(aCmd->isCmd("GOT1"    ))  executeGoT1(aCmd);
+   if(aCmd->isCmd("GOT2"    ))  executeGoT2(aCmd);
+   if(aCmd->isCmd("GOT3"    ))  executeGoT3(aCmd);
 }
 
 //******************************************************************************
@@ -45,27 +50,27 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeGo11(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeGoA1(Ris::CmdLineCmd* aCmd)
 {
-   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockC);
+   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockA);
 
-   Some::MyBlockC* tC1 = Some::MyBlockC::create(101);
+   Some::MyBlockA* tC1 = Some::MyBlockA::create(101);
    tC1->method1();
 
-   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockC);
+   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockA);
 
    tC1->destroy();
 
-   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockC);
+   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockA);
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeGo12(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeGoA2(Ris::CmdLineCmd* aCmd)
 {
-   Some::MyBlockC* tC1 = Some::MyBlockC::create(101);
+   Some::MyBlockA* tC1 = Some::MyBlockA::create(101);
    Prn::print(0, "%d %d",tC1->mBlockHandle.mPoolIndex,tC1->mBlockHandle.mBlockIndex);
 
    CC::BlockHandle tBlockHandle = CC::getBlockPoolBlockHandle(tC1);
@@ -76,63 +81,90 @@ void CmdLineExec::executeGo12(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeGo21(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeGoB1(Ris::CmdLineCmd* aCmd)
 {
-   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockA);
-
-   Some::MyBlockA* t1A = Some::MyBlockA::allocateA();
-
-   t1A->method1A();
-   t1A->~MyBlockA();
-   t1A->deallocateA();
-
-   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockA);
-
-}
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void CmdLineExec::executeGo22(Ris::CmdLineCmd* aCmd)
-{
-   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockA);
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockB);
 
-   Some::MyBlockA* t1A1 = Some::MyBlockA::allocateA();
-   Some::MyBlockA* t1A2 = Some::MyBlockA::allocateA();
    Some::MyBlockB* t1B1 = Some::MyBlockB::createBlock();
    Some::MyBlockB* t1B2 = Some::MyBlockB::createBlock();
 
-   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockA);
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockB);
 
-   t1A1->deallocateA();
-   t1A2->deallocateA();
    t1B1->destroy();
    t1B2->destroy();
 
-   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockA);
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockB);
 }
 
-
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeGo23(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeGoB2(Ris::CmdLineCmd* aCmd)
 {
-   Some::MyBlockA* t1A1 = Some::MyBlockA::allocateA();
-   Some::MyBlockA* t1A2 = (Some::MyBlockA*)CC::BlockHandle::ptr(t1A1->mBlockHandle);
+}
 
-   t1A1->method1A();
-   t1A2->method1A();
-   t1A1->deallocateA();
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
-   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockA);
+void CmdLineExec::executeGoC1(Ris::CmdLineCmd* aCmd)
+{
+   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockC);
+
+   Some::MyBlockC* t1C = Some::MyBlockC::allocateC();
+
+   t1C->method1C();
+   t1C->~MyBlockC();
+   t1C->deallocateC();
+
+   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockC);
+
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGoC2(Ris::CmdLineCmd* aCmd)
+{
+   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockC);
+   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockB);
+
+   Some::MyBlockC* t1C1 = Some::MyBlockC::allocateC();
+   Some::MyBlockC* t1C2 = Some::MyBlockC::allocateC();
+   Some::MyBlockB* t1B1 = Some::MyBlockB::createBlock();
+   Some::MyBlockB* t1B2 = Some::MyBlockB::createBlock();
+
+   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockC);
+   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockB);
+
+   t1C1->deallocateC();
+   t1C2->deallocateC();
+   t1B1->destroy();
+   t1B2->destroy();
+
+   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockC);
+   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockB);
 }
 
 //******************************************************************************
 
-void CmdLineExec::executeGo24(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeGoC3(Ris::CmdLineCmd* aCmd)
+{
+   Some::MyBlockC* t1C1 = Some::MyBlockC::allocateC();
+   Some::MyBlockC* t1C2 = (Some::MyBlockC*)CC::BlockHandle::ptr(t1C1->mBlockHandle);
+
+   t1C1->method1C();
+   t1C2->method1C();
+   t1C1->deallocateC();
+
+   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockC);
+}
+
+//******************************************************************************
+
+void CmdLineExec::executeGoT1(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1,1);
    int tPoolIndex = aCmd->argInt(1);
@@ -143,7 +175,7 @@ void CmdLineExec::executeGo24(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeGo25(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeGoT2(Ris::CmdLineCmd* aCmd)
 {
    // Block pool parameters.
    CC::BlockPoolParms tBlockPoolParms;
@@ -163,14 +195,13 @@ void CmdLineExec::executeGo25(Ris::CmdLineCmd* aCmd)
    tBP->initialize(&tBlockPoolParms);
    tBP->finalize();
    delete tBP;
-
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeGo26(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeGoT3(Ris::CmdLineCmd* aCmd)
 {
 }
 

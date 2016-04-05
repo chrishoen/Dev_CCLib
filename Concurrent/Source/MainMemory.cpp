@@ -3,7 +3,7 @@
 #include "GSettings.h"
 #include "ccBlockPoolCentral.h"
 #include "someBlockPoolIndex.h"
-#include "someMyBlockC.h"
+#include "someMyBlockA.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -25,10 +25,10 @@ void main_memory_initialize()
 
    // Create block pool.
    tBlockPoolParms.reset();
-   tBlockPoolParms.mPoolIndex     = Some::cBlockPoolIndex_MyBlockC;
+   tBlockPoolParms.mPoolIndex     = Some::cBlockPoolIndex_MyBlockA;
    tBlockPoolParms.mBlockPoolType = CC::cBlockPoolType_LFFreeList;
    tBlockPoolParms.mNumBlocks     = gGSettings.mAllocate;
-   tBlockPoolParms.mBlockSize     = sizeof(Some::MyBlockC);
+   tBlockPoolParms.mBlockSize     = sizeof(Some::MyBlockA);
    CC::createBlockPool(&tBlockPoolParms);
 }
 

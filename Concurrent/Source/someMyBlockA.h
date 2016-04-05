@@ -1,5 +1,5 @@
-#ifndef _SOMEMYBLOCKC_H_
-#define _SOMEMYBLOCKC_H_
+#ifndef _SOMEMYBLOCKA_H_
+#define _SOMEMYBLOCKA_H_
 
 /*==============================================================================
 ==============================================================================*/
@@ -18,7 +18,7 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 
-class MyBlockC : public CC::HasBlockHandle
+class MyBlockA : public CC::HasBlockHandle
 {
 public:
 
@@ -28,16 +28,16 @@ public:
    // Memory management, constructors and destructors
 
    // Allocate a block from the block pool and call its constructor.
-   static MyBlockC* create ();
-   static MyBlockC* create (int aIdentifier);
+   static MyBlockA* create ();
+   static MyBlockA* create (int aIdentifier);
 
    // This method deallocates the object from the block pool from which it was
    // created. It does not call a class destructor.
    void destroy();
 
    // Constructor, it is called by create after allocation of a new block.
-   MyBlockC();
-   MyBlockC(int aIdentifier);
+   MyBlockA();
+   MyBlockA(int aIdentifier);
 
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------

@@ -11,7 +11,7 @@ Description:
 #include "ccBlockPoolCentral.h"
 #include "ccBlockPoolBlock.h"
 #include "someBlockPoolIndex.h"
-#include "someMyBlockC.h"
+#include "someMyBlockA.h"
 
 namespace Some
 {
@@ -21,24 +21,24 @@ namespace Some
 //******************************************************************************
 // Allocate a block from the block pool and call its constructor.
 
-MyBlockC* MyBlockC::create ()
+MyBlockA* MyBlockA::create ()
 { 
    // Allocate a block from the block pool.
    // Call the constructor on the allocated block using placement new.
    // Set the allocated block memory handle.
    // Return a pointer to the allocated block.
 
-   return CC::createBlock<MyBlockC,cBlockPoolIndex_MyBlockC>();
+   return CC::createBlock<MyBlockA,cBlockPoolIndex_MyBlockA>();
 }
 
-MyBlockC* MyBlockC::create (int aIdentifier)
+MyBlockA* MyBlockA::create (int aIdentifier)
 { 
    // Allocate a block from the block pool.
    // Call the constructor on the allocated block using placement new.
    // Set the allocated block memory handle.
    // Return a pointer to the allocated block.
 
-   return CC::createBlock<MyBlockC,cBlockPoolIndex_MyBlockC>(aIdentifier);
+   return CC::createBlock<MyBlockA,cBlockPoolIndex_MyBlockA>(aIdentifier);
 }
 
 //****************************************************************************
@@ -47,7 +47,7 @@ MyBlockC* MyBlockC::create (int aIdentifier)
 // This method deallocates the object from the block pool from which it was
 // created. It does not call a class destructor.
 
-void MyBlockC::destroy()
+void MyBlockA::destroy()
 {
    // Deallocate the block back to the block pool
    CC::deallocateBlockPoolBlock(this->mBlockHandle);
@@ -58,7 +58,7 @@ void MyBlockC::destroy()
 //****************************************************************************
 // Default Constructor.
 
-MyBlockC::MyBlockC()
+MyBlockA::MyBlockA()
 {
    mIdentifier = 0;
    mCode1=101;
@@ -72,7 +72,7 @@ MyBlockC::MyBlockC()
 //****************************************************************************
 // Constructor, it is called by create after allocation of a new block.
 
-MyBlockC::MyBlockC(int aIdentifier)
+MyBlockA::MyBlockA(int aIdentifier)
 {
    mIdentifier = aIdentifier;
    mCode1=101;
@@ -85,9 +85,9 @@ MyBlockC::MyBlockC(int aIdentifier)
 //****************************************************************************
 //****************************************************************************
 
-void MyBlockC::method1()
+void MyBlockA::method1()
 {
-   Prn::print(0, "MyBlockC::method1 %d",mIdentifier);
+   Prn::print(0, "MyBlockA::method1 %d",mIdentifier);
 }
 
 }//namespace

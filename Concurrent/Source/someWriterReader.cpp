@@ -14,7 +14,7 @@ Description:
 #include "LFBackoff.h"
 #include "LFFreeList.h"
 #include "LFIntQueue.h"
-#include "someMyBlockC.h"
+#include "someMyBlockA.h"
 #include "someShare.h"
 #include "someWriterReader.h"
 
@@ -188,7 +188,7 @@ void WriterReader::startTrialType5()
       {
          ++mCount &= 0xFFFF;
 
-         MyBlockC* tObject = MyBlockC::create();
+         MyBlockA* tObject = MyBlockA::create();
          tObject->mCode1 = mCount;
          gShare.mValueQueue.tryWrite(tObject);
 
@@ -516,11 +516,11 @@ void WriterReader::writereadType5(int aNumWrites)
       {
          ++mCount &= 0xFFFF;
 
-         MyBlockC* tObject = 0;
+         MyBlockA* tObject = 0;
          bool tPass = false;
 
          mMarkerWrite.doStart();
-         tObject = MyBlockC::create();
+         tObject = MyBlockA::create();
          mMarkerWrite.doStop();
 
          if (tObject)
@@ -549,7 +549,7 @@ void WriterReader::writereadType5(int aNumWrites)
          bool tPass;
          int tCount;
 
-         MyBlockC* tObject = 0;
+         MyBlockA* tObject = 0;
          tPass = gShare.mValueQueue.tryRead((void**)&tObject);
          tDelayA.delay();
 
@@ -681,7 +681,7 @@ void WriterReader::flushType5()
    {
       int tCount;
       bool tPass;
-      MyBlockC* tObject = 0;
+      MyBlockA* tObject = 0;
       tPass = gShare.mValueQueue.tryRead((void**)&tObject);
       if (!tPass) break;
       tCount = tObject->mCode1;

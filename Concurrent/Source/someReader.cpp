@@ -12,7 +12,7 @@ Description:
 #include "someShare.h"
 #include "LFBackoff.h"
 #include "LFIntQueue.h"
-#include "someMyBlockC.h"
+#include "someMyBlockA.h"
 #include "someReader.h"
 
 namespace Some
@@ -222,7 +222,7 @@ void Reader::readType5(int aNumReads)
    {
       bool tPass;
       int tCount;
-      MyBlockC* tObject = 0;
+      MyBlockA* tObject = 0;
 
       mMarkerRead.doStart();
       tPass = gShare.mValueQueue.tryRead((void**)&tObject);
@@ -340,7 +340,7 @@ void Reader::flushType5()
    while(true)
    {
       bool tPass;
-      MyBlockC* tObject = 0;
+      MyBlockA* tObject = 0;
       tPass = gShare.mValueQueue.tryRead((void**)&tObject);
       if (!tPass) break;
 
