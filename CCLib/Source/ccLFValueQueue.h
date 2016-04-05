@@ -103,8 +103,8 @@ public:
    //***************************************************************************
    // Members
 
-   // If this flag is true then the memory for this object was created
-   // externally. If it is false then the memory was allocated at 
+   // If this flag is false then the memory for this object was created
+   // externally. If it is true then the memory was allocated at 
    // initialization and must be freed at finalization.
    bool mFreeMemoryFlag;
 
