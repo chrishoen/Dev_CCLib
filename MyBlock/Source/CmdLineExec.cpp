@@ -63,19 +63,13 @@ void CmdLineExec::executeGo11(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-Some::MyBlockC* gC1[100000];
-
-
 void CmdLineExec::executeGo12(Ris::CmdLineCmd* aCmd)
 {
-   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockC);
+   Some::MyBlockC* tC1 = Some::MyBlockC::create(101);
+   Prn::print(0, "%d %d",tC1->mBlockHandle.mPoolIndex,tC1->mBlockHandle.mBlockIndex);
 
-   for (int i = 0; i < 65536; i++)
-   {
-      gC1[i] = Some::MyBlockC::create();
-   }
-
-   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockC);
+   CC::BlockHandle tBlockHandle = CC::getBlockPoolBlockHandle(tC1);
+   Prn::print(0, "%d %d",tBlockHandle.mPoolIndex,tBlockHandle.mBlockIndex);
 }
 
 //******************************************************************************

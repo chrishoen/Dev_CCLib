@@ -103,6 +103,9 @@ void deallocateBlockPoolBlock(BlockHandle aBlockHandle);
 // Get a pointer to a block, given a block handle.
 void* getBlockPoolBlockPtr(BlockHandle aBlockHandle);
 
+// Get the handle of a block, given its address.
+BlockHandle getBlockPoolBlockHandle(void* aBlockPtr);
+
 // Shows block pool info.
 void showBlockPool(int aPoolIndex);
 

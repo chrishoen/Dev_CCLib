@@ -193,4 +193,21 @@ char* BlockBoxArray::block(int aIndex)
    return tBlock;
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Get the handle of a block, given its address.
+
+BlockHandle BlockBoxArray::getBlockHandle(void* aBlockPtr)
+{
+   BlockHandle tBlockHandle;
+   if (aBlockPtr==0) return tBlockHandle;
+
+   char*  tBlock = (char*)aBlockPtr;
+   BlockHeader* tHeader = (BlockHeader*)(tBlock - cHeaderSize);
+
+   tBlockHandle = tHeader->mBlockHandle;
+   return tBlockHandle;
+}
+
 }//namespace
