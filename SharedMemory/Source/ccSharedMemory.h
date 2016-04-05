@@ -49,6 +49,16 @@ protected:
 };
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Global instance
+
+#ifdef _CCSHAREDMEMORY_CPP_
+          SharedMemory gSharedMemory;
+#else
+   extern SharedMemory gSharedMemory;
+#endif
+
 }//namespace
 
 #endif

@@ -10,6 +10,8 @@ Description:
 #include "prnPrint.h"
 
 #include "cc_functions.h"
+
+#define  _CCSHAREDMEMORY_CPP_
 #include "ccSharedMemory.h"
 
 namespace CC
