@@ -89,10 +89,11 @@ public:
 //****************************************************************************
 //****************************************************************************
 // This is a function template used to create classes that use the block pool
-// for memory management.
+// for memory management. This is used for intrusive blocks, those that must
+// contain a block handle member variable.
 
 template <class BlockClass,int BlockPoolIndex>
-BlockClass* createBlock()
+BlockClass* createBlockIntrusive()
 {
    // Block pointer.
    BlockClass* tBlockPointer = 0;
@@ -118,7 +119,7 @@ BlockClass* createBlock()
 //****************************************************************************
 
 template <class BlockClass,int BlockPoolIndex,typename Parm1>
-BlockClass* createBlock(Parm1 P1)
+BlockClass* createBlockIntrusive(Parm1 P1)
 {
    // Block pointer.
    BlockClass* tBlockPointer = 0;
@@ -144,7 +145,7 @@ BlockClass* createBlock(Parm1 P1)
 //****************************************************************************
 
 template <class BlockClass,int BlockPoolIndex,typename Parm1,typename Parm2>
-BlockClass* createBlock(Parm1 P1,Parm1 P2)
+BlockClass* createBlockIntrusive(Parm1 P1,Parm1 P2)
 {
    // Block pointer.
    BlockClass* tBlockPointer = 0;
@@ -170,7 +171,7 @@ BlockClass* createBlock(Parm1 P1,Parm1 P2)
 //****************************************************************************
 
 template <class BlockClass,int BlockPoolIndex,typename Parm1,typename Parm2,typename Parm3>
-BlockClass* createBlock(Parm1 P1,Parm1 P2,Parm1 P3)
+BlockClass* createBlockIntrusive(Parm1 P1,Parm1 P2,Parm1 P3)
 {
    // Block pointer.
    BlockClass* tBlockPointer = 0;

@@ -29,7 +29,7 @@ MyTreeBlock* MyTreeBlock::create (int aIdentifier)
    // Set the allocated block memory handle.
    // Return a pointer to the allocated block.
 
-   return CC::createBlock<MyTreeBlock,cBlockPoolIndex_MyTreeBlock>(aIdentifier);
+   return CC::createBlockIntrusive<MyTreeBlock,cBlockPoolIndex_MyTreeBlock>(aIdentifier);
 }
 
 //****************************************************************************

@@ -28,7 +28,7 @@ MyBlockA* MyBlockA::create ()
    // Set the allocated block memory handle.
    // Return a pointer to the allocated block.
 
-   return CC::createBlock<MyBlockA,cBlockPoolIndex_MyBlockA>();
+   return CC::createBlockIntrusive<MyBlockA,cBlockPoolIndex_MyBlockA>();
 }
 
 MyBlockA* MyBlockA::create (int aIdentifier)
@@ -38,7 +38,7 @@ MyBlockA* MyBlockA::create (int aIdentifier)
    // Set the allocated block memory handle.
    // Return a pointer to the allocated block.
 
-   return CC::createBlock<MyBlockA,cBlockPoolIndex_MyBlockA>(aIdentifier);
+   return CC::createBlockIntrusive<MyBlockA,cBlockPoolIndex_MyBlockA>(aIdentifier);
 }
 
 //****************************************************************************
