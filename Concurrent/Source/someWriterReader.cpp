@@ -160,34 +160,6 @@ void WriterReader::startTrialType4()
       {
          ++mCount &= 0xFFFF;
 
-         CC::BaseLFBlock* tBlock = gShare.mBlockFreeList.listPop();
-         Class1A* tObject = new(tBlock) Class1A;
-         tObject->mCode1 = mCount;
-         gShare.mPointerQueue.writePtr(tObject);
-
-         mWriteCount++;
-         mWritePassCount++;
-         mWriteCheckSum += mCount;
-      }
-   }
-
-   mMarkerWrite.startTrial(gGSettings.mXLimit);
-   mMarkerRead.startTrial(gGSettings.mXLimit);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void WriterReader::startTrialType5()
-{
-   if (mIdent == 0)
-   {
-      int tListSize = gGSettings.mAllocate;
-      for (int i = 0; i < tListSize / 2; i++)
-      {
-         ++mCount &= 0xFFFF;
-
          MyBlockA* tObject = MyBlockA::create();
          tObject->mCode1 = mCount;
          gShare.mValueQueue.tryWrite(tObject);
@@ -214,7 +186,6 @@ void WriterReader::startTrial()
    case 2: startTrialType2 (); break;
    case 3: startTrialType3 (); break;
    case 4: startTrialType4 (); break;
-   case 5: startTrialType5 (); break;
    }
 }
 //******************************************************************************
@@ -431,81 +402,12 @@ void WriterReader::writereadType3(int aNumWrites)
    }
 }
    
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
 void WriterReader::writereadType4(int aNumWrites)
-{
-   LFBackoff tDelayA(gGSettings.mDelayA1,gGSettings.mDelayA2);
-
-   for (int i = 0; i < aNumWrites; i++)
-   {
-      // Write
-      if (my_randflag(0.5))
-      {
-         ++mCount &= 0xFFFF;
-
-         mMarkerWrite.doStart();
-         CC::BaseLFBlock* tBlock = gShare.mBlockFreeList.listPop();
-         mMarkerWrite.doStop();
-         Class1A* tObject = new(tBlock) Class1A;
-         tObject->mCode1 = mCount;
-
-         bool tPass = gShare.mPointerQueue.writePtr(tObject);
-         tDelayA.delay();
-
-         if (tPass)
-         {
-            mWriteCount++;
-            mWritePassCount++;
-            mWriteCheckSum += mCount;
-         }
-         else
-         {
-            gShare.mBlockFreeList.listPush(tObject);
-            mWriteCount++;
-            mWriteFailCount++;
-         }
-      }
-      // Read
-      else
-      {
-         bool tPass;
-         int tCount;
-
-         Class1A* tObject = (Class1A*)gShare.mPointerQueue.readPtr();
-         tDelayA.delay();
-
-         tPass = tObject!=0;
-         if (tObject)
-         {
-            tCount = tObject->mCode1;
-            mMarkerRead.doStart();
-            gShare.mBlockFreeList.listPush(tObject);
-            mMarkerRead.doStop();
-         }
-
-         if (tPass)
-         {
-            mReadCount++;
-            mReadPassCount++;
-            mReadCheckSum += tCount;
-         }
-         else
-         {
-            mReadCount++;
-            mReadFailCount++;
-         }
-      }
-   }
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void WriterReader::writereadType5(int aNumWrites)
 {
    LFBackoff tDelayA(gGSettings.mDelayA1,gGSettings.mDelayA2);
 
@@ -588,7 +490,6 @@ void WriterReader::writeread(int aNumWrites)
    case 2: writereadType2 (aNumWrites); break;
    case 3: writereadType3 (aNumWrites); break;
    case 4: writereadType4 (aNumWrites); break;
-   case 5: writereadType5 (aNumWrites); break;
    }
 }
    
@@ -661,25 +562,6 @@ void WriterReader::flushType4()
    while(true)
    {
       int tCount;
-      Class1A* tObject = (Class1A*)gShare.mPointerQueue.readPtr();
-      if (tObject==0) break;
-      tCount = tObject->mCode1;
-      gShare.mBlockFreeList.listPush(tObject);
-      mReadCount++;
-      mReadPassCount++;
-      mReadCheckSum += tCount;
-   }
-}
-   
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void WriterReader::flushType5()
-{
-   while(true)
-   {
-      int tCount;
       bool tPass;
       MyBlockA* tObject = 0;
       tPass = gShare.mValueQueue.tryRead((void**)&tObject);
@@ -704,7 +586,6 @@ void WriterReader::flush()
    case 2: flushType2 (); break;
    case 3: flushType3 (); break;
    case 4: flushType4 (); break;
-   case 5: flushType5 (); break;
    }
 }
    

@@ -63,9 +63,8 @@ void StatusThread::threadRunFunction()
             if (gShare.mType==1) tQueueSize = LFIntQueue::size();
             if (gShare.mType==2) tQueueSize = gShare.mPointerQueue.size();
             if (gShare.mType==3) tQueueSize = gShare.mBlockQueue.size();
-            if (gShare.mType==4) tQueueSize = gShare.mBlockFreeList.size();
-          //if (gShare.mType==5) tQueueSize = gShare.mValueQueue.size();
-            if (gShare.mType==5) tQueueSize = CC::getBlockPoolSize(cBlockPoolIndex_MyBlockA);
+          //if (gShare.mType==4) tQueueSize = gShare.mValueQueue.size();
+            if (gShare.mType==4) tQueueSize = CC::getBlockPoolSize(cBlockPoolIndex_MyBlockA);
             Prn::print(Prn::ThreadRun1, "%s$   %s   %s %8d",
                mProcString,
                my_stringLLU(tString1, gShare.mWriter[0].mCount),
@@ -79,9 +78,8 @@ void StatusThread::threadRunFunction()
             if (gShare.mType==1) tQueueSize = LFIntQueue::size();
             if (gShare.mType==2) tQueueSize = gShare.mPointerQueue.size();
             if (gShare.mType==3) tQueueSize = gShare.mBlockQueue.size();
-            if (gShare.mType==4) tQueueSize = gShare.mBlockFreeList.size();
-          //if (gShare.mType==5) tQueueSize = gShare.mValueQueue.size();
-            if (gShare.mType==5) tQueueSize = CC::getBlockPoolSize(cBlockPoolIndex_MyBlockA);
+          //if (gShare.mType==4) tQueueSize = gShare.mValueQueue.size();
+            if (gShare.mType==4) tQueueSize = CC::getBlockPoolSize(cBlockPoolIndex_MyBlockA);
             Prn::print(Prn::ThreadRun1, "%s$   %s   %s %8d",
                mProcString,
                my_stringLLU(tString1, gShare.mWriterReader[0].mWriteCount),

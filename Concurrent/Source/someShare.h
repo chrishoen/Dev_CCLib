@@ -15,7 +15,6 @@
 #include "ccLFValueQueue.h"
 #include "ccLFPointerQueue.h"
 #include "ccLFBlockQueue.h"
-#include "ccLFBlockFreeList.h"
 
 namespace Some
 {
@@ -76,9 +75,7 @@ public:
 
    CC::LFPointerQueue       mPointerQueue;
    CC::LFBlockQueue         mBlockQueue;
-   CC::LFBlockFreeList      mBlockFreeList;
    CC::LFValueQueue<void*>  mValueQueue;
-// CC::LFPointerQueue       mValueQueue;
 
 };
 

@@ -37,7 +37,6 @@ public:
    void startTrialType2();
    void startTrialType3();
    void startTrialType4();
-   void startTrialType5();
    void startTrial     ();
    void finishTrial();
 
@@ -45,14 +44,12 @@ public:
    void writereadType2 (int aNumWrites);
    void writereadType3 (int aNumWrites);
    void writereadType4 (int aNumWrites);
-   void writereadType5 (int aNumWrites);
    void writeread      (int aNumWrites);
 
    void flushType1 ();
    void flushType2 ();
    void flushType3 ();
    void flushType4 ();
-   void flushType5 ();
    void flush      ();
 
    //---------------------------------------------------------------------------

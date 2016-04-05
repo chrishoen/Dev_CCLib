@@ -167,63 +167,11 @@ void Writer::writeType3(int aNumWrites)
    }
 }
 
-
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
 void Writer::writeType4(int aNumWrites)
-{
-   LFBackoff tDelayA(gGSettings.mDelayA1,gGSettings.mDelayA2);
-
-   for (int i = 0; i < aNumWrites; i++)
-   {
-      Class1A*         tObject = 0;
-      CC::BaseLFBlock* tBlock = 0;
-      bool tPass;
-      int tCount = mCount & 0xFFFF;
-
-      mMarkerWrite.doStart();
-      tBlock = gShare.mBlockFreeList.listPop();
-      mMarkerWrite.doStop();
-
-      if (tBlock)
-      {
-         tObject = new(tBlock)Class1A;
-         tObject->mCode1 = tCount;
-         tPass = gShare.mPointerQueue.writePtr(tObject);
-      }
-      else
-      {
-         tObject=0;
-         tPass=false;
-      }
-
-      tDelayA.delay();
-
-      if (tPass)
-      {
-         mCount++;
-         mPassCount++;
-         mCheckSum += tCount;
-      }
-      else
-      {
-         if (tObject)
-         {
-            gShare.mBlockFreeList.listPush(tObject);
-         }
-         mCount++;
-         mFailCount++;
-      }
-   }
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void Writer::writeType5(int aNumWrites)
 {
    LFBackoff tDelayA(gGSettings.mDelayA1,gGSettings.mDelayA2);
 
@@ -297,7 +245,6 @@ void Writer::write(int aNumWrites)
    case 2: writeType2 (aNumWrites); break;
    case 3: writeType3 (aNumWrites); break;
    case 4: writeType4 (aNumWrites); break;
-   case 5: writeType5 (aNumWrites); break;
    }
 }
    
