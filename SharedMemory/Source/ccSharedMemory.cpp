@@ -56,7 +56,7 @@ void SharedMemory::initializeForServer(int aNumBytes)
       PAGE_READWRITE,
       0,
       aNumBytes,
-      "TESTMYSHAREMEMFILE");
+      "AAATESTSHAREMEMFILE");
 
    PVOID tMemory=MapViewOfFile(
       mSpecific->mShareFileMap,
@@ -68,12 +68,12 @@ void SharedMemory::initializeForServer(int aNumBytes)
       NULL,
       0,
       200,
-      "TESTMYSHARESEM");
+      "AAATESTSHARESEM");
 
    mSpecific->mMutex=CreateMutex(
       NULL,
       FALSE,
-      "TESTMYSHAREMUTEX");
+      "AAATESTSHAREMUTEX");
 
    ReleaseMutex(mSpecific->mMutex);
 }
@@ -86,7 +86,7 @@ void SharedMemory::initializeForClient()
 {
    mSpecific->mShareFileMap=OpenFileMapping(
       FILE_MAP_READ | FILE_MAP_WRITE,FALSE,
-      "TESTMYSHAREMEMFILE");
+      "AAATESTSHAREMEMFILE");
 
    PVOID tMemory=MapViewOfFile(
       mSpecific->mShareFileMap,
@@ -97,12 +97,12 @@ void SharedMemory::initializeForClient()
    mSpecific->mSemaphore=OpenSemaphore(
       EVENT_ALL_ACCESS | EVENT_MODIFY_STATE | SYNCHRONIZE,
       FALSE,
-      "TESTMYSHARESEM");
+      "AAATESTSHARESEM");
 
    mSpecific->mMutex=OpenMutex(
       MUTEX_ALL_ACCESS | MUTEX_MODIFY_STATE | SYNCHRONIZE,
       FALSE,
-      "TESTMYSHAREMUTEX");
+      "AAATESTSHAREMUTEX");
 }
 
 //******************************************************************************
