@@ -78,35 +78,38 @@ namespace CC
 //***************************************************************************
 // Here is a set of calls that manage block pools.
 
-// This initializes the block pool facility. It is called at program
-// initialization, before any block pools are created.
+// Initialize the block pool facility. It is called at program
+// initialization, before any block pools are created and used.
 void initializeBlockPoolCentral();
 
-// This finalizes the block pool facility. It is called at program
+// Finalize the block pool facility. It is called at program
 // termination. It destroys all block pools that were created.
 void finalizeBlockPoolCentral();
 
-// This creates a block pool and places a pointer to it into the block
+// Create a block pool and place a pointer to it into the block
 // pool array. It is passed a set of parameters.
 void createBlockPool(BlockPoolParms* aParms);
 
-// This allocates a block from a block pool. It is passes a pool index and 
+// Allocate a block from a block pool. It is passes a pool index and 
 // it returns a pointer to the block and a handle for the block.
 // It returns true if successful, false if the block pool is empty.
 bool allocateBlockPoolBlock(int aPoolIndex,void** aBlockPointer,BlockHandle* aBlockHandle);
 
-// This deallocates a block from a block pool. It is passed a handle to the
+// Deallocates a block from a block pool. It is passed a handle to the
 // block, which contains the pool index of the block pool to deallocate the 
 // block from.
 void deallocateBlockPoolBlock(BlockHandle aBlockHandle);
 
-// This returns a pointer to a block, given a block handle.
+// Get a pointer to a block, given a block handle.
 void* getBlockPoolBlockPtr(BlockHandle aBlockHandle);
 
-// This shows block pool info.
+// Shows block pool info.
 void showBlockPool(int aPoolIndex);
 
-// This shows block pool info.
+// Get the size of a block pool.
+int getBlockPoolSize(int aPoolIndex);
+
+// Test block pool code.
 void testBlockPool(int aPoolIndex);
 
 }//namespace

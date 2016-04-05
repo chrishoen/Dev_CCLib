@@ -30,8 +30,8 @@ static BlockPoolParms mBlockPoolParms[cMaxNumBlockPools];
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-// This initializes the block pool facility. It is called at program
-// initialization, before any block pools are created.
+// Initialize the block pool facility. It is called at program
+// initialization, before any block pools are created and used.
 
 void initializeBlockPoolCentral()
 {
@@ -45,7 +45,30 @@ void initializeBlockPoolCentral()
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-// This creates a block pool and places a pointer to it into the block
+// Finalize the block pool facility. It is called at program
+// termination. It destroys all block pools that were created.
+
+void finalizeBlockPoolCentral()
+{
+   // For each block pool that was created
+   for (int i = 0; i < cMaxNumBlockPools; i++)
+   {
+      if (mBlockPoolParms[i].mValidFlag)
+      {
+         // Finalize and delete the block pool.
+         mBlockPool[i]->finalize();
+         delete mBlockPool[i];
+         mBlockPool[i]=0;
+         // Mark it invalid.
+         mBlockPoolParms[i].mValidFlag = false;
+      }
+   }
+}
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+// Create a block pool and place a pointer to it into the block
 // pool array. It is passed a set of parameters.
 
 void createBlockPool(BlockPoolParms* aParms)
@@ -87,36 +110,12 @@ void createBlockPool(BlockPoolParms* aParms)
 
    // Store parameters.
    mBlockPoolParms[tPoolIndex] = *aParms;
-
 }
 
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-// This finalizes the block pool facility. It is called at program
-// termination. It destroys all block pools that were created.
-
-void finalizeBlockPoolCentral()
-{
-   // For each block pool that was created
-   for (int i = 0; i < cMaxNumBlockPools; i++)
-   {
-      if (mBlockPoolParms[i].mValidFlag)
-      {
-         // Finalize and delete the block pool.
-         mBlockPool[i]->finalize();
-         delete mBlockPool[i];
-         mBlockPool[i]=0;
-         // Mark it invalid.
-         mBlockPoolParms[i].mValidFlag = false;
-      }
-   }
-}
-
-//****************************************************************************
-//****************************************************************************
-//****************************************************************************
-// This shows block pool info.
+// Test code.
 
 void testBlockPool(int aPoolIndex)
 {
@@ -125,7 +124,7 @@ void testBlockPool(int aPoolIndex)
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-// This allocates a block from a block pool. It is passes a pool index and 
+// Allocate a block from a block pool. It is passes a pool index and 
 // it returns a pointer to the block and a handle for the block.
 // It returns true if successful, false if the block pool is empty.
 
@@ -145,7 +144,7 @@ bool allocateBlockPoolBlock(int aPoolIndex,void** aBlockPointer,BlockHandle* aBl
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-// This deallocates a block from a block pool. It is passed a handle to the
+// Deallocates a block from a block pool. It is passed a handle to the
 // block, which contains the pool index of the block pool to deallocate the 
 // block from.
 
@@ -158,7 +157,7 @@ void deallocateBlockPoolBlock(BlockHandle aBlockHandle)
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-// This returns a pointer to a block, given a block handle.
+// Get a pointer to a block, given a block handle.
 
 void* getBlockPoolBlockPtr(BlockHandle aBlockHandle)
 {
@@ -171,7 +170,7 @@ void* getBlockPoolBlockPtr(BlockHandle aBlockHandle)
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-// This shows block pool info.
+// Show block pool info.
 
 void showBlockPool(int aPoolIndex)
 {
@@ -182,6 +181,22 @@ void showBlockPool(int aPoolIndex)
       return;
    }
    mBlockPool[aPoolIndex]->show();
+}
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+// Get the size of a block pool.
+
+int getBlockPoolSize(int aPoolIndex)
+{
+   // Guard
+   if (!mBlockPoolParms[aPoolIndex].mValidFlag)
+   {
+      printf("ERROR BlockPool doesn't exists %d\n", aPoolIndex);
+      return 0;
+   }
+   return mBlockPool[aPoolIndex]->size();
 }
 
 } //namespace
