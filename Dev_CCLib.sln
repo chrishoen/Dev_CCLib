@@ -35,6 +35,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StackTest", "StackTest\Stac
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProtoBlock", "ProtoBlock\ProtoBlock.vcxproj", "{516CB74E-4EE5-4810-A52A-004571A79492}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SharedMemory", "SharedMemory\SharedMemory.vcxproj", "{F04B0F2D-3BDE-4EB2-8AB8-7C1498CA69C1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -171,6 +173,14 @@ Global
 		{516CB74E-4EE5-4810-A52A-004571A79492}.Release|Win32.Build.0 = Release|Win32
 		{516CB74E-4EE5-4810-A52A-004571A79492}.Release|x64.ActiveCfg = Release|x64
 		{516CB74E-4EE5-4810-A52A-004571A79492}.Release|x64.Build.0 = Release|x64
+		{F04B0F2D-3BDE-4EB2-8AB8-7C1498CA69C1}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F04B0F2D-3BDE-4EB2-8AB8-7C1498CA69C1}.Debug|Win32.Build.0 = Debug|Win32
+		{F04B0F2D-3BDE-4EB2-8AB8-7C1498CA69C1}.Debug|x64.ActiveCfg = Debug|x64
+		{F04B0F2D-3BDE-4EB2-8AB8-7C1498CA69C1}.Debug|x64.Build.0 = Debug|x64
+		{F04B0F2D-3BDE-4EB2-8AB8-7C1498CA69C1}.Release|Win32.ActiveCfg = Release|Win32
+		{F04B0F2D-3BDE-4EB2-8AB8-7C1498CA69C1}.Release|Win32.Build.0 = Release|Win32
+		{F04B0F2D-3BDE-4EB2-8AB8-7C1498CA69C1}.Release|x64.ActiveCfg = Release|x64
+		{F04B0F2D-3BDE-4EB2-8AB8-7C1498CA69C1}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
