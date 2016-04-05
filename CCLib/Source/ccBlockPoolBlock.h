@@ -23,9 +23,9 @@ memory pools.
 namespace CC
 {
 
-//****************************************************************************
-//****************************************************************************
-//****************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // This is a class template for classes whose instances use a block pool 
 // for memory management.
 
@@ -34,48 +34,50 @@ class BlockPoolBlock
 {
 public:
 
-   //--------------------------------------------------------------------------
-   //--------------------------------------------------------------------------
-   //--------------------------------------------------------------------------
-   // This allocates a block from the block pool and uses placement new
-   // to call the class constructor. It is analogous to new.
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Block handle member.
 
-   static BlockClass* allocate()
+   BlockHandle mBlockHandle;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Create a block. Allocate the block from the block pool and call the
+   // class constructor on the block.
+
+   static BlockClass* createBlock()
    {
       // Block pointer.
       BlockClass* tBlockPointer = 0;
       // Block handle.
       CC::BlockHandle tBlockHandle;
 
-      // Allocate a block from the block pool.
-      CC::allocateBlockPoolBlock(BlockPoolIndex,(void**)&tBlockPointer,&tBlockHandle);
+      // Try to allocate a block from the block pool.
+      if (CC::allocateBlockPoolBlock(BlockPoolIndex, (void**)&tBlockPointer, &tBlockHandle))
+      {
+         // Call the constructor on the allocated block using placement new.
+         new(tBlockPointer)BlockClass();
 
-      // Call the constructor on the allocated block using placement new.
-      new(tBlockPointer)BlockClass();
-
-      // Set the allocated block memory handle.
-      tBlockPointer->mBlockHandle = tBlockHandle;
-
+         // Set the allocated block memory handle.
+         tBlockPointer->mBlockHandle = tBlockHandle;
+      }
       // Return the pointer to the allocated block.
+      // Return null if the block pool is empty.
       return tBlockPointer;
    }
-   //--------------------------------------------------------------------------
-   //--------------------------------------------------------------------------
-   //--------------------------------------------------------------------------
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // This deallocates the object back to the block pool. It does not call
    // a destructor for the object.
-#if 0
-   void deallocate()
-   {
-      // Deallocate the block back to the block pool
- //    deallocateBlockPoolBlock(this->mBlockHandle);
-   }
-#endif
 
-   static void deallocate(BlockClass* aBlock)
+   void destroy()
    {
       // Deallocate the block back to the block pool
-      deallocateBlockPoolBlock(aBlock->mBlockHandle);
+      deallocateBlockPoolBlock(this->mBlockHandle);
    }
 
 };

@@ -106,16 +106,16 @@ void CmdLineExec::executeGo22(Ris::CmdLineCmd* aCmd)
 
    Some::MyBlockA* t1A1 = Some::MyBlockA::allocateA();
    Some::MyBlockA* t1A2 = Some::MyBlockA::allocateA();
-   Some::MyBlockB* t1B1 = Some::MyBlockB::allocate();
-   Some::MyBlockB* t1B2 = Some::MyBlockB::allocate();
+   Some::MyBlockB* t1B1 = Some::MyBlockB::createBlock();
+   Some::MyBlockB* t1B2 = Some::MyBlockB::createBlock();
 
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockA);
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockB);
 
    t1A1->deallocateA();
    t1A2->deallocateA();
-   Some::MyBlockB::deallocate(t1B1);
-   Some::MyBlockB::deallocate(t1B2);
+   t1B1->destroy();
+   t1B2->destroy();
 
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockA);
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockB);

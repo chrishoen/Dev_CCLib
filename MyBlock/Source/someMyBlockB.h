@@ -19,8 +19,7 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 
-//class MyBlockB : public CC::HasBlockHandle, public CC::BlockPoolBlock<Some::MyBlockB,Some::cBlockPoolIndex_MyBlockB>
-class MyBlockB : public Some::MyBlockA, public CC::BlockPoolBlock<Some::MyBlockB,Some::cBlockPoolIndex_MyBlockB>
+class MyBlockB : public CC::BlockPoolBlock<Some::MyBlockB,Some::cBlockPoolIndex_MyBlockB>
 {
 public:
 
