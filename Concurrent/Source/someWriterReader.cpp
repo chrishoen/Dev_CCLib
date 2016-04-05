@@ -516,26 +516,32 @@ void WriterReader::writereadType5(int aNumWrites)
       {
          ++mCount &= 0xFFFF;
 
+         MyBlockC* tObject = 0;
+         bool tPass = false;
+
          mMarkerWrite.doStart();
-         MyBlockC* tObject = MyBlockC::create();
+         tObject = MyBlockC::create();
          mMarkerWrite.doStop();
-         tObject->mCode1 = mCount;
 
-         bool tPass = gShare.mValueQueue.tryWrite(tObject);
+         if (tObject)
+         {
+            tObject->mCode1 = mCount;
+            tPass = gShare.mValueQueue.tryWrite(tObject);
+
+            if (tPass)
+            {
+               mWriteCount++;
+               mWritePassCount++;
+               mWriteCheckSum += mCount;
+            }
+            else
+            {
+               tObject->destroy();
+               mWriteCount++;
+               mWriteFailCount++;
+            }
+         }
          tDelayA.delay();
-
-         if (tPass)
-         {
-            mWriteCount++;
-            mWritePassCount++;
-            mWriteCheckSum += mCount;
-         }
-         else
-         {
-            tObject->destroy();
-            mWriteCount++;
-            mWriteFailCount++;
-         }
       }
       // Read
       else

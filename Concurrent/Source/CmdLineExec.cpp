@@ -62,11 +62,17 @@ Some::MyBlockC* gC1[100000];
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockC);
-   return;
 
-   for (int i = 0; i < 10; i++)
+   for (int i = 0; i < 20000; i++)
    {
       gC1[i] = Some::MyBlockC::create();
+   }
+
+   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockC);
+
+   for (int i = 0; i < 20000; i++)
+   {
+      gC1[i]->destroy();
    }
 
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockC);
