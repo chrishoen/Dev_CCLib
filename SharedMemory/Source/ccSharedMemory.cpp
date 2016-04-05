@@ -22,7 +22,9 @@ namespace CC
 class SharedMemory::Specific
 {
 public:
-   HANDLE mHandle;
+   HANDLE mShareFileMap;
+   HANDLE mSemaphore;
+   HANDLE mMutex;
 };
 
 //****************************************************************************
@@ -38,33 +40,65 @@ SharedMemory::SharedMemory()
    mNumBytes = 0;
 }
 
-void SharedMemory::initialize(char* aName, int aNumBytes)
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+
+void SharedMemory::initializeForServer(int aNumBytes)
 {
-   //---------------------------------------------------------------------------
-   //---------------------------------------------------------------------------
-   //---------------------------------------------------------------------------
-   // Initialize memory.
+   mSpecific->mShareFileMap=CreateFileMapping(
+      INVALID_HANDLE_VALUE,
+      NULL,
+      PAGE_READWRITE,
+      0,
+      aNumBytes,
+      "TESTMYSHAREMEMFILE");
 
-   mNumBytes = cc_round_upto16(aNumBytes);
+   PVOID tMemory=MapViewOfFile(
+      mSpecific->mShareFileMap,
+      FILE_MAP_READ | FILE_MAP_WRITE,0,0,0);
 
-   void* aMemory=0;
-   // Deallocate memory, if any exists.
-   finalize();
+   mMemory = tMemory;
 
-   // If the instance of this class is not to reside in external memory
-   // then allocate memory for it on the system heap.
-   if (aMemory == 0)
-   {
-      mMemory = malloc(mNumBytes);
-      mFreeMemoryFlag = true;
-   }
-   // If the instance of this class is to reside in external memory
-   // then use the memory pointer that was passed in.
-   else
-   {
-      mMemory = aMemory;
-      mFreeMemoryFlag = false;
-   }
+   mSpecific->mSemaphore=CreateSemaphore(
+      NULL,
+      0,
+      200,
+      "TESTMYSHARESEM");
+
+   mSpecific->mMutex=CreateMutex(
+      NULL,
+      FALSE,
+      "TESTMYSHAREMUTEX");
+
+   ReleaseMutex(mSpecific->mMutex);
+}
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+
+void SharedMemory::initializeForClient()
+{
+   mSpecific->mShareFileMap=OpenFileMapping(
+      FILE_MAP_READ | FILE_MAP_WRITE,FALSE,
+      "TESTMYSHAREMEMFILE");
+
+   PVOID tMemory=MapViewOfFile(
+      mSpecific->mShareFileMap,
+      FILE_MAP_READ | FILE_MAP_WRITE,0,0,0);
+
+   mMemory = tMemory;
+
+   mSpecific->mSemaphore=OpenSemaphore(
+      EVENT_ALL_ACCESS | EVENT_MODIFY_STATE | SYNCHRONIZE,
+      FALSE,
+      "TESTMYSHARESEM");
+
+   mSpecific->mMutex=OpenMutex(
+      MUTEX_ALL_ACCESS | MUTEX_MODIFY_STATE | SYNCHRONIZE,
+      FALSE,
+      "TESTMYSHAREMUTEX");
 }
 
 //******************************************************************************
@@ -73,15 +107,38 @@ void SharedMemory::initialize(char* aName, int aNumBytes)
 
 void SharedMemory::finalize()
 {
-   if (mFreeMemoryFlag)
-   {
-      if (mMemory)
-      {
-         free(mMemory);
-      }
-   }
-   mMemory = 0;
-   mFreeMemoryFlag = false;
+   CloseHandle(mSpecific->mShareFileMap);
+   CloseHandle(mSpecific->mSemaphore);
+   CloseHandle(mSpecific->mMutex);
 }
 
+//******************************************************************************
+
+bool SharedMemory::putSemaphore(void)
+{
+   return 0!=ReleaseSemaphore(mSpecific->mSemaphore,1,NULL);
+}
+
+//******************************************************************************
+
+bool SharedMemory::getSemaphore(void)
+{
+   DWORD status = WaitForSingleObject(mSpecific->mSemaphore,INFINITE);
+   return status == WAIT_OBJECT_0;
+}
+
+//******************************************************************************
+
+bool SharedMemory::putMutex(void)
+{
+   return 0!=ReleaseMutex(mSpecific->mMutex);
+}
+
+//******************************************************************************
+
+bool SharedMemory::getMutex(void)
+{
+   DWORD status = WaitForSingleObject(mSpecific->mMutex,INFINITE);
+   return status == WAIT_OBJECT_0;
+}
 }//namespace

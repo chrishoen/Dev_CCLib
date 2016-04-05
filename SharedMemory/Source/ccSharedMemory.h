@@ -27,9 +27,15 @@ public:
    //***************************************************************************
    //***************************************************************************
 
-   void initialize(char* aName,int aNumBytes);
+   void initializeForServer(int aNumBytes);
+   void initializeForClient();
    void finalize();
 
+   // Synchronization objects
+   bool putSemaphore     (void);
+   bool getSemaphore     (void);
+   bool putMutex         (void);
+   bool getMutex         (void);
 
    int mNumBytes;
    bool mFreeMemoryFlag;
