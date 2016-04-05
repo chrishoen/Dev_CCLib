@@ -14,6 +14,7 @@ Description:
 #include "LFBackoff.h"
 #include "LFFreeList.h"
 #include "LFIntQueue.h"
+#include "someMyBlockC.h"
 #include "someShare.h"
 #include "someWriterReader.h"
 
@@ -187,8 +188,7 @@ void WriterReader::startTrialType5()
       {
          ++mCount &= 0xFFFF;
 
-         CC::BaseLFBlock* tBlock = gShare.mBlockFreeList.listPop();
-         Class1A* tObject = new(tBlock) Class1A;
+         MyBlockC* tObject = MyBlockC::create();
          tObject->mCode1 = mCount;
          gShare.mValueQueue.tryWrite(tObject);
 
@@ -517,9 +517,8 @@ void WriterReader::writereadType5(int aNumWrites)
          ++mCount &= 0xFFFF;
 
          mMarkerWrite.doStart();
-         CC::BaseLFBlock* tBlock = gShare.mBlockFreeList.listPop();
+         MyBlockC* tObject = MyBlockC::create();
          mMarkerWrite.doStop();
-         Class1A* tObject = new(tBlock) Class1A;
          tObject->mCode1 = mCount;
 
          bool tPass = gShare.mValueQueue.tryWrite(tObject);
@@ -533,7 +532,7 @@ void WriterReader::writereadType5(int aNumWrites)
          }
          else
          {
-            gShare.mBlockFreeList.listPush(tObject);
+            tObject->destroy();
             mWriteCount++;
             mWriteFailCount++;
          }
@@ -544,7 +543,7 @@ void WriterReader::writereadType5(int aNumWrites)
          bool tPass;
          int tCount;
 
-         Class1A* tObject = 0;
+         MyBlockC* tObject = 0;
          tPass = gShare.mValueQueue.tryRead((void**)&tObject);
          tDelayA.delay();
 
@@ -552,7 +551,7 @@ void WriterReader::writereadType5(int aNumWrites)
          {
             tCount = tObject->mCode1;
             mMarkerRead.doStart();
-            gShare.mBlockFreeList.listPush(tObject);
+            tObject->destroy();
             mMarkerRead.doStop();
          }
 
@@ -676,11 +675,11 @@ void WriterReader::flushType5()
    {
       int tCount;
       bool tPass;
-      Class1A* tObject = 0;
+      MyBlockC* tObject = 0;
       tPass = gShare.mValueQueue.tryRead((void**)&tObject);
       if (!tPass) break;
       tCount = tObject->mCode1;
-      gShare.mBlockFreeList.listPush(tObject);
+      tObject->destroy();
       mReadCount++;
       mReadPassCount++;
       mReadCheckSum += tCount;

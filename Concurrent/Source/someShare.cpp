@@ -53,7 +53,6 @@ void Share::initialize()
          mPointerQueue.initialize(gGSettings.mAllocate);
          break;
       case 5:
-         mBlockFreeList.initialize(gGSettings.mAllocate, sizeof(Class1A));
          mValueQueue.initialize(gGSettings.mAllocate);
          break;
       }

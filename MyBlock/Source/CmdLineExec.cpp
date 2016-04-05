@@ -63,8 +63,19 @@ void CmdLineExec::executeGo11(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
+Some::MyBlockC* gC1[100000];
+
+
 void CmdLineExec::executeGo12(Ris::CmdLineCmd* aCmd)
 {
+   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockC);
+
+   for (int i = 0; i < 65536; i++)
+   {
+      gC1[i] = Some::MyBlockC::create();
+   }
+
+   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockC);
 }
 
 //******************************************************************************

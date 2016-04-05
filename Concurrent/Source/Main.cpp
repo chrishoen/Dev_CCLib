@@ -1,32 +1,37 @@
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <stdio.h>
+
+#include "MainInit.h"
+#include "MainMemory.h"
 #include "prnPrint.h"
-#include "risThreadsProcess.h"
 #include "risCmdLineConsole.h"
 #include "CmdLineExec.h"
 
-#include "GSettings.h"
-#include "MainInit.h"
+void amain_init();
+
 
 //******************************************************************************
 int main(int argc,char** argv)
 {
    //--------------------------------------------------------------------
-   // Initialize
+   // Begin program
 
    main_initialize(argc,argv);
+   main_memory_initialize();
 
    //--------------------------------------------------------------------
    // Start user command line executive,
-   // It returns when user exits
+   // Wait for user to exit
 
    CmdLineExec* tExec = new CmdLineExec;
-   Ris::executeCmdLineConsole(tExec);
+   Ris::gCmdLineConsole.execute(tExec);
    delete tExec;
 
    //--------------------------------------------------------------------
-   // Exit
-   
-   main_finalize();
+   // End program
 
+   main_memory_finalize();
+   main_finalize();
    return 0;
 }
-

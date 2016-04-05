@@ -1,8 +1,8 @@
 
+#include <stdio.h>
+#include "GSettings.h"
 #include "ccBlockPoolCentral.h"
 #include "someBlockPoolIndex.h"
-#include "someMyBlockA.h"
-#include "someMyBlockB.h"
 #include "someMyBlockC.h"
 
 //******************************************************************************
@@ -25,25 +25,9 @@ void main_memory_initialize()
 
    // Create block pool.
    tBlockPoolParms.reset();
-   tBlockPoolParms.mPoolIndex     = Some::cBlockPoolIndex_MyBlockA;
-   tBlockPoolParms.mBlockPoolType = CC::cBlockPoolType_FreeList;
-   tBlockPoolParms.mNumBlocks     = 1000;
-   tBlockPoolParms.mBlockSize     = sizeof(Some::MyBlockA);
-   CC::createBlockPool(&tBlockPoolParms);
-
-   // Create block pool.
-   tBlockPoolParms.reset();
-   tBlockPoolParms.mPoolIndex     = Some::cBlockPoolIndex_MyBlockB;
-   tBlockPoolParms.mBlockPoolType = CC::cBlockPoolType_FreeList;
-   tBlockPoolParms.mNumBlocks     = 1000;
-   tBlockPoolParms.mBlockSize     = sizeof(Some::MyBlockB);
-   CC::createBlockPool(&tBlockPoolParms);
-
-   // Create block pool.
-   tBlockPoolParms.reset();
    tBlockPoolParms.mPoolIndex     = Some::cBlockPoolIndex_MyBlockC;
    tBlockPoolParms.mBlockPoolType = CC::cBlockPoolType_FreeList;
-   tBlockPoolParms.mNumBlocks     = 65536;
+   tBlockPoolParms.mNumBlocks     = gGSettings.mAllocate;
    tBlockPoolParms.mBlockSize     = sizeof(Some::MyBlockC);
    CC::createBlockPool(&tBlockPoolParms);
 }

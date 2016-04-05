@@ -8,6 +8,10 @@
 #include "LFFreeList.h"
 #include "CmdLineExec.h"
 
+#include "someBlockPoolIndex.h"
+#include "someMyBlockC.h"
+#include "ccBlockPoolCentral.h"
+
 #include "Timing.h"
 #include "someThreads.h"
 #include "someShare.h"
@@ -50,9 +54,22 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+Some::MyBlockC* gC1[100000];
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
+   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockC);
+   return;
+
+   for (int i = 0; i < 10; i++)
+   {
+      gC1[i] = Some::MyBlockC::create();
+   }
+
+   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockC);
 }
 
 //******************************************************************************

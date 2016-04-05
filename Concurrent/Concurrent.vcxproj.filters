@@ -67,6 +67,12 @@
     <ClCompile Include="Source\someClass1.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\MainMemory.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\someMyBlockC.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h">
@@ -130,6 +136,15 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\someClass1.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MainMemory.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\someMyBlockC.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\someBlockPoolIndex.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
