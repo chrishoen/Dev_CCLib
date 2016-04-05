@@ -63,7 +63,6 @@ BlockBoxArray::BlockBoxArray()
 
 BlockBoxArray::~BlockBoxArray()
 {
-   return;
    finalize();
 }
 
@@ -87,7 +86,6 @@ void BlockBoxArray::initialize(int aNumBlocks,int aBlockSize,int aPoolIndex,void
    // then allocate memory for it on the system heap.
    if (aMemory == 0)
    {
-      printf("BlockBoxArray::malloc\n");
       mMemory = malloc(BlockBoxArray::getMemorySize(aNumBlocks,aBlockSize));
       mFreeMemoryFlag = true;
    }
@@ -103,7 +101,7 @@ void BlockBoxArray::initialize(int aNumBlocks,int aBlockSize,int aPoolIndex,void
    int tStateSize    = BlockBoxArrayState::getMemorySize();
    int tBlockSize    = cc_round_upto16(aBlockSize);
    int tBlockBoxSize = cHeaderSize + tBlockSize;
-   int tArraySize    = (aNumBlocks+1)*tBlockBoxSize;
+   int tArraySize    = aNumBlocks*tBlockBoxSize;
 
    // Calculate memory addresses.
    char* tStateMemory = (char*)mMemory;
@@ -138,7 +136,6 @@ void BlockBoxArray::finalize()
    {
       if (mMemory)
       {
-         printf("BlockBoxArray::free\n");
          free(mMemory);
       }
    }
@@ -158,7 +155,7 @@ int BlockBoxArray::getMemorySize(int aNumBlocks,int aBlockSize)
    int tStateSize    = BlockBoxArrayState::getMemorySize();
    int tBlockSize    = cc_round_upto16(aBlockSize);
    int tBlockBoxSize = cHeaderSize + tBlockSize;
-   int tArraySize    = (aNumBlocks+1)*tBlockBoxSize;
+   int tArraySize    = aNumBlocks*tBlockBoxSize;
    int tMemorySize   = tStateSize + tArraySize;
 
    return tMemorySize;

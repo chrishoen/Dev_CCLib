@@ -29,9 +29,9 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("GO11"    ))  executeGo11(aCmd);
    if(aCmd->isCmd("GO12"    ))  executeGo12(aCmd);
    if(aCmd->isCmd("GO21"    ))  executeGo21(aCmd);
-   if(aCmd->isCmd("GO23"    ))  executeGo22(aCmd);
-   if(aCmd->isCmd("GO24"    ))  executeGo23(aCmd);
-   if(aCmd->isCmd("GO25"    ))  executeGo24(aCmd);
+   if(aCmd->isCmd("GO22"    ))  executeGo22(aCmd);
+   if(aCmd->isCmd("GO23"    ))  executeGo23(aCmd);
+   if(aCmd->isCmd("GO24"    ))  executeGo24(aCmd);
    if(aCmd->isCmd("GO25"    ))  executeGo25(aCmd);
    if(aCmd->isCmd("GO26"    ))  executeGo26(aCmd);
 }
@@ -73,24 +73,6 @@ void CmdLineExec::executeGo11(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo12(Ris::CmdLineCmd* aCmd)
 {
-   // Block pool parameters.
-   CC::BlockPoolParms tBlockPoolParms;
-   // Create block pool.
-   tBlockPoolParms.reset();
-   tBlockPoolParms.mPoolIndex     = Some::cBlockPoolIndex_MyBlockA;
-   tBlockPoolParms.mBlockPoolType = CC::cBlockPoolType_FreeList;
-   tBlockPoolParms.mNumBlocks     = 1000;
-   tBlockPoolParms.mBlockSize     = sizeof(Some::MyBlockA);
-
-
-   int tParmSize   = CC::BlockPoolParms::getMemorySize();
-   void* tParmMemory = malloc(tParmSize);
-   CC::BlockPoolParms* mParms = new(tParmMemory) CC::BlockPoolParms(tBlockPoolParms);
-// mParms = new(tParmMemory)BlockPoolParms(*aParms);
-// mParms = (BlockPoolParms*)tParmMemory;
-// *mParms = *aParms;
-   free(tParmMemory);
-   Prn::print(0, "done");
 }
 
 //******************************************************************************

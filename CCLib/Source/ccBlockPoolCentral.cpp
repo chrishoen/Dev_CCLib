@@ -120,21 +120,6 @@ void finalizeBlockPoolCentral()
 
 void testBlockPool(int aPoolIndex)
 {
-   printf("testBlockPool BEGIN %d\n", aPoolIndex);
-   // Guard
-   if (!mBlockPoolParms[aPoolIndex].mValidFlag)
-   {
-      printf("ERROR BlockPool doesn't exists %d\n", aPoolIndex);
-      return;
-   }
-   mBlockPool[aPoolIndex]->show();
-   mBlockPool[aPoolIndex]->finalize();
-   printf("testBlockPool END   %d\n", aPoolIndex);
-   delete mBlockPool[aPoolIndex];
-   return;
-
-   mBlockPool[aPoolIndex]=0;
-   mBlockPoolParms[aPoolIndex].mValidFlag = false;
 }
 
 //****************************************************************************

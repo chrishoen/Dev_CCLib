@@ -58,7 +58,6 @@ BlockPoolLFIndexStack::BlockPoolLFIndexStack()
 
 BlockPoolLFIndexStack::~BlockPoolLFIndexStack()
 {
-   return;
    finalize();
 }
 
@@ -81,7 +80,6 @@ void BlockPoolLFIndexStack::initialize(int aNumElements,void* aMemory)
    // then allocate memory for it on the system heap.
    if (aMemory == 0)
    {
-      printf("BlockBoxLFIndexStack::malloc\n");
       mMemory = malloc(BlockPoolLFIndexStack::getMemorySize(aNumElements));
       mFreeMemoryFlag = true;
    }
@@ -142,7 +140,6 @@ void BlockPoolLFIndexStack::finalize()
    {
       if (mMemory)
       {
-         printf("BlockPoolLFIndexStack::free\n");
          free(mMemory);
       }
    }

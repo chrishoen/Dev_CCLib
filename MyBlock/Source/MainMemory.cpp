@@ -16,7 +16,6 @@ void main_memory_initialize()
    //***************************************************************************
    // Initialize block pools.
 
-   return;
    // Initialize block pool central facility.
    CC::initializeBlockPoolCentral();
 
@@ -47,7 +46,6 @@ void main_memory_initialize()
 
 void main_memory_finalize()
 {
-   return;
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
