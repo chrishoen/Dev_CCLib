@@ -2,6 +2,7 @@
 
 #include "prnPrint.h"
 #include "risThreadsProcess.h"
+#include "GSettings.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -52,6 +53,20 @@ void main_initialize(int argc,char** argv)
    Prn::setFilter(Prn::QCallRun4,  false);
 
    Prn::print(0,"MyBlock**********************************************BEGIN");
+
+   //---------------------------------------------------------------------------
+   // Initialize Settings
+
+   if (argc > 1)
+   {
+      gSettings.initialize(argv[1]);
+   }
+   else
+   {
+      gSettings.initialize("MemServer");
+   }
+
+   gSettings.show();
 }
 
 //******************************************************************************

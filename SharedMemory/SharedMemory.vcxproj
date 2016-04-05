@@ -168,6 +168,7 @@
   <ItemGroup>
     <ClCompile Include="Source\ccSharedMemory.cpp" />
     <ClCompile Include="Source\CmdLineExec.cpp" />
+    <ClCompile Include="Source\GSettings.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
     <ClCompile Include="Source\MainMemory.cpp" />
@@ -176,6 +177,7 @@
   <ItemGroup>
     <ClInclude Include="Source\ccSharedMemory.h" />
     <ClInclude Include="Source\CmdLineExec.h" />
+    <ClInclude Include="Source\GSettings.h" />
     <ClInclude Include="Source\MainInit.h" />
     <ClInclude Include="Source\MainMemory.h" />
     <ClInclude Include="Source\someBlockPoolIndex.h" />
