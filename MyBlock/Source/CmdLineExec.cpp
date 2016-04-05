@@ -10,6 +10,7 @@
 #include "someBlockPoolIndex.h"
 #include "someMyBlockA.h"
 #include "someMyBlockB.h"
+#include "someMyBlockC.h"
 #include "CmdLineExec.h"
 
 using namespace std;
@@ -46,25 +47,16 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo11(Ris::CmdLineCmd* aCmd)
 {
-   // Block pool parameters.
-   CC::BlockPoolParms tBlockPoolParms;
+   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockC);
 
-   // Create block pool.
-   tBlockPoolParms.reset();
-   tBlockPoolParms.mPoolIndex     = Some::cBlockPoolIndex_MyBlockA;
-   tBlockPoolParms.mBlockPoolType = CC::cBlockPoolType_FreeList;
-   tBlockPoolParms.mNumBlocks     = 1000;
-   tBlockPoolParms.mBlockSize     = sizeof(Some::MyBlockA);
+   Some::MyBlockC* tC1 = Some::MyBlockC::create(101);
+   tC1->method1();
 
-   int tSize = CC::BlockPoolBase::getMemorySize(&tBlockPoolParms);
-   Prn::print(0, "Size %d",tSize);
+   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockC);
 
-   // Create block pool.
-   CC::BlockPoolBase* tBP = new CC::BlockPoolFreeList;
-   tBP->initialize(&tBlockPoolParms);
-   tBP->finalize();
-   delete tBP;
+   tC1->destroy();
 
+   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockC);
 }
 
 //******************************************************************************
@@ -148,8 +140,25 @@ void CmdLineExec::executeGo24(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo25(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0, "sizeofA %d",sizeof(Some::MyBlockA));
-   Prn::print(0, "sizeofB %d",sizeof(Some::MyBlockB));
+   // Block pool parameters.
+   CC::BlockPoolParms tBlockPoolParms;
+
+   // Create block pool.
+   tBlockPoolParms.reset();
+   tBlockPoolParms.mPoolIndex     = Some::cBlockPoolIndex_MyBlockA;
+   tBlockPoolParms.mBlockPoolType = CC::cBlockPoolType_FreeList;
+   tBlockPoolParms.mNumBlocks     = 1000;
+   tBlockPoolParms.mBlockSize     = sizeof(Some::MyBlockA);
+
+   int tSize = CC::BlockPoolBase::getMemorySize(&tBlockPoolParms);
+   Prn::print(0, "Size %d",tSize);
+
+   // Create block pool.
+   CC::BlockPoolBase* tBP = new CC::BlockPoolFreeList;
+   tBP->initialize(&tBlockPoolParms);
+   tBP->finalize();
+   delete tBP;
+
 }
 
 //******************************************************************************
@@ -158,7 +167,5 @@ void CmdLineExec::executeGo25(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo26(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0, "sizeofA %d",sizeof(Some::MyBlockA));
-   Prn::print(0, "sizeofB %d",sizeof(Some::MyBlockB));
 }
 
