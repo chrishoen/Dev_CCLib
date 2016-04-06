@@ -95,6 +95,8 @@ public:
    // Attach an object node to the last child of this subject node, after it.
    // The object node becomes this subject node's last child.
    void attachAfterLastChild (TreeNode* aObjectNodeP);
+   // Attach as last in structure
+   void attachAfterLastChildAsLastInStructure (TreeNode* aObjectNodeP);
 
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
@@ -158,6 +160,43 @@ public:
    // which assumes a tree node structure traversal in construction order.
 
    BlockHandle mAncestorWithAfterH;
+
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   // Node flags, these encode relationship's that this node has with other 
+   // nodes, within its tree structure. These flags all default to false.
+
+   typedef union TreeNodeTxFlags
+   {
+      // Flags
+      struct
+      {
+         // This is true if the node is the last in a sequence of a 
+         // transmitted node structure
+         bool mIsLastInStructure : 1;
+      };
+      // Binary value
+      unsigned char mValue;
+   } TreeNodeTxFlags;
+
+   // These are the flags
+   TreeNodeTxFlags mTreeNodeTxFlags;
+
+   // This is the node attachment level. It is used by transmit and receive
+   // queues to deconstruct and reconstruct tree node structures that are
+   // transmitted over a communications channel.
+   //
+   // This variable should be considered as a sort of temporary variable.
+   // It is changed by various actions done by node queues. It should not
+   // be used as a node level and it is not set by the attachment methods.
+   // It is set by a transmit queue prior to transmission and is used
+   // by a receive queue to reconstruct node structures.
+   //
+   // Use of this variable is mainly via the getNextNode visitor call,
+   // which assumes a tree node structure traversal in construction order.
+
+   int mTxAttachLevel;
 
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------

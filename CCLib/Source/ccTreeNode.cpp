@@ -26,6 +26,9 @@ TreeNode::TreeNode()
    mIdentifier=0;
    mMemoryType = 0;
    mAncestorWithAfterH = BlockHandle::nullH;
+
+   mTreeNodeTxFlags.mValue = 0;
+   mTxAttachLevel = 0;
 }
 
 TreeNode::TreeNode(int aIdentifier)
@@ -41,6 +44,9 @@ TreeNode::TreeNode(int aIdentifier)
    mIdentifier = aIdentifier;
    mMemoryType = 0;
    mAncestorWithAfterH = BlockHandle::nullH;
+
+   mTreeNodeTxFlags.mValue = 0;
+   mTxAttachLevel = 0;
 }
 
 //****************************************************************************
@@ -98,6 +104,15 @@ void TreeNode::attachBeforeFirstChild (TreeNode* aObjectNodeP)
 //****************************************************************************
 // Attach an object node to the last child of this subject node, after it.
 // The object node becomes this subject node's last child.
+
+void TreeNode::attachAfterLastChildAsLastInStructure(TreeNode* aObjectNodeP)
+{
+   // Set the last in structure transmit flag
+   aObjectNodeP->mTreeNodeTxFlags.mIsLastInStructure = true;
+
+   // Attach
+   attachAfterLastChild(aObjectNodeP);
+}
 
 void TreeNode::attachAfterLastChild  (TreeNode* aObjectNodeP)
 {

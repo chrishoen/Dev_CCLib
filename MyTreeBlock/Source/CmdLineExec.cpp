@@ -92,9 +92,6 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,1);
-   int tPoolIndex = aCmd->argInt(1);
-   CC::testBlockPool(tPoolIndex);
 }
 
 //******************************************************************************
