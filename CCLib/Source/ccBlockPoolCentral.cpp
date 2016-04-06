@@ -68,8 +68,10 @@ void finalizeBlockPoolCentral()
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-// Create a block pool and place a pointer to it into the block
-// pool array. It is passed a set of parameters.
+// Create and initialize a block pool and place a pointer to it into the
+// block pool array. It is passed a set of parameters. Store these parameters
+// in persistent storage. They will be used throughout the lifetime of the 
+// block pool.
 
 void createBlockPool(BlockPoolParms* aParms)
 {

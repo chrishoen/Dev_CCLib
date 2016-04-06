@@ -78,8 +78,10 @@ namespace CC
 //***************************************************************************
 // Here is a set of calls that manage block pools.
 
-// Initialize the block pool facility. It is called at program
-// initialization, before any block pools are created and used.
+// Create and initialize a block pool and place a pointer to it into the
+// block pool array. It is passed a set of parameters. Store these parameters
+// in persistent storage. They will be used throughout the lifetime of the 
+// block pool.
 void initializeBlockPoolCentral();
 
 // Finalize the block pool facility. It is called at program
