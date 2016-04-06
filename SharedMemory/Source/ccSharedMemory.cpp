@@ -84,6 +84,8 @@ void SharedMemory::initializeForServer(int aNumBytes)
 
 void SharedMemory::initializeForClient()
 {
+   mSpecific = new SharedMemory::Specific;
+
    mSpecific->mShareFileMap=OpenFileMapping(
       FILE_MAP_READ | FILE_MAP_WRITE,FALSE,
       "AAATESTSHAREMEMFILE");

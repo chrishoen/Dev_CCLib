@@ -114,7 +114,7 @@ bool GSettings::initialize(char* aSection)
    }
    if (strcmp(mSection, "MemClient") == 0)
    {
-      mMyAppRole = cMemServer;
+      mMyAppRole = cMemClient;
    }
 
    // Apply settings file to this executive   

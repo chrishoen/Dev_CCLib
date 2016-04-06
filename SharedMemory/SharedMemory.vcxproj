@@ -174,7 +174,7 @@
     <ClCompile Include="Source\MainInit.cpp" />
     <ClCompile Include="Source\MainMemory.cpp" />
     <ClCompile Include="Source\someMyBlockA.cpp" />
-    <ClCompile Include="Source\someShare.cpp" />
+    <ClCompile Include="Source\someThread1.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\ccSharedChannel.h" />
@@ -185,7 +185,7 @@
     <ClInclude Include="Source\MainMemory.h" />
     <ClInclude Include="Source\someBlockPoolIndex.h" />
     <ClInclude Include="Source\someMyBlockA.h" />
-    <ClInclude Include="Source\someShare.h" />
+    <ClInclude Include="Source\someThread1.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CCLib\CCLib.vcxproj">

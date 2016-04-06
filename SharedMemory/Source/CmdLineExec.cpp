@@ -6,6 +6,7 @@
 
 #include "prnPrint.h"
 #include "ccBlockPoolCentral.h"
+#include "ccSharedMemory.h"
 #include "someBlockPoolIndex.h"
 #include "someMyBlockA.h"
 #include "CmdLineExec.h"
@@ -30,6 +31,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("GO3"     ))  executeGo3(aCmd);
    if(aCmd->isCmd("GO4"     ))  executeGo4(aCmd);
 
+   if(aCmd->isCmd("TX"      ))  executeTx(aCmd);
    if(aCmd->isCmd("C"       ))  executeCreate(aCmd);
    if(aCmd->isCmd("D"       ))  executeDestroy(aCmd);
    if(aCmd->isCmd("S"       ))  executeShow(aCmd);
@@ -80,6 +82,16 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeTx(Ris::CmdLineCmd* aCmd)
+{
+   Prn::print(0, "CC::gSharedMemory.putSemaphore");
+   CC::gSharedMemory.putSemaphore();
 }
 
 //******************************************************************************
