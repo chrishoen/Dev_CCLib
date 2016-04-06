@@ -72,8 +72,11 @@ public:
    }
 
    // Initialize.
-   void initialize(int aNumElements)
+   void initialize(int aNumElements,bool aConstructorFlag)
    {
+      // Do not initialize, if already initialized.
+      if (!aConstructorFlag) return;
+
       // Store.
       mNumElements       = aNumElements;
       // Allocate for one extra dummy node.
@@ -98,6 +101,7 @@ template <class Element>
 class LFValueQueue
 {
 public:
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -156,11 +160,16 @@ public:
    //***************************************************************************
    // Initialize
 
-   void initialize(int aNumElements,void* aMemory = 0)
+   void initialize(int aNumElements)
    {
-      //---------------------------------------------------------------------------
-      //---------------------------------------------------------------------------
-      //---------------------------------------------------------------------------
+      initialize(aNumElements,true,0);
+   }
+
+   void initialize(int aNumElements,bool aConstructorFlag, void* aMemory)
+   {
+      //------------------------------------------------------------------------
+      //------------------------------------------------------------------------
+      //------------------------------------------------------------------------
       // Initialize memory.
 
       // Deallocate memory, if any exists.
@@ -194,50 +203,79 @@ public:
       char* tListArrayMemory    = tQueueArrayMemory + tQueueArraySize;
       char* tElementArrayMemory = tListArrayMemory  + tListArraySize;
 
-      // Initialize state.
-      mX = new(tStateMemory) LFValueQueueState;
-      mX->initialize(aNumElements);
+      // Construct the state.
+      if (aConstructorFlag)
+      {
+         // Call the constructor.
+         mX = new(tStateMemory)LFValueQueueState;
+      }
+      else
+      {
+         // The constructor has already been called.
+         mX = (LFValueQueueState*)tStateMemory;
+      }
+      // Initialize the state.
+      mX->initialize(aNumElements,aConstructorFlag);
 
-      // Initialize the queue array.
-      mQueueNext = new(tQueueArrayMemory) AtomicLFIndex[mX->mQueueNumElements];
+      // Construct the arrays.
+      if (aConstructorFlag)
+      {
+         // Call the constructor.
+         mQueueNext = new(tQueueArrayMemory)AtomicLFIndex[mX->mQueueNumElements];
 
-      // Initialize the linked list array.
-      mListNext = new(tListArrayMemory) AtomicLFIndex[mX->mListNumElements];
+         // Call the constructor.
+         mListNext = new(tListArrayMemory)AtomicLFIndex[mX->mListNumElements];
 
-      // Initialize the element array.
-      mElement = new(tElementArrayMemory) Element[mX->mQueueNumElements];
+         // Call the constructor.
+         mElement = new(tElementArrayMemory)Element[mX->mQueueNumElements];
+      }
+      else
+      {
+         // The constructor has already been called.
+         mQueueNext = (AtomicLFIndex*)tQueueArrayMemory;
 
-      //---------------------------------------------------------------------------
-      //---------------------------------------------------------------------------
-      //---------------------------------------------------------------------------
+         // The constructor has already been called.
+         mListNext = (AtomicLFIndex*)tListArrayMemory;
+
+         // The constructor has already been called.
+         mElement = (Element*)tElementArrayMemory;
+      }
+
+      //------------------------------------------------------------------------
+      //------------------------------------------------------------------------
+      //------------------------------------------------------------------------
       // Initialize variables.
 
-      // Initialize linked list array. Each node next node is the one after it.
-      for (int i = 0; i < mX->mListNumElements-1; i++)
+      // Initialize queue and linked list, if not already been initialized.
+      if (aConstructorFlag)
       {
-         mListNext[i].store(LFIndex(i+1,0));
+         // Initialize linked list array. Each node next node is the one after it.
+         for (int i = 0; i < mX->mListNumElements - 1; i++)
+         {
+            mListNext[i].store(LFIndex(i + 1, 0));
+         }
+         // The last node has no next node.
+         mListNext[mX->mListNumElements - 1].store(LFIndex(cInvalid, 0));
+
+         // List head points to the first node.
+         mX->mListHead.store(LFIndex(0, 0));
+         // List size is initially a full stack.
+         mX->mListSize = mX->mListNumElements;
+
+         // Initialize queue array. Each node has no next node.
+         for (int i = 0; i < mX->mListNumElements; i++)
+         {
+            mQueueNext[i].store(LFIndex(cInvalid, 0));
+         }
+
+         // Pop the dummy node.
+         int tDummyNode;
+         listPop(&tDummyNode);
+
+         // initialize queue head and tail.
+         mX->mQueueHead.store(LFIndex(tDummyNode, 0));
+         mX->mQueueTail = mX->mQueueHead.load();
       }
-      // The last node has no next node.
-      mListNext[mX->mListNumElements-1].store(LFIndex(cInvalid,0));
-
-      // List head points to the first node.
-      mX->mListHead.store(LFIndex(0,0));
-      // List size is initially a full stack.
-      mX->mListSize = mX->mListNumElements;
-
-      // Initialize queue array. Each node has no next node.
-      for (int i = 0; i < mX->mListNumElements; i++)
-      {
-         mQueueNext[i].store(LFIndex(cInvalid, 0));
-      }
-
-      // Pop the dummy node.
-      int tDummyNode;
-      listPop(&tDummyNode);
-
-      // initialize queue head and tail.
-      mX->mQueueHead.store(LFIndex(tDummyNode, 0));
-      mX->mQueueTail = mX->mQueueHead.load();
    }
 
    //***************************************************************************

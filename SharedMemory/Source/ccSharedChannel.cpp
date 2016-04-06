@@ -49,7 +49,7 @@ SharedChannel::~SharedChannel()
 // This initializes the stack to a fixed size. It initializes member
 // variables and and the stack array, given external memory.
 
-void SharedChannel::initialize(void* aMemory)
+void SharedChannel::initialize(bool aConstructorFlag,void* aMemory)
 {
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
@@ -85,7 +85,7 @@ void SharedChannel::initialize(void* aMemory)
    //---------------------------------------------------------------------------
    // Initialize variables.
 
-   mQueue.initialize(cNumElements,tQueueMemory);
+   mQueue.initialize(cNumElements,aConstructorFlag,tQueueMemory);
 
 }
 

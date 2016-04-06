@@ -43,7 +43,7 @@ public:
    // this will be used onto the stack.
    // For aAllocate==10 this will push 9,8,7,6,5,4,3,2,1,0 so that element
    // zero will be the first one poped.
-   void initialize(void* aMemory = 0);
+   void initialize(bool aConstructorFlag,void* aMemory);
 
    // Deallocate memory.
    void finalize();
