@@ -19,8 +19,11 @@ void main_memory_initialize()
    //***************************************************************************
    // Initialize shared memory.
 
+   // Locals
+   bool tServerFlag = gGSettings.isServer();
    bool tConstructorFlag = true;
 
+   // Initialize shared memory.
    if (gGSettings.isServer())
    {
       CC::gSharedMemory.initializeForServer(1024 * 1024);
@@ -34,12 +37,8 @@ void main_memory_initialize()
 
    Prn::print(0, "SharedMemory %p",CC::gSharedMemory.mMemory1);
 
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
    // Initialize shared channel.
-
-   CC::gSharedChannel.initialize(tConstructorFlag,CC::gSharedMemory.mMemory1);
+   CC::gSharedChannel.initialize(tServerFlag,tConstructorFlag,CC::gSharedMemory.mMemory1);
 
    Prn::print(0, "SharedMemory %p",CC::gSharedMemory.mMemory1);
 
@@ -86,6 +85,7 @@ void main_memory_finalize()
    //***************************************************************************
    // Finalize shared memory.
 
+   CC::gSharedChannel.finalize();
    CC::gSharedMemory.finalize();
 }
 

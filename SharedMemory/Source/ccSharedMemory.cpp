@@ -25,8 +25,6 @@ class SharedMemory::Specific
 {
 public:
    HANDLE mShareFileMap;
-   HANDLE mSemaphore;
-   HANDLE mMutex;
 };
 
 //****************************************************************************
@@ -65,19 +63,6 @@ void SharedMemory::initializeForServer(int aNumBytes)
 
    mMemory1 = tMemory;
    mMemory2 = tMemory + cMemorySize1;
-
-   mSpecific->mSemaphore=CreateSemaphore(
-      NULL,
-      0,
-      200,
-      "AAATESTSHARESEM");
-
-   mSpecific->mMutex=CreateMutex(
-      NULL,
-      FALSE,
-      "AAATESTSHAREMUTEX");
-
-   ReleaseMutex(mSpecific->mMutex);
 }
 
 //****************************************************************************
@@ -98,16 +83,6 @@ void SharedMemory::initializeForClient()
 
    mMemory1 = tMemory;
    mMemory2 = tMemory + cMemorySize1;
-
-   mSpecific->mSemaphore=OpenSemaphore(
-      EVENT_ALL_ACCESS | EVENT_MODIFY_STATE | SYNCHRONIZE,
-      FALSE,
-      "AAATESTSHARESEM");
-
-   mSpecific->mMutex=OpenMutex(
-      MUTEX_ALL_ACCESS | MUTEX_MODIFY_STATE | SYNCHRONIZE,
-      FALSE,
-      "AAATESTSHAREMUTEX");
 }
 
 //******************************************************************************
@@ -117,39 +92,12 @@ void SharedMemory::initializeForClient()
 void SharedMemory::finalize()
 {
    CloseHandle(mSpecific->mShareFileMap);
-   CloseHandle(mSpecific->mSemaphore);
-   CloseHandle(mSpecific->mMutex);
 
-   delete mSpecific;
+   if (mSpecific)
+   {
+      delete mSpecific;
+      mSpecific = 0;
+   }
 }
 
-//******************************************************************************
-
-bool SharedMemory::putSemaphore(void)
-{
-   return 0!=ReleaseSemaphore(mSpecific->mSemaphore,1,NULL);
-}
-
-//******************************************************************************
-
-bool SharedMemory::getSemaphore(void)
-{
-   DWORD status = WaitForSingleObject(mSpecific->mSemaphore,INFINITE);
-   return status == WAIT_OBJECT_0;
-}
-
-//******************************************************************************
-
-bool SharedMemory::putMutex(void)
-{
-   return 0!=ReleaseMutex(mSpecific->mMutex);
-}
-
-//******************************************************************************
-
-bool SharedMemory::getMutex(void)
-{
-   DWORD status = WaitForSingleObject(mSpecific->mMutex,INFINITE);
-   return status == WAIT_OBJECT_0;
-}
 }//namespace

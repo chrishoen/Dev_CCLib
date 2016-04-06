@@ -94,7 +94,7 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeTx(Ris::CmdLineCmd* aCmd)
 {
    CC::gSharedChannel.mQueue.tryWrite(++mCount);
-   CC::gSharedMemory.putSemaphore();
+   CC::gSharedChannel.putSemaphore();
    Prn::print(0, "CC::gSharedMemory.putSemaphore %d",mCount);
 }
 
