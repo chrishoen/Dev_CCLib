@@ -29,6 +29,7 @@ public:
    void executeShow     (Ris::CmdLineCmd* aCmd);
 
    Some::MyBlockA* mMyBlockA;
+   int mCount;
 };
 
 //******************************************************************************

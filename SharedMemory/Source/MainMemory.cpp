@@ -2,6 +2,7 @@
 #include "prnPrint.h"
 #include "GSettings.h"
 #include "ccSharedMemory.h"
+#include "ccSharedChannel.h"
 #include "ccBlockPoolCentral.h"
 #include "someBlockPoolIndex.h"
 #include "someMyBlockA.h"
@@ -19,6 +20,7 @@ void main_memory_initialize()
    // Initialize shared memory.
 
    bool tConstructorFlag = true;
+
    if (gGSettings.isServer())
    {
       CC::gSharedMemory.initializeForServer(1024 * 1024);
@@ -29,6 +31,15 @@ void main_memory_initialize()
       CC::gSharedMemory.initializeForClient();
       tConstructorFlag = false;
    }
+
+   Prn::print(0, "SharedMemory %p",CC::gSharedMemory.mMemory1);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Initialize shared channel.
+
+   CC::gSharedChannel.initialize(tConstructorFlag,CC::gSharedMemory.mMemory1);
 
    Prn::print(0, "SharedMemory %p",CC::gSharedMemory.mMemory1);
 
