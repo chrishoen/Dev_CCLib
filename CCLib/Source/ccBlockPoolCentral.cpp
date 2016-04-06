@@ -123,15 +123,6 @@ void createBlockPool(BlockPoolParms* aParms)
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-// Test code.
-
-void testBlockPool(int aPoolIndex)
-{
-}
-
-//****************************************************************************
-//****************************************************************************
-//****************************************************************************
 // Allocate a block from a block pool. It is passes a pool index and 
 // it returns a pointer to the block and a handle for the block.
 // It returns true if successful, false if the block pool is empty.
@@ -190,6 +181,14 @@ void* getBlockPoolBlockPtr(BlockHandle aBlockHandle)
 {
    // Guard
    if (aBlockHandle.isNull())  return 0;
+#if 1
+   // Calculate block address from stored parameters and block pool.handle
+   BlockPoolParms* tParms = &mBlockPoolParms[aBlockHandle.mPoolIndex];
+   char*  tBlockBox = &tParms->mBlockBoxPtr[tParms->mBlockBoxSize*aBlockHandle.mBlockIndex];
+   char*  tBlock = tBlockBox + cBlockHeaderSize;
+   // Return pointer to block.
+   return tBlock;
+#endif
    // Return pointer to block.
    return mBlockPool[aBlockHandle.mPoolIndex]->getBlockPtr(aBlockHandle);
 }
@@ -201,6 +200,16 @@ void* getBlockPoolBlockPtr(BlockHandle aBlockHandle)
 
 BlockHandle getBlockPoolBlockHandle(void* aBlockPtr)
 {
+#if 1
+   BlockHandle tBlockHandle;
+   if (aBlockPtr==0) return tBlockHandle;
+
+   char*  tBlock = (char*)aBlockPtr;
+   BlockHeader* tHeader = (BlockHeader*)(tBlock - cBlockHeaderSize);
+
+   tBlockHandle = tHeader->mBlockHandle;
+   return tBlockHandle;
+#endif
    return BlockBoxArray::getBlockHandle(aBlockPtr);
 }
 
@@ -234,6 +243,22 @@ int getBlockPoolSize(int aPoolIndex)
       return 0;
    }
    return mBlockPool[aPoolIndex]->size();
+}
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+// Test code.
+
+void testBlockPool(int aPoolIndex)
+{
+   BlockPoolParms* tParms = &mBlockPoolParms[aPoolIndex];
+
+   printf("mBlockBoxPtr    %p\n", tParms->mBlockBoxPtr);
+   printf("mBlockBoxSize   %d\n", tParms->mBlockBoxSize);
+   printf("mBlockHeaderSize%d\n", tParms->mBlockHeaderSize);
+
+   mBlockPool[aPoolIndex]->show();
 }
 
 } //namespace

@@ -38,7 +38,7 @@ void BlockBoxArrayState::initialize(BlockPoolParms* aParms)
    // Store members.
    mNumBlocks    = aParms->mNumBlocks;
    mBlockSize    = cc_round_upto16(aParms->mBlockSize);
-   mBlockBoxSize = mBlockSize + cHeaderSize;;
+   mBlockBoxSize = mBlockSize + cBlockHeaderSize;;
    mPoolIndex    = aParms->mPoolIndex;
 }
 
@@ -100,7 +100,7 @@ void BlockBoxArray::initialize(BlockPoolParms* aParms,void* aMemory)
    // Calculate memory sizes.
    int tStateSize    = BlockBoxArrayState::getMemorySize();
    int tBlockSize    = cc_round_upto16(aParms->mBlockSize);
-   int tBlockBoxSize = cHeaderSize + tBlockSize;
+   int tBlockBoxSize = cBlockHeaderSize + tBlockSize;
    int tArraySize    = aParms->mNumBlocks*tBlockBoxSize;
 
    // Calculate memory addresses.
@@ -139,6 +139,11 @@ void BlockBoxArray::initialize(BlockPoolParms* aParms,void* aMemory)
          tHeader->mBlockHandle.set(mX->mPoolIndex, i);
       }
    }
+
+   // Store block array parameters. These can be used elsewhere.
+   aParms->mBlockHeaderSize = cBlockHeaderSize;
+   aParms->mBlockBoxSize    = tBlockBoxSize;
+   aParms->mBlockBoxPtr     = mArray;
 }
 
 //******************************************************************************
@@ -169,7 +174,7 @@ int BlockBoxArray::getMemorySize(BlockPoolParms* aParms)
    // Calculate memory sizes.
    int tStateSize    = BlockBoxArrayState::getMemorySize();
    int tBlockSize    = cc_round_upto16(aParms->mBlockSize);
-   int tBlockBoxSize = cHeaderSize + tBlockSize;
+   int tBlockBoxSize = cBlockHeaderSize + tBlockSize;
    int tArraySize    = aParms->mNumBlocks*tBlockBoxSize;
    int tMemorySize   = tStateSize + tArraySize;
 
@@ -207,7 +212,7 @@ BlockHeader* BlockBoxArray::header(int aIndex)
 char* BlockBoxArray::block(int aIndex)
 {
    char*  tBlockBox = &mArray[mX->mBlockBoxSize*aIndex];
-   char*  tBlock = tBlockBox + cHeaderSize;
+   char*  tBlock = tBlockBox + cBlockHeaderSize;
    return tBlock;
 }
 
@@ -222,7 +227,7 @@ BlockHandle BlockBoxArray::getBlockHandle(void* aBlockPtr)
    if (aBlockPtr==0) return tBlockHandle;
 
    char*  tBlock = (char*)aBlockPtr;
-   BlockHeader* tHeader = (BlockHeader*)(tBlock - cHeaderSize);
+   BlockHeader* tHeader = (BlockHeader*)(tBlock - cBlockHeaderSize);
 
    tBlockHandle = tHeader->mBlockHandle;
    return tBlockHandle;

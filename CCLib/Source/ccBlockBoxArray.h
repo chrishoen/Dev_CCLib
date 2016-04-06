@@ -76,7 +76,7 @@ typedef struct BlockHeader
 } BlockHeader;
 
 // This structure must not take up more than sixteen bytes.
-static const int cHeaderSize = 16;
+static const int cBlockHeaderSize = 16;
 
 //******************************************************************************
 //******************************************************************************

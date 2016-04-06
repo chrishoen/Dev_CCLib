@@ -73,7 +73,7 @@ public:
 
    // This contains the address of the first block box in the block box array.
    // It can be used to obtain the address of a block header or a block body.
-   void* mBlockArrayPtr;
+   char* mBlockBoxPtr;
 
    //***************************************************************************
    //***************************************************************************

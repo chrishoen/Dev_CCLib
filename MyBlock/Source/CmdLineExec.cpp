@@ -28,26 +28,44 @@ void CmdLineExec::reset()
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
    if(aCmd->isCmd("RESET"  ))  reset();
-   if(aCmd->isCmd("GOA1"    ))  executeGoA1(aCmd);
-   if(aCmd->isCmd("GOA2"    ))  executeGoA2(aCmd);
+   if(aCmd->isCmd("GO1"    ))  executeGoA1(aCmd);
+   if(aCmd->isCmd("A1"     ))  executeGoA1(aCmd);
+   if(aCmd->isCmd("A2"     ))  executeGoA2(aCmd);
 
-   if(aCmd->isCmd("GOB1"    ))  executeGoB1(aCmd);
-   if(aCmd->isCmd("GOB2"    ))  executeGoB2(aCmd);
+   if(aCmd->isCmd("B1"     ))  executeGoB1(aCmd);
+   if(aCmd->isCmd("B2"     ))  executeGoB2(aCmd);
 
-   if(aCmd->isCmd("GOC1"    ))  executeGoC1(aCmd);
-   if(aCmd->isCmd("GOC2"    ))  executeGoC2(aCmd);
+   if(aCmd->isCmd("C1"     ))  executeGoC1(aCmd);
+   if(aCmd->isCmd("C2"     ))  executeGoC2(aCmd);
 
-   if(aCmd->isCmd("GOD1"    ))  executeGoD1(aCmd);
-   if(aCmd->isCmd("GOD2"    ))  executeGoD2(aCmd);
+   if(aCmd->isCmd("D1"     ))  executeGoD1(aCmd);
+   if(aCmd->isCmd("D2"     ))  executeGoD2(aCmd);
 
-   if(aCmd->isCmd("GOT1"    ))  executeGoT1(aCmd);
-   if(aCmd->isCmd("GOT2"    ))  executeGoT2(aCmd);
-   if(aCmd->isCmd("GOT3"    ))  executeGoT3(aCmd);
+   if(aCmd->isCmd("T1"     ))  executeGoT1(aCmd);
+   if(aCmd->isCmd("T2"     ))  executeGoT2(aCmd);
+   if(aCmd->isCmd("T3"     ))  executeGoT3(aCmd);
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+
+void CmdLineExec::executeGoT1(Ris::CmdLineCmd* aCmd)
+{
+   Some::MyBlockA* tC1 = Some::MyBlockA::create(101);
+   Some::MyBlockA* tC2 = (Some::MyBlockA*)CC::getBlockPoolBlockPtr(tC1->mBlockHandle);
+   tC1->method1();
+   tC2->method1();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGoT2(Ris::CmdLineCmd* aCmd)
+{
+   CC::testBlockPool(Some::cBlockPoolIndex_MyBlockA);
+}
 
 //******************************************************************************
 //******************************************************************************
@@ -158,41 +176,6 @@ void CmdLineExec::executeGoD1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGoD2(Ris::CmdLineCmd* aCmd)
 {
-}
-
-//******************************************************************************
-
-void CmdLineExec::executeGoT1(Ris::CmdLineCmd* aCmd)
-{
-   aCmd->setArgDefault(1,1);
-   int tPoolIndex = aCmd->argInt(1);
-   CC::testBlockPool(tPoolIndex);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void CmdLineExec::executeGoT2(Ris::CmdLineCmd* aCmd)
-{
-   // Block pool parameters.
-   CC::BlockPoolParms tBlockPoolParms;
-
-   // Create block pool.
-   tBlockPoolParms.reset();
-   tBlockPoolParms.mPoolIndex     = Some::cBlockPoolIndex_MyBlockA;
-   tBlockPoolParms.mBlockPoolType = CC::cBlockPoolType_FreeList;
-   tBlockPoolParms.mNumBlocks     = 1000;
-   tBlockPoolParms.mBlockSize     = sizeof(Some::MyBlockA);
-
-   int tSize = CC::BlockPoolBase::getMemorySize(&tBlockPoolParms);
-   Prn::print(0, "Size %d",tSize);
-
-   // Create block pool.
-   CC::BlockPoolBase* tBP = new CC::BlockPoolFreeList;
-   tBP->initialize(&tBlockPoolParms);
-   tBP->finalize();
-   delete tBP;
 }
 
 //******************************************************************************

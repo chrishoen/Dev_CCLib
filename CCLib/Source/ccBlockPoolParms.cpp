@@ -35,7 +35,7 @@ void BlockPoolParms::reset()
    mValidFlag        = false;
    mBlockBoxSize     = 0;
    mBlockHeaderSize  = 0;
-   mBlockArrayPtr    = 0;
+   mBlockBoxPtr      = 0;
 }
 
 //******************************************************************************
