@@ -65,12 +65,6 @@ public:
    // True if block pool has been created.
    bool  mValidFlag;
 
-   // True if these are the original parameters that were passed in at block
-   // pool creation. False if this is a copy of the original parameters. If
-   // this is false and these parameters reside in shared memory then none of
-   // the pointer parameters are valid.
-   bool  mOriginalFlag;
-
    // Block box size in bytes.
    int   mBlockBoxSize;
 

@@ -86,7 +86,15 @@ public:
    // the user as a pointer to the block.
    BlockBoxArray mBlocks;
 
-   // Copy of parameters that were passed in at initialization.
+   // A pointer to the parameters that were passed in at initialization.
+   // Whoever owns this block pool (creates and initializes it) must maintain
+   // storage for these parameters for the lifetime of the block pool.
+   // The owner creates an instance of the parameters and fills in some of
+   // them and passes them to the block pool at initialization. The block pool
+   // then also fills in some of them during its initiialization and the 
+   // owner might use some of them after the initialization. Memory storage
+   // for these must be maintained my the owner throughout the lifetime of
+   // the block pool.
    BlockPoolParms* mParms;
 
    //***************************************************************************

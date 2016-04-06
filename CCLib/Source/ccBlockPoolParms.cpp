@@ -33,7 +33,6 @@ void BlockPoolParms::reset()
    mMemory           = 0;
    mConstructorFlag  = true;
    mValidFlag        = false;
-   mOriginalFlag     = true;
    mBlockBoxSize     = 0;
    mBlockHeaderSize  = 0;
    mBlockArrayPtr    = 0;

@@ -85,6 +85,12 @@ void createBlockPool(BlockPoolParms* aParms)
       return;
    }
 
+   // Store parameters.
+   // These are used throughout the lifetime of the blockpool.
+   mBlockPoolParms[tPoolIndex] = *aParms;
+   // Local pointer.
+   BlockPoolParms* tParms = &mBlockPoolParms[tPoolIndex];
+
    // Create and initialize the block pool.
    switch (aParms->mBlockPoolType)
    {
@@ -93,23 +99,23 @@ void createBlockPool(BlockPoolParms* aParms)
       case cBlockPoolType_LFFreeList :
       {
          mBlockPool[tPoolIndex] = new BlockPoolFreeList;
-         mBlockPool[tPoolIndex]->initialize(aParms);
+         mBlockPool[tPoolIndex]->initialize(tParms);
       }
       break;
       // Error.
       default :
       {
-         printf("ERROR BlockPoolType BAD", aParms->mBlockPoolType);
+         printf("ERROR BlockPoolType BAD", tParms->mBlockPoolType);
          return;
       }
       break;
    }
 
-   // Mark it valid.
-   aParms->mValidFlag = true;
-
-   // Store parameters.
-   mBlockPoolParms[tPoolIndex] = *aParms;
+   if (!tParms->mValidFlag)
+   {
+      printf("ERROR BlockPool Initialization FAIL", tParms->mBlockPoolType);
+      return;
+   }
 }
 
 //****************************************************************************

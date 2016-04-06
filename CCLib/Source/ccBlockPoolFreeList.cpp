@@ -108,6 +108,8 @@ void BlockPoolFreeList::initialize(BlockPoolParms* aParms)
    // Initialize the index stack.
    mBlockIndexStack->initialize(aParms,tStackMemory);
 
+   // Mark this block pool initialization as valid.
+   aParms->mValidFlag = true;
 }
 
 //******************************************************************************

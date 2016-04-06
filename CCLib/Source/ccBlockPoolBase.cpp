@@ -61,31 +61,18 @@ void BlockPoolBase::initializeBase(BlockPoolParms* aParms,void* aMemory)
    }
 
    // Calculate memory sizes.
-   int tParmSize   = BlockPoolParms::getMemorySize();
    int tArraySize  = BlockBoxArray::getMemorySize(aParms);
 
    // Calculate memory addresses.
-   char* tParmMemory = (char*)mBaseClassMemory;
-   char* tArrayMemory = tParmMemory + tParmSize;
+   char* tArrayMemory = (char*)mBaseClassMemory;
 
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
    // Initialize variables.
 
-   // Construct the copy of the parameters.
-   if (aParms->mConstructorFlag)
-   {
-      // Call the constructor.
-      mParms = new(tParmMemory)BlockPoolParms(*aParms);
-   }
-   else
-   {
-      // The constructor has already been called.
-      mParms = (BlockPoolParms*)tParmMemory;
-   }
-   // Mark that these are not the original parameters, they are a copy.
-   mParms->mOriginalFlag = false;
+   // Store the pointer to the parameters.
+   mParms = aParms;
 
    // Initialize the block box array.
    mBlocks.initialize(aParms,tArrayMemory);
@@ -118,9 +105,8 @@ void BlockPoolBase::finalizeBase()
 
 int BlockPoolBase::getMemorySize(BlockPoolParms* aParms)
 {
-   int tParmSize   = BlockPoolParms::getMemorySize();
    int tArraySize  = BlockBoxArray::getMemorySize(aParms);
-   int tMemorySize = tParmSize + tArraySize;
+   int tMemorySize = tArraySize;
    return tMemorySize;
 }
 
