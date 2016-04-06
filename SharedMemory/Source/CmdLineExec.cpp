@@ -34,10 +34,35 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("GO3"     ))  executeGo3(aCmd);
    if(aCmd->isCmd("GO4"     ))  executeGo4(aCmd);
 
-   if(aCmd->isCmd("TX"      ))  executeTx(aCmd);
+   if(aCmd->isCmd("I"       ))  executeTxInt(aCmd);
+   if(aCmd->isCmd("B"       ))  executeTxBlock(aCmd);
    if(aCmd->isCmd("C"       ))  executeCreate(aCmd);
    if(aCmd->isCmd("D"       ))  executeDestroy(aCmd);
    if(aCmd->isCmd("S"       ))  executeShow(aCmd);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeTxInt(Ris::CmdLineCmd* aCmd)
+{
+   CC::gSharedSynch.mIntQueue.tryWrite(++mCount);
+   CC::gSharedSynch.putSemaphore();
+   Prn::print(0, "IntQueue         write %d",mCount);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeTxBlock(Ris::CmdLineCmd* aCmd)
+{
+   Some::MyBlockA* tBlock = Some::MyBlockA::create(++mCount);
+
+   CC::gSharedSynch.mBlockHandleQueue.tryWrite(tBlock->mBlockHandle);
+   CC::gSharedSynch.putSemaphore();
+   Prn::print(0, "BlockHandleQueue write %d",mCount);
 }
 
 //******************************************************************************
@@ -85,17 +110,6 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void CmdLineExec::executeTx(Ris::CmdLineCmd* aCmd)
-{
-   CC::gSharedSynch.mQueue.tryWrite(++mCount);
-   CC::gSharedSynch.putSemaphore();
-   Prn::print(0, "CC::gSharedMemory.putSemaphore %d",mCount);
 }
 
 //******************************************************************************

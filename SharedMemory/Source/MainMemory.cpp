@@ -35,7 +35,7 @@ void main_memory_initialize()
       tConstructorFlag = false;
    }
 
-   Prn::print(0, "SharedMemory %p",CC::gSharedMemory.mMemory);
+   Prn::print(0, "SharedSynch  %d",CC::SharedSynch::getMemorySize());
 
    // Initialize shared channel.
    CC::gSharedSynch.initialize(tServerFlag,tConstructorFlag,CC::gSharedMemory.mSynchMemory);

@@ -22,7 +22,8 @@ public:
    void executeGo3(Ris::CmdLineCmd* aCmd);
    void executeGo4(Ris::CmdLineCmd* aCmd);
 
-   void executeTx       (Ris::CmdLineCmd* aCmd);
+   void executeTxInt    (Ris::CmdLineCmd* aCmd);
+   void executeTxBlock  (Ris::CmdLineCmd* aCmd);
 
    void executeCreate   (Ris::CmdLineCmd* aCmd);
    void executeDestroy  (Ris::CmdLineCmd* aCmd);

@@ -92,17 +92,20 @@ void SharedSynch::initialize(bool aServerFlag,bool aConstructorFlag,void* aMemor
    }
 
    // Calculate memory sizes.
-   int tQueueSize = LFValueQueue<int>::getMemorySize(cNumElements);
+   int tIntQueueSize         = LFValueQueue<int>::getMemorySize(cNumElements);
+   int tBlockHandleQueueSize = LFValueQueue<BlockHandle>::getMemorySize(cNumElements);
 
    // Calculate memory addresses.
-   char* tQueueMemory = (char*)mMemory;
+   char* tIntQueueMemory         = (char*)mMemory;
+   char* tBlockHandleQueueMemory = tIntQueueMemory + tIntQueueSize;
 
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
    // Initialize variables.
 
-   mQueue.initialize(cNumElements,aConstructorFlag,tQueueMemory);
+   mIntQueue.initialize(cNumElements,aConstructorFlag,tIntQueueMemory);
+   mBlockHandleQueue.initialize(cNumElements,aConstructorFlag,tBlockHandleQueueMemory);
 
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
@@ -145,7 +148,7 @@ void SharedSynch::initialize(bool aServerFlag,bool aConstructorFlag,void* aMemor
 void SharedSynch::finalize()
 {
    // Finalize memory.
-   mQueue.finalize();
+   mIntQueue.finalize();
 
    if (mFreeMemoryFlag)
    {
@@ -175,8 +178,9 @@ void SharedSynch::finalize()
 
 int SharedSynch::getMemorySize()
 {
-   int tQueueSize = LFValueQueue<int>::getMemorySize(cNumElements);
-   int tMemorySize = tQueueSize;
+   int tIntQueueSize         = LFValueQueue<int>::getMemorySize(cNumElements);
+   int tBlockHandleQueueSize = LFValueQueue<BlockHandle>::getMemorySize(cNumElements);
+   int tMemorySize = tIntQueueSize + tBlockHandleQueueSize;
    return tMemorySize;
 }
 

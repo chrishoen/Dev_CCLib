@@ -6,6 +6,7 @@ Shared memory channel.
 
 
 ==============================================================================*/
+#include "ccBlockHandle.h"
 #include "ccLFValueQueue.h"
 
 //******************************************************************************
@@ -73,10 +74,13 @@ public:
    void* mMemory;
 
    // Queue number of elements.
-   static const int cNumElements = 1000;
+   static const int cNumElements = 100;
    
-   // Queue.
-   LFValueQueue<int> mQueue;
+   // Integer queue.
+   LFValueQueue<int> mIntQueue;
+
+   // Block handle queue.
+   LFValueQueue<BlockHandle> mBlockHandleQueue;
    
    //***************************************************************************
    //***************************************************************************

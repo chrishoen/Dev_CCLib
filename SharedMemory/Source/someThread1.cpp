@@ -10,6 +10,7 @@ Description:
 
 #include "ccSharedMemory.h"
 #include "ccSharedSynch.h"
+#include "ccBlockHandle.h"
 
 #define  _SOMETHREAD1_CPP_
 #include "someThread1.h"
@@ -35,21 +36,42 @@ Thread1::Thread1()
 void Thread1::threadRunFunction()
 {
    Prn::print(Prn::ThreadRun1, "Thread1::threadRunFunction BEGIN");
+
+   // Loop until termination.
    while (true)
    {
+      // Local
+      bool tEmptyFlag = true;
+      int tCount = 0;
+      CC::BlockHandle tBlockHandle;
+
+      // Wait for semaphore.
       CC::gSharedSynch.getSemaphore();
+      // Exit on termination flag.
       if (mTerminateFlag) break;
 
-      int tCount = 99999;
-      if (CC::gSharedSynch.mQueue.tryRead(&tCount))
+      // Try to read from int queue.
+      if (CC::gSharedSynch.mIntQueue.tryRead(&tCount))
       {
-         Prn::print(Prn::ThreadRun1, "CC::gSharedMemory.getSemaphore %d",tCount);
+         tEmptyFlag = false;
+         Prn::print(Prn::ThreadRun1, "IntQueue        read %d",tCount);
+
       }
-      else
+
+      // Try to read from block handle queue.
+      if (CC::gSharedSynch.mBlockHandleQueue.tryRead(&tBlockHandle))
       {
-         Prn::print(Prn::ThreadRun1, "CC::gSharedMemory.getSemaphore EMPTY");
+         tEmptyFlag = false;
+         Prn::print(Prn::ThreadRun1, "BlockHandeQueue read %d",tBlockHandle.mBlockIndex);
+      }
+
+      // If both empty
+      if (tEmptyFlag)
+      {
+         Prn::print(Prn::ThreadRun1, "Queues EMPTY");
       }
    }
+
    Prn::print(Prn::ThreadRun1, "Thread1::threadRunFunction END");
 }
 
