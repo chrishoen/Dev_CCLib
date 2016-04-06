@@ -2,7 +2,7 @@
 #include "prnPrint.h"
 #include "GSettings.h"
 #include "ccSharedMemory.h"
-#include "ccSharedChannel.h"
+#include "ccSharedSynch.h"
 #include "ccBlockPoolCentral.h"
 #include "someBlockPoolIndex.h"
 #include "someMyBlockA.h"
@@ -38,7 +38,7 @@ void main_memory_initialize()
    Prn::print(0, "SharedMemory %p",CC::gSharedMemory.mMemory1);
 
    // Initialize shared channel.
-   CC::gSharedChannel.initialize(tServerFlag,tConstructorFlag,CC::gSharedMemory.mMemory1);
+   CC::gSharedSynch.initialize(tServerFlag,tConstructorFlag,CC::gSharedMemory.mMemory1);
 
    Prn::print(0, "SharedMemory %p",CC::gSharedMemory.mMemory1);
 
@@ -85,7 +85,7 @@ void main_memory_finalize()
    //***************************************************************************
    // Finalize shared memory.
 
-   CC::gSharedChannel.finalize();
+   CC::gSharedSynch.finalize();
    CC::gSharedMemory.finalize();
 }
 

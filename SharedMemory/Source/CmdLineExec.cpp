@@ -7,7 +7,7 @@
 #include "prnPrint.h"
 #include "ccBlockPoolCentral.h"
 #include "ccSharedMemory.h"
-#include "ccSharedChannel.h"
+#include "ccSharedSynch.h"
 #include "someBlockPoolIndex.h"
 #include "someMyBlockA.h"
 #include "CmdLineExec.h"
@@ -93,8 +93,8 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeTx(Ris::CmdLineCmd* aCmd)
 {
-   CC::gSharedChannel.mQueue.tryWrite(++mCount);
-   CC::gSharedChannel.putSemaphore();
+   CC::gSharedSynch.mQueue.tryWrite(++mCount);
+   CC::gSharedSynch.putSemaphore();
    Prn::print(0, "CC::gSharedMemory.putSemaphore %d",mCount);
 }
 

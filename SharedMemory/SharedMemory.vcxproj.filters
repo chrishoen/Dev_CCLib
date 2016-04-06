@@ -28,10 +28,10 @@
     <ClCompile Include="Source\GSettings.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ccSharedChannel.cpp">
+    <ClCompile Include="Source\someThread1.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\someThread1.cpp">
+    <ClCompile Include="Source\ccSharedSynch.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -57,10 +57,10 @@
     <ClInclude Include="Source\GSettings.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccSharedChannel.h">
+    <ClInclude Include="Source\someThread1.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\someThread1.h">
+    <ClInclude Include="Source\ccSharedSynch.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

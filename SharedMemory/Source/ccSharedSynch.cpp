@@ -14,8 +14,8 @@ Description:
 #include "cc_functions.h"
 
 
-#define  _CCSHAREDCHANNEL_CPP_
-#include "ccSharedChannel.h"
+#define  _CCSHAREDSYNCH_CPP_
+#include "ccSharedSynch.h"
 
 using namespace std;
 
@@ -27,7 +27,7 @@ namespace CC
 //******************************************************************************
 // pimpl idiom.
 
-class SharedChannel::Specific
+class SharedSynch::Specific
 {
 public:
    HANDLE mSemaphore;
@@ -39,7 +39,7 @@ public:
 //******************************************************************************
 // Constructor, initialize members for an empty stack of size zero 
 
-SharedChannel::SharedChannel()
+SharedSynch::SharedSynch()
 {
    mSpecific=0;
    // All null.
@@ -52,7 +52,7 @@ SharedChannel::SharedChannel()
 //******************************************************************************
 // Destructor, deallocate the array
 
-SharedChannel::~SharedChannel()
+SharedSynch::~SharedSynch()
 {
    finalize();
 }
@@ -63,7 +63,7 @@ SharedChannel::~SharedChannel()
 // This initializes the stack to a fixed size. It initializes member
 // variables and and the stack array, given external memory.
 
-void SharedChannel::initialize(bool aServerFlag,bool aConstructorFlag,void* aMemory)
+void SharedSynch::initialize(bool aServerFlag,bool aConstructorFlag,void* aMemory)
 {
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
@@ -74,13 +74,13 @@ void SharedChannel::initialize(bool aServerFlag,bool aConstructorFlag,void* aMem
    finalize();
 
    // pimpl idiom.
-   mSpecific = new SharedChannel::Specific;
+   mSpecific = new SharedSynch::Specific;
 
    // If the instance of this class is not to reside in external memory
    // then allocate memory for it on the system heap.
    if (aMemory == 0)
    {
-      mMemory = malloc(SharedChannel::getMemorySize());
+      mMemory = malloc(SharedSynch::getMemorySize());
       mFreeMemoryFlag = true;
    }
    // If the instance of this class is to reside in external memory
@@ -142,7 +142,7 @@ void SharedChannel::initialize(bool aServerFlag,bool aConstructorFlag,void* aMem
 //******************************************************************************
 //******************************************************************************
 
-void SharedChannel::finalize()
+void SharedSynch::finalize()
 {
    // Finalize memory.
    mQueue.finalize();
@@ -173,7 +173,7 @@ void SharedChannel::finalize()
 // This returns the number of bytes that an instance of this class
 // will need to be allocated for it.
 
-int SharedChannel::getMemorySize()
+int SharedSynch::getMemorySize()
 {
    int tQueueSize = LFValueQueue<int>::getMemorySize(cNumElements);
    int tMemorySize = tQueueSize;
@@ -182,14 +182,14 @@ int SharedChannel::getMemorySize()
 
 //******************************************************************************
 
-bool SharedChannel::putSemaphore(void)
+bool SharedSynch::putSemaphore(void)
 {
    return 0!=ReleaseSemaphore(mSpecific->mSemaphore,1,NULL);
 }
 
 //******************************************************************************
 
-bool SharedChannel::getSemaphore(void)
+bool SharedSynch::getSemaphore(void)
 {
    DWORD status = WaitForSingleObject(mSpecific->mSemaphore,INFINITE);
    return status == WAIT_OBJECT_0;
@@ -197,14 +197,14 @@ bool SharedChannel::getSemaphore(void)
 
 //******************************************************************************
 
-bool SharedChannel::putMutex(void)
+bool SharedSynch::putMutex(void)
 {
    return 0!=ReleaseMutex(mSpecific->mMutex);
 }
 
 //******************************************************************************
 
-bool SharedChannel::getMutex(void)
+bool SharedSynch::getMutex(void)
 {
    DWORD status = WaitForSingleObject(mSpecific->mMutex,INFINITE);
    return status == WAIT_OBJECT_0;

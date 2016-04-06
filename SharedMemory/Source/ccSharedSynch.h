@@ -1,5 +1,5 @@
-#ifndef _CCSHAREDCHANNEL_H_
-#define _CCSHAREDCHANNEL_H_
+#ifndef _CCSHAREDSYNCH_H_
+#define _CCSHAREDSYNCH_H_
 /*==============================================================================
 
 Shared memory channel. 
@@ -19,7 +19,7 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 
-class SharedChannel
+class SharedSynch
 {
 public:
 
@@ -29,8 +29,8 @@ public:
    // Methods
 
    // Constructor
-   SharedChannel();
-  ~SharedChannel();
+   SharedSynch();
+  ~SharedSynch();
 
    // Initialize the queue and the synchronization objects.
    // It is passed three parameters.
@@ -102,10 +102,10 @@ protected:
 //******************************************************************************
 // Global instance
 
-#ifdef _CCSHAREDCHANNEL_CPP_
-          SharedChannel gSharedChannel;
+#ifdef _CCSHAREDSYNCH_CPP_
+          SharedSynch gSharedSynch;
 #else
-   extern SharedChannel gSharedChannel;
+   extern SharedSynch gSharedSynch;
 #endif
 
 //******************************************************************************

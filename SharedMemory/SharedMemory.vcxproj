@@ -166,7 +166,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source\ccSharedChannel.cpp" />
+    <ClCompile Include="Source\ccSharedSynch.cpp" />
     <ClCompile Include="Source\ccSharedMemory.cpp" />
     <ClCompile Include="Source\CmdLineExec.cpp" />
     <ClCompile Include="Source\GSettings.cpp" />
@@ -177,7 +177,7 @@
     <ClCompile Include="Source\someThread1.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\ccSharedChannel.h" />
+    <ClInclude Include="Source\ccSharedSynch.h" />
     <ClInclude Include="Source\ccSharedMemory.h" />
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\GSettings.h" />

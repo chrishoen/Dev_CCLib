@@ -9,7 +9,7 @@ Description:
 #include "prnPrint.h"
 
 #include "ccSharedMemory.h"
-#include "ccSharedChannel.h"
+#include "ccSharedSynch.h"
 
 #define  _SOMETHREAD1_CPP_
 #include "someThread1.h"
@@ -37,11 +37,11 @@ void Thread1::threadRunFunction()
    Prn::print(Prn::ThreadRun1, "Thread1::threadRunFunction BEGIN");
    while (true)
    {
-      CC::gSharedChannel.getSemaphore();
+      CC::gSharedSynch.getSemaphore();
       if (mTerminateFlag) break;
 
       int tCount = 99999;
-      if (CC::gSharedChannel.mQueue.tryRead(&tCount))
+      if (CC::gSharedSynch.mQueue.tryRead(&tCount))
       {
          Prn::print(Prn::ThreadRun1, "CC::gSharedMemory.getSemaphore %d",tCount);
       }
@@ -60,7 +60,7 @@ void Thread1::shutdownThread()
    // Set terminate
    mTerminateFlag = true;
    // Wake up thread.
-   CC::gSharedChannel.putSemaphore();
+   CC::gSharedSynch.putSemaphore();
    // Wait for terminate
    waitForThreadTerminate();
 }   
