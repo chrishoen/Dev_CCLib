@@ -169,6 +169,7 @@
     <ClCompile Include="Source\ccLFBlockQueue.cpp" />
     <ClCompile Include="Source\ccLFBounded.cpp" />
     <ClCompile Include="Source\ccTokenStack.cpp" />
+    <ClCompile Include="Source\ccTreeNode.cpp" />
     <ClCompile Include="Source\CmdLineExec.cpp" />
     <ClCompile Include="Source\LFBlockQueue.cpp" />
     <ClCompile Include="Source\LFFreeList.cpp" />
@@ -187,6 +188,7 @@
     <ClInclude Include="Source\ccLFBlockQueue.h" />
     <ClInclude Include="Source\ccLFBounded.h" />
     <ClInclude Include="Source\ccTokenStack.h" />
+    <ClInclude Include="Source\ccTreeNode.h" />
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\LFAtomic.h" />
     <ClInclude Include="Source\LFBlockQueue.h" />
