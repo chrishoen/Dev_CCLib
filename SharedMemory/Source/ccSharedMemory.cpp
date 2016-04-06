@@ -20,7 +20,8 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-
+// pimpl idiom.
+ 
 class SharedMemory::Specific
 {
 public:
@@ -30,25 +31,27 @@ public:
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-// Default Constructor.
+// Constructor.
 
 SharedMemory::SharedMemory()
 {
    mSpecific = 0;
-   mFreeMemoryFlag = false;
-   mMemory1 = 0;
-   mMemory2 = 0;
-   mNumBytes = 0;
+   mMemory = 0;
+   mSynchMemory = 0;
+   mBlockPoolMemory = 0;
 }
 
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
+// Create the shared memory and calculate addresses.
 
 void SharedMemory::initializeForServer(int aNumBytes)
 {
+   // pimpl idiom.
    mSpecific = new SharedMemory::Specific;
 
+   // Create Shared memory.
    mSpecific->mShareFileMap=CreateFileMapping(
       INVALID_HANDLE_VALUE,
       NULL,
@@ -61,18 +64,24 @@ void SharedMemory::initializeForServer(int aNumBytes)
       mSpecific->mShareFileMap,
       FILE_MAP_READ | FILE_MAP_WRITE,0,0,0);
 
-   mMemory1 = tMemory;
-   mMemory2 = tMemory + cMemorySize1;
+   // Calculate addresses.
+   mMemory          = tMemory;
+   mSynchMemory     = tMemory;
+   mBlockPoolMemory = tMemory + cc_round_upto16(cSynchMemorySize);
 }
 
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
+// Open the shared memory and calculate addresses.
 
 void SharedMemory::initializeForClient()
 {
+   // pimpl idiom.
+
    mSpecific = new SharedMemory::Specific;
 
+   // Open Shared memory.
    mSpecific->mShareFileMap=OpenFileMapping(
       FILE_MAP_READ | FILE_MAP_WRITE,FALSE,
       "AAATESTSHAREMEMFILE");
@@ -81,13 +90,16 @@ void SharedMemory::initializeForClient()
       mSpecific->mShareFileMap,
       FILE_MAP_READ | FILE_MAP_WRITE,0,0,0);
 
-   mMemory1 = tMemory;
-   mMemory2 = tMemory + cMemorySize1;
+   // Calculate addresses.
+   mMemory          = tMemory;
+   mSynchMemory     = tMemory;
+   mBlockPoolMemory = tMemory + cc_round_upto16(cSynchMemorySize);
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Close the shared memory.
 
 void SharedMemory::finalize()
 {
