@@ -30,7 +30,7 @@ void main_memory_initialize()
       tConstructorFlag = false;
    }
 
-   Prn::print(0, "SharedMemory %p",CC::gSharedMemory.mMemory);
+   Prn::print(0, "SharedMemory %p",CC::gSharedMemory.mMemory1);
 
    //***************************************************************************
    //***************************************************************************
@@ -49,7 +49,7 @@ void main_memory_initialize()
    tBlockPoolParms.mBlockPoolType   = CC::cBlockPoolType_FreeList;
    tBlockPoolParms.mNumBlocks       = 1000;
    tBlockPoolParms.mBlockSize       = sizeof(Some::MyBlockA);
-   tBlockPoolParms.mMemory          = CC::gSharedMemory.mMemory;
+   tBlockPoolParms.mMemory          = CC::gSharedMemory.mMemory2;
    tBlockPoolParms.mConstructorFlag = tConstructorFlag;
    CC::createBlockPool(&tBlockPoolParms);
 }

@@ -39,7 +39,10 @@ public:
 
    int mNumBytes;
    bool mFreeMemoryFlag;
-   void* mMemory;
+   void* mMemory1;
+   void* mMemory2;
+
+   static const int cMemorySize1 = 65536;
 
 protected:
    class Specific;

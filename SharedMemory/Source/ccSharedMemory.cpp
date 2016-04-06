@@ -38,7 +38,8 @@ SharedMemory::SharedMemory()
 {
    mSpecific = 0;
    mFreeMemoryFlag = false;
-   mMemory = 0;
+   mMemory1 = 0;
+   mMemory2 = 0;
    mNumBytes = 0;
 }
 
@@ -58,11 +59,12 @@ void SharedMemory::initializeForServer(int aNumBytes)
       aNumBytes,
       "AAATESTSHAREMEMFILE");
 
-   PVOID tMemory=MapViewOfFile(
+   char* tMemory = (char*)MapViewOfFile(
       mSpecific->mShareFileMap,
       FILE_MAP_READ | FILE_MAP_WRITE,0,0,0);
 
-   mMemory = tMemory;
+   mMemory1 = tMemory;
+   mMemory2 = tMemory + cMemorySize1;
 
    mSpecific->mSemaphore=CreateSemaphore(
       NULL,
@@ -90,11 +92,12 @@ void SharedMemory::initializeForClient()
       FILE_MAP_READ | FILE_MAP_WRITE,FALSE,
       "AAATESTSHAREMEMFILE");
 
-   PVOID tMemory=MapViewOfFile(
+   char* tMemory = (char*)MapViewOfFile(
       mSpecific->mShareFileMap,
       FILE_MAP_READ | FILE_MAP_WRITE,0,0,0);
 
-   mMemory = tMemory;
+   mMemory1 = tMemory;
+   mMemory2 = tMemory + cMemorySize1;
 
    mSpecific->mSemaphore=OpenSemaphore(
       EVENT_ALL_ACCESS | EVENT_MODIFY_STATE | SYNCHRONIZE,
