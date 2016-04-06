@@ -51,5 +51,14 @@
     <ClInclude Include="Source\MainMemory.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="Source\ccTreeNodeRxQueue.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ccTreeNodeTxQueue.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\someMyTreeBlockChannel.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

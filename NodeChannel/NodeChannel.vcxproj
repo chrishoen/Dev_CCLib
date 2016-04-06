@@ -180,12 +180,15 @@
     <ClCompile Include="Source\someMyTreeBlockVisitor.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\ccTreeNodeRxQueue.h" />
+    <ClInclude Include="Source\ccTreeNodeTxQueue.h" />
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\MainInit.h" />
     <ClInclude Include="Source\MainMemory.h" />
     <ClInclude Include="Source\someBlockPoolIndex.h" />
     <ClInclude Include="Source\someGenerateMyTreeBlocks.h" />
     <ClInclude Include="Source\someMyTreeBlock.h" />
+    <ClInclude Include="Source\someMyTreeBlockChannel.h" />
     <ClInclude Include="Source\someMyTreeBlockVisitor.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

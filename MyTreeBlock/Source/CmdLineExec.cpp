@@ -39,6 +39,41 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
+void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
+{
+   Some::MyTreeBlock* tX1 = Some::MyTreeBlock::create(1000);
+   Some::MyTreeBlock* tX2 = Some::MyTreeBlock::create(1000);
+   Some::MyTreeBlock* tX3 = Some::MyTreeBlock::create(1000);
+   tX1->destroy();
+   tX2->destroy();
+   tX3->destroy();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
+{
+   Some::MyTreeBlock* tRootNode = Some::MyTreeBlock::create(1000);
+
+   Some::MyTreeBlock* tRootNode1 = 0;
+
+   tRootNode1 = Some::MyTreeBlock::create(2000);
+   Some::generateMyTreeBlocks1(tRootNode1);
+   Some::printAllMyTreeBlocks1(tRootNode1);
+   Some::printAllMyTreeBlocks1(tRootNode1);
+   return;
+   printf("MMMMMMMMMMMM\n");
+   tRootNode->attachAfterLastChild(tRootNode1);
+
+   Some::printAllMyTreeBlocks1(tRootNode);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
    CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
@@ -86,17 +121,5 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
    Some::MyTreeBlock* tRootNode = Some::MyTreeBlock::create(1);
    Some::generateMyTreeBlocks1(tRootNode);
    Some::printAllMyTreeBlocks1(tRootNode);
-}
-
-//******************************************************************************
-
-void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
-{
-}
-
-//******************************************************************************
-
-void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
-{
 }
 

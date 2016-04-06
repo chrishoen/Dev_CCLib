@@ -52,10 +52,12 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGoT1(Ris::CmdLineCmd* aCmd)
 {
-   Some::MyBlockA* tC1 = Some::MyBlockA::create(101);
-   Some::MyBlockA* tC2 = (Some::MyBlockA*)CC::getBlockPoolBlockPtr(tC1->mBlockHandle);
-   tC1->method1();
-   tC2->method1();
+   Some::MyBlockA* tX1 = Some::MyBlockA::create(101);
+   Some::MyBlockA* tX2 = Some::MyBlockA::create(101);
+   Some::MyBlockA* tX3 = Some::MyBlockA::create(101);
+   tX1->destroy();
+   tX2->destroy();
+   tX3->destroy();
 }
 
 //******************************************************************************
