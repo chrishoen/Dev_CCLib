@@ -28,6 +28,12 @@
     <ClCompile Include="Source\GSettings.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\someShare.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ccSharedChannel.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h">
@@ -49,6 +55,12 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\GSettings.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\someShare.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ccSharedChannel.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

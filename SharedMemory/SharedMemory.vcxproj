@@ -166,6 +166,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\ccSharedChannel.cpp" />
     <ClCompile Include="Source\ccSharedMemory.cpp" />
     <ClCompile Include="Source\CmdLineExec.cpp" />
     <ClCompile Include="Source\GSettings.cpp" />
@@ -173,8 +174,10 @@
     <ClCompile Include="Source\MainInit.cpp" />
     <ClCompile Include="Source\MainMemory.cpp" />
     <ClCompile Include="Source\someMyBlockA.cpp" />
+    <ClCompile Include="Source\someShare.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\ccSharedChannel.h" />
     <ClInclude Include="Source\ccSharedMemory.h" />
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\GSettings.h" />
@@ -182,6 +185,7 @@
     <ClInclude Include="Source\MainMemory.h" />
     <ClInclude Include="Source\someBlockPoolIndex.h" />
     <ClInclude Include="Source\someMyBlockA.h" />
+    <ClInclude Include="Source\someShare.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CCLib\CCLib.vcxproj">
