@@ -15,7 +15,7 @@
 
 //******************************************************************************
 
-Settings::Settings()
+GSettings::GSettings()
 {
    mSection[0]=0;
 
@@ -24,7 +24,7 @@ Settings::Settings()
 
 }
 
-void Settings::show()
+void GSettings::show()
 {
    printf("GSettings ******* %s\n", mSection);
 
@@ -40,7 +40,7 @@ void Settings::show()
 // if "Section", the first command line argument, is the same as the section 
 // specified in initialize.
 
-bool Settings::isMySection(Ris::CmdLineCmd* aCmd)
+bool GSettings::isMySection(Ris::CmdLineCmd* aCmd)
 {
    bool tFlag=false;
 
@@ -63,7 +63,7 @@ bool Settings::isMySection(Ris::CmdLineCmd* aCmd)
 // BEGIN starts a section, END exits a section
 // Only commands for a section are processed
 
-void Settings::execute(Ris::CmdLineCmd* aCmd)
+void GSettings::execute(Ris::CmdLineCmd* aCmd)
 {
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
@@ -96,7 +96,7 @@ void Settings::execute(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-bool Settings::initialize(char* aSection)
+bool GSettings::initialize(char* aSection)
 { 
    // File path
    char tFilePath[200];
@@ -128,7 +128,7 @@ bool Settings::initialize(char* aSection)
    }
    else
    {
-      printf("Settings::file open failed\n");
+      printf("GSettings::file open failed\n");
       return false;
    }
 }

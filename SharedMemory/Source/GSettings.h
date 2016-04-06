@@ -15,17 +15,17 @@ This file contains settings.
 //**********************************************************************
 //**********************************************************************
 //**********************************************************************
-// ProtoCommSettings class, inherits from BaseCmdLineExec to process
+// GSettings class, inherits from BaseCmdLineExec to process
 // command lines from a command line file.
 // Each application reads its own print settings from a common settings
 // file. 
 
-class Settings : public Ris::BaseCmdLineExec
+class GSettings : public Ris::BaseCmdLineExec
 {
 public:
 
    //---------------------------------------------------------------------------
-   // Settings members.
+   // GSettings members.
 
    static const int cMemServer = 1;
    static const int cMemClient = 2;
@@ -44,7 +44,7 @@ public:
    // Infrastucture. Constructor and such
 
    typedef Ris::BaseCmdLineExec BaseClass;
-   Settings();
+   GSettings();
    void show();
 
    // Baseclass override, executes for each line in the settings
@@ -53,7 +53,7 @@ public:
    void execute(Ris::CmdLineCmd* aCmd);
 
    // Initialize.
-   // aSettingsFileName is the settings filename. aSection is the settings
+   // aGSettingsFileName is the settings filename. aSection is the settings
    // file section that each application extracts its settings from. 
    // aSectionMode specifies the section mode. Each section begins with a 
    // command line, such as "Begin CmdFile Default", where "Begin" is the 
@@ -80,9 +80,9 @@ public:
 // Global instance
 
 #ifdef _GSETTINGS_CPP_
-        Settings gSettings;
+        GSettings gGSettings;
 #else
-        extern Settings gSettings;
+        extern GSettings gGSettings;
 #endif
 
 

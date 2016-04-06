@@ -1,5 +1,6 @@
 
 #include "prnPrint.h"
+#include "GSettings.h"
 #include "ccSharedMemory.h"
 #include "ccBlockPoolCentral.h"
 #include "someBlockPoolIndex.h"
@@ -17,7 +18,18 @@ void main_memory_initialize()
    //***************************************************************************
    // Initialize shared memory.
 
-   CC::gSharedMemory.initializeForServer(1024*1024);
+   bool tConstructorFlag = true;
+   if (gGSettings.isServer())
+   {
+      CC::gSharedMemory.initializeForServer(1024 * 1024);
+      tConstructorFlag = true;
+   }
+   else
+   {
+      CC::gSharedMemory.initializeForClient();
+      tConstructorFlag = false;
+   }
+
    Prn::print(0, "SharedMemory %p",CC::gSharedMemory.mMemory);
 
    //***************************************************************************
@@ -33,11 +45,12 @@ void main_memory_initialize()
 
    // Create block pool.
    tBlockPoolParms.reset();
-   tBlockPoolParms.mPoolIndex     = Some::cBlockPoolIndex_MyBlockA;
-   tBlockPoolParms.mBlockPoolType = CC::cBlockPoolType_FreeList;
-   tBlockPoolParms.mNumBlocks     = 1000;
-   tBlockPoolParms.mBlockSize     = sizeof(Some::MyBlockA);
-   tBlockPoolParms.mMemory        = CC::gSharedMemory.mMemory;
+   tBlockPoolParms.mPoolIndex       = Some::cBlockPoolIndex_MyBlockA;
+   tBlockPoolParms.mBlockPoolType   = CC::cBlockPoolType_FreeList;
+   tBlockPoolParms.mNumBlocks       = 1000;
+   tBlockPoolParms.mBlockSize       = sizeof(Some::MyBlockA);
+   tBlockPoolParms.mMemory          = CC::gSharedMemory.mMemory;
+   tBlockPoolParms.mConstructorFlag = tConstructorFlag;
    CC::createBlockPool(&tBlockPoolParms);
 }
 

@@ -59,14 +59,14 @@ void main_initialize(int argc,char** argv)
 
    if (argc > 1)
    {
-      gSettings.initialize(argv[1]);
+      gGSettings.initialize(argv[1]);
    }
    else
    {
-      gSettings.initialize("MemServer");
+      gGSettings.initialize("MemServer");
    }
 
-   gSettings.show();
+   gGSettings.show();
 }
 
 //******************************************************************************
