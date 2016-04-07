@@ -60,7 +60,7 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
       generateLabelledTreeNodes3(tRootNode);
    }
 
-   printAllLabelledTreeNodes1(tRootNode);
+   printAllLabelledTreeNodesCO(tRootNode);
 }
 
 //******************************************************************************
@@ -76,15 +76,15 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
    if (aCmd->argInt(1) == 1)
    {
-      printAllLabelledTreeNodes1(tRootNode);
+      printAllLabelledTreeNodesCO(tRootNode);
    }
    else if (aCmd->argInt(1) == 2)
    {
-      printAllLabelledTreeNodes2(tRootNode);
+      printAllLabelledTreeNodesDO(tRootNode);
    }
    else if (aCmd->argInt(1) == 3)
    {
-      printAllLabelledTreeNodes3(tRootNode);
+      printAllLabelledTreeNodesVN(tRootNode);
    }
 
 }
@@ -106,15 +106,15 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
    if (aCmd->argInt(1) == 1)
    {
-      printAllLabelledTreeNodes1(tRootNode);
+      printAllLabelledTreeNodesCO(tRootNode);
    }
    else if (aCmd->argInt(1) == 2)
    {
-      printAllLabelledTreeNodes2(tRootNode);
+      printAllLabelledTreeNodesDO(tRootNode);
    }
    else if (aCmd->argInt(1) == 3)
    {
-      printAllLabelledTreeNodes3(tRootNode);
+      printAllLabelledTreeNodesVN(tRootNode);
    }
    else if (aCmd->argInt(1) == 4)
    {
@@ -138,7 +138,7 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
    LabelledTreeNode* tRootNode = new LabelledTreeNode(0,"root");
 
    generateLabelledTreeNodes1(tRootNode);
-   printAllLabelledTreeNodes1(tRootNode);
+   printAllLabelledTreeNodesCO(tRootNode);
 }
 
 //******************************************************************************
@@ -168,8 +168,8 @@ void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
    printf("**********************************attachAfterLastChild(tRootNode2\n");
    tRootNode->attachAfterLastChild(tRootNode2);
 
-   printf("**********************************printAllLabelledTreeNodes1(mRootNode)\n");
-   printAllLabelledTreeNodes1(tRootNode);
+   printf("**********************************printAllLabelledTreeNodesCO(mRootNode)\n");
+   printAllLabelledTreeNodesCO(tRootNode);
 }
 //******************************************************************************
 //******************************************************************************

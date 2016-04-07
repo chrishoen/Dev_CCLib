@@ -12,7 +12,7 @@ namespace CC
 //****************************************************************************
 //****************************************************************************
 
-void visitAllNodes1(
+void visitAllNodesCO(
    TreeNode*         aSubjectNodeP,
    RecursiveAnchor*  aRecursiveAnchor,
    NodeVisitorCall*  aNodeVisitorCall)
@@ -21,7 +21,7 @@ void visitAllNodes1(
    (*aNodeVisitorCall)(aSubjectNodeP, aRecursiveAnchor);
 
    // Visit all nodes below the subject node
-   visitAllNodesBelow1(
+   visitAllNodesBelowCO(
       aSubjectNodeP,
       aRecursiveAnchor,
       aNodeVisitorCall);
@@ -31,13 +31,13 @@ void visitAllNodes1(
 //****************************************************************************
 //****************************************************************************
 
-void visitAllNodes2(
+void visitAllNodesDO(
    TreeNode*         aSubjectNodeP,
    RecursiveAnchor*  aRecursiveAnchor,
    NodeVisitorCall*  aNodeVisitorCall)
 {
    // Visit all nodes below the subject node
-   visitAllNodesBelow2(
+   visitAllNodesBelowDO(
       aSubjectNodeP,
       aRecursiveAnchor,
       aNodeVisitorCall);
@@ -51,7 +51,7 @@ void visitAllNodes2(
 //****************************************************************************
 //****************************************************************************
 
-void visitAllNodesBelow1(
+void visitAllNodesBelowCO(
    TreeNode*         aSubjectNodeP,
    RecursiveAnchor*  aRecursiveAnchor,
    NodeVisitorCall*  aNodeVisitorCall)
@@ -82,7 +82,7 @@ void visitAllNodesBelow1(
       (*aNodeVisitorCall)(tChildNodeP, aRecursiveAnchor);
 
       // Recursively call this method for the child node
-      visitAllNodesBelow1(
+      visitAllNodesBelowCO(
          tChildNodeP,
          aRecursiveAnchor,
          aNodeVisitorCall);
@@ -100,7 +100,7 @@ void visitAllNodesBelow1(
 //****************************************************************************
 // Visit all nodes below
 
-void visitAllNodesBelow2(
+void visitAllNodesBelowDO(
    TreeNode*         aSubjectNodeP,
    RecursiveAnchor*  aRecursiveAnchor,
    NodeVisitorCall*  aNodeVisitorCall)
@@ -125,7 +125,7 @@ void visitAllNodesBelow2(
       tFirstInLevel = false;
 
       // Recursively call this method for the child node
-      visitAllNodesBelow2(
+      visitAllNodesBelowDO(
          tChildNodeP,
          aRecursiveAnchor,
          aNodeVisitorCall);
@@ -163,7 +163,7 @@ void printAllTreeNodes1(TreeNode* aSubjectNodeP)
    tNodeVisitorCall.bind(visitNodeForPrint);
    RecursiveAnchor tRecursiveAnchor;
 
-   visitAllNodes1(
+   visitAllNodesCO(
       aSubjectNodeP,
       &tRecursiveAnchor,
       &tNodeVisitorCall);
@@ -175,7 +175,7 @@ void printAllTreeNodes2(TreeNode* aSubjectNodeP)
    tNodeVisitorCall.bind(visitNodeForPrint);
    RecursiveAnchor tRecursiveAnchor;
 
-   visitAllNodes2(
+   visitAllNodesDO(
       aSubjectNodeP,
       &tRecursiveAnchor,
       &tNodeVisitorCall);

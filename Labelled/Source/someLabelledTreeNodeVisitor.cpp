@@ -28,29 +28,29 @@ void visitLabelledTreeNodeForPrint (CC::TreeNode* aSubjectNode, CC::RecursiveAnc
 //    tSubjectNode->mFullPath);
 }
 
-void printAllLabelledTreeNodes1(LabelledTreeNode* aSubjectNode)
+void printAllLabelledTreeNodesCO(LabelledTreeNode* aSubjectNode)
 {
    CC::NodeVisitorCall tNodeVisitorCall(visitLabelledTreeNodeForPrint);
    CC::RecursiveAnchor tRecursiveAnchor;
 
-   visitAllNodes1(
+   visitAllNodesCO(
       aSubjectNode,
       &tRecursiveAnchor,
       &tNodeVisitorCall);
 }
 
-void printAllLabelledTreeNodes2(LabelledTreeNode* aSubjectNode)
+void printAllLabelledTreeNodesDO(LabelledTreeNode* aSubjectNode)
 {
    CC::NodeVisitorCall tNodeVisitorCall(visitLabelledTreeNodeForPrint);
    CC::RecursiveAnchor tRecursiveAnchor;
 
-   visitAllNodes2(
+   visitAllNodesDO(
       aSubjectNode,
       &tRecursiveAnchor,
       &tNodeVisitorCall);
 }
 
-void printAllLabelledTreeNodes3(LabelledTreeNode* aSubjectNode)
+void printAllLabelledTreeNodesVN(LabelledTreeNode* aSubjectNode)
 {
    CC::NodeVisitorCall tNodeVisitorCall(visitLabelledTreeNodeForPrint);
    CC::RecursiveAnchor tRecursiveAnchor;
@@ -88,7 +88,7 @@ void destroyAllLabelledTreeNodes(LabelledTreeNode* aSubjectNode)
    CC::NodeVisitorCall tNodeVisitorCall(visitLabelledTreeNodeForPrint);
    CC::RecursiveAnchor tRecursiveAnchor;
 
-   visitAllNodes2(
+   visitAllNodesDO(
       aSubjectNode,
       &tRecursiveAnchor,
       &tNodeVisitorCall);

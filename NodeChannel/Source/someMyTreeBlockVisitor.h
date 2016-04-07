@@ -13,9 +13,9 @@ namespace Some
 
 void visitMyTreeBlockForPrint (MyTreeBlock* aSubjectNode, CC::RecursiveAnchor* aRecursiveAnchor);
 
-void printAllMyTreeBlocks1(MyTreeBlock* aSubjectNode);
-void printAllMyTreeBlocks2(MyTreeBlock* aSubjectNode);
-void printAllMyTreeBlocks3(MyTreeBlock* aSubjectNode);
+void printAllMyTreeBlocksCO(MyTreeBlock* aSubjectNode);
+void printAllMyTreeBlocksDO(MyTreeBlock* aSubjectNode);
+void printAllMyTreeBlocksVN(MyTreeBlock* aSubjectNode);
 
 //****************************************************************************
 //****************************************************************************

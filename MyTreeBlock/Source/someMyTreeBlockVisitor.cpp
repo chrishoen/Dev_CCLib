@@ -26,29 +26,29 @@ void visitMyTreeBlockForPrint (CC::TreeNode* aSubjectNode, CC::RecursiveAnchor* 
       tSubjectNode->mIdentifier);
 }
 
-void printAllMyTreeBlocks1(MyTreeBlock* aSubjectNode)
+void printAllMyTreeBlocksCO(MyTreeBlock* aSubjectNode)
 {
    CC::RecursiveAnchor tRecursiveAnchor;
    CC::NodeVisitorCall tNodeVisitorCall(visitMyTreeBlockForPrint);
 
-   CC::visitAllNodes1(
+   CC::visitAllNodesCO(
       aSubjectNode,
       &tRecursiveAnchor,
       &tNodeVisitorCall);
 }
 
-void printAllMyTreeBlocks2(MyTreeBlock* aSubjectNode)
+void printAllMyTreeBlocksDO(MyTreeBlock* aSubjectNode)
 {
    CC::RecursiveAnchor tRecursiveAnchor;
    CC::NodeVisitorCall tNodeVisitorCall(visitMyTreeBlockForPrint);
 
-   CC::visitAllNodes2(
+   CC::visitAllNodesDO(
       aSubjectNode,
       &tRecursiveAnchor,
       &tNodeVisitorCall);
 }
 
-void printAllMyTreeBlocks3(MyTreeBlock* aSubjectNode)
+void printAllMyTreeBlocksVN(MyTreeBlock* aSubjectNode)
 {
    CC::NodeVisitorCall tNodeVisitorCall(visitMyTreeBlockForPrint);
    CC::RecursiveAnchor tRecursiveAnchor;
@@ -85,7 +85,7 @@ void destroyAllMyTreeBlocks(MyTreeBlock* aSubjectNode)
    CC::RecursiveAnchor tRecursiveAnchor;
    CC::NodeVisitorCall tNodeVisitorCall(visitMyTreeBlockForDestroy);
 
-   CC::visitAllNodes2(
+   CC::visitAllNodesDO(
       aSubjectNode,
       &tRecursiveAnchor,
       &tNodeVisitorCall);

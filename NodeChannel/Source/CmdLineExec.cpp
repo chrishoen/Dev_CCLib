@@ -64,7 +64,7 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
       generateMyTreeBlocks3(tRootNode);
    }
 
-   Some::printAllMyTreeBlocks3(tRootNode);
+   Some::printAllMyTreeBlocksVN(tRootNode);
 }
 
 //******************************************************************************
@@ -80,15 +80,15 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
    if (aCmd->argInt(1) == 1)
    {
-      Some::printAllMyTreeBlocks1(tRootNode);
+      Some::printAllMyTreeBlocksCO(tRootNode);
    }
    else if (aCmd->argInt(1) == 2)
    {
-      Some::printAllMyTreeBlocks2(tRootNode);
+      Some::printAllMyTreeBlocksDO(tRootNode);
    }
    else if (aCmd->argInt(1) == 3)
    {
-      Some::printAllMyTreeBlocks3(tRootNode);
+      Some::printAllMyTreeBlocksVN(tRootNode);
    }
 
 }
@@ -107,15 +107,15 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
    if (aCmd->argInt(1) == 1)
    {
-      Some::printAllMyTreeBlocks1(tRootNode);
+      Some::printAllMyTreeBlocksCO(tRootNode);
    }
    else if (aCmd->argInt(1) == 2)
    {
-      Some::printAllMyTreeBlocks2(tRootNode);
+      Some::printAllMyTreeBlocksDO(tRootNode);
    }
    else if (aCmd->argInt(1) == 3)
    {
-      Some::printAllMyTreeBlocks3(tRootNode);
+      Some::printAllMyTreeBlocksVN(tRootNode);
    }
    else if (aCmd->argInt(1) == 4)
    {
@@ -247,8 +247,8 @@ void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
    printf("**********************************attachAfterLastChild(tRootNode2\n");
    tRootNode->attachAfterLastChild(tRootNode2);
 
-   printf("**********************************printAllMyTreeBlocks1(mRootNode)\n");
-   Some::printAllMyTreeBlocks1(tRootNode);
+   printf("**********************************printAllMyTreeBlocksCO(mRootNode)\n");
+   Some::printAllMyTreeBlocksCO(tRootNode);
 }
 //******************************************************************************
 //******************************************************************************

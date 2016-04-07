@@ -61,13 +61,13 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 
    tRootNode1 = Some::MyTreeBlock::create(2000);
    Some::generateMyTreeBlocks1(tRootNode1);
-   Some::printAllMyTreeBlocks1(tRootNode1);
-   Some::printAllMyTreeBlocks1(tRootNode1);
+   Some::printAllMyTreeBlocksCO(tRootNode1);
+   Some::printAllMyTreeBlocksCO(tRootNode1);
    return;
    printf("MMMMMMMMMMMM\n");
    tRootNode->attachAfterLastChild(tRootNode1);
 
-   Some::printAllMyTreeBlocks1(tRootNode);
+   Some::printAllMyTreeBlocksCO(tRootNode);
 }
 
 //******************************************************************************
@@ -79,7 +79,7 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
    CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
    Some::MyTreeBlock* tRootNode = Some::MyTreeBlock::create(999);
    Some::generateMyTreeBlocks1(tRootNode);
-   Some::printAllMyTreeBlocks1(tRootNode);
+   Some::printAllMyTreeBlocksCO(tRootNode);
 
    CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
 // CC::destroyAllTreeNodes(tRootNode);
@@ -110,7 +110,7 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
       Some::generateMyTreeBlocks3(tRootNode);
    }
 
-   Some::printAllMyTreeBlocks1(tRootNode);
+   Some::printAllMyTreeBlocksCO(tRootNode);
    CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
 }
 
@@ -120,6 +120,6 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
    Some::MyTreeBlock* tRootNode = Some::MyTreeBlock::create(1);
    Some::generateMyTreeBlocks1(tRootNode);
-   Some::printAllMyTreeBlocks1(tRootNode);
+   Some::printAllMyTreeBlocksCO(tRootNode);
 }
 

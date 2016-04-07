@@ -37,15 +37,15 @@ typedef CC::CallPointer2<TreeNode*,RecursiveAnchor*> NodeVisitorCall;
 // collection. It is passed a recursive anchor and a call pointer that is
 // called on each node visited
 
-void visitAllNodes1(
+void visitAllNodesCO(
    TreeNode*         aSubjectNodeP,
    RecursiveAnchor*  aRecursiveAnchor,
    NodeVisitorCall*  aNodeVisitorCall);
 
 // This visits all nodes below a given subject root node. It is called 
-// by the above visitAllNodes1.
+// by the above visitAllNodesCO.
 
-void visitAllNodesBelow1(
+void visitAllNodesBelowCO(
    TreeNode*         aSubjectNodeP,
    RecursiveAnchor*  aRecursiveAnchor,
    NodeVisitorCall*  aNodeVisitorCall);
@@ -58,15 +58,15 @@ void visitAllNodesBelow1(
 // collection. It is passed a recursive anchor and a call pointer that is
 // called on each node visited
 
-void visitAllNodes2(
+void visitAllNodesDO(
    TreeNode*         aSubjectNodeP,
    RecursiveAnchor*  aRecursiveAnchor,
    NodeVisitorCall*  aNodeVisitorCall);
 
 // This visits all nodes below a given subject root node. It is called 
-// by the above visitAllNodes2.
+// by the above visitAllNodesDO.
 
-void visitAllNodesBelow2(
+void visitAllNodesBelowDO(
    TreeNode*         aSubjectNodeP, 
    RecursiveAnchor*  aRecursiveAnchor,
    NodeVisitorCall*  aNodeVisitorCall);

@@ -13,9 +13,9 @@ namespace Some
 
 void visitLabelledTreeNodeForPrint (LabelledTreeNode* aSubjectNode, CC::RecursiveAnchor* aRecursiveAnchor);
 
-void printAllLabelledTreeNodes1(LabelledTreeNode* aSubjectNode);
-void printAllLabelledTreeNodes2(LabelledTreeNode* aSubjectNode);
-void printAllLabelledTreeNodes3(LabelledTreeNode* aSubjectNode);
+void printAllLabelledTreeNodesCO(LabelledTreeNode* aSubjectNode);
+void printAllLabelledTreeNodesDO(LabelledTreeNode* aSubjectNode);
+void printAllLabelledTreeNodesVN(LabelledTreeNode* aSubjectNode);
 
 //****************************************************************************
 //****************************************************************************

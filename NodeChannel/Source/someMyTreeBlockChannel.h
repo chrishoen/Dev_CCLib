@@ -50,7 +50,7 @@ inline void transferMyTreeBlockQueues(
 inline void printMyTreeBlockRxQueue(
    CC::TreeNodeRxQueue<Some::MyTreeBlock>* aRxQueue)
 {
-   Some::printAllMyTreeBlocks1(aRxQueue->mRootNode);
+   Some::printAllMyTreeBlocksCO(aRxQueue->mRootNode);
 }
 
 //****************************************************************************
@@ -60,7 +60,7 @@ inline void printMyTreeBlockRxQueue(
 inline void printMyTreeBlockTxQueue(
    CC::TreeNodeTxQueue<Some::MyTreeBlock>* aTxQueue)
 {
-   Some::printAllMyTreeBlocks1(aTxQueue->mRootNode);
+   Some::printAllMyTreeBlocksCO(aTxQueue->mRootNode);
 }
 
 //****************************************************************************
