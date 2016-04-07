@@ -120,6 +120,12 @@ void showBlockPool(int aPoolIndex);
 // Get the size of a block pool.
 int getBlockPoolSize(int aPoolIndex);
 
+// Return true if memory for a block is long term and false if it is short 
+// term. If it is long term then allocated blocks must be deallocated. If it
+// is short term then allocated blocks do not have to be deallocated, they
+// are simply reused.
+bool isBlockPoolMemoryLongTerm(BlockHandle aBlockHandle);
+
 // Test block pool code.
 void testBlockPool(int aPoolIndex);
 

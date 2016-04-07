@@ -24,7 +24,6 @@ TreeNode::TreeNode()
 
    // Empty state
    mIdentifier=0;
-   mMemoryType = 0;
    mAncestorWithAfterH = BlockHandle::nullH;
 
    mTreeNodeTxFlags.mValue = 0;
@@ -42,7 +41,6 @@ TreeNode::TreeNode(int aIdentifier)
 
    // Set state
    mIdentifier = aIdentifier;
-   mMemoryType = 0;
    mAncestorWithAfterH = BlockHandle::nullH;
 
    mTreeNodeTxFlags.mValue = 0;

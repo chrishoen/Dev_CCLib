@@ -94,7 +94,7 @@ void createBlockPool(BlockPoolParms* aParms)
    // Local pointer.
    BlockPoolParms* tParms = &mBlockPoolParms[tPoolIndex];
 
-   // Create and initialize the block pool.
+   // Block pool type lookup table.
    switch (aParms->mBlockPoolType)
    {
       // Create and initialize the block pool.
@@ -105,6 +105,7 @@ void createBlockPool(BlockPoolParms* aParms)
          mBlockPool[tPoolIndex]->initialize(tParms);
       }
       break;
+      // Create and initialize the block pool.
       case cBlockPoolType_ShortTerm :
       {
          mBlockPool[tPoolIndex] = new BlockPoolShortTerm;
@@ -250,6 +251,27 @@ int getBlockPoolSize(int aPoolIndex)
       return 0;
    }
    return mBlockPool[aPoolIndex]->size();
+}
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+// Return true if memory for a block is long term and false if it is short 
+// term. If it is long term then allocated blocks must be deallocated. If it
+// is short term then allocated blocks do not have to be deallocated, they
+// are simply reused.
+
+bool isBlockPoolMemoryLongTerm(BlockHandle aBlockHandle)
+{
+   // Block pool type lookup table.
+   switch (mBlockPoolParms[aBlockHandle.mPoolIndex].mBlockPoolType)
+   {
+      // Create and initialize the block pool.
+      case cBlockPoolType_FreeList   : return true;
+      case cBlockPoolType_LFFreeList : return true;
+      case cBlockPoolType_ShortTerm  : return false;
+   }
+   return true;
 }
 
 //****************************************************************************

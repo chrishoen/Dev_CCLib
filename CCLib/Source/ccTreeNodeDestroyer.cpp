@@ -3,8 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "ccBlockPoolCentral.h"
 #include "ccTreeNodeDestroyer.h"
-#include "ccDefs.h"
 
 namespace CC
 {
@@ -17,7 +17,7 @@ void destroyAllTreeNodes(
    TreeNode* aSubjectNode)
 {
    // If short term memory then there is no destruction
-   if (aSubjectNode->mMemoryType == CC::MemoryType_ShortTerm)
+   if (!isBlockPoolMemoryLongTerm(aSubjectNode->mBlockHandle))
    {
       // Detach the subject node from all nodes to which it is attached
       aSubjectNode->detachFromAll();
@@ -66,7 +66,7 @@ void destroyAllTreeNodesBelow(
       tFirstInLevel = false;
 
       // If not short term memory then there is destruction
-      if (aSubjectNode->mMemoryType != CC::MemoryType_ShortTerm)
+      if (isBlockPoolMemoryLongTerm(aSubjectNode->mBlockHandle))
       {
          // Recursively call this method for the child node
          destroyAllTreeNodesBelow(
