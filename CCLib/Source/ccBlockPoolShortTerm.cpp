@@ -11,7 +11,9 @@ Description:
 #include <new>
 
 #include "cc_functions.h"
-#include "ccBlockBoxArray.h"
+#include "ccBlockPoolShortTerm.h"
+
+using namespace std;
 
 namespace CC
 {
@@ -21,30 +23,25 @@ namespace CC
 //******************************************************************************
 // Constructor, initialize members for an empty stack of size zero 
 
-BlockBoxArrayState::BlockBoxArrayState()
+BlockPoolShortTermState::BlockPoolShortTermState()
 {
    // All null
    mNumBlocks=0;
-   mBlockSize=0;
-   mBlockBoxSize=0;
-   mPoolIndex=0;
+   mIndexCount=0;
 }
 
-void BlockBoxArrayState::initialize(BlockPoolParms* aParms)
+void BlockPoolShortTermState::initialize(BlockPoolParms* aParms)
 {
    // Do not initialize, if already initialized.
    if (!aParms->mConstructorFlag) return;
 
    // Store members.
    mNumBlocks    = aParms->mNumBlocks;
-   mBlockSize    = cc_round_upto16(aParms->mBlockSize);
-   mBlockBoxSize = mBlockSize + cBlockHeaderSize;;
-   mPoolIndex    = aParms->mPoolIndex;
 }
 
-int BlockBoxArrayState::getMemorySize()
+int BlockPoolShortTermState::getMemorySize()
 {
-   return cc_round_upto16(sizeof(BlockBoxArrayState));
+   return cc_round_upto16(sizeof(BlockPoolShortTermState));
 }
 
 //******************************************************************************
@@ -52,16 +49,14 @@ int BlockBoxArrayState::getMemorySize()
 //******************************************************************************
 // Constructor
 
-BlockBoxArray::BlockBoxArray()
+BlockPoolShortTerm::BlockPoolShortTerm()
 {
-   // All null
-   mX = 0;
+   // All null.
    mFreeMemoryFlag = false;
    mMemory = 0;
-   mArray=0;
 }
 
-BlockBoxArray::~BlockBoxArray()
+BlockPoolShortTerm::~BlockPoolShortTerm()
 {
    finalize();
 }
@@ -69,10 +64,24 @@ BlockBoxArray::~BlockBoxArray()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Allocate memory for the block array. It is passed the number of blocks to 
-// allocate and the size of the blocks.
+// This initializes the block pool for long term blocks. It allocates memory
+// for the block array and initializes the index stack. It is passed the
+// number of blocks to allocate and the size of the blocks. Memory for one
+// dummy block is allocated because index zero is reserved to indicate a
+// null block.
+//
+// For aNumBlocks==10 blocks will range 0,1,2,3,4,5,6,7,8,9
+// A block index of cInvalid indicates an invalid block.
+//
+// An index stack is used to manage free list access to the blocks
+// The stack is initialized for a free list by pushing indices onto it.
+// For aAllocate==10 this will push 0,1,2,3,4,5,6,7,8,9
+//
+// When a block is allocated, an index is popped off of the stack.
+// When a block is deallocated, its index is pushed back onto the stack.
+//
 
-void BlockBoxArray::initialize(BlockPoolParms* aParms,void* aMemory)
+void BlockPoolShortTerm::initialize(BlockPoolParms* aParms)
 {
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
@@ -84,74 +93,62 @@ void BlockBoxArray::initialize(BlockPoolParms* aParms,void* aMemory)
 
    // If the instance of this class is not to reside in external memory
    // then allocate memory for it on the system heap.
-   if (aMemory == 0)
+   if (aParms->mMemory == 0)
    {
-      mMemory = malloc(BlockBoxArray::getMemorySize(aParms));
+      mMemory = malloc(BlockPoolShortTerm::getMemorySize(aParms));
       mFreeMemoryFlag = true;
    }
    // If the instance of this class is to reside in external memory
    // then use the memory pointer that was passed in.
    else
    {
-      mMemory = aMemory;
+      mMemory = aParms->mMemory;
       mFreeMemoryFlag = false;
    }
 
    // Calculate memory sizes.
-   int tStateSize    = BlockBoxArrayState::getMemorySize();
-   int tBlockSize    = cc_round_upto16(aParms->mBlockSize);
-   int tBlockBoxSize = cBlockHeaderSize + tBlockSize;
-   int tArraySize    = aParms->mNumBlocks*tBlockBoxSize;
+   int tStateSize     = BlockPoolShortTermState::getMemorySize();
+   int tBaseClassSize = BlockPoolBase::getMemorySize(aParms);
 
    // Calculate memory addresses.
-   char* tStateMemory = (char*)mMemory;
-   char* tArrayMemory = tStateMemory + tStateSize;
+   char* tStateMemory     = (char*)mMemory;
+   char* tBaseClassMemory = tStateMemory + tStateSize;
+
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // Initialize variables.
 
    // Construct the state.
    if (aParms->mConstructorFlag)
    {
       // Call the constructor.
-      mX = new(tStateMemory)BlockBoxArrayState;
+      mX = new(tStateMemory)BlockPoolShortTermState;
    }
    else
    {
       // The constructor has already been called.
-      mX = (BlockBoxArrayState*)tStateMemory;
+      mX = (BlockPoolShortTermState*)tStateMemory;
    }
    // Initialize the state.
    mX->initialize(aParms);
 
-   // Set the array pointer value.
-   mArray = tArrayMemory;
+   // Initialize the base class variables.
+   BaseClass::initializeBase(aParms,tBaseClassMemory);
 
-   // Initialize the block headers, if they have not
-   // already been initialized.
-   if (aParms->mConstructorFlag)
-   {
-      // Initialize block headers.
-      for (int i = 0; i < mX->mNumBlocks; i++)
-      {
-         // Header pointer.
-         BlockHeader* tHeader = header(i);
-         // Call Header constructor.
-         new(tHeader)BlockHeader;
-         // Set header variables.
-         tHeader->mBlockHandle.set(mX->mPoolIndex, i);
-      }
-   }
-
-   // Store block array parameters. These can be used elsewhere.
-   aParms->mBlockHeaderSize = cBlockHeaderSize;
-   aParms->mBlockBoxSize    = tBlockBoxSize;
-   aParms->mBlockBoxPtr     = mArray;
+   // Mark this block pool initialization as valid.
+   aParms->mValidFlag = true;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Deallocate memory for the block array.
 
-void BlockBoxArray::finalize()
+void BlockPoolShortTerm::finalize()
 {
+   BaseClass::finalizeBase();
+
    if (mFreeMemoryFlag)
    {
       if (mMemory)
@@ -169,68 +166,78 @@ void BlockBoxArray::finalize()
 // This returns the number of bytes that an instance of this class
 // will need to be allocated for it.
 
-int BlockBoxArray::getMemorySize(BlockPoolParms* aParms)
+int BlockPoolShortTerm::getMemorySize(BlockPoolParms* aParms)
 {
-   // Calculate memory sizes.
-   int tStateSize    = BlockBoxArrayState::getMemorySize();
-   int tBlockSize    = cc_round_upto16(aParms->mBlockSize);
-   int tBlockBoxSize = cBlockHeaderSize + tBlockSize;
-   int tArraySize    = aParms->mNumBlocks*tBlockBoxSize;
-   int tMemorySize   = tStateSize + tArraySize;
+   int tStateSize     = BlockPoolShortTermState::getMemorySize();
+   int tBaseClassSize = BlockPoolBase::getMemorySize(aParms);
 
+   int tMemorySize = tStateSize + tBaseClassSize;
    return tMemorySize;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Return a pointer to a block, based on block array index
+// Size, the number of blocks that are available to be allocated.
 
-char* BlockBoxArray::blockBox(int aIndex)
-{
-   char*  tBlockBox = &mArray[mX->mBlockBoxSize*aIndex];
-   return tBlockBox;
+int BlockPoolShortTerm::size()
+{ 
+   return (int)(mX->mIndexCount & 0x7FFFFFFF);
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Return a pointer to a header, based on block array index
+// Get a block from the pool, this allocates a block.
+// Return true if successful, false if the block pool is empty.
 
-BlockHeader* BlockBoxArray::header(int aIndex)
+bool BlockPoolShortTerm::allocate(void** aBlockPointer,BlockHandle* aBlockHandle)
 {
-   char*  tBlockBox = &mArray[mX->mBlockBoxSize*aIndex];
-   BlockHeader* tHeader = (BlockHeader*)tBlockBox;
-   return tHeader;
+   // Guard.
+   if (mX->mNumBlocks==0) return false;
+
+   // Increment atomic 64 bit counter. This will last for years before it rolls over.
+   unsigned long long tIndexCount = mX->mIndexCount.fetch_add(1,memory_order_relaxed);
+
+   // Calculate the block index so that it cycles 0..mNumBlocks-1.
+   int tBlockIndex = tIndexCount % mX->mNumBlocks;
+
+   // Return a pointer to the block at that index.
+   if (aBlockPointer)
+   {
+      *aBlockPointer = mBlocks.block(tBlockIndex);
+   }
+
+   // Return the memory handle for the block.
+   if (aBlockHandle)
+   {
+      aBlockHandle->set(BaseClass::mParms->mPoolIndex, tBlockIndex);
+   }
+
+   // Done
+   return true;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Return a pointer to a body, based on block array index
+// Put a block back to the pool, this deallocates a block.
+// This does nothing, because it is short term.
+// This should not get called.
 
-char* BlockBoxArray::block(int aIndex)
+void BlockPoolShortTerm::deallocate(BlockHandle aBlockHandle)
 {
-   char*  tBlockBox = &mArray[mX->mBlockBoxSize*aIndex];
-   char*  tBlock = tBlockBox + cBlockHeaderSize;
-   return tBlock;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Get the handle of a block, given its address.
+// Return a pointer to a block, given its memory handle.
 
-BlockHandle BlockBoxArray::getBlockHandle(void* aBlockPtr)
+void* BlockPoolShortTerm::getBlockPtr(BlockHandle aBlockHandle)
 {
-   BlockHandle tBlockHandle;
-   if (aBlockPtr==0) return tBlockHandle;
-
-   char*  tBlock = (char*)aBlockPtr;
-   BlockHeader* tHeader = (BlockHeader*)(tBlock - cBlockHeaderSize);
-
-   tBlockHandle = tHeader->mBlockHandle;
-   return tBlockHandle;
+   // Return the address of the block within the block array.
+   return mBlocks.block(aBlockHandle.mBlockIndex);
 }
 
 }//namespace

@@ -12,6 +12,7 @@ Print utility
 
 #include "ccBlockPoolBase.h"
 #include "ccBlockPoolFreeList.h"
+#include "ccBlockPoolShortTerm.h"
 
 #include "ccBlockPoolCentral.h"
 
@@ -101,6 +102,12 @@ void createBlockPool(BlockPoolParms* aParms)
       case cBlockPoolType_LFFreeList :
       {
          mBlockPool[tPoolIndex] = new BlockPoolFreeList;
+         mBlockPool[tPoolIndex]->initialize(tParms);
+      }
+      break;
+      case cBlockPoolType_ShortTerm :
+      {
+         mBlockPool[tPoolIndex] = new BlockPoolShortTerm;
          mBlockPool[tPoolIndex]->initialize(tParms);
       }
       break;
