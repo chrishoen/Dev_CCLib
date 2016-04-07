@@ -46,24 +46,13 @@ public:
 
    TreeNodeTxQueue()
    {
-      mRootNode = 0 ;
+      mRootNode = TreeNodeClass::create();
       mGetNodeP = 0;
    }
 
   ~TreeNodeTxQueue()
    {
       mRootNode->destroy();
-   }
-
-
-   //--------------------------------------------------------------------------
-   //--------------------------------------------------------------------------
-   //--------------------------------------------------------------------------
-   // Put the root node of a node structure to the queue for transmission.
-
-   void setRootNode(TreeNodeClass* aRootNodeP)
-   {
-      mRootNode = aRootNodeP;
    }
 
    //--------------------------------------------------------------------------

@@ -51,7 +51,7 @@ public:
 
    TreeNodeRxQueue()
    {
-      mRootNode = 0;
+      mRootNode = TreeNodeClass::create();
       mPutNodeP = 0;
 
       for (int i = 0; i < MaxLevelDepth; i++)
@@ -61,14 +61,9 @@ public:
       mParentAtLevelP[0] = mRootNode;
    }
 
-   //--------------------------------------------------------------------------
-   //--------------------------------------------------------------------------
-   //--------------------------------------------------------------------------
-   // Put the root node of a node structure to the queue for transmission.
-
-   void setRootNode(TreeNodeClass* aNodeP)
+  ~TreeNodeRxQueue()
    {
-      mRootNode = aNodeP;
+      mRootNode->destroy();
    }
 
 //****************************************************************************

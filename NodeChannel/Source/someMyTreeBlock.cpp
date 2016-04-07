@@ -22,6 +22,21 @@ namespace Some
 //******************************************************************************
 // Allocate a block from the block pool and call its constructor.
 
+MyTreeBlock* MyTreeBlock::create ()
+{ 
+   // Allocate a block from the block pool.
+   // Call the constructor on the allocated block using placement new.
+   // Set the allocated block memory handle.
+   // Return a pointer to the allocated block.
+
+   return CC::createBlockIntrusive<MyTreeBlock,cBlockPoolIndex_MyTreeBlock>();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Allocate a block from the block pool and call its constructor.
+
 MyTreeBlock* MyTreeBlock::create (int aIdentifier)
 { 
    // Allocate a block from the block pool.
