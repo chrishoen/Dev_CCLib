@@ -6,15 +6,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\ccCriticalSection_win.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ccPointerCircular.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ccPointerStack.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\ccTreeNode.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -24,22 +15,13 @@
     <ClCompile Include="Source\ccTreeNodeVisitor.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ccPointerShiftRegister.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\cc_functions.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ccLFBlockFreeList.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\ccLFBlockQueue.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\ccLFPointerQueue.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ccLogic.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\ccBlockBoxArray.cpp">
@@ -80,19 +62,10 @@
     <ClInclude Include="Source\ccContainers2.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccCriticalSection.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\ccDefs.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccDiagrams.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ccPointerCircular.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ccPointerStack.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccTreeNode.h">
@@ -104,16 +77,10 @@
     <ClInclude Include="Source\ccTreeNodeVisitor.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccPointerShiftRegister.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\cc_functions.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccValueQueue.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ccLFBlockFreeList.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccLFBlockQueue.h">
@@ -123,9 +90,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccLFPointerQueue.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ccLogic.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccValueStack.h">
