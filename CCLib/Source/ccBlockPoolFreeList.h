@@ -18,7 +18,7 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 // This class encapsulates a block pool that is based on a free list paradigm.
-// It is long term and it is not thread safe.
+// It is long term.
 //
 // It contains a free list of blocks, which is a block array and a stack of
 // indices into the array. When a block is allocated, an index is popped off of
@@ -37,6 +37,10 @@ namespace CC
 // The stack is initialized for a free list by pushing indices onto it.
 // For aAllocate==10 this will push 9,8,7,6,5,4,3,2,1,0 onto the stack
 // so that block zero will be the first one popped.
+//
+// The index stack can be configured to be thread safe that uses a lock free
+// atomic cas treiber stack. It can also configured to be a normal stack
+// which is not thread safe, but is faster.
 
 class BlockPoolFreeList : public BlockPoolBase
 {
@@ -92,7 +96,8 @@ public:
    // This is a free list stack of indices into the block array.
    // When a block is allocated, an index is popped off of the stack.
    // When a block is deallocated, its index is pushed back onto the stack.
-
+   // Based on the pool type this will be instantiated with a normal stack
+   // or a lock free treiber stack.
    BlockPoolBaseIndexStack* mBlockIndexStack;
 
    //***************************************************************************

@@ -55,25 +55,26 @@ public:
 //******************************************************************************
 //******************************************************************************
 // This class encapsulates a block pool that is based on a free list paradigm.
-// It is long term and it is not thread safe.
+// It is short term term and it is thread safe.
 //
-// It contains a free list of blocks, which is a block array and a stack of
-// indices into the array. When a block is allocated, an index is popped off of
-// the stack. When a block is deallocated, its index is pushed onto the stack.
-//   
-// At initialization, all of the indices are pushed onto the stack. The 
-// pool starts out with a full stack.
+// There are two types of memory block pool: short term and long term. Short
+// term blocks are non persistent and have short lifetimes. Long term
+// blocks are persistent and have long lifetimes.
+// instance.
 //
-// It allocates memory for the block array and initializes the index stack.
-// It is passed the number of blocks to allocate and the size of the blocks. 
+// Blocks that are allocated from long term pools must be deallocated once
+// their lifetimes have expired. Blocks that are allocated from short term 
+// pools are not deallocated, they are simply reused. 
+// 
+// This is short term. It does not deallocate blocks. 
 //
-// For aNumBlocks==10 blocks will range 0,1,2,3,4,5,6,7,8,9
-// So block indices will range 0,1,2,3,4,5,6,7,8,9
-//
-// An index stack is used to manage free list access to the blocks
-// The stack is initialized for a free list by pushing indices onto it.
-// For aAllocate==10 this will push 9,8,7,6,5,4,3,2,1,0 onto the stack
-// so that block zero will be the first one popped.
+// For block allocations, it uses a 64 bit atomic counter that increments
+// with each allocate. A cyclic 0..mNumBlocks-1 block index derived from
+// this is used to get a block from the block array.
+// 
+// The block index counter has never yet been observed to rollover, but if it
+// does then erroneous results will occur. An allocation once every
+// microsecond will rollover after 584942 years.
 
 class BlockPoolShortTerm : public BlockPoolBase
 {

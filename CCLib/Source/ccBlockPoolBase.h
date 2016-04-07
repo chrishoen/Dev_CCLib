@@ -119,11 +119,3 @@ public:
 }//namespace
 #endif
 
-// There are two types of memory block pool: short term and long term. Short
-// term blocks are non persistent and have short lifetimes. Long term
-// blocks are persistent and have long lifetimes.
-// instance.
-//
-// Blocks that are allocated from long term pools must be deallocated once
-// their lifetimes have expired. Blocks that are allocated from short term 
-// pools are not deallocated, they are simply reused. 
