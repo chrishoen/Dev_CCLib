@@ -2,6 +2,7 @@
 #define _CCLFINDEX_H_
 
 #include <atomic>
+#include "ccDefs.h"
 
 /*==============================================================================
 ==============================================================================*/
@@ -25,14 +26,14 @@ struct LFIndex
    int mCount;
 
    // Constructor
-   LFIndex()
+   LFIndex() NOEXCEPT
    {
       mIndex = 0;
       mCount = 0;
    }
 
    // Constructor
-   LFIndex(int aIndex, int aCount)
+   LFIndex(int aIndex, int aCount) NOEXCEPT
    {
       mIndex = aIndex;
       mCount = aCount;

@@ -21,6 +21,12 @@ enum
 
 enum { MaxLevelDepth = 20 };
 
+#ifndef _MSC_VER
+#define NOEXCEPT noexcept(true)
+#else
+#define NOEXCEPT
+#endif
+
 } //namespace
 #endif
 
