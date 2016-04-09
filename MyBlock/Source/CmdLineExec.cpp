@@ -139,12 +139,12 @@ void CmdLineExec::executeGoC1(Ris::CmdLineCmd* aCmd)
 {
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockC);
 
-   Some::MyBlockC* tC1 = Some::MyBlockC::create(101);
+   Some::MyBlockC* tC1 = new Some::MyBlockC(101);
    tC1->method1();
 
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockC);
 
-   tC1->destroy();
+   delete tC1;
 
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockC);
 }
@@ -165,13 +165,13 @@ void CmdLineExec::executeGoD1(Ris::CmdLineCmd* aCmd)
 {
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockD);
 
-   Some::MyBlockD* tD1 = Some::MyBlockD::create();
-   Some::MyBlockD* tD2 = Some::MyBlockD::create();
+   Some::MyBlockD* tD1 = new Some::MyBlockD;
+   Some::MyBlockD* tD2 = new Some::MyBlockD;
 
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockD);
 
-   tD1->destroy();
-   tD2->destroy();
+   delete tD1;
+   delete tD2;
 
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockD);
 }

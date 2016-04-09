@@ -22,6 +22,8 @@ MyBlockD::MyBlockD()
 {
    Prn::print(0, "MyBlockD::MyBlockD");
    mCode1B=101;
+
+   mBlockHandle.set(this);
 }
 
 MyBlockD::~MyBlockD()
