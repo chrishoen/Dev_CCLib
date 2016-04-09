@@ -20,83 +20,58 @@ namespace CC
 // it is. Methods are provided to convert between block pointers and block
 // handles.
 //
-// The pool index value of zero is reserved to indicate a null pool and the
-// block index value of zero is reserved to indicate a null block.
+// The pool index value of all ones is reserved to indicate a null pool and the
+// block index value of all ones is reserved to indicate a null block.
 //
 
 struct BlockHandle
 {
-   // Invalid node
-   static const int  cInvalid = 0xFFFF;
-
-   //--------------------------------------------------------------------------
-   //--------------------------------------------------------------------------
-   //---------------------------------------------------------------------------
-   // Members
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
 
    // Memory pool index, specifies which memory pool a block is in.
    unsigned short mPoolIndex;
+
    // Memory block index, specifies which block within the memory pool.
    unsigned short mBlockIndex;
 
-   //--------------------------------------------------------------------------
-   //--------------------------------------------------------------------------
-   //---------------------------------------------------------------------------
-   // Constructor
+   // Invalid index value, used to mark a pool or a block as null.
+   static const int  cInvalid = 0xFFFF;
 
-   BlockHandle::BlockHandle()
-   {
-      mPoolIndex  = cInvalid;
-      mBlockIndex = cInvalid;
-   }
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Constructors.
 
-   BlockHandle::BlockHandle(unsigned short aPoolIndex, unsigned short aBlockIndex)
-   {
-      mPoolIndex  = aPoolIndex;
-      mBlockIndex = aBlockIndex;
-   }
+   BlockHandle::BlockHandle();
+   BlockHandle::BlockHandle(unsigned short aPoolIndex, unsigned short aBlockIndex);
+   void set(unsigned short aPoolIndex, unsigned short aBlockIndex);
 
-   //--------------------------------------------------------------------------
-   //--------------------------------------------------------------------------
-   //---------------------------------------------------------------------------
-   // Set
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Null block handle value.
 
-   void setNull()
-   {
-      mPoolIndex  = cInvalid;
-      mBlockIndex = cInvalid;
-   }
-
-   // Set
-   void set(unsigned short aPoolIndex, unsigned short aBlockIndex)
-   {
-      mPoolIndex  = aPoolIndex;
-      mBlockIndex = aBlockIndex;
-   }
-
-   //--------------------------------------------------------------------------
-   //--------------------------------------------------------------------------
-   //---------------------------------------------------------------------------
-   // Null
-
-   bool isNull()
-   {
-      return mPoolIndex==cInvalid || mBlockIndex==cInvalid;
-   }
-
-   static BlockHandle null()
-   {
-      BlockHandle tTemp;
-      tTemp.setNull();
-      return tTemp;
-   }
-
+   void setNull();
+   bool isNull();
+   static BlockHandle null();
    static BlockHandle nullH;
 
-   //--------------------------------------------------------------------------
-   //--------------------------------------------------------------------------
-   //--------------------------------------------------------------------------
-   // Handle to pointer conversions.
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Set a block handle from the given address of the block. This obtains the 
+   // block handle by looking it up in the global block pool facility.
+
+   void set(void* aBlockPointer);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Get the address of the block specified by the block handle. This obtains 
+   // the handle by looking it up in the global block pool facility.
 
    static void* ptr(BlockHandle aBlockHandle);
 };

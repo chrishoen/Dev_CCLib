@@ -27,17 +27,15 @@ public:
    //--------------------------------------------------------------------------
    // Memory management, constructors and destructors
 
-   // Allocate a block from the block pool and call its constructor.
-   static MyBlockA* create ();
-   static MyBlockA* create (int aIdentifier);
+   // Allocate or deallocate a block from the block pool.
+   static void* operator new      (size_t sz);
+   static void  operator delete   (void* ptr);
 
-   // This method deallocates the object from the block pool from which it was
-   // created. It does not call a class destructor.
-   void destroy();
-
-   // Constructor, it is called by create after allocation of a new block.
+   // Constructors.
    MyBlockA();
    MyBlockA(int aIdentifier);
+   // Destructor.
+  ~MyBlockA();
 
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------

@@ -18,6 +18,8 @@ public:
 
   void executeGoA1(Ris::CmdLineCmd* aCmd);
   void executeGoA2(Ris::CmdLineCmd* aCmd);
+  void executeGoA3(Ris::CmdLineCmd* aCmd);
+  void executeGoA4(Ris::CmdLineCmd* aCmd);
 
   void executeGoB1(Ris::CmdLineCmd* aCmd);
   void executeGoB2(Ris::CmdLineCmd* aCmd);
