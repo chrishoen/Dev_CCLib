@@ -182,7 +182,7 @@ void Writer::writeType4(int aNumWrites)
       int tCount = mCount & 0xFFFF;
 
       mMarkerWrite.doStart();
-      tObject = MyBlockA::create();
+      tObject = new MyBlockA();
       mMarkerWrite.doStop();
 
       if (tObject)
@@ -207,7 +207,7 @@ void Writer::writeType4(int aNumWrites)
       {
          if (tObject)
          {
-            tObject->destroy();
+            delete tObject;
          }
          mCount++;
          mFailCount++;

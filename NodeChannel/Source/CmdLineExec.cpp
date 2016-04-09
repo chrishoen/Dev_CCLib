@@ -24,7 +24,7 @@ CmdLineExec::CmdLineExec()
 //******************************************************************************
 void CmdLineExec::reset()
 {
-   mRootNode = Some::MyTreeBlock::create(0);
+   mRootNode = new Some::MyTreeBlock(0);
 
    Some::generateMyTreeBlocks1(mRootNode);
 }
@@ -49,7 +49,7 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1,2);
 
-   Some::MyTreeBlock* tRootNode = Some::MyTreeBlock::create(0);
+   Some::MyTreeBlock* tRootNode = new Some::MyTreeBlock(0);
 
    if (aCmd->argInt(1) == 1)
    {
@@ -75,7 +75,7 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1,1);
 
-   Some::MyTreeBlock* tRootNode = Some::MyTreeBlock::create(0);
+   Some::MyTreeBlock* tRootNode = new Some::MyTreeBlock(0);
    generateMyTreeBlocks3(tRootNode);
 
    if (aCmd->argInt(1) == 1)
@@ -101,7 +101,7 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1,5);
 
-   Some::MyTreeBlock* tRootNode = Some::MyTreeBlock::create(0);
+   Some::MyTreeBlock* tRootNode = new Some::MyTreeBlock(0);
    generateMyTreeBlocks2(tRootNode);
 
 
@@ -150,9 +150,9 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
    CC::TreeNodeTxQueue<Some::MyTreeBlock> tTxQueue;
    CC::TreeNodeRxQueue<Some::MyTreeBlock> tRxQueue;
 
-   Some::MyTreeBlock* tRootNode1 = Some::MyTreeBlock::create(1000);
-   Some::MyTreeBlock* tRootNode2 = Some::MyTreeBlock::create(2000);
-   Some::MyTreeBlock* tRootNode3 = Some::MyTreeBlock::create(3000);
+   Some::MyTreeBlock* tRootNode1 = new Some::MyTreeBlock(1000);
+   Some::MyTreeBlock* tRootNode2 = new Some::MyTreeBlock(2000);
+   Some::MyTreeBlock* tRootNode3 = new Some::MyTreeBlock(3000);
 
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
@@ -231,14 +231,14 @@ void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
    printf("**********************************go5\n");
    printf("\n");
 
-   Some::MyTreeBlock* tRootNode = Some::MyTreeBlock::create(0);
+   Some::MyTreeBlock* tRootNode = new Some::MyTreeBlock(0);
 
    printf("**********************************generateMyTreeBlocks1(tRootNode1)\n");
-   Some::MyTreeBlock* tRootNode1 = Some::MyTreeBlock::create(0);
+   Some::MyTreeBlock* tRootNode1 = new Some::MyTreeBlock(0);
    generateMyTreeBlocks1(tRootNode1);
 
    printf("**********************************generateMyTreeBlocks1(tRootNode2)\n");
-   Some::MyTreeBlock* tRootNode2 = Some::MyTreeBlock::create(0);
+   Some::MyTreeBlock* tRootNode2 = new Some::MyTreeBlock(0);
    generateMyTreeBlocks1(tRootNode2);
 
    printf("**********************************attachAfterLastChild(tRootNode1)\n");

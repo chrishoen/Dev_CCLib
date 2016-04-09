@@ -51,7 +51,7 @@ public:
 
    TreeNodeRxQueue()
    {
-      mRootNode = TreeNodeClass::create();
+      mRootNode = new TreeNodeClass();
       mPutNodeP = 0;
 
       for (int i = 0; i < MaxLevelDepth; i++)

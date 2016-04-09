@@ -15,6 +15,9 @@ namespace CC
 
 TreeNode::TreeNode()
 {
+   // Set this block handle.
+   mBlockHandle.set(this);
+
    // All pointers to zero
    mParentNodeH = BlockHandle::nullH;
    mBeforeNodeH = BlockHandle::nullH;
@@ -32,6 +35,9 @@ TreeNode::TreeNode()
 
 TreeNode::TreeNode(int aIdentifier)
 {
+   // Set this block handle.
+   mBlockHandle.set(this);
+
    // All pointers to zero
    mParentNodeH = BlockHandle::nullH;
    mBeforeNodeH = BlockHandle::nullH;

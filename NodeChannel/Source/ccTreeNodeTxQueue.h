@@ -46,7 +46,7 @@ public:
 
    TreeNodeTxQueue()
    {
-      mRootNode = TreeNodeClass::create();
+      mRootNode = new TreeNodeClass;
       mGetNodeP = 0;
    }
 

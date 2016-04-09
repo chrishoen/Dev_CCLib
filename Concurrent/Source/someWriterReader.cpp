@@ -160,7 +160,7 @@ void WriterReader::startTrialType4()
       {
          ++mCount &= 0xFFFF;
 
-         MyBlockA* tObject = MyBlockA::create();
+         MyBlockA* tObject = new MyBlockA();
          tObject->mCode1 = mCount;
          gShare.mValueQueue.tryWrite(tObject);
 
@@ -422,7 +422,7 @@ void WriterReader::writereadType4(int aNumWrites)
          bool tPass = false;
 
          mMarkerWrite.doStart();
-         tObject = MyBlockA::create();
+         tObject = new MyBlockA();
          mMarkerWrite.doStop();
 
          if (tObject)
@@ -438,7 +438,7 @@ void WriterReader::writereadType4(int aNumWrites)
             }
             else
             {
-               tObject->destroy();
+               delete tObject;
                mWriteCount++;
                mWriteFailCount++;
             }
@@ -459,7 +459,7 @@ void WriterReader::writereadType4(int aNumWrites)
          {
             tCount = tObject->mCode1;
             mMarkerRead.doStart();
-            tObject->destroy();
+            delete tObject;
             mMarkerRead.doStop();
          }
 
@@ -567,7 +567,7 @@ void WriterReader::flushType4()
       tPass = gShare.mValueQueue.tryRead((void**)&tObject);
       if (!tPass) break;
       tCount = tObject->mCode1;
-      tObject->destroy();
+      delete tObject;
       mReadCount++;
       mReadPassCount++;
       mReadCheckSum += tCount;

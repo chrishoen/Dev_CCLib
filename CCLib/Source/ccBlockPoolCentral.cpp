@@ -141,7 +141,7 @@ bool allocateBlockPoolBlock(int aPoolIndex,void** aBlockPointer,BlockHandle* aBl
    if (aPoolIndex==0) return false;
    if (!mBlockPoolParms[aPoolIndex].mValidFlag)
    {
-      printf("ERROR BlockPool doesn't exists %d\n", aPoolIndex);
+      printf("ERROR allocate BlockPool doesn't exist %d\n", aPoolIndex);
       return false;
    }
    // Get block from specific pool.
@@ -231,7 +231,7 @@ void showBlockPool(int aPoolIndex)
    // Guard
    if (!mBlockPoolParms[aPoolIndex].mValidFlag)
    {
-      printf("ERROR BlockPool doesn't exists %d\n", aPoolIndex);
+      printf("ERROR show BlockPool doesn't exist %d\n", aPoolIndex);
       return;
    }
    mBlockPool[aPoolIndex]->show();
@@ -247,7 +247,7 @@ int getBlockPoolSize(int aPoolIndex)
    // Guard
    if (!mBlockPoolParms[aPoolIndex].mValidFlag)
    {
-      printf("ERROR BlockPool doesn't exists %d\n", aPoolIndex);
+      printf("ERROR size BlockPool doesn't exist %d\n", aPoolIndex);
       return 0;
    }
    return mBlockPool[aPoolIndex]->size();

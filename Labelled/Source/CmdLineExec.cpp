@@ -99,7 +99,7 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
    CC::showBlockPool(Some::cBlockPoolIndex_LabelledTreeNode);
 
-   LabelledTreeNode* tRootNode = LabelledTreeNode::create(0,"root");
+   LabelledTreeNode* tRootNode = new LabelledTreeNode(0,"root");
    generateLabelledTreeNodes1(tRootNode);
 
    CC::showBlockPool(Some::cBlockPoolIndex_LabelledTreeNode);

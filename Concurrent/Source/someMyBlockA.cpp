@@ -9,7 +9,6 @@ Description:
 #include "prnPrint.h"
 
 #include "ccBlockPoolCentral.h"
-#include "ccBlockPoolBlockIntrusive.h"
 #include "someBlockPoolIndex.h"
 #include "someMyBlockA.h"
 
@@ -19,38 +18,32 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Allocate a block from the block pool and call its constructor.
+// Allocate a block from the block pool at the given block pool index.
+// Return a pointer to the allocated block.
+// Return null if the block pool is empty.
 
-MyBlockA* MyBlockA::create ()
-{ 
-   // Allocate a block from the block pool.
-   // Call the constructor on the allocated block using placement new.
-   // Set the allocated block memory handle.
-   // Return a pointer to the allocated block.
+void* MyBlockA::operator new(size_t sz)
+{
+   // Block pointer.
+   void* tBlockPointer = 0;
 
-   return CC::createBlockIntrusive<MyBlockA,cBlockPoolIndex_MyBlockA>();
+   // Try to allocate a block from the block pool.
+   CC::allocateBlockPoolBlock(Some::cBlockPoolIndex_MyBlockA, (void**)&tBlockPointer, 0);
+
+   // Return the pointer to the allocated block.
+   // Return null if the block pool is empty.
+   return tBlockPointer;
 }
+  
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Deallocate a block from the block pool.
 
-MyBlockA* MyBlockA::create (int aIdentifier)
-{ 
-   // Allocate a block from the block pool.
-   // Call the constructor on the allocated block using placement new.
-   // Set the allocated block memory handle.
-   // Return a pointer to the allocated block.
-
-   return CC::createBlockIntrusive<MyBlockA,cBlockPoolIndex_MyBlockA>(aIdentifier);
-}
-
-//****************************************************************************
-//****************************************************************************
-//****************************************************************************
-// This method deallocates the object from the block pool from which it was
-// created. It does not call a class destructor.
-
-void MyBlockA::destroy()
+void MyBlockA::operator delete(void* ptr)
 {
    // Deallocate the block back to the block pool
-   CC::deallocateBlockPoolBlock(this->mBlockHandle);
+   CC::deallocateBlockPoolBlock(ptr);
 }
 
 //****************************************************************************
@@ -65,6 +58,8 @@ MyBlockA::MyBlockA()
    mCode2=102;
    mCode3=103;
    mCode4=104;
+
+   mBlockHandle.set(this);
 }
 
 //****************************************************************************
@@ -79,6 +74,16 @@ MyBlockA::MyBlockA(int aIdentifier)
    mCode2=102;
    mCode3=103;
    mCode4=104;
+
+   mBlockHandle.set(this);
+}
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
+
+MyBlockA::~MyBlockA()
+{
 }
 
 //****************************************************************************
@@ -87,7 +92,7 @@ MyBlockA::MyBlockA(int aIdentifier)
 
 void MyBlockA::method1()
 {
-   Prn::print(0, "MyBlockA::method1 %d",mIdentifier);
+   Prn::print(0, "MyBlockA::method1     %d",mIdentifier);
 }
 
 }//namespace

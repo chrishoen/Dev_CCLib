@@ -193,7 +193,7 @@ void Reader::readType4(int aNumReads)
       {
          tCount = tObject->mCode1;
          mMarkerRead.doStart();
-         tObject->destroy();;
+         delete tObject;
          mMarkerRead.doStop();
       }
 
@@ -285,7 +285,7 @@ void Reader::flushType4()
       if (!tPass) break;
 
       int tCount = tObject->mCode1;
-      tObject->destroy();
+      delete tObject;
 
       mCount++;
       mPassCount++;

@@ -58,7 +58,7 @@ void CmdLineExec::executeTxInt(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeTxBlock(Ris::CmdLineCmd* aCmd)
 {
-   Some::MyBlockA* tBlock = Some::MyBlockA::create(++mCount);
+   Some::MyBlockA* tBlock = new Some::MyBlockA(++mCount);
 
    CC::gSharedSynch.mBlockHandleQueue.tryWrite(tBlock->mBlockHandle);
    CC::gSharedSynch.putSemaphore();
@@ -73,12 +73,12 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockA);
 
-   Some::MyBlockA* tC1 = Some::MyBlockA::create(101);
+   Some::MyBlockA* tC1 = new Some::MyBlockA(101);
    tC1->method1();
 
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockA);
 
-   tC1->destroy();
+   delete tC1;
 
    CC::showBlockPool(Some::cBlockPoolIndex_MyBlockA);
 }
@@ -89,7 +89,7 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   Some::MyBlockA* tC1 = Some::MyBlockA::create(101);
+   Some::MyBlockA* tC1 = new Some::MyBlockA(101);
    Prn::print(0, "%d %d",tC1->mBlockHandle.mPoolIndex,tC1->mBlockHandle.mBlockIndex);
 
    CC::BlockHandle tBlockHandle = CC::getBlockPoolBlockHandle(tC1);
@@ -118,12 +118,12 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeCreate(Ris::CmdLineCmd* aCmd)
 {
-   mMyBlockA = Some::MyBlockA::create(101);
+   mMyBlockA = new Some::MyBlockA(101);
 }
 
 void CmdLineExec::executeDestroy(Ris::CmdLineCmd* aCmd)
 {
-   mMyBlockA->destroy();
+   delete mMyBlockA;
 }
 
 void CmdLineExec::executeShow(Ris::CmdLineCmd* aCmd)

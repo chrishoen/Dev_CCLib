@@ -41,8 +41,6 @@
     <ClInclude Include="Source\ccBlockPoolBase.h" />
     <ClInclude Include="Source\ccBlockPoolBaseIndexStack.h" />
     <ClInclude Include="Source\ccBlockPoolBlock.h" />
-    <ClInclude Include="Source\ccBlockPoolBlockIntrusive.h" />
-    <ClInclude Include="Source\ccBlockPoolBlockNonIntrusive.h" />
     <ClInclude Include="Source\ccBlockPoolCentral.h" />
     <ClInclude Include="Source\ccBlockPoolFreeList.h" />
     <ClInclude Include="Source\ccBlockPoolIndexStack.h" />

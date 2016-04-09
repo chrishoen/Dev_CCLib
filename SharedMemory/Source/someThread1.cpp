@@ -78,7 +78,7 @@ void Thread1::threadRunFunction()
          // Process block.
          tCount = tBlock->mIdentifier;
          // Destroy block.
-         tBlock->destroy();
+         delete tBlock;
          // Print.
          Prn::print(Prn::ThreadRun1, "BlockHandeQueue read %d",tCount);
       }

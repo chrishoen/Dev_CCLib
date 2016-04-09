@@ -7,6 +7,8 @@
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+#include "ccBlockPoolBlock.h"
+#include "someBlockPoolIndex.h"
 #include "ccTreeNode.h"
 
 namespace Some
@@ -16,18 +18,14 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 
-//ass LabelledTreeNode : public CC::TreeNode, public CC::BlockPoolBlock<Some::LabelledTreeNode,Some::cBlockPoolIndex_LabelledTreeNode>
-class LabelledTreeNode : public CC::TreeNode
+class LabelledTreeNode : public CC::TreeNode,public CC::BlockPoolBlock<Some::cBlockPoolIndex_LabelledTreeNode>
 {
 public:
 
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
-   // Memory management, constructors and destructors
-
-   // Create with default memory type and specified member variables
-   static LabelledTreeNode* create (int aIdentifier,char* aLabel);
+   // Constructors.
 
    // Constructor, it is called by create after allocation of a new block.
    LabelledTreeNode();

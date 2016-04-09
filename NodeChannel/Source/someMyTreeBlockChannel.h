@@ -30,7 +30,7 @@ inline void transferMyTreeBlockQueues(
             tTxNode->mTxAttachLevel,
             tTxNode->mFullPath);
 #endif
-         Some::MyTreeBlock* tRxNode = Some::MyTreeBlock::create(tTxNode->mIdentifier);
+         Some::MyTreeBlock* tRxNode = new Some::MyTreeBlock(tTxNode->mIdentifier);
          tRxNode->mTreeNodeTxFlags = tTxNode->mTreeNodeTxFlags;
          tRxNode->mTxAttachLevel = tTxNode->mTxAttachLevel;
          aRxQueue->putRxNode(tRxNode);

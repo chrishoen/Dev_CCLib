@@ -9,38 +9,10 @@ Description:
 #include <new>
 #include "prnPrint.h"
 
-#include "ccBlockPoolCentral.h"
-#include "someBlockPoolIndex.h"
-#include "someBlockPoolIndex.h"
 #include "someLabelledTreeNode.h"
 
 namespace Some
 {
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Create with specified member variables
-
-LabelledTreeNode* LabelledTreeNode::create (int aIdentifier,char* aLabel)
-{ 
-   // Block pointer.
-   LabelledTreeNode* tBlockPointer = 0;
-   // Block handle.
-   CC::BlockHandle tBlockHandle;
-
-   // Allocate a block from the block pool.
-   CC::allocateBlockPoolBlock(cBlockPoolIndex_LabelledTreeNode,(void**)&tBlockPointer,&tBlockHandle);
-
-   // Call the constructor on the allocated block using placement new.
-   new(tBlockPointer)LabelledTreeNode(aIdentifier,aLabel);
-
-   // Set the allocated block memory handle.
-   tBlockPointer->mBlockHandle = tBlockHandle;
-
-   // Return the pointer to the allocated block.
-   return tBlockPointer;
-}
 
 //****************************************************************************
 //****************************************************************************

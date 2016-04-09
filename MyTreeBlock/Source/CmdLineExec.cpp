@@ -41,12 +41,19 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 {
-   Some::MyTreeBlock* tX1 = Some::MyTreeBlock::create(1000);
-   Some::MyTreeBlock* tX2 = Some::MyTreeBlock::create(1000);
-   Some::MyTreeBlock* tX3 = Some::MyTreeBlock::create(1000);
-   tX1->destroy();
-   tX2->destroy();
-   tX3->destroy();
+   CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
+
+   Some::MyTreeBlock* tX1 = new Some::MyTreeBlock(1000);
+   Some::MyTreeBlock* tX2 = new Some::MyTreeBlock(1000);
+   Some::MyTreeBlock* tX3 = new Some::MyTreeBlock(1000);
+
+   CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
+
+   delete tX1;
+   delete tX2;
+   delete tX3;
+
+   CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
 }
 
 //******************************************************************************
@@ -55,11 +62,11 @@ void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
-   Some::MyTreeBlock* tRootNode = Some::MyTreeBlock::create(1000);
+   Some::MyTreeBlock* tRootNode = new Some::MyTreeBlock(1000);
 
    Some::MyTreeBlock* tRootNode1 = 0;
 
-   tRootNode1 = Some::MyTreeBlock::create(2000);
+   tRootNode1 = new Some::MyTreeBlock(2000);
    Some::generateMyTreeBlocks1(tRootNode1);
    Some::printAllMyTreeBlocksCO(tRootNode1);
    Some::printAllMyTreeBlocksCO(tRootNode1);
@@ -77,7 +84,7 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
    CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
-   Some::MyTreeBlock* tRootNode = Some::MyTreeBlock::create(999);
+   Some::MyTreeBlock* tRootNode = new Some::MyTreeBlock(999);
    Some::generateMyTreeBlocks1(tRootNode);
    Some::printAllMyTreeBlocksCO(tRootNode);
 
@@ -95,7 +102,7 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
    CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
 
-   Some::MyTreeBlock* tRootNode = Some::MyTreeBlock::create(1);
+   Some::MyTreeBlock* tRootNode = new Some::MyTreeBlock(1);
 
    if (aCmd->argInt(1) == 1)
    {
@@ -118,7 +125,7 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
-   Some::MyTreeBlock* tRootNode = Some::MyTreeBlock::create(1);
+   Some::MyTreeBlock* tRootNode = new Some::MyTreeBlock(1);
    Some::generateMyTreeBlocks1(tRootNode);
    Some::printAllMyTreeBlocksCO(tRootNode);
 }

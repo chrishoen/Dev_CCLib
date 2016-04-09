@@ -181,28 +181,38 @@ bool BlockPoolFreeList::allocate(void** aBlockPointer,BlockHandle* aBlockHandle)
 {
    int tBlockIndex = 0;
       
-   // Pop a block index from the index stack, as a free list.
-   if(!mBlockIndexStack->pop(&tBlockIndex))
+   // Try to pop a block index from the index stack, as a free list.
+   if (mBlockIndexStack->pop(&tBlockIndex))
    {
-      // If empty stack return.
-      *aBlockPointer = 0;
-      aBlockHandle->setNull();
-//    printf("BlockPoolFreeList STACK EMPTY %d\n",BaseClass::mParms->mPoolIndex);
+      // Return a pointer to the block at that index.
+      if (aBlockPointer)
+      {
+         *aBlockPointer = mBlocks.block(tBlockIndex);
+      }
+
+      // Return the memory handle for the block.
+      if (aBlockHandle)
+      {
+         aBlockHandle->set(BaseClass::mParms->mPoolIndex, tBlockIndex);
+      }
+      return true;
+   }
+   // If the stack is empty
+   else
+   {
+      // Return a null pointer.
+      if (aBlockPointer)
+      {
+         *aBlockPointer = mBlocks.block(tBlockIndex);
+      }
+
+      // Return a null memory handle.
+      if (aBlockHandle)
+      {
+         aBlockHandle->setNull();
+      }
       return false;
    }
-
-   // Return a pointer to the block at that index.
-   if (aBlockPointer)
-   {
-      *aBlockPointer = mBlocks.block(tBlockIndex);
-   }
-
-   // Return the memory handle for the block.
-   if (aBlockHandle)
-   {
-      aBlockHandle->set(BaseClass::mParms->mPoolIndex, tBlockIndex);
-   }
-
    // Done
    return true;
 }
