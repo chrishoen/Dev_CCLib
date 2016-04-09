@@ -137,5 +137,8 @@
     <ClInclude Include="Source\ccBlockPoolShortTerm.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="Source\ccBlockPoolBlock.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
