@@ -88,9 +88,11 @@ void createBlockPool(BlockPoolParms* aParms)
       return;
    }
 
-   // Store parameters.
-   // These are used throughout the lifetime of the blockpool.
+   // Store parameters. These are used throughout the lifetime of the block pool.
    mBlockPoolParms[tPoolIndex] = *aParms;
+   // Range check parameters.
+   mBlockPoolParms[tPoolIndex].makeConsistent();
+
    // Local pointer.
    BlockPoolParms* tParms = &mBlockPoolParms[tPoolIndex];
 

@@ -49,5 +49,18 @@ void BlockPoolParms::reset()
    mBlockBoxPtr      = 0;
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Make parameters consistent. Check ranges.
+
+void BlockPoolParms::makeConsistent()
+{
+   if (mNumBlocks > cBlockPool_MaxNumBlocks)
+   {
+      mNumBlocks = cBlockPool_MaxNumBlocks;
+   }
+}
+
 } //namespace
 

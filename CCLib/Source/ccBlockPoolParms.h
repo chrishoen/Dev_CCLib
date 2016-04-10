@@ -17,6 +17,9 @@ namespace CC
 // Block pool constants.
 
    // Block pool types.
+   static const int cBlockPool_MaxNumBlocks   = 65536 - 1;
+
+   // Block pool types.
    static const int cBlockPoolType_FreeList   = 1;
    static const int cBlockPoolType_LFFreeList = 2;
    static const int cBlockPoolType_ShortTerm  = 3;
@@ -89,8 +92,12 @@ public:
    //***************************************************************************
    // Methods
 
+   // Constructor.
    BlockPoolParms();
    void reset();
+
+   // Make parameters consistent. Check ranges.
+   void makeConsistent();
 };
 
 }//namespace
