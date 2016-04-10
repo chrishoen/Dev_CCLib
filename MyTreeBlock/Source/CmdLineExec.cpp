@@ -39,47 +39,6 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
-{
-   CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
-
-   Some::MyTreeBlock* tX1 = new Some::MyTreeBlock(1000);
-   Some::MyTreeBlock* tX2 = new Some::MyTreeBlock(1000);
-   CC::TreeNode* tY2 = tX2;
-
-   CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
-
-   delete tX1;
-   delete tX2;
-
-   CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
-{
-   Some::MyTreeBlock* tRootNode = new Some::MyTreeBlock(1000);
-
-   Some::MyTreeBlock* tRootNode1 = 0;
-
-   tRootNode1 = new Some::MyTreeBlock(2000);
-   Some::generateMyTreeBlocks1(tRootNode1);
-   Some::printAllMyTreeBlocksCO(tRootNode1);
-   Some::printAllMyTreeBlocksCO(tRootNode1);
-   return;
-   printf("MMMMMMMMMMMM\n");
-   tRootNode->attachAfterLastChild(tRootNode1);
-
-   Some::printAllMyTreeBlocksCO(tRootNode);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
    CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
@@ -155,5 +114,46 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
    }
 
    CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
+{
+   CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
+
+   Some::MyTreeBlock* tX1 = new Some::MyTreeBlock(1000);
+   Some::MyTreeBlock* tX2 = new Some::MyTreeBlock(1000);
+   CC::TreeNode* tY2 = tX2;
+
+   CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
+
+   delete tX1;
+   delete tY2;
+
+   CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
+{
+   Some::MyTreeBlock* tRootNode = new Some::MyTreeBlock(1000);
+
+   Some::MyTreeBlock* tRootNode1 = 0;
+
+   tRootNode1 = new Some::MyTreeBlock(2000);
+   Some::generateMyTreeBlocks1(tRootNode1);
+   Some::printAllMyTreeBlocksCO(tRootNode1);
+   Some::printAllMyTreeBlocksCO(tRootNode1);
+   return;
+   printf("MMMMMMMMMMMM\n");
+   tRootNode->attachAfterLastChild(tRootNode1);
+
+   Some::printAllMyTreeBlocksCO(tRootNode);
 }
 

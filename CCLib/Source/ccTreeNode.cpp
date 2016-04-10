@@ -1,12 +1,44 @@
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include "ccBlockPoolCentral.h"
+#include "ccBlockPoolIndex.h"
+
 #include "ccTreeNode.h"
 
 namespace CC
 {
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Allocate a block from the block pool at the given block pool index.
+// Return a pointer to the allocated block.
+// Return null if the block pool is empty.
+
+void* TreeNode::operator new(size_t sz)
+{
+   // Block pointer.
+   void* tBlockPointer = 0;
+
+   // Try to allocate a block from the block pool.
+   CC::allocateBlockPoolBlock(CC::cBlockPoolIndex_TreeNode, (void**)&tBlockPointer, 0);
+
+   // Return the pointer to the allocated block.
+   // Return null if the block pool is empty.
+   return tBlockPointer;
+}
+  
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Deallocate a block from the block pool.
+
+void TreeNode::operator delete(void* ptr)
+{
+   // Deallocate the block back to the block pool
+   CC::deallocateBlockPoolBlock(ptr);
+}
 
 //****************************************************************************
 //****************************************************************************
