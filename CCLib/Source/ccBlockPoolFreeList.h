@@ -62,29 +62,23 @@ public:
    //***************************************************************************
    // Methods
 
-   //---------------------------------------------------------------------------
    // Constructor
    BlockPoolFreeList();
   ~BlockPoolFreeList();
 
-   //---------------------------------------------------------------------------
    // Initialize the block pool. It is passed block pool parameters.
    void initialize(BlockPoolParms* aParms);
 
-   //---------------------------------------------------------------------------
    // Deallocate memory for the block array.
    void finalize();
 
-   //---------------------------------------------------------------------------
    // Get a block from the pool, this allocates a block.
    // Return true if successful, false if the block pool is empty.
    bool allocate(void** aBlockPointer,BlockHandle* aBlockHandle);
 
-   //---------------------------------------------------------------------------
    // Put a block back to the pool, this deallocates a block.
    void deallocate(BlockHandle aBlockHandle);
 
-   //---------------------------------------------------------------------------
    // Get a pointer to a block, given its memory handle.
    void* getBlockPtr(BlockHandle aBlockHandle);
 
