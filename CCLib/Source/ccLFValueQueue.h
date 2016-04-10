@@ -21,6 +21,7 @@ This can be used for Multiple Writer Muliple Reader.
 ==============================================================================*/
 #include <atomic>
 #include <new>
+#include "ccDefs.h"
 #include "cc_functions.h"
 #include "ccMemoryPtr.h"
 #include "ccLFIndex.h"
@@ -126,9 +127,9 @@ public:
       MemorySize::MemorySize(int aNumElements)
       {
          mStateSize         = LFValueQueueState::getMemorySize();
-         mQueueArraySize    = (aNumElements + 1)*sizeof(AtomicLFIndex);
-         mListArraySize     = (aNumElements + 1)*sizeof(AtomicLFIndex);
-         mElementArraySize  = (aNumElements + 1)*sizeof(Element);
+         mQueueArraySize    = cc_round_upto16(cNewArrayExtraMemory + (aNumElements + 1)*sizeof(AtomicLFIndex));
+         mListArraySize     = cc_round_upto16(cNewArrayExtraMemory + (aNumElements + 1)*sizeof(AtomicLFIndex));
+         mElementArraySize  = cc_round_upto16(cNewArrayExtraMemory + (aNumElements)*sizeof(Element));
          mMemorySize = mStateSize + mQueueArraySize + mListArraySize + mElementArraySize;
       }
    };

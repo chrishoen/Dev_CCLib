@@ -21,7 +21,8 @@ enum
 
 enum { MaxLevelDepth = 20 };
 
-static const int cNewArrayExtra = 8;
+// operator new[] adds extra bytes to store number of elements.
+static const int cNewArrayExtraMemory = 4;
 
 #ifndef _MSC_VER
 #define NOEXCEPT noexcept(true)
