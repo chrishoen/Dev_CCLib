@@ -146,7 +146,16 @@ bool allocateBlockPoolBlock(int aPoolIndex,void** aBlockPointer,BlockHandle* aBl
       return false;
    }
    // Get block from specific pool.
-   return mBlockPool[aPoolIndex]->allocate(aBlockPointer,aBlockHandle);
+   bool tSuccess = mBlockPool[aPoolIndex]->allocate(aBlockPointer,aBlockHandle);
+
+   // Check result.
+   if (tSuccess) return true;
+   if (!mBlockPoolParms[aPoolIndex].mNoThrowFlag)
+   {
+      printf("ERROR allocate BlockPool EMPTY %d\n", aPoolIndex);
+      throw 101;
+   }
+   return false;
 }
 
 //******************************************************************************

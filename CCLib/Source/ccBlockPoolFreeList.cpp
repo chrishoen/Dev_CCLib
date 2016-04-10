@@ -41,7 +41,7 @@ public:
    {
       mBaseClassSize = BlockPoolBase::getMemorySize(aParms);
 
-      if (aParms->mUseLockFree)
+      if (aParms->mLockFreeFlag)
       {
          mStackSize = BlockPoolLFIndexStack::getMemorySize(aParms);
       }
@@ -116,7 +116,7 @@ void BlockPoolFreeList::initialize(BlockPoolParms* aParms)
    finalize();
 
    // Create the index stack.
-   if (aParms->mUseLockFree)
+   if (aParms->mLockFreeFlag)
    {
       mBlockIndexStack = new BlockPoolLFIndexStack;
    }

@@ -51,12 +51,6 @@ public:
    // Type of block pool.
    int   mBlockPoolType;
 
-   // If true then lock free algorithms will be used and allocations,
-   // deallocations will be thread safe.
-   // If false then lock free algorithms will not be used and allocations,
-   // deallocations will not be thread safe.
-   bool mUseLockFree;
-
    // Number of blocks to allocate.
    int   mNumBlocks;
 
@@ -74,13 +68,21 @@ public:
    // already been created. This is true otherwise.
    bool mConstructorFlag;
 
+   // If true then lock free algorithms will be used and allocations,
+   // deallocations will be thread safe.
+   // If false then lock free algorithms will not be used and allocations,
+   // deallocations will not be thread safe.
+   bool mLockFreeFlag;
+
+   // If true then execptions will not be throw when an allocation is 
+   // requested on an empty block pool. If true then an exception will 
+   // thrown.
+   bool mNoThrowFlag;
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Parameters that are used internally to the block pool.
-
-   // True if block pool has been created.
-   bool  mValidFlag;
 
    // Block box size in bytes.
    int   mBlockBoxSize;
@@ -91,6 +93,9 @@ public:
    // This contains the address of the first block box in the block box array.
    // It can be used to obtain the address of a block header or a block body.
    char* mBlockBoxPtr;
+
+   // True if block pool has been created.
+   bool  mValidFlag;
 
    //***************************************************************************
    //***************************************************************************

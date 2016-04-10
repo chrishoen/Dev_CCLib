@@ -49,31 +49,6 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-
-void CmdLineExec::executeGoR1(Ris::CmdLineCmd* aCmd)
-{
-   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockR);
-
-   Some::MyBlockR* tR1 = new Some::MyBlockR;
-
-   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockR);
-
-   delete tR1;
-
-   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockR);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void CmdLineExec::executeGoR2(Ris::CmdLineCmd* aCmd)
-{
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -166,6 +141,31 @@ void CmdLineExec::executeGoB2(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
+void CmdLineExec::executeGoR1(Ris::CmdLineCmd* aCmd)
+{
+   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockR);
+
+   Some::MyBlockR* tR1 = new Some::MyBlockR;
+
+   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockR);
+
+   delete tR1;
+
+   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockR);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGoR2(Ris::CmdLineCmd* aCmd)
+{
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void CmdLineExec::executeGoT1(Ris::CmdLineCmd* aCmd)
 {
    Some::MyBlockA* tX1 = new Some::MyBlockA(101);
@@ -191,5 +191,15 @@ void CmdLineExec::executeGoT2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGoT3(Ris::CmdLineCmd* aCmd)
 {
+   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockA);
+
+   aCmd->setArgDefault(1,1000);
+   int tNumBlocks = aCmd->argInt(1);
+   for (int i = 0; i < tNumBlocks; i++)
+   {
+      Some::MyBlockA* tX1 = new Some::MyBlockA(101);
+   }
+
+   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockA);
 }
 

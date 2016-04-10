@@ -39,15 +39,18 @@ void BlockPoolParms::reset()
 {
    mPoolIndex        = 0;
    mBlockPoolType    = cBlockPoolType_FreeList;
-   mUseLockFree      = true;
+   mLockFreeFlag     = true;
    mNumBlocks        = 0;
    mBlockSize        = 0;
    mMemory           = 0;
    mConstructorFlag  = true;
-   mValidFlag        = false;
+   mLockFreeFlag     = true;
+   mNoThrowFlag      = false;
+
    mBlockBoxSize     = 0;
    mBlockHeaderSize  = 0;
    mBlockBoxPtr      = 0;
+   mValidFlag        = false;
 }
 
 //******************************************************************************
