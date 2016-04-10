@@ -11,6 +11,7 @@ Description:
 #include <new>
 
 #include "cc_functions.h"
+#include "ccDefs.h"
 #include "ccMemoryPtr.h"
 #include "ccBlockBoxArray.h"
 
@@ -76,11 +77,11 @@ public:
    // Calculate and store memory sizes.
    MemorySize::MemorySize(BlockPoolParms* aParms)
    {
-      mStateSize = BlockBoxArrayState::getMemorySize();
-      mBlockSize = cc_round_upto16(aParms->mBlockSize);
+      mStateSize    = BlockBoxArrayState::getMemorySize();
+      mBlockSize    = cc_round_upto16(aParms->mBlockSize);
       mBlockBoxSize = cBlockHeaderSize + mBlockSize;
-      mArraySize = aParms->mNumBlocks*mBlockBoxSize;
-      mMemorySize = mStateSize + mArraySize;
+      mArraySize    = cc_round_upto16(cNewArrayExtraMemory + aParms->mNumBlocks*mBlockBoxSize);
+      mMemorySize   = mStateSize + mArraySize;
    }
 };
 

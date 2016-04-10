@@ -11,6 +11,7 @@ Description:
 #include <new>
 
 #include "cc_functions.h"
+#include "ccDefs.h"
 #include "ccMemoryPtr.h"
 #include "ccBlockPoolLFIndexStack.h"
 
@@ -63,8 +64,8 @@ public:
    // Calculate and store memory sizes.
    MemorySize::MemorySize(BlockPoolParms* aParms)
    {
-      mStateSize = BlockPoolLFIndexStackState::getMemorySize();
-      mArraySize = (aParms->mNumBlocks + 1)*sizeof(AtomicLFIndex);
+      mStateSize  = BlockPoolLFIndexStackState::getMemorySize();
+      mArraySize  = cc_round_upto16(cNewArrayExtraMemory + (aParms->mNumBlocks + 1)*sizeof(AtomicLFIndex));
       mMemorySize = mStateSize + mArraySize;
    }
 };

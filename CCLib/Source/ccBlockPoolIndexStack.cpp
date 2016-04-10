@@ -11,6 +11,7 @@ Description:
 #include <new>
 
 #include "cc_functions.h"
+#include "ccDefs.h"
 #include "ccMemoryPtr.h"
 #include "ccBlockPoolIndexStack.h"
 
@@ -63,7 +64,7 @@ public:
    MemorySize::MemorySize(BlockPoolParms* aParms)
    {
       mStateSize = BlockPoolIndexStackState::getMemorySize();
-      mArraySize = cc_round_upto16(aParms->mNumBlocks*sizeof(int));
+      mArraySize = cc_round_upto16(cNewArrayExtraMemory + aParms->mNumBlocks*sizeof(int));
       mMemorySize = mStateSize + mArraySize;
    }
 };
