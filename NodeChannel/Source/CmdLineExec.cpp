@@ -8,6 +8,8 @@
 #include "ccTreeNode.h"
 #include "ccTreeNodeVisitor.h"
 #include "ccTreeNodeDestroyer.h"
+#include "ccBlockPoolCentral.h"
+#include "someBlockPoolIndex.h"
 #include "someMyTreeBlock.h"
 #include "someMyTreeBlockVisitor.h"
 #include "someMyTreeBlockChannel.h"
@@ -101,9 +103,12 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1,5);
 
-   Some::MyTreeBlock* tRootNode = new Some::MyTreeBlock(0);
-   generateMyTreeBlocks2(tRootNode);
+   CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
 
+   Some::MyTreeBlock* tRootNode = new Some::MyTreeBlock(0);
+   generateMyTreeBlocks1(tRootNode);
+
+   CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
 
    if (aCmd->argInt(1) == 1)
    {
@@ -125,6 +130,8 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
    {
       CC::destroyAllTreeNodes(tRootNode);
    }
+
+   CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
 }
 
 //******************************************************************************

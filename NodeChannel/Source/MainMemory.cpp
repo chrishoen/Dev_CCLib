@@ -3,6 +3,9 @@
 
 #include "ccBlockPoolCentral.h"
 #include "ccBlockPoolFreeList.h"
+#include "ccBlockPoolIndex.h"
+#include "ccTreeNode.h"
+
 #include "someBlockPoolIndex.h"
 #include "someMyTreeBlock.h"
 
@@ -26,11 +29,18 @@ void main_memory_initialize()
 
    // Create block pool.
    tBlockPoolParms.reset();
+   tBlockPoolParms.mPoolIndex     = CC::cBlockPoolIndex_TreeNode;
+   tBlockPoolParms.mBlockPoolType = CC::cBlockPoolType_FreeList;
+   tBlockPoolParms.mNumBlocks     = 1000;
+   tBlockPoolParms.mBlockSize     = sizeof(CC::TreeNode);
+   CC::createBlockPool(&tBlockPoolParms);
+
+   // Create block pool.
+   tBlockPoolParms.reset();
    tBlockPoolParms.mPoolIndex     = Some::cBlockPoolIndex_MyTreeBlock;
    tBlockPoolParms.mBlockPoolType = CC::cBlockPoolType_FreeList;
-   tBlockPoolParms.mNumBlocks     = 10000;
+   tBlockPoolParms.mNumBlocks     = 1000;
    tBlockPoolParms.mBlockSize     = sizeof(Some::MyTreeBlock);
-// tBlockPoolParms.mMemory        = malloc(CC::BlockPoolFreeList::getMemorySize(&tBlockPoolParms));
    CC::createBlockPool(&tBlockPoolParms);
 }
 

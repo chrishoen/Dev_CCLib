@@ -9,10 +9,43 @@ Description:
 #include <new>
 #include "prnPrint.h"
 
+#include "ccBlockPoolCentral.h"
+#include "someBlockPoolIndex.h"
 #include "someLabelledTreeNode.h"
 
 namespace Some
 {
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Allocate a block from the block pool at the given block pool index.
+// Return a pointer to the allocated block.
+// Return null if the block pool is empty.
+
+void* LabelledTreeNode::operator new(size_t sz)
+{
+   // Block pointer.
+   void* tBlockPointer = 0;
+
+   // Try to allocate a block from the block pool.
+   CC::allocateBlockPoolBlock(Some::cBlockPoolIndex_LabelledTreeNode, (void**)&tBlockPointer, 0);
+
+   // Return the pointer to the allocated block.
+   // Return null if the block pool is empty.
+   return tBlockPointer;
+}
+  
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Deallocate a block from the block pool.
+
+void LabelledTreeNode::operator delete(void* ptr)
+{
+   // Deallocate the block back to the block pool
+   CC::deallocateBlockPoolBlock(ptr);
+}
 
 //****************************************************************************
 //****************************************************************************

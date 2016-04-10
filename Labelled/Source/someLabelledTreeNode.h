@@ -7,8 +7,6 @@
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-#include "ccBlockPoolBlock.h"
-#include "someBlockPoolIndex.h"
 #include "ccTreeNode.h"
 
 namespace Some
@@ -18,16 +16,20 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 
-class LabelledTreeNode : public CC::TreeNode,public CC::BlockPoolBlock<Some::cBlockPoolIndex_LabelledTreeNode>
+class LabelledTreeNode : public CC::TreeNode
 {
 public:
 
-   //--------------------------------------------------------------------------
-   //--------------------------------------------------------------------------
-   //--------------------------------------------------------------------------
-   // Constructors.
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // Memory management, constructors and destructors.
 
-   // Constructor, it is called by create after allocation of a new block.
+   // Allocate or deallocate a block from the block pool.
+   static void* operator new      (size_t sz);
+   static void  operator delete   (void* ptr);
+
+   // Constructors.
    LabelledTreeNode();
    LabelledTreeNode(int aIdentifier,char* aLabel);
 
