@@ -10,10 +10,44 @@ Description:
 #include <stdio.h>
 #include <new>
 
+#include "cc_functions.h"
+#include "ccMemoryPtr.h"
 #include "ccBlockPoolBase.h"
 
 namespace CC
 {
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This sub class calculates and stores the memory sizes needed by the class.
+
+class BlockPoolBase::MemorySize
+{
+public:
+   // Members.
+   int mArraySize;
+   int mMemorySize;
+
+   // Calculate and store memory sizes.
+   MemorySize::MemorySize(BlockPoolParms* aParms)
+   {
+      mArraySize  = BlockBoxArray::getMemorySize(aParms);
+      mMemorySize = mArraySize;
+   }
+};
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This returns the number of bytes that an instance of this class
+// will need to be allocated for it.
+
+int BlockPoolBase::getMemorySize(BlockPoolParms* aParms)
+{
+   MemorySize tMemorySize(aParms);
+   return tMemorySize.mMemorySize;
+}
 
 //******************************************************************************
 //******************************************************************************
@@ -61,7 +95,7 @@ void BlockPoolBase::initializeBase(BlockPoolParms* aParms,void* aMemory)
    }
 
    // Calculate memory sizes.
-   int tArraySize  = BlockBoxArray::getMemorySize(aParms);
+   MemorySize tMemorySize(aParms);
 
    // Calculate memory addresses.
    char* tArrayMemory = (char*)mBaseClassMemory;
@@ -95,19 +129,6 @@ void BlockPoolBase::finalizeBase()
    }
    mBaseClassMemory = 0;
    mBaseClassFreeMemoryFlag = false;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// This returns the number of bytes that an instance of this class
-// will need to be allocated for it.
-
-int BlockPoolBase::getMemorySize(BlockPoolParms* aParms)
-{
-   int tArraySize  = BlockBoxArray::getMemorySize(aParms);
-   int tMemorySize = tArraySize;
-   return tMemorySize;
 }
 
 //******************************************************************************

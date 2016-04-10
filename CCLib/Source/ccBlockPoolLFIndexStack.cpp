@@ -11,6 +11,7 @@ Description:
 #include <new>
 
 #include "cc_functions.h"
+#include "ccMemoryPtr.h"
 #include "ccBlockPoolLFIndexStack.h"
 
 using namespace std;

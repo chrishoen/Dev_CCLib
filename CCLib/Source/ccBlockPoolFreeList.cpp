@@ -12,6 +12,7 @@ Description:
 #include <string.h>
 
 #include "cc_functions.h"
+#include "ccMemoryPtr.h"
 #include "ccBlockPoolIndexStack.h"
 #include "ccBlockPoolLFIndexStack.h"
 #include "ccBlockPoolFreeList.h"

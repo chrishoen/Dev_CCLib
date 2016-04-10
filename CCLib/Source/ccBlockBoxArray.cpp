@@ -11,6 +11,7 @@ Description:
 #include <new>
 
 #include "cc_functions.h"
+#include "ccMemoryPtr.h"
 #include "ccBlockBoxArray.h"
 
 namespace CC
@@ -82,7 +83,6 @@ public:
       mMemorySize = mStateSize + mArraySize;
    }
 };
-
 
 //******************************************************************************
 //******************************************************************************
