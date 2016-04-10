@@ -139,8 +139,10 @@ void BlockPoolIndexStack::initialize(BlockPoolParms* aParms,void* aMemory)
    MemorySize tMemorySize(aParms);
 
    // Calculate memory addresses.
-   char* tStateMemory = (char*)mMemory;
-   char* tArrayMemory = tStateMemory + tMemorySize.mStateSize;
+   MemoryPtr tMemoryPtr(mMemory);
+
+   char* tStateMemory = tMemoryPtr.cfetch_add(tMemorySize.mStateSize);
+   char* tArrayMemory = tMemoryPtr.cfetch_add(tMemorySize.mArraySize);
 
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------

@@ -98,7 +98,9 @@ void BlockPoolBase::initializeBase(BlockPoolParms* aParms,void* aMemory)
    MemorySize tMemorySize(aParms);
 
    // Calculate memory addresses.
-   char* tArrayMemory = (char*)mBaseClassMemory;
+   MemoryPtr tMemoryPtr(mBaseClassMemory);
+
+   char* tArrayMemory = tMemoryPtr.cfetch_add(tMemorySize.mArraySize);
 
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------

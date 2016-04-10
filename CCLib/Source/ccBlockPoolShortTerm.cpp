@@ -145,8 +145,10 @@ void BlockPoolShortTerm::initialize(BlockPoolParms* aParms)
    MemorySize tMemorySize(aParms);
 
    // Calculate memory addresses.
-   char* tStateMemory     = (char*)mMemory;
-   char* tBaseClassMemory = tStateMemory + tMemorySize.mStateSize;
+   MemoryPtr tMemoryPtr(mMemory);
+
+   char* tStateMemory     = tMemoryPtr.cfetch_add(tMemorySize.mStateSize);
+   char* tBaseClassMemory = tMemoryPtr.cfetch_add(tMemorySize.mBaseClassSize);
 
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------

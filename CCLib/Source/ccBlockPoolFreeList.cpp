@@ -134,8 +134,10 @@ void BlockPoolFreeList::initialize(BlockPoolParms* aParms)
    MemorySize tMemorySize(aParms);
 
    // Calculate memory addresses.
-   char* tBaseClassMemory = (char*)mMemory;
-   char* tStackMemory = tBaseClassMemory + tMemorySize.mBaseClassSize;
+   MemoryPtr tMemoryPtr(mMemory);
+
+   char* tBaseClassMemory = tMemoryPtr.cfetch_add(tMemorySize.mBaseClassSize);
+   char* tStackMemory     = tMemoryPtr.cfetch_add(tMemorySize.mStackSize);
 
    // Initialize the base class variables.
    BaseClass::initializeBase(aParms,tBaseClassMemory);

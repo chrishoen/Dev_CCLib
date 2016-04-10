@@ -22,6 +22,7 @@ This can be used for Multiple Writer Muliple Reader.
 #include <atomic>
 #include <new>
 #include "cc_functions.h"
+#include "ccMemoryPtr.h"
 #include "ccLFIndex.h"
 //******************************************************************************
 //******************************************************************************
@@ -236,10 +237,12 @@ public:
       MemorySize tMemorySize(aNumElements);
 
       // Calculate memory addresses.
-      char* tStateMemory        = (char*)mMemory;
-      char* tQueueArrayMemory   = tStateMemory      + tMemorySize.mStateSize;
-      char* tListArrayMemory    = tQueueArrayMemory + tMemorySize.mQueueArraySize;
-      char* tElementArrayMemory = tListArrayMemory  + tMemorySize.mListArraySize;
+      MemoryPtr tMemoryPtr(mMemory);
+
+      char* tStateMemory        = tMemoryPtr.cfetch_add(tMemorySize.mStateSize);
+      char* tQueueArrayMemory   = tMemoryPtr.cfetch_add(tMemorySize.mQueueArraySize);
+      char* tListArrayMemory    = tMemoryPtr.cfetch_add(tMemorySize.mListArraySize);
+      char* tElementArrayMemory = tMemoryPtr.cfetch_add(tMemorySize.mElementArraySize);
 
       // Construct the state.
       if (aConstructorFlag)
