@@ -11,6 +11,7 @@ Description:
 #include <math.h>
 #include <string.h>
 
+#include "cc_functions.h"
 #include "ccBlockPoolIndexStack.h"
 #include "ccBlockPoolLFIndexStack.h"
 #include "ccBlockPoolFreeList.h"
@@ -21,7 +22,54 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Constructor
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This sub class calculates and stores the memory sizes needed by the class.
+
+class BlockPoolFreeList::MemorySize
+{
+public:
+   // Members.
+   int mBaseClassSize;
+   int mStackSize;
+   int mMemorySize;
+
+   // Calculate and store memory sizes.
+   MemorySize::MemorySize(BlockPoolParms* aParms)
+   {
+      mBaseClassSize = BlockPoolBase::getMemorySize(aParms);
+
+      mStackSize     = 0;
+      switch (aParms->mBlockPoolType)
+      {
+         case cBlockPoolType_FreeList   : mStackSize = BlockPoolIndexStack::getMemorySize(aParms); break;
+         case cBlockPoolType_LFFreeList : mStackSize = BlockPoolLFIndexStack::getMemorySize(aParms); break;
+      }
+
+      mMemorySize = mBaseClassSize + mStackSize;
+   }
+};
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This returns the number of bytes that an instance of this class
+// will need to be allocated for it.
+
+int BlockPoolFreeList::getMemorySize(BlockPoolParms* aParms)
+{
+   MemorySize tMemorySize(aParms);
+   return tMemorySize.mMemorySize;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Constructor.
 
 BlockPoolFreeList::BlockPoolFreeList()
 {
@@ -82,18 +130,11 @@ void BlockPoolFreeList::initialize(BlockPoolParms* aParms)
    }
 
    // Calculate memory sizes.
-   int tBaseClassSize = BlockPoolBase::getMemorySize(aParms);
-
-   int tStackSize = 0;
-   switch (aParms->mBlockPoolType)
-   {
-   case cBlockPoolType_FreeList   : tStackSize = BlockPoolIndexStack::getMemorySize(aParms); break;
-   case cBlockPoolType_LFFreeList : tStackSize = BlockPoolLFIndexStack::getMemorySize(aParms); break;
-   }
+   MemorySize tMemorySize(aParms);
 
    // Calculate memory addresses.
    char* tBaseClassMemory = (char*)mMemory;
-   char* tStackMemory = tBaseClassMemory + tBaseClassSize;
+   char* tStackMemory = tBaseClassMemory + tMemorySize.mBaseClassSize;
 
    // Initialize the base class variables.
    BaseClass::initializeBase(aParms,tBaseClassMemory);
@@ -137,27 +178,6 @@ void BlockPoolFreeList::finalize()
    }
    mMemory = 0;
    mFreeMemoryFlag = false;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// This returns the number of bytes that an instance of this class
-// will need to be allocated for it.
-
-int BlockPoolFreeList::getMemorySize(BlockPoolParms* aParms)
-{
-   int tBaseClassSize = BlockPoolBase::getMemorySize(aParms);
-
-   int tStackSize     = 0;
-   switch (aParms->mBlockPoolType)
-   {
-   case cBlockPoolType_FreeList   : tStackSize = BlockPoolIndexStack::getMemorySize(aParms); break;
-   case cBlockPoolType_LFFreeList : tStackSize = BlockPoolLFIndexStack::getMemorySize(aParms); break;
-   }
-
-   int tMemorySize = tBaseClassSize + tStackSize;
-   return tMemorySize;
 }
 
 //******************************************************************************
