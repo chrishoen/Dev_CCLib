@@ -42,6 +42,17 @@ public:
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
+   // This returns the number of bytes that an instance of this class
+   // will need to be allocated for it.
+
+   static int getMemorySize()
+   {
+      return cc_round_upto16(sizeof(LFValueQueueState));
+   }
+
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
    // Members.
 
    // Number of elements allocated.
@@ -84,13 +95,6 @@ public:
       // Allocate for one extra dummy node.
       mListNumElements   = aNumElements + 1;
    }
-
-   // This returns the number of bytes that an instance of this class
-   // will need to be allocated for it.
-   static int getMemorySize()
-   {
-      return cc_round_upto16(sizeof(LFValueQueueState));
-   }
 };
 
 //******************************************************************************
@@ -101,6 +105,44 @@ template <class Element>
 class LFValueQueue
 {
 public:
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // This sub class calculates and stores the memory sizes needed by the class.
+
+   class MemorySize
+   {
+   public:
+      // Members.
+      int mStateSize;
+      int mQueueArraySize;
+      int mListArraySize;
+      int mElementArraySize;
+      int mMemorySize;
+
+      // Calculate and store memory sizes.
+      MemorySize::MemorySize(int aNumElements)
+      {
+         mStateSize         = LFValueQueueState::getMemorySize();
+         mQueueArraySize    = (aNumElements + 1)*sizeof(AtomicLFIndex);
+         mListArraySize     = (aNumElements + 1)*sizeof(AtomicLFIndex);
+         mElementArraySize  = (aNumElements + 1)*sizeof(Element);
+         mMemorySize = mStateSize + mQueueArraySize + mListArraySize + mElementArraySize;
+      }
+   };
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // This returns the number of bytes that an instance of this class
+   // will need to be allocated for it.
+
+   static int getMemorySize(int aNumElements)
+   {
+      MemorySize tMemorySize(aNumElements);
+      return tMemorySize.mMemorySize;
+   }
 
    //***************************************************************************
    //***************************************************************************
@@ -191,17 +233,13 @@ public:
       }
 
       // Calculate memory sizes.
-      int tStateSize         = LFValueQueueState::getMemorySize();
-      int tQueueArraySize    = (aNumElements + 1)*sizeof(AtomicLFIndex);
-      int tListArraySize     = (aNumElements + 1)*sizeof(AtomicLFIndex);
-      int tElementArraySize  = (aNumElements + 1)*sizeof(Element);
-      int tMemorySize = tStateSize + tQueueArraySize + tListArraySize + tElementArraySize;
+      MemorySize tMemorySize(aNumElements);
 
       // Calculate memory addresses.
       char* tStateMemory        = (char*)mMemory;
-      char* tQueueArrayMemory   = tStateMemory      + tStateSize;
-      char* tListArrayMemory    = tQueueArrayMemory + tQueueArraySize;
-      char* tElementArrayMemory = tListArrayMemory  + tListArraySize;
+      char* tQueueArrayMemory   = tStateMemory      + tMemorySize.mStateSize;
+      char* tListArrayMemory    = tQueueArrayMemory + tMemorySize.mQueueArraySize;
+      char* tElementArrayMemory = tListArrayMemory  + tMemorySize.mListArraySize;
 
       // Construct the state.
       if (aConstructorFlag)
@@ -293,21 +331,6 @@ public:
       }
       mMemory = 0;
       mFreeMemoryFlag = false;
-   }
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // This returns the number of bytes that an instance of this class
-   // will need to be allocated for it.
-
-   static int getMemorySize(int aNumElements)
-   {
-      int tStateSize         = LFValueQueueState::getMemorySize();
-      int tQueueArraySize    = (aNumElements + 1)*sizeof(AtomicLFIndex);
-      int tListArraySize     = (aNumElements + 1)*sizeof(AtomicLFIndex);
-      int tElementArraySize  = (aNumElements + 1)*sizeof(Element);
-      int tMemorySize = tStateSize + tQueueArraySize + tListArraySize + tElementArraySize;
-      return tMemorySize;
    }
 
    //***************************************************************************
