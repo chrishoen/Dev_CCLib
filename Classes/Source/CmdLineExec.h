@@ -23,11 +23,6 @@ public:
   void executeGo22 (Ris::CmdLineCmd* aCmd);
   void executeGo31 (Ris::CmdLineCmd* aCmd);
   void executeGo32 (Ris::CmdLineCmd* aCmd);
-  void executeGo41 (Ris::CmdLineCmd* aCmd);
-  void executeGo42 (Ris::CmdLineCmd* aCmd);
-  void executeGo43 (Ris::CmdLineCmd* aCmd);
-  void executeGo44 (Ris::CmdLineCmd* aCmd);
-  void executeGo5  (Ris::CmdLineCmd* aCmd);
   void executeGo6  (Ris::CmdLineCmd* aCmd);
   void executeGo7  (Ris::CmdLineCmd* aCmd);
   void executeGo8  (Ris::CmdLineCmd* aCmd);
