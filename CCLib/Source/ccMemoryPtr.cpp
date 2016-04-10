@@ -41,12 +41,12 @@ void MemoryPtr::set(void* aMemoryPtr)
 //******************************************************************************
 // Get memory pointer value.
 
-void* MemoryPtr::vget()
+void* MemoryPtr::vfetch()
 {
    return mMemoryPtr;
 }
 
-char* MemoryPtr::cget()
+char* MemoryPtr::cfetch()
 {
    return (char*)mMemoryPtr;
 }
