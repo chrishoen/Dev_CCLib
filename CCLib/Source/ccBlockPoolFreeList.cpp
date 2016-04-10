@@ -182,6 +182,7 @@ bool BlockPoolFreeList::allocate(void** aBlockPointer,BlockHandle* aBlockHandle)
    int tBlockIndex = 0;
       
    // Try to pop a block index from the index stack, as a free list.
+   // If the stack is not empty
    if (mBlockIndexStack->pop(&tBlockIndex))
    {
       // Return a pointer to the block at that index.
@@ -203,7 +204,7 @@ bool BlockPoolFreeList::allocate(void** aBlockPointer,BlockHandle* aBlockHandle)
       // Return a null pointer.
       if (aBlockPointer)
       {
-         *aBlockPointer = mBlocks.block(tBlockIndex);
+         *aBlockPointer = 0;
       }
 
       // Return a null memory handle.
