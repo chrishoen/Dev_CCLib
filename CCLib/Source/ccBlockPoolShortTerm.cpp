@@ -23,6 +23,11 @@ namespace CC
 //******************************************************************************
 // Constructor, initialize members for an empty stack of size zero 
 
+int BlockPoolShortTermState::getMemorySize()
+{
+   return cc_round_upto16(sizeof(BlockPoolShortTermState));
+}
+
 BlockPoolShortTermState::BlockPoolShortTermState()
 {
    // All null
@@ -39,9 +44,38 @@ void BlockPoolShortTermState::initialize(BlockPoolParms* aParms)
    mNumBlocks    = aParms->mNumBlocks;
 }
 
-int BlockPoolShortTermState::getMemorySize()
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This sub class calculates and stores the memory sizes needed by the class.
+
+class BlockPoolShortTerm::MemorySize
 {
-   return cc_round_upto16(sizeof(BlockPoolShortTermState));
+public:
+   // Members.
+   int mStateSize;
+   int mBaseClassSize;
+   int mMemorySize;
+
+   // Calculate and store memory sizes.
+   MemorySize::MemorySize(BlockPoolParms* aParms)
+   {
+      mStateSize     = BlockPoolShortTermState::getMemorySize();
+      mBaseClassSize = BlockPoolBase::getMemorySize(aParms);
+      mMemorySize = mStateSize + mBaseClassSize;
+   }
+};
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This returns the number of bytes that an instance of this class
+// will need to be allocated for it.
+
+int BlockPoolShortTerm::getMemorySize(BlockPoolParms* aParms)
+{
+   MemorySize tMemorySize(aParms);
+   return tMemorySize.mMemorySize;
 }
 
 //******************************************************************************
@@ -107,12 +141,11 @@ void BlockPoolShortTerm::initialize(BlockPoolParms* aParms)
    }
 
    // Calculate memory sizes.
-   int tStateSize     = BlockPoolShortTermState::getMemorySize();
-   int tBaseClassSize = BlockPoolBase::getMemorySize(aParms);
+   MemorySize tMemorySize(aParms);
 
    // Calculate memory addresses.
    char* tStateMemory     = (char*)mMemory;
-   char* tBaseClassMemory = tStateMemory + tStateSize;
+   char* tBaseClassMemory = tStateMemory + tMemorySize.mStateSize;
 
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
@@ -158,21 +191,6 @@ void BlockPoolShortTerm::finalize()
    }
    mMemory = 0;
    mFreeMemoryFlag = false;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// This returns the number of bytes that an instance of this class
-// will need to be allocated for it.
-
-int BlockPoolShortTerm::getMemorySize(BlockPoolParms* aParms)
-{
-   int tStateSize     = BlockPoolShortTermState::getMemorySize();
-   int tBaseClassSize = BlockPoolBase::getMemorySize(aParms);
-
-   int tMemorySize = tStateSize + tBaseClassSize;
-   return tMemorySize;
 }
 
 //******************************************************************************
