@@ -61,7 +61,7 @@ void CmdLineExec::executeGo6(Ris::CmdLineCmd* aCmd)
    tSize = CC::BlockPoolFreeList::getMemorySize(&tBlockPoolParms);
    Prn::print(0, "%d",tSize);
 
-   tBlockPoolParms.mBlockPoolType = CC::cBlockPoolType_LFFreeList;
+   tBlockPoolParms.mBlockPoolType = CC::cBlockPoolType_FreeList;
    tSize = CC::BlockPoolFreeList::getMemorySize(&tBlockPoolParms);
    Prn::print(0, "%d",tSize);
 }

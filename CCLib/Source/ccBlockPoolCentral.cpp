@@ -101,7 +101,6 @@ void createBlockPool(BlockPoolParms* aParms)
    {
       // Create and initialize the block pool.
       case cBlockPoolType_FreeList :
-      case cBlockPoolType_LFFreeList :
       {
          mBlockPool[tPoolIndex] = new BlockPoolFreeList;
          mBlockPool[tPoolIndex]->initialize(tParms);
@@ -274,7 +273,6 @@ bool isBlockPoolMemoryLongTerm(BlockHandle aBlockHandle)
    {
       // Create and initialize the block pool.
       case cBlockPoolType_FreeList   : return true;
-      case cBlockPoolType_LFFreeList : return true;
       case cBlockPoolType_ShortTerm  : return false;
    }
    return true;

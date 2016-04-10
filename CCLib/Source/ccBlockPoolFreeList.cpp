@@ -41,11 +41,13 @@ public:
    {
       mBaseClassSize = BlockPoolBase::getMemorySize(aParms);
 
-      mStackSize     = 0;
-      switch (aParms->mBlockPoolType)
+      if (aParms->mUseLockFree)
       {
-         case cBlockPoolType_FreeList   : mStackSize = BlockPoolIndexStack::getMemorySize(aParms); break;
-         case cBlockPoolType_LFFreeList : mStackSize = BlockPoolLFIndexStack::getMemorySize(aParms); break;
+         mStackSize = BlockPoolLFIndexStack::getMemorySize(aParms);
+      }
+      else
+      {
+         mStackSize = BlockPoolIndexStack::getMemorySize(aParms);
       }
 
       mMemorySize = mBaseClassSize + mStackSize;
@@ -114,10 +116,13 @@ void BlockPoolFreeList::initialize(BlockPoolParms* aParms)
    finalize();
 
    // Create the index stack.
-   switch (aParms->mBlockPoolType)
+   if (aParms->mUseLockFree)
    {
-      case cBlockPoolType_FreeList   : mBlockIndexStack = new BlockPoolIndexStack; break;
-      case cBlockPoolType_LFFreeList : mBlockIndexStack = new BlockPoolLFIndexStack; break;
+      mBlockIndexStack = new BlockPoolLFIndexStack;
+   }
+   else
+   {
+      mBlockIndexStack = new BlockPoolIndexStack;
    }
 
    // If the instance of this class is not to reside in external memory

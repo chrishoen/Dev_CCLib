@@ -21,7 +21,6 @@ namespace CC
 
    // Block pool types.
    static const int cBlockPoolType_FreeList   = 1;
-   static const int cBlockPoolType_LFFreeList = 2;
    static const int cBlockPoolType_ShortTerm  = 3;
 
 //******************************************************************************
@@ -51,6 +50,12 @@ public:
 
    // Type of block pool.
    int   mBlockPoolType;
+
+   // If true then lock free algorithms will be used and allocations,
+   // deallocations will be thread safe.
+   // If false then lock free algorithms will not be used and allocations,
+   // deallocations will not be thread safe.
+   bool mUseLockFree;
 
    // Number of blocks to allocate.
    int   mNumBlocks;

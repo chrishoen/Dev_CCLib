@@ -39,6 +39,7 @@ void BlockPoolParms::reset()
 {
    mPoolIndex        = 0;
    mBlockPoolType    = cBlockPoolType_FreeList;
+   mUseLockFree      = true;
    mNumBlocks        = 0;
    mBlockSize        = 0;
    mMemory           = 0;
