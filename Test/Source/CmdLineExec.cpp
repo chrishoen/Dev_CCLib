@@ -39,25 +39,11 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,10);
+   Prn::print(0, "sizeof(size_t)  %d",sizeof(size_t));
+   Prn::print(0, "sizeof(int[10]) %d",sizeof(int[10]));
+   Prn::print(0, "sizeof(atomic<int>[10]) %d",sizeof(atomic<int>[10]));
 
-   int tN = aCmd->argInt(1);
 
-   int tM = tN;
-
-   if (((tN & 0xF) != 0) || (tN==0))
-   {
-      tM = ((tN & ~0xF) + 0x10);
-   }
-   else
-   {
-      tM = tN; 
-   }
-
-   tM = ((tN & 0xF) != 0) ? ((tN & ~0xF) + 0x10) : tN;
-
-   Prn::print(0, "N %5d %08X",tN,tN);
-   Prn::print(0, "M %5d %08X",tM,tM);
 }
 
 //******************************************************************************
