@@ -19,6 +19,21 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This returns the number of bytes that an instance of this class
+// will need to be allocated for it.
+ 
+int BlockBoxArrayState::getMemorySize()
+{
+   return cc_round_upto16(sizeof(BlockBoxArrayState));
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Constructor, initialize members for an empty stack of size zero 
 
 BlockBoxArrayState::BlockBoxArrayState()
@@ -42,9 +57,43 @@ void BlockBoxArrayState::initialize(BlockPoolParms* aParms)
    mPoolIndex    = aParms->mPoolIndex;
 }
 
-int BlockBoxArrayState::getMemorySize()
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This sub class calculates and stores the memory sizes needed by the class.
+
+class BlockBoxArray::MemorySize
 {
-   return cc_round_upto16(sizeof(BlockBoxArrayState));
+public:
+   // Members.
+   int mStateSize;
+   int mBlockSize;
+   int mBlockBoxSize;
+   int mArraySize;
+   int mMemorySize;
+
+   // Calculate and store memory sizes.
+   MemorySize::MemorySize(BlockPoolParms* aParms)
+   {
+      mStateSize = BlockBoxArrayState::getMemorySize();
+      mBlockSize = cc_round_upto16(aParms->mBlockSize);
+      mBlockBoxSize = cBlockHeaderSize + mBlockSize;
+      mArraySize = aParms->mNumBlocks*mBlockBoxSize;
+      mMemorySize = mStateSize + mArraySize;
+   }
+};
+
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This returns the number of bytes that an instance of this class
+// will need to be allocated for it.
+
+int BlockBoxArray::getMemorySize(BlockPoolParms* aParms)
+{
+   MemorySize tMemorySize(aParms);
+   return tMemorySize.mMemorySize;
 }
 
 //******************************************************************************
@@ -98,14 +147,11 @@ void BlockBoxArray::initialize(BlockPoolParms* aParms,void* aMemory)
    }
 
    // Calculate memory sizes.
-   int tStateSize    = BlockBoxArrayState::getMemorySize();
-   int tBlockSize    = cc_round_upto16(aParms->mBlockSize);
-   int tBlockBoxSize = cBlockHeaderSize + tBlockSize;
-   int tArraySize    = aParms->mNumBlocks*tBlockBoxSize;
+   MemorySize tMemorySize(aParms);
 
    // Calculate memory addresses.
    char* tStateMemory = (char*)mMemory;
-   char* tArrayMemory = tStateMemory + tStateSize;
+   char* tArrayMemory = tStateMemory + tMemorySize.mStateSize;
 
    // Construct the state.
    if (aParms->mConstructorFlag)
@@ -142,7 +188,7 @@ void BlockBoxArray::initialize(BlockPoolParms* aParms,void* aMemory)
 
    // Store block array parameters. These can be used elsewhere.
    aParms->mBlockHeaderSize = cBlockHeaderSize;
-   aParms->mBlockBoxSize    = tBlockBoxSize;
+   aParms->mBlockBoxSize    = tMemorySize.mBlockBoxSize;
    aParms->mBlockBoxPtr     = mArray;
 }
 
@@ -161,24 +207,6 @@ void BlockBoxArray::finalize()
    }
    mMemory = 0;
    mFreeMemoryFlag = false;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// This returns the number of bytes that an instance of this class
-// will need to be allocated for it.
-
-int BlockBoxArray::getMemorySize(BlockPoolParms* aParms)
-{
-   // Calculate memory sizes.
-   int tStateSize    = BlockBoxArrayState::getMemorySize();
-   int tBlockSize    = cc_round_upto16(aParms->mBlockSize);
-   int tBlockBoxSize = cBlockHeaderSize + tBlockSize;
-   int tArraySize    = aParms->mNumBlocks*tBlockBoxSize;
-   int tMemorySize   = tStateSize + tArraySize;
-
-   return tMemorySize;
 }
 
 //******************************************************************************
