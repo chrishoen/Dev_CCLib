@@ -23,6 +23,11 @@ namespace CC
 //******************************************************************************
 // Constructor, initialize members for an empty stack of size zero 
 
+int BlockPoolIndexStackState::getMemorySize()
+{
+   return cc_round_upto16(sizeof(BlockPoolIndexStackState));
+}
+
 BlockPoolIndexStackState::BlockPoolIndexStackState()
 {
    // All null.
@@ -40,9 +45,38 @@ void BlockPoolIndexStackState::initialize(BlockPoolParms* aParms)
    mNumElements = aParms->mNumBlocks;
 }
 
-int BlockPoolIndexStackState::getMemorySize()
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This sub class calculates and stores the memory sizes needed by the class.
+
+class BlockPoolIndexStack::MemorySize
 {
-   return cc_round_upto16(sizeof(BlockPoolIndexStackState));
+public:
+   // Members.
+   int mStateSize;
+   int mArraySize;
+   int mMemorySize;
+
+   // Calculate and store memory sizes.
+   MemorySize::MemorySize(BlockPoolParms* aParms)
+   {
+      mStateSize = BlockPoolIndexStackState::getMemorySize();
+      mArraySize = cc_round_upto16(aParms->mNumBlocks*sizeof(int));
+      mMemorySize = mStateSize + mArraySize;
+   }
+};
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This returns the number of bytes that an instance of this class
+// will need to be allocated for it.
+
+int BlockPoolIndexStack::getMemorySize(BlockPoolParms* aParms)
+{
+   MemorySize tMemorySize(aParms);
+   return tMemorySize.mMemorySize;
 }
 
 //******************************************************************************
@@ -101,12 +135,11 @@ void BlockPoolIndexStack::initialize(BlockPoolParms* aParms,void* aMemory)
    }
 
    // Calculate memory sizes.
-   int tStateSize = BlockPoolIndexStackState::getMemorySize();
-   int tArraySize = aParms->mNumBlocks*sizeof(int);
+   MemorySize tMemorySize(aParms);
 
    // Calculate memory addresses.
    char* tStateMemory = (char*)mMemory;
-   char* tArrayMemory = tStateMemory + tStateSize;
+   char* tArrayMemory = tStateMemory + tMemorySize.mStateSize;
 
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
@@ -166,20 +199,6 @@ void BlockPoolIndexStack::finalize()
    }
    mMemory = 0;
    mFreeMemoryFlag = false;
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// This returns the number of bytes that an instance of this class
-// will need to be allocated for it.
-
-int BlockPoolIndexStack::getMemorySize(BlockPoolParms* aParms)
-{
-   int tStateSize = BlockPoolIndexStackState::getMemorySize();
-   int tArraySize = cc_round_upto16(aParms->mNumBlocks*sizeof(int));
-   int tMemorySize = tStateSize + tArraySize;
-   return tMemorySize;
 }
 
 //******************************************************************************

@@ -32,6 +32,14 @@ public:
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
+   // This returns the number of bytes that an instance of this class
+   // will need to be allocated for it.
+
+   static int getMemorySize();
+
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
    // Members.
 
    // Index into the array.
@@ -51,9 +59,6 @@ public:
    // Initialize.
    void initialize(BlockPoolParms* aParms);
 
-   // This returns the number of bytes that an instance of this class
-   // will need to be allocated for it.
-   static int getMemorySize();
 };
 
 //******************************************************************************
@@ -63,6 +68,16 @@ public:
 class BlockPoolIndexStack : public BlockPoolBaseIndexStack
 {
 public:
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // This returns the number of bytes that an instance of this class
+   // will need to be allocated for it.
+
+   static int getMemorySize(BlockPoolParms* aParms);
+
+   class MemorySize;
 
    //***************************************************************************
    //***************************************************************************
@@ -119,14 +134,6 @@ public:
    // State variables for the stack. These are located in a separate class
    // so that they can be located in externale memory.
    BlockPoolIndexStackState* mX;
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // This returns the number of bytes that an instance of this class
-   // will need to be allocated for it.
-
-   static int getMemorySize(BlockPoolParms* aParms);
 };
 
 //******************************************************************************
