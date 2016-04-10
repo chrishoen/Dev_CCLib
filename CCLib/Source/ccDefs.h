@@ -21,6 +21,8 @@ enum
 
 enum { MaxLevelDepth = 20 };
 
+static const int cNewArrayExtra = 8;
+
 #ifndef _MSC_VER
 #define NOEXCEPT noexcept(true)
 #else
