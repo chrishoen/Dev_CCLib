@@ -32,7 +32,8 @@ public:
    static void  operator delete   (void* ptr,int aMode);
    static void  operator delete[] (void* ptr,int aMode);
 
-   int mCode;
+   int mCode1;
+   int mCode2;
 };
 
 //******************************************************************************

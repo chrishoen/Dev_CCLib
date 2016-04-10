@@ -49,6 +49,23 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 }
 
 //******************************************************************************
+
+void CmdLineExec::executeGo31(Ris::CmdLineCmd* aCmd)
+{
+   Class3A* tX1 = new(1)Class3A;
+   Class3A::operator delete(tX1,1);
+}
+
+//******************************************************************************
+
+void CmdLineExec::executeGo32(Ris::CmdLineCmd* aCmd)
+{
+   Prn::print(0, "sizeof(Class3A[2]) %d",sizeof(Class3A[2]));
+   Class3A* tX2 = new(1)Class3A[2];
+   Class3A::operator delete[](tX2,1);
+}
+
+//******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
@@ -166,22 +183,6 @@ void CmdLineExec::executeGo22(Ris::CmdLineCmd* aCmd)
    Prn::print(0,"");
    memDestroyArray<Class2A>(tX2,1,2);
    Prn::print(0,"");
-}
-
-//******************************************************************************
-
-void CmdLineExec::executeGo31(Ris::CmdLineCmd* aCmd)
-{
-   Class3A* tX1 = new(1)Class3A;
-   Class3A::operator delete(tX1,1);
-}
-
-//******************************************************************************
-
-void CmdLineExec::executeGo32(Ris::CmdLineCmd* aCmd)
-{
-   Class3A* tX2 = new(1)Class3A[2];
-   Class3A::operator delete[](tX2,1);
 }
 
 //******************************************************************************

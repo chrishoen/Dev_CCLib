@@ -21,7 +21,8 @@ namespace Some
 Class3A::Class3A()
 {
    Prn::print(0, "Class3A::Class3A");
-   mCode=101;
+   mCode1=101;
+   mCode2=101;
 }
 
 Class3A::~Class3A()
