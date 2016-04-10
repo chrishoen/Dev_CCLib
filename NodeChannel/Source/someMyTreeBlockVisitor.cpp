@@ -77,7 +77,7 @@ void visitMyTreeBlockForDestroy (CC::TreeNode* aSubjectNode, CC::RecursiveAnchor
       aRecursiveAnchor->mLevel,
       tSubjectNode->mIdentifier);
 #endif
-   tSubjectNode->destroy();
+   delete tSubjectNode;
 }
 
 void destroyAllMyTreeBlocks(MyTreeBlock* aSubjectNode)

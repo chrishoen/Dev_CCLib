@@ -366,16 +366,4 @@ void TreeNode::detachFromAll()
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-// This method deallocates the object from the block pool from which it was
-// created. It does not call a class destructor.
-
-void TreeNode::destroy()
-{
-   // Deallocate the block back to the block pool
-   deallocateBlockPoolBlock(this->mBlockHandle);
-}
-
-//****************************************************************************
-//****************************************************************************
-//****************************************************************************
 }//namespace

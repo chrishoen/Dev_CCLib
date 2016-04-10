@@ -129,15 +129,6 @@ public:
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
-   // Memory management.
-
-   // This method deallocates the object from the block pool from which it was
-   // created. It does not call a class destructor.
-   void destroy();
-
-   //--------------------------------------------------------------------------
-   //--------------------------------------------------------------------------
-   //--------------------------------------------------------------------------
    // This is a pointer to the closest ancestor of this node that has a node
    // after it. It is used by transmit and receive queues to deconstruct and
    // reconstruct tree node structures that are transmitted over a 

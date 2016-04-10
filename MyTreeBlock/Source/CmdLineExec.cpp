@@ -39,19 +39,18 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
    CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
 
    Some::MyTreeBlock* tX1 = new Some::MyTreeBlock(1000);
    Some::MyTreeBlock* tX2 = new Some::MyTreeBlock(1000);
-   Some::MyTreeBlock* tX3 = new Some::MyTreeBlock(1000);
+   CC::TreeNode* tY2 = tX2;
 
    CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
 
    delete tX1;
    delete tX2;
-   delete tX3;
 
    CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
 }
@@ -60,7 +59,7 @@ void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 {
    Some::MyTreeBlock* tRootNode = new Some::MyTreeBlock(1000);
 
@@ -125,8 +124,36 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
-   Some::MyTreeBlock* tRootNode = new Some::MyTreeBlock(1);
-   Some::generateMyTreeBlocks1(tRootNode);
-   Some::printAllMyTreeBlocksCO(tRootNode);
+   aCmd->setArgDefault(1,5);
+
+   CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
+
+   Some::MyTreeBlock* tRootNode = new Some::MyTreeBlock(0);
+   generateMyTreeBlocks1(tRootNode);
+
+   CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
+
+   if (aCmd->argInt(1) == 1)
+   {
+      Some::printAllMyTreeBlocksCO(tRootNode);
+   }
+   else if (aCmd->argInt(1) == 2)
+   {
+      Some::printAllMyTreeBlocksDO(tRootNode);
+   }
+   else if (aCmd->argInt(1) == 3)
+   {
+      Some::printAllMyTreeBlocksVN(tRootNode);
+   }
+   else if (aCmd->argInt(1) == 4)
+   {
+      Some::destroyAllMyTreeBlocks(tRootNode);
+   }
+   else if (aCmd->argInt(1) == 5)
+   {
+      CC::destroyAllTreeNodes(tRootNode);
+   }
+
+   CC::showBlockPool(Some::cBlockPoolIndex_MyTreeBlock);
 }
 

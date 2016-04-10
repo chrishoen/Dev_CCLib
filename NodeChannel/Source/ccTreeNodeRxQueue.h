@@ -63,7 +63,7 @@ public:
 
   ~TreeNodeRxQueue()
    {
-      mRootNode->destroy();
+      delete mRootNode;
    }
 
 //****************************************************************************

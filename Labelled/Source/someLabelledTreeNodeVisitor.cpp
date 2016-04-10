@@ -80,7 +80,7 @@ void visitLabelledTreeNodeForDestroy (CC::TreeNode* aSubjectNode, CC::RecursiveA
       tSubjectNode->mIdentifier,
       tSubjectNode->mFullPath);
 #endif
-   tSubjectNode->destroy();
+   delete tSubjectNode;
 }
 
 void destroyAllLabelledTreeNodes(LabelledTreeNode* aSubjectNode)

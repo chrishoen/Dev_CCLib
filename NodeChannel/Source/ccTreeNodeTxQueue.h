@@ -52,7 +52,7 @@ public:
 
   ~TreeNodeTxQueue()
    {
-      mRootNode->destroy();
+      delete mRootNode;
    }
 
    //--------------------------------------------------------------------------

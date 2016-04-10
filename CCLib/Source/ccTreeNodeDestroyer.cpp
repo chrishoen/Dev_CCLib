@@ -33,7 +33,7 @@ void destroyAllTreeNodes(
       &tRecursiveAnchor);
 
    // Destroy the subject node
-   aSubjectNode->destroy();
+   delete aSubjectNode;
 
 }
 
@@ -84,7 +84,7 @@ void destroyAllTreeNodesBelow(
       tChildNodeP->detachFromAll();
 
       // Destroy the child node
-      tChildNodeP->destroy();
+      delete tChildNodeP;
 
       // Proceed to the next child node
       tChildNodeP = tAfterChildNodeP;
