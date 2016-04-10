@@ -3,10 +3,7 @@
 #include "someBlockPoolIndex.h"
 #include "someMyBlockA.h"
 #include "someMyBlockB.h"
-#include "someMyBlockC.h"
-#include "someMyBlockD.h"
 #include "someMyBlockR.h"
-#include "someMyBlockS.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -44,34 +41,10 @@ void main_memory_initialize()
 
    // Create block pool.
    tBlockPoolParms.reset();
-   tBlockPoolParms.mPoolIndex     = Some::cBlockPoolIndex_MyBlockC;
-   tBlockPoolParms.mBlockPoolType = CC::cBlockPoolType_FreeList;
-   tBlockPoolParms.mNumBlocks     = 1000;
-   tBlockPoolParms.mBlockSize     = sizeof(Some::MyBlockC);
-   CC::createBlockPool(&tBlockPoolParms);
-
-   // Create block pool.
-   tBlockPoolParms.reset();
-   tBlockPoolParms.mPoolIndex     = Some::cBlockPoolIndex_MyBlockD;
-   tBlockPoolParms.mBlockPoolType = CC::cBlockPoolType_FreeList;
-   tBlockPoolParms.mNumBlocks     = 1000;
-   tBlockPoolParms.mBlockSize     = sizeof(Some::MyBlockD);
-   CC::createBlockPool(&tBlockPoolParms);
-
-   // Create block pool.
-   tBlockPoolParms.reset();
    tBlockPoolParms.mPoolIndex     = Some::cBlockPoolIndex_MyBlockR;
    tBlockPoolParms.mBlockPoolType = CC::cBlockPoolType_FreeList;
    tBlockPoolParms.mNumBlocks     = 1000;
    tBlockPoolParms.mBlockSize     = sizeof(Some::MyBlockR);
-   CC::createBlockPool(&tBlockPoolParms);
-
-   // Create block pool.
-   tBlockPoolParms.reset();
-   tBlockPoolParms.mPoolIndex     = Some::cBlockPoolIndex_MyBlockS;
-   tBlockPoolParms.mBlockPoolType = CC::cBlockPoolType_FreeList;
-   tBlockPoolParms.mNumBlocks     = 1000;
-   tBlockPoolParms.mBlockSize     = sizeof(Some::MyBlockS);
    CC::createBlockPool(&tBlockPoolParms);
 }
 

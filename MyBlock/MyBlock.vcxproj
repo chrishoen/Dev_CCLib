@@ -172,10 +172,7 @@
     <ClCompile Include="Source\MainMemory.cpp" />
     <ClCompile Include="Source\someMyBlockA.cpp" />
     <ClCompile Include="Source\someMyBlockB.cpp" />
-    <ClCompile Include="Source\someMyBlockC.cpp" />
-    <ClCompile Include="Source\someMyBlockD.cpp" />
     <ClCompile Include="Source\someMyBlockR.cpp" />
-    <ClCompile Include="Source\someMyBlockS.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h" />
@@ -184,10 +181,7 @@
     <ClInclude Include="Source\someBlockPoolIndex.h" />
     <ClInclude Include="Source\someMyBlockA.h" />
     <ClInclude Include="Source\someMyBlockB.h" />
-    <ClInclude Include="Source\someMyBlockC.h" />
-    <ClInclude Include="Source\someMyBlockD.h" />
     <ClInclude Include="Source\someMyBlockR.h" />
-    <ClInclude Include="Source\someMyBlockS.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CCLib\CCLib.vcxproj">

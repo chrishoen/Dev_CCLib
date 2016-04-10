@@ -10,6 +10,7 @@
 #include <new>
 #include "ccBlockHandle.h"
 #include "ccBlockPoolCentral.h"
+#include "someMyBlockA.h"
 
 namespace Some
 {
@@ -18,7 +19,7 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 
-class MyBlockR : public CC::HasBlockHandle
+class MyBlockR : public Some::MyBlockA
 {
 public:
 

@@ -16,10 +16,8 @@ namespace Some
 
 static const int cBlockPoolIndex_MyBlockA = 1;
 static const int cBlockPoolIndex_MyBlockB = 2;
-static const int cBlockPoolIndex_MyBlockC = 3;
-static const int cBlockPoolIndex_MyBlockD = 4;
-static const int cBlockPoolIndex_MyBlockR = 5;
-static const int cBlockPoolIndex_MyBlockS = 6;
+
+static const int cBlockPoolIndex_MyBlockR = 3;
 
 //******************************************************************************
 //******************************************************************************

@@ -10,10 +10,8 @@
 #include "someBlockPoolIndex.h"
 #include "someMyBlockA.h"
 #include "someMyBlockB.h"
-#include "someMyBlockC.h"
-#include "someMyBlockD.h"
 #include "someMyBlockR.h"
-#include "someMyBlockS.h"
+
 #include "CmdLineExec.h"
 
 using namespace std;
@@ -40,17 +38,8 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("B1"     ))  executeGoB1(aCmd);
    if(aCmd->isCmd("B2"     ))  executeGoB2(aCmd);
 
-   if(aCmd->isCmd("C1"     ))  executeGoC1(aCmd);
-   if(aCmd->isCmd("C2"     ))  executeGoC2(aCmd);
-
-   if(aCmd->isCmd("D1"     ))  executeGoD1(aCmd);
-   if(aCmd->isCmd("D2"     ))  executeGoD2(aCmd);
-
    if(aCmd->isCmd("R1"     ))  executeGoR1(aCmd);
    if(aCmd->isCmd("R2"     ))  executeGoR2(aCmd);
-
-   if(aCmd->isCmd("S1"     ))  executeGoS1(aCmd);
-   if(aCmd->isCmd("S2"     ))  executeGoS2(aCmd);
 
    if(aCmd->isCmd("T1"     ))  executeGoT1(aCmd);
    if(aCmd->isCmd("T2"     ))  executeGoT2(aCmd);
@@ -79,31 +68,6 @@ void CmdLineExec::executeGoR1(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 
 void CmdLineExec::executeGoR2(Ris::CmdLineCmd* aCmd)
-{
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void CmdLineExec::executeGoS1(Ris::CmdLineCmd* aCmd)
-{
-   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockS);
-
-   Some::MyBlockS* tS1 = new Some::MyBlockS;
-
-   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockS);
-
-   delete tS1;
-
-   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockS);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void CmdLineExec::executeGoS2(Ris::CmdLineCmd* aCmd)
 {
 }
 
@@ -195,59 +159,6 @@ void CmdLineExec::executeGoB1(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 
 void CmdLineExec::executeGoB2(Ris::CmdLineCmd* aCmd)
-{
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void CmdLineExec::executeGoC1(Ris::CmdLineCmd* aCmd)
-{
-   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockC);
-
-   Some::MyBlockC* tC1 = new Some::MyBlockC(101);
-   tC1->method1();
-
-   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockC);
-
-   delete tC1;
-
-   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockC);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void CmdLineExec::executeGoC2(Ris::CmdLineCmd* aCmd)
-{
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void CmdLineExec::executeGoD1(Ris::CmdLineCmd* aCmd)
-{
-   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockD);
-
-   Some::MyBlockD* tD1 = new Some::MyBlockD;
-   Some::MyBlockD* tD2 = new Some::MyBlockD;
-
-   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockD);
-
-   delete tD1;
-   delete tD2;
-
-   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockD);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void CmdLineExec::executeGoD2(Ris::CmdLineCmd* aCmd)
 {
 }
 
