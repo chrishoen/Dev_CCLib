@@ -174,8 +174,12 @@ void deallocateBlockPoolBlock(BlockHandle aBlockHandle)
 
 void deallocateBlockPoolBlock(void* aBlockPtr)
 {
+   //Guard.
+   if (aBlockPtr==0) return;
    // Get the block handle.
    BlockHandle tBlockHandle = BlockBoxArray::getBlockHandle(aBlockPtr);
+   //Guard.
+   if (tBlockHandle==BlockHandle::nullH) return;
    // Deallocate the block.
    mBlockPool[tBlockHandle.mPoolIndex]->deallocate(tBlockHandle);
 }

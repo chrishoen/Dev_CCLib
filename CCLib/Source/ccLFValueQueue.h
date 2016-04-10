@@ -305,7 +305,7 @@ public:
       int tStateSize         = LFValueQueueState::getMemorySize();
       int tQueueArraySize    = (aNumElements + 1)*sizeof(AtomicLFIndex);
       int tListArraySize     = (aNumElements + 1)*sizeof(AtomicLFIndex);
-      int tElementArraySize  = (aNumElements)*sizeof(Element);
+      int tElementArraySize  = (aNumElements + 1)*sizeof(Element);
       int tMemorySize = tStateSize + tQueueArraySize + tListArraySize + tElementArraySize;
       return tMemorySize;
    }
