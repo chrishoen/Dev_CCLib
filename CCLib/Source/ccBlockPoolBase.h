@@ -46,7 +46,7 @@ public:
    // Initialize the block pool. It is passed block pool parameters.
    virtual void initialize(BlockPoolParms* aParms)=0;
 
-   // Deallocate memory for the block array.
+   // Deallocate memory for the block pool.
    virtual void finalize()=0;
 
    // Get a block from the pool, this allocates a block.
@@ -64,10 +64,10 @@ public:
    //***************************************************************************
    // Methods called by inheriting classes
 
-   // Initialize the block pool. It is passed block pool parameters.
+   // Initialize the block pool base class. It is passed block pool parameters.
    void initializeBase(BlockPoolParms* aParms,void* aMemory);
 
-   // Deallocate memory for the block array.
+   // Deallocate memory for the block pool base class.
    void finalizeBase();
 
    //***************************************************************************

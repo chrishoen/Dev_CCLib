@@ -23,6 +23,9 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Constructor, initialize members for an empty stack of size zero 
 
 int BlockPoolIndexStackState::getMemorySize()
@@ -50,7 +53,7 @@ void BlockPoolIndexStackState::initialize(BlockPoolParms* aParms)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This sub class calculates and stores the memory sizes needed by the class.
+// This local class calculates and stores the memory sizes needed by the class.
 
 class BlockPoolIndexStack::MemorySize
 {
@@ -81,6 +84,9 @@ int BlockPoolIndexStack::getMemorySize(BlockPoolParms* aParms)
    return tMemorySize.mMemorySize;
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -180,7 +186,7 @@ void BlockPoolIndexStack::initialize(BlockPoolParms* aParms,void* aMemory)
    if (aParms->mConstructorFlag)
    {
       // Push the indices of the blocks in the array onto the index stack.
-      // For aAllocate==10 this will push 9,8,8,6,5,4,3,2,1,0
+      // For aAllocate==10 this will push 9,7,8,6,5,4,3,2,1,0
       for (int i = mX->mNumElements - 1; i >= 0; i--)
       {
          push(i);
@@ -191,6 +197,7 @@ void BlockPoolIndexStack::initialize(BlockPoolParms* aParms,void* aMemory)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Deallocate memory for the stack.
 
 void BlockPoolIndexStack::finalize()
 {

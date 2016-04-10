@@ -26,7 +26,7 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This sub class calculates and stores the memory sizes needed by the class.
+// This local class calculates and stores the memory sizes needed by the class.
 
 class BlockPoolFreeList::MemorySize
 {
@@ -90,16 +90,14 @@ BlockPoolFreeList::~BlockPoolFreeList()
 //******************************************************************************
 // This initializes the block pool for long term blocks. It allocates memory
 // for the block array and initializes the index stack. It is passed the
-// number of blocks to allocate and the size of the blocks. Memory for one
-// dummy block is allocated because index zero is reserved to indicate a
-// null block.
+// number of blocks to allocate and the size of the blocks.
 //
 // For aNumBlocks==10 blocks will range 0,1,2,3,4,5,6,7,8,9
 // A block index of cInvalid indicates an invalid block.
 //
 // An index stack is used to manage free list access to the blocks
 // The stack is initialized for a free list by pushing indices onto it.
-// For aAllocate==10 this will push 0,1,2,3,4,5,6,7,8,9
+// For aAllocate==10 this will push 9,7,8,6,5,4,3,2,1,0
 //
 // When a block is allocated, an index is popped off of the stack.
 // When a block is deallocated, its index is pushed back onto the stack.
@@ -114,6 +112,13 @@ void BlockPoolFreeList::initialize(BlockPoolParms* aParms)
 
    // Deallocate memory, if any exists.
    finalize();
+
+   // Create the index stack.
+   switch (aParms->mBlockPoolType)
+   {
+      case cBlockPoolType_FreeList   : mBlockIndexStack = new BlockPoolIndexStack; break;
+      case cBlockPoolType_LFFreeList : mBlockIndexStack = new BlockPoolLFIndexStack; break;
+   }
 
    // If the instance of this class is not to reside in external memory
    // then allocate memory for it on the system heap.
@@ -139,15 +144,13 @@ void BlockPoolFreeList::initialize(BlockPoolParms* aParms)
    char* tBaseClassMemory = tMemoryPtr.cfetch_add(tMemorySize.mBaseClassSize);
    char* tStackMemory     = tMemoryPtr.cfetch_add(tMemorySize.mStackSize);
 
-   // Initialize the base class variables.
-   BaseClass::initializeBase(aParms,tBaseClassMemory);
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // Initialize variables.
 
-   // Create the index stack.
-   switch (aParms->mBlockPoolType)
-   {
-   case cBlockPoolType_FreeList   : mBlockIndexStack = new BlockPoolIndexStack; break;
-   case cBlockPoolType_LFFreeList : mBlockIndexStack = new BlockPoolLFIndexStack; break;
-   }
+   // Initialize the base class.
+   BaseClass::initializeBase(aParms,tBaseClassMemory);
 
    // Initialize the index stack.
    mBlockIndexStack->initialize(aParms,tStackMemory);
@@ -159,7 +162,7 @@ void BlockPoolFreeList::initialize(BlockPoolParms* aParms)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Deallocate memory for the block array.
+// Deallocate memory for the block pool.
 
 void BlockPoolFreeList::finalize()
 {

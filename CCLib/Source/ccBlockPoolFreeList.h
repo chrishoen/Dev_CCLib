@@ -69,7 +69,7 @@ public:
    // Initialize the block pool. It is passed block pool parameters.
    void initialize(BlockPoolParms* aParms);
 
-   // Deallocate memory for the block array.
+   // Deallocate memory for the block pool.
    void finalize();
 
    // Get a block from the pool, this allocates a block.

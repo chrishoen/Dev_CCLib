@@ -111,7 +111,7 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // This sub class calculates and stores the memory sizes needed by the class.
+   // This local class calculates and stores the memory sizes needed by the class.
 
    class MemorySize
    {
