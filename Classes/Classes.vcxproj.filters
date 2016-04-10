@@ -42,8 +42,5 @@
     <ClInclude Include="Source\someClass2.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\someMemory.h">
-      <Filter>Source</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

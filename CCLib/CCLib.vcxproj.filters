@@ -51,6 +51,9 @@
     <ClCompile Include="Source\ccBlockPoolShortTerm.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\ccMemoryPtr.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\ccCallPointer.h">
@@ -135,6 +138,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccBlockPoolIndex.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ccMemoryPtr.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

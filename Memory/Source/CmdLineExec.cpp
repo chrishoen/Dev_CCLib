@@ -10,6 +10,7 @@
 #include "someClass1.h"
 #include "someClass2.h"
 #include "someClass3.h"
+#include "someMemory.h"
 using namespace Some;
 
 
@@ -90,12 +91,33 @@ void CmdLineExec::executeGo20(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo21(Ris::CmdLineCmd* aCmd)
 {
+   Prn::print(0,"*****************************tX1 create Class2A");
+   Prn::print(0,"");
+   Class2A* tX1 = memCreate<Class2A>(1);
+   tX1->method1();
+   Prn::print(0,"");
+
+   Prn::print(0,"*****************************tX1 destroy Class2A");
+   Prn::print(0,"");
+   memDestroy<Class2A>(tX1,1);
+   Prn::print(0,"");
+
 }
 
 //******************************************************************************
 
 void CmdLineExec::executeGo22(Ris::CmdLineCmd* aCmd)
 {
+   Prn::print(0,"*****************************tX2 create Class2A");
+   Prn::print(0,"");
+   Class2A* tX2 = memCreateArray<Class2A>(1,2);
+   tX2[0].method1();
+   Prn::print(0,"");
+
+   Prn::print(0,"*****************************tX2 destroy Class2A");
+   Prn::print(0,"");
+   memDestroyArray<Class2A>(tX2,1,2);
+   Prn::print(0,"");
 }
 
 //******************************************************************************

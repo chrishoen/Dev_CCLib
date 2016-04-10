@@ -37,6 +37,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SharedMemory", "SharedMemor
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NodeChannel", "NodeChannel\NodeChannel.vcxproj", "{6BCBD8AE-924C-4356-9AD1-45D2425714C5}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Memory", "Memory\Memory.vcxproj", "{051DF8AA-C984-4359-949D-93B4FDDE3693}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -181,6 +183,14 @@ Global
 		{6BCBD8AE-924C-4356-9AD1-45D2425714C5}.Release|Win32.Build.0 = Release|Win32
 		{6BCBD8AE-924C-4356-9AD1-45D2425714C5}.Release|x64.ActiveCfg = Release|x64
 		{6BCBD8AE-924C-4356-9AD1-45D2425714C5}.Release|x64.Build.0 = Release|x64
+		{051DF8AA-C984-4359-949D-93B4FDDE3693}.Debug|Win32.ActiveCfg = Debug|Win32
+		{051DF8AA-C984-4359-949D-93B4FDDE3693}.Debug|Win32.Build.0 = Debug|Win32
+		{051DF8AA-C984-4359-949D-93B4FDDE3693}.Debug|x64.ActiveCfg = Debug|x64
+		{051DF8AA-C984-4359-949D-93B4FDDE3693}.Debug|x64.Build.0 = Debug|x64
+		{051DF8AA-C984-4359-949D-93B4FDDE3693}.Release|Win32.ActiveCfg = Release|Win32
+		{051DF8AA-C984-4359-949D-93B4FDDE3693}.Release|Win32.Build.0 = Release|Win32
+		{051DF8AA-C984-4359-949D-93B4FDDE3693}.Release|x64.ActiveCfg = Release|x64
+		{051DF8AA-C984-4359-949D-93B4FDDE3693}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

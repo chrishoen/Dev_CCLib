@@ -19,16 +19,10 @@
     <ClCompile Include="Source\someClass1.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ccMemBaseBlockPool.cpp">
+    <ClCompile Include="Source\someClass3.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ccMemLongTermBlockPool.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ccMemBlockBoxArray.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ccMemPool.cpp">
+    <ClCompile Include="Source\someClass2.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -42,22 +36,13 @@
     <ClInclude Include="Source\someClass1.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccMemHandle.h">
+    <ClInclude Include="Source\someClass3.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccMemBaseBlockPool.h">
+    <ClInclude Include="Source\someClass2.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccMemLongTermBlockPool.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ccMemBlockBoxArray.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ccMemPool.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ccMemPoolIndex.h">
+    <ClInclude Include="Source\someMemory.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
