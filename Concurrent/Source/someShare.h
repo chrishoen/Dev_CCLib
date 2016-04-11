@@ -15,6 +15,7 @@
 #include "ccLFValueQueue.h"
 #include "ccLFPacketQueue.h"
 #include "ccLFPointerQueue.h"
+#include "ccDTValueQueue.h"
 
 namespace Some
 {
@@ -77,7 +78,7 @@ public:
    CC::LFValueQueue<void*>    mValueQueue;
    CC::LFPacketQueue          mPacketQueue;
    CC::LFValueQueue<int>      mIntQueue;
-   CC::LFValueQueue<int>      mDTIntQueue;
+   CC::DTValueQueue<int>      mDTIntQueue;
 
 };
 

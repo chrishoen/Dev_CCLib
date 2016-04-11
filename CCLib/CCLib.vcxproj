@@ -53,6 +53,7 @@
     <ClInclude Include="Source\ccContainers2.h" />
     <ClInclude Include="Source\ccDefs.h" />
     <ClInclude Include="Source\ccDiagrams.h" />
+    <ClInclude Include="Source\ccDTValueQueue.h" />
     <ClInclude Include="Source\ccLFPacketQueue.h" />
     <ClInclude Include="Source\ccLFIndex.h" />
     <ClInclude Include="Source\ccLFPointerQueue.h" />
