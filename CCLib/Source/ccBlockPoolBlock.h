@@ -46,7 +46,6 @@ public:
 
    static void* operator new(size_t sz)
    {
-//    Prn::print(0, "BlockPoolBlock::new   %d",(int)sz);
 
       // Block pointer.
       void* tBlockPointer = 0;
@@ -67,7 +66,6 @@ public:
 
    static void operator delete(void* ptr)
    {
-//    Prn::print(0, "BlockPoolBlock::delete");
       // Deallocate the block back to the block pool
       CC::deallocateBlockPoolBlock(ptr);
    }
