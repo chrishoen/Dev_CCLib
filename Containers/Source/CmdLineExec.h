@@ -4,6 +4,7 @@
 #include "ccLFPointerQueue.h"
 #include "ccLFValueQueue.h"
 #include "ccLFPacketQueue.h"
+#include "ccSRWValueQueue.h"
 #include "risCmdLineExec.h"
 
 //******************************************************************************
@@ -31,7 +32,8 @@ public:
   void executeReadI  (Ris::CmdLineCmd* aCmd);
 
   int mCount;
-  CC::LFValueQueue<int>      mIntQueue;
+//CC::LFValueQueue<int>      mIntQueue;
+  CC::SRWValueQueue<int>     mIntQueue;
   CC::LFPacketQueue          mPacketQueue;
   CC::LFPointerQueue<void*>  mPointerQueue;
 };
