@@ -34,7 +34,7 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// State variables for the stack. These are located in a separate class
+// State variables for the object. These are located in a separate class
 // so that they can be located in external memory.
 
 class LFValueQueueState
@@ -329,7 +329,7 @@ public:
 
          // List head points to the first node.
          mX->mListHead.store(LFIndex(0, 0));
-         // List size is initially a full stack.
+         // List size is initially a full free list.
          mX->mListSize = mX->mListNumElements;
 
          // Initialize queue array. Each node has no next node.
