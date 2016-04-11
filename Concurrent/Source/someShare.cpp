@@ -54,6 +54,9 @@ void Share::initialize()
       case 5:
          mIntQueue.initialize(gGSettings.mNumElements);
          break;
+      case 6:
+         mDTIntQueue.initialize(gGSettings.mNumElements);
+         break;
       }
       break;
    }

@@ -58,6 +58,22 @@ void Reader::show()
 //******************************************************************************
 //******************************************************************************
 
+void Reader::startTrial()
+{
+   mMarkerRead.startTrial(gGSettings.mXLimit);
+
+}
+void Reader::finishTrial()
+{
+   mMarkerRead.finishTrial();
+
+   mMeanTimeRead = mMarkerRead.mStatistics.mMean;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void Reader::readType1(int aNumReads)
 {
    LFBackoff tDelayB(gGSettings.mDelayB1,gGSettings.mDelayB2);
@@ -210,6 +226,7 @@ void Reader::readType4(int aNumReads)
       }
    }
 }
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -243,6 +260,56 @@ void Reader::readType5(int aNumReads)
    }
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void Reader::readType6(int aNumReads)
+{
+   LFBackoff tDelayB(gGSettings.mDelayB1,gGSettings.mDelayB2);
+
+   for (int i = 0; i < aNumReads; i++)
+   {
+      bool tPass;
+      int tCount;
+
+      mMarkerRead.doStart();
+      tPass = gShare.mDTIntQueue.tryRead(&tCount);
+      mMarkerRead.doStop();
+
+      tDelayB.delay();
+
+      if (tPass)
+      {
+         mCount++;
+         mPassCount++;
+         mCheckSum += tCount;
+      }
+      else
+      {
+         mCount++;
+         mFailCount++;
+      }
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void Reader::read(int aNumReads)
+{
+   switch (gShare.mType)
+   {
+   case 1: readType1(aNumReads); break;
+   case 2: readType2(aNumReads); break;
+   case 3: readType3(aNumReads); break;
+   case 4: readType4(aNumReads); break;
+   case 5: readType5(aNumReads); break;
+   case 6: readType6(aNumReads); break;
+   }
+}
+   
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -348,30 +415,25 @@ void Reader::flushType5()
 //******************************************************************************
 //******************************************************************************
 
-void Reader::startTrial()
+void Reader::flushType6()
 {
-   mMarkerRead.startTrial(gGSettings.mXLimit);
-
-}
-void Reader::finishTrial()
-{
-   mMarkerRead.finishTrial();
-
-   mMeanTimeRead = mMarkerRead.mStatistics.mMean;
-}
-
-void Reader::read(int aNumReads)
-{
-   switch (gShare.mType)
+   while(true)
    {
-   case 1: readType1(aNumReads); break;
-   case 2: readType2(aNumReads); break;
-   case 3: readType3(aNumReads); break;
-   case 4: readType4(aNumReads); break;
-   case 5: readType5(aNumReads); break;
+      int tCount;
+      bool tPass;
+      tPass = gShare.mDTIntQueue.tryRead(&tCount);
+      if (!tPass) break;
+
+      mCount++;
+      mPassCount++;
+      mCheckSum += tCount;
    }
 }
    
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void Reader::flush()
 {
    switch (gShare.mType)
@@ -381,6 +443,7 @@ void Reader::flush()
    case 3: flushType3(); break;
    case 4: flushType4(); break;
    case 5: flushType5(); break;
+   case 6: flushType6(); break;
    }
 }
    

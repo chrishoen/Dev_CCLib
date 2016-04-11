@@ -38,6 +38,7 @@ public:
    void startTrialType3();
    void startTrialType4();
    void startTrialType5();
+   void startTrialType6();
    void startTrial     ();
    void finishTrial();
 
@@ -46,6 +47,7 @@ public:
    void writereadType3 (int aNumWrites);
    void writereadType4 (int aNumWrites);
    void writereadType5 (int aNumWrites);
+   void writereadType6 (int aNumWrites);
    void writeread      (int aNumWrites);
 
    void flushType1 ();
@@ -53,6 +55,7 @@ public:
    void flushType3 ();
    void flushType4 ();
    void flushType5 ();
+   void flushType6 ();
    void flush      ();
 
    //---------------------------------------------------------------------------

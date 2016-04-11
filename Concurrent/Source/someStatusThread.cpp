@@ -65,6 +65,8 @@ void StatusThread::threadRunFunction()
             if (gShare.mType==3) tQueueSize = gShare.mPacketQueue.size();
             if (gShare.mType==4) tQueueSize = CC::getBlockPoolSize(cBlockPoolIndex_MyBlockA);
             if (gShare.mType==5) tQueueSize = gShare.mIntQueue.size();
+            if (gShare.mType==6) tQueueSize = gShare.mDTIntQueue.size();
+
             Prn::print(Prn::ThreadRun1, "%s$   %s   %s %8d",
                mProcString,
                my_stringLLU(tString1, gShare.mWriter[0].mCount),
@@ -80,6 +82,8 @@ void StatusThread::threadRunFunction()
             if (gShare.mType==3) tQueueSize = gShare.mPacketQueue.size();
             if (gShare.mType==4) tQueueSize = CC::getBlockPoolSize(cBlockPoolIndex_MyBlockA);
             if (gShare.mType==5) tQueueSize = gShare.mIntQueue.size();
+            if (gShare.mType==6) tQueueSize = gShare.mDTIntQueue.size();
+
             Prn::print(Prn::ThreadRun1, "%s$   %s   %s %8d",
                mProcString,
                my_stringLLU(tString1, gShare.mWriterReader[0].mWriteCount),

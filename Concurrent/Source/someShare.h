@@ -77,6 +77,7 @@ public:
    CC::LFValueQueue<void*>    mValueQueue;
    CC::LFPacketQueue          mPacketQueue;
    CC::LFValueQueue<int>      mIntQueue;
+   CC::LFValueQueue<int>      mDTIntQueue;
 
 };
 

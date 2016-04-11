@@ -40,6 +40,7 @@ public:
    void readType3 (int aNumReads);
    void readType4 (int aNumReads);
    void readType5 (int aNumReads);
+   void readType6 (int aNumReads);
    void read      (int aNumReads);
 
    void flushType1 ();
@@ -47,6 +48,7 @@ public:
    void flushType3 ();
    void flushType4 ();
    void flushType5 ();
+   void flushType6 ();
    void flush  ();
 
    //---------------------------------------------------------------------------
