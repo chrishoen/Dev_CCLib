@@ -36,8 +36,6 @@ public:
    // Initialize the queue and the synchronization objects.
    // It is passed three parameters.
    // 
-   // aServer is true if server, false if client.
-   //
    // aMemory is a pointer to external memory allocated for the entire
    // channel. If this is null then system heap memory is allocated for
    // the channel.
@@ -47,7 +45,7 @@ public:
    // called.This is false if the block pool resides in shared memory and has
    // already been created. This is true otherwise.
 
-   void initialize(bool aServerFlag,bool aConstructorFlag,void* aMemory);
+   void initialize(bool aConstructorFlag,void* aMemory);
 
    // Deallocate memory.
    void finalize();

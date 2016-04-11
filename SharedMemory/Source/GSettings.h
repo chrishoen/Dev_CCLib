@@ -27,18 +27,10 @@ public:
    //---------------------------------------------------------------------------
    // GSettings members.
 
-   static const int cMemServer = 1;
-   static const int cMemClient = 2;
-
    static const int cMaxStringSize = 30;
 
    int  mMyAppNumber;
-   int  mMyAppRole;
-
    int  mNumBytes;
-
-   bool isServer() {return mMyAppRole==cMemServer;}
-   bool isClient() {return mMyAppRole==cMemClient;}
 
    //---------------------------------------------------------------------------
    // Infrastucture. Constructor and such

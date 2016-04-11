@@ -26,7 +26,7 @@ int main(int argc,char** argv)
    //--------------------------------------------------------------------
    // Launch threads
 
-   if (gGSettings.isClient())
+   if (gGSettings.mMyAppNumber != 1)
    {
       Some::gThread1 = new Some::Thread1;
       Some::gThread1->launchThread();
@@ -43,7 +43,7 @@ int main(int argc,char** argv)
    //--------------------------------------------------------------------
    // Shutdown threads
 
-   if (gGSettings.isClient())
+   if (gGSettings.mMyAppNumber != 1)
    {
       Some::gThread1->shutdownThread();
       delete Some::gThread1;

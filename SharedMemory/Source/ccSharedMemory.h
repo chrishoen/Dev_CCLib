@@ -32,11 +32,8 @@ public:
    SharedMemory();
 
    // Create the shared memory and calculate addresses.
-   void initializeForServer(int aNumBytes);
+   bool initialize(int aNumBytes);
    
-   // Open the shared memory and calculate addresses.
-   void initializeForClient();
-
    // Close the shared memory.
    void finalize();
 

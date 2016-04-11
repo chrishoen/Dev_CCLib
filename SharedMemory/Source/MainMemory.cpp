@@ -20,25 +20,16 @@ void main_memory_initialize()
    // Initialize shared memory.
 
    // Locals
-   bool tServerFlag = gGSettings.isServer();
+   int  tNumBytes = 1024*1024;
    bool tConstructorFlag = true;
 
    // Initialize shared memory.
-   if (gGSettings.isServer())
-   {
-      CC::gSharedMemory.initializeForServer(1024 * 1024);
-      tConstructorFlag = true;
-   }
-   else
-   {
-      CC::gSharedMemory.initializeForClient();
-      tConstructorFlag = false;
-   }
+   tConstructorFlag = CC::gSharedMemory.initialize(tNumBytes);
 
-   Prn::print(0, "SharedSynch  %d",CC::SharedSynch::getMemorySize());
+   Prn::print(0, "ConstuctionFlag  %d",tConstructorFlag);
 
    // Initialize shared channel.
-   CC::gSharedSynch.initialize(tServerFlag,tConstructorFlag,CC::gSharedMemory.mSynchMemory);
+   CC::gSharedSynch.initialize(tConstructorFlag,CC::gSharedMemory.mSynchMemory);
 
    //***************************************************************************
    //***************************************************************************

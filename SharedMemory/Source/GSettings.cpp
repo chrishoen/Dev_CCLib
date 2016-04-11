@@ -20,15 +20,13 @@ GSettings::GSettings()
    mSection[0]=0;
 
    mMyAppNumber = 0;
-   mMyAppRole = 0;
-
+   mNumBytes = 0;
 }
 
 void GSettings::show()
 {
    printf("GSettings ******* %s\n", mSection);
 
-   printf("MyAppRole                 %d\n", mMyAppRole);
    printf("MyAppNumber               %d\n", mMyAppNumber);
    printf("NumBytes                  %d\n", mNumBytes);
 
@@ -105,17 +103,6 @@ bool GSettings::initialize(char* aSection)
 
    // Copy arguments
    strcpy(mSection,aSection);
-
-   // Get AppRole
-   mMyAppRole = 0;
-   if (strcmp(mSection, "MemServer") == 0)
-   {
-      mMyAppRole = cMemServer;
-   }
-   if (strcmp(mSection, "MemClient") == 0)
-   {
-      mMyAppRole = cMemClient;
-   }
 
    // Apply settings file to this executive   
    Ris::CmdLineFile tCmdLineFile;

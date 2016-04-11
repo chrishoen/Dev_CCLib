@@ -45,8 +45,9 @@ SharedMemory::SharedMemory()
 //****************************************************************************
 //****************************************************************************
 // Create the shared memory and calculate addresses.
+// If Create doesn't open existing file then return true.
 
-void SharedMemory::initializeForServer(int aNumBytes)
+bool SharedMemory::initialize(int aNumBytes)
 {
    // pimpl idiom.
    mSpecific = new SharedMemory::Specific;
@@ -60,31 +61,8 @@ void SharedMemory::initializeForServer(int aNumBytes)
       aNumBytes,
       "AAATESTSHAREMEMFILE");
 
-   char* tMemory = (char*)MapViewOfFile(
-      mSpecific->mShareFileMap,
-      FILE_MAP_READ | FILE_MAP_WRITE,0,0,0);
-
-   // Calculate addresses.
-   mMemory          = tMemory;
-   mSynchMemory     = tMemory;
-   mBlockPoolMemory = tMemory + cc_round_upto16(cSynchMemorySize);
-}
-
-//****************************************************************************
-//****************************************************************************
-//****************************************************************************
-// Open the shared memory and calculate addresses.
-
-void SharedMemory::initializeForClient()
-{
-   // pimpl idiom.
-
-   mSpecific = new SharedMemory::Specific;
-
-   // Open Shared memory.
-   mSpecific->mShareFileMap=OpenFileMapping(
-      FILE_MAP_READ | FILE_MAP_WRITE,FALSE,
-      "AAATESTSHAREMEMFILE");
+   int tCreateStatus = GetLastError();
+   printf("CreateFileMapping %d\n",tCreateStatus);
 
    char* tMemory = (char*)MapViewOfFile(
       mSpecific->mShareFileMap,
@@ -94,7 +72,11 @@ void SharedMemory::initializeForClient()
    mMemory          = tMemory;
    mSynchMemory     = tMemory;
    mBlockPoolMemory = tMemory + cc_round_upto16(cSynchMemorySize);
+
+   // Done
+   return tCreateStatus==0;
 }
+
 
 //******************************************************************************
 //******************************************************************************

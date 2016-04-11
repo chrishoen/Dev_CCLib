@@ -63,7 +63,7 @@ SharedSynch::~SharedSynch()
 // This initializes the stack to a fixed size. It initializes member
 // variables and and the stack array, given external memory.
 
-void SharedSynch::initialize(bool aServerFlag,bool aConstructorFlag,void* aMemory)
+void SharedSynch::initialize(bool aConstructorFlag,void* aMemory)
 {
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
@@ -112,33 +112,19 @@ void SharedSynch::initialize(bool aServerFlag,bool aConstructorFlag,void* aMemor
    //---------------------------------------------------------------------------
    // Initialize interprocess synchronization.
 
-   if (aServerFlag)
-   {
-      mSpecific->mSemaphore = CreateSemaphore(
-         NULL,
-         0,
-         200,
-         "AAATESTSHARESEM");
+   mSpecific->mSemaphore = CreateSemaphore(
+      NULL,
+      0,
+      200,
+      "AAATESTSHARESEM");
 
-      mSpecific->mMutex = CreateMutex(
-         NULL,
-         FALSE,
-         "AAATESTSHAREMUTEX");
+   mSpecific->mMutex = CreateMutex(
+      NULL,
+      FALSE,
+      "AAATESTSHAREMUTEX");
 
-      ReleaseMutex(mSpecific->mMutex);
-   }
-   else
-   {
-      mSpecific->mSemaphore = OpenSemaphore(
-         EVENT_ALL_ACCESS | EVENT_MODIFY_STATE | SYNCHRONIZE,
-         FALSE,
-         "AAATESTSHARESEM");
+   ReleaseMutex(mSpecific->mMutex);
 
-      mSpecific->mMutex = OpenMutex(
-         MUTEX_ALL_ACCESS | MUTEX_MODIFY_STATE | SYNCHRONIZE,
-         FALSE,
-         "AAATESTSHAREMUTEX");
-   }
 }
 
 //******************************************************************************
