@@ -48,8 +48,6 @@ namespace LFIntQueue
    static atomic<int>   mListSize;
    static AtomicLFIndex mListHead;
    
-   static atomic<int>* mListHeadIndexPtr = (atomic<int>*)&mListHead;
-
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -297,7 +295,8 @@ namespace LFIntQueue
          mListNext[aNode].store(tHead,memory_order_relaxed);
 
          // The pushed node is the new head node.
-         if ((*mListHeadIndexPtr).compare_exchange_weak(tHead.mIndex, aNode,memory_order_release,memory_order_relaxed)) break;
+         std::atomic<int>* tListHeadIndexPtr = (std::atomic<int>*)&mListHead;
+         if ((*tListHeadIndexPtr).compare_exchange_weak(tHead.mIndex, aNode, std::memory_order_release, std::memory_order_relaxed)) break;
          if (++tLoopCount == 10000) throw 103;
       }
       if (tLoopCount != 0)
