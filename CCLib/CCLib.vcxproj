@@ -28,7 +28,6 @@
     <ClCompile Include="Source\ccBlockPoolLFIndexStack.cpp" />
     <ClCompile Include="Source\ccBlockPoolParms.cpp" />
     <ClCompile Include="Source\ccBlockPoolShortTerm.cpp" />
-    <ClCompile Include="Source\ccLFBlockQueue.cpp" />
     <ClCompile Include="Source\ccLFPacketQueue.cpp" />
     <ClCompile Include="Source\ccLFPointerQueue.cpp" />
     <ClCompile Include="Source\ccMemoryPtr.cpp" />
@@ -55,7 +54,6 @@
     <ClInclude Include="Source\ccContainers2.h" />
     <ClInclude Include="Source\ccDefs.h" />
     <ClInclude Include="Source\ccDiagrams.h" />
-    <ClInclude Include="Source\ccLFBlockQueue.h" />
     <ClInclude Include="Source\ccLFPacketQueue.h" />
     <ClInclude Include="Source\ccLFIndex.h" />
     <ClInclude Include="Source\ccLFPointerQueue.h" />

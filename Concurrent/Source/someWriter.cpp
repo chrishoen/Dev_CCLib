@@ -140,13 +140,13 @@ void Writer::writeType3(int aNumWrites)
       mMarkerWrite.doStart();
 
       int tIndex;
-      void* tBlock = gShare.mBlockQueue.startWrite(&tIndex);
-      if (tBlock)
+      void* tPacket = gShare.mPacketQueue.startWrite(&tIndex);
+      if (tPacket)
       {
-         Class1A* tObject = new(tBlock) Class1A;
+         Class1A* tObject = new(tPacket) Class1A;
          tObject->mCode1 = tCount;
          tDelayA.delay();
-         gShare.mBlockQueue.finishWrite(tIndex);
+         gShare.mPacketQueue.finishWrite(tIndex);
          tPass=true;
       }
 

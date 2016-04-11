@@ -46,7 +46,7 @@ void Share::initialize()
          mPointerQueue.initialize(gGSettings.mAllocate);
          break;
       case 3:
-         mBlockQueue.initialize(gGSettings.mAllocate, sizeof(Class1A));
+         mPacketQueue.initialize(gGSettings.mAllocate, sizeof(Class1A));
          break;
       case 4:
          mValueQueue.initialize(gGSettings.mAllocate);

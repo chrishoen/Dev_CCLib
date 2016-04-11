@@ -129,12 +129,12 @@ void WriterReader::startTrialType3()
          ++mCount &= 0xFFFF;
 
          int tIndex;
-         void* tBlock = gShare.mBlockQueue.startWrite(&tIndex);
-         if (tBlock)
+         void* tPacket = gShare.mPacketQueue.startWrite(&tIndex);
+         if (tPacket)
          {
-            Class1A* tObject = new(tBlock) Class1A;
+            Class1A* tObject = new(tPacket) Class1A;
             tObject->mCode1 = mCount;
-            gShare.mBlockQueue.finishWrite(tIndex);
+            gShare.mPacketQueue.finishWrite(tIndex);
          }
 
          mWriteCount++;
@@ -346,18 +346,18 @@ void WriterReader::writereadType3(int aNumWrites)
          mMarkerWrite.doStart();
 
          int tIndex;
-         void* tBlock = gShare.mBlockQueue.startWrite(&tIndex);
-         if (tBlock)
+         void* tPacket = gShare.mPacketQueue.startWrite(&tIndex);
+         if (tPacket)
          {
-            Class1A* tObject = new(tBlock) Class1A;
+            Class1A* tObject = new(tPacket) Class1A;
             tObject->mCode1 = mCount;
-            gShare.mBlockQueue.finishWrite(tIndex);
+            gShare.mPacketQueue.finishWrite(tIndex);
          }
 
          mMarkerWrite.doStop();
          tDelayA.delay();
 
-         if (tBlock)
+         if (tPacket)
          {
             mWriteCount++;
             mWritePassCount++;
@@ -377,11 +377,11 @@ void WriterReader::writereadType3(int aNumWrites)
          int tCount;
 
          mMarkerRead.doStart();
-         Class1A* tObject = (Class1A*)gShare.mBlockQueue.startRead(&tIndex);
+         Class1A* tObject = (Class1A*)gShare.mPacketQueue.startRead(&tIndex);
          if (tObject)
          {
             tCount = tObject->mCode1;
-            gShare.mBlockQueue.finishRead(tIndex);
+            gShare.mPacketQueue.finishRead(tIndex);
             tPass = true;
          }
          mMarkerRead.doStop();
@@ -541,11 +541,11 @@ void WriterReader::flushType3()
    while(true)
    {
 
-      Class1A* tObject = (Class1A*)gShare.mBlockQueue.startRead(&tIndex);
+      Class1A* tObject = (Class1A*)gShare.mPacketQueue.startRead(&tIndex);
       if (!tObject) break;
 
       tCount = tObject->mCode1;
-      gShare.mBlockQueue.finishRead(tIndex);
+      gShare.mPacketQueue.finishRead(tIndex);
 
       mReadCount++;
       mReadPassCount++;
