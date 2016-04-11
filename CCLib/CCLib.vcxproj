@@ -53,8 +53,7 @@
     <ClInclude Include="Source\ccContainers2.h" />
     <ClInclude Include="Source\ccDefs.h" />
     <ClInclude Include="Source\ccDiagrams.h" />
-    <ClInclude Include="Source\ccDTValueQueue.h" />
-    <ClInclude Include="Source\ccDTValueQueue22.h" />
+    <ClInclude Include="Source\ccSRWValueQueue.h" />
     <ClInclude Include="Source\ccLFPacketQueue.h" />
     <ClInclude Include="Source\ccLFIndex.h" />
     <ClInclude Include="Source\ccLFPointerQueue.h" />
@@ -65,7 +64,6 @@
     <ClInclude Include="Source\ccTreeNodeDestroyer.h" />
     <ClInclude Include="Source\ccTreeNodeVisitor.h" />
     <ClInclude Include="Source\ccValueQueue.h" />
-    <ClInclude Include="Source\ccValueStack.h" />
     <ClInclude Include="Source\cc_functions.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

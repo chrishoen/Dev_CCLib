@@ -5,7 +5,6 @@
 #include <atomic>
 
 #include "ccValueQueue.h"
-#include "ccValueStack.h"
 #include "ccBlockPoolIndexStack.h"
 #include "ccBlockPoolLFIndexStack.h"
 #include "ccBlockPoolParms.h"
@@ -471,21 +470,5 @@ void CmdLineExec::executeGo7(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo8(Ris::CmdLineCmd* aCmd)
 {
-   CC::ValueStack<int> tStack;
-   tStack.initialize(4);
-   
-   int tY;
-   tStack.push(101);
-   tStack.push(102);
-   tStack.push(103);
-   tStack.push(104);
-
-   Prn::print(0, "Stack %d", tStack.size());
-
-   tStack.pop(&tY);
-
-   Prn::print(0, "Get   %d", tY);
-
-   Prn::print(0, "Stack %d", tStack.size());
 }
 

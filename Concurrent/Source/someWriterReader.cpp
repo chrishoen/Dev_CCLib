@@ -212,7 +212,7 @@ void WriterReader::startTrialType6()
       {
          ++mCount &= 0xFFFF;
 
-         gShare.mDTIntQueue.tryWrite(mCount);
+         gShare.mSRWIntQueue.tryWrite(mCount);
 
          mWriteCount++;
          mWritePassCount++;
@@ -611,7 +611,7 @@ void WriterReader::writereadType6(int aNumWrites)
          bool tPass = false;
 
          mMarkerWrite.doStart();
-         tPass = gShare.mDTIntQueue.tryWrite(mCount);
+         tPass = gShare.mSRWIntQueue.tryWrite(mCount);
          mMarkerWrite.doStop();
 
          tDelayA.delay();
@@ -636,7 +636,7 @@ void WriterReader::writereadType6(int aNumWrites)
          int tCount;
 
          mMarkerRead.doStart();
-         tPass = gShare.mDTIntQueue.tryRead(&tCount);
+         tPass = gShare.mSRWIntQueue.tryRead(&tCount);
          mMarkerRead.doStop();
 
          tDelayA.delay();
@@ -782,7 +782,7 @@ void WriterReader::flushType6()
    {
       int tCount;
       bool tPass;
-      tPass = gShare.mDTIntQueue.tryRead(&tCount);
+      tPass = gShare.mSRWIntQueue.tryRead(&tCount);
       if (!tPass) break;
       mReadCount++;
       mReadPassCount++;

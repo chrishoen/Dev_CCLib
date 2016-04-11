@@ -1,8 +1,8 @@
-#ifndef _CCDTVALUEQUEUE_H_
-#define _CCDTVALUEQUEUE_H_
+#ifndef _CSRWTVALUEQUEUE_H_
+#define _CCSRWVALUEQUEUE_H_
 /*==============================================================================
 
-Double Thread Value Queue Class Template. 
+Single Reader Writer Value Queue Class Template. 
 
 It is single writer single reader thread safe.
 It is uses no thread synchronization.
@@ -29,7 +29,7 @@ namespace CC
 // State variables for the stack. These are located in a separate class
 // so that they can be located in external memory.
 
-class DTValueQueueState
+class SRWValueQueueState
 {
 public:
 
@@ -41,7 +41,7 @@ public:
 
    static int getMemorySize()
    {
-      return cc_round_upto16(sizeof(DTValueQueueState));
+      return cc_round_upto16(sizeof(SRWValueQueueState));
    }
 
    //***************************************************************************
@@ -60,7 +60,7 @@ public:
    // Methods.
 
    // Constructor.
-   DTValueQueueState()
+   SRWValueQueueState()
    {
       // All null
       mNumElements = 0;
@@ -86,7 +86,7 @@ public:
 //******************************************************************************
 
 template <class Element>
-class DTValueQueue
+class SRWValueQueue
 {
 public:
 
@@ -106,7 +106,7 @@ public:
       // Calculate and store memory sizes.
       MemorySize::MemorySize(int aNumElements)
       {
-         mStateSize         = DTValueQueueState::getMemorySize();
+         mStateSize         = SRWValueQueueState::getMemorySize();
          mElementArraySize  = cc_round_upto16(cNewArrayExtraMemory + (aNumElements + 1)*sizeof(Element));
          mMemorySize = mStateSize + mElementArraySize;
       }
@@ -141,7 +141,7 @@ public:
 
    // State variables for the queue. These are located in a separate class
    // so that they can be located in externale memory.
-   DTValueQueueState* mX;
+   SRWValueQueueState* mX;
 
    // Array of values, storage for the values.
    // Size is NumElements + 1.
@@ -153,7 +153,7 @@ public:
    //***************************************************************************
    // Constructor
 
-   DTValueQueue()
+   SRWValueQueue()
    {
       // All null.
       mX = 0;
@@ -164,7 +164,7 @@ public:
       mElement = 0;
    }
 
-   ~DTValueQueue()
+   ~SRWValueQueue()
    {
       finalize();
    }
@@ -193,7 +193,7 @@ public:
       // then allocate memory for it on the system heap.
       if (aMemory == 0)
       {
-         mMemory = malloc(DTValueQueue<Element>::getMemorySize(aNumElements));
+         mMemory = malloc(SRWValueQueue<Element>::getMemorySize(aNumElements));
          mFreeMemoryFlag = true;
       }
       // If the instance of this class is to reside in external memory
@@ -217,12 +217,12 @@ public:
       if (aConstructorFlag)
       {
          // Call the constructor.
-         mX = new(tStateMemory)DTValueQueueState;
+         mX = new(tStateMemory)SRWValueQueueState;
       }
       else
       {
          // The constructor has already been called.
-         mX = (DTValueQueueState*)tStateMemory;
+         mX = (SRWValueQueueState*)tStateMemory;
       }
       // Initialize the state.
       mX->initialize(aNumElements,aConstructorFlag);

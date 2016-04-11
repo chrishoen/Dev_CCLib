@@ -89,9 +89,6 @@
     <ClInclude Include="Source\ccLFPointerQueue.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccValueStack.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\ccRecursiveAnchor.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -140,10 +137,7 @@
     <ClInclude Include="Source\ccLFPacketQueue.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccDTValueQueue22.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ccDTValueQueue.h">
+    <ClInclude Include="Source\ccSRWValueQueue.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

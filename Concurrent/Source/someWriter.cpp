@@ -260,7 +260,7 @@ void Writer::writeType6(int aNumWrites)
       ++mCount &= 0xFFFF;
 
       mMarkerWrite.doStart();
-      tPass = gShare.mDTIntQueue.tryWrite(mCount);
+      tPass = gShare.mSRWIntQueue.tryWrite(mCount);
       mMarkerWrite.doStop();
 
       tDelayA.delay();
