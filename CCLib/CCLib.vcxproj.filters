@@ -54,6 +54,9 @@
     <ClCompile Include="Source\ccMemoryPtr.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Source\ccLFElementQueue.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\ccCallPointer.h">
@@ -141,6 +144,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccMemoryPtr.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ccLFElementQueue.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
