@@ -2,7 +2,7 @@
 #define _CCLFVALUEQUEUE_H_
 /*==============================================================================
 
-Lock Free Value Queue Class TEmplate. 
+Lock Free Value Queue Class Template. 
 
 This implements a value queue. The queue is thread safe. It uses a atomic
 interlocked compare and exchanges to guard against concurrency contentions.
@@ -165,15 +165,22 @@ public:
    // so that they can be located in externale memory.
    LFValueQueueState* mX;
 
-   // Array of values.
+   // Array of values, storage for the values.
+   // Size is NumElements + 1.
+   // Index range is 0..NumElements.
    Element* mElement;
 
-   // Queue array.
-   AtomicLFIndex*    mQueueNext;
+   // Queue array, contains the node index of the queue next node.
+   // Size is NumElements + 1.
+   // Index range is 0..NumElements.
+   AtomicLFIndex* mQueueNext;
 
-   // Free List array.
-   AtomicLFIndex*    mListNext;
+   // Free List array, contains the node index of the free list next node.
+   // Size is NumElements + 1.
+   // Index range is 0..NumElements.
+   AtomicLFIndex* mListNext;
 
+   // Marks an invalid node.
    static const int  cInvalid = 0x80000000;
 
    //***************************************************************************

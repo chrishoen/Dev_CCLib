@@ -18,9 +18,6 @@
     <ClCompile Include="Source\cc_functions.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ccLFPointerQueue.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\ccBlockBoxArray.cpp">
       <Filter>Source</Filter>
     </ClCompile>

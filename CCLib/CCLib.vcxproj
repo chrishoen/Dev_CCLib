@@ -29,7 +29,6 @@
     <ClCompile Include="Source\ccBlockPoolParms.cpp" />
     <ClCompile Include="Source\ccBlockPoolShortTerm.cpp" />
     <ClCompile Include="Source\ccLFPacketQueue.cpp" />
-    <ClCompile Include="Source\ccLFPointerQueue.cpp" />
     <ClCompile Include="Source\ccMemoryPtr.cpp" />
     <ClCompile Include="Source\ccTreeNode.cpp" />
     <ClCompile Include="Source\ccTreeNodeDestroyer.cpp" />

@@ -31,9 +31,9 @@ public:
   void executeReadI  (Ris::CmdLineCmd* aCmd);
 
   int mCount;
-  CC::LFValueQueue<int>   mIntQueue;
-  CC::LFPacketQueue       mPacketQueue;
-  CC::LFPointerQueue      mPointerQueue;
+  CC::LFValueQueue<int>      mIntQueue;
+  CC::LFPacketQueue          mPacketQueue;
+  CC::LFPointerQueue<void*>  mPointerQueue;
 };
 
 //******************************************************************************

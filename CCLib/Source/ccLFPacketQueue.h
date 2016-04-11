@@ -115,13 +115,19 @@ public:
    // so that they can be located in externale memory.
    LFPacketQueueState* mX;
 
-   // Array of queue elements, storage for the packets.
+   // Array of bytes, storage for the packets.
+   // Size is NumElements + 1.
+   // Index range is 0..NumElements.
    void* mElement;
 
    // Queue array, contains the node index of the queue next node.
+   // Size is NumElements + 1.
+   // Index range is 0..NumElements.
    AtomicLFIndex* mQueueNext;
 
    // Free List array, contains the node index of the free list next node.
+   // Size is NumElements + 1.
+   // Index range is 0..NumElements.
    AtomicLFIndex* mListNext;
 
    // Marks an invalid node.
