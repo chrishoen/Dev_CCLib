@@ -13,7 +13,7 @@ Description:
 #include "cc_functions.h"
 #include "ccDefs.h"
 #include "ccMemoryPtr.h"
-#include "ccLFElementQueue.h"
+#include "ccLFPacketQueue.h"
 
 using namespace std;
 
@@ -27,12 +27,12 @@ namespace CC
 //******************************************************************************
 // Constructor, initialize members for an empty stack of size zero 
 
-int LFElementQueueState::getMemorySize()
+int LFPacketQueueState::getMemorySize()
 {
-   return cc_round_upto16(sizeof(LFElementQueueState));
+   return cc_round_upto16(sizeof(LFPacketQueueState));
 }
 
-LFElementQueueState::LFElementQueueState()
+LFPacketQueueState::LFPacketQueueState()
 {
    // All null
    mNumElements=0;
@@ -41,13 +41,13 @@ LFElementQueueState::LFElementQueueState()
    mElementSize=0;
 }
 
-void LFElementQueueState::initialize(int aNumElements,int aElementSize,bool aConstructorFlag)
+void LFPacketQueueState::initialize(int aNumElements,int aElementSize,bool aConstructorFlag)
 {
    // Do not initialize, if already initialized.
    if (!aConstructorFlag) return;
 
-   // Store.
-   mNumElements       = aNumElements;
+   // Allocate for one extra dummy node.
+   mNumElements       = aNumElements + 1;
    // Allocate for one extra dummy node.
    mQueueNumElements  = aNumElements + 1;
    // Allocate for one extra dummy node.
@@ -61,7 +61,7 @@ void LFElementQueueState::initialize(int aNumElements,int aElementSize,bool aCon
 //***************************************************************************
 // This local class calculates and stores the memory sizes needed by the class.
 
-class LFElementQueue::MemorySize
+class LFPacketQueue::MemorySize
 {
 public:
    // Members.
@@ -74,10 +74,10 @@ public:
    // Calculate and store memory sizes.
    MemorySize::MemorySize(int aNumElements,int aElementSize)
    {
-      mStateSize         = LFElementQueueState::getMemorySize();
+      mStateSize         = LFPacketQueueState::getMemorySize();
       mQueueArraySize    = cc_round_upto16(cNewArrayExtraMemory + (aNumElements + 1)*sizeof(AtomicLFIndex));
       mListArraySize     = cc_round_upto16(cNewArrayExtraMemory + (aNumElements + 1)*sizeof(AtomicLFIndex));
-      mElementArraySize  = cc_round_upto16(cNewArrayExtraMemory + (aNumElements)*aElementSize);
+      mElementArraySize  = cc_round_upto16(cNewArrayExtraMemory + (aNumElements + 1)*aElementSize);
       mMemorySize = mStateSize + mQueueArraySize + mListArraySize + mElementArraySize;
    }
 };
@@ -88,7 +88,7 @@ public:
 // This returns the number of bytes that an instance of this class
 // will need to be allocated for it.
 
-int LFElementQueue::getMemorySize(int aNumElements,int aElementSize)
+int LFPacketQueue::getMemorySize(int aNumElements,int aElementSize)
 {
    MemorySize tMemorySize(aNumElements,aElementSize);
    return tMemorySize.mMemorySize;
@@ -102,7 +102,7 @@ int LFElementQueue::getMemorySize(int aNumElements,int aElementSize)
 //******************************************************************************
 // Constructor.
 
-LFElementQueue::LFElementQueue()
+LFPacketQueue::LFPacketQueue()
 {
    // All null.
    mX = 0;
@@ -115,7 +115,7 @@ LFElementQueue::LFElementQueue()
    mListNext = 0;
 }
 
-LFElementQueue::~LFElementQueue()
+LFPacketQueue::~LFPacketQueue()
 {
    finalize();
 }
@@ -125,12 +125,12 @@ LFElementQueue::~LFElementQueue()
 //***************************************************************************
 // Initialize
 
-void LFElementQueue::initialize(int aNumElements,int aElementSize)
+void LFPacketQueue::initialize(int aNumElements,int aElementSize)
 {
    initialize(aNumElements,aElementSize,true,0);
 }
 
-void LFElementQueue::initialize(int aNumElements,int aElementSize,bool aConstructorFlag, void* aMemory)
+void LFPacketQueue::initialize(int aNumElements,int aElementSize,bool aConstructorFlag, void* aMemory)
 {
    //------------------------------------------------------------------------
    //------------------------------------------------------------------------
@@ -144,7 +144,7 @@ void LFElementQueue::initialize(int aNumElements,int aElementSize,bool aConstruc
    // then allocate memory for it on the system heap.
    if (aMemory == 0)
    {
-      mMemory = malloc(LFElementQueue::getMemorySize(aNumElements,aElementSize));
+      mMemory = malloc(LFPacketQueue::getMemorySize(aNumElements,aElementSize));
       mFreeMemoryFlag = true;
    }
    // If the instance of this class is to reside in external memory
@@ -170,15 +170,15 @@ void LFElementQueue::initialize(int aNumElements,int aElementSize,bool aConstruc
    if (aConstructorFlag)
    {
       // Call the constructor.
-      mX = new(tStateMemory)LFElementQueueState;
+      mX = new(tStateMemory)LFPacketQueueState;
    }
    else
    {
       // The constructor has already been called.
-      mX = (LFElementQueueState*)tStateMemory;
+      mX = (LFPacketQueueState*)tStateMemory;
    }
    // Initialize the state.
-   mX->initialize(aNumElements,aNumElements,aConstructorFlag);
+   mX->initialize(aNumElements,aElementSize,aConstructorFlag);
 
    // Construct the arrays.
    if (aConstructorFlag)
@@ -243,7 +243,7 @@ void LFElementQueue::initialize(int aNumElements,int aElementSize,bool aConstruc
 //***************************************************************************
 //***************************************************************************
 
-void LFElementQueue::finalize()
+void LFPacketQueue::finalize()
 {
    if (mFreeMemoryFlag)
    {
@@ -261,7 +261,7 @@ void LFElementQueue::finalize()
 //***************************************************************************
 // Size
 
-int LFElementQueue::size()
+int LFPacketQueue::size()
 {
    return mX->mListNumElements - mX->mListSize.load(std::memory_order_relaxed);
 }
@@ -269,9 +269,9 @@ int LFElementQueue::size()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Return a pointer to a element, based on element array index
+// Return a pointer to a packet, based on its packet index.
 
-void* LFElementQueue::element(int aIndex)
+void* LFPacketQueue::elementAt(int aIndex)
 {
    return (void*)((char*)mElement + mX->mElementSize*aIndex);
 }
@@ -285,7 +285,7 @@ void* LFElementQueue::element(int aIndex)
 // is to be written is stored in the new node. The new node is then attached
 // to the queue tail node and the tail index is updated.
 
-void* LFElementQueue::startWrite(int* aNodeIndex)
+void* LFPacketQueue::startWrite(int* aNodeIndex)
 {
    // Try to allocate a node from the free list.
    // Exit if it is empty.
@@ -294,10 +294,10 @@ void* LFElementQueue::startWrite(int* aNodeIndex)
 
    // Return a pointer to the node element.
    *aNodeIndex = tNodeIndex;
-   return element(tNodeIndex);
+   return elementAt(tNodeIndex);
 }
 
-void LFElementQueue::finishWrite(int aNodeIndex)
+void LFPacketQueue::finishWrite(int aNodeIndex)
 {
    // Initialize the node.
    int tNodeIndex = aNodeIndex;
@@ -339,7 +339,7 @@ void LFElementQueue::finishWrite(int aNodeIndex)
 // node, pushes the previous head node back onto the free list and updates the
 // head index.
 
-void* LFElementQueue::startRead(int* aNodeIndex)
+void* LFPacketQueue::startRead(int* aNodeIndex)
 {
    void* tElementPtr = 0;
    LFIndex tHead, tTail, tNext;
@@ -360,7 +360,7 @@ void* LFElementQueue::startRead(int* aNodeIndex)
          }
          else
          {
-            tElementPtr = element(tNext.mIndex);
+            tElementPtr = elementAt(tNext.mIndex);
             if (mX->mQueueHead.compare_exchange_strong(tHead, LFIndex(tNext.mIndex, tHead.mCount+1),memory_order_acquire,memory_order_relaxed))break;
          }
       }
@@ -374,7 +374,7 @@ void* LFElementQueue::startRead(int* aNodeIndex)
    return tElementPtr;
 }
 
-void LFElementQueue::finishRead(int aNodeIndex)
+void LFPacketQueue::finishRead(int aNodeIndex)
 {
    listPush(aNodeIndex);
 }
@@ -384,7 +384,7 @@ void LFElementQueue::finishRead(int aNodeIndex)
 //******************************************************************************
 // This detaches the head node.
 
-bool LFElementQueue::listPop(int* aNode)
+bool LFPacketQueue::listPop(int* aNode)
 {
    // Store the head node in a temp.
    // This is the node that will be detached.
@@ -415,7 +415,7 @@ bool LFElementQueue::listPop(int* aNode)
 //***************************************************************************
 // Insert a node into the list before the list head node.
 
-bool LFElementQueue::listPush(int aNode)
+bool LFPacketQueue::listPush(int aNode)
 {
    // Store the head node in a temp.
    LFIndex tHead = mX->mListHead.load(memory_order_relaxed);

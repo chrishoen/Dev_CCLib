@@ -54,7 +54,7 @@
     <ClCompile Include="Source\ccMemoryPtr.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ccLFElementQueue.cpp">
+    <ClCompile Include="Source\ccLFPacketQueue.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -146,7 +146,7 @@
     <ClInclude Include="Source\ccMemoryPtr.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccLFElementQueue.h">
+    <ClInclude Include="Source\ccLFPacketQueue.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

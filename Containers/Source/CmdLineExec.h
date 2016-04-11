@@ -3,6 +3,7 @@
 
 #include "ccLFPointerQueue.h"
 #include "ccLFValueQueue.h"
+#include "ccLFPacketQueue.h"
 #include "ccLFBlockQueue.h"
 #include "risCmdLineExec.h"
 
@@ -27,12 +28,15 @@ public:
   void executeReadP  (Ris::CmdLineCmd* aCmd);
   void executeWriteB (Ris::CmdLineCmd* aCmd);
   void executeReadB  (Ris::CmdLineCmd* aCmd);
+  void executeWriteK (Ris::CmdLineCmd* aCmd);
+  void executeReadK  (Ris::CmdLineCmd* aCmd);
   void executeWriteI (Ris::CmdLineCmd* aCmd);
   void executeReadI  (Ris::CmdLineCmd* aCmd);
 
   int mCount;
-  CC::LFPointerQueue      mPointerQueue;
   CC::LFValueQueue<int>   mIntQueue;
+  CC::LFPacketQueue       mPacketQueue;
+  CC::LFPointerQueue      mPointerQueue;
   CC::LFBlockQueue        mBlockQueue;
 };
 

@@ -1,21 +1,21 @@
-#ifndef _CCLFELEMENTQUEUE_H_
-#define _CCLFELEMENTQUEUE_H_
+#ifndef _CCLFPACKETQUEUE_H_
+#define _CCLFPACKETQUEUE_H_
 /*==============================================================================
 
-Lock Free Element Queue.
+Lock Free Packet Queue.
 
 It is Multiple Writer Single Reader.
 It is lock free, non blocking.
 It is shared memory safe.
 It is zero copy.
 
-This implements a queue of fixed size elements, where the queue provides the
-memory allocation for the elements (memory for the elements is contained
+This implements a queue of fixed size packets, where the queue provides the
+memory allocation for the packets (memory for the packets is contained
 within the queue). The queue is thread safe. It uses atomic compare and
 exchanges to guard against concurrency contentions.
 
 It implements the Michael and Scott algorithm with no backoff. It maintains
-storage for the elements by implementing a free list that uses the Trieber 
+storage for the packets by implementing a free list that uses the Trieber 
 algorithm with no backoff.
 
 ==============================================================================*/
@@ -34,7 +34,7 @@ namespace CC
 // State variables for the queue. These are located in a separate class
 // so that they can be located in external memory.
 
-class LFElementQueueState
+class LFPacketQueueState
 {
 public:
 
@@ -51,7 +51,7 @@ public:
    //***************************************************************************
    // Members.
 
-   // Number of elements allocated.
+   // Number of packets allocated.
    int mNumElements;
    int mQueueNumElements;
    int mListNumElements;
@@ -71,7 +71,7 @@ public:
    // Methods.
 
    // Constructor.
-   LFElementQueueState();
+   LFPacketQueueState();
 
    // Initialize.
    void initialize(int aNumElements,int aElementSize,bool aConstructorFlag);
@@ -80,8 +80,9 @@ public:
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Lock free packet queue class.
 
-class LFElementQueue
+class LFPacketQueue
 {
 public:
 
@@ -112,17 +113,18 @@ public:
 
    // State variables for the queue. These are located in a separate class
    // so that they can be located in externale memory.
-   LFElementQueueState* mX;
+   LFPacketQueueState* mX;
 
-   // Array of values.
+   // Array of queue elements, storage for the packets.
    void* mElement;
 
-   // Queue array.
-   AtomicLFIndex*    mQueueNext;
+   // Queue array, contains the node index of the queue next node.
+   AtomicLFIndex* mQueueNext;
 
-   // Free List array.
-   AtomicLFIndex*    mListNext;
+   // Free List array, contains the node index of the free list next node.
+   AtomicLFIndex* mListNext;
 
+   // Marks an invalid node.
    static const int  cInvalid = 0x80000000;
 
    //***************************************************************************
@@ -131,12 +133,11 @@ public:
    // Methods.
 
    // Constructor
-   LFElementQueue();
-  ~LFElementQueue();
+   LFPacketQueue();
+  ~LFPacketQueue();
 
    // Allocate memory for the queue and free list arrays and initialize the
-   // queue logic variables. Allocate is the number of elements to allocate
-   // memory for. ElementSize is the element size in bytes.
+   // queue variables. 
    void initialize(int aNumElements,int aElementSize);
    void initialize(int aNumElements,int aElementSize,bool aConstructorFlag, void* aMemory);
 
@@ -144,35 +145,37 @@ public:
    void finalize();
 
    // Queue size
-   int  size();
+   int size();
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Queue and Free List Methods. These write or read values from the queue
+   // Queue and Free List Methods. These write or read packets from the queue
    // and pop or push node indices from the free list.
 
-   // These are used to enqueue a element. StartWrite pops a element from the free
-   // list and returns a pointer to it. After writing to the element, FinishWrite
-   // is called to enqueue it. The node index is passed between the two methods.
+   // These are used to enqueue a packet. StartWrite pops a packet from the 
+   // free list and returns a pointer to it. If the queue is full then it 
+   // returns null. After writing to the packet, FinishWrite is called to 
+   // enqueue it at the queue tail. The node index is passed between the two
+   // methods.
 
    void* startWrite  (int* aNodeIndex);
    void  finishWrite (int  aNodeIndex);
 
-   // These are used to dequeue a element. StartRead dequeues a element from the 
-   // queue and returns a pointer to it. After reading from the element,
+   // These are used to dequeue a packet. StartRead dequeues a packet from the 
+   // queue head and returns a pointer to it. After reading from the packet,
    // FinishRead is called to push it onto the free list. The node index is 
    // passed between the two methods.
 
    void* startRead   (int* aNodeIndex);
    void  finishRead  (int  aNodeIndex);
 
-   // These are called by the above write and read methods.
+   // These are called by the above write and read methods. 
    bool  listPop     (int* aNode);
    bool  listPush    (int  aNode);
 
-   // Return a pointer to a element, based on its element index.
-   void* element(int aIndex);
+   // Return a pointer to a packet, based on its packet index.
+   void* elementAt(int aIndex);
 };
 
 //******************************************************************************
@@ -191,52 +194,52 @@ public:
 
    // includes
    #include <new>
-   #include "ccLFElementQueue.h"
+   #include "ccLFPacketQueue.h"
 
-   // Declare element queue
-   CC::LFElementQueue mElementQueue;
-   // Initialize element queue
-   mElementQueue.initialize(100,sizeof(Class1A));
+   // Declare packet queue
+   CC::LFPacketQueue mPacketQueue;
+   // Initialize packet queue
+   mPacketQueue.initialize(100,sizeof(Class1A));
 
    //---------------------------------------------------------------------------
-   // Enqueue a element
+   // Enqueue a packet
 
    // Example counter
    int tWriteCount;
    // This is passed between StartWrite and FinishWrite
    int tWriteIndex;
 
-   // Try to start a write to allocate a element
-   void* tElement = mElementQueue.startWrite(&tWriteIndex);
+   // Try to start a write to allocate a packet
+   void* tElement = mPacketQueue.startWrite(&tWriteIndex);
    // If the queue is not full
    if (tElement)
    {
-      // Create a new object with placement new on the allocated element.
+      // Create a new object with placement new on the allocated packet.
       // Placement new must be used with any classes that use vtables.
       Class1A* tObject = new(tElement) Class1A;
       // Access the new object
       tObject->mCode1 = tWriteCount;
       // Finish the write
-      mElementQueue.finishWrite(tWriteIndex);
+      mPacketQueue.finishWrite(tWriteIndex);
    }
 
    //---------------------------------------------------------------------------
-   // Dequeue a element 
+   // Dequeue a packet 
 
    // Example counter
    int tReadCount;
    // This is passed between StartRead and FinishRead
    int tReadIndex;
 
-   // Try to start a element read, returns a pointer to an object
-   Class1A* tObject = (Class1A*)mElementQueue.startRead(&tReadIndex);
+   // Try to start a packet read, returns a pointer to an object
+   Class1A* tObject = (Class1A*)mPacketQueue.startRead(&tReadIndex);
    // If the queue is not empty
    if (tObject)
    {
       // Access the object
       tReadCount = tObject->mCode1;
       // Finish the read
-      mElementQueue.finishRead(tReadIndex);
+      mPacketQueue.finishRead(tReadIndex);
    }
 #endif
 
