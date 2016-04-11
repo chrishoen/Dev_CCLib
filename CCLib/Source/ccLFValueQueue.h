@@ -90,8 +90,8 @@ public:
       // Do not initialize, if already initialized.
       if (!aConstructorFlag) return;
 
-      // Store.
-      mNumElements       = aNumElements;
+      // Allocate for one extra dummy node.
+      mNumElements       = aNumElements + 1;
       // Allocate for one extra dummy node.
       mQueueNumElements  = aNumElements + 1;
       // Allocate for one extra dummy node.
@@ -129,7 +129,7 @@ public:
          mStateSize         = LFValueQueueState::getMemorySize();
          mQueueArraySize    = cc_round_upto16(cNewArrayExtraMemory + (aNumElements + 1)*sizeof(AtomicLFIndex));
          mListArraySize     = cc_round_upto16(cNewArrayExtraMemory + (aNumElements + 1)*sizeof(AtomicLFIndex));
-         mElementArraySize  = cc_round_upto16(cNewArrayExtraMemory + (aNumElements)*sizeof(Element));
+         mElementArraySize  = cc_round_upto16(cNewArrayExtraMemory + (aNumElements + 1)*sizeof(Element));
          mMemorySize = mStateSize + mQueueArraySize + mListArraySize + mElementArraySize;
       }
    };
