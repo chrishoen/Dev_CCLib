@@ -219,6 +219,37 @@ void Writer::writeType4(int aNumWrites)
 //******************************************************************************
 //******************************************************************************
 
+void Writer::writeType5(int aNumWrites)
+{
+   LFBackoff tDelayA(gGSettings.mDelayA1,gGSettings.mDelayA2);
+
+   for (int i = 0; i < aNumWrites; i++)
+   {
+      bool tPass = false;
+      ++mCount &= 0xFFFF;
+
+      mMarkerWrite.doStart();
+      tPass = gShare.mIntQueue.tryWrite(mCount);
+      mMarkerWrite.doStop();
+
+      tDelayA.delay();
+
+      if (tPass)
+      {
+         mPassCount++;
+         mCheckSum += mCount;
+      }
+      else
+      {
+         mFailCount++;
+      }
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void Writer::startTrial()
 {
    mMarkerWrite.startTrial(gGSettings.mXLimit);
@@ -245,6 +276,7 @@ void Writer::write(int aNumWrites)
    case 2: writeType2 (aNumWrites); break;
    case 3: writeType3 (aNumWrites); break;
    case 4: writeType4 (aNumWrites); break;
+   case 5: writeType5 (aNumWrites); break;
    }
 }
    

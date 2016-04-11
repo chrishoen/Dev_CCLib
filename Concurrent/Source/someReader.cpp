@@ -210,6 +210,38 @@ void Reader::readType4(int aNumReads)
       }
    }
 }
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void Reader::readType5(int aNumReads)
+{
+   LFBackoff tDelayB(gGSettings.mDelayB1,gGSettings.mDelayB2);
+
+   for (int i = 0; i < aNumReads; i++)
+   {
+      bool tPass;
+      int tCount;
+
+      mMarkerRead.doStart();
+      tPass = gShare.mIntQueue.tryRead(&tCount);
+      mMarkerRead.doStop();
+
+      tDelayB.delay();
+
+      if (tPass)
+      {
+         mCount++;
+         mPassCount++;
+         mCheckSum += tCount;
+      }
+      else
+      {
+         mCount++;
+         mFailCount++;
+      }
+   }
+}
 
 //******************************************************************************
 //******************************************************************************
@@ -297,6 +329,25 @@ void Reader::flushType4()
 //******************************************************************************
 //******************************************************************************
 
+void Reader::flushType5()
+{
+   while(true)
+   {
+      int tCount;
+      bool tPass;
+      tPass = gShare.mIntQueue.tryRead(&tCount);
+      if (!tPass) break;
+
+      mCount++;
+      mPassCount++;
+      mCheckSum += tCount;
+   }
+}
+   
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void Reader::startTrial()
 {
    mMarkerRead.startTrial(gGSettings.mXLimit);
@@ -317,6 +368,7 @@ void Reader::read(int aNumReads)
    case 2: readType2(aNumReads); break;
    case 3: readType3(aNumReads); break;
    case 4: readType4(aNumReads); break;
+   case 5: readType5(aNumReads); break;
    }
 }
    
@@ -328,6 +380,7 @@ void Reader::flush()
    case 2: flushType2(); break;
    case 3: flushType3(); break;
    case 4: flushType4(); break;
+   case 5: flushType5(); break;
    }
 }
    

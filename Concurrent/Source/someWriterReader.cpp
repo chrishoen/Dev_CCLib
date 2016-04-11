@@ -178,6 +178,31 @@ void WriterReader::startTrialType4()
 //******************************************************************************
 //******************************************************************************
 
+void WriterReader::startTrialType5()
+{
+   if (mIdent == 0)
+   {
+      int tListSize = gGSettings.mNumElements;
+      for (int i = 0; i < tListSize / 2; i++)
+      {
+         ++mCount &= 0xFFFF;
+
+         gShare.mIntQueue.tryWrite(mCount);
+
+         mWriteCount++;
+         mWritePassCount++;
+         mWriteCheckSum += mCount;
+      }
+   }
+
+   mMarkerWrite.startTrial(gGSettings.mXLimit);
+   mMarkerRead.startTrial(gGSettings.mXLimit);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void WriterReader::startTrial()
 {
    switch (gShare.mType)
@@ -186,6 +211,7 @@ void WriterReader::startTrial()
    case 2: startTrialType2 (); break;
    case 3: startTrialType3 (); break;
    case 4: startTrialType4 (); break;
+   case 5: startTrialType5 (); break;
    }
 }
 //******************************************************************************
@@ -482,6 +508,69 @@ void WriterReader::writereadType4(int aNumWrites)
 //******************************************************************************
 //******************************************************************************
 
+void WriterReader::writereadType5(int aNumWrites)
+{
+   LFBackoff tDelayA(gGSettings.mDelayA1,gGSettings.mDelayA2);
+
+   for (int i = 0; i < aNumWrites; i++)
+   {
+      // Write
+      if (my_randflag(0.5))
+      {
+         ++mCount &= 0xFFFF;
+
+         bool tPass = false;
+
+         mMarkerWrite.doStart();
+         tPass = gShare.mIntQueue.tryWrite(mCount);
+         mMarkerWrite.doStop();
+
+         tDelayA.delay();
+
+         if (tPass)
+         {
+            mWriteCount++;
+            mWritePassCount++;
+            mWriteCheckSum += mCount;
+         }
+         else
+         {
+            mWriteCount++;
+            mWriteFailCount++;
+         }
+
+      }
+      // Read
+      else
+      {
+         bool tPass;
+         int tCount;
+
+         mMarkerRead.doStart();
+         tPass = gShare.mIntQueue.tryRead(&tCount);
+         mMarkerRead.doStop();
+
+         tDelayA.delay();
+
+         if (tPass)
+         {
+            mReadCount++;
+            mReadPassCount++;
+            mReadCheckSum += tCount;
+         }
+         else
+         {
+            mReadCount++;
+            mReadFailCount++;
+         }
+      }
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void WriterReader::writeread(int aNumWrites)
 {
    switch (gShare.mType)
@@ -490,6 +579,7 @@ void WriterReader::writeread(int aNumWrites)
    case 2: writereadType2 (aNumWrites); break;
    case 3: writereadType3 (aNumWrites); break;
    case 4: writereadType4 (aNumWrites); break;
+   case 5: writereadType5 (aNumWrites); break;
    }
 }
    
@@ -578,6 +668,24 @@ void WriterReader::flushType4()
 //******************************************************************************
 //******************************************************************************
 
+void WriterReader::flushType5()
+{
+   while(true)
+   {
+      int tCount;
+      bool tPass;
+      tPass = gShare.mIntQueue.tryRead(&tCount);
+      if (!tPass) break;
+      mReadCount++;
+      mReadPassCount++;
+      mReadCheckSum += tCount;
+   }
+}
+   
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void WriterReader::flush()
 {
    switch (gShare.mType)
@@ -586,6 +694,7 @@ void WriterReader::flush()
    case 2: flushType2 (); break;
    case 3: flushType3 (); break;
    case 4: flushType4 (); break;
+   case 5: flushType5 (); break;
    }
 }
    
