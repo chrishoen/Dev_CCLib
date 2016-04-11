@@ -4,19 +4,19 @@
 
 Lock Free Value Queue Class Template. 
 
+It is multiple writer multiple reader thread safe.
+It is lock free, non blocking.
+It is shared memory safe.
+
 This implements a value queue. The queue is thread safe. It uses a atomic
 interlocked compare and exchanges to guard against concurrency contentions.
 It implements the Michael and Scott algorithm with no backoff.
-This can be used for Multiple Writer Multiple Reader.
 
-This implements a value queue. It uses a atomic interlocked compare and
-exchanges to guard against concurrency contentions.
+It is thread safe for separate multiple writer and multpile reader threads.
 
 It implements the Michael and Scott algorithm with no backoff. It maintains
 storage for the blocks by implementing a free list that uses the Trieber 
 algorithm with no backoff.
-
-This can be used for Multiple Writer Muliple Reader.
 
 ==============================================================================*/
 #include <atomic>

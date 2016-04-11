@@ -4,10 +4,13 @@
 
 Double Thread Value Queue Class Template. 
 
-This implements a value queue. The queue is thread safe for a single writer
-and a single reader.
+It is single writer single reader thread safe.
+It is uses no thread synchronization.
+It is shared memory safe.
 
-This can be used for Single Writer Single Reader.
+This implements a value queue. 
+
+It is thread safe for separate single writer and single reader threads.
 
 ==============================================================================*/
 #include <new>

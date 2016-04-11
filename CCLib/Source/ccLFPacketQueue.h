@@ -4,7 +4,7 @@
 
 Lock Free Packet Queue.
 
-It is Multiple Writer Single Reader.
+It is multiple writer single reader thread safe.
 It is lock free, non blocking.
 It is shared memory safe.
 It is zero copy.
@@ -13,6 +13,8 @@ This implements a queue of fixed size packets, where the queue provides the
 memory allocation for the packets (memory for the packets is contained
 within the queue). The queue is thread safe. It uses atomic compare and
 exchanges to guard against concurrency contentions.
+
+It is thread safe for separate multiple writer and single reader threads.
 
 It implements the Michael and Scott algorithm with no backoff. It maintains
 storage for the packets by implementing a free list that uses the Trieber 
