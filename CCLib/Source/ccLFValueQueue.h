@@ -209,6 +209,27 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
+   // Initialization Methods.
+   //
+   // Initialization parameters:
+   // Number of elements to create. There is one extra dummy element, so that
+   // memory for aNumElements+1 is allocated.
+   //    int aNumElements
+   //
+   // If true then constructors are called for all internal objects created
+   // for the object. If false then the constructors are not called.
+   // This is false if the object resides in shared memory and has
+   // already been created. This is true otherwise.
+   //    bool aConstructorFlag
+   //
+   // Pointer to external memory allocated for the entire object.
+   // If this is null then system heap memory is allocated for the entire
+   // block pool.
+   //    void* aMemory
+   //
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Initialize
 
    void initialize(int aNumElements)

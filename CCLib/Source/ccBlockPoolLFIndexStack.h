@@ -123,8 +123,6 @@ public:
    //***************************************************************************
    // Members
 
-   static const int  cInvalid = 0x80000000;
-
    // If this flag is false then the memory for this object was created
    // externally. If it is true then the memory was allocated at 
    // initialization and must be freed at finalization.
@@ -141,6 +139,14 @@ public:
    // State variables for the stack. These are located in a separate class
    // so that they can be located in externale memory.
    BlockPoolLFIndexStackState* mX;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // More
+
+   static const int  cInvalid = 0x80000000;
+
 };
 
 //******************************************************************************
