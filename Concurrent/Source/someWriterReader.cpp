@@ -72,7 +72,7 @@ void WriterReader::startTrialType1()
 {
    if (mIdent == 0)
    {
-      int tListSize = gGSettings.mAllocate;
+      int tListSize = gGSettings.mNumElements;
       for (int i = 0; i < tListSize / 2; i++)
       {
          ++mCount &= 0xFFFF;
@@ -96,7 +96,7 @@ void WriterReader::startTrialType2()
 {
    if (mIdent == 0)
    {
-      int tListSize = gGSettings.mAllocate;
+      int tListSize = gGSettings.mNumElements;
       for (int i = 0; i < tListSize / 2; i++)
       {
          ++mCount &= 0xFFFF;
@@ -123,7 +123,7 @@ void WriterReader::startTrialType3()
 {
    if (mIdent == 0)
    {
-      int tListSize = gGSettings.mAllocate;
+      int tListSize = gGSettings.mNumElements;
       for (int i = 0; i < tListSize / 2; i++)
       {
          ++mCount &= 0xFFFF;
@@ -155,7 +155,7 @@ void WriterReader::startTrialType4()
 {
    if (mIdent == 0)
    {
-      int tListSize = gGSettings.mAllocate;
+      int tListSize = gGSettings.mNumElements;
       for (int i = 0; i < tListSize / 2; i++)
       {
          ++mCount &= 0xFFFF;

@@ -27,7 +27,7 @@ void main_memory_initialize()
    tBlockPoolParms.reset();
    tBlockPoolParms.mPoolIndex     = Some::cBlockPoolIndex_MyBlockA;
    tBlockPoolParms.mBlockPoolType = CC::cBlockPoolType_FreeList;
-   tBlockPoolParms.mNumBlocks     = gGSettings.mAllocate;
+   tBlockPoolParms.mNumBlocks     = gGSettings.mNumElements;
    tBlockPoolParms.mBlockSize     = sizeof(Some::MyBlockA);
    tBlockPoolParms.mNoThrowFlag   = true;
    CC::createBlockPool(&tBlockPoolParms);

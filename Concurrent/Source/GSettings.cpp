@@ -25,7 +25,7 @@ GSettings::GSettings()
    mNumWriters  =    1;
    mType        =    1;
    mTest        =    1;
-   mAllocate    = 1000;
+   mNumElements = 1000;
    mTerminate   = 0;
 
    mWriteLower  =  900;
@@ -57,7 +57,7 @@ void GSettings::show()
    printf("GSettings   Type          %11d\n",    mType);
    printf("GSettings   Test          %11d\n",    mTest);
    printf("GSettings   NumWriters    %11d\n",    mNumWriters);
-   printf("GSettings   Allocate      %11d\n",    mAllocate);
+   printf("GSettings   NumElements   %11d\n",    mNumElements);
    printf("GSettings   Terminate     %11d\n",    mTerminate);
    printf("GSettings   WriteLower    %11d\n",    mWriteLower);
    printf("GSettings   WriteUpper    %11d\n",    mWriteUpper);
@@ -86,9 +86,8 @@ void GSettings::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("NumWriters"))   mNumWriters  = aCmd->argInt (1);
    if(aCmd->isCmd("Type"))         mType        = aCmd->argInt (1);
    if(aCmd->isCmd("Test"))         mTest        = aCmd->argInt (1);
-   if(aCmd->isCmd("Allocate"))     mAllocate    = aCmd->argInt (1);
+   if(aCmd->isCmd("NumElements"))  mNumElements = aCmd->argInt (1);
    if(aCmd->isCmd("Terminate"))    mTerminate   = aCmd->argInt (1);
-   if(aCmd->isCmd("Allocate"))     mAllocate    = aCmd->argInt (1);
    if(aCmd->isCmd("WriteLower"))   mWriteLower  = aCmd->argInt (1);
    if(aCmd->isCmd("WriteUpper"))   mWriteUpper  = aCmd->argInt (1);
    if(aCmd->isCmd("ReadLower"))    mReadLower   = aCmd->argInt (1);

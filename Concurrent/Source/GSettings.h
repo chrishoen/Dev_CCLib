@@ -23,7 +23,7 @@ public:
    int     mType;
    int     mTest;
 
-   int     mAllocate;
+   int     mNumElements;
    int     mTerminate;
 
    int     mWriteLower;

@@ -40,16 +40,19 @@ void Share::initialize()
       switch (mType)
       {
       case 1:
-         LFIntQueue::initialize(gGSettings.mAllocate);
+         LFIntQueue::initialize(gGSettings.mNumElements);
          break;
       case 2:
-         mPointerQueue.initialize(gGSettings.mAllocate);
+         mPointerQueue.initialize(gGSettings.mNumElements);
          break;
       case 3:
-         mPacketQueue.initialize(gGSettings.mAllocate, sizeof(Class1A));
+         mPacketQueue.initialize(gGSettings.mNumElements, sizeof(Class1A));
          break;
       case 4:
-         mValueQueue.initialize(gGSettings.mAllocate);
+         mValueQueue.initialize(gGSettings.mNumElements);
+         break;
+      case 5:
+         mIntQueue.initialize(gGSettings.mNumElements);
          break;
       }
       break;
