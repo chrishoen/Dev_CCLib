@@ -13,6 +13,7 @@
 #include "someWriterReader.h"
 #include "someTester.h"
 #include "ccLFValueQueue.h"
+#include "ccLFPacketQueue.h"
 #include "ccLFPointerQueue.h"
 #include "ccLFBlockQueue.h"
 
@@ -74,8 +75,8 @@ public:
    double              mTesterMeanTime2;
 
    CC::LFPointerQueue       mPointerQueue;
-   CC::LFBlockQueue         mBlockQueue;
    CC::LFValueQueue<void*>  mValueQueue;
+   CC::LFPacketQueue        mBlockQueue;
 
 };
 
