@@ -276,7 +276,7 @@ public:
          mListNext = new(tListArrayMemory)AtomicLFIndex[mX->mListNumElements];
 
          // Call the constructor.
-         mElement = new(tElementArrayMemory)Element[mX->mQueueNumElements];
+         mElement = new(tElementArrayMemory)Element[mX->mNumElements];
       }
       else
       {

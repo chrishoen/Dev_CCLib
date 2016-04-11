@@ -140,6 +140,9 @@
     <ClInclude Include="Source\ccLFPacketQueue.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="Source\ccDTValueQueue22.h">
+      <Filter>Source</Filter>
+    </ClInclude>
     <ClInclude Include="Source\ccDTValueQueue.h">
       <Filter>Source</Filter>
     </ClInclude>

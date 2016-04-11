@@ -1,26 +1,86 @@
-#ifndef _CC_DTVALUEQUEUE_H_
-#define _CC_DTVALUEQUEUE_H_
-
+#ifndef _CCDTVALUEQUEUE_H_
+#define _CCDTVALUEQUEUE_H_
 /*==============================================================================
 
-Template for queue of values
+Double Thread Value Queue Class Template. 
+
+This implements a value queue. The queue is thread safe for a single writer
+and a single reader.
+
+This can be used for Single Writer Single Reader.
 
 ==============================================================================*/
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
+#include <new>
+#include "ccDefs.h"
+#include "cc_functions.h"
+#include "ccMemoryPtr.h"
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
 namespace CC
 {
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// State variables for the stack. These are located in a separate class
+// so that they can be located in external memory.
+
+class DTValueQueueState
+{
+public:
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // This returns the number of bytes that an instance of this class
+   // will need to be allocated for it.
+
+   static int getMemorySize()
+   {
+      return cc_round_upto16(sizeof(DTValueQueueState));
+   }
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   // Number of elements allocated.
+   int mNumElements;
+   int mPutIndex;
+   int mGetIndex;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Constructor.
+   DTValueQueueState()
+   {
+      // All null
+      mNumElements = 0;
+      mPutIndex = 0;
+      mGetIndex = 0;
+   }
+
+   // Initialize.
+   void initialize(int aNumElements,bool aConstructorFlag)
+   {
+      // Do not initialize, if already initialized.
+      if (!aConstructorFlag) return;
+
+      // Allocate for one extra dummy node.
+      mNumElements = aNumElements + 1;
+      mPutIndex = 0;
+      mGetIndex = 0;
+   }
+};
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This is a class template for a queue of values, as opposed to blocks.
 
 template <class Element>
 class DTValueQueue
@@ -28,61 +88,188 @@ class DTValueQueue
 public:
 
    //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // This local class calculates and stores the memory sizes needed by the class.
+
+   class MemorySize
+   {
+   public:
+      // Members.
+      int mStateSize;
+      int mElementArraySize;
+      int mMemorySize;
+
+      // Calculate and store memory sizes.
+      MemorySize::MemorySize(int aNumElements)
+      {
+         mStateSize         = DTValueQueueState::getMemorySize();
+         mElementArraySize  = cc_round_upto16(cNewArrayExtraMemory + (aNumElements + 1)*sizeof(Element));
+         mMemorySize = mStateSize + mElementArraySize;
+      }
+   };
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // This returns the number of bytes that an instance of this class
+   // will need to be allocated for it.
+
+   static int getMemorySize(int aNumElements)
+   {
+      MemorySize tMemorySize(aNumElements);
+      return tMemorySize.mMemorySize;
+   }
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Members
 
-   int mNumElements;
-   int mPutIndex;
-   int mGetIndex;
+   // If this flag is false then the memory for this object was created
+   // externally. If it is true then the memory was allocated at 
+   // initialization and must be freed at finalization.
+   bool mFreeMemoryFlag;
 
+   // Pointer to memory for which the queue resides. This is either created
+   // externally and passed as an initialization parameter or it is created
+   // on the system heap at initialization.
+   void* mMemory;
+
+   // State variables for the queue. These are located in a separate class
+   // so that they can be located in externale memory.
+   DTValueQueueState* mX;
+
+   // Array of values, storage for the values.
+   // Size is NumElements + 1.
+   // Index range is 0..NumElements.
    Element* mElement;
-   
+
    //***************************************************************************
-   // Constructor, initialize members for an empty queue of size zero 
+   //***************************************************************************
+   //***************************************************************************
+   // Constructor
 
    DTValueQueue()
    {
+      // All null.
+      mX = 0;
+      mFreeMemoryFlag = false;
+      mMemory = 0;
+
       // All null
-      mNumElements = 0;
-      mPutIndex = 0;
-      mGetIndex = 0;
-      mElement  = 0;
+      mElement = 0;
+   }
+
+   ~DTValueQueue()
+   {
+      finalize();
    }
 
    //***************************************************************************
-   // Destructor, deallocate the queue array
+   //***************************************************************************
+   //***************************************************************************
+   // Initialize
 
-  ~DTValueQueue()
+   void initialize(int aNumElements)
    {
-     // Deallocate the array
-     if (mElement) delete mElement;
+      initialize(aNumElements,true,0);
+   }
+
+   void initialize(int aNumElements,bool aConstructorFlag, void* aMemory)
+   {
+      //------------------------------------------------------------------------
+      //------------------------------------------------------------------------
+      //------------------------------------------------------------------------
+      // Initialize memory.
+
+      // Deallocate memory, if any exists.
+      finalize();
+
+      // If the instance of this class is not to reside in external memory
+      // then allocate memory for it on the system heap.
+      if (aMemory == 0)
+      {
+         mMemory = malloc(DTValueQueue<Element>::getMemorySize(aNumElements));
+         mFreeMemoryFlag = true;
+      }
+      // If the instance of this class is to reside in external memory
+      // then use the memory pointer that was passed in.
+      else
+      {
+         mMemory = aMemory;
+         mFreeMemoryFlag = false;
+      }
+
+      // Calculate memory sizes.
+      MemorySize tMemorySize(aNumElements);
+
+      // Calculate memory addresses.
+      MemoryPtr tMemoryPtr(mMemory);
+
+      char* tStateMemory        = tMemoryPtr.cfetch_add(tMemorySize.mStateSize);
+      char* tElementArrayMemory = tMemoryPtr.cfetch_add(tMemorySize.mElementArraySize);
+
+      // Construct the state.
+      if (aConstructorFlag)
+      {
+         // Call the constructor.
+         mX = new(tStateMemory)DTValueQueueState;
+      }
+      else
+      {
+         // The constructor has already been called.
+         mX = (DTValueQueueState*)tStateMemory;
+      }
+      // Initialize the state.
+      mX->initialize(aNumElements,aConstructorFlag);
+
+      // Construct the arrays.
+      if (aConstructorFlag)
+      {
+         // Call the constructor.
+         mElement = new(tElementArrayMemory)Element[mX->mNumElements];
+      }
+      else
+      {
+         // The constructor has already been called.
+         mElement = (Element*)tElementArrayMemory;
+      }
+
+      //------------------------------------------------------------------------
+      //------------------------------------------------------------------------
+      //------------------------------------------------------------------------
+      // Initialize variables.
    }
 
    //***************************************************************************
-   // This initializes the queue to a fixed size. It initializes member
-   // variables and allocates heap storage for the queue array. The queue has
-   // a specified maximum number of elements and it allocates memory for the
-   // maximum number of elements plus one, there is an extra element allocated.
+   //***************************************************************************
+   //***************************************************************************
 
-   void initialize(int aNumOfElements)
+   void finalize()
    {
-      // Initialize variables
-      mPutIndex = 0;
-      mGetIndex = 0;
-      // Allocate memory for the array to have an extra element
-      mNumElements = aNumOfElements + 1;
-
-      // Allocate memory for the array
-      mElement = new Element[mNumElements];
+      if (mFreeMemoryFlag)
+      {
+         if (mMemory)
+         {
+            free(mMemory);
+         }
+      }
+      mMemory = 0;
+      mFreeMemoryFlag = false;
    }
 
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    //***************************************************************************
    // This is the current size of the queue. It is the difference between the 
    // mPutIndex and the mGetIndex.
 
    int size()
    {
-      int tSize = mPutIndex - mGetIndex;
-      if (tSize < 0) tSize = mNumElements + tSize;
+      int tSize = mX->mPutIndex - mX->mGetIndex;
+      if (tSize < 0) tSize = mX->mNumElements + tSize;
       return tSize;
    }
 
@@ -105,17 +292,17 @@ public:
    bool tryWrite (Element aElement)
    {
       // Test if the queue is full.
-      int tSize = mPutIndex - mGetIndex;
-      if (tSize < 0) tSize = mNumElements + tSize;
-      if (tSize > mNumElements - 2) return false;
+      int tSize = mX->mPutIndex - mX->mGetIndex;
+      if (tSize < 0) tSize = mX->mNumElements + tSize;
+      if (tSize > mX->mNumElements - 2) return false;
 
       // Local put index
-      int tPutIndex = mPutIndex;
+      int tPutIndex = mX->mPutIndex;
       // Copy the source element into the element at the queue put index
       mElement[tPutIndex] = aElement;
       // Advance the put index
-      if(++tPutIndex == mNumElements) tPutIndex = 0;
-      mPutIndex = tPutIndex;
+      if(++tPutIndex == mX->mNumElements) tPutIndex = 0;
+      mX->mPutIndex = tPutIndex;
       // Done
       return true;
    }
@@ -134,23 +321,27 @@ public:
    bool tryRead(Element* aValue)
    {
       // Test if the queue is empty.
-      int tSize = mPutIndex - mGetIndex;
-      if (tSize < 0) tSize = mNumElements + tSize;
+      int tSize = mX->mPutIndex - mX->mGetIndex;
+      if (tSize < 0) tSize = mX->mNumElements + tSize;
       if (tSize == 0) return false;
 
       // Local index
-      int tGetIndex = mGetIndex;
+      int tGetIndex = mX->mGetIndex;
       // Copy the queue array element at the get index
       *aValue = mElement[tGetIndex];
       // Advance the get index
-      if(++tGetIndex == mNumElements) tGetIndex = 0;
-      mGetIndex = tGetIndex;
+      if(++tGetIndex == mX->mNumElements) tGetIndex = 0;
+      mX->mGetIndex = tGetIndex;
 
       // Done.
       return true;
    }
 };
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 }//namespace
 #endif
-   //***************************************************************************
+
