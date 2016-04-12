@@ -127,13 +127,13 @@ public:
    void finalize();
 
    // Return a pointer to a block box, based on its block index.
-   char* blockBox(int aIndex);
+   char* getBlockBoxPtr(int aIndex);
 
    // Return a pointer to a block header, based on its block index.
-   BlockHeader* header(int aIndex);
+   BlockHeader* getHeaderPtr(int aIndex);
 
    // Return a pointer to a block body, based on its block index.
-   char* block(int aIndex);
+   char* getBlockPtr(int aIndex);
 
    //***************************************************************************
    //***************************************************************************

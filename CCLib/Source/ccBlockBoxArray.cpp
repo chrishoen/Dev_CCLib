@@ -184,7 +184,7 @@ void BlockBoxArray::initialize(BlockPoolParms* aParms,void* aMemory)
       for (int i = 0; i < mX->mNumBlocks; i++)
       {
          // Header pointer.
-         BlockHeader* tHeader = header(i);
+         BlockHeader* tHeader = getHeaderPtr(i);
          // Call Header constructor.
          new(tHeader)BlockHeader;
          // Set header variables.
@@ -220,7 +220,7 @@ void BlockBoxArray::finalize()
 //******************************************************************************
 // Return a pointer to a block, based on block array index
 
-char* BlockBoxArray::blockBox(int aIndex)
+char* BlockBoxArray::getBlockBoxPtr(int aIndex)
 {
    char*  tBlockBox = &mArray[mX->mBlockBoxSize*aIndex];
    return tBlockBox;
@@ -231,7 +231,7 @@ char* BlockBoxArray::blockBox(int aIndex)
 //******************************************************************************
 // Return a pointer to a header, based on block array index
 
-BlockHeader* BlockBoxArray::header(int aIndex)
+BlockHeader* BlockBoxArray::getHeaderPtr(int aIndex)
 {
    char*  tBlockBox = &mArray[mX->mBlockBoxSize*aIndex];
    BlockHeader* tHeader = (BlockHeader*)tBlockBox;
@@ -243,7 +243,7 @@ BlockHeader* BlockBoxArray::header(int aIndex)
 //******************************************************************************
 // Return a pointer to a body, based on block array index
 
-char* BlockBoxArray::block(int aIndex)
+char* BlockBoxArray::getBlockPtr(int aIndex)
 {
    char*  tBlockBox = &mArray[mX->mBlockBoxSize*aIndex];
    char*  tBlock = tBlockBox + cBlockHeaderSize;

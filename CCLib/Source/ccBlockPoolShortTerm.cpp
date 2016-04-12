@@ -232,7 +232,7 @@ bool BlockPoolShortTerm::allocate(void** aBlockPointer,BlockHandle* aBlockHandle
    // Return a pointer to the block at that index.
    if (aBlockPointer)
    {
-      *aBlockPointer = mBlocks.block(tBlockIndex);
+      *aBlockPointer = mBlocks.getBlockPtr(tBlockIndex);
    }
 
    // Return the memory handle for the block.
@@ -264,7 +264,7 @@ void BlockPoolShortTerm::deallocate(BlockHandle aBlockHandle)
 void* BlockPoolShortTerm::getBlockPtr(BlockHandle aBlockHandle)
 {
    // Return the address of the block within the block array.
-   return mBlocks.block(aBlockHandle.mBlockIndex);
+   return mBlocks.getBlockPtr(aBlockHandle.mBlockIndex);
 }
 
 }//namespace
