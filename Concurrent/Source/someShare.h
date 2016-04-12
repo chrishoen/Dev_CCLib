@@ -39,6 +39,8 @@ public:
    void show3();
    void show();
 
+   void putDummy(void* aPointer);
+
    int mMode;
    int mType;
    int mTest;

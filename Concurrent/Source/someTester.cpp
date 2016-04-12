@@ -56,7 +56,6 @@ void Tester::test1(int aNumIter)
 {
    LFBackoff tDelayA(gGSettings.mDelayA1,gGSettings.mDelayA2);
    LFBackoff tDelayB(gGSettings.mDelayB1,gGSettings.mDelayB2);
-// tDelayA.setDelay(100,100);
 
    for (int i = 0; i < aNumIter; i++)
    {

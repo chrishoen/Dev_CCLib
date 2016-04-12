@@ -57,6 +57,14 @@ void Share::initialize()
       case 6:
          mSRWIntQueue.initialize(gGSettings.mNumElements);
          break;
+      case 11:
+         break;
+      case 12:
+         break;
+      case 21:
+      case 22:
+         mValueQueue.initialize(gGSettings.mNumElements);
+         break;
       }
       break;
    }
@@ -249,5 +257,11 @@ void Share::show()
    case 3: show3  (); break;
    }
 }
-   
+
+static int gDummyCount=0;
+void Share::putDummy(void* aPointer)
+{
+   gDummyCount++;
+}
+
 }//namespace
