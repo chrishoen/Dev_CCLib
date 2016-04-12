@@ -155,7 +155,8 @@ public:
    BlockBoxArrayState* mX;
 
    // Pointer to allocated memory for the block box array.
-   char* mArray;
+   // This is an array of bytes of size NumBlocks*BlockBoxSize.
+   char* mBlockBoxArray;
 
    //***************************************************************************
    //***************************************************************************

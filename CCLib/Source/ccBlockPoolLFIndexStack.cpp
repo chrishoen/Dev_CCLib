@@ -36,8 +36,7 @@ int BlockPoolLFIndexStackState::getMemorySize()
 BlockPoolLFIndexStackState::BlockPoolLFIndexStackState()
 {
    // All null.
-   mNumElements     = 0;
-   mListNumElements = 0;
+   mFreeListNumNodes = 0;
 }
 
 void BlockPoolLFIndexStackState::initialize(BlockPoolParms* aParms)
@@ -45,10 +44,8 @@ void BlockPoolLFIndexStackState::initialize(BlockPoolParms* aParms)
    // Do not initialize, if already initialized.
    if (!aParms->mConstructorFlag) return;
 
-   // Store.
-   mNumElements     = aParms->mNumBlocks;
    // Allocate for one extra dummy node.
-   mListNumElements = aParms->mNumBlocks + 1;
+   mFreeListNumNodes = aParms->mNumBlocks + 1;
 }
 
 //******************************************************************************
@@ -61,15 +58,15 @@ class BlockPoolLFIndexStack::MemorySize
 public:
    // Members.
    int mStateSize;
-   int mArraySize;
+   int mFreeListNextSize;
    int mMemorySize;
 
    // Calculate and store memory sizes.
    MemorySize::MemorySize(BlockPoolParms* aParms)
    {
-      mStateSize  = BlockPoolLFIndexStackState::getMemorySize();
-      mArraySize  = cc_round_upto16(cNewArrayExtraMemory + (aParms->mNumBlocks + 1)*sizeof(AtomicLFIndex));
-      mMemorySize = mStateSize + mArraySize;
+      mStateSize         = BlockPoolLFIndexStackState::getMemorySize();
+      mFreeListNextSize  = cc_round_upto16(cNewArrayExtraMemory + (aParms->mNumBlocks + 1)*sizeof(AtomicLFIndex));
+      mMemorySize = mStateSize + mFreeListNextSize;
    }
 };
 
@@ -96,7 +93,7 @@ BlockPoolLFIndexStack::BlockPoolLFIndexStack()
 {
    // All null.
    mX = 0;
-   mListNext = 0;
+   mFreeListNext = 0;
    mFreeMemoryFlag = false;
    mMemory = 0;
 }
@@ -142,8 +139,8 @@ void BlockPoolLFIndexStack::initialize(BlockPoolParms* aParms,void* aMemory)
    // Calculate memory addresses.
    MemoryPtr tMemoryPtr(mMemory);
 
-   char* tStateMemory = tMemoryPtr.cfetch_add(tMemorySize.mStateSize);
-   char* tArrayMemory = tMemoryPtr.cfetch_add(tMemorySize.mArraySize);
+   char* tStateMemory        = tMemoryPtr.cfetch_add(tMemorySize.mStateSize);
+   char* tFreeListNextMemory = tMemoryPtr.cfetch_add(tMemorySize.mFreeListNextSize);
 
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
@@ -168,12 +165,12 @@ void BlockPoolLFIndexStack::initialize(BlockPoolParms* aParms,void* aMemory)
    if (aParms->mConstructorFlag)
    {
       // Call the constructor.
-      mListNext = new(tArrayMemory)AtomicLFIndex[mX->mListNumElements];
+      mFreeListNext = new(tFreeListNextMemory)AtomicLFIndex[mX->mFreeListNumNodes];
    }
    else
    {
       // The constructor has already been called.
-      mListNext = (AtomicLFIndex*)tArrayMemory;
+      mFreeListNext = (AtomicLFIndex*)tFreeListNextMemory;
    }
 
    //---------------------------------------------------------------------------
@@ -185,17 +182,17 @@ void BlockPoolLFIndexStack::initialize(BlockPoolParms* aParms,void* aMemory)
    if (aParms->mConstructorFlag)
    {
       // Initialize linked list array. Each node next node is the one after it.
-      for (int i = 0; i < mX->mListNumElements - 1; i++)
+      for (int i = 0; i < mX->mFreeListNumNodes - 1; i++)
       {
-         mListNext[i].store(LFIndex(i + 1, 0));
+         mFreeListNext[i].store(LFIndex(i + 1, 0));
       }
       // The last node has no next node.
-      mListNext[mX->mListNumElements - 1].store(LFIndex(cInvalid, 0));
+      mFreeListNext[mX->mFreeListNumNodes - 1].store(LFIndex(cInvalid, 0));
 
       // List head points to the first node.
-      mX->mListHead.store(LFIndex(0, 0));
+      mX->mFreeListHead.store(LFIndex(0, 0));
       // List size is initially a full stack.
-      mX->mListSize = mX->mListNumElements;
+      mX->mFreeListSize = mX->mFreeListNumNodes;
 
       // Pop the dummy node.
       int tDummyNode;
@@ -228,7 +225,7 @@ void BlockPoolLFIndexStack::finalize()
 
 int BlockPoolLFIndexStack::size()
 { 
-   return mX->mListSize.load(memory_order_relaxed);
+   return mX->mFreeListSize.load(memory_order_relaxed);
 }
 
 //******************************************************************************
@@ -241,7 +238,7 @@ bool BlockPoolLFIndexStack::pop(int* aNodeIndex)
 {
    // Store the head node in a temp.
    // This is the node that will be detached.
-   LFIndex tHead = mX->mListHead.load(memory_order_relaxed);
+   LFIndex tHead = mX->mFreeListHead.load(memory_order_relaxed);
 
    int tLoopCount=0;
    while (true)
@@ -250,11 +247,11 @@ bool BlockPoolLFIndexStack::pop(int* aNodeIndex)
       if (tHead.mIndex == cInvalid) return false;
 
       // Set the head node to be the node that is after the head node.
-      if (mX->mListHead.compare_exchange_weak(tHead, LFIndex(mListNext[tHead.mIndex].load(memory_order_relaxed).mIndex,tHead.mCount+1),memory_order_acquire,memory_order_relaxed)) break;
+      if (mX->mFreeListHead.compare_exchange_weak(tHead, LFIndex(mFreeListNext[tHead.mIndex].load(memory_order_relaxed).mIndex,tHead.mCount+1),memory_order_acquire,memory_order_relaxed)) break;
 
       if (++tLoopCount==10000) throw 103;
    }
-   mX->mListSize.fetch_sub(1,memory_order_relaxed);
+   mX->mFreeListSize.fetch_sub(1,memory_order_relaxed);
 
    // Return the detached original head node.
    *aNodeIndex = tHead.mIndex - 1;
@@ -272,22 +269,22 @@ bool BlockPoolLFIndexStack::push(int aNodeIndex)
    int tNodeIndex = aNodeIndex + 1;
 
    // Store the head node in a temp.
-   LFIndex tHead = mX->mListHead.load(memory_order_relaxed);
+   LFIndex tHead = mX->mFreeListHead.load(memory_order_relaxed);
 
    int tLoopCount=0;
    while (true)
    {
       // Attach the head node to the pushed node.
-      mListNext[tNodeIndex].store(tHead,memory_order_relaxed);
+      mFreeListNext[tNodeIndex].store(tHead,memory_order_relaxed);
 
       // The pushed node is the new head node.
-      atomic<int>* tListHeadIndexPtr = (std::atomic<int>*)&mX->mListHead;
+      atomic<int>* tListHeadIndexPtr = (std::atomic<int>*)&mX->mFreeListHead;
       if ((*tListHeadIndexPtr).compare_exchange_weak(tHead.mIndex, tNodeIndex,memory_order_release,memory_order_relaxed)) break;
       if (++tLoopCount == 10000) throw 103;
    }
 
    // Done.
-   mX->mListSize.fetch_add(1,memory_order_relaxed);
+   mX->mFreeListSize.fetch_add(1,memory_order_relaxed);
    return true;
 }
 

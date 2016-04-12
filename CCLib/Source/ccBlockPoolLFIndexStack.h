@@ -44,15 +44,12 @@ public:
    //***************************************************************************
    // Members.
 
-   // Number of values allocated
-   int mNumElements;
-
    // Number of free list nodes allocated
-   int mListNumElements;
+   int mFreeListNumNodes;
 
    // Free List array and variables
-   AtomicLFIndex     mListHead;
-   std::atomic<int>  mListSize;
+   AtomicLFIndex     mFreeListHead;
+   std::atomic<int>  mFreeListSize;
    
    //***************************************************************************
    //***************************************************************************
@@ -134,7 +131,7 @@ public:
    void* mMemory;
 
    // Free List array for treiber stack.
-   AtomicLFIndex*    mListNext;
+   AtomicLFIndex*    mFreeListNext;
    
    // State variables for the stack. These are located in a separate class
    // so that they can be located in externale memory.
