@@ -45,9 +45,6 @@
     <ClCompile Include="Source\ccBlockPoolShortTerm.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ccMemoryPtr.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\ccLFPacketQueue.cpp">
       <Filter>Source</Filter>
     </ClCompile>
