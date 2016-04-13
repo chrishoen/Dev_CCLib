@@ -58,8 +58,6 @@ MyBlockA::MyBlockA()
    mCode2=102;
    mCode3=103;
    mCode4=104;
-
-   mBlockHandle.set(this);
 }
 
 //****************************************************************************
@@ -74,8 +72,6 @@ MyBlockA::MyBlockA(int aIdentifier)
    mCode2=102;
    mCode3=103;
    mCode4=104;
-
-   mBlockHandle.set(this);
 }
 
 //****************************************************************************
