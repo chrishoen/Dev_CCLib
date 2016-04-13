@@ -64,6 +64,8 @@ void BlockPoolParms::makeConsistent()
    {
       mNumBlocks = cBlockPool_MaxNumBlocks;
    }
+
+   mBlockSize    = cc_round_upto16(mBlockSize);
 }
 
 } //namespace

@@ -58,13 +58,34 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGoT1(Ris::CmdLineCmd* aCmd)
+{
+   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockA);
+
+   Some::MyBlockA* tX1 = new Some::MyBlockA(101);
+   Prn::print(0, "tX1.mBlockHandle %d %d", tX1->mBlockHandle.mPoolIndex,tX1->mBlockHandle.mBlockIndex);
+
+   Some::MyBlockA* tX2 = (Some::MyBlockA*)CC::getBlockPoolBlockPtr(tX1->mBlockHandle);
+   Prn::print(0, "tX2.mBlockHandle %d %d", tX2->mBlockHandle.mPoolIndex,tX2->mBlockHandle.mBlockIndex);
+}
+
+//******************************************************************************
 
 void CmdLineExec::executeGoA1(Ris::CmdLineCmd* aCmd)
 {
+   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockA);
+
    Prn::print(0, "GoA1 %d", sizeof(Some::MyBlockA));
    Some::MyBlockA* tX1 = new Some::MyBlockA(101);
+   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockA);
    tX1->method1();
+
    delete tX1;
+
+   CC::showBlockPool(Some::cBlockPoolIndex_MyBlockA);
 }
 
 //******************************************************************************
@@ -166,7 +187,7 @@ void CmdLineExec::executeGoR2(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeGoT1(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeGoT2(Ris::CmdLineCmd* aCmd)
 {
    Some::MyBlockA* tX1 = new Some::MyBlockA(101);
    Some::MyBlockA* tX2 = new Some::MyBlockA(101);
@@ -174,14 +195,7 @@ void CmdLineExec::executeGoT1(Ris::CmdLineCmd* aCmd)
    delete tX1;
    delete tX2;
    delete tX3;
-}
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void CmdLineExec::executeGoT2(Ris::CmdLineCmd* aCmd)
-{
    CC::testBlockPool(Some::cBlockPoolIndex_MyBlockA);
 }
 

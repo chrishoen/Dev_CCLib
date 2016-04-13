@@ -29,7 +29,7 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Constructor, initialize members for an empty stack of size zero 
+// Constructor
 
 int BlockPoolFasterState::getMemorySize()
 {
@@ -44,6 +44,7 @@ BlockPoolFasterState::BlockPoolFasterState()
    mBlockBoxSize=0;
    mPoolIndex=0;
    mFreeListNumNodes = 0;
+   mFreeListSize = 0;
 }
 
 void BlockPoolFasterState::initialize(BlockPoolParms* aParms)
@@ -54,11 +55,12 @@ void BlockPoolFasterState::initialize(BlockPoolParms* aParms)
    // Store members.
    mNumBlocks    = aParms->mNumBlocks;
    mBlockSize    = cc_round_upto16(aParms->mBlockSize);
-   mBlockBoxSize = mBlockSize + cBlockHeaderSize;;
+   mBlockBoxSize = cBlockHeaderSize + mBlockSize;
    mPoolIndex    = aParms->mPoolIndex;
 
    // Allocate for one extra dummy node.
    mFreeListNumNodes = aParms->mNumBlocks + 1;
+   mFreeListSize = 0;
 }
 
 //******************************************************************************
@@ -89,7 +91,7 @@ public:
       mBlockBoxArraySize = cc_round_upto16(cNewArrayExtraMemory + aParms->mNumBlocks*mBlockBoxSize);
       mFreeListNextSize  = cc_round_upto16(cNewArrayExtraMemory + (aParms->mNumBlocks + 1)*sizeof(AtomicLFIndex));
 
-      mMemorySize = mStateSize + mFreeListNextSize + mBlockBoxArraySize;
+      mMemorySize = mStateSize + mBlockBoxArraySize + mFreeListNextSize;
    }
 };
 

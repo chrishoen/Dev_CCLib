@@ -209,9 +209,9 @@ void deallocateBlockPoolBlock(void* aBlockPtr)
 
 void* getBlockPoolBlockPtr(BlockHandle aBlockHandle)
 {
+#if 1
    // Guard
    if (aBlockHandle.isNull())  return 0;
-#if 1
    // Calculate block address from stored parameters and block pool.handle
    BlockPoolParms* tParms = &mBlockPoolParms[aBlockHandle.mPoolIndex];
    char*  tBlockBox = &tParms->mBlockBoxPtr[tParms->mBlockBoxSize*aBlockHandle.mBlockIndex];
