@@ -58,15 +58,15 @@ class BlockPoolShortTerm::MemorySize
 public:
    // Members.
    int mStateSize;
-   int mBaseClassSize;
+   int mBlockBoxArraySize;
    int mMemorySize;
 
    // Calculate and store memory sizes.
    MemorySize::MemorySize(BlockPoolParms* aParms)
    {
       mStateSize     = BlockPoolShortTermState::getMemorySize();
-      mBaseClassSize = BlockPoolBase::getMemorySize(aParms);
-      mMemorySize = mStateSize + mBaseClassSize;
+      mBlockBoxArraySize = BlockBoxArray::getMemorySize(aParms);
+      mMemorySize = mStateSize + mBlockBoxArraySize;
    }
 };
 
@@ -153,9 +153,9 @@ void BlockPoolShortTerm::initialize(BlockPoolParms* aParms)
    // Calculate memory addresses.
    MemoryPtr tMemoryPtr(mMemory);
 
-   char* tStateMemory     = tMemoryPtr.cfetch_add(tMemorySize.mStateSize);
-   char* tBaseClassMemory = tMemoryPtr.cfetch_add(tMemorySize.mBaseClassSize);
-
+   char* tStateMemory         = tMemoryPtr.cfetch_add(tMemorySize.mStateSize);
+   char* tBlockBoxArrayMemory = tMemoryPtr.cfetch_add(tMemorySize.mBlockBoxArraySize);
+   
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
@@ -175,8 +175,11 @@ void BlockPoolShortTerm::initialize(BlockPoolParms* aParms)
    // Initialize the state.
    mX->initialize(aParms);
 
-   // Initialize the base class variables.
-   BaseClass::initializeBase(aParms,tBaseClassMemory);
+   // Store the pointer to the parameters.
+   mParms = aParms;
+
+   // Initialize the block box array.
+   mBlocks.initialize(aParms,tBlockBoxArrayMemory);
 
    // Mark this block pool initialization as valid.
    aParms->mValidFlag = true;
@@ -189,7 +192,7 @@ void BlockPoolShortTerm::initialize(BlockPoolParms* aParms)
 
 void BlockPoolShortTerm::finalize()
 {
-   BaseClass::finalizeBase();
+   mBlocks.finalize();
 
    if (mOwnMemoryFlag)
    {
@@ -238,7 +241,7 @@ bool BlockPoolShortTerm::allocate(void** aBlockPointer,BlockHandle* aBlockHandle
    // Return the memory handle for the block.
    if (aBlockHandle)
    {
-      aBlockHandle->set(BaseClass::mParms->mPoolIndex, tBlockIndex);
+      aBlockHandle->set(mParms->mPoolIndex, tBlockIndex);
    }
 
    // Done
@@ -265,6 +268,16 @@ void* BlockPoolShortTerm::getBlockPtr(BlockHandle aBlockHandle)
 {
    // Return the address of the block within the block array.
    return mBlocks.getBlockPtr(aBlockHandle.mBlockIndex);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Helpers
+
+void BlockPoolShortTerm::show()
+{
+   printf("BlockPoolShorTerm size %d $ %d\n", mParms->mPoolIndex,size());
 }
 
 }//namespace

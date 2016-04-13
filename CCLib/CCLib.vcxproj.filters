@@ -21,9 +21,6 @@
     <ClCompile Include="Source\ccBlockBoxArray.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ccBlockPoolBase.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\ccBlockHandle.cpp">
       <Filter>Source</Filter>
     </ClCompile>

@@ -21,7 +21,6 @@
   <ItemGroup>
     <ClCompile Include="Source\ccBlockBoxArray.cpp" />
     <ClCompile Include="Source\ccBlockHandle.cpp" />
-    <ClCompile Include="Source\ccBlockPoolBase.cpp" />
     <ClCompile Include="Source\ccBlockPoolCentral.cpp" />
     <ClCompile Include="Source\ccBlockPoolFreeList.cpp" />
     <ClCompile Include="Source\ccBlockPoolIndexStack.cpp" />

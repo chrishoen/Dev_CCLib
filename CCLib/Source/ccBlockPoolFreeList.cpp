@@ -32,14 +32,14 @@ class BlockPoolFreeList::MemorySize
 {
 public:
    // Members.
-   int mBaseClassSize;
+   int mBlockBoxArraySize;
    int mStackSize;
    int mMemorySize;
 
    // Calculate and store memory sizes.
    MemorySize::MemorySize(BlockPoolParms* aParms)
    {
-      mBaseClassSize = BlockPoolBase::getMemorySize(aParms);
+      mBlockBoxArraySize = BlockBoxArray::getMemorySize(aParms);
 
       if (aParms->mLockFreeFlag)
       {
@@ -50,7 +50,7 @@ public:
          mStackSize = BlockPoolIndexStack::getMemorySize(aParms);
       }
 
-      mMemorySize = mBaseClassSize + mStackSize;
+      mMemorySize = mBlockBoxArraySize + mStackSize;
    }
 };
 
@@ -146,16 +146,19 @@ void BlockPoolFreeList::initialize(BlockPoolParms* aParms)
    // Calculate memory addresses.
    MemoryPtr tMemoryPtr(mMemory);
 
-   char* tBaseClassMemory = tMemoryPtr.cfetch_add(tMemorySize.mBaseClassSize);
-   char* tStackMemory     = tMemoryPtr.cfetch_add(tMemorySize.mStackSize);
+   char* tBlockBoxArrayMemory = tMemoryPtr.cfetch_add(tMemorySize.mBlockBoxArraySize);
+   char* tStackMemory         = tMemoryPtr.cfetch_add(tMemorySize.mStackSize);
 
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
    // Initialize variables.
 
-   // Initialize the base class.
-   BaseClass::initializeBase(aParms,tBaseClassMemory);
+   // Store the pointer to the parameters.
+   mParms = aParms;
+
+   // Initialize the block box array.
+   mBlocks.initialize(aParms,tBlockBoxArrayMemory);
 
    // Initialize the index stack.
    mBlockIndexStack->initialize(aParms,tStackMemory);
@@ -171,7 +174,7 @@ void BlockPoolFreeList::initialize(BlockPoolParms* aParms)
 
 void BlockPoolFreeList::finalize()
 {
-   BaseClass::finalizeBase();
+   mBlocks.finalize();
 
    if (mBlockIndexStack)
    {
@@ -225,7 +228,7 @@ bool BlockPoolFreeList::allocate(void** aBlockPointer,BlockHandle* aBlockHandle)
       // Return the memory handle for the block.
       if (aBlockHandle)
       {
-         aBlockHandle->set(BaseClass::mParms->mPoolIndex, tBlockIndex);
+         aBlockHandle->set(mParms->mPoolIndex, tBlockIndex);
       }
       return true;
    }
@@ -270,5 +273,16 @@ void* BlockPoolFreeList::getBlockPtr(BlockHandle aBlockHandle)
    // Return the address of the block within the block array.
    return mBlocks.getBlockPtr(aBlockHandle.mBlockIndex);
 }
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Helpers
+
+void BlockPoolFreeList::show()
+{
+   printf("BlockPoolFreeList size %d $ %d\n", mParms->mPoolIndex,size());
+}
+
 
 }//namespace
