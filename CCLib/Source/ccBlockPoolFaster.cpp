@@ -328,7 +328,10 @@ bool BlockPoolFaster::allocate(void** aBlockPointer,BlockHandle* aBlockHandle)
       // Return a pointer to the block at that index.
       if (aBlockPointer)
       {
+         *aBlockPointer = mBlockBoxArrayPtr.vplus(mX->mBlockBoxSize*tBlockIndex + cBlockHeaderSize);
+#if 0
          *aBlockPointer = getBlockPtr(tBlockIndex);
+#endif
       }
 
       // Return the memory handle for the block.
@@ -388,10 +391,13 @@ void* BlockPoolFaster::getBlockPtr(BlockHandle aBlockHandle)
 //******************************************************************************
 // Return a pointer to a block, based on block array index
 
-char* BlockPoolFaster::getBlockBoxPtr(int aIndex)
+char* BlockPoolFaster::getBlockBoxPtr(int aBlockIndex)
 {
+   return mBlockBoxArrayPtr.cplus(mX->mBlockBoxSize*aBlockIndex + cBlockHeaderSize);
+#if 0
    char*  tBlockBox = &mBlockBoxArray[mX->mBlockBoxSize*aIndex];
    return tBlockBox;
+#endif
 }
 
 //******************************************************************************
@@ -416,9 +422,9 @@ BlockHeader* BlockPoolFaster::getHeaderPtr(int aIndex)
 //******************************************************************************
 // Return a pointer to a body, based on block array index
 
-char* BlockPoolFaster::getBlockPtr(int aIndex)
+char* BlockPoolFaster::getBlockPtr(int aBlockIndex)
 {
-   return mBlockBoxArrayPtr.cplus(mX->mBlockBoxSize*aIndex + cBlockHeaderSize);
+   return mBlockBoxArrayPtr.cplus(mX->mBlockBoxSize*aBlockIndex + cBlockHeaderSize);
 
 #if 0
    char*  tBlockBox = &mBlockBoxArray[mX->mBlockBoxSize*aIndex];
@@ -432,12 +438,12 @@ char* BlockPoolFaster::getBlockPtr(int aIndex)
 //******************************************************************************
 // Get the handle of a block, given its address.
 
-BlockHandle BlockPoolFaster::getBlockHandle(void* aBlockPtr)
+BlockHandle BlockPoolFaster::getBlockHandle(void* aBlockPointer)
 {
    BlockHandle tBlockHandle;
-   if (aBlockPtr==0) return tBlockHandle;
+   if (aBlockPointer==0) return tBlockHandle;
 
-   MemoryPtr tBlockPtr(aBlockPtr);
+   MemoryPtr tBlockPtr(aBlockPointer);
    BlockHeader* tHeader = (BlockHeader*)tBlockPtr.vminus(cBlockHeaderSize);
    tBlockHandle = tHeader->mBlockHandle;
    return tBlockHandle;
