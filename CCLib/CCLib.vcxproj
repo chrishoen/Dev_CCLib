@@ -22,6 +22,7 @@
     <ClCompile Include="Source\ccBlockBoxArray.cpp" />
     <ClCompile Include="Source\ccBlockHandle.cpp" />
     <ClCompile Include="Source\ccBlockPoolCentral.cpp" />
+    <ClCompile Include="Source\ccBlockPoolFaster.cpp" />
     <ClCompile Include="Source\ccBlockPoolFreeList.cpp" />
     <ClCompile Include="Source\ccBlockPoolIndexStack.cpp" />
     <ClCompile Include="Source\ccBlockPoolLFIndexStack.cpp" />
@@ -40,6 +41,7 @@
     <ClInclude Include="Source\ccBlockPoolBaseIndexStack.h" />
     <ClInclude Include="Source\ccBlockPoolBlock.h" />
     <ClInclude Include="Source\ccBlockPoolCentral.h" />
+    <ClInclude Include="Source\ccBlockPoolFaster.h" />
     <ClInclude Include="Source\ccBlockPoolFreeList.h" />
     <ClInclude Include="Source\ccBlockPoolIndex.h" />
     <ClInclude Include="Source\ccBlockPoolIndexStack.h" />

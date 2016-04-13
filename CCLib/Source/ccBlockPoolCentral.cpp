@@ -12,6 +12,7 @@ Print utility
 
 #include "ccBlockPoolBase.h"
 #include "ccBlockPoolFreeList.h"
+#include "ccBlockPoolFaster.h"
 #include "ccBlockPoolShortTerm.h"
 
 #include "ccBlockPoolCentral.h"
@@ -103,6 +104,13 @@ void createBlockPool(BlockPoolParms* aParms)
       case cBlockPoolType_FreeList :
       {
          mBlockPool[tPoolIndex] = new BlockPoolFreeList;
+         mBlockPool[tPoolIndex]->initialize(tParms);
+      }
+      break;
+      // Create and initialize the block pool.
+      case cBlockPoolType_Faster :
+      {
+         mBlockPool[tPoolIndex] = new BlockPoolFaster;
          mBlockPool[tPoolIndex]->initialize(tParms);
       }
       break;
