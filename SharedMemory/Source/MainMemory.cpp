@@ -3,7 +3,7 @@
 #include "GSettings.h"
 #include "ccSharedMemory.h"
 #include "ccSharedSynch.h"
-#include "ccBlockPoolCentral.h"
+#include "ccBlockPool.h"
 #include "someBlockPoolIndex.h"
 #include "someMyBlockA.h"
 

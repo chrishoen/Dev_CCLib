@@ -10,7 +10,7 @@
 
 #include "someBlockPoolIndex.h"
 #include "someMyBlockA.h"
-#include "ccBlockPoolCentral.h"
+#include "ccBlockPool.h"
 
 #include "Timing.h"
 #include "someThreads.h"

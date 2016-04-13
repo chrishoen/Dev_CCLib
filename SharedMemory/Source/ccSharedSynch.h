@@ -6,7 +6,7 @@ Shared memory channel.
 
 
 ==============================================================================*/
-#include "ccBlockHandle.h"
+#include "ccBlockPool.h"
 #include "ccLFValueQueue.h"
 
 //******************************************************************************

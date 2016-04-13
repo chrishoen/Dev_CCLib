@@ -5,7 +5,7 @@
 #include <new>
 
 #include "prnPrint.h"
-#include "ccBlockPoolCentral.h"
+#include "ccBlockPool.h"
 #include "someBlockPoolIndex.h"
 #include "someMyBlockA.h"
 #include "CmdLineExec.h"

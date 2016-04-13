@@ -11,7 +11,7 @@ Free list block pool class
 #include <atomic>
 #include "ccLFIndex.h"
 #include "ccMemoryPtr.h"
-#include "ccBlockHandle.h"
+#include "ccBlockPool.h"
 #include "ccBlockHeader.h"
 #include "ccBlockPoolBase.h"
 

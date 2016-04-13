@@ -11,7 +11,7 @@ A block box contains a block header and a block body.
 ==============================================================================*/
 
 #include "ccBlockHeader.h"
-#include "ccBlockHandle.h"
+#include "ccBlockPool.h"
 #include "ccBlockPoolParms.h"
 
 //******************************************************************************

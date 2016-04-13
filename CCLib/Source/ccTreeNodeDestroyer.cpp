@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "ccBlockPoolCentral.h"
+#include "ccBlockPool.h"
 #include "ccTreeNodeDestroyer.h"
 
 namespace CC

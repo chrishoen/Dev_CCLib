@@ -4,8 +4,7 @@
 #include <new>
 #include <stdio.h>
 
-#include "ccBlockhandle.h"
-#include "ccBlockPoolCentral.h"
+#include "ccBlockPool.h"
 
 /*==============================================================================
 

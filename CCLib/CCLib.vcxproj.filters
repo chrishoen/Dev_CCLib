@@ -21,9 +21,6 @@
     <ClCompile Include="Source\ccBlockBoxArray.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ccBlockHandle.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\ccBlockPoolFreeList.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -92,9 +89,6 @@
     <ClInclude Include="Source\ccBlockBoxArray.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccBlockHandle.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\ccBlockPoolBase.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -141,6 +135,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccBlockHeader.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ccBlockPool.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

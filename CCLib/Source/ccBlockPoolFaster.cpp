@@ -14,8 +14,6 @@ Description:
 
 #include "cc_functions.h"
 #include "ccMemoryPtr.h"
-#include "ccBlockPoolIndexStack.h"
-#include "ccBlockPoolLFIndexStack.h"
 #include "ccBlockPoolFaster.h"
 
 using namespace std;

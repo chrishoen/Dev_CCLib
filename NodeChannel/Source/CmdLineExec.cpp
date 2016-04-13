@@ -8,7 +8,7 @@
 #include "ccTreeNode.h"
 #include "ccTreeNodeVisitor.h"
 #include "ccTreeNodeDestroyer.h"
-#include "ccBlockPoolCentral.h"
+#include "ccBlockPool.h"
 #include "someBlockPoolIndex.h"
 #include "someMyTreeBlock.h"
 #include "someMyTreeBlockVisitor.h"

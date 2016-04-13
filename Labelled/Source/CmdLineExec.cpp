@@ -7,7 +7,7 @@
 #include "prnPrint.h"
 #include "ccTreeNodeVisitor.h"
 #include "ccTreeNodeDestroyer.h"
-#include "ccBlockPoolCentral.h"
+#include "ccBlockPool.h"
 #include "someBlockPoolIndex.h"
 #include "someLabelledTreeNode.h"
 #include "someGenerateLabelledTreeNodes.h"

@@ -65,7 +65,7 @@ Specific block pool classes inherit from a block pool base class.
 //******************************************************************************
 
 #include "ccBlockPoolParms.h"
-#include "ccBlockHandle.h"
+#include "ccBlockPool.h"
 
 namespace CC
 {

@@ -1,7 +1,7 @@
 
 #include <stdio.h>
 #include "GSettings.h"
-#include "ccBlockPoolCentral.h"
+#include "ccBlockPool.h"
 #include "someBlockPoolIndex.h"
 #include "someMyBlockA.h"
 

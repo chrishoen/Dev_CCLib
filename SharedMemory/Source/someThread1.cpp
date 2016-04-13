@@ -10,7 +10,7 @@ Description:
 
 #include "ccSharedMemory.h"
 #include "ccSharedSynch.h"
-#include "ccBlockHandle.h"
+#include "ccBlockPool.h"
 #include "someMyBlockA.h"
 
 #define  _SOMETHREAD1_CPP_

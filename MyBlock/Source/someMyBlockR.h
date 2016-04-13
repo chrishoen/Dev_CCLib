@@ -8,8 +8,7 @@
 //******************************************************************************
 //******************************************************************************
 #include <new>
-#include "ccBlockHandle.h"
-#include "ccBlockPoolCentral.h"
+#include "ccBlockPool.h"
 #include "someMyBlockA.h"
 
 namespace Some
