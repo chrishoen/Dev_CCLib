@@ -209,6 +209,7 @@ void BlockPoolFaster::initialize(BlockPoolParms* aParms)
 
    // Set the array pointer value.
    mBlockBoxArray = tBlockBoxArrayMemory;
+   mBlockBoxArrayPtr.set(tBlockBoxArrayMemory);
 
    // Initialize the block headers, if they have not
    // already been initialized.
@@ -375,8 +376,11 @@ void BlockPoolFaster::deallocate(BlockHandle aBlockHandle)
 
 void* BlockPoolFaster::getBlockPtr(BlockHandle aBlockHandle)
 {
+   return mBlockBoxArrayPtr.vplus(mX->mBlockBoxSize*aBlockHandle.mBlockIndex + cBlockHeaderSize);
+#if 0
    // Return the address of the block within the block array.
    return getBlockPtr(aBlockHandle.mBlockIndex);
+#endif
 }
 
 //******************************************************************************
@@ -397,9 +401,14 @@ char* BlockPoolFaster::getBlockBoxPtr(int aIndex)
 
 BlockHeader* BlockPoolFaster::getHeaderPtr(int aIndex)
 {
-   char*  tBlockBox = &mBlockBoxArray[mX->mBlockBoxSize*aIndex];
+   char* tBlockBox = mBlockBoxArrayPtr.cplus(mX->mBlockBoxSize*aIndex);
    BlockHeader* tHeader = (BlockHeader*)tBlockBox;
    return tHeader;
+#if 0
+   char* tBlockBox = &mBlockBoxArray[mX->mBlockBoxSize*aIndex];
+   BlockHeader* tHeader = (BlockHeader*)tBlockBox;
+   return tHeader;
+#endif
 }
 
 //******************************************************************************
@@ -409,9 +418,13 @@ BlockHeader* BlockPoolFaster::getHeaderPtr(int aIndex)
 
 char* BlockPoolFaster::getBlockPtr(int aIndex)
 {
+   return mBlockBoxArrayPtr.cplus(mX->mBlockBoxSize*aIndex + cBlockHeaderSize);
+
+#if 0
    char*  tBlockBox = &mBlockBoxArray[mX->mBlockBoxSize*aIndex];
    char*  tBlock = tBlockBox + cBlockHeaderSize;
    return tBlock;
+#endif
 }
 
 //******************************************************************************
@@ -424,11 +437,22 @@ BlockHandle BlockPoolFaster::getBlockHandle(void* aBlockPtr)
    BlockHandle tBlockHandle;
    if (aBlockPtr==0) return tBlockHandle;
 
+   MemoryPtr tBlockPtr(aBlockPtr);
+   BlockHeader* tHeader = (BlockHeader*)tBlockPtr.vminus(cBlockHeaderSize);
+   tBlockHandle = tHeader->mBlockHandle;
+   return tBlockHandle;
+
+#if 0
+   BlockHandle tBlockHandle;
+   if (aBlockPtr==0) return tBlockHandle;
+
    char*  tBlock = (char*)aBlockPtr;
    BlockHeader* tHeader = (BlockHeader*)(tBlock - cBlockHeaderSize);
 
    tBlockHandle = tHeader->mBlockHandle;
    return tBlockHandle;
+#endif
+
 }
 
 //******************************************************************************

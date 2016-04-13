@@ -10,6 +10,7 @@ Free list block pool class
 
 #include <atomic>
 #include "ccLFIndex.h"
+#include "ccMemoryPtr.h"
 #include "ccBlockHandle.h"
 #include "ccBlockHeader.h"
 #include "ccBlockPoolBase.h"
@@ -200,6 +201,8 @@ public:
    // Pointer to allocated memory for the block box array.
    // This is an array of bytes of size NumBlocks*BlockBoxSize.
    char* mBlockBoxArray;
+   // Same thing.
+   MemoryPtr mBlockBoxArrayPtr;
 
    // Free List array for treiber stack.
    AtomicLFIndex*    mFreeListNext;
