@@ -130,13 +130,13 @@ public:
    // on the system heap at initialization.
    void* mMemory;
 
-   // Free List array for treiber stack.
-   AtomicLFIndex*    mFreeListNext;
-   
    // State variables for the stack. These are located in a separate class
    // so that they can be located in externale memory.
    BlockPoolLFIndexStackState* mX;
 
+   // Free List array for treiber stack.
+   AtomicLFIndex*    mFreeListNext;
+   
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
