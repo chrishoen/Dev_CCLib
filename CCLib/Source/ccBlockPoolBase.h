@@ -10,8 +10,8 @@ This defines a base class for block pools.
 //******************************************************************************
 //******************************************************************************
 
-#include "ccBlockpoolParms.h"
-#include "ccBlockBoxArray.h"
+#include "ccBlockHandle.h"
+#include "ccBlockPoolParms.h"
 
 namespace CC
 {

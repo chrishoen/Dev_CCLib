@@ -93,9 +93,9 @@ BlockPoolLFIndexStack::BlockPoolLFIndexStack()
 {
    // All null.
    mX = 0;
-   mFreeListNext = 0;
    mOwnMemoryFlag = false;
    mMemory = 0;
+   mFreeListNext = 0;
 }
 
 BlockPoolLFIndexStack::~BlockPoolLFIndexStack()

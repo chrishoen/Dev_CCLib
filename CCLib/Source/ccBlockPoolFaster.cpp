@@ -6,6 +6,7 @@ Description:
 //******************************************************************************
 //******************************************************************************
 
+#include <new>
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
@@ -17,8 +18,48 @@ Description:
 #include "ccBlockPoolLFIndexStack.h"
 #include "ccBlockPoolFaster.h"
 
+using namespace std;
+
 namespace CC
 {
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Constructor, initialize members for an empty stack of size zero 
+
+int BlockPoolFasterState::getMemorySize()
+{
+   return cc_round_upto16(sizeof(BlockPoolFasterState));
+}
+
+BlockPoolFasterState::BlockPoolFasterState()
+{
+   // All null.
+   mNumBlocks=0;
+   mBlockSize=0;
+   mBlockBoxSize=0;
+   mPoolIndex=0;
+   mFreeListNumNodes = 0;
+}
+
+void BlockPoolFasterState::initialize(BlockPoolParms* aParms)
+{
+   // Do not initialize, if already initialized.
+   if (!aParms->mConstructorFlag) return;
+
+   // Store members.
+   mNumBlocks    = aParms->mNumBlocks;
+   mBlockSize    = cc_round_upto16(aParms->mBlockSize);
+   mBlockBoxSize = mBlockSize + cBlockHeaderSize;;
+   mPoolIndex    = aParms->mPoolIndex;
+
+   // Allocate for one extra dummy node.
+   mFreeListNumNodes = aParms->mNumBlocks + 1;
+}
 
 //******************************************************************************
 //******************************************************************************
@@ -32,25 +73,23 @@ class BlockPoolFaster::MemorySize
 {
 public:
    // Members.
+   int mStateSize;
+   int mBlockSize;
+   int mBlockBoxSize;
    int mBlockBoxArraySize;
-   int mStackSize;
+   int mFreeListNextSize;
    int mMemorySize;
 
    // Calculate and store memory sizes.
    MemorySize::MemorySize(BlockPoolParms* aParms)
    {
-      mBlockBoxArraySize = BlockBoxArray::getMemorySize(aParms);
+      mStateSize         = BlockPoolFasterState::getMemorySize();
+      mBlockSize         = cc_round_upto16(aParms->mBlockSize);
+      mBlockBoxSize      = cBlockHeaderSize + mBlockSize;
+      mBlockBoxArraySize = cc_round_upto16(cNewArrayExtraMemory + aParms->mNumBlocks*mBlockBoxSize);
+      mFreeListNextSize  = cc_round_upto16(cNewArrayExtraMemory + (aParms->mNumBlocks + 1)*sizeof(AtomicLFIndex));
 
-      if (aParms->mLockFreeFlag)
-      {
-         mStackSize = BlockPoolLFIndexStack::getMemorySize(aParms);
-      }
-      else
-      {
-         mStackSize = BlockPoolIndexStack::getMemorySize(aParms);
-      }
-
-      mMemorySize = mBlockBoxArraySize + mStackSize;
+      mMemorySize = mStateSize + mFreeListNextSize + mBlockBoxArraySize;
    }
 };
 
@@ -77,9 +116,11 @@ int BlockPoolFaster::getMemorySize(BlockPoolParms* aParms)
 BlockPoolFaster::BlockPoolFaster()
 {
    // All null.
+   mX = 0;
    mOwnMemoryFlag = false;
    mMemory = 0;
-   mBlockIndexStack = 0;
+   mFreeListNext = 0;
+   mBlockBoxArray=0;
 }
 
 BlockPoolFaster::~BlockPoolFaster()
@@ -115,16 +156,6 @@ void BlockPoolFaster::initialize(BlockPoolParms* aParms)
    // Deallocate memory, if any exists.
    finalize();
 
-   // Create the index stack.
-   if (aParms->mLockFreeFlag)
-   {
-      mBlockIndexStack = new BlockPoolLFIndexStack;
-   }
-   else
-   {
-      mBlockIndexStack = new BlockPoolIndexStack;
-   }
-
    // If the instance of this class is not to reside in external memory
    // then allocate memory for it on the system heap.
    if (aParms->mMemory == 0)
@@ -146,25 +177,107 @@ void BlockPoolFaster::initialize(BlockPoolParms* aParms)
    // Calculate memory addresses.
    MemoryPtr tMemoryPtr(mMemory);
 
+   char* tStateMemory         = tMemoryPtr.cfetch_add(tMemorySize.mStateSize);
    char* tBlockBoxArrayMemory = tMemoryPtr.cfetch_add(tMemorySize.mBlockBoxArraySize);
-   char* tStackMemory         = tMemoryPtr.cfetch_add(tMemorySize.mStackSize);
+   char* tFreeListNextMemory  = tMemoryPtr.cfetch_add(tMemorySize.mFreeListNextSize);
 
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
    //---------------------------------------------------------------------------
-   // Initialize variables.
+   // Initialize state.
+
+   // Construct the state.
+   if (aParms->mConstructorFlag)
+   {
+      // Call the constructor.
+      mX = new(tStateMemory)BlockPoolFasterState;
+   }
+   else
+   {
+      // The constructor has already been called.
+      mX = (BlockPoolFasterState*)tStateMemory;
+   }
+   // Initialize the state.
+   mX->initialize(aParms);
+
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // Initialize block box array.
+
+   // Set the array pointer value.
+   mBlockBoxArray = tBlockBoxArrayMemory;
+
+   // Initialize the block headers, if they have not
+   // already been initialized.
+   if (aParms->mConstructorFlag)
+   {
+      // Initialize block headers.
+      for (int i = 0; i < mX->mNumBlocks; i++)
+      {
+         // Header pointer.
+         BlockHeader* tHeader = getHeaderPtr(i);
+         // Call Header constructor.
+         new(tHeader)BlockHeader;
+         // Set header variables.
+         tHeader->mBlockHandle.set(mX->mPoolIndex, i);
+      }
+   }
+
+   // Construct the linked list array.
+   if (aParms->mConstructorFlag)
+   {
+      // Call the constructor.
+      mFreeListNext = new(tFreeListNextMemory)AtomicLFIndex[mX->mFreeListNumNodes];
+   }
+   else
+   {
+      // The constructor has already been called.
+      mFreeListNext = (AtomicLFIndex*)tFreeListNextMemory;
+   }
+
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // Initialize free list.
+
+   // Initialize linked list, if it has not already been initialized.
+   if (aParms->mConstructorFlag)
+   {
+      // Initialize linked list array. Each node next node is the one after it.
+      for (int i = 0; i < mX->mFreeListNumNodes - 1; i++)
+      {
+         mFreeListNext[i].store(LFIndex(i + 1, 0));
+      }
+      // The last node has no next node.
+      mFreeListNext[mX->mFreeListNumNodes - 1].store(LFIndex(cInvalid, 0));
+
+      // List head points to the first node.
+      mX->mFreeListHead.store(LFIndex(0, 0));
+      // List size is initially a full stack.
+      mX->mFreeListSize = mX->mFreeListNumNodes;
+
+      // Pop the dummy node.
+      int tDummyNode;
+      listPop(&tDummyNode);
+   }
+
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   //---------------------------------------------------------------------------
+   // Initialize parameters.
 
    // Store the pointer to the parameters.
    mParms = aParms;
 
-   // Initialize the block box array.
-   mBlocks.initialize(aParms,tBlockBoxArrayMemory);
-
-   // Initialize the index stack.
-   mBlockIndexStack->initialize(aParms,tStackMemory);
-
    // Mark this block pool initialization as valid.
    aParms->mValidFlag = true;
+
+   // Store block array parameters. These can be used elsewhere.
+   aParms->mBlockHeaderSize = cBlockHeaderSize;
+   aParms->mBlockBoxSize    = tMemorySize.mBlockBoxSize;
+   aParms->mBlockBoxPtr     = mBlockBoxArray;
+
 }
 
 //******************************************************************************
@@ -174,15 +287,6 @@ void BlockPoolFaster::initialize(BlockPoolParms* aParms)
 
 void BlockPoolFaster::finalize()
 {
-   mBlocks.finalize();
-
-   if (mBlockIndexStack)
-   {
-      mBlockIndexStack->finalize();
-      delete mBlockIndexStack;
-      mBlockIndexStack = 0;
-   }
-
    if (mOwnMemoryFlag)
    {
       if (mMemory)
@@ -201,8 +305,7 @@ void BlockPoolFaster::finalize()
 
 int BlockPoolFaster::size()
 { 
-   if (mBlockIndexStack==0) return 0;
-   return mBlockIndexStack->size();
+   return mX->mFreeListSize.load(memory_order_relaxed);
 }
 
 //******************************************************************************
@@ -217,12 +320,12 @@ bool BlockPoolFaster::allocate(void** aBlockPointer,BlockHandle* aBlockHandle)
       
    // Try to pop a block index from the index stack, as a free list.
    // If the stack is not empty
-   if (mBlockIndexStack->pop(&tBlockIndex))
+   if (listPop(&tBlockIndex))
    {
       // Return a pointer to the block at that index.
       if (aBlockPointer)
       {
-         *aBlockPointer = mBlocks.getBlockPtr(tBlockIndex);
+         *aBlockPointer = getBlockPtr(tBlockIndex);
       }
 
       // Return the memory handle for the block.
@@ -260,7 +363,7 @@ bool BlockPoolFaster::allocate(void** aBlockPointer,BlockHandle* aBlockHandle)
 void BlockPoolFaster::deallocate(BlockHandle aBlockHandle)
 {
    // Push the block index back onto the stack
-   mBlockIndexStack->push(aBlockHandle.mBlockIndex);
+   listPush(aBlockHandle.mBlockIndex);
 }
 
 //******************************************************************************
@@ -271,7 +374,59 @@ void BlockPoolFaster::deallocate(BlockHandle aBlockHandle)
 void* BlockPoolFaster::getBlockPtr(BlockHandle aBlockHandle)
 {
    // Return the address of the block within the block array.
-   return mBlocks.getBlockPtr(aBlockHandle.mBlockIndex);
+   return getBlockPtr(aBlockHandle.mBlockIndex);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Return a pointer to a block, based on block array index
+
+char* BlockPoolFaster::getBlockBoxPtr(int aIndex)
+{
+   char*  tBlockBox = &mBlockBoxArray[mX->mBlockBoxSize*aIndex];
+   return tBlockBox;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Return a pointer to a header, based on block array index
+
+BlockHeader* BlockPoolFaster::getHeaderPtr(int aIndex)
+{
+   char*  tBlockBox = &mBlockBoxArray[mX->mBlockBoxSize*aIndex];
+   BlockHeader* tHeader = (BlockHeader*)tBlockBox;
+   return tHeader;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Return a pointer to a body, based on block array index
+
+char* BlockPoolFaster::getBlockPtr(int aIndex)
+{
+   char*  tBlockBox = &mBlockBoxArray[mX->mBlockBoxSize*aIndex];
+   char*  tBlock = tBlockBox + cBlockHeaderSize;
+   return tBlock;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Get the handle of a block, given its address.
+
+BlockHandle BlockPoolFaster::getBlockHandle(void* aBlockPtr)
+{
+   BlockHandle tBlockHandle;
+   if (aBlockPtr==0) return tBlockHandle;
+
+   char*  tBlock = (char*)aBlockPtr;
+   BlockHeader* tHeader = (BlockHeader*)(tBlock - cBlockHeaderSize);
+
+   tBlockHandle = tHeader->mBlockHandle;
+   return tBlockHandle;
 }
 
 //******************************************************************************
@@ -284,5 +439,64 @@ void BlockPoolFaster::show()
    printf("BlockPoolFaster size %d $ %d\n", mParms->mPoolIndex,size());
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This detaches the head node.
+// Use an offset of one so that pop and push indices range 0..NumElements-1.
+
+bool BlockPoolFaster::listPop(int* aNodeIndex)
+{
+   // Store the head node in a temp.
+   // This is the node that will be detached.
+   LFIndex tHead = mX->mFreeListHead.load(memory_order_relaxed);
+
+   int tLoopCount=0;
+   while (true)
+   {
+      // Exit if the list is empty.
+      if (tHead.mIndex == cInvalid) return false;
+
+      // Set the head node to be the node that is after the head node.
+      if (mX->mFreeListHead.compare_exchange_weak(tHead, LFIndex(mFreeListNext[tHead.mIndex].load(memory_order_relaxed).mIndex,tHead.mCount+1),memory_order_acquire,memory_order_relaxed)) break;
+
+      if (++tLoopCount==10000) throw 103;
+   }
+   mX->mFreeListSize.fetch_sub(1,memory_order_relaxed);
+
+   // Return the detached original head node.
+   *aNodeIndex = tHead.mIndex - 1;
+   return true;
+}
+
+//***************************************************************************
+//***************************************************************************
+//***************************************************************************
+// Insert a node into the list before the list head node.
+// Use an offset of one so that pop and push indices range 0..NumElements-1.
+
+bool BlockPoolFaster::listPush(int aNodeIndex)
+{
+   int tNodeIndex = aNodeIndex + 1;
+
+   // Store the head node in a temp.
+   LFIndex tHead = mX->mFreeListHead.load(memory_order_relaxed);
+
+   int tLoopCount=0;
+   while (true)
+   {
+      // Attach the head node to the pushed node.
+      mFreeListNext[tNodeIndex].store(tHead,memory_order_relaxed);
+
+      // The pushed node is the new head node.
+      atomic<int>* tListHeadIndexPtr = (std::atomic<int>*)&mX->mFreeListHead;
+      if ((*tListHeadIndexPtr).compare_exchange_weak(tHead.mIndex, tNodeIndex,memory_order_release,memory_order_relaxed)) break;
+      if (++tLoopCount == 10000) throw 103;
+   }
+
+   // Done.
+   mX->mFreeListSize.fetch_add(1,memory_order_relaxed);
+   return true;
+}
 
 }//namespace

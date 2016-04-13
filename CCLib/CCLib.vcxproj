@@ -37,6 +37,7 @@
   <ItemGroup>
     <ClInclude Include="Source\ccBlockBoxArray.h" />
     <ClInclude Include="Source\ccBlockHandle.h" />
+    <ClInclude Include="Source\ccBlockHeader.h" />
     <ClInclude Include="Source\ccBlockPoolBase.h" />
     <ClInclude Include="Source\ccBlockPoolBaseIndexStack.h" />
     <ClInclude Include="Source\ccBlockPoolBlock.h" />

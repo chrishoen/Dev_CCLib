@@ -140,5 +140,8 @@
     <ClInclude Include="Source\ccBlockPoolFaster.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="Source\ccBlockHeader.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
