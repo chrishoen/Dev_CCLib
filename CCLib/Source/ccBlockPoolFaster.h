@@ -68,9 +68,6 @@ public:
    //***************************************************************************
    // Members.
 
-   // Number of free list nodes allocated
-   int mFreeListNumNodes;
-
    // Number of blocks allocated.
    int mNumBlocks;
 
@@ -83,11 +80,14 @@ public:
    // Memory pool index for the block box array.
    int mPoolIndex;
 
+   // Number of free list nodes allocated
+   int mFreeListNumNodes;
+
    // Free list head node.
-   AtomicLFIndex     mFreeListHead;
+   AtomicLFIndex mFreeListHead;
 
    // Free list size.
-   std::atomic<int>  mFreeListSize;
+   std::atomic<int> mFreeListSize;
    
    //***************************************************************************
    //***************************************************************************
@@ -186,24 +186,10 @@ public:
    // on the system heap at initialization.
    void* mMemory;
 
-   // A pointer to the parameters that were passed in at initialization.
-   // Whoever owns this block pool (creates and initializes it) must maintain
-   // storage for these parameters for the lifetime of the block pool.
-   // The owner creates an instance of the parameters and fills in some of
-   // them and passes them to the block pool at initialization. The block pool
-   // then also fills in some of them during its initiialization and the 
-   // owner might use some of them after the initialization. Memory storage
-   // for these must be maintained my the owner throughout the lifetime of
-   // the block pool.
-   BlockPoolParms* mParms;
-
    // State variables for the block pool. These are located in a separate
    // class so that they can be located in external memory.
    BlockPoolFasterState* mX;
 
-   // Free List array for treiber stack.
-   AtomicLFIndex*    mFreeListNext;
-   
    // This allocates storage for the blocks on the system heap or in shared
    // memory and provides pointer access to the allocated blocks. This is a block
    // box array. A block box contains a block header and a block body. The
@@ -214,6 +200,20 @@ public:
    // Pointer to allocated memory for the block box array.
    // This is an array of bytes of size NumBlocks*BlockBoxSize.
    char* mBlockBoxArray;
+
+   // Free List array for treiber stack.
+   AtomicLFIndex*    mFreeListNext;
+   
+   // A pointer to the parameters that were passed in at initialization.
+   // Whoever owns this block pool (creates and initializes it) must maintain
+   // storage for these parameters for the lifetime of the block pool.
+   // The owner creates an instance of the parameters and fills in some of
+   // them and passes them to the block pool at initialization. The block pool
+   // then also fills in some of them during its initiialization and the 
+   // owner might use some of them after the initialization. Memory storage
+   // for these must be maintained my the owner throughout the lifetime of
+   // the block pool.
+   BlockPoolParms* mParms;
 
    //***************************************************************************
    //***************************************************************************
