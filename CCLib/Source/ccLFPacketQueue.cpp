@@ -106,7 +106,7 @@ LFPacketQueue::LFPacketQueue()
 {
    // All null.
    mX = 0;
-   mFreeMemoryFlag = false;
+   mOwnMemoryFlag = false;
    mMemory = 0;
 
    // All null
@@ -145,14 +145,14 @@ void LFPacketQueue::initialize(int aNumElements,int aElementSize,bool aConstruct
    if (aMemory == 0)
    {
       mMemory = malloc(LFPacketQueue::getMemorySize(aNumElements,aElementSize));
-      mFreeMemoryFlag = true;
+      mOwnMemoryFlag = true;
    }
    // If the instance of this class is to reside in external memory
    // then use the memory pointer that was passed in.
    else
    {
       mMemory = aMemory;
-      mFreeMemoryFlag = false;
+      mOwnMemoryFlag = false;
    }
 
    // Calculate memory sizes.
@@ -245,7 +245,7 @@ void LFPacketQueue::initialize(int aNumElements,int aElementSize,bool aConstruct
 
 void LFPacketQueue::finalize()
 {
-   if (mFreeMemoryFlag)
+   if (mOwnMemoryFlag)
    {
       if (mMemory)
       {
@@ -253,7 +253,7 @@ void LFPacketQueue::finalize()
       }
    }
    mMemory = 0;
-   mFreeMemoryFlag = false;
+   mOwnMemoryFlag = false;
 }
 
 //***************************************************************************

@@ -109,7 +109,7 @@ BlockBoxArray::BlockBoxArray()
 {
    // All null
    mX = 0;
-   mFreeMemoryFlag = false;
+   mOwnMemoryFlag = false;
    mMemory = 0;
    mBlockBoxArray=0;
 }
@@ -140,14 +140,14 @@ void BlockBoxArray::initialize(BlockPoolParms* aParms,void* aMemory)
    if (aMemory == 0)
    {
       mMemory = malloc(BlockBoxArray::getMemorySize(aParms));
-      mFreeMemoryFlag = true;
+      mOwnMemoryFlag = true;
    }
    // If the instance of this class is to reside in external memory
    // then use the memory pointer that was passed in.
    else
    {
       mMemory = aMemory;
-      mFreeMemoryFlag = false;
+      mOwnMemoryFlag = false;
    }
 
    // Calculate memory sizes.
@@ -204,7 +204,7 @@ void BlockBoxArray::initialize(BlockPoolParms* aParms,void* aMemory)
 
 void BlockBoxArray::finalize()
 {
-   if (mFreeMemoryFlag)
+   if (mOwnMemoryFlag)
    {
       if (mMemory)
       {
@@ -212,7 +212,7 @@ void BlockBoxArray::finalize()
       }
    }
    mMemory = 0;
-   mFreeMemoryFlag = false;
+   mOwnMemoryFlag = false;
 }
 
 //******************************************************************************

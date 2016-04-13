@@ -94,7 +94,7 @@ BlockPoolLFIndexStack::BlockPoolLFIndexStack()
    // All null.
    mX = 0;
    mFreeListNext = 0;
-   mFreeMemoryFlag = false;
+   mOwnMemoryFlag = false;
    mMemory = 0;
 }
 
@@ -123,14 +123,14 @@ void BlockPoolLFIndexStack::initialize(BlockPoolParms* aParms,void* aMemory)
    if (aMemory == 0)
    {
       mMemory = malloc(BlockPoolLFIndexStack::getMemorySize(aParms));
-      mFreeMemoryFlag = true;
+      mOwnMemoryFlag = true;
    }
    // If the instance of this class is to reside in external memory
    // then use the memory pointer that was passed in.
    else
    {
       mMemory = aMemory;
-      mFreeMemoryFlag = false;
+      mOwnMemoryFlag = false;
    }
 
    // Calculate memory sizes.
@@ -207,7 +207,7 @@ void BlockPoolLFIndexStack::initialize(BlockPoolParms* aParms,void* aMemory)
 
 void BlockPoolLFIndexStack::finalize()
 {
-   if (mFreeMemoryFlag)
+   if (mOwnMemoryFlag)
    {
       if (mMemory)
       {
@@ -215,7 +215,7 @@ void BlockPoolLFIndexStack::finalize()
       }
    }
    mMemory = 0;
-   mFreeMemoryFlag = false;
+   mOwnMemoryFlag = false;
 }
 
 //***************************************************************************

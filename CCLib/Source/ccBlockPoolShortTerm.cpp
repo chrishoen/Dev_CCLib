@@ -93,7 +93,7 @@ int BlockPoolShortTerm::getMemorySize(BlockPoolParms* aParms)
 BlockPoolShortTerm::BlockPoolShortTerm()
 {
    // All null.
-   mFreeMemoryFlag = false;
+   mOwnMemoryFlag = false;
    mMemory = 0;
 }
 
@@ -137,14 +137,14 @@ void BlockPoolShortTerm::initialize(BlockPoolParms* aParms)
    if (aParms->mMemory == 0)
    {
       mMemory = malloc(BlockPoolShortTerm::getMemorySize(aParms));
-      mFreeMemoryFlag = true;
+      mOwnMemoryFlag = true;
    }
    // If the instance of this class is to reside in external memory
    // then use the memory pointer that was passed in.
    else
    {
       mMemory = aParms->mMemory;
-      mFreeMemoryFlag = false;
+      mOwnMemoryFlag = false;
    }
 
    // Calculate memory sizes.
@@ -191,7 +191,7 @@ void BlockPoolShortTerm::finalize()
 {
    BaseClass::finalizeBase();
 
-   if (mFreeMemoryFlag)
+   if (mOwnMemoryFlag)
    {
       if (mMemory)
       {
@@ -199,7 +199,7 @@ void BlockPoolShortTerm::finalize()
       }
    }
    mMemory = 0;
-   mFreeMemoryFlag = false;
+   mOwnMemoryFlag = false;
 }
 
 //******************************************************************************

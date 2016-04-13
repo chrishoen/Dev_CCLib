@@ -132,7 +132,7 @@ public:
    // If this flag is false then the memory for this object was created
    // externally. If it is true then the memory was allocated at 
    // initialization and must be freed at finalization.
-   bool mFreeMemoryFlag;
+   bool mOwnMemoryFlag;
 
    // Pointer to memory for which the queue resides. This is either created
    // externally and passed as an initialization parameter or it is created
@@ -157,7 +157,7 @@ public:
    {
       // All null.
       mX = 0;
-      mFreeMemoryFlag = false;
+      mOwnMemoryFlag = false;
       mMemory = 0;
 
       // All null
@@ -194,14 +194,14 @@ public:
       if (aMemory == 0)
       {
          mMemory = malloc(SRWValueQueue<Element>::getMemorySize(aNumElements));
-         mFreeMemoryFlag = true;
+         mOwnMemoryFlag = true;
       }
       // If the instance of this class is to reside in external memory
       // then use the memory pointer that was passed in.
       else
       {
          mMemory = aMemory;
-         mFreeMemoryFlag = false;
+         mOwnMemoryFlag = false;
       }
 
       // Calculate memory sizes.
@@ -251,7 +251,7 @@ public:
 
    void finalize()
    {
-      if (mFreeMemoryFlag)
+      if (mOwnMemoryFlag)
       {
          if (mMemory)
          {
@@ -259,7 +259,7 @@ public:
          }
       }
       mMemory = 0;
-      mFreeMemoryFlag = false;
+      mOwnMemoryFlag = false;
    }
 
    //***************************************************************************

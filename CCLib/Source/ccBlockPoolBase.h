@@ -78,7 +78,7 @@ public:
    // If this flag is false then the memory for this object was created
    // externally. If it is true then the memory was allocated at 
    // initialization and must be freed at finalization.
-   bool mBaseClassFreeMemoryFlag;
+   bool mBaseClassOwnMemoryFlag;
 
    // Pointer to memory for which the stack resides. This is either created
    // externally and passed as an initialization parameter or it is created
