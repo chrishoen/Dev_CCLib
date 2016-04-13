@@ -7,6 +7,7 @@ Block pool parameter class
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+#include "ccMemoryPtr.h"
 
 namespace CC
 {
@@ -93,7 +94,7 @@ public:
 
    // This contains the address of the first block box in the block box array.
    // It can be used to obtain the address of a block header or a block body.
-   char* mBlockBoxPtr;
+   MemoryPtr mBlockBoxArrayPtr;
 
    // True if block pool has been created.
    bool  mValidFlag;

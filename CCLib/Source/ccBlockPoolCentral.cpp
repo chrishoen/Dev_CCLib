@@ -209,7 +209,13 @@ void deallocateBlockPoolBlock(void* aBlockPtr)
 
 void* getBlockPoolBlockPtr(BlockHandle aBlockHandle)
 {
-#if 1
+   // Guard
+   if (aBlockHandle.isNull())  return 0;
+   // Calculate block address from stored parameters and block pool.handle
+   BlockPoolParms* tParms = &mBlockPoolParms[aBlockHandle.mPoolIndex];
+   return tParms->mBlockBoxArrayPtr.vplus(tParms->mBlockBoxSize*aBlockHandle.mBlockIndex + cBlockHeaderSize);
+
+#if 0
    // Guard
    if (aBlockHandle.isNull())  return 0;
    // Calculate block address from stored parameters and block pool.handle
@@ -219,8 +225,11 @@ void* getBlockPoolBlockPtr(BlockHandle aBlockHandle)
    // Return pointer to block.
    return tBlock;
 #endif
+
+#if 0
    // Return pointer to block.
    return mBlockPool[aBlockHandle.mPoolIndex]->getBlockPtr(aBlockHandle);
+#endif
 }
 
 //******************************************************************************
@@ -228,19 +237,29 @@ void* getBlockPoolBlockPtr(BlockHandle aBlockHandle)
 //******************************************************************************
 // Get the handle of a block, given its address.
 
-BlockHandle getBlockPoolBlockHandle(void* aBlockPtr)
+BlockHandle getBlockPoolBlockHandle(void* aBlockPointer)
 {
-#if 1
    BlockHandle tBlockHandle;
-   if (aBlockPtr==0) return tBlockHandle;
+   if (aBlockPointer==0) return tBlockHandle;
 
-   char*  tBlock = (char*)aBlockPtr;
+   MemoryPtr tBlockPtr(aBlockPointer);
+   BlockHeader* tHeader = (BlockHeader*)tBlockPtr.vminus(cBlockHeaderSize);
+   tBlockHandle = tHeader->mBlockHandle;
+   return tBlockHandle;
+
+#if 0
+   BlockHandle tBlockHandle;
+   if (aBlockPointer==0) return tBlockHandle;
+
+   char*  tBlock = (char*)aBlockPointer;
    BlockHeader* tHeader = (BlockHeader*)(tBlock - cBlockHeaderSize);
 
    tBlockHandle = tHeader->mBlockHandle;
    return tBlockHandle;
 #endif
-   return BlockBoxArray::getBlockHandle(aBlockPtr);
+#if 0
+   return BlockBoxArray::getBlockHandle(aBlockPointer);
+#endif
 }
 
 //******************************************************************************
@@ -304,9 +323,9 @@ void testBlockPool(int aPoolIndex)
 {
    BlockPoolParms* tParms = &mBlockPoolParms[aPoolIndex];
 
-   printf("mBlockBoxPtr    %p\n", tParms->mBlockBoxPtr);
-   printf("mBlockBoxSize   %d\n", tParms->mBlockBoxSize);
-   printf("mBlockHeaderSize%d\n", tParms->mBlockHeaderSize);
+   printf("mBlockBoxArrayPtr %p\n", tParms->mBlockBoxArrayPtr.vfetch());
+   printf("mBlockBoxSize     %d\n", tParms->mBlockBoxSize);
+   printf("mBlockHeaderSize  %d\n", tParms->mBlockHeaderSize);
 
    mBlockPool[aPoolIndex]->show();
 }

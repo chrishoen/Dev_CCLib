@@ -193,9 +193,9 @@ void BlockBoxArray::initialize(BlockPoolParms* aParms,void* aMemory)
    }
 
    // Store block array parameters. These can be used elsewhere.
-   aParms->mBlockHeaderSize = cBlockHeaderSize;
-   aParms->mBlockBoxSize    = tMemorySize.mBlockBoxSize;
-   aParms->mBlockBoxPtr     = mBlockBoxArray;
+   aParms->mBlockHeaderSize  = cBlockHeaderSize;
+   aParms->mBlockBoxSize     = tMemorySize.mBlockBoxSize;
+   aParms->mBlockBoxArrayPtr = MemoryPtr(mBlockBoxArray);
 }
 
 //******************************************************************************
