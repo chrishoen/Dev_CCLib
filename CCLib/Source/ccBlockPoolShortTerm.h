@@ -165,8 +165,10 @@ public:
    // Helpers
 
    // Size, the number of blocks that are available to be allocated.
-   void show();
    int size();
+
+   // Show status and metrics for the block pool.
+   void show();
 };
 
 //******************************************************************************

@@ -51,8 +51,11 @@ public:
    //***************************************************************************
    // Helpers
 
-   virtual void show()=0;
+   // Size, the number of blocks that are available to be allocated.
    virtual int size()=0;
+
+   // Show status and metrics for the block pool.
+   virtual void show()=0;
 };
 
 //******************************************************************************
