@@ -99,7 +99,7 @@ bool GSettings::initialize(char* aSection)
    // File path
    char tFilePath[200];
 
-   strcpy(tFilePath, "C:\\MyLib\\Settings\\SharedMemorySettings.txt");
+   strcpy(tFilePath, "C:\\Alpha\\Settings\\SharedMemorySettings.txt");
 
    // Copy arguments
    strcpy(mSection,aSection);
