@@ -18,6 +18,7 @@ namespace CC
 //******************************************************************************
 // Lock Free Index used by CAS based algorithms.
 
+__declspec(align(8)) 
 struct LFIndex
 {
    // Used as a node index.

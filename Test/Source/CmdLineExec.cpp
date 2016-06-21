@@ -39,9 +39,9 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0, "sizeof(size_t)  %d",sizeof(size_t));
-   Prn::print(0, "sizeof(int[10]) %d",sizeof(int[10]));
-   Prn::print(0, "sizeof(atomic<int>[10]) %d",sizeof(atomic<int>[10]));
+   Prn::print(0, "sizeof(size_t)  %d", (int)sizeof(size_t));
+   Prn::print(0, "sizeof(int[10]) %d", (int)sizeof(int[10]));
+   Prn::print(0, "sizeof(atomic<int>[10]) %d", (int)sizeof(atomic<int>[10]));
 
 
 }

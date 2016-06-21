@@ -130,7 +130,7 @@ void createBlockPool(BlockPoolParms* aParms)
       // Error.
       default :
       {
-         printf("ERROR BlockPoolType BAD", tParms->mBlockPoolType);
+         printf("ERROR BlockPoolType BAD %d", tParms->mBlockPoolType);
          return;
       }
       break;
@@ -138,7 +138,7 @@ void createBlockPool(BlockPoolParms* aParms)
 
    if (!tParms->mValidFlag)
    {
-      printf("ERROR BlockPool Initialization FAIL", tParms->mBlockPoolType);
+      printf("ERROR BlockPool Initialization FAIL %d", tParms->mBlockPoolType);
       return;
    }
 }

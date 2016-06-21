@@ -10,18 +10,19 @@
 //******************************************************************************
 //******************************************************************************
 
-struct LFIndex 
+__declspec(align(8))
+struct LFIndex
 {  
    int mIndex;  
    int mCount;  
 
-   LFIndex()
+   LFIndex() noexcept
    {
       mIndex = 0;
       mCount = 0;
    }
 
-   LFIndex(int aIndex,int aCount)
+   LFIndex(int aIndex,int aCount) noexcept
    {
       mIndex = aIndex;
       mCount = aCount;

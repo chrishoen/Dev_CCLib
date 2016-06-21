@@ -25,7 +25,7 @@ CmdLineExec::CmdLineExec()
 
 void CmdLineExec::reset()
 {
-   for (int i=0;i<100;i++) printf("\n",i);
+   for (int i=0;i<100;i++) printf("\n");
    mCount=0;
    LFIntQueue::initialize(4);
 }
