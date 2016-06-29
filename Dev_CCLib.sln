@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test", "Test\Test.vcxproj", "{CAE77CCE-F1ED-4596-913A-975EA3C7BCB8}"
 EndProject
@@ -38,6 +38,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NodeChannel", "NodeChannel\NodeChannel.vcxproj", "{6BCBD8AE-924C-4356-9AD1-45D2425714C5}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Memory", "Memory\Memory.vcxproj", "{051DF8AA-C984-4359-949D-93B4FDDE3693}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ShiftRegister", "ShiftRegister\ShiftRegister.vcxproj", "{786559E3-1E49-44AE-8450-E631C3797C31}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -191,6 +193,14 @@ Global
 		{051DF8AA-C984-4359-949D-93B4FDDE3693}.Release|Win32.Build.0 = Release|Win32
 		{051DF8AA-C984-4359-949D-93B4FDDE3693}.Release|x64.ActiveCfg = Release|x64
 		{051DF8AA-C984-4359-949D-93B4FDDE3693}.Release|x64.Build.0 = Release|x64
+		{786559E3-1E49-44AE-8450-E631C3797C31}.Debug|Win32.ActiveCfg = Debug|Win32
+		{786559E3-1E49-44AE-8450-E631C3797C31}.Debug|Win32.Build.0 = Debug|Win32
+		{786559E3-1E49-44AE-8450-E631C3797C31}.Debug|x64.ActiveCfg = Debug|x64
+		{786559E3-1E49-44AE-8450-E631C3797C31}.Debug|x64.Build.0 = Debug|x64
+		{786559E3-1E49-44AE-8450-E631C3797C31}.Release|Win32.ActiveCfg = Release|Win32
+		{786559E3-1E49-44AE-8450-E631C3797C31}.Release|Win32.Build.0 = Release|Win32
+		{786559E3-1E49-44AE-8450-E631C3797C31}.Release|x64.ActiveCfg = Release|x64
+		{786559E3-1E49-44AE-8450-E631C3797C31}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
