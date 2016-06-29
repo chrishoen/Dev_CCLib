@@ -36,7 +36,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   CC::ShiftRegister tF;
+   CC::ShiftRegister<double> tF;
    tF.initialize(4);
 
    for (int i=0;i<16;i++)
@@ -56,7 +56,7 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   CC::ShiftRegister tF;
+   CC::ShiftRegister<double> tF;
    tF.initialize(4);
 
    for (int i = 0; i<16; i++)
@@ -73,7 +73,7 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
-   CC::ShiftRegister tF;
+   CC::ShiftRegister<double> tF;
    tF.initialize(256);
 
    for (int i = 0; i<1000; i++)
