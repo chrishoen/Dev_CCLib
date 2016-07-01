@@ -5,7 +5,7 @@
 #include <atomic>
 
 #include "prnPrint.h"
-#include "ccShiftRegister.h"
+#include "ccValueHistory.h"
 #include "CmdLineExec.h"
 
 using namespace std;
@@ -36,17 +36,17 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   CC::ShiftRegister<double> tF;
+   CC::ValueHistory<double,double> tF;
    tF.initialize(4);
 
    for (int i=0;i<16;i++)
    {
-      tF.shiftRight(i*1.0);
+      tF.put(i*1.0,i*10.0);
    }
 
    for (int i=0;i<4;i++)
    {
-      Prn::print(0,"%3d %8.3f",i,tF.get(i));
+      Prn::print(0,"%3d %8.3f %8.3f", i, tF.getTime(i), tF.getElement(i));
    }
 }
 
@@ -56,15 +56,6 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   CC::ShiftRegister<double> tF;
-   tF.initialize(4);
-
-   for (int i = 0; i<16; i++)
-   {
-      tF.shiftRight(11.0 + i*1.0);
-      Prn::print(0,"%3d %8.3f %8.3f", i, tF.getLeft(), tF.getRight());
-   }
-
 }
 
 //******************************************************************************
@@ -73,20 +64,6 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
-   CC::ShiftRegister<double> tF;
-   tF.initialize(256);
-
-   for (int i = 0; i<1000; i++)
-   {
-      tF.shiftRight(11.0 + i*1.0);
-   }
-
-   for (int i = 0; i<16; i++)
-   {
-      tF.shiftRight(11.0 + i*1.0);
-      Prn::print(0,"%3d %8.3f %8.3f", i, tF.getLeft(), tF.getRight());
-   }
-
 }
 
 //******************************************************************************

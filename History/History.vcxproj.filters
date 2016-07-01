@@ -27,5 +27,8 @@
     <ClInclude Include="Source\ccShiftRegister.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="Source\ccValueHistory.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
