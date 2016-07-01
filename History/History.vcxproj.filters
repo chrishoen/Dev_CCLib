@@ -24,9 +24,6 @@
     <ClInclude Include="Source\MainInit.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccShiftRegister.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\ccValueHistory.h">
       <Filter>Source</Filter>
     </ClInclude>

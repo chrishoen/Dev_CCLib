@@ -3,7 +3,8 @@
 
 /*==============================================================================
 
-Template for history of values
+Template for a class that implements a container that stores a history of 
+values and times.
 
 ==============================================================================*/
 #include <stdio.h>
@@ -21,7 +22,9 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This is a class template for a History of values, as opposed to blocks.
+// This is a class template for a history of values. It contains a circular
+// buffer of values and a circualr buffer of times. Values and times are put
+// to the container and can be gotten according to an offset index. 
 
 template <class Time,class Element>
 class ValueHistory
@@ -103,7 +106,7 @@ public:
    //***************************************************************************
    // Return the size.
 
-   int size()     { return mSize; }
+   int  size()    { return mSize; }
    bool isGet()   { return mSize != 0; }
    bool isEmpty() { return mSize == 0; }
 

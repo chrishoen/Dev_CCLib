@@ -171,7 +171,6 @@
     <ClCompile Include="Source\MainInit.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\ccShiftRegister.h" />
     <ClInclude Include="Source\ccValueHistory.h" />
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\MainInit.h" />
