@@ -65,8 +65,8 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // This initializes the History to a fixed size. It initializes member
-   // variables and allocates heap storage for the History array. The History has
+   // Initializes the history to a fixed size. It initializes member
+   // variables and allocates heap storage for the history array. The history has
    // a specified maximum number of elements and it allocates memory for the
    // maximum number of elements.
 
@@ -89,6 +89,19 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
+   // Reinitializes the history. It is equivalent to an initialize without
+   // the memory allocation.
+
+   void reinitialize()
+   {
+      // Initialize variables
+      mIndex = 0;
+   }
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // If memory has been allocated then deallocate it.
 
    void finalize()
    {
@@ -131,7 +144,7 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // This gets a time from the history at an index that is offset from the
+   // Get a time from the history at an index that is offset from the
    // current index.
 
    Time getTime(int aOffset)
@@ -147,7 +160,7 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // This gets an element from the history at an index that is offset from the
+   // Get an element from the history at an index that is offset from the
    // current index.
 
    Element getElement(int aOffset)
