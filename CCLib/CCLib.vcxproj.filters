@@ -140,5 +140,8 @@
     <ClInclude Include="Source\ccBlockPool.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="Source\ccValueHistory.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

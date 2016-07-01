@@ -63,6 +63,7 @@
     <ClInclude Include="Source\ccTreeNode.h" />
     <ClInclude Include="Source\ccTreeNodeDestroyer.h" />
     <ClInclude Include="Source\ccTreeNodeVisitor.h" />
+    <ClInclude Include="Source\ccValueHistory.h" />
     <ClInclude Include="Source\ccValueQueue.h" />
     <ClInclude Include="Source\cc_functions.h" />
   </ItemGroup>
