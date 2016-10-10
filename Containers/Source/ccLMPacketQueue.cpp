@@ -288,8 +288,17 @@ void* LMPacketQueue::startWrite(int* aNodeIndex)
 {
    // Try to allocate a node from the free list.
    // Exit if it is empty.
+
+   mListMutex.lock();
+
    int tNodeIndex;
-   if (!listPop(&tNodeIndex)) return 0;
+   if (!listPop(&tNodeIndex))
+   {
+      mListMutex.unlock();
+      return 0;
+   }
+
+   mListMutex.unlock();
 
    // Initialize the node.
    mQueueNext[tNodeIndex] = cInvalid;
@@ -301,9 +310,13 @@ void* LMPacketQueue::startWrite(int* aNodeIndex)
 
 void LMPacketQueue::finishWrite(int aNodeIndex)
 {
+   mTailMutex.lock();
+
    // Attach the node to the queue tail.
    mQueueNext[mX->mQueueTail] = aNodeIndex;
    mX->mQueueTail = aNodeIndex;
+
+   mTailMutex.unlock();
 }
 
 //******************************************************************************
@@ -339,7 +352,9 @@ void* LMPacketQueue::startRead(int* aNodeIndex)
 
 void LMPacketQueue::finishRead(int aNodeIndex)
 {
+   mListMutex.lock();
    listPush(aNodeIndex);
+   mListMutex.unlock();
 }
 
 //******************************************************************************
@@ -395,18 +410,22 @@ bool LMPacketQueue::listPush(int aNode)
 
 void LMPacketQueue::lockList()
 {
+   mListMutex.lock();
 }
 
 void LMPacketQueue::unlockList()
 {
+   mListMutex.unlock();
 }
 
 void LMPacketQueue::lockTail()
 {
+   mTailMutex.lock();
 }
 
 void LMPacketQueue::unlockTail()
 {
+   mTailMutex.unlock();
 }
 
 }//namespace
