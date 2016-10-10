@@ -46,7 +46,7 @@ void Share::initialize()
          mPointerQueue.initialize(gGSettings.mNumElements);
          break;
       case 3:
-         mPacketQueue.initialize(gGSettings.mNumElements, sizeof(Class1A));
+         mLFPacketQueue.initialize(gGSettings.mNumElements, sizeof(Class1A));
          break;
       case 4:
          mValueQueue.initialize(gGSettings.mNumElements);
@@ -56,6 +56,9 @@ void Share::initialize()
          break;
       case 6:
          mSRWIntQueue.initialize(gGSettings.mNumElements);
+         break;
+      case 7:
+         mLMPacketQueue.initialize(gGSettings.mNumElements, sizeof(Class1A));
          break;
       case 11:
          break;

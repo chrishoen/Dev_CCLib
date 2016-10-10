@@ -158,12 +158,12 @@ void Reader::readType3(int aNumReads)
 
       mMarkerRead.doStart();
 
-      Class1A* tObject = (Class1A*)gShare.mPacketQueue.startRead(&tIndex);
+      Class1A* tObject = (Class1A*)gShare.mLFPacketQueue.startRead(&tIndex);
       if (tObject)
       {
          tCount = tObject->mCode1;
          tDelayB.delay();
-         gShare.mPacketQueue.finishRead(tIndex);
+         gShare.mLFPacketQueue.finishRead(tIndex);
       }
 
       mMarkerRead.doStop();
@@ -297,6 +297,49 @@ void Reader::readType6(int aNumReads)
 //******************************************************************************
 //******************************************************************************
 
+void Reader::readType7(int aNumReads)
+{
+   LFBackoff tDelayB(gGSettings.mDelayB1,gGSettings.mDelayB2);
+
+   for (int i = 0; i < aNumReads; i++)
+   {
+      bool tPass;
+      int tCount;
+      int tIndex;
+
+      mMarkerRead.doStart();
+
+      Class1A* tObject = (Class1A*)gShare.mLMPacketQueue.startRead(&tIndex);
+      if (tObject)
+      {
+         tCount = tObject->mCode1;
+         tDelayB.delay();
+         gShare.mLMPacketQueue.finishRead(tIndex);
+      }
+
+      mMarkerRead.doStop();
+      tPass = tObject!=0;
+
+      tDelayB.delay();
+
+      if (tPass)
+      {
+         mCount++;
+         mPassCount++;
+         mCheckSum += tCount;
+      }
+      else
+      {
+         mCount++;
+         mFailCount++;
+      }
+   }
+}
+  
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void Reader::read(int aNumReads)
 {
    switch (gShare.mType)
@@ -307,6 +350,7 @@ void Reader::read(int aNumReads)
    case 4: readType4(aNumReads); break;
    case 5: readType5(aNumReads); break;
    case 6: readType6(aNumReads); break;
+   case 7: readType7(aNumReads); break;
    }
 }
    
@@ -358,11 +402,11 @@ void Reader::flushType3()
    while(true)
    {
 
-      Class1A* tObject = (Class1A*)gShare.mPacketQueue.startRead(&tIndex);
+      Class1A* tObject = (Class1A*)gShare.mLFPacketQueue.startRead(&tIndex);
       if (!tObject) break;
 
       tCount = tObject->mCode1;
-      gShare.mPacketQueue.finishRead(tIndex);
+      gShare.mLFPacketQueue.finishRead(tIndex);
 
       mCount++;
       mPassCount++;
@@ -434,6 +478,30 @@ void Reader::flushType6()
 //******************************************************************************
 //******************************************************************************
 
+void Reader::flushType7()
+{
+   int tCount;
+   int tIndex;
+
+   while(true)
+   {
+
+      Class1A* tObject = (Class1A*)gShare.mLMPacketQueue.startRead(&tIndex);
+      if (!tObject) break;
+
+      tCount = tObject->mCode1;
+      gShare.mLMPacketQueue.finishRead(tIndex);
+
+      mCount++;
+      mPassCount++;
+      mCheckSum += tCount;
+   }
+}
+   
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void Reader::flush()
 {
    switch (gShare.mType)
@@ -444,6 +512,7 @@ void Reader::flush()
    case 4: flushType4(); break;
    case 5: flushType5(); break;
    case 6: flushType6(); break;
+   case 7: flushType7(); break;
    }
 }
    

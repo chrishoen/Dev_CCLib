@@ -140,13 +140,13 @@ void Writer::writeType3(int aNumWrites)
       mMarkerWrite.doStart();
 
       int tIndex;
-      void* tPacket = gShare.mPacketQueue.startWrite(&tIndex);
+      void* tPacket = gShare.mLFPacketQueue.startWrite(&tIndex);
       if (tPacket)
       {
          Class1A* tObject = new(tPacket) Class1A;
          tObject->mCode1 = tCount;
          tDelayA.delay();
-         gShare.mPacketQueue.finishWrite(tIndex);
+         gShare.mLFPacketQueue.finishWrite(tIndex);
          tPass=true;
       }
 
@@ -281,6 +281,49 @@ void Writer::writeType6(int aNumWrites)
 //******************************************************************************
 //******************************************************************************
 
+void Writer::writeType7(int aNumWrites)
+{
+   LFBackoff tDelayA(gGSettings.mDelayA1,gGSettings.mDelayA2);
+
+   for (int i = 0; i < aNumWrites; i++)
+   {
+      bool tPass = false;
+      int tCount = mCount & 0xFFFF;
+
+      mMarkerWrite.doStart();
+
+      int tIndex;
+      void* tPacket = gShare.mLMPacketQueue.startWrite(&tIndex);
+      if (tPacket)
+      {
+         Class1A* tObject = new(tPacket) Class1A;
+         tObject->mCode1 = tCount;
+         tDelayA.delay();
+         gShare.mLMPacketQueue.finishWrite(tIndex);
+         tPass=true;
+      }
+
+      mMarkerWrite.doStop();
+      tDelayA.delay();
+
+      if (tPass)
+      {
+         mCount++;
+         mPassCount++;
+         mCheckSum += tCount;
+      }
+      else
+      {
+         mCount++;
+         mFailCount++;
+      }
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void Writer::startTrial()
 {
    mMarkerWrite.startTrial(gGSettings.mXLimit);
@@ -309,6 +352,7 @@ void Writer::write(int aNumWrites)
    case 4: writeType4 (aNumWrites); break;
    case 5: writeType5 (aNumWrites); break;
    case 6: writeType6 (aNumWrites); break;
+   case 7: writeType7 (aNumWrites); break;
    }
 }
    
