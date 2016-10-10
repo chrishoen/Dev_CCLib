@@ -202,6 +202,7 @@ public:
    bool  listPush    (int  aNode);
 
    // Return a pointer to a packet, based on its packet index.
+private:
    void* elementAt(int aIndex);
 };
 

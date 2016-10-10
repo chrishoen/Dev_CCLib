@@ -35,8 +35,8 @@ public:
   int mCount;
 //CC::LFValueQueue<int>      mIntQueue;
   CC::SRWValueQueue<int>     mIntQueue;
-  CC::LFPacketQueue          mPacketQueue;
-//CC::LMPacketQueue          mPacketQueue;
+//CC::LFPacketQueue          mPacketQueue;
+  CC::LMPacketQueue          mPacketQueue;
   CC::LFPointerQueue<void*>  mPointerQueue;
 };
 

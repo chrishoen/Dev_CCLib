@@ -331,6 +331,7 @@ void* LMPacketQueue::startRead(int* aNodeIndex)
 
    // Return new head.
    *aNodeIndex = tNewHead;
+   *aNodeIndex = tNode;
 
    // Done.
    return tElementPtr;
@@ -386,4 +387,26 @@ bool LMPacketQueue::listPush(int aNode)
    mX->mListSize++;
    return true;
 }
+
+//***************************************************************************
+//***************************************************************************
+//***************************************************************************
+// Insert a node into the list before the list head node.
+
+void LMPacketQueue::lockList()
+{
+}
+
+void LMPacketQueue::unlockList()
+{
+}
+
+void LMPacketQueue::lockTail()
+{
+}
+
+void LMPacketQueue::unlockTail()
+{
+}
+
 }//namespace
