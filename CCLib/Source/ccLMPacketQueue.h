@@ -16,7 +16,11 @@ against concurrency contentions.
 
 It is thread safe for separate multiple writer and single reader threads.
 
-==============================================================================*/
+It implements the Michael and Scott algorithm for blocking queues. It 
+uses mutex protection. It maintains storage for the packets by implementing a
+free list that also uses mutex protection. 
+
+=============================================================================*/
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
