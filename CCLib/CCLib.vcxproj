@@ -28,6 +28,8 @@
     <ClCompile Include="Source\ccBlockPoolParms.cpp" />
     <ClCompile Include="Source\ccBlockPoolShortTerm.cpp" />
     <ClCompile Include="Source\ccLFPacketQueue.cpp" />
+    <ClCompile Include="Source\ccLMPacketQueue.cpp" />
+    <ClCompile Include="Source\ccSynch.cpp" />
     <ClCompile Include="Source\ccTreeNode.cpp" />
     <ClCompile Include="Source\ccTreeNodeDestroyer.cpp" />
     <ClCompile Include="Source\ccTreeNodeVisitor.cpp" />
@@ -53,6 +55,7 @@
     <ClInclude Include="Source\ccContainers2.h" />
     <ClInclude Include="Source\ccDefs.h" />
     <ClInclude Include="Source\ccDiagrams.h" />
+    <ClInclude Include="Source\ccLMPacketQueue.h" />
     <ClInclude Include="Source\ccSRWValueQueue.h" />
     <ClInclude Include="Source\ccLFPacketQueue.h" />
     <ClInclude Include="Source\ccLFIndex.h" />
@@ -60,6 +63,7 @@
     <ClInclude Include="Source\ccLFValueQueue.h" />
     <ClInclude Include="Source\ccMemoryPtr.h" />
     <ClInclude Include="Source\ccRecursiveAnchor.h" />
+    <ClInclude Include="Source\ccSynch.h" />
     <ClInclude Include="Source\ccTreeNode.h" />
     <ClInclude Include="Source\ccTreeNodeDestroyer.h" />
     <ClInclude Include="Source\ccTreeNodeVisitor.h" />
