@@ -155,5 +155,8 @@
     <ClInclude Include="Source\ccSynch.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="Source\smsContainers.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

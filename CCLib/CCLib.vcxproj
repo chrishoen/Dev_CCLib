@@ -70,6 +70,7 @@
     <ClInclude Include="Source\ccValueHistory.h" />
     <ClInclude Include="Source\ccValueQueue.h" />
     <ClInclude Include="Source\cc_functions.h" />
+    <ClInclude Include="Source\smsContainers.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1909118A-707C-47E4-80BC-84130E1C951B}</ProjectGuid>
