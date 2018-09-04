@@ -122,11 +122,7 @@ void GSettings::readFromFileName(char* aFileName)
    else
    {
       char tBuffer[400];
-<<<<<<< HEAD
       strcpy(tFilePath, Ris::getAlphaFilePath_Settings(tBuffer, "ConcurrentSettings.txt"));
-=======
-      strcpy(tFilePath, Ris::getAlphaFilePath_Settings(tBuffer, "ThreadTestSettings.txt"));
->>>>>>> 9e3666a0aa4a2e6758187e92ab393c2f2a97e61c
    }
 
    readFromFilePath(tFilePath);
