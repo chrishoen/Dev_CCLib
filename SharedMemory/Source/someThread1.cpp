@@ -6,7 +6,7 @@ Description:
 //******************************************************************************
 //******************************************************************************
 
-#include "prnPrint.h"
+#include "stdafx.h"
 
 #include "ccSharedMemory.h"
 #include "ccSharedSynch.h"

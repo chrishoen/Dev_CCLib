@@ -1,7 +1,4 @@
-#include <math.h>
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include "stdafx.h"
 
 #include "someGenerateMyTreeBlocks.h"
 

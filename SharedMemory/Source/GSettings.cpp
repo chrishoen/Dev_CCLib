@@ -2,10 +2,8 @@
 //******************************************************************************
 //******************************************************************************
 
-#include <stdio.h>
-#include <string.h>
+#include "stdafx.h"
 
-#include "my_functions.h"
 #include "risCmdLineFile.h"
 #include "risPortableCalls.h"
 

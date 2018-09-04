@@ -1,9 +1,5 @@
-#include <math.h>
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include "stdafx.h"
 
-#include "prnPrint.h"
 #include "ModuloMN_PowerOfTwo.h"
 
 #include "CmdLineExec.h"

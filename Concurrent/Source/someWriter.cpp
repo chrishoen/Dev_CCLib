@@ -6,8 +6,7 @@ Description:
 //******************************************************************************
 //******************************************************************************
 
-#include <new>
-#include "prnPrint.h"
+#include "stdafx.h"
 
 #include "GSettings.h"
 #include "LFBackoff.h"

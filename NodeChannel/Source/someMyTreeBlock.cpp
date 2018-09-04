@@ -6,8 +6,7 @@ Description:
 //******************************************************************************
 //******************************************************************************
 
-#include <new>
-#include "prnPrint.h"
+#include "stdafx.h"
 
 #include "ccBlockPool.h"
 #include "someBlockPoolIndex.h"

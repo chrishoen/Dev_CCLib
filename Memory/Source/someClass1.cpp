@@ -6,8 +6,7 @@ Description:
 //******************************************************************************
 //******************************************************************************
 
-#include <new>
-#include "prnPrint.h"
+#include "stdafx.h"
 
 #define  _SOMECLASS1_CPP_
 #include "someClass1.h"

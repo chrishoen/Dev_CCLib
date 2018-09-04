@@ -35,6 +35,8 @@ is ill-formed if a replacement is defined in namespace other than global
 namespace, or if it is defined as a static non-member function at global scope
 
 */
+#include "stdafx.h"
+
 #include <cstdio>
 #include <cstdlib>
 

@@ -1,10 +1,8 @@
-#include <stdio.h>
-#include <string.h>
+#include "stdafx.h"
+
 #include <windows.h>
 #include <atomic>
 
-#include "prnPrint.h"
-#include "my_functions.h"
 #include "risTimeMarker.h"
 #include "GSettings.h"
 #include "LFFreeList.h"

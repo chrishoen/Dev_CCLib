@@ -1,3 +1,4 @@
+#include "stdafx.h"
 
 #include "ccBlockPool.h"
 #include "someBlockPoolIndex.h"

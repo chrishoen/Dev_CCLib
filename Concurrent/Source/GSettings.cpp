@@ -5,9 +5,7 @@
 //******************************************************************************
 //******************************************************************************
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
+#include "stdafx.h"
 
 #include "risAlphaDir.h"
 #include "risCmdLineFile.h"

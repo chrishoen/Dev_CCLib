@@ -1,5 +1,5 @@
+#include "stdafx.h"
 
-#include <stdio.h>
 #include "GSettings.h"
 #include "ccBlockPool.h"
 #include "someBlockPoolIndex.h"

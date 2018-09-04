@@ -1,10 +1,5 @@
-#include <math.h>
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <new>
+#include "stdafx.h"
 
-#include "prnPrint.h"
 #include "ccBlockPool.h"
 #include "ccSharedMemory.h"
 #include "ccSharedSynch.h"

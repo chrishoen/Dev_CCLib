@@ -1,9 +1,4 @@
-#include <windows.h>
-#include <math.h>
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <atomic>
+#include "stdafx.h"
 
 #include "prnPrint.h"
 #include "LFIndex.h"

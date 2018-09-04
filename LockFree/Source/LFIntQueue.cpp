@@ -1,9 +1,7 @@
-#include <stdio.h>
-#include <string.h>
+#include "stdafx.h"
+
 #include <windows.h>
 #include <atomic>
-#include "my_functions.h"
-#include "prnPrint.h"
 
 #include "LFIndex.h"
 #include "LFBackoff.h"

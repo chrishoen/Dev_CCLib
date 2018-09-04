@@ -1,11 +1,5 @@
-#include <windows.h>
-#include <math.h>
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <new>
+#include "stdafx.h"
 
-#include "prnPrint.h"
 #include "someClass1.h"
 
 #include "CmdLineExec.h"

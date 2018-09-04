@@ -1,5 +1,6 @@
 
-#include "prnPrint.h"
+#include "stdafx.h"
+
 #include "GSettings.h"
 #include "ccSharedMemory.h"
 #include "ccSharedSynch.h"

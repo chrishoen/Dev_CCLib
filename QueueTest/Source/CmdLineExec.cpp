@@ -1,13 +1,10 @@
-#include <math.h>
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include "stdafx.h"
+
 #include <atomic>
 
 #include "ccValueQueue.h"
 #include "ccLFValueQueue.h"
 
-#include "prnPrint.h"
 #include "CmdLineExec.h"
 
 using namespace std;

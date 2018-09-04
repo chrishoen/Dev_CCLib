@@ -1,6 +1,5 @@
-#include <windows.h>
+#include "stdafx.h"
 
-#include "prnPrint.h"
 #include "risThreadsProcess.h"
 #include "GSettings.h"
 
