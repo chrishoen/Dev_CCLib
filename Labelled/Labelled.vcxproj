@@ -179,6 +179,7 @@
     <ClCompile Include="Source\someGenerateLabelledTreeNodes.cpp" />
     <ClCompile Include="Source\someLabelledTreeNode.cpp" />
     <ClCompile Include="Source\someLabelledTreeNodeVisitor.cpp" />
+    <ClCompile Include="Source\stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h" />
@@ -188,6 +189,7 @@
     <ClInclude Include="Source\someGenerateLabelledTreeNodes.h" />
     <ClInclude Include="Source\someLabelledTreeNode.h" />
     <ClInclude Include="Source\someLabelledTreeNodeVisitor.h" />
+    <ClInclude Include="Source\stdafx.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

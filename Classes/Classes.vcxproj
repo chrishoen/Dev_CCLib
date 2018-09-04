@@ -173,6 +173,7 @@
     <ClCompile Include="Source\someClass1.cpp" />
     <ClCompile Include="Source\someClass2.cpp" />
     <ClCompile Include="Source\someClass3.cpp" />
+    <ClCompile Include="Source\stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CmdLineExec.h" />
@@ -180,6 +181,7 @@
     <ClInclude Include="Source\someClass1.h" />
     <ClInclude Include="Source\someClass2.h" />
     <ClInclude Include="Source\someClass3.h" />
+    <ClInclude Include="Source\stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CCLib\CCLib.vcxproj">

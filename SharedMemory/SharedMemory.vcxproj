@@ -176,6 +176,7 @@
     <ClCompile Include="Source\MainMemory.cpp" />
     <ClCompile Include="Source\someMyBlockA.cpp" />
     <ClCompile Include="Source\someThread1.cpp" />
+    <ClCompile Include="Source\stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\ccSharedSynch.h" />
@@ -187,6 +188,7 @@
     <ClInclude Include="Source\someBlockPoolIndex.h" />
     <ClInclude Include="Source\someMyBlockA.h" />
     <ClInclude Include="Source\someThread1.h" />
+    <ClInclude Include="Source\stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CCLib\CCLib.vcxproj">

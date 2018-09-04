@@ -189,6 +189,7 @@
     <ClCompile Include="Source\someWriterReader.cpp" />
     <ClCompile Include="Source\someWriterReaderThread.cpp" />
     <ClCompile Include="Source\someWriterThread.cpp" />
+    <ClCompile Include="Source\stdafx.cpp" />
     <ClCompile Include="Source\Timing.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -215,6 +216,7 @@
     <ClInclude Include="Source\someWriterReader.h" />
     <ClInclude Include="Source\someWriterReaderThread.h" />
     <ClInclude Include="Source\someWriterThread.h" />
+    <ClInclude Include="Source\stdafx.h" />
     <ClInclude Include="Source\Timing.h" />
   </ItemGroup>
   <ItemGroup>
