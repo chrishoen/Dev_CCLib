@@ -9,7 +9,7 @@ Description:
 
 #include "LFIntQueue.h"
 #include "LFFreeList.h"
-#include "GSettings.h"
+#include "Parms.h"
 
 #define  _SOMESHARE_CPP_
 #include "someShare.h"
@@ -27,9 +27,9 @@ Share::Share()
 
 void Share::initialize()
 {
-   mMode = gGSettings.mMode;
-   mType = gGSettings.mType;
-   mTest = gGSettings.mTest;
+   mMode = gParms.mMode;
+   mType = gParms.mType;
+   mTest = gParms.mTest;
    mTerminateFlag = false;
 
    switch (mMode)
@@ -39,25 +39,25 @@ void Share::initialize()
       switch (mType)
       {
       case 1:
-         LFIntQueue::initialize(gGSettings.mNumElements);
+         LFIntQueue::initialize(gParms.mNumElements);
          break;
       case 2:
-         mPointerQueue.initialize(gGSettings.mNumElements);
+         mPointerQueue.initialize(gParms.mNumElements);
          break;
       case 3:
-         mLFPacketQueue.initialize(gGSettings.mNumElements, sizeof(Class1A));
+         mLFPacketQueue.initialize(gParms.mNumElements, sizeof(Class1A));
          break;
       case 4:
-         mValueQueue.initialize(gGSettings.mNumElements);
+         mValueQueue.initialize(gParms.mNumElements);
          break;
       case 5:
-         mIntQueue.initialize(gGSettings.mNumElements);
+         mIntQueue.initialize(gParms.mNumElements);
          break;
       case 6:
-         mSRWIntQueue.initialize(gGSettings.mNumElements);
+         mSRWIntQueue.initialize(gParms.mNumElements);
          break;
       case 7:
-         mLMPacketQueue.initialize(gGSettings.mNumElements, sizeof(Class1A));
+         mLMPacketQueue.initialize(gParms.mNumElements, sizeof(Class1A));
          break;
       case 11:
          break;
@@ -65,13 +65,13 @@ void Share::initialize()
          break;
       case 21:
       case 22:
-         mValueQueue.initialize(gGSettings.mNumElements);
+         mValueQueue.initialize(gParms.mNumElements);
          break;
       }
       break;
    }
 
-   mNumWriters = gGSettings.mNumWriters;
+   mNumWriters = gParms.mNumWriters;
    if (mNumWriters > cMaxNumWriters) mNumWriters = cMaxNumWriters;
 
    for (int i = 0; i < mNumWriters; i++)

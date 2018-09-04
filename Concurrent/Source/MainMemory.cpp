@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-#include "GSettings.h"
+#include "Parms.h"
 #include "ccBlockPool.h"
 #include "someBlockPoolIndex.h"
 #include "someMyBlockA.h"
@@ -27,7 +27,7 @@ void main_memory_initialize()
    tBlockPoolParms.reset();
    tBlockPoolParms.mPoolIndex     = Some::cBlockPoolIndex_MyBlockA;
    tBlockPoolParms.mBlockPoolType = CC::cBlockPoolType_Faster;
-   tBlockPoolParms.mNumBlocks     = gGSettings.mNumElements;
+   tBlockPoolParms.mNumBlocks     = gParms.mNumElements;
    tBlockPoolParms.mBlockSize     = sizeof(Some::MyBlockA);
    tBlockPoolParms.mNoThrowFlag   = true;
    CC::createBlockPool(&tBlockPoolParms);

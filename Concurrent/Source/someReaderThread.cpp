@@ -9,7 +9,7 @@
 #include <Windows.h>
 
 #include "someShare.h"
-#include "GSettings.h"
+#include "Parms.h"
 
 #define  _SOMEREADERTHREAD_CPP_
 #include "someReaderThread.h"
@@ -24,10 +24,10 @@ namespace Some
 ReaderThread::ReaderThread() 
 {
    // Settings Members
-   mSleepLower = gGSettings.mSleepLower;
-   mSleepUpper = gGSettings.mSleepUpper;
-   mReadLower  = gGSettings.mReadLower;
-   mReadUpper  = gGSettings.mReadUpper;
+   mSleepLower = gParms.mSleepLower;
+   mSleepUpper = gParms.mSleepUpper;
+   mReadLower  = gParms.mReadLower;
+   mReadUpper  = gParms.mReadUpper;
 
    // BaseClass
    BaseClass::setThreadPriorityHigh();

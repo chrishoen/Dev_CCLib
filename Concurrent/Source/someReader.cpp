@@ -8,7 +8,7 @@ Description:
 
 #include "stdafx.h"
 
-#include "GSettings.h"
+#include "Parms.h"
 #include "someShare.h"
 #include "LFBackoff.h"
 #include "LFIntQueue.h"
@@ -60,7 +60,7 @@ void Reader::show()
 
 void Reader::startTrial()
 {
-   mMarkerRead.startTrial(gGSettings.mXLimit);
+   mMarkerRead.startTrial(gParms.mXLimit);
 
 }
 void Reader::finishTrial()
@@ -76,7 +76,7 @@ void Reader::finishTrial()
 
 void Reader::readType1(int aNumReads)
 {
-   LFBackoff tDelayB(gGSettings.mDelayB1,gGSettings.mDelayB2);
+   LFBackoff tDelayB(gParms.mDelayB1,gParms.mDelayB2);
 
    for (int i = 0; i < aNumReads; i++)
    {
@@ -109,7 +109,7 @@ void Reader::readType1(int aNumReads)
 
 void Reader::readType2(int aNumReads)
 {
-   LFBackoff tDelayB(gGSettings.mDelayB1,gGSettings.mDelayB2);
+   LFBackoff tDelayB(gParms.mDelayB1,gParms.mDelayB2);
 
    for (int i = 0; i < aNumReads; i++)
    {
@@ -148,7 +148,7 @@ void Reader::readType2(int aNumReads)
 
 void Reader::readType3(int aNumReads)
 {
-   LFBackoff tDelayB(gGSettings.mDelayB1,gGSettings.mDelayB2);
+   LFBackoff tDelayB(gParms.mDelayB1,gParms.mDelayB2);
 
    for (int i = 0; i < aNumReads; i++)
    {
@@ -192,7 +192,7 @@ void Reader::readType3(int aNumReads)
 
 void Reader::readType4(int aNumReads)
 {
-   LFBackoff tDelayB(gGSettings.mDelayB1,gGSettings.mDelayB2);
+   LFBackoff tDelayB(gParms.mDelayB1,gParms.mDelayB2);
 
    for (int i = 0; i < aNumReads; i++)
    {
@@ -233,7 +233,7 @@ void Reader::readType4(int aNumReads)
 
 void Reader::readType5(int aNumReads)
 {
-   LFBackoff tDelayB(gGSettings.mDelayB1,gGSettings.mDelayB2);
+   LFBackoff tDelayB(gParms.mDelayB1,gParms.mDelayB2);
 
    for (int i = 0; i < aNumReads; i++)
    {
@@ -266,7 +266,7 @@ void Reader::readType5(int aNumReads)
 
 void Reader::readType6(int aNumReads)
 {
-   LFBackoff tDelayB(gGSettings.mDelayB1,gGSettings.mDelayB2);
+   LFBackoff tDelayB(gParms.mDelayB1,gParms.mDelayB2);
 
    for (int i = 0; i < aNumReads; i++)
    {
@@ -299,7 +299,7 @@ void Reader::readType6(int aNumReads)
 
 void Reader::readType7(int aNumReads)
 {
-   LFBackoff tDelayB(gGSettings.mDelayB1,gGSettings.mDelayB2);
+   LFBackoff tDelayB(gParms.mDelayB1,gParms.mDelayB2);
 
    for (int i = 0; i < aNumReads; i++)
    {

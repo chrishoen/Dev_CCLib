@@ -170,7 +170,6 @@
     <ClCompile Include="..\LockFree\Source\LFFreeList.cpp" />
     <ClCompile Include="..\LockFree\Source\LFIntQueue.cpp" />
     <ClCompile Include="Source\CmdLineExec.cpp" />
-    <ClCompile Include="Source\GSettings.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
     <ClCompile Include="Source\MainMemory.cpp" />
@@ -201,7 +200,6 @@
     <ClInclude Include="..\LockFree\Source\LFIndex.h" />
     <ClInclude Include="..\LockFree\Source\LFIntQueue.h" />
     <ClInclude Include="Source\CmdLineExec.h" />
-    <ClInclude Include="Source\GSettings.h" />
     <ClInclude Include="Source\MainInit.h" />
     <ClInclude Include="Source\MainMemory.h" />
     <ClInclude Include="Source\Parms.h" />

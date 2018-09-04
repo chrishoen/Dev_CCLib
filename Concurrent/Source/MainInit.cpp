@@ -2,7 +2,7 @@
 
 #include <windows.h>
 
-#include "GSettings.h"
+#include "parms.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -36,10 +36,6 @@ void exitProcess()
 
 void main_initialize(int argc,char** argv)
 {
-   // Read settings file
-   gGSettings.readFromFileName();
-   gGSettings.show();
-
    // Enter process
    enterProcessHigh();
 
@@ -76,6 +72,10 @@ void main_initialize(int argc,char** argv)
    Prn::setFilter(Prn::QCallRun2,  false);
    Prn::setFilter(Prn::QCallRun3,  false);
    Prn::setFilter(Prn::QCallRun4,  false);
+
+   // Read parms files.
+   gParms.readFile();
+
 
    Prn::print(0,"Concurrent*******************************************BEGIN");
 }

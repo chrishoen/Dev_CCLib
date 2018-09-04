@@ -9,7 +9,7 @@
 #include <Windows.h>
 
 #include "someShare.h"
-#include "GSettings.h"
+#include "Parms.h"
 
 #define  _SOMEWRITERTHREAD_CPP_
 #include "someWriterReaderThread.h"
@@ -24,10 +24,10 @@ namespace Some
 WriterReaderThread::WriterReaderThread(int aIdent) 
 {
    // Settings Members
-   mSleepLower = gGSettings.mSleepLower;
-   mSleepUpper = gGSettings.mSleepUpper;
-   mWriteLower = gGSettings.mWriteLower;
-   mWriteUpper = gGSettings.mWriteUpper;
+   mSleepLower = gParms.mSleepLower;
+   mSleepUpper = gParms.mSleepUpper;
+   mWriteLower = gParms.mWriteLower;
+   mWriteUpper = gParms.mWriteUpper;
 
    // BaseClass
    BaseClass::setThreadPriorityHigh();
@@ -76,9 +76,9 @@ void WriterReaderThread::threadRunFunction()
          // Sleep
          threadSleep(my_irand(mSleepLower, mSleepUpper));
          // Thread loop termination
-         if (gGSettings.mTerminate != 0)
+         if (gParms.mTerminate != 0)
          {
-            if (gShare.mWriterReader[mIdent].mWriteCount > gGSettings.mTerminate)
+            if (gShare.mWriterReader[mIdent].mWriteCount > gParms.mTerminate)
             {
                gShare.mTerminateFlag = true;
             }

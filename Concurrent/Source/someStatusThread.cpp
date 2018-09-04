@@ -12,7 +12,7 @@
 #include "LFFreeList.h"
 #include "LFIntQueue.h"
 #include "someShare.h"
-#include "GSettings.h"
+#include "Parms.h"
 
 #define  _SOMESTATUSTHREAD_CPP_
 #include "someStatusThread.h"

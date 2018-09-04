@@ -9,7 +9,7 @@
 #include <Windows.h>
 
 #include "someShare.h"
-#include "GSettings.h"
+#include "Parms.h"
 
 #define  _SOMETESTERTHREAD_CPP_
 #include "someTesterThread.h"
@@ -24,10 +24,10 @@ namespace Some
 TesterThread::TesterThread() 
 {
    // Settings Members
-   mSleepLower = gGSettings.mSleepLower;
-   mSleepUpper = gGSettings.mSleepUpper;
-   mWriteLower = gGSettings.mWriteLower;
-   mWriteUpper = gGSettings.mWriteUpper;
+   mSleepLower = gParms.mSleepLower;
+   mSleepUpper = gParms.mSleepUpper;
+   mWriteLower = gParms.mWriteLower;
+   mWriteUpper = gParms.mWriteUpper;
 
    // BaseClass
    BaseClass::setThreadPriorityHigh();
@@ -58,9 +58,9 @@ void TesterThread::threadRunFunction()
          // Sleep
          threadSleep(my_irand(mSleepLower, mSleepUpper));
          // Thread loop termination
-         if (gGSettings.mTerminate != 0)
+         if (gParms.mTerminate != 0)
          {
-            if (gShare.mTester.mCount > gGSettings.mTerminate)
+            if (gShare.mTester.mCount > gParms.mTerminate)
             {
                gShare.mTerminateFlag = true;
             }

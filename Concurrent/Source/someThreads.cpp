@@ -7,7 +7,7 @@ Description:
 //******************************************************************************
 #include "stdafx.h"
 
-#include "GSettings.h"
+#include "Parms.h"
 #include "someShare.h"
 
 #define  _SOMETHREADS_CPP_
@@ -26,7 +26,7 @@ Threads::Threads()
 
 void Threads::reset()
 {
-   mNumWriters = gGSettings.mNumWriters;
+   mNumWriters = gParms.mNumWriters;
    if (mNumWriters > cMaxNumWriters) mNumWriters = cMaxNumWriters;
 
    for (int i = 0; i < cMaxNumWriters; i++)

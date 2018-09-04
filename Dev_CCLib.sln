@@ -44,7 +44,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Files", "Files", "{D87D4E67-8723-404D-9E2C-B7BB2490C8E0}"
 	ProjectSection(SolutionItems) = preProject
 		Files\Concurrent_Parms.txt = Files\Concurrent_Parms.txt
-		Files\ConcurrentSettings.txt = Files\ConcurrentSettings.txt
 		Files\SharedMemorySettings.txt = Files\SharedMemorySettings.txt
 	EndProjectSection
 EndProject

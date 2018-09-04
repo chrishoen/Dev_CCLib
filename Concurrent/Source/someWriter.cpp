@@ -8,7 +8,7 @@ Description:
 
 #include "stdafx.h"
 
-#include "GSettings.h"
+#include "Parms.h"
 #include "LFBackoff.h"
 #include "LFFreeList.h"
 #include "LFIntQueue.h"
@@ -61,7 +61,7 @@ void Writer::show()
 
 void Writer::writeType1(int aNumWrites)
 {
-   LFBackoff tDelayA(gGSettings.mDelayA1,gGSettings.mDelayA2);
+   LFBackoff tDelayA(gParms.mDelayA1,gParms.mDelayA2);
 
    for (int i = 0; i < aNumWrites; i++)
    {
@@ -93,7 +93,7 @@ void Writer::writeType1(int aNumWrites)
 
 void Writer::writeType2(int aNumWrites)
 {
-   LFBackoff tDelayA(gGSettings.mDelayA1,gGSettings.mDelayA2);
+   LFBackoff tDelayA(gParms.mDelayA1,gParms.mDelayA2);
 
    for (int i = 0; i < aNumWrites; i++)
    {
@@ -129,7 +129,7 @@ void Writer::writeType2(int aNumWrites)
 
 void Writer::writeType3(int aNumWrites)
 {
-   LFBackoff tDelayA(gGSettings.mDelayA1,gGSettings.mDelayA2);
+   LFBackoff tDelayA(gParms.mDelayA1,gParms.mDelayA2);
 
    for (int i = 0; i < aNumWrites; i++)
    {
@@ -172,7 +172,7 @@ void Writer::writeType3(int aNumWrites)
 
 void Writer::writeType4(int aNumWrites)
 {
-   LFBackoff tDelayA(gGSettings.mDelayA1,gGSettings.mDelayA2);
+   LFBackoff tDelayA(gParms.mDelayA1,gParms.mDelayA2);
 
    for (int i = 0; i < aNumWrites; i++)
    {
@@ -220,7 +220,7 @@ void Writer::writeType4(int aNumWrites)
 
 void Writer::writeType5(int aNumWrites)
 {
-   LFBackoff tDelayA(gGSettings.mDelayA1,gGSettings.mDelayA2);
+   LFBackoff tDelayA(gParms.mDelayA1,gParms.mDelayA2);
 
    for (int i = 0; i < aNumWrites; i++)
    {
@@ -251,7 +251,7 @@ void Writer::writeType5(int aNumWrites)
 
 void Writer::writeType6(int aNumWrites)
 {
-   LFBackoff tDelayA(gGSettings.mDelayA1,gGSettings.mDelayA2);
+   LFBackoff tDelayA(gParms.mDelayA1,gParms.mDelayA2);
 
    for (int i = 0; i < aNumWrites; i++)
    {
@@ -282,7 +282,7 @@ void Writer::writeType6(int aNumWrites)
 
 void Writer::writeType7(int aNumWrites)
 {
-   LFBackoff tDelayA(gGSettings.mDelayA1,gGSettings.mDelayA2);
+   LFBackoff tDelayA(gParms.mDelayA1,gParms.mDelayA2);
 
    for (int i = 0; i < aNumWrites; i++)
    {
@@ -325,9 +325,9 @@ void Writer::writeType7(int aNumWrites)
 
 void Writer::startTrial()
 {
-   mMarkerWrite.startTrial(gGSettings.mXLimit);
-   mMarkerPop.startTrial(gGSettings.mXLimit);
-   mMarkerPush.startTrial(gGSettings.mXLimit);
+   mMarkerWrite.startTrial(gParms.mXLimit);
+   mMarkerPop.startTrial(gParms.mXLimit);
+   mMarkerPush.startTrial(gParms.mXLimit);
 
 }
 void Writer::finishTrial()

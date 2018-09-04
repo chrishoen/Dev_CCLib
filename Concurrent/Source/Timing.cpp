@@ -4,7 +4,7 @@
 #include <atomic>
 
 #include "risTimeMarker.h"
-#include "GSettings.h"
+#include "Parms.h"
 #include "LFFreeList.h"
 #include "LFIntQueue.h"
 #include "LFBackoff.h"
@@ -58,7 +58,7 @@ namespace Timing
       mReadCount=0;
       mAX=0;
 
-      mMarker.startTrial(gGSettings.mXLimit);
+      mMarker.startTrial(gParms.mXLimit);
 
       for (int i = 0; i < tIterations; i++)
       {
@@ -99,8 +99,8 @@ namespace Timing
       mWriteCount=0;
       mReadCount=0;
 
-      mMarkerWrite.startTrial(gGSettings.mXLimit);
-      mMarkerRead.startTrial(gGSettings.mXLimit);
+      mMarkerWrite.startTrial(gParms.mXLimit);
+      mMarkerRead.startTrial(gParms.mXLimit);
 
       for (int i = 0; i < tIterations; i++)
       {
@@ -143,8 +143,8 @@ namespace Timing
       mPopCount=0;
       mPushCount=0;
 
-      mMarkerPop.startTrial(gGSettings.mXLimit);
-      mMarkerPush.startTrial(gGSettings.mXLimit);
+      mMarkerPop.startTrial(gParms.mXLimit);
+      mMarkerPush.startTrial(gParms.mXLimit);
 
       for (int i = 0; i < tIterations; i++)
       {

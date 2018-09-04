@@ -9,7 +9,7 @@ Description:
 #include "stdafx.h"
 
 
-#include "GSettings.h"
+#include "Parms.h"
 #include "LFBackoff.h"
 #include "LFFreeList.h"
 #include "LFIntQueue.h"
@@ -72,7 +72,7 @@ void WriterReader::startTrialType1()
 {
    if (mIdent == 0)
    {
-      int tListSize = gGSettings.mNumElements;
+      int tListSize = gParms.mNumElements;
       for (int i = 0; i < tListSize / 2; i++)
       {
          ++mCount &= 0xFFFF;
@@ -84,8 +84,8 @@ void WriterReader::startTrialType1()
       }
    }
 
-   mMarkerWrite.startTrial(gGSettings.mXLimit);
-   mMarkerRead.startTrial(gGSettings.mXLimit);
+   mMarkerWrite.startTrial(gParms.mXLimit);
+   mMarkerRead.startTrial(gParms.mXLimit);
 }
 
 //******************************************************************************
@@ -96,7 +96,7 @@ void WriterReader::startTrialType2()
 {
    if (mIdent == 0)
    {
-      int tListSize = gGSettings.mNumElements;
+      int tListSize = gParms.mNumElements;
       for (int i = 0; i < tListSize / 2; i++)
       {
          ++mCount &= 0xFFFF;
@@ -111,8 +111,8 @@ void WriterReader::startTrialType2()
       }
    }
 
-   mMarkerWrite.startTrial(gGSettings.mXLimit);
-   mMarkerRead.startTrial(gGSettings.mXLimit);
+   mMarkerWrite.startTrial(gParms.mXLimit);
+   mMarkerRead.startTrial(gParms.mXLimit);
 }
 
 //******************************************************************************
@@ -123,7 +123,7 @@ void WriterReader::startTrialType3()
 {
    if (mIdent == 0)
    {
-      int tListSize = gGSettings.mNumElements;
+      int tListSize = gParms.mNumElements;
       for (int i = 0; i < tListSize / 2; i++)
       {
          ++mCount &= 0xFFFF;
@@ -143,8 +143,8 @@ void WriterReader::startTrialType3()
       }
    }
 
-   mMarkerWrite.startTrial(gGSettings.mXLimit);
-   mMarkerRead.startTrial(gGSettings.mXLimit);
+   mMarkerWrite.startTrial(gParms.mXLimit);
+   mMarkerRead.startTrial(gParms.mXLimit);
 }
 
 //******************************************************************************
@@ -155,7 +155,7 @@ void WriterReader::startTrialType4()
 {
    if (mIdent == 0)
    {
-      int tListSize = gGSettings.mNumElements;
+      int tListSize = gParms.mNumElements;
       for (int i = 0; i < tListSize / 2; i++)
       {
          ++mCount &= 0xFFFF;
@@ -170,8 +170,8 @@ void WriterReader::startTrialType4()
       }
    }
 
-   mMarkerWrite.startTrial(gGSettings.mXLimit);
-   mMarkerRead.startTrial(gGSettings.mXLimit);
+   mMarkerWrite.startTrial(gParms.mXLimit);
+   mMarkerRead.startTrial(gParms.mXLimit);
 }
 
 //******************************************************************************
@@ -182,7 +182,7 @@ void WriterReader::startTrialType5()
 {
    if (mIdent == 0)
    {
-      int tListSize = gGSettings.mNumElements;
+      int tListSize = gParms.mNumElements;
       for (int i = 0; i < tListSize / 2; i++)
       {
          ++mCount &= 0xFFFF;
@@ -195,8 +195,8 @@ void WriterReader::startTrialType5()
       }
    }
 
-   mMarkerWrite.startTrial(gGSettings.mXLimit);
-   mMarkerRead.startTrial(gGSettings.mXLimit);
+   mMarkerWrite.startTrial(gParms.mXLimit);
+   mMarkerRead.startTrial(gParms.mXLimit);
 }
 
 //******************************************************************************
@@ -207,7 +207,7 @@ void WriterReader::startTrialType6()
 {
    if (mIdent == 0)
    {
-      int tListSize = gGSettings.mNumElements;
+      int tListSize = gParms.mNumElements;
       for (int i = 0; i < tListSize / 2; i++)
       {
          ++mCount &= 0xFFFF;
@@ -220,8 +220,8 @@ void WriterReader::startTrialType6()
       }
    }
 
-   mMarkerWrite.startTrial(gGSettings.mXLimit);
-   mMarkerRead.startTrial(gGSettings.mXLimit);
+   mMarkerWrite.startTrial(gParms.mXLimit);
+   mMarkerRead.startTrial(gParms.mXLimit);
 }
 
 //******************************************************************************
@@ -230,8 +230,8 @@ void WriterReader::startTrialType6()
 
 void WriterReader::startTrialType11()
 {
-   mMarkerWrite.startTrial(gGSettings.mXLimit);
-   mMarkerRead.startTrial(gGSettings.mXLimit);
+   mMarkerWrite.startTrial(gParms.mXLimit);
+   mMarkerRead.startTrial(gParms.mXLimit);
 }
 
 //******************************************************************************
@@ -240,8 +240,8 @@ void WriterReader::startTrialType11()
 
 void WriterReader::startTrialType12()
 {
-   mMarkerWrite.startTrial(gGSettings.mXLimit);
-   mMarkerRead.startTrial(gGSettings.mXLimit);
+   mMarkerWrite.startTrial(gParms.mXLimit);
+   mMarkerRead.startTrial(gParms.mXLimit);
 }
 
 //******************************************************************************
@@ -252,7 +252,7 @@ void WriterReader::startTrialType21()
 {
    if (mIdent == 0)
    {
-      int tListSize = gGSettings.mNumElements;
+      int tListSize = gParms.mNumElements;
       for (int i = 0; i < tListSize / 2; i++)
       {
          ++mCount &= 0xFFFF;
@@ -267,8 +267,8 @@ void WriterReader::startTrialType21()
       }
    }
 
-   mMarkerWrite.startTrial(gGSettings.mXLimit);
-   mMarkerRead.startTrial(gGSettings.mXLimit);
+   mMarkerWrite.startTrial(gParms.mXLimit);
+   mMarkerRead.startTrial(gParms.mXLimit);
 }
 
 //******************************************************************************
@@ -279,7 +279,7 @@ void WriterReader::startTrialType22()
 {
    if (mIdent == 0)
    {
-      int tListSize = gGSettings.mNumElements;
+      int tListSize = gParms.mNumElements;
       for (int i = 0; i < tListSize / 2; i++)
       {
          ++mCount &= 0xFFFF;
@@ -294,8 +294,8 @@ void WriterReader::startTrialType22()
       }
    }
 
-   mMarkerWrite.startTrial(gGSettings.mXLimit);
-   mMarkerRead.startTrial(gGSettings.mXLimit);
+   mMarkerWrite.startTrial(gParms.mXLimit);
+   mMarkerRead.startTrial(gParms.mXLimit);
 }
 
 //******************************************************************************
@@ -337,7 +337,7 @@ void WriterReader::finishTrial()
 
 void WriterReader::writereadType1(int aNumWrites)
 {
-   LFBackoff tDelayA(gGSettings.mDelayA1,gGSettings.mDelayA2);
+   LFBackoff tDelayA(gParms.mDelayA1,gParms.mDelayA2);
 
    for (int i = 0; i < aNumWrites; i++)
    {
@@ -395,7 +395,7 @@ void WriterReader::writereadType1(int aNumWrites)
 
 void WriterReader::writereadType2(int aNumWrites)
 {
-   LFBackoff tDelayA(gGSettings.mDelayA1,gGSettings.mDelayA2);
+   LFBackoff tDelayA(gParms.mDelayA1,gParms.mDelayA2);
 
    for (int i = 0; i < aNumWrites; i++)
    {
@@ -464,7 +464,7 @@ void WriterReader::writereadType2(int aNumWrites)
 
 void WriterReader::writereadType3(int aNumWrites)
 {
-   LFBackoff tDelayA(gGSettings.mDelayA1,gGSettings.mDelayA2);
+   LFBackoff tDelayA(gParms.mDelayA1,gParms.mDelayA2);
 
    for (int i = 0; i < aNumWrites; i++)
    {
@@ -538,7 +538,7 @@ void WriterReader::writereadType3(int aNumWrites)
 
 void WriterReader::writereadType4(int aNumWrites)
 {
-   LFBackoff tDelayA(gGSettings.mDelayA1,gGSettings.mDelayA2);
+   LFBackoff tDelayA(gParms.mDelayA1,gParms.mDelayA2);
 
    for (int i = 0; i < aNumWrites; i++)
    {
@@ -613,7 +613,7 @@ void WriterReader::writereadType4(int aNumWrites)
 
 void WriterReader::writereadType5(int aNumWrites)
 {
-   LFBackoff tDelayA(gGSettings.mDelayA1,gGSettings.mDelayA2);
+   LFBackoff tDelayA(gParms.mDelayA1,gParms.mDelayA2);
 
    for (int i = 0; i < aNumWrites; i++)
    {
@@ -676,7 +676,7 @@ void WriterReader::writereadType5(int aNumWrites)
 
 void WriterReader::writereadType6(int aNumWrites)
 {
-   LFBackoff tDelayA(gGSettings.mDelayA1,gGSettings.mDelayA2);
+   LFBackoff tDelayA(gParms.mDelayA1,gParms.mDelayA2);
 
    for (int i = 0; i < aNumWrites; i++)
    {
@@ -739,7 +739,7 @@ void WriterReader::writereadType6(int aNumWrites)
 
 void WriterReader::writereadType11(int aNumWrites)
 {
-   LFBackoff tDelayA(gGSettings.mDelayA1,gGSettings.mDelayA2);
+   LFBackoff tDelayA(gParms.mDelayA1,gParms.mDelayA2);
 
    for (int i = 0; i < aNumWrites; i++)
    {
@@ -771,7 +771,7 @@ void WriterReader::writereadType11(int aNumWrites)
 
 void WriterReader::writereadType12(int aNumWrites)
 {
-   LFBackoff tDelayA(gGSettings.mDelayA1,gGSettings.mDelayA2);
+   LFBackoff tDelayA(gParms.mDelayA1,gParms.mDelayA2);
 
    for (int i = 0; i < aNumWrites; i++)
    {
@@ -803,7 +803,7 @@ void WriterReader::writereadType12(int aNumWrites)
 
 void WriterReader::writereadType21(int aNumWrites)
 {
-   LFBackoff tDelayA(gGSettings.mDelayA1,gGSettings.mDelayA2);
+   LFBackoff tDelayA(gParms.mDelayA1,gParms.mDelayA2);
 
    for (int i = 0; i < aNumWrites; i++)
    {
@@ -878,7 +878,7 @@ void WriterReader::writereadType21(int aNumWrites)
 
 void WriterReader::writereadType22(int aNumWrites)
 {
-   LFBackoff tDelayA(gGSettings.mDelayA1,gGSettings.mDelayA2);
+   LFBackoff tDelayA(gParms.mDelayA1,gParms.mDelayA2);
 
    for (int i = 0; i < aNumWrites; i++)
    {

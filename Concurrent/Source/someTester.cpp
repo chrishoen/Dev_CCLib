@@ -8,7 +8,7 @@ Description:
 
 #include "stdafx.h"
 
-#include "GSettings.h"
+#include "Parms.h"
 #include "LFBackoff.h"
 #include "LFFreeList.h"
 #include "LFIntQueue.h"
@@ -54,8 +54,8 @@ void Tester::show()
 
 void Tester::test1(int aNumIter)
 {
-   LFBackoff tDelayA(gGSettings.mDelayA1,gGSettings.mDelayA2);
-   LFBackoff tDelayB(gGSettings.mDelayB1,gGSettings.mDelayB2);
+   LFBackoff tDelayA(gParms.mDelayA1,gParms.mDelayA2);
+   LFBackoff tDelayB(gParms.mDelayB1,gParms.mDelayB2);
 
    for (int i = 0; i < aNumIter; i++)
    {
@@ -101,8 +101,8 @@ void Tester::test4(int aNumIter)
 
 void Tester::startTrial()
 {
-   mMarkerTest1.startTrial(gGSettings.mXLimit);
-   mMarkerTest2.startTrial(gGSettings.mXLimit);
+   mMarkerTest1.startTrial(gParms.mXLimit);
+   mMarkerTest2.startTrial(gParms.mXLimit);
 }
 void Tester::finishTrial()
 {
