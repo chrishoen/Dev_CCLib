@@ -12,6 +12,8 @@
 #include "someThreads.h"
 #include "someShare.h"
 
+#include "Parms.h"
+
 using namespace Some;
 
 //******************************************************************************
@@ -46,7 +48,9 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
    if(aCmd->isCmd("GO2"   ))  executeGo2   (aCmd);
    if(aCmd->isCmd("GO3"   ))  executeGo3   (aCmd);
-   if(aCmd->isCmd("GO4"   ))  executeGo4   (aCmd);
+   if(aCmd->isCmd("GO4"  ))   executeGo4   (aCmd);
+
+   if(aCmd->isCmd("Parms"))  executeParms  (aCmd);
 }
 
 //******************************************************************************
@@ -157,13 +161,23 @@ void CmdLineExec::executeDelay1(Ris::CmdLineCmd* aCmd)
 
 //******************************************************************************
  inline int convertFromUsec(double aDelay)
-   {
-   }
+ {
+ }
 void CmdLineExec::executeDelay2(Ris::CmdLineCmd* aCmd)
 {
    double tX = aCmd->argDouble(1);
       int tN = lround(385.79*tX - 38.827);
       if (tN<0) tN=0;
    Prn::print(0, "%d",tN);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeParms(Ris::CmdLineCmd* aCmd)
+{
+   gParms.readFile();
+   gParms.show();
 }
 

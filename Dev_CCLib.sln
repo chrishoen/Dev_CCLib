@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2003
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test", "Test\Test.vcxproj", "{CAE77CCE-F1ED-4596-913A-975EA3C7BCB8}"
 EndProject
@@ -40,6 +40,13 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Memory", "Memory\Memory.vcxproj", "{051DF8AA-C984-4359-949D-93B4FDDE3693}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "History", "History\History.vcxproj", "{786559E3-1E49-44AE-8450-E631C3797C31}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Files", "Files", "{D87D4E67-8723-404D-9E2C-B7BB2490C8E0}"
+	ProjectSection(SolutionItems) = preProject
+		Files\Concurrent_Parms.txt = Files\Concurrent_Parms.txt
+		Files\ConcurrentSettings.txt = Files\ConcurrentSettings.txt
+		Files\SharedMemorySettings.txt = Files\SharedMemorySettings.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -204,5 +211,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AAA7F166-FC9F-4FB8-B758-C7933DE4A089}
 	EndGlobalSection
 EndGlobal

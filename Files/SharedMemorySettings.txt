@@ -1,0 +1,27 @@
+//********************************************************************
+SectionBegin MemPeer1
+
+   MyAppNumber      1
+
+   NumBytes      1003
+
+SectionEnd
+
+//********************************************************************
+SectionBegin MemPeer2
+
+   MyAppNumber      2
+
+   NumBytes      1003
+
+SectionEnd
+
+//********************************************************************
+SectionBegin MemPeer3
+
+   MyAppNumber      3
+
+   NumBytes      1003
+
+SectionEnd
+

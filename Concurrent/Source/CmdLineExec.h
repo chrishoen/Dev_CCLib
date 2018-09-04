@@ -1,11 +1,11 @@
-#ifndef _CMDLINEEXEC_H_
-#define _CMDLINEEXEC_H_
+#pragma once
 
 #include "risCmdLineExec.h"
 
 //******************************************************************************
-// specific command line sequencer
 //******************************************************************************
+//******************************************************************************
+
 class CmdLineExec : public Ris::BaseCmdLineExec
 {
 public:
@@ -33,7 +33,11 @@ public:
 
   void executeDelay1 (Ris::CmdLineCmd* aCmd);
   void executeDelay2 (Ris::CmdLineCmd* aCmd);
+
+  void executeParms  (Ris::CmdLineCmd* aCmd);
 };
+
 //******************************************************************************
-#endif
+//******************************************************************************
+//******************************************************************************
 
