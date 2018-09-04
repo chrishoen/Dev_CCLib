@@ -6,9 +6,7 @@ Description:
 //******************************************************************************
 //******************************************************************************
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <new>
+#include "stdafx.h"
 
 #include "cc_functions.h"
 #include "ccDefs.h"

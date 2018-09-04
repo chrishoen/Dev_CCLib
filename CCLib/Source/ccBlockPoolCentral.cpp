@@ -5,9 +5,7 @@
 //******************************************************************************
 //******************************************************************************
 
-#include <stdio.h>
-#include <string.h>
-#include <stdarg.h>
+#include "stdafx.h"
 
 #include "ccBlockPoolBase.h"
 #include "ccBlockPoolFreeList.h"

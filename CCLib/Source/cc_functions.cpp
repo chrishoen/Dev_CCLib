@@ -6,10 +6,8 @@ Description:
 //******************************************************************************
 //******************************************************************************
 
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include "stdafx.h"
+
 #include <time.h>
 
 #include "cc_functions.h"

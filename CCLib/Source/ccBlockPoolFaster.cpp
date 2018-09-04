@@ -6,11 +6,7 @@ Description:
 //******************************************************************************
 //******************************************************************************
 
-#include <new>
-#include <stdlib.h>
-#include <stdio.h>
-#include <math.h>
-#include <string.h>
+#include "stdafx.h"
 
 #include "cc_functions.h"
 #include "ccMemoryPtr.h"

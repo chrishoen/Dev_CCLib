@@ -5,10 +5,11 @@
 //******************************************************************************
 //******************************************************************************
 
-#include <windows.h> 
+#include "stdafx.h"
 
-#include <stdio.h>
+#include <windows.h> 
 #include <assert.h>
+
 #include "ccSynch.h"
 
 #pragma unmanaged

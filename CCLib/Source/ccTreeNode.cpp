@@ -2,9 +2,8 @@
 //******************************************************************************
 //******************************************************************************
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
+#include "stdafx.h"
+
 #include "ccBlockPool.h"
 #include "ccBlockPoolIndex.h"
 
