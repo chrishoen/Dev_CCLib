@@ -1,5 +1,5 @@
-#ifndef _CCBLOCKPOOLINDEXSTACK_H_
-#define _CCBLOCKPOOLINDEXSTACK_H_
+#pragma once
+
 /*==============================================================================
 
 Free List Stack of Indices. 
@@ -32,9 +32,10 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
+   // Class.
+
    // This returns the number of bytes that an instance of this class
    // will need to be allocated for it.
-
    static int getMemorySize();
 
    //***************************************************************************
@@ -58,7 +59,6 @@ public:
 
    // Initialize.
    void initialize(BlockPoolParms* aParms);
-
 };
 
 //******************************************************************************
@@ -72,9 +72,10 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
+   // Class.
+
    // This returns the number of bytes that an instance of this class
    // will need to be allocated for it.
-
    static int getMemorySize(BlockPoolParms* aParms);
 
    class MemorySize;
@@ -82,9 +83,31 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Methods
+   // Members.
 
-   // Constructor
+   // If this flag is false then the memory for this object was created
+   // externally. If it is true then the memory was allocated at 
+   // initialization and must be freed at finalization.
+   bool mOwnMemoryFlag;
+
+   // Pointer to memory for which the stack resides. This is either created
+   // externally and passed as an initialization parameter or it is created
+   // on the system heap at initialization.
+   void* mMemory;
+
+   // Array of indices for the stack.
+   int* mElement;
+
+   // State variables for the stack. These are located in a separate class
+   // so that they can be located in externale memory.
+   BlockPoolIndexStackState* mX;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Constructor.
    BlockPoolIndexStack();
   ~BlockPoolIndexStack();
 
@@ -112,32 +135,11 @@ public:
 
    // Return size, the number of elements that have been pushed onto the stack.
    int size();
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Members
-
-   // If this flag is false then the memory for this object was created
-   // externally. If it is true then the memory was allocated at 
-   // initialization and must be freed at finalization.
-   bool mOwnMemoryFlag;
-
-   // Pointer to memory for which the stack resides. This is either created
-   // externally and passed as an initialization parameter or it is created
-   // on the system heap at initialization.
-   void* mMemory;
-
-   // Array of indices for the stack.
-   int* mElement;
-   
-   // State variables for the stack. These are located in a separate class
-   // so that they can be located in externale memory.
-   BlockPoolIndexStackState* mX;
 };
 
 //******************************************************************************
-
+//******************************************************************************
+//******************************************************************************
 }//namespace
-#endif
+
 

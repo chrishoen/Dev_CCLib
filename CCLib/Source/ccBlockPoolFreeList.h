@@ -1,5 +1,5 @@
-#ifndef _CCBLOCKPOOLFREELIST_H_
-#define _CCBLOCKPOOLFREELIST_H_
+#pragma once
+
 /*==============================================================================
 Free list block pool class
 ==============================================================================*/
@@ -51,6 +51,8 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
+   // Class.
+
    // This returns the number of bytes that an instance of this class
    // will need to be allocated for it.
 
@@ -61,32 +63,7 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Methods
-
-   // Constructor
-   BlockPoolFreeList();
-  ~BlockPoolFreeList();
-
-   // Initialize the block pool. It is passed block pool parameters.
-   void initialize(BlockPoolParms* aParms);
-
-   // Deallocate memory for the block pool.
-   void finalize();
-
-   // Get a block from the pool, this allocates a block.
-   // Return true if successful, false if the block pool is empty.
-   bool allocate(void** aBlockPointer,BlockHandle* aBlockHandle);
-
-   // Put a block back to the pool, this deallocates a block.
-   void deallocate(BlockHandle aBlockHandle);
-
-   // Get a pointer to a block, given its memory handle.
-   void* getBlockPtr(BlockHandle aBlockHandle);
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Members
+   // Members.
 
    // If this flag is false then the memory for this object was created
    // externally. If it is true then the memory was allocated at 
@@ -127,7 +104,32 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Helpers
+   // Methods.
+
+   // Constructor,
+   BlockPoolFreeList();
+  ~BlockPoolFreeList();
+
+   // Initialize the block pool. It is passed block pool parameters.
+   void initialize(BlockPoolParms* aParms);
+
+   // Deallocate memory for the block pool.
+   void finalize();
+
+   // Get a block from the pool, this allocates a block.
+   // Return true if successful, false if the block pool is empty.
+   bool allocate(void** aBlockPointer,BlockHandle* aBlockHandle);
+
+   // Put a block back to the pool, this deallocates a block.
+   void deallocate(BlockHandle aBlockHandle);
+
+   // Get a pointer to a block, given its memory handle.
+   void* getBlockPtr(BlockHandle aBlockHandle);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Helper methods.
 
    // Size, the number of blocks that are available to be allocated.
    int size();
@@ -137,7 +139,7 @@ public:
 };
 
 //******************************************************************************
-
+//******************************************************************************
+//******************************************************************************
 }//namespace
-#endif
 

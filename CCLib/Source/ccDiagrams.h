@@ -1,5 +1,5 @@
-#ifndef _CCDIAGRAMS_H_
-#define _CCDIAGRAMS_H_
+#pragma once
+
 /*==============================================================================
 
 Construction Order, parent nodes are created before child nodes
@@ -112,4 +112,3 @@ Destruction Order, child nodes are destroyed before parent nodes
                           +---------+
 
 ==============================================================================*/
-#endif

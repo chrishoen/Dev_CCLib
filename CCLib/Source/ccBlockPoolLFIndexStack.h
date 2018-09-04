@@ -1,5 +1,5 @@
-#ifndef _CCBLOCKPOOLLFINDEXSTACK_H_
-#define _CCBLOCKPOOLLFINDEXSTACK_H_
+#pragma once
+
 /*==============================================================================
 
 Lock Free Free List Stack of Indices. 
@@ -11,9 +11,15 @@ contentions. It implements the Trieber algorithm with no backoff.
 This is used by containers that use a free list.
 
 ==============================================================================*/
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 #include <atomic>
 #include "ccLFIndex.h"
 #include "ccBlockPoolBaseIndexStack.h"
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -34,9 +40,10 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
+   // Class.
+
    // This returns the number of bytes that an instance of this class
    // will need to be allocated for it.
-
    static int getMemorySize();
 
    //***************************************************************************
@@ -74,9 +81,10 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
+   // Class.
+
    // This returns the number of bytes that an instance of this class
    // will need to be allocated for it.
-
    static int getMemorySize(BlockPoolParms* aParms);
 
    class MemorySize;
@@ -84,7 +92,36 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Methods
+   // Constants.
+
+   static const int  cInvalid = 0x80000000;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   // If this flag is false then the memory for this object was created
+   // externally. If it is true then the memory was allocated at 
+   // initialization and must be freed at finalization.
+   bool mOwnMemoryFlag;
+
+   // Pointer to memory for which the stack resides. This is either created
+   // externally and passed as an initialization parameter or it is created
+   // on the system heap at initialization.
+   void* mMemory;
+
+   // State variables for the stack. These are located in a separate class
+   // so that they can be located in externale memory.
+   BlockPoolLFIndexStackState* mX;
+
+   // Free List array for treiber stack.
+   AtomicLFIndex*    mFreeListNext;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
 
    // Constructor
    BlockPoolLFIndexStack();
@@ -114,40 +151,10 @@ public:
 
    // Return size, the number of elements that have been pushed onto the stack.
    int size();
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Members
-
-   // If this flag is false then the memory for this object was created
-   // externally. If it is true then the memory was allocated at 
-   // initialization and must be freed at finalization.
-   bool mOwnMemoryFlag;
-
-   // Pointer to memory for which the stack resides. This is either created
-   // externally and passed as an initialization parameter or it is created
-   // on the system heap at initialization.
-   void* mMemory;
-
-   // State variables for the stack. These are located in a separate class
-   // so that they can be located in externale memory.
-   BlockPoolLFIndexStackState* mX;
-
-   // Free List array for treiber stack.
-   AtomicLFIndex*    mFreeListNext;
-   
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // More
-
-   static const int  cInvalid = 0x80000000;
-
 };
 
 //******************************************************************************
-
+//******************************************************************************
+//******************************************************************************
 }//namespace
-#endif
 

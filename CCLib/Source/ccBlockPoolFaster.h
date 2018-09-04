@@ -1,5 +1,5 @@
-#ifndef _CCBLOCKPOOLFASTER_H_
-#define _CCBLOCKPOOLFASTER_H_
+#pragma once
+
 /*==============================================================================
 Free list block pool class
 ==============================================================================*/
@@ -115,9 +115,10 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
+   // Class.
+
    // This returns the number of bytes that an instance of this class
    // will need to be allocated for it.
-
    static int getMemorySize(BlockPoolParms* aParms);
 
    class MemorySize;
@@ -125,9 +126,63 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Methods
+   // Constants.
 
-   // Constructor
+   // This marks an invalid free list node.
+   static const int  cInvalid = 0x80000000;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   // If this flag is false then the memory for this object was created
+   // externally. If it is true then the memory was allocated at 
+   // initialization and must be freed at finalization.
+   bool mOwnMemoryFlag;
+
+   // Pointer to memory for which the stack resides. This is either created
+   // externally and passed as an initialization parameter or it is created
+   // on the system heap at initialization.
+   void* mMemory;
+
+   // State variables for the block pool. These are located in a separate
+   // class so that they can be located in external memory.
+   BlockPoolFasterState* mX;
+
+   // This allocates storage for the blocks on the system heap or in shared
+   // memory and provides pointer access to the allocated blocks. This is a block
+   // box array. A block box contains a block header and a block body. The
+   // header is invisible to the user and is used for things like resource
+   // counting and pointer to handle conversions. The block body is visible to 
+   // the user as a pointer to the block.
+   //
+   // Pointer to allocated memory for the block box array.
+   // This is an array of bytes of size NumBlocks*BlockBoxSize.
+   char* mBlockBoxArray;
+   // Same thing.
+   MemoryPtr mBlockBoxArrayPtr;
+
+   // Free List array for treiber stack.
+   AtomicLFIndex*    mFreeListNext;
+
+   // A pointer to the parameters that were passed in at initialization.
+   // Whoever owns this block pool (creates and initializes it) must maintain
+   // storage for these parameters for the lifetime of the block pool.
+   // The owner creates an instance of the parameters and fills in some of
+   // them and passes them to the block pool at initialization. The block pool
+   // then also fills in some of them during its initiialization and the 
+   // owner might use some of them after the initialization. Memory storage
+   // for these must be maintained my the owner throughout the lifetime of
+   // the block pool.
+   BlockPoolParms* mParms;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Constructor.
    BlockPoolFaster();
   ~BlockPoolFaster();
 
@@ -175,61 +230,7 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Members
-
-   // If this flag is false then the memory for this object was created
-   // externally. If it is true then the memory was allocated at 
-   // initialization and must be freed at finalization.
-   bool mOwnMemoryFlag;
-
-   // Pointer to memory for which the stack resides. This is either created
-   // externally and passed as an initialization parameter or it is created
-   // on the system heap at initialization.
-   void* mMemory;
-
-   // State variables for the block pool. These are located in a separate
-   // class so that they can be located in external memory.
-   BlockPoolFasterState* mX;
-
-   // This allocates storage for the blocks on the system heap or in shared
-   // memory and provides pointer access to the allocated blocks. This is a block
-   // box array. A block box contains a block header and a block body. The
-   // header is invisible to the user and is used for things like resource
-   // counting and pointer to handle conversions. The block body is visible to 
-   // the user as a pointer to the block.
-   //
-   // Pointer to allocated memory for the block box array.
-   // This is an array of bytes of size NumBlocks*BlockBoxSize.
-   char* mBlockBoxArray;
-   // Same thing.
-   MemoryPtr mBlockBoxArrayPtr;
-
-   // Free List array for treiber stack.
-   AtomicLFIndex*    mFreeListNext;
-   
-   // A pointer to the parameters that were passed in at initialization.
-   // Whoever owns this block pool (creates and initializes it) must maintain
-   // storage for these parameters for the lifetime of the block pool.
-   // The owner creates an instance of the parameters and fills in some of
-   // them and passes them to the block pool at initialization. The block pool
-   // then also fills in some of them during its initiialization and the 
-   // owner might use some of them after the initialization. Memory storage
-   // for these must be maintained my the owner throughout the lifetime of
-   // the block pool.
-   BlockPoolParms* mParms;
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // More
-
-   // This marks an invalid free list node.
-   static const int  cInvalid = 0x80000000;
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Helpers
+   // Helper methods.
 
    // Size, the number of blocks that are available to be allocated.
    int size();
@@ -237,16 +238,12 @@ public:
    // Show status and metrics for the block pool.
    void show();
 
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
    // Get the handle of a block, given its address.
-
    static BlockHandle getBlockHandle(void* aBlockPtr);
 };
 
 //******************************************************************************
-
+//******************************************************************************
+//******************************************************************************
 }//namespace
-#endif
 

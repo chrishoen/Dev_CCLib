@@ -1,5 +1,5 @@
-#ifndef _CCBLOCBOXKARRAY_H_
-#define _CCBLOCBOXKARRAY_H_
+#pragma once
+
 /*==============================================================================
 
 This defines an array of memory blocks that are dynamically allocated. It 
@@ -150,11 +150,10 @@ public:
    // Get the handle of a block, given its address.
 
    static BlockHandle getBlockHandle(void* aBlockPtr);
-
 };
 
 //******************************************************************************
-
+//******************************************************************************
+//******************************************************************************
 }//namespace
-#endif
 

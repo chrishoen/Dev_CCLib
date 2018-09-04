@@ -1,5 +1,5 @@
-#ifndef _CC_CONTAINERS2_H_
-#define _CC_CONTAINERS2_H_
+#pragma once
+
 
 /*==============================================================================
 
@@ -239,7 +239,6 @@ public:
 
 }//namespace
 }//namespace
-#endif
 
 
 

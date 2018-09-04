@@ -1,5 +1,4 @@
-#ifndef _CCBLOCKPOOL_H_
-#define _CCBLOCKPOOL_H_
+#pragma once
 
 /*==============================================================================
 
@@ -104,43 +103,32 @@ struct BlockHandle
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Constructors.
+   // Methods.
 
+   // Constructors.
    BlockHandle::BlockHandle();
    BlockHandle::BlockHandle(unsigned short aPoolIndex, unsigned short aBlockIndex);
    void set(unsigned short aPoolIndex, unsigned short aBlockIndex);
 
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
    // Null block handle value.
-
    void setNull();
    bool isNull();
    static BlockHandle null();
    static BlockHandle nullH;
 
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
    // Set a block handle from the given address of the block. This obtains the 
    // block handle by looking it up in the global block pool facility.
-
    void set(void* aBlockPointer);
 
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
    // Get the address of the block specified by the block handle. This obtains 
    // the handle by looking it up in the global block pool facility.
-
    static void* ptr(BlockHandle aBlockHandle);
 };
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Operators
+// Operators.
 
 inline bool operator==(const BlockHandle& lhs, const BlockHandle& rhs)
 {
@@ -234,7 +222,7 @@ void testBlockPool(int aPoolIndex);
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-// Constructors.
+// Implementation. Constructors.
 
 inline BlockHandle::BlockHandle()
 {
@@ -251,7 +239,7 @@ inline BlockHandle::BlockHandle(unsigned short aPoolIndex, unsigned short aBlock
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
-// Set null.
+// Implementation. Set null.
 
 inline void BlockHandle::setNull()
 {
@@ -280,6 +268,7 @@ inline BlockHandle  BlockHandle::null()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Implementation. 
 // Set a block handle from the given address of the block. This obtains the 
 // block handle by looking it up in the global block pool facility.
 
@@ -291,6 +280,7 @@ inline void BlockHandle::set(void* aBlockPointer)
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
+// Implementation. 
 // Get the address of the block specified by the block handle. This obtains 
 // the handle by looking it up in the global block pool facility.
 
@@ -299,8 +289,7 @@ inline void* BlockHandle::ptr(BlockHandle aBlockHandle)
    return getBlockPoolBlockPtr(aBlockHandle);
 }
 
-
-
-
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
 }//namespace
-#endif

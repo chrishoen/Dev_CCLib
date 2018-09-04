@@ -48,7 +48,7 @@
     <ClCompile Include="Source\ccLMPacketQueue.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ccSynch.cpp">
+    <ClCompile Include="Source\ccSynch_win.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -153,9 +153,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccSynch.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\smsContainers.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

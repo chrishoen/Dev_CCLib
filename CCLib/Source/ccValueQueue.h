@@ -1,11 +1,11 @@
-#ifndef _CC_VALUEQUEUE_H_
-#define _CC_VALUEQUEUE_H_
+#pragma once
 
 /*==============================================================================
 
 Template for queue of values
 
 ==============================================================================*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -28,7 +28,9 @@ class ValueQueue
 public:
 
    //***************************************************************************
-   // Members
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
 
    int mAllocate;
    int mPutIndex;
@@ -37,8 +39,11 @@ public:
    Element* mElement;
    
    //***************************************************************************
-   // Constructor, initialize members for an empty queue of size zero 
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
 
+   // Constructor, initialize members for an empty queue of size zero 
    ValueQueue()
    {
       // All null
@@ -49,6 +54,8 @@ public:
    }
 
    //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Destructor, deallocate the queue array
 
   ~ValueQueue()
@@ -57,7 +64,9 @@ public:
      if (mElement) delete mElement;
    }
 
-   //***************************************************************************
+  //***************************************************************************
+  //***************************************************************************
+  //***************************************************************************
    // This initializes the queue to a fixed size. It initializes member
    // variables and allocates heap storage for the queue array. The queue has
    // a specified maximum number of elements and it allocates memory for the
@@ -76,6 +85,8 @@ public:
    }
 
    //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // This returns true if put operations are allowed. Puts are allowed if the 
    // current size is less than or equal to Allocate - 2. If the size is equal
    // to Allocate - 2 then the next put operation would put the size to
@@ -90,6 +101,8 @@ public:
    }
    
    //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // This is executed after a put operation to advance the queue put index to
    // point to the next element to put to. It uses a temp variable so that
    //  writing to the index is atomic.
@@ -101,6 +114,8 @@ public:
       mPutIndex = tPutIndex;
    }
 
+   //***************************************************************************
+   //***************************************************************************
    //***************************************************************************
    // This puts an element to the queue and advances the put index. It does a 
    // copy from a source element into the queue array element at the put index.
@@ -119,6 +134,8 @@ public:
    }
 
    //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // This returns a pointer to the current queue element to put to. It is
    // provided to give direct access to the put element to minimize copies. If
    // an element is put directly to the queue array by using this pointer then 
@@ -129,6 +146,8 @@ public:
       return mElement[mPutIndex];
    }
 
+   //***************************************************************************
+   //***************************************************************************
    //***************************************************************************
    // This returns true if get operations are allowed. Gets are allowed if the 
    // current size is greater than zero. This is the same as "is not empty".
@@ -141,6 +160,8 @@ public:
    }
    
    //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // This is executed after a get operation to advance the queue get index to
    // point to the next element to get from. It uses a temp index variable so
    // that writing to the index is atomic.
@@ -152,6 +173,8 @@ public:
       mGetIndex = tGetIndex;
    }
 
+   //***************************************************************************
+   //***************************************************************************
    //***************************************************************************
    // This gets an element from the queue and advances the get index. It does a 
    // copy from the queue array element at the get index into a destination
@@ -172,6 +195,8 @@ public:
    }
 
    //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // This returns a pointer to the current queue element to get from. It is
    // provided to give direct access to the get element to minimize copies. If
    // an element is gotten directly from the queue array by using this pointer
@@ -182,6 +207,8 @@ public:
       return mElement[mGetIndex];
    }
 
+   //***************************************************************************
+   //***************************************************************************
    //***************************************************************************
    // This is the current size of the queue. It is the difference between the 
    // mPutIndex and the mGetIndex.
@@ -199,8 +226,10 @@ public:
    }
 };
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 }//namespace
-#endif
 
 
 

@@ -1,5 +1,4 @@
-#ifndef _CCBLOCKPOOLCENTRAL_H_
-#define _CCBLOCKPOOLCENTRAL_H_
+#pragma once
 
 /*==============================================================================
 
@@ -126,6 +125,8 @@ bool isBlockPoolMemoryLongTerm(BlockHandle aBlockHandle);
 // Test block pool code.
 void testBlockPool(int aPoolIndex);
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 }//namespace
-#endif
 

@@ -1,10 +1,15 @@
-#ifndef _CCTREENODE_H_
-#define _CCTREENODE_H_
+#pragma once
+
 
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************
+
 #include "ccBlockPool.h"
+
+//****************************************************************************
+//****************************************************************************
+//****************************************************************************
 
 namespace CC
 {
@@ -39,23 +44,18 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Memory management, constructors and destructors.
-
-   // Allocate or deallocate a block from the block pool.
-   static void* operator new      (size_t sz);
-   static void  operator delete   (void* ptr);
-
-   // Constructors.
-   TreeNode();
-   TreeNode(int aIdentifier);
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Memebers.
 
    // Blockhandle, used for block pool memory management.
-
    BlockHandle mBlockHandle;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
+   // Memebers.
    // Node pointers, they point to other neighboring nodes to which a node is
    // attached, If a pointer is null then there is no associated neighbor. The
    // child nodes of a node are managed via a linked list that starts at the 
@@ -81,56 +81,7 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Node identifier
-
-   int mIdentifier;
-   
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // These attach an object node to this subject node, as a child node
-
-   // Attach an object node to the first child of this subject node, before it.
-   // The object node becomes this subject node's first child.
-   void attachBeforeFirstChild (TreeNode* aObjectNodeP);
-
-   // Attach an object node to the last child of this subject node, after it.
-   // The object node becomes this subject node's last child.
-   void attachAfterLastChild (TreeNode* aObjectNodeP);
-   // Attach as last in structure
-   void attachAfterLastChildAsLastInStructure (TreeNode* aObjectNodeP);
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // These detach attached object nodes from this parent subject node.
-
-   // Detach the first child node of this parent subject node. Return a
-   // pointer to the detached child node.
-   TreeNode* detachFirstChild ();
-
-   // Detach the last child node of this parent subject node. Return a
-   // pointer to the detached child node.
-   TreeNode* detachLastChild ();
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // These attach an object node to this subject node.
-
-   // Attach an object node to this subject node, before it
-   void attachBefore (TreeNode* aObjectNodeP);
-
-   // Attach an object node to this subject node, after it
-   void attachAfter (TreeNode* aObjectNodeP);
-
-   // Detach this subject node from all of the nodes to which it is attached.
-   // This is used when a node is destroyed.
-   void detachFromAll();
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
+   // Memebers.
    // This is a pointer to the closest ancestor of this node that has a node
    // after it. It is used by transmit and receive queues to deconstruct and
    // reconstruct tree node structures that are transmitted over a 
@@ -150,6 +101,15 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
+   // Memebers.
+   // Node identifier.
+
+   int mIdentifier;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Memebers.
    // Node flags, these encode relationship's that this node has with other 
    // nodes, within its tree structure. These flags all default to false.
 
@@ -181,12 +141,80 @@ public:
    //
    // Use of this variable is mainly via the getNextNode visitor call,
    // which assumes a tree node structure traversal in construction order.
-
    int mTxAttachLevel;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+   // Memory management, constructors and destructors.
+
+   // Allocate or deallocate a block from the block pool.
+   static void* operator new      (size_t sz);
+   static void  operator delete   (void* ptr);
+
+   // Constructors.
+   TreeNode();
+   TreeNode(int aIdentifier);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+   // These attach an object node to this subject node, as a child node
+
+   // Attach an object node to the first child of this subject node, before it.
+   // The object node becomes this subject node's first child.
+   void attachBeforeFirstChild (TreeNode* aObjectNodeP);
+
+   // Attach an object node to the last child of this subject node, after it.
+   // The object node becomes this subject node's last child.
+   void attachAfterLastChild (TreeNode* aObjectNodeP);
+   // Attach as last in structure
+   void attachAfterLastChildAsLastInStructure (TreeNode* aObjectNodeP);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+   // These detach attached object nodes from this parent subject node.
+
+   // Detach the first child node of this parent subject node. Return a
+   // pointer to the detached child node.
+   TreeNode* detachFirstChild ();
+
+   // Detach the last child node of this parent subject node. Return a
+   // pointer to the detached child node.
+   TreeNode* detachLastChild ();
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+   // These attach an object node to this subject node.
+
+   // Attach an object node to this subject node, before it
+   void attachBefore (TreeNode* aObjectNodeP);
+
+   // Attach an object node to this subject node, after it
+   void attachAfter (TreeNode* aObjectNodeP);
+
+   // Detach this subject node from all of the nodes to which it is attached.
+   // This is used when a node is destroyed.
+   void detachFromAll();
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
    // Handle to pointer conversions.
 
    static TreeNode* ptr(BlockHandle aBlockHandle);
@@ -204,6 +232,7 @@ public:
 //****************************************************************************
 }//namespace
 
+#if 0
 //****************************************************************************
 //****************************************************************************
 //****************************************************************************

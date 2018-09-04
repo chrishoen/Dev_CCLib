@@ -1,10 +1,4 @@
-#ifndef _CCBLOCKPOOLBLOCK_H_
-#define _CCBLOCKPOOLBLOCK_H_
-
-#include <new>
-#include <stdio.h>
-
-#include "ccBlockPool.h"
+#pragma once
 
 /*==============================================================================
 
@@ -20,6 +14,11 @@ memory pools.
 This is used for intrusive blocks, those that must contain a block handle 
 member variable.
 ==============================================================================*/
+
+#include <new>
+#include <stdio.h>
+
+#include "ccBlockPool.h"
 
 namespace CC
 {
@@ -74,5 +73,3 @@ public:
 //******************************************************************************
 //******************************************************************************
 }//namespace
-
-#endif

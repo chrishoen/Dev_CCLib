@@ -1,5 +1,5 @@
-#ifndef _CC_VALUEHISTORY_H_
-#define _CC_VALUEHISTORY_H_
+#pragma once
+
 
 /*==============================================================================
 
@@ -7,6 +7,7 @@ Template for a class that implements a container that stores a history of
 values and times.
 
 ==============================================================================*/
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -32,7 +33,9 @@ class ValueHistory
 public:
 
    //***************************************************************************
-   // Members
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
 
    int mNumElements;
    int mIndex;
@@ -42,8 +45,11 @@ public:
    Element* mElement;
    
    //***************************************************************************
-   // Constructor, initialize members for an empty History of size zero 
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
 
+   // Constructor, initialize members for an empty History of size zero 
    ValueHistory()
    {
       // All null
@@ -54,9 +60,7 @@ public:
       mElement  = 0;
    }
 
-   //***************************************************************************
    // Destructor, deallocate the History array
-
   ~ValueHistory()
    {
      finalize();
@@ -70,7 +74,7 @@ public:
    // a specified maximum number of elements and it allocates memory for the
    // maximum number of elements.
 
-   void initialize(int aNumOfElements)
+  void initialize(int aNumOfElements)
    {
       // Deallocate memory, if any exists.
       finalize();
@@ -92,7 +96,7 @@ public:
    // Reinitializes the history. It is equivalent to an initialize without
    // the memory allocation.
 
-   void reinitialize()
+  void reinitialize()
    {
       // Initialize variables
       mIndex = 0;
@@ -174,5 +178,7 @@ public:
    }
 };
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 }//namespace
-#endif
