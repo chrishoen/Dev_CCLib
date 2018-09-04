@@ -5,7 +5,7 @@
 
    Mode                 1
    Type                 7
-   NumWriters           4
+   NumWriters           2
 
    NumElements      65536
 
