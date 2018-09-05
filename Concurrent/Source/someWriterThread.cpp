@@ -6,8 +6,6 @@
 //******************************************************************************
 #include "stdafx.h"
 
-#include <Windows.h>
-
 #include "someShare.h"
 #include "Parms.h"
 
@@ -91,7 +89,7 @@ void WriterThread::threadRunFunction()
          if (gShare.mTerminateFlag) break;
 
          // Write
-         gShare.mWriterProcessor[mIdent] = GetCurrentProcessorNumber();
+         gShare.mWriterProcessor[mIdent] = BaseClass::getThreadProcessorNumber();
          gShare.mWriter[mIdent].write(my_irand(mWriteLower, mWriteUpper));
       }
       gShare.mWriter[mIdent].finishTrial();

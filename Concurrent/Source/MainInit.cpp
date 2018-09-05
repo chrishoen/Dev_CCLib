@@ -1,35 +1,8 @@
 #include "stdafx.h"
 
-#include <windows.h>
+#include "risThreadsProcess.h"
 
-#include "parms.h"
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-static const int cTimerPeriod = 10;
-
-void enterProcessHigh()
-{
-   // Set process priority class and affinity
-   SetPriorityClass(GetCurrentProcess(), REALTIME_PRIORITY_CLASS);
-   SetProcessAffinityMask(GetCurrentProcess(), 0x3E);
-
-   // Set process timer resolution to one millisecond
-   timeBeginPeriod(cTimerPeriod);
-   // Seed random numbers
-   my_srand();
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void exitProcess()
-{
-   timeEndPeriod(cTimerPeriod);
-}
+#include "Parms.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -38,10 +11,12 @@ void exitProcess()
 
 void main_initialize(int argc,char** argv)
 {
-   // Enter process
-   enterProcessHigh();
+   // Enter process.
+   Ris::Threads::setProcessTimerResolution(10);
+   Ris::Threads::setProcessAffinityMask(0x3E);
+   Ris::Threads::enterProcessHigh();
 
-   // Initialize print facility
+   // Initialize print facility.
    Prn::resetPrint();
    Prn::initializePrint();
 
@@ -94,8 +69,8 @@ void main_finalize()
    // Close print
    Prn::finalizePrint();
 
-   // Exit process
-   exitProcess();
+   // Exit process.
+   Ris::Threads::exitProcess();
 }
 
 //******************************************************************************

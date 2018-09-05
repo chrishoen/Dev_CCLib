@@ -6,8 +6,6 @@
 //******************************************************************************
 #include "stdafx.h"
 
-#include <Windows.h>
-
 #include "someShare.h"
 #include "Parms.h"
 
@@ -67,7 +65,7 @@ void ReaderThread::threadRunFunction()
          if (gShare.mTerminateFlag) break;
 
          // Read 
-         gShare.mReaderProcessor = GetCurrentProcessorNumber();
+         gShare.mReaderProcessor = BaseClass::getThreadProcessorNumber();
          gShare.mReader.read(my_irand(mReadLower, mReadUpper));
       }
       gShare.mReader.finishTrial();

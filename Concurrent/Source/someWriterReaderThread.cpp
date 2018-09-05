@@ -6,8 +6,6 @@
 //******************************************************************************
 #include "stdafx.h"
 
-#include <Windows.h>
-
 #include "someShare.h"
 #include "Parms.h"
 
@@ -58,12 +56,16 @@ WriterReaderThread::WriterReaderThread(int aIdent)
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
 void WriterReaderThread::threadInitFunction()
 {
    Prn::print(0,"WriterReaderThread::threadInitFunction");
 }
 
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 
 void WriterReaderThread::threadRunFunction()
@@ -87,7 +89,7 @@ void WriterReaderThread::threadRunFunction()
          if (gShare.mTerminateFlag) break;
 
          // Write
-         gShare.mWriterProcessor[mIdent] = GetCurrentProcessorNumber();
+         gShare.mWriterProcessor[mIdent] = BaseClass::getThreadProcessorNumber();
          gShare.mWriterReader[mIdent].writeread(my_irand(mWriteLower, mWriteUpper));
       }
       gShare.mWriterReader[mIdent].finishTrial();
@@ -99,6 +101,8 @@ void WriterReaderThread::threadRunFunction()
 }
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
 void WriterReaderThread::threadExitFunction()
 {
@@ -106,6 +110,8 @@ void WriterReaderThread::threadExitFunction()
    gShare.mWriterReader[mIdent].show();
 }
 
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 
 void WriterReaderThread::shutdownThread()
@@ -116,5 +122,8 @@ void WriterReaderThread::shutdownThread()
    waitForThreadTerminate();
 }   
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 }//namespace
 
