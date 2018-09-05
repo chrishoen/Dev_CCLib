@@ -4,6 +4,7 @@
 #include <string.h>
 #include <math.h>
 
+#include <atomic>
 #include <new>
 
 #include "prnPrint.h"

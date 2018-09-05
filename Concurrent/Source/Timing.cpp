@@ -1,8 +1,5 @@
 #include "stdafx.h"
 
-#include <windows.h>
-#include <atomic>
-
 #include "risTimeMarker.h"
 #include "Parms.h"
 #include "LFFreeList.h"
