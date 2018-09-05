@@ -1,10 +1,8 @@
-#ifndef _SOMEWRITERREADER_H_
-#define _SOMEWRITERREADER_H_
+#pragma once
 
 /*==============================================================================
 ==============================================================================*/
 
-#include <stdio.h>
 #include "someMessage.h"
 #include "risTimeMarker.h"
 
@@ -23,15 +21,43 @@ namespace Some
 class WriterReader
 {
 public:
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
 
-   //---------------------------------------------------------------------------
-   // Methods
+   unsigned short mIdent;
+   int mCount;
+
+   unsigned long long   mWriteCount;
+   unsigned long long   mWritePassCount;
+   unsigned long long   mWriteFailCount;
+   unsigned long long   mWriteCheckSum;
+
+   unsigned long long   mReadCount;
+   unsigned long long   mReadPassCount;
+   unsigned long long   mReadFailCount;
+   unsigned long long   mReadCheckSum;
+
+   Ris::TrialTimeMarker mMarkerWrite;
+   double               mMeanTimeWrite;
+   Ris::TrialTimeMarker mMarkerRead;
+   double               mMeanTimeRead;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
 
    WriterReader();
-
    void initialize(unsigned aIdent=0);
    void finalize();
    void show();
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
 
    void startTrialType1 ();
    void startTrialType2 ();
@@ -69,32 +95,10 @@ public:
    void flushType21 ();
    void flushType22 ();
    void flush       ();
-
-   //---------------------------------------------------------------------------
-   // Members
-
-   unsigned short mIdent;
-   int mCount;
-
-   unsigned long long mWriteCount;
-   unsigned long long mWritePassCount;
-   unsigned long long mWriteFailCount;
-   unsigned long long mWriteCheckSum;
-
-   unsigned long long mReadCount;
-   unsigned long long mReadPassCount;
-   unsigned long long mReadFailCount;
-   unsigned long long mReadCheckSum;
-
-   Ris::TrialTimeMarker mMarkerWrite;
-   double               mMeanTimeWrite;
-   Ris::TrialTimeMarker mMarkerRead;
-   double               mMeanTimeRead;
-
 };
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 }//namespace
-
-#endif
 

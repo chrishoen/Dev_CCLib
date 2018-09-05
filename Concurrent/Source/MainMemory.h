@@ -1,12 +1,11 @@
-#ifndef _MAINMEMORY_H_
-#define _MAINMEMORY_H_
+#pragma once
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Initialize/finalize program block pool memory resources.
 
 void main_memory_initialize();
 void main_memory_finalize();
 
-#endif
 

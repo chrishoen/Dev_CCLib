@@ -1,8 +1,6 @@
-#ifndef _SOMESTATUSTHREAD_H_
-#define _SOMESTATUSTHREAD_H_
+#pragma once
 
 /*==============================================================================
-
 ==============================================================================*/
 
 //******************************************************************************
@@ -20,27 +18,40 @@ namespace Some
 class StatusThread : public Ris::Threads::BaseThread
 {
 public:
-
-   // Constructor
    typedef Ris::Threads::BaseThread BaseClass;
+
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+   // Members.
+
+   // Thread termination flag.
+   bool  mTerminateFlag;
+
+   // Program process string.
+   char mProcString[20];
+
+   //******************************************************************************
+   //******************************************************************************
+   //******************************************************************************
+   // Methods.
+
+   // Constructor.
    StatusThread(); 
 
-   //Base class overloads.
+   // Base class overloads.
    void threadInitFunction();
    void threadRunFunction();
    void threadExitFunction();
    void shutdownThread();
 
-   // Thread Members
-   bool  mTerminateFlag;
-
-   // Support
+   // Update the program process string.
    void updateProcString();
-   char mProcString[20];
 };
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 }//namespace
 
-#endif
 

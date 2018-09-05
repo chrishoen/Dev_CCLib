@@ -1,8 +1,6 @@
-#ifndef _SOMETESTERTHREAD_H_
-#define _SOMETESTERTHREAD_H_
+#pragma once
 
 /*==============================================================================
-
 ==============================================================================*/
 
 //******************************************************************************
@@ -20,32 +18,41 @@ namespace Some
 class TesterThread : public Ris::Threads::BaseThread
 {
 public:
-
-   // Constructor
    typedef Ris::Threads::BaseThread BaseClass;
-   TesterThread(); 
 
-   //Base class overloads.
-   void threadInitFunction();
-   void threadRunFunction();
-   void threadExitFunction();
-   void shutdownThread();
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
 
-   // Tester Members
+   // Tester Members.
    int    mIdent;
 
-   // Thread Members
+   // Thread Members.
    bool  mTerminateFlag;
    int   mWriteLower;
    int   mWriteUpper;
    int   mSleepLower;
    int   mSleepUpper;
 
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
 
+   // Constructor.
+   TesterThread(); 
+
+   // Base class overloads.
+   void threadInitFunction();
+   void threadRunFunction();
+   void threadExitFunction();
+   void shutdownThread();
 };
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 }//namespace
 
-#endif
 

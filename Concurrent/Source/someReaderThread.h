@@ -1,8 +1,6 @@
-#ifndef _SOMEREADERTHREAD_H_
-#define _SOMEREADERTHREAD_H_
+#pragma once
 
 /*==============================================================================
-
 ==============================================================================*/
 
 //******************************************************************************
@@ -20,9 +18,25 @@ namespace Some
 class ReaderThread : public Ris::Threads::BaseThread
 {
 public:
+   typedef Ris::Threads::BaseThread BaseClass;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   bool  mTerminateFlag;
+   int   mReadLower;
+   int   mReadUpper;
+   int   mSleepLower;
+   int   mSleepUpper;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
 
    // Constructor
-   typedef Ris::Threads::BaseThread BaseClass;
    ReaderThread(); 
 
    //Base class overloads.
@@ -30,19 +44,11 @@ public:
    void threadRunFunction();
    void threadExitFunction();
    void shutdownThread();
-
-   // Reader Members
-
-   // Thread Members
-   bool  mTerminateFlag;
-   int   mReadLower;
-   int   mReadUpper;
-   int   mSleepLower;
-   int   mSleepUpper;
 };
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 }//namespace
 
-#endif
 

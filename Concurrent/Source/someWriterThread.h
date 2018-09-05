@@ -1,8 +1,6 @@
-#ifndef _SOMEWRITERTHREAD_H_
-#define _SOMEWRITERTHREAD_H_
+#pragma once
 
 /*==============================================================================
-
 ==============================================================================*/
 
 //******************************************************************************
@@ -21,15 +19,10 @@ class WriterThread : public Ris::Threads::BaseThread
 {
 public:
 
-   // Constructor
-   typedef Ris::Threads::BaseThread BaseClass;
-   WriterThread(int aIdent); 
-
-   //Base class overloads.
-   void threadInitFunction();
-   void threadRunFunction();
-   void threadExitFunction();
-   void shutdownThread();
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
 
    // Writer Members
    int    mIdent;
@@ -41,11 +34,24 @@ public:
    int   mSleepLower;
    int   mSleepUpper;
 
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
 
+   // Constructor.
+   typedef Ris::Threads::BaseThread BaseClass;
+   WriterThread(int aIdent); 
+
+   // Base class overloads.
+   void threadInitFunction();
+   void threadRunFunction();
+   void threadExitFunction();
+   void shutdownThread();
 };
 
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
 }//namespace
-
-#endif
 
