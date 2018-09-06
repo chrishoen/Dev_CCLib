@@ -30,8 +30,7 @@ TesterThread::TesterThread()
    // BaseClass
    BaseClass::setThreadPriorityHigh();
 
-   BaseClass::mThreadAffinityMask = 0x02;
-   BaseClass::mThreadIdealProcessor = 1;
+   BaseClass::mThreadSingleProcessor = 1;
 
    // Thread Members
    mTerminateFlag = false;

@@ -33,20 +33,16 @@ WriterThread::WriterThread(int aIdent)
    switch (aIdent)
    {
    case 0:
-      BaseClass::mThreadAffinityMask = 0x04;
-      BaseClass::mThreadIdealProcessor = 2;
+      BaseClass::mThreadSingleProcessor = 2;
       break;
    case 1:
-      BaseClass::mThreadAffinityMask = 0x08;
-      BaseClass::mThreadIdealProcessor = 3;
+      BaseClass::mThreadSingleProcessor = 3;
       break;
    case 2:
-      BaseClass::mThreadAffinityMask = 0x10;
-      BaseClass::mThreadIdealProcessor = 4;
+      BaseClass::mThreadSingleProcessor = 4;
       break;
    case 3:
-      BaseClass::mThreadAffinityMask = 0x20;
-      BaseClass::mThreadIdealProcessor = 5;
+      BaseClass::mThreadSingleProcessor = 5;
       break;
    }
 
