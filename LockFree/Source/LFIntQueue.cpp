@@ -1,6 +1,5 @@
 #include "stdafx.h"
 
-#include <windows.h>
 #include <atomic>
 
 #include "LFIndex.h"
@@ -16,7 +15,7 @@ namespace LFIntQueue
    //***************************************************************************
    // Support
 
-   static const int cInvalid = 0x80000000;
+   static const short int cInvalid = (short int)0x8000;
 
    //***************************************************************************
    //***************************************************************************
@@ -293,7 +292,7 @@ namespace LFIntQueue
          mListNext[aNode].store(tHead,memory_order_relaxed);
 
          // The pushed node is the new head node.
-         std::atomic<int>* tListHeadIndexPtr = (std::atomic<int>*)&mListHead;
+         std::atomic<short int>* tListHeadIndexPtr = (std::atomic<short int>*)&mListHead;
          if ((*tListHeadIndexPtr).compare_exchange_weak(tHead.mIndex, aNode, std::memory_order_release, std::memory_order_relaxed)) break;
          if (++tLoopCount == 10000) throw 103;
       }

@@ -1,6 +1,5 @@
 #include "stdafx.h"
 
-#include <windows.h>
 #include <atomic>
 
 #include "LFIndex.h"
@@ -16,7 +15,7 @@ namespace LFFreeList
    //***************************************************************************
    // Support
 
-   static const int cInvalid = 0x80000000;
+   static const short int cInvalid = (short int)0x80000000;
 
    //***************************************************************************
    //***************************************************************************
@@ -34,11 +33,11 @@ namespace LFFreeList
    bool listPop (int* aNode);
    bool listPush (int aNode);
 
-   atomic<int>   mListSize;
+   atomic<short int>   mListSize;
    AtomicLFIndex mListHead;
    
-   atomic<int>* mListHeadIndexPtr = (atomic<int>*)&mListHead;
-   atomic<int>& mListHeadIndexRef = (atomic<int>&)*mListHeadIndexPtr;
+   atomic<short int>* mListHeadIndexPtr = (atomic<short int>*)&mListHead;
+   atomic<short int>& mListHeadIndexRef = (atomic<short int>&)*mListHeadIndexPtr;
 
    //***************************************************************************
    //***************************************************************************

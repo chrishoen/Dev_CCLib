@@ -1,5 +1,4 @@
-#ifndef _LFINDEX_H_
-#define _LFINDEX_H_
+#pragma once
 
 #include <atomic>
 
@@ -10,11 +9,11 @@
 //******************************************************************************
 //******************************************************************************
 
-__declspec(align(8))
-struct LFIndex
+__declspec(align(4))
+typedef struct LFIndex
 {  
-   int mIndex;  
-   int mCount;  
+   short int mIndex;  
+   short int mCount;  
 
    LFIndex() noexcept
    {
@@ -22,12 +21,16 @@ struct LFIndex
       mCount = 0;
    }
 
-   LFIndex(int aIndex,int aCount) noexcept
+   LFIndex(short int aIndex,short int aCount) noexcept
    {
       mIndex = aIndex;
       mCount = aCount;
    }
-};
+} LFIndex;
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
 inline bool operator==(const LFIndex& lhs, const LFIndex& rhs)
 {
@@ -50,4 +53,3 @@ struct AtomicLFIndexBlock
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-#endif
