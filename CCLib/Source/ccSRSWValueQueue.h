@@ -34,7 +34,7 @@ namespace CC
 // State variables for the stack. These are located in a separate class
 // so that they can be located in external memory.
 
-class SRWValueQueueState
+class SRSWValueQueueState
 {
 public:
 
@@ -47,7 +47,7 @@ public:
    // will need to be allocated for it.
    static int getMemorySize()
    {
-      return cc_round_upto16(sizeof(SRWValueQueueState));
+      return cc_round_upto16(sizeof(SRSWValueQueueState));
    }
 
    //***************************************************************************
@@ -66,7 +66,7 @@ public:
    // Methods.
 
    // Constructor.
-   SRWValueQueueState()
+   SRSWValueQueueState()
    {
       // All null
       mNumElements = 0;
@@ -92,7 +92,7 @@ public:
 //******************************************************************************
 
 template <class Element>
-class SRWValueQueue
+class SRSWValueQueue
 {
 public:
 
@@ -113,7 +113,7 @@ public:
       // Calculate and store memory sizes.
       MemorySize::MemorySize(int aNumElements)
       {
-         mStateSize         = SRWValueQueueState::getMemorySize();
+         mStateSize         = SRSWValueQueueState::getMemorySize();
          mElementArraySize  = cc_round_upto16(cNewArrayExtraMemory + (aNumElements + 1)*sizeof(Element));
          mMemorySize = mStateSize + mElementArraySize;
       }
@@ -149,7 +149,7 @@ public:
 
    // State variables for the queue. These are located in a separate class
    // so that they can be located in externale memory.
-   SRWValueQueueState* mX;
+   SRSWValueQueueState* mX;
 
    // Array of values, storage for the values.
    // Size is NumElements + 1.
@@ -162,7 +162,7 @@ public:
    // Methods.
 
    // Constructor.
-   SRWValueQueue()
+   SRSWValueQueue()
    {
       // All null.
       mX = 0;
@@ -173,7 +173,7 @@ public:
       mElement = 0;
    }
 
-   ~SRWValueQueue()
+   ~SRSWValueQueue()
    {
       finalize();
    }
@@ -202,7 +202,7 @@ public:
       // then allocate memory for it on the system heap.
       if (aMemory == 0)
       {
-         mMemory = malloc(SRWValueQueue<Element>::getMemorySize(aNumElements));
+         mMemory = malloc(SRSWValueQueue<Element>::getMemorySize(aNumElements));
          mOwnMemoryFlag = true;
       }
       // If the instance of this class is to reside in external memory
@@ -226,12 +226,12 @@ public:
       if (aConstructorFlag)
       {
          // Call the constructor.
-         mX = new(tStateMemory)SRWValueQueueState;
+         mX = new(tStateMemory)SRSWValueQueueState;
       }
       else
       {
          // The constructor has already been called.
-         mX = (SRWValueQueueState*)tStateMemory;
+         mX = (SRSWValueQueueState*)tStateMemory;
       }
       // Initialize the state.
       mX->initialize(aNumElements,aConstructorFlag);

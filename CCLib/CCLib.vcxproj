@@ -60,7 +60,7 @@
     <ClInclude Include="Source\ccDefs.h" />
     <ClInclude Include="Source\ccDiagrams.h" />
     <ClInclude Include="Source\ccLMPacketQueue.h" />
-    <ClInclude Include="Source\ccSRWValueQueue.h" />
+    <ClInclude Include="Source\ccSRSWValueQueue.h" />
     <ClInclude Include="Source\ccLFPacketQueue.h" />
     <ClInclude Include="Source\ccLFIndex.h" />
     <ClInclude Include="Source\ccLFPointerQueue.h" />
