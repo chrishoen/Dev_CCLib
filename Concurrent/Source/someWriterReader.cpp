@@ -129,12 +129,12 @@ void WriterReader::startTrialType3()
          ++mCount &= 0xFFFF;
 
          int tIndex;
-         void* tPacket = gShare.mLFPacketQueue.startWrite(&tIndex);
+         void* tPacket = gShare.mLFObjectQueue.startWrite(&tIndex);
          if (tPacket)
          {
             Class1A* tObject = new(tPacket) Class1A;
             tObject->mCode1 = mCount;
-            gShare.mLFPacketQueue.finishWrite(tIndex);
+            gShare.mLFObjectQueue.finishWrite(tIndex);
          }
 
          mWriteCount++;
@@ -476,12 +476,12 @@ void WriterReader::writereadType3(int aNumWrites)
          mMarkerWrite.doStart();
 
          int tIndex;
-         void* tPacket = gShare.mLFPacketQueue.startWrite(&tIndex);
+         void* tPacket = gShare.mLFObjectQueue.startWrite(&tIndex);
          if (tPacket)
          {
             Class1A* tObject = new(tPacket) Class1A;
             tObject->mCode1 = mCount;
-            gShare.mLFPacketQueue.finishWrite(tIndex);
+            gShare.mLFObjectQueue.finishWrite(tIndex);
          }
 
          mMarkerWrite.doStop();
@@ -507,11 +507,11 @@ void WriterReader::writereadType3(int aNumWrites)
          int tCount;
 
          mMarkerRead.doStart();
-         Class1A* tObject = (Class1A*)gShare.mLFPacketQueue.startRead(&tIndex);
+         Class1A* tObject = (Class1A*)gShare.mLFObjectQueue.startRead(&tIndex);
          if (tObject)
          {
             tCount = tObject->mCode1;
-            gShare.mLFPacketQueue.finishRead(tIndex);
+            gShare.mLFObjectQueue.finishRead(tIndex);
             tPass = true;
          }
          mMarkerRead.doStop();
@@ -1016,11 +1016,11 @@ void WriterReader::flushType3()
    while(true)
    {
 
-      Class1A* tObject = (Class1A*)gShare.mLFPacketQueue.startRead(&tIndex);
+      Class1A* tObject = (Class1A*)gShare.mLFObjectQueue.startRead(&tIndex);
       if (!tObject) break;
 
       tCount = tObject->mCode1;
-      gShare.mLFPacketQueue.finishRead(tIndex);
+      gShare.mLFObjectQueue.finishRead(tIndex);
 
       mReadCount++;
       mReadPassCount++;

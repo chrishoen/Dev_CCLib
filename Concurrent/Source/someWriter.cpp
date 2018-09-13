@@ -139,13 +139,13 @@ void Writer::writeType3(int aNumWrites)
       mMarkerWrite.doStart();
 
       int tIndex;
-      void* tPacket = gShare.mLFPacketQueue.startWrite(&tIndex);
+      void* tPacket = gShare.mLFObjectQueue.startWrite(&tIndex);
       if (tPacket)
       {
          Class1A* tObject = new(tPacket) Class1A;
          tObject->mCode1 = tCount;
          tDelayA.delay();
-         gShare.mLFPacketQueue.finishWrite(tIndex);
+         gShare.mLFObjectQueue.finishWrite(tIndex);
          tPass=true;
       }
 
@@ -292,13 +292,13 @@ void Writer::writeType7(int aNumWrites)
       mMarkerWrite.doStart();
 
       int tIndex;
-      void* tPacket = gShare.mLMPacketQueue.startWrite(&tIndex);
+      void* tPacket = gShare.mLMObjectQueue.startWrite(&tIndex);
       if (tPacket)
       {
          Class1A* tObject = new(tPacket) Class1A;
          tObject->mCode1 = tCount;
          tDelayA.delay();
-         gShare.mLMPacketQueue.finishWrite(tIndex);
+         gShare.mLMObjectQueue.finishWrite(tIndex);
          tPass=true;
       }
 

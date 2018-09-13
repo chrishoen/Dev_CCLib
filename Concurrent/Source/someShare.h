@@ -12,10 +12,10 @@
 #include "someWriterReader.h"
 #include "someTester.h"
 #include "ccLFValueQueue.h"
-#include "ccLFPacketQueue.h"
+#include "ccLFObjectQueue.h"
 #include "ccLFPointerQueue.h"
 #include "ccSRSWValueQueue.h"
-#include "ccLMPacketQueue.h"
+#include "ccLMObjectQueue.h"
 
 namespace Some
 {
@@ -74,10 +74,10 @@ public:
 
    CC::LFPointerQueue<void*>  mPointerQueue;
    CC::LFValueQueue<void*>    mValueQueue;
-   CC::LFPacketQueue          mLFPacketQueue;
+   CC::LFObjectQueue          mLFObjectQueue;
    CC::LFValueQueue<int>      mIntQueue;
    CC::SRSWValueQueue<int>     mSRSWIntQueue;
-   CC::LMPacketQueue          mLMPacketQueue;
+   CC::LMObjectQueue          mLMObjectQueue;
 
    //***************************************************************************
    //***************************************************************************

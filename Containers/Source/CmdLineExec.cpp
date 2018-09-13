@@ -23,7 +23,7 @@ void CmdLineExec::reset()
    mCount=1000;
    mIntQueue.initialize(4);
    mPointerQueue.initialize(4);
-   mPacketQueue.initialize(4,sizeof(Class1A));
+   mObjectQueue.initialize(4,sizeof(Class1A));
 
    printf("sizeof(Class1A) %d\n",(int)sizeof(Class1A));
 }
@@ -54,12 +54,12 @@ void CmdLineExec::executeWriteK(Ris::CmdLineCmd* aCmd)
    mCount++;
 
    int tIndex;
-   void* tPacket = mPacketQueue.startWrite(&tIndex);
+   void* tPacket = mObjectQueue.startWrite(&tIndex);
    if (tPacket)
    {
       Class1A* tObject = new(tPacket) Class1A;
       tObject->mCode1 = mCount;
-      mPacketQueue.finishWrite(tIndex);
+      mObjectQueue.finishWrite(tIndex);
 
       Prn::print(0, "WRITE PASS      $$ %d                  %d", mCount,tIndex);
    }
@@ -74,13 +74,13 @@ void CmdLineExec::executeWriteK(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeReadK(Ris::CmdLineCmd* aCmd)
 {
    int tIndex;
-   Class1A* tObject = (Class1A*)mPacketQueue.startRead(&tIndex);
+   Class1A* tObject = (Class1A*)mObjectQueue.startRead(&tIndex);
 
    if (tObject)
    {
       Prn::print(0, "READ  PASS      $$           %d        %d", tObject->mCode1,tIndex);
 //    Prn::print(0, "READ  PASS      $$           %d        %d", tObject->mCode1,tObject->mCode2);
-      mPacketQueue.finishRead(tIndex);
+      mObjectQueue.finishRead(tIndex);
    }
    else
    {

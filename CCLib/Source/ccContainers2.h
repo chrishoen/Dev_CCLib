@@ -579,7 +579,7 @@ void TransferFileToList(SFileList& List)
 // 
 //   0 =< mBeginIndex =< DataIndex =< mEndIndex =< Allocate-1
 // 
-// This feature is provided to implement packets that have header storage
+// This feature is provided to implement objects that have header storage
 // allocated at the beginning of the array and have variable length
 // maximum transmission unit size which can be less than Allocate.
 

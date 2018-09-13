@@ -3,8 +3,8 @@
 
 #include "ccLFPointerQueue.h"
 #include "ccLFValueQueue.h"
-#include "ccLFPacketQueue.h"
-#include "ccLMPacketQueue.h"
+#include "ccLFObjectQueue.h"
+#include "ccLMObjectQueue.h"
 #include "ccSRSWValueQueue.h"
 #include "risCmdLineExec.h"
 
@@ -35,8 +35,8 @@ public:
   int mCount;
 //CC::LFValueQueue<int>      mIntQueue;
   CC::SRSWValueQueue<int>     mIntQueue;
-//CC::LFPacketQueue          mPacketQueue;
-  CC::LMPacketQueue          mPacketQueue;
+//CC::LFObjectQueue          mObjectQueue;
+  CC::LMObjectQueue          mObjectQueue;
   CC::LFPointerQueue<void*>  mPointerQueue;
 };
 

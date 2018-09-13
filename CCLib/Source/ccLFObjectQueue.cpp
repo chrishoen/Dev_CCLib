@@ -11,7 +11,7 @@ Description:
 #include "cc_functions.h"
 #include "ccDefs.h"
 #include "ccMemoryPtr.h"
-#include "ccLMPacketQueue.h"
+#include "ccLFObjectQueue.h"
 
 using namespace std;
 
@@ -23,14 +23,14 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Constructor, initialize members for an empty stack of size zero 
+// Constructor, initialize members for an empty stack of size zero. 
 
-int LMPacketQueueState::getMemorySize()
+int LFObjectQueueState::getMemorySize()
 {
-   return cc_round_upto16(sizeof(LMPacketQueueState));
+   return cc_round_upto16(sizeof(LFObjectQueueState));
 }
 
-LMPacketQueueState::LMPacketQueueState()
+LFObjectQueueState::LFObjectQueueState()
 {
    // All null
    mNumElements=0;
@@ -39,7 +39,7 @@ LMPacketQueueState::LMPacketQueueState()
    mElementSize=0;
 }
 
-void LMPacketQueueState::initialize(int aNumElements,int aElementSize,bool aConstructorFlag)
+void LFObjectQueueState::initialize(int aNumElements,int aElementSize,bool aConstructorFlag)
 {
    // Do not initialize, if already initialized.
    if (!aConstructorFlag) return;
@@ -59,7 +59,7 @@ void LMPacketQueueState::initialize(int aNumElements,int aElementSize,bool aCons
 //***************************************************************************
 // This local class calculates and stores the memory sizes needed by the class.
 
-class LMPacketQueue::MemorySize
+class LFObjectQueue::MemorySize
 {
 public:
    // Members.
@@ -72,9 +72,9 @@ public:
    // Calculate and store memory sizes.
    MemorySize::MemorySize(int aNumElements,int aElementSize)
    {
-      mStateSize         = LMPacketQueueState::getMemorySize();
-      mQueueArraySize    = cc_round_upto16(cNewArrayExtraMemory + (aNumElements + 1)*sizeof(int));
-      mListArraySize     = cc_round_upto16(cNewArrayExtraMemory + (aNumElements + 1)*sizeof(int));
+      mStateSize         = LFObjectQueueState::getMemorySize();
+      mQueueArraySize    = cc_round_upto16(cNewArrayExtraMemory + (aNumElements + 1)*sizeof(AtomicLFIndex));
+      mListArraySize     = cc_round_upto16(cNewArrayExtraMemory + (aNumElements + 1)*sizeof(AtomicLFIndex));
       mElementArraySize  = cc_round_upto16(cNewArrayExtraMemory + (aNumElements + 1)*aElementSize);
       mMemorySize = mStateSize + mQueueArraySize + mListArraySize + mElementArraySize;
    }
@@ -86,7 +86,7 @@ public:
 // This returns the number of bytes that an instance of this class
 // will need to be allocated for it.
 
-int LMPacketQueue::getMemorySize(int aNumElements,int aElementSize)
+int LFObjectQueue::getMemorySize(int aNumElements,int aElementSize)
 {
    MemorySize tMemorySize(aNumElements,aElementSize);
    return tMemorySize.mMemorySize;
@@ -100,7 +100,7 @@ int LMPacketQueue::getMemorySize(int aNumElements,int aElementSize)
 //******************************************************************************
 // Constructor.
 
-LMPacketQueue::LMPacketQueue()
+LFObjectQueue::LFObjectQueue()
 {
    // All null.
    mX = 0;
@@ -113,7 +113,7 @@ LMPacketQueue::LMPacketQueue()
    mListNext = 0;
 }
 
-LMPacketQueue::~LMPacketQueue()
+LFObjectQueue::~LFObjectQueue()
 {
    finalize();
 }
@@ -123,16 +123,16 @@ LMPacketQueue::~LMPacketQueue()
 //***************************************************************************
 // Initialize
 
-void LMPacketQueue::initialize(int aNumElements,int aElementSize)
+void LFObjectQueue::initialize(int aNumElements,int aElementSize)
 {
    initialize(aNumElements,aElementSize,true,0);
 }
 
-void LMPacketQueue::initialize(int aNumElements,int aElementSize,bool aConstructorFlag, void* aMemory)
+void LFObjectQueue::initialize(int aNumElements,int aElementSize,bool aConstructorFlag, void* aMemory)
 {
-   //------------------------------------------------------------------------
-   //------------------------------------------------------------------------
-   //------------------------------------------------------------------------
+   //************************************************************************
+   //************************************************************************
+   //************************************************************************
    // Initialize memory.
 
    // Deallocate memory, if any exists.
@@ -142,7 +142,7 @@ void LMPacketQueue::initialize(int aNumElements,int aElementSize,bool aConstruct
    // then allocate memory for it on the system heap.
    if (aMemory == 0)
    {
-      mMemory = malloc(LMPacketQueue::getMemorySize(aNumElements,aElementSize));
+      mMemory = malloc(LFObjectQueue::getMemorySize(aNumElements,aElementSize));
       mOwnMemoryFlag = true;
    }
    // If the instance of this class is to reside in external memory
@@ -168,12 +168,12 @@ void LMPacketQueue::initialize(int aNumElements,int aElementSize,bool aConstruct
    if (aConstructorFlag)
    {
       // Call the constructor.
-      mX = new(tStateMemory)LMPacketQueueState;
+      mX = new(tStateMemory)LFObjectQueueState;
    }
    else
    {
       // The constructor has already been called.
-      mX = (LMPacketQueueState*)tStateMemory;
+      mX = (LFObjectQueueState*)tStateMemory;
    }
    // Initialize the state.
    mX->initialize(aNumElements,aElementSize,aConstructorFlag);
@@ -182,26 +182,27 @@ void LMPacketQueue::initialize(int aNumElements,int aElementSize,bool aConstruct
    if (aConstructorFlag)
    {
       // Call the constructor.
-      mQueueNext = new(tQueueArrayMemory)int[mX->mQueueNumElements];
+      mQueueNext = new(tQueueArrayMemory)AtomicLFIndex[mX->mQueueNumElements];
 
       // Call the constructor.
-      mListNext = new(tListArrayMemory)int[mX->mListNumElements];
+      mListNext = new(tListArrayMemory)AtomicLFIndex[mX->mListNumElements];
    }
    else
    {
       // The constructor has already been called.
-      mQueueNext = (int*)tQueueArrayMemory;
+      mQueueNext = (AtomicLFIndex*)tQueueArrayMemory;
 
       // The constructor has already been called.
-      mListNext = (int*)tListArrayMemory;
+      mListNext = (AtomicLFIndex*)tListArrayMemory;
+
    }
 
    // There is no constructor for this array.
    mElement = tElementArrayMemory;
 
-   //------------------------------------------------------------------------
-   //------------------------------------------------------------------------
-   //------------------------------------------------------------------------
+   //************************************************************************
+   //************************************************************************
+   //************************************************************************
    // Initialize variables.
 
    // Initialize queue and linked list, if not already been initialized.
@@ -210,37 +211,38 @@ void LMPacketQueue::initialize(int aNumElements,int aElementSize,bool aConstruct
       // Initialize linked list array. Each node next node is the one after it.
       for (int i = 0; i < mX->mListNumElements - 1; i++)
       {
-         mListNext[i] = i + 1;
+         mListNext[i].store(LFIndex(i + 1, 0));
       }
       // The last node has no next node.
-      mListNext[mX->mListNumElements - 1] = cInvalid;
+      mListNext[mX->mListNumElements - 1].store(LFIndex(cInvalid, 0));
 
       // List head points to the first node.
-      mX->mListHead = 0;
+      mX->mListHead.store(LFIndex(0, 0));
       // List size is initially a full stack.
       mX->mListSize = mX->mListNumElements;
 
       // Initialize queue array. Each node has no next node.
       for (int i = 0; i < mX->mListNumElements; i++)
       {
-         mQueueNext[i] = cInvalid;
+         mQueueNext[i].store(LFIndex(cInvalid, 0));
       }
 
       // Pop the dummy node.
       int tDummyNode;
       listPop(&tDummyNode);
 
-      // Initialize queue head and tail.
-      mX->mQueueHead = tDummyNode;
-      mX->mQueueTail = mX->mQueueHead;
+      // initialize queue head and tail.
+      mX->mQueueHead.store(LFIndex(tDummyNode, 0));
+      mX->mQueueTail = mX->mQueueHead.load();
    }
 }
 
 //***************************************************************************
 //***************************************************************************
 //***************************************************************************
+// Finalize.
 
-void LMPacketQueue::finalize()
+void LFObjectQueue::finalize()
 {
    if (mOwnMemoryFlag)
    {
@@ -256,19 +258,19 @@ void LMPacketQueue::finalize()
 //***************************************************************************
 //***************************************************************************
 //***************************************************************************
-// Size
+// Size.
 
-int LMPacketQueue::size()
+int LFObjectQueue::size()
 {
-   return mX->mListNumElements - mX->mListSize;
+   return mX->mListNumElements - mX->mListSize.load(std::memory_order_relaxed);
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Return a pointer to a packet, based on its packet index.
+// Return a pointer to an object, based on its object index.
 
-void* LMPacketQueue::elementAt(int aIndex)
+void* LFObjectQueue::elementAt(int aIndex)
 {
    return (void*)((char*)mElement + mX->mElementSize*aIndex);
 }
@@ -282,39 +284,49 @@ void* LMPacketQueue::elementAt(int aIndex)
 // is to be written is stored in the new node. The new node is then attached
 // to the queue tail node and the tail index is updated.
 
-void* LMPacketQueue::startWrite(int* aNodeIndex)
+void* LFObjectQueue::startWrite(int* aNodeIndex)
 {
    // Try to allocate a node from the free list.
    // Exit if it is empty.
-
-   mListMutex.lock();
-
    int tNodeIndex;
-   if (!listPop(&tNodeIndex))
-   {
-      mListMutex.unlock();
-      return 0;
-   }
-
-   mListMutex.unlock();
-
-   // Initialize the node.
-   mQueueNext[tNodeIndex] = cInvalid;
+   if (!listPop(&tNodeIndex)) return 0;
 
    // Return a pointer to the node element.
    *aNodeIndex = tNodeIndex;
    return elementAt(tNodeIndex);
 }
 
-void LMPacketQueue::finishWrite(int aNodeIndex)
+void LFObjectQueue::finishWrite(int aNodeIndex)
 {
-   mTailMutex.lock();
+   // Initialize the node.
+   int tNodeIndex = aNodeIndex;
+   mQueueNext[tNodeIndex].store(LFIndex(cInvalid, 0), memory_order_relaxed);
 
    // Attach the node to the queue tail.
-   mQueueNext[mX->mQueueTail] = aNodeIndex;
-   mX->mQueueTail = aNodeIndex;
+   LFIndex tTail,tNext;
 
-   mTailMutex.unlock();
+   int tLoopCount=0;
+   while (true)
+   {
+      tTail = mX->mQueueTail.load(memory_order_relaxed);
+      tNext = mQueueNext[tTail.mIndex].load(memory_order_acquire);
+
+      if (tTail == mX->mQueueTail.load(memory_order_relaxed))
+      {
+         if (tNext.mIndex == cInvalid)
+         {
+            if (mQueueNext[tTail.mIndex].compare_exchange_strong(tNext, LFIndex(tNodeIndex, tNext.mCount+1),memory_order_release,memory_order_relaxed)) break;
+         }
+         else
+         {
+            mX->mQueueTail.compare_exchange_weak(tTail, LFIndex(tNext.mIndex, tTail.mCount+1),memory_order_release,memory_order_relaxed);
+         }
+      }
+
+      if (++tLoopCount==10000) throw 101;
+   }
+
+   mX->mQueueTail.compare_exchange_strong(tTail, LFIndex(tNodeIndex, tTail.mCount+1),memory_order_release,memory_order_relaxed);
 }
 
 //******************************************************************************
@@ -326,33 +338,44 @@ void LMPacketQueue::finishWrite(int aNodeIndex)
 // node, pushes the previous head node back onto the free list and updates the
 // head index.
 
-void* LMPacketQueue::startRead(int* aNodeIndex)
+void* LFObjectQueue::startRead(int* aNodeIndex)
 {
-   // Store int temps.
    void* tElementPtr = 0;
-   int tNode    = mX->mQueueHead;
-   int tNewHead = mQueueNext[tNode];
+   LFIndex tHead, tTail, tNext;
 
-   // Exit if queue is empty.
-   if (tNewHead == cInvalid) return 0;
+   int tLoopCount=0;
+   while (true)
+   {
+      tHead = mX->mQueueHead.load(memory_order_relaxed);
+      tTail = mX->mQueueTail.load(memory_order_acquire);
+      tNext = mQueueNext[tHead.mIndex].load(memory_order_relaxed);
 
-   // Store new head.
-   tElementPtr = elementAt(tNewHead);
-   mX->mQueueHead = tNewHead;
+      if (tHead == mX->mQueueHead.load(memory_order_acquire))
+      {
+         if (tHead.mIndex == tTail.mIndex)
+         {
+            if (tNext.mIndex == cInvalid) return 0;
+            mX->mQueueTail.compare_exchange_strong(tTail, LFIndex(tNext.mIndex, tTail.mCount+1),memory_order_release,memory_order_relaxed);
+         }
+         else
+         {
+            tElementPtr = elementAt(tNext.mIndex);
+            if (mX->mQueueHead.compare_exchange_strong(tHead, LFIndex(tNext.mIndex, tHead.mCount+1),memory_order_acquire,memory_order_relaxed))break;
+         }
+      }
 
-   // Return new head.
-   *aNodeIndex = tNewHead;
-   *aNodeIndex = tNode;
+      if (++tLoopCount==10000) throw 102;
+   }
+
+   *aNodeIndex = tHead.mIndex;
 
    // Done.
    return tElementPtr;
 }
 
-void LMPacketQueue::finishRead(int aNodeIndex)
+void LFObjectQueue::finishRead(int aNodeIndex)
 {
-   mListMutex.lock();
    listPush(aNodeIndex);
-   mListMutex.unlock();
 }
 
 //******************************************************************************
@@ -360,23 +383,29 @@ void LMPacketQueue::finishRead(int aNodeIndex)
 //******************************************************************************
 // This detaches the head node.
 
-bool LMPacketQueue::listPop(int* aNode)
+bool LFObjectQueue::listPop(int* aNode)
 {
    // Store the head node in a temp.
    // This is the node that will be detached.
-   int tHead = mX->mListHead;
+   LFIndex tHead = mX->mListHead.load(memory_order_relaxed);
 
-   // Exit if the list is empty.
-   if (tHead == cInvalid) return false;
+   int tLoopCount=0;
+   while (true)
+   {
+      // Exit if the list is empty.
+      if (tHead.mIndex == cInvalid) return false;
 
-   // Set the head node to be the node that is after the head node.
-   mX->mListHead = mListNext[tHead];
+      // Set the head node to be the node that is after the head node.
+      if (mX->mListHead.compare_exchange_weak(tHead, LFIndex(mListNext[tHead.mIndex].load(memory_order_relaxed).mIndex,tHead.mCount+1),memory_order_acquire,memory_order_relaxed)) break;
+
+      if (++tLoopCount==10000) throw 103;
+   }
 
    // Return the detached original head node.
-   *aNode = tHead;
+   *aNode = tHead.mIndex;
 
    // Done.
-   mX->mListSize--;
+   mX->mListSize.fetch_sub(1,memory_order_relaxed);
    return true;
 }
 
@@ -385,45 +414,28 @@ bool LMPacketQueue::listPop(int* aNode)
 //***************************************************************************
 // Insert a node into the list before the list head node.
 
-bool LMPacketQueue::listPush(int aNode)
+bool LFObjectQueue::listPush(int aNode)
 {
    // Store the head node in a temp.
-   int tHead = mX->mListHead;
+   LFIndex tHead = mX->mListHead.load(memory_order_relaxed);
 
-   // Attach the head node to the pushed node.
-   mListNext[aNode] = tHead;
+   int tLoopCount=0;
+   while (true)
+   {
+      // Attach the head node to the pushed node.
+      mListNext[aNode].store(tHead,memory_order_relaxed);
 
-   // The pushed node is the new head node.
-   mX->mListHead = aNode;
+      // The pushed node is the new head node.
+      atomic<int>* tListHeadIndexPtr = (std::atomic<int>*)&mX->mListHead;
+      if ((*tListHeadIndexPtr).compare_exchange_weak(tHead.mIndex, aNode,memory_order_release,memory_order_relaxed)) break;
+      if (++tLoopCount == 10000) throw 103;
+   }
 
    // Done.
-   mX->mListSize++;
+   mX->mListSize.fetch_add(1,memory_order_relaxed);
    return true;
 }
-
 //***************************************************************************
 //***************************************************************************
 //***************************************************************************
-// Insert a node into the list before the list head node.
-
-void LMPacketQueue::lockList()
-{
-   mListMutex.lock();
-}
-
-void LMPacketQueue::unlockList()
-{
-   mListMutex.unlock();
-}
-
-void LMPacketQueue::lockTail()
-{
-   mTailMutex.lock();
-}
-
-void LMPacketQueue::unlockTail()
-{
-   mTailMutex.unlock();
-}
-
 }//namespace

@@ -39,19 +39,19 @@
     <ClCompile Include="Source\ccBlockPoolShortTerm.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ccLFPacketQueue.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\ccBlockPoolFaster.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ccLMPacketQueue.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\ccSynch_win.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\stdafx.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ccLFObjectQueue.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ccLMObjectQueue.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -134,9 +134,6 @@
     <ClInclude Include="Source\ccMemoryPtr.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccLFPacketQueue.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\ccBlockPoolFaster.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -149,9 +146,6 @@
     <ClInclude Include="Source\ccValueHistory.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccLMPacketQueue.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\ccSynch.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -159,6 +153,12 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccSRSWValueQueue.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ccLFObjectQueue.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ccLMObjectQueue.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

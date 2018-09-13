@@ -9,15 +9,15 @@ It lockes with semaphores, blocking.
 It is shared memory safe.
 It is zero copy.
 
-This implements a queue of fixed size packets, where the queue provides the
-memory allocation for the packets (memory for the packets is contained
+This implements a queue of fixed size objects, where the queue provides the
+memory allocation for the objects (memory for the objects is contained
 within the queue). The queue is thread safe. It uses mutexes to guard 
 against concurrency contentions.
 
 It is thread safe for separate multiple writer and single reader threads.
 
 It implements the Michael and Scott algorithm for blocking queues. It 
-uses mutex protection. It maintains storage for the packets by implementing a
+uses mutex protection. It maintains storage for the objects by implementing a
 free list that also uses mutex protection. 
 
 =============================================================================*/
@@ -41,7 +41,7 @@ namespace CC
 // State variables for the object. These are located in a separate class
 // so that they can be located in external memory.
 
-class LMPacketQueueState
+class LMObjectQueueState
 {
 public:
 
@@ -59,7 +59,7 @@ public:
    //***************************************************************************
    // Members.
 
-   // Number of packets allocated.
+   // Number of objects allocated.
    int mNumElements;
    int mQueueNumElements;
    int mListNumElements;
@@ -79,7 +79,7 @@ public:
    // Methods.
 
    // Constructor.
-   LMPacketQueueState();
+   LMObjectQueueState();
 
    // Initialize.
    void initialize(int aNumElements,int aElementSize,bool aConstructorFlag);
@@ -88,9 +88,9 @@ public:
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Lock free packet queue class.
+// Lock free object queue class.
 
-class LMPacketQueue
+class LMObjectQueue
 {
 public:
 
@@ -122,9 +122,9 @@ public:
 
    // State variables for the queue. These are located in a separate class
    // so that they can be located in externale memory.
-   LMPacketQueueState* mX;
+   LMObjectQueueState* mX;
 
-   // Array of bytes, storage for the packets.
+   // Array of bytes, storage for the objects.
    // Size is NumElements + 1.
    // Index range is 0..NumElements.
    void* mElement;
@@ -171,8 +171,8 @@ public:
    //    void* aMemory
 
    // Constructor.
-   LMPacketQueue();
-  ~LMPacketQueue();
+   LMObjectQueue();
+  ~LMObjectQueue();
 
    // Allocate memory for the queue and free list arrays and initialize the
    // queue variables. 
@@ -188,20 +188,20 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Queue and Free List Methods. These write or read packets from the queue
+   // Queue and Free List Methods. These write or read objects from the queue
    // and pop or push node indices from the free list.
 
-   // These are used to enqueue a packet. StartWrite pops a packet from the 
+   // These are used to enqueue an object. StartWrite pops an object from the 
    // free list and returns a pointer to it. If the queue is full then it 
-   // returns null. After writing to the packet, FinishWrite is called to 
+   // returns null. After writing to the object, FinishWrite is called to 
    // enqueue it at the queue tail. The node index is passed between the two
    // methods.
 
    void* startWrite  (int* aNodeIndex);
    void  finishWrite (int  aNodeIndex);
 
-   // These are used to dequeue a packet. StartRead dequeues a packet from the 
-   // queue head and returns a pointer to it. After reading from the packet,
+   // These are used to dequeue an object. StartRead dequeues an object from the 
+   // queue head and returns a pointer to it. After reading from the object,
    // FinishRead is called to push it onto the free list. The node index is 
    // passed between the two methods.
 
@@ -227,7 +227,7 @@ public:
    //***************************************************************************
    // Helper methods.
 private:
-   // Return a pointer to a packet, based on its packet index.
+   // Return a pointer to an object, based on its object index.
    void* elementAt(int aIndex);
 };
 
@@ -247,52 +247,52 @@ private:
 
    // includes
    #include <new>
-   #include "ccLMPacketQueue.h"
+   #include "ccLMObjectQueue.h"
 
-   // Declare packet queue
-   CC::LMPacketQueue mPacketQueue;
-   // Initialize packet queue
-   mPacketQueue.initialize(100,sizeof(Class1A));
+   // Declare object queue
+   CC::LMObjectQueue mObjectQueue;
+   // Initialize object queue
+   mObjectQueue.initialize(100,sizeof(Class1A));
 
    //---------------------------------------------------------------------------
-   // Enqueue a packet
+   // Enqueue an object
 
    // Example counter
    int tWriteCount;
    // This is passed between StartWrite and FinishWrite
    int tWriteIndex;
 
-   // Try to start a write to allocate a packet
-   void* tElement = mPacketQueue.startWrite(&tWriteIndex);
+   // Try to start a write to allocate an object
+   void* tElement = mObjectQueue.startWrite(&tWriteIndex);
    // If the queue is not full
    if (tElement)
    {
-      // Create a new object with placement new on the allocated packet.
+      // Create a new object with placement new on the allocated object.
       // Placement new must be used with any classes that use vtables.
       Class1A* tObject = new(tElement) Class1A;
       // Access the new object
       tObject->mCode1 = tWriteCount;
       // Finish the write
-      mPacketQueue.finishWrite(tWriteIndex);
+      mObjectQueue.finishWrite(tWriteIndex);
    }
 
    //---------------------------------------------------------------------------
-   // Dequeue a packet 
+   // Dequeue an object 
 
    // Example counter
    int tReadCount;
    // This is passed between StartRead and FinishRead
    int tReadIndex;
 
-   // Try to start a packet read, returns a pointer to an object
-   Class1A* tObject = (Class1A*)mPacketQueue.startRead(&tReadIndex);
+   // Try to start an object read, returns a pointer to an object
+   Class1A* tObject = (Class1A*)mObjectQueue.startRead(&tReadIndex);
    // If the queue is not empty
    if (tObject)
    {
       // Access the object
       tReadCount = tObject->mCode1;
       // Finish the read
-      mPacketQueue.finishRead(tReadIndex);
+      mObjectQueue.finishRead(tReadIndex);
    }
 #endif
 
