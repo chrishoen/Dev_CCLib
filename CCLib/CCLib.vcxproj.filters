@@ -161,5 +161,8 @@
     <ClInclude Include="Source\ccLMObjectQueue.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="Source\ccLMValueQueue.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -60,6 +60,7 @@
     <ClInclude Include="Source\ccDefs.h" />
     <ClInclude Include="Source\ccDiagrams.h" />
     <ClInclude Include="Source\ccLMObjectQueue.h" />
+    <ClInclude Include="Source\ccLMValueQueue.h" />
     <ClInclude Include="Source\ccSRSWValueQueue.h" />
     <ClInclude Include="Source\ccLFObjectQueue.h" />
     <ClInclude Include="Source\ccLFIndex.h" />
