@@ -131,6 +131,7 @@ void CmdLineExec::executeRead(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeStart(Ris::CmdLineCmd* aCmd)
 {
+   gParms.readFile();
    gShare.initialize();
    gThreads.start();
 }

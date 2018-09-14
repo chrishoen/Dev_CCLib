@@ -224,22 +224,24 @@ void Writer::writeType5(int aNumWrites)
 
    for (int i = 0; i < aNumWrites; i++)
    {
-      bool tPass = false;
-      ++mCount &= 0xFFFF;
+      bool tPass;
+      int tCount = mCount & 0xFFFF;
 
       mMarkerWrite.doStart();
-      tPass = gShare.mLFIntQueue.tryWrite(mCount);
+      tPass = gShare.mLFIntQueue.tryWrite(tCount);
       mMarkerWrite.doStop();
 
       tDelayA.delay();
 
       if (tPass)
       {
+         mCount++;
          mPassCount++;
-         mCheckSum += mCount;
+         mCheckSum += tCount;
       }
       else
       {
+         mCount++;
          mFailCount++;
       }
    }
@@ -255,22 +257,24 @@ void Writer::writeType6(int aNumWrites)
 
    for (int i = 0; i < aNumWrites; i++)
    {
-      bool tPass = false;
-      ++mCount &= 0xFFFF;
+      bool tPass;
+      int tCount = mCount & 0xFFFF;
 
       mMarkerWrite.doStart();
-      tPass = gShare.mSRSWIntQueue.tryWrite(mCount);
+      tPass = gShare.mSRSWIntQueue.tryWrite(tCount);
       mMarkerWrite.doStop();
 
       tDelayA.delay();
 
       if (tPass)
       {
+         mCount++;
          mPassCount++;
-         mCheckSum += mCount;
+         mCheckSum += tCount;
       }
       else
       {
+         mCount++;
          mFailCount++;
       }
    }

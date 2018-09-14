@@ -46,7 +46,7 @@ void Threads::reset()
 
 void Threads::start1()
 {
-   Prn::print(0,"Threads::start1*******************************");
+   Prn::print(0,"Threads::start1******************************* %d",gShare.mType);
    reset();
 
    mReaderThread = new ReaderThread;
