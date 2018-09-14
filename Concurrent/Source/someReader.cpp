@@ -339,6 +339,39 @@ void Reader::readType7(int aNumReads)
 //******************************************************************************
 //******************************************************************************
 
+void Reader::readType8(int aNumReads)
+{
+   LFBackoff tDelayB(gParms.mDelayB1, gParms.mDelayB2);
+
+   for (int i = 0; i < aNumReads; i++)
+   {
+      bool tPass;
+      int tCount;
+
+      mMarkerRead.doStart();
+      tPass = gShare.mLMIntQueue.tryRead(&tCount);
+      mMarkerRead.doStop();
+
+      tDelayB.delay();
+
+      if (tPass)
+      {
+         mCount++;
+         mPassCount++;
+         mCheckSum += tCount;
+      }
+      else
+      {
+         mCount++;
+         mFailCount++;
+      }
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void Reader::read(int aNumReads)
 {
    switch (gShare.mType)
@@ -350,6 +383,7 @@ void Reader::read(int aNumReads)
    case 5: readType5(aNumReads); break;
    case 6: readType6(aNumReads); break;
    case 7: readType7(aNumReads); break;
+   case 8: readType8(aNumReads); break;
    }
 }
    
@@ -501,6 +535,25 @@ void Reader::flushType7()
 //******************************************************************************
 //******************************************************************************
 
+void Reader::flushType8()
+{
+   while (true)
+   {
+      int tCount;
+      bool tPass;
+      tPass = gShare.mLMIntQueue.tryRead(&tCount);
+      if (!tPass) break;
+
+      mCount++;
+      mPassCount++;
+      mCheckSum += tCount;
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void Reader::flush()
 {
    switch (gShare.mType)
@@ -512,6 +565,7 @@ void Reader::flush()
    case 5: flushType5(); break;
    case 6: flushType6(); break;
    case 7: flushType7(); break;
+   case 8: flushType8(); break;
    }
 }
    

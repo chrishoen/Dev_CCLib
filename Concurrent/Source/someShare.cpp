@@ -59,6 +59,9 @@ void Share::initialize()
       case 7:
          mLMObjectQueue.initialize(gParms.mNumElements, sizeof(Class1A));
          break;
+      case 8:
+         mLMIntQueue.initialize(gParms.mNumElements);
+         break;
       case 11:
          break;
       case 12:

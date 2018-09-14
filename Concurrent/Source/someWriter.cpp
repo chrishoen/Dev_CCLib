@@ -327,6 +327,39 @@ void Writer::writeType7(int aNumWrites)
 //******************************************************************************
 //******************************************************************************
 
+void Writer::writeType8(int aNumWrites)
+{
+   LFBackoff tDelayA(gParms.mDelayA1, gParms.mDelayA2);
+
+   for (int i = 0; i < aNumWrites; i++)
+   {
+      bool tPass;
+      int tCount = mCount & 0xFFFF;
+
+      mMarkerWrite.doStart();
+      tPass = gShare.mLMIntQueue.tryWrite(tCount);
+      mMarkerWrite.doStop();
+
+      tDelayA.delay();
+
+      if (tPass)
+      {
+         mCount++;
+         mPassCount++;
+         mCheckSum += tCount;
+      }
+      else
+      {
+         mCount++;
+         mFailCount++;
+      }
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void Writer::startTrial()
 {
    mMarkerWrite.startTrial(gParms.mXLimit);
@@ -349,13 +382,14 @@ void Writer::write(int aNumWrites)
 {
    switch (gShare.mType)
    {
-   case 1: writeType1 (aNumWrites); break;
-   case 2: writeType2 (aNumWrites); break;
-   case 3: writeType3 (aNumWrites); break;
-   case 4: writeType4 (aNumWrites); break;
-   case 5: writeType5 (aNumWrites); break;
-   case 6: writeType6 (aNumWrites); break;
-   case 7: writeType7 (aNumWrites); break;
+   case 1: writeType1(aNumWrites); break;
+   case 2: writeType2(aNumWrites); break;
+   case 3: writeType3(aNumWrites); break;
+   case 4: writeType4(aNumWrites); break;
+   case 5: writeType5(aNumWrites); break;
+   case 6: writeType6(aNumWrites); break;
+   case 7: writeType7(aNumWrites); break;
+   case 8: writeType8(aNumWrites); break;
    }
 }
    
