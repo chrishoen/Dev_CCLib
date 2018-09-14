@@ -17,7 +17,8 @@
    WriteUpper       60000
    ReadLower       200000
    ReadUpper       600000
-   Terminate     10000000
+   Terminate      2000000
+   
    XLimit              40
 
    DelayA1            2.0
