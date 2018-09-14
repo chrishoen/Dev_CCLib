@@ -51,7 +51,7 @@ void Share::initialize()
          mValueQueue.initialize(gParms.mNumElements);
          break;
       case 5:
-         mIntQueue.initialize(gParms.mNumElements);
+         mLFIntQueue.initialize(gParms.mNumElements);
          break;
       case 6:
          mSRSWIntQueue.initialize(gParms.mNumElements);

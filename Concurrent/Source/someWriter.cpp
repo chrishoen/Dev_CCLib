@@ -228,7 +228,7 @@ void Writer::writeType5(int aNumWrites)
       ++mCount &= 0xFFFF;
 
       mMarkerWrite.doStart();
-      tPass = gShare.mIntQueue.tryWrite(mCount);
+      tPass = gShare.mLFIntQueue.tryWrite(mCount);
       mMarkerWrite.doStop();
 
       tDelayA.delay();

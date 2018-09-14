@@ -240,7 +240,7 @@ void Reader::readType5(int aNumReads)
       int tCount;
 
       mMarkerRead.doStart();
-      tPass = gShare.mIntQueue.tryRead(&tCount);
+      tPass = gShare.mLFIntQueue.tryRead(&tCount);
       mMarkerRead.doStop();
 
       tDelayB.delay();
@@ -445,7 +445,7 @@ void Reader::flushType5()
    {
       int tCount;
       bool tPass;
-      tPass = gShare.mIntQueue.tryRead(&tCount);
+      tPass = gShare.mLFIntQueue.tryRead(&tCount);
       if (!tPass) break;
 
       mCount++;

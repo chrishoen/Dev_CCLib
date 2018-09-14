@@ -67,7 +67,7 @@ void StatusThread::threadRunFunction()
             if (gShare.mType==2)  tQueueSize = gShare.mPointerQueue.size();
             if (gShare.mType==3)  tQueueSize = gShare.mLFObjectQueue.size();
             if (gShare.mType==4)  tQueueSize = CC::getBlockPoolSize(cBlockPoolIndex_MyBlockA);
-            if (gShare.mType==5)  tQueueSize = gShare.mIntQueue.size();
+            if (gShare.mType==5)  tQueueSize = gShare.mLFIntQueue.size();
             if (gShare.mType==6)  tQueueSize = gShare.mSRSWIntQueue.size();
             if (gShare.mType==7)  tQueueSize = gShare.mLMObjectQueue.size();
 
@@ -85,7 +85,7 @@ void StatusThread::threadRunFunction()
             if (gShare.mType==2)  tQueueSize = gShare.mPointerQueue.size();
             if (gShare.mType==3)  tQueueSize = gShare.mLFObjectQueue.size();
             if (gShare.mType==4)  tQueueSize = CC::getBlockPoolSize(cBlockPoolIndex_MyBlockA);
-            if (gShare.mType==5)  tQueueSize = gShare.mIntQueue.size();
+            if (gShare.mType==5)  tQueueSize = gShare.mLFIntQueue.size();
             if (gShare.mType==6)  tQueueSize = gShare.mSRSWIntQueue.size();
             if (gShare.mType==7)  tQueueSize = gShare.mLMObjectQueue.size();
             if (gShare.mType==11) tQueueSize = 9911;

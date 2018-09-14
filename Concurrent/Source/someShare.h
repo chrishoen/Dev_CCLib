@@ -75,7 +75,7 @@ public:
    CC::LFPointerQueue<void*>  mPointerQueue;
    CC::LFValueQueue<void*>    mValueQueue;
    CC::LFObjectQueue          mLFObjectQueue;
-   CC::LFValueQueue<int>      mIntQueue;
+   CC::LFValueQueue<int>      mLFIntQueue;
    CC::SRSWValueQueue<int>     mSRSWIntQueue;
    CC::LMObjectQueue          mLMObjectQueue;
 
