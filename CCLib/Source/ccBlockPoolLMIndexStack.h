@@ -4,10 +4,13 @@
 
 Free List Stack of Indices. 
 
-This implements a free list stack of indices. It is not thread safe.
+This implements a free list stack of indices. It is thread safe, because
+it uses a synchronization lock around critical sections.
 
 ==============================================================================*/
+
 #include "ccBlockPoolBaseIndexStack.h"
+#include "ccSynchLock.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -101,6 +104,14 @@ public:
    // State variables for the stack. These are located in a separate class
    // so that they can be located in externale memory.
    BlockPoolLMIndexStackState* mX;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   // This is a synchronization lock used to protect critical sections.
+   SynchLock mSynchLock;
 
    //***************************************************************************
    //***************************************************************************

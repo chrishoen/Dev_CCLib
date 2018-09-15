@@ -217,14 +217,23 @@ void BlockPoolLMIndexStack::finalize()
 
 bool BlockPoolLMIndexStack::push(int aValue)
 {
-   // Guard for stack full.
-   if (mX->mIndex == mX->mNumElements) return false;
+   // Enter critical section.
+   mSynchLock.lock();
 
+   // Guard for stack full.
+   if (mX->mIndex == mX->mNumElements)
+   {
+      mSynchLock.unlock();
+      return false;
+   }
 
    // Copy the source element to the element at the stack index.
    mElement[mX->mIndex] = aValue;
    // Increment the index.
    mX->mIndex++;
+
+   // Leave critical section.
+   mSynchLock.unlock();
 
    // Done
    return true;
@@ -237,13 +246,23 @@ bool BlockPoolLMIndexStack::push(int aValue)
 
 bool BlockPoolLMIndexStack::pop(int* aValue)
 {
-   // Guard
-   if (mX->mIndex == 0) return false;
+   // Enter critical section.
+   mSynchLock.lock();
+
+   // Guard for stack empty.
+   if (mX->mIndex == 0)
+   {
+      mSynchLock.unlock();
+      return false;
+   }
 
    // Copy the element below the stack index to the destination element.
    *aValue = mElement[mX->mIndex - 1];
    // Decrement the index.
    mX->mIndex--;
+
+   // Leave critical section.
+   mSynchLock.unlock();
 
    // Return success.
    return true;

@@ -11,7 +11,7 @@ Description:
 #include "cc_functions.h"
 #include "ccMemoryPtr.h"
 #include "ccBlockPoolIndexStack.h"
-#include "ccBlockPoolLFIndexStack.h"
+#include "ccBlockPoolLMIndexStack.h"
 #include "ccBlockPoolFreeList.h"
 
 namespace CC
@@ -40,7 +40,7 @@ public:
 
       if (aParms->mLockFreeFlag)
       {
-         mStackSize = BlockPoolLFIndexStack::getMemorySize(aParms);
+         mStackSize = BlockPoolLMIndexStack::getMemorySize(aParms);
       }
       else
       {
@@ -115,7 +115,7 @@ void BlockPoolFreeList::initialize(BlockPoolParms* aParms)
    // Create the index stack.
    if (aParms->mLockFreeFlag)
    {
-      mBlockIndexStack = new BlockPoolLFIndexStack;
+      mBlockIndexStack = new BlockPoolLMIndexStack;
    }
    else
    {
