@@ -56,8 +56,15 @@ void ReaderThread::threadRunFunction()
    try
    {
       gShare.mReader.startTrial();
+      int tLoopCount = 0;
       while (1)
       {
+         // Start trial statistics after cache settles.
+         if (tLoopCount == 1000)
+         {
+            gShare.mReader.finishTrial();
+            gShare.mReader.startTrial();
+         }
          // Sleep
          threadSleep(my_irand(mSleepLower, mSleepUpper));
          if (mTerminateFlag) break;
@@ -66,6 +73,7 @@ void ReaderThread::threadRunFunction()
          // Read 
          gShare.mReaderProcessor = BaseClass::getThreadProcessorNumber();
          gShare.mReader.read(my_irand(mReadLower, mReadUpper));
+         tLoopCount++;
       }
       gShare.mReader.finishTrial();
    }

@@ -69,8 +69,15 @@ void WriterThread::threadRunFunction()
    try
    {
       gShare.mWriter[mIdent].startTrial();
+      int tLoopCount = 0;
       while (1)
       {
+         // Start trial statistics after cache settles.
+         if (tLoopCount == 1000)
+         {
+            gShare.mWriter[mIdent].finishTrial();
+            gShare.mWriter[mIdent].startTrial();
+         }
          // Sleep
          threadSleep(my_irand(mSleepLower, mSleepUpper));
          // Thread loop termination
@@ -87,6 +94,7 @@ void WriterThread::threadRunFunction()
          // Write
          gShare.mWriterProcessor[mIdent] = BaseClass::getThreadProcessorNumber();
          gShare.mWriter[mIdent].write(my_irand(mWriteLower, mWriteUpper));
+         tLoopCount++;
       }
       gShare.mWriter[mIdent].finishTrial();
    }
