@@ -2,7 +2,7 @@
 
 /*==============================================================================
 
-Single Reader Multiple Writer value Queue class template. 
+Single Reader Multiple Writer Value Queue class template. 
 
 It is multiple writer single reader thread safe.
 It is uses thread synchronization (semaphores).
@@ -164,7 +164,8 @@ public:
 
    // This is a mutex semaphore that is used to lock access to member 
    // variables for write operations.
-   MutexSemaphore mLock;
+// MutexSemaphore mLock;
+   CriticalSection mLock;
 
    //***************************************************************************
    //***************************************************************************

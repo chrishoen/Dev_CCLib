@@ -4,7 +4,7 @@
 // MODE1       heavy read
 
    Mode                 1
-   Type                 1
+   Type                 8
    NumWriters           2
 
    NumElements      65536
@@ -19,6 +19,7 @@
    ReadUpper       600000
    Terminate      2000000
    XLimit              40
+   XLimit             100
 
    DelayA1            2.0
    DelayA2            6.0
