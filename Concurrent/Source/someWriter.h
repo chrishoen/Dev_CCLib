@@ -65,6 +65,7 @@ public:
    void writeType6(int aNumWrites);
    void writeType7(int aNumWrites);
    void writeType8(int aNumWrites);
+   void writeType9(int aNumWrites);
    void write(int aNumWrites);
 };
 

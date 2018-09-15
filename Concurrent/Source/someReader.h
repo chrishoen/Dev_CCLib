@@ -56,6 +56,7 @@ public:
    void readType6(int aNumReads);
    void readType7(int aNumReads);
    void readType8(int aNumReads);
+   void readType9(int aNumReads);
    void read(int aNumReads);
 
    void flushType1();
@@ -66,6 +67,7 @@ public:
    void flushType6();
    void flushType7();
    void flushType8();
+   void flushType9();
    void flush();
 };
 

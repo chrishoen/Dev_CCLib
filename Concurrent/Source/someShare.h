@@ -80,6 +80,7 @@ public:
    CC::SRSWValueQueue<int>    mSRSWIntQueue;
    CC::LMObjectQueue          mLMObjectQueue;
    CC::LMValueQueue<int>      mLMIntQueue;
+   CC::LMValueQueue<void*>    mLMPointerQueue;
 
    //***************************************************************************
    //***************************************************************************

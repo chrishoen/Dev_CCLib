@@ -372,6 +372,47 @@ void Reader::readType8(int aNumReads)
 //******************************************************************************
 //******************************************************************************
 
+void Reader::readType9(int aNumReads)
+{
+   LFBackoff tDelayB(gParms.mDelayB1, gParms.mDelayB2);
+
+   for (int i = 0; i < aNumReads; i++)
+   {
+      bool tPass;
+      int tCount;
+      MyBlockA* tObject = 0;
+
+      mMarkerRead.doStart();
+      tPass = gShare.mLMPointerQueue.tryRead((void**)&tObject);
+      mMarkerRead.doStop();
+      tDelayB.delay();
+
+      if (tObject)
+      {
+         tCount = tObject->mCode1;
+         mMarkerRead.doStart();
+         delete tObject;
+         mMarkerRead.doStop();
+      }
+
+      if (tPass)
+      {
+         mCount++;
+         mPassCount++;
+         mCheckSum += tCount;
+      }
+      else
+      {
+         mCount++;
+         mFailCount++;
+      }
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void Reader::read(int aNumReads)
 {
    switch (gShare.mType)
@@ -384,6 +425,7 @@ void Reader::read(int aNumReads)
    case 6: readType6(aNumReads); break;
    case 7: readType7(aNumReads); break;
    case 8: readType8(aNumReads); break;
+   case 9: readType9(aNumReads); break;
    }
 }
    
@@ -554,6 +596,28 @@ void Reader::flushType8()
 //******************************************************************************
 //******************************************************************************
 
+void Reader::flushType9()
+{
+   while (true)
+   {
+      bool tPass;
+      MyBlockA* tObject = 0;
+      tPass = gShare.mLMPointerQueue.tryRead((void**)&tObject);
+      if (!tPass) break;
+
+      int tCount = tObject->mCode1;
+      delete tObject;
+
+      mCount++;
+      mPassCount++;
+      mCheckSum += tCount;
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void Reader::flush()
 {
    switch (gShare.mType)
@@ -566,6 +630,7 @@ void Reader::flush()
    case 6: flushType6(); break;
    case 7: flushType7(); break;
    case 8: flushType8(); break;
+   case 9: flushType9(); break;
    }
 }
    
