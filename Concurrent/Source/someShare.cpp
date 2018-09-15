@@ -229,6 +229,14 @@ void Share::show12()
    Prn::print(0, "readRetry          %16.5f", tReadRetry);
    Prn::print(0, "popRetry           %16.5f", tPopRetry);
    Prn::print(0, "pushRetry          %16.5f", tPushRetry);
+
+   Prn::print(0, "");
+   for (int i = 0; i < mNumWriters; i++)
+   {
+      mWriter[i].mMarkerWrite.mStatistics.showEUMM(0, "WStat");
+   }
+   mReader.mMarkerRead.mStatistics.showEUMM(0, "RStat");
+
 }
   
 //******************************************************************************
