@@ -21,7 +21,7 @@ It is thread safe for multiple writer and single reader threads.
 #include "ccDefs.h"
 #include "cc_functions.h"
 #include "ccMemoryPtr.h"
-#include "ccSynch.h"
+#include "ccSynchLock.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -164,8 +164,7 @@ public:
 
    // This is a mutex semaphore that is used to lock access to member 
    // variables for write operations.
-// MutexSemaphore mLock;
-   CriticalSection mLock;
+   SynchLock mLock;
 
    //***************************************************************************
    //***************************************************************************

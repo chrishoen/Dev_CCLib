@@ -42,9 +42,6 @@
     <ClCompile Include="Source\ccBlockPoolFaster.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ccSynch_win.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\stdafx.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -52,6 +49,12 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\ccLMObjectQueue.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ccBlockPoolLMIndexStack.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ccSynchLock_win.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -146,9 +149,6 @@
     <ClInclude Include="Source\ccValueHistory.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccSynch.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\stdafx.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -162,6 +162,12 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccLMValueQueue.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ccBlockPoolLMIndexStack.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ccSynchLock.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
