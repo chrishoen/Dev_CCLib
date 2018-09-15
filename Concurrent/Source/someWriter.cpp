@@ -104,7 +104,7 @@ void Writer::writeType2(int aNumWrites)
       tObject->mCode1 = tCount;
 
       mMarkerWrite.doStart();
-      tPass = gShare.mPointerQueue.writePtr(tObject);
+      tPass = gShare.mLFPointerQueue.writePtr(tObject);
       mMarkerWrite.doStop();
       tDelayA.delay();
 
@@ -187,7 +187,7 @@ void Writer::writeType4(int aNumWrites)
       if (tObject)
       {
          tObject->mCode1 = tCount;
-         tPass = gShare.mValueQueue.tryWrite(tObject);
+         tPass = gShare.mLFValueQueue.tryWrite(tObject);
       }
       else
       {

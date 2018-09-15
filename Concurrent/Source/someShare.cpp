@@ -42,13 +42,13 @@ void Share::initialize()
          LFIntQueue::initialize(gParms.mNumElements);
          break;
       case 2:
-         mPointerQueue.initialize(gParms.mNumElements);
+         mLFPointerQueue.initialize(gParms.mNumElements);
          break;
       case 3:
          mLFObjectQueue.initialize(gParms.mNumElements, sizeof(Class1A));
          break;
       case 4:
-         mValueQueue.initialize(gParms.mNumElements);
+         mLFValueQueue.initialize(gParms.mNumElements);
          break;
       case 5:
          mLFIntQueue.initialize(gParms.mNumElements);
@@ -68,7 +68,7 @@ void Share::initialize()
          break;
       case 21:
       case 22:
-         mValueQueue.initialize(gParms.mNumElements);
+         mLFValueQueue.initialize(gParms.mNumElements);
          break;
       }
       break;

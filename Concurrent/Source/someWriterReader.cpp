@@ -103,7 +103,7 @@ void WriterReader::startTrialType2()
 
          Class1A* tObject = new Class1A;
          tObject->mCode1 = mCount;
-         gShare.mPointerQueue.writePtr(tObject);
+         gShare.mLFPointerQueue.writePtr(tObject);
 
          mWriteCount++;
          mWritePassCount++;
@@ -162,7 +162,7 @@ void WriterReader::startTrialType4()
 
          MyBlockA* tObject = new MyBlockA();
          tObject->mCode1 = mCount;
-         gShare.mValueQueue.tryWrite(tObject);
+         gShare.mLFValueQueue.tryWrite(tObject);
 
          mWriteCount++;
          mWritePassCount++;
@@ -259,7 +259,7 @@ void WriterReader::startTrialType21()
 
          Class1A* tObject = new Class1A();
          tObject->mCode1 = mCount;
-         gShare.mValueQueue.tryWrite(tObject);
+         gShare.mLFValueQueue.tryWrite(tObject);
 
          mWriteCount++;
          mWritePassCount++;
@@ -286,7 +286,7 @@ void WriterReader::startTrialType22()
 
          MyBlockA* tObject = new MyBlockA();
          tObject->mCode1 = mCount;
-         gShare.mValueQueue.tryWrite(tObject);
+         gShare.mLFValueQueue.tryWrite(tObject);
 
          mWriteCount++;
          mWritePassCount++;
@@ -408,7 +408,7 @@ void WriterReader::writereadType2(int aNumWrites)
          tObject->mCode1 = mCount;
 
          mMarkerWrite.doStart();
-         bool tPass = gShare.mPointerQueue.writePtr(tObject);
+         bool tPass = gShare.mLFPointerQueue.writePtr(tObject);
          mMarkerWrite.doStop();
          tDelayA.delay();
 
@@ -432,7 +432,7 @@ void WriterReader::writereadType2(int aNumWrites)
          int tCount;
 
          mMarkerRead.doStart();
-         Class1A* tObject = (Class1A*)gShare.mPointerQueue.readPtr();
+         Class1A* tObject = (Class1A*)gShare.mLFPointerQueue.readPtr();
          mMarkerRead.doStop();
          tDelayA.delay();
 
@@ -557,7 +557,7 @@ void WriterReader::writereadType4(int aNumWrites)
          if (tObject)
          {
             tObject->mCode1 = mCount;
-            tPass = gShare.mValueQueue.tryWrite(tObject);
+            tPass = gShare.mLFValueQueue.tryWrite(tObject);
 
             if (tPass)
             {
@@ -581,7 +581,7 @@ void WriterReader::writereadType4(int aNumWrites)
          int tCount;
 
          MyBlockA* tObject = 0;
-         tPass = gShare.mValueQueue.tryRead((void**)&tObject);
+         tPass = gShare.mLFValueQueue.tryRead((void**)&tObject);
          tDelayA.delay();
 
          if (tPass)
@@ -822,7 +822,7 @@ void WriterReader::writereadType21(int aNumWrites)
          if (tObject)
          {
             tObject->mCode1 = mCount;
-            tPass = gShare.mValueQueue.tryWrite(tObject);
+            tPass = gShare.mLFValueQueue.tryWrite(tObject);
 
             if (tPass)
             {
@@ -846,7 +846,7 @@ void WriterReader::writereadType21(int aNumWrites)
          int tCount;
 
          Class1A* tObject = 0;
-         tPass = gShare.mValueQueue.tryRead((void**)&tObject);
+         tPass = gShare.mLFValueQueue.tryRead((void**)&tObject);
          tDelayA.delay();
 
          if (tPass)
@@ -897,7 +897,7 @@ void WriterReader::writereadType22(int aNumWrites)
          if (tObject)
          {
             tObject->mCode1 = mCount;
-            tPass = gShare.mValueQueue.tryWrite(tObject);
+            tPass = gShare.mLFValueQueue.tryWrite(tObject);
 
             if (tPass)
             {
@@ -921,7 +921,7 @@ void WriterReader::writereadType22(int aNumWrites)
          int tCount;
 
          MyBlockA* tObject = 0;
-         tPass = gShare.mValueQueue.tryRead((void**)&tObject);
+         tPass = gShare.mLFValueQueue.tryRead((void**)&tObject);
          tDelayA.delay();
 
          if (tPass)
@@ -994,7 +994,7 @@ void WriterReader::flushType2()
    while(true)
    {
       int tCount;
-      Class1A* tObject = (Class1A*)gShare.mPointerQueue.readPtr();
+      Class1A* tObject = (Class1A*)gShare.mLFPointerQueue.readPtr();
       if (tObject==0) break;
       tCount = tObject->mCode1;
       delete tObject;
@@ -1039,7 +1039,7 @@ void WriterReader::flushType4()
       int tCount;
       bool tPass;
       MyBlockA* tObject = 0;
-      tPass = gShare.mValueQueue.tryRead((void**)&tObject);
+      tPass = gShare.mLFValueQueue.tryRead((void**)&tObject);
       if (!tPass) break;
       tCount = tObject->mCode1;
       delete tObject;
@@ -1112,7 +1112,7 @@ void WriterReader::flushType21()
       int tCount;
       bool tPass;
       Class1A* tObject = 0;
-      tPass = gShare.mValueQueue.tryRead((void**)&tObject);
+      tPass = gShare.mLFValueQueue.tryRead((void**)&tObject);
       if (!tPass) break;
       tCount = tObject->mCode1;
       delete tObject;
@@ -1133,7 +1133,7 @@ void WriterReader::flushType22()
       int tCount;
       bool tPass;
       MyBlockA* tObject = 0;
-      tPass = gShare.mValueQueue.tryRead((void**)&tObject);
+      tPass = gShare.mLFValueQueue.tryRead((void**)&tObject);
       if (!tPass) break;
       tCount = tObject->mCode1;
       delete tObject;

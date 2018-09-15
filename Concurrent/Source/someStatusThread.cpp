@@ -66,7 +66,7 @@ void StatusThread::threadRunFunction()
             switch (gShare.mType)
             {
             case 1:  tQueueSize = LFIntQueue::size(); break;
-            case 2:  tQueueSize = gShare.mPointerQueue.size(); break;
+            case 2:  tQueueSize = gShare.mLFPointerQueue.size(); break;
             case 3:  tQueueSize = gShare.mLFObjectQueue.size(); break;
             case 4:  tQueueSize = CC::getBlockPoolSize(cBlockPoolIndex_MyBlockA); break;
             case 5:  tQueueSize = gShare.mLFIntQueue.size(); break;
@@ -88,7 +88,7 @@ void StatusThread::threadRunFunction()
             switch (gShare.mType)
             {
             case 1:  tQueueSize = LFIntQueue::size();
-            case 2:  tQueueSize = gShare.mPointerQueue.size();
+            case 2:  tQueueSize = gShare.mLFPointerQueue.size();
             case 3:  tQueueSize = gShare.mLFObjectQueue.size();
             case 4:  tQueueSize = CC::getBlockPoolSize(cBlockPoolIndex_MyBlockA);
             case 5:  tQueueSize = gShare.mLFIntQueue.size();

@@ -117,7 +117,7 @@ void Reader::readType2(int aNumReads)
       int tCount;
 
       mMarkerRead.doStart();
-      Class1A* tObject = (Class1A*)gShare.mPointerQueue.readPtr();
+      Class1A* tObject = (Class1A*)gShare.mLFPointerQueue.readPtr();
       mMarkerRead.doStop();
       tDelayB.delay();
 
@@ -200,7 +200,7 @@ void Reader::readType4(int aNumReads)
       MyBlockA* tObject = 0;
 
       mMarkerRead.doStart();
-      tPass = gShare.mValueQueue.tryRead((void**)&tObject);
+      tPass = gShare.mLFValueQueue.tryRead((void**)&tObject);
       mMarkerRead.doStop();
       tDelayB.delay();
 
@@ -411,7 +411,7 @@ void Reader::flushType2()
 {
    while(true)
    {
-      Class1A* tObject = (Class1A*)gShare.mPointerQueue.readPtr();
+      Class1A* tObject = (Class1A*)gShare.mLFPointerQueue.readPtr();
       if (!tObject) break;
 
       int tCount = tObject->mCode1;
@@ -457,7 +457,7 @@ void Reader::flushType4()
    {
       bool tPass;
       MyBlockA* tObject = 0;
-      tPass = gShare.mValueQueue.tryRead((void**)&tObject);
+      tPass = gShare.mLFValueQueue.tryRead((void**)&tObject);
       if (!tPass) break;
 
       int tCount = tObject->mCode1;

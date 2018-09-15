@@ -73,8 +73,8 @@ public:
    double              mTesterMeanTime1;
    double              mTesterMeanTime2;
 
-   CC::LFPointerQueue<void*>  mPointerQueue;
-   CC::LFValueQueue<void*>    mValueQueue;
+   CC::LFPointerQueue<void*>  mLFPointerQueue;
+   CC::LFValueQueue<void*>    mLFValueQueue;
    CC::LFObjectQueue          mLFObjectQueue;
    CC::LFValueQueue<int>      mLFIntQueue;
    CC::SRSWValueQueue<int>    mSRSWIntQueue;
