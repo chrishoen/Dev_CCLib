@@ -70,7 +70,7 @@ public:
    int mMemorySize;
 
    // Calculate and store memory sizes.
-   MemorySize::MemorySize(int aNumElements,int aElementSize)
+   MemorySize(int aNumElements,int aElementSize)
    {
       mStateSize         = LMObjectQueueState::getMemorySize();
       mQueueArraySize    = cc_round_upto16(cNewArrayExtraMemory + (aNumElements + 1)*sizeof(int));

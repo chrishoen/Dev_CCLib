@@ -73,7 +73,7 @@ public:
    int mMemorySize;
 
    // Calculate and store memory sizes.
-   MemorySize::MemorySize(BlockPoolParms* aParms)
+   MemorySize(BlockPoolParms* aParms)
    {
       mStateSize         = BlockBoxArrayState::getMemorySize();
       mBlockSize         = cc_round_upto16(aParms->mBlockSize);

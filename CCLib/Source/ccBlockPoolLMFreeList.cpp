@@ -33,7 +33,7 @@ public:
    int mMemorySize;
 
    // Calculate and store memory sizes.
-   MemorySize::MemorySize(BlockPoolParms* aParms)
+   MemorySize(BlockPoolParms* aParms)
    {
       mBlockBoxArraySize = BlockBoxArray::getMemorySize(aParms);
       mStackSize = BlockPoolLMIndexStack::getMemorySize(aParms);
