@@ -1,10 +1,8 @@
-#ifndef _CCCALLPOINTER_H_
-#define _CCALLPOINTER_H_
+#pragma once
 
 //*****************************************************************************
 //*****************************************************************************
 //*****************************************************************************
-// Refactored by Chris Hoen 2015 to be included with CCLib
 // Refactored by Chris Hoen 2014 to be consistent with RisLib
 // Renamed FastDelegate to CallPointer
 // Changed namespace fastdelegate to Ris
@@ -2136,6 +2134,4 @@ CallPointer8<Param1, Param2, Param3, Param4, Param5, Param6, Param7, Param8, FAS
 #undef FASTDLGT_RETTYPE
 
 } //namespace
-
-#endif
 
