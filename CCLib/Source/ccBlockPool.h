@@ -102,8 +102,8 @@ struct BlockHandle
    // Methods.
 
    // Constructors.
-   BlockHandle::BlockHandle();
-   BlockHandle::BlockHandle(unsigned short aPoolIndex, unsigned short aBlockIndex);
+   BlockHandle();
+   BlockHandle(unsigned short aPoolIndex, unsigned short aBlockIndex);
    void set(unsigned short aPoolIndex, unsigned short aBlockIndex);
 
    // Null block handle value.
