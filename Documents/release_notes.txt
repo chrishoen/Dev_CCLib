@@ -1,0 +1,19 @@
+//*******************************************
+// VERSION_1_1
+
+Last before moving to DevelopLib\Dev_CCLib
+
+//*******************************************
+// VERSION_1_2
+
+Last before adding operator new, delete
+Last version that has ccBlockPoolBlock::create,destroy
+
+//*******************************************
+// VERSION_1_3
+
+Last before simplifying block pool
+This keeps the block pool version that has no concurrency
+
+
+
