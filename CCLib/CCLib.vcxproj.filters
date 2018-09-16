@@ -36,9 +36,6 @@
     <ClCompile Include="Source\ccBlockPoolLFIndexStack.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ccBlockPoolShortTerm.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\ccBlockPoolFaster.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -123,9 +120,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccLFValueQueue.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ccBlockPoolShortTerm.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccBlockPoolBlock.h">

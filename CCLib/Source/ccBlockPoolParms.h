@@ -17,12 +17,11 @@ namespace CC
 // Block pool constants.
 
    // Block pool types.
-   static const int cBlockPool_MaxNumBlocks   = 65536 - 1;
+   static const int cBlockPool_MaxNumBlocks   = 32768 - 1;
 
    // Block pool types.
    static const int cBlockPoolType_FreeList   = 1;
    static const int cBlockPoolType_Faster     = 2;
-   static const int cBlockPoolType_ShortTerm  = 3;
 
 //******************************************************************************
 //******************************************************************************

@@ -42,7 +42,7 @@ public:
    // attachment level of nodes that are put to the queue. When a node
    // is put to the queue it is attached as a last child of a parent node
    // that is in this array.
-   TreeNode* mParentAtLevelP[MaxLevelDepth];
+   TreeNode* mParentAtLevelP[cMaxLevelDepth];
 
 //****************************************************************************
 //****************************************************************************
@@ -54,7 +54,7 @@ public:
       mRootNode = new TreeNodeClass();
       mPutNodeP = 0;
 
-      for (int i = 0; i < MaxLevelDepth; i++)
+      for (int i = 0; i < cMaxLevelDepth; i++)
       {
          mParentAtLevelP[i] = 0;
       }

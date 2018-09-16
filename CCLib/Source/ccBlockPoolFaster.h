@@ -22,7 +22,6 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 // This class encapsulates a block pool that is based on a free list paradigm.
-// It is long term.
 //
 // It contains a free list of blocks, which is a block array and a stack of
 // indices into the array. When a block is allocated, an index is popped off of

@@ -27,7 +27,6 @@
     <ClCompile Include="Source\ccBlockPoolLFIndexStack.cpp" />
     <ClCompile Include="Source\ccBlockPoolLMIndexStack.cpp" />
     <ClCompile Include="Source\ccBlockPoolParms.cpp" />
-    <ClCompile Include="Source\ccBlockPoolShortTerm.cpp" />
     <ClCompile Include="Source\ccLFObjectQueue.cpp" />
     <ClCompile Include="Source\ccLMObjectQueue.cpp" />
     <ClCompile Include="Source\ccSynchLock_win.cpp" />
@@ -55,7 +54,6 @@
     <ClInclude Include="Source\ccBlockPoolLFIndexStack.h" />
     <ClInclude Include="Source\ccBlockPoolLMIndexStack.h" />
     <ClInclude Include="Source\ccBlockPoolParms.h" />
-    <ClInclude Include="Source\ccBlockPoolShortTerm.h" />
     <ClInclude Include="Source\ccCallPointer.h" />
     <ClInclude Include="Source\ccContainers.h" />
     <ClInclude Include="Source\ccContainers2.h" />

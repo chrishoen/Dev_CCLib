@@ -15,14 +15,6 @@ namespace CC
 void destroyAllTreeNodes(
    TreeNode* aSubjectNode)
 {
-   // If short term memory then there is no destruction
-   if (!isBlockPoolMemoryLongTerm(aSubjectNode->mBlockHandle))
-   {
-      // Detach the subject node from all nodes to which it is attached
-      aSubjectNode->detachFromAll();
-      return;
-   }
-
    // Recursive anchor
    RecursiveAnchor tRecursiveAnchor;
 
@@ -33,7 +25,6 @@ void destroyAllTreeNodes(
 
    // Destroy the subject node
    delete aSubjectNode;
-
 }
 
 //****************************************************************************
@@ -63,14 +54,10 @@ void destroyAllTreeNodesBelow(
       aRecursiveAnchor->mFirstInLevel = tFirstInLevel;
       tFirstInLevel = false;
 
-      // If not short term memory then there is destruction
-      if (isBlockPoolMemoryLongTerm(aSubjectNode->mBlockHandle))
-      {
-         // Recursively call this method for the child node
-         destroyAllTreeNodesBelow(
-            tChildNodeP,
-            aRecursiveAnchor);
-      }
+      // Recursively call this method for the child node
+      destroyAllTreeNodesBelow(
+         tChildNodeP,
+         aRecursiveAnchor);
 
       // Update the recursive index
       aRecursiveAnchor->mIndex++;

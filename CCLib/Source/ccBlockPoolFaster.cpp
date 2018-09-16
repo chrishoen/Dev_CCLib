@@ -127,9 +127,9 @@ BlockPoolFaster::~BlockPoolFaster()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This initializes the block pool for long term blocks. It allocates memory
-// for the block array and initializes the index stack. It is passed the
-// number of blocks to allocate and the size of the blocks.
+// This initializes the block pool. It allocates memory for the block array
+// and initializes the index stack. It is passed the number of blocks to
+// allocate and the size of the blocks.
 //
 // For aNumBlocks==10 blocks will range 0,1,2,3,4,5,6,7,8,9
 // A block index of cInvalid indicates an invalid block.

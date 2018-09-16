@@ -10,7 +10,6 @@
 #include "ccBlockPoolBase.h"
 #include "ccBlockPoolFreeList.h"
 #include "ccBlockPoolFaster.h"
-#include "ccBlockPoolShortTerm.h"
 
 #include "ccBlockPool.h"
 
@@ -115,13 +114,6 @@ void createBlockPool(BlockPoolParms* aParms)
       case cBlockPoolType_Faster :
       {
          mBlockPool[tPoolIndex] = new BlockPoolFaster;
-         mBlockPool[tPoolIndex]->initialize(tParms);
-      }
-      break;
-      // Create and initialize the block pool.
-      case cBlockPoolType_ShortTerm :
-      {
-         mBlockPool[tPoolIndex] = new BlockPoolShortTerm;
          mBlockPool[tPoolIndex]->initialize(tParms);
       }
       break;
@@ -296,26 +288,6 @@ int getBlockPoolSize(int aPoolIndex)
       return 0;
    }
    return mBlockPool[aPoolIndex]->size();
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Return true if memory for a block is long term and false if it is short 
-// term. If it is long term then allocated blocks must be deallocated. If it
-// is short term then allocated blocks do not have to be deallocated, they
-// are simply reused.
-
-bool isBlockPoolMemoryLongTerm(BlockHandle aBlockHandle)
-{
-   // Block pool type lookup table.
-   switch (mBlockPoolParms[aBlockHandle.mPoolIndex].mBlockPoolType)
-   {
-      // Create and initialize the block pool.
-      case cBlockPoolType_FreeList   : return true;
-      case cBlockPoolType_ShortTerm  : return false;
-   }
-   return true;
 }
 
 //******************************************************************************

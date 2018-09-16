@@ -20,12 +20,8 @@ then be done via block pool allocate/deallocate calls, new/delete cannot
 be used.
 
 There can be different types of block pools. They differ in terms of block
-lifetimes (short term and long term), thread safety and concurrent access,
-and where block memory is located (system heap or shared memory).
-
-Short term blocks are non persistent and have short term lifetimes. Long
-term blocks are persistent and have long lifetimes. Short term blocks are
-not deallocated, they are simply reused. Long term blocks are deallocated.
+thread safety and concurrent access, and where block memory is located
+(system heap or shared memory).
 
 The block pools for a program are contained in a global store that contains
 an array of block pool pointers. When a block pool is created, a pointer to
@@ -115,12 +111,6 @@ void showBlockPool(int aPoolIndex);
 
 // Get the size of a block pool.
 int getBlockPoolSize(int aPoolIndex);
-
-// Return true if memory for a block is long term and false if it is short 
-// term. If it is long term then allocated blocks must be deallocated. If it
-// is short term then allocated blocks do not have to be deallocated, they
-// are simply reused.
-bool isBlockPoolMemoryLongTerm(BlockHandle aBlockHandle);
 
 // Test block pool code.
 void testBlockPool(int aPoolIndex);
