@@ -65,6 +65,9 @@ void Share::initialize()
       case 9:
          mLMPointerQueue.initialize(gParms.mNumElements);
          break;
+      case 10:
+         mLMPointerQueue.initialize(gParms.mNumElements);
+         break;
       case 11:
          break;
       case 12:
