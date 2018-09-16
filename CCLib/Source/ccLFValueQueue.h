@@ -28,6 +28,7 @@ algorithm with no backoff.
 #include <new>
 #include "ccDefs.h"
 #include "cc_functions.h"
+#include "cc_throw.h"
 #include "ccMemoryPtr.h"
 #include "ccLFIndex.h"
 
@@ -422,7 +423,7 @@ public:
             }
          }
 
-         if (++tLoopCount == 10000) throw 101;
+         if (++tLoopCount == 10000) cc_throw(101);
       }
 
       mX->mQueueTail.compare_exchange_strong(tTail, LFIndex(tNodeIndex, tTail.mCount + 1), std::memory_order_release, std::memory_order_relaxed);
@@ -465,7 +466,7 @@ public:
             }
          }
 
-         if (++tLoopCount == 10000) throw 102;
+         if (++tLoopCount == 10000) cc_throw(102);
       }
 
       listPush(tHead.mIndex);
@@ -494,7 +495,7 @@ public:
          // Set the head node to be the node that is after the head node.
          if (mX->mListHead.compare_exchange_weak(tHead, LFIndex(mListNext[tHead.mIndex].load(std::memory_order_relaxed).mIndex, tHead.mCount + 1), std::memory_order_acquire, std::memory_order_relaxed)) break;
 
-         if (++tLoopCount == 10000) throw 103;
+         if (++tLoopCount == 10000) cc_throw(103);
       }
 
       // Return the detached original head node.
@@ -524,7 +525,7 @@ public:
          // The pushed node is the new head node.
          std::atomic<short int>* tListHeadIndexPtr = (std::atomic<short int>*)&mX->mListHead;
          if ((*tListHeadIndexPtr).compare_exchange_weak(tHead.mIndex, aNode, std::memory_order_release, std::memory_order_relaxed)) break;
-         if (++tLoopCount == 10000) throw 103;
+         if (++tLoopCount == 10000) cc_throw(103);
       }
 
       // Done.

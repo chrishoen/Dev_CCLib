@@ -7,6 +7,7 @@
 
 #include "stdafx.h"
 
+#include "cc_throw.h"
 #include "ccBlockPoolBase.h"
 #include "ccBlockPoolFreeList.h"
 #include "ccBlockPoolFaster.h"
@@ -157,7 +158,7 @@ bool allocateBlockPoolBlock(int aPoolIndex,void** aBlockPointer,BlockHandle* aBl
    if (!mBlockPoolParms[aPoolIndex].mNoThrowFlag)
    {
       printf("ERROR allocate BlockPool EMPTY %d\n", aPoolIndex);
-      throw 101;
+      cc_throw(101);
    }
    return false;
 }

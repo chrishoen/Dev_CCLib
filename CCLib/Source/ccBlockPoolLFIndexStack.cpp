@@ -9,6 +9,7 @@ Description:
 #include "stdafx.h"
 
 #include "cc_functions.h"
+#include "cc_throw.h"
 #include "ccDefs.h"
 #include "ccMemoryPtr.h"
 #include "ccBlockPoolLFIndexStack.h"
@@ -247,7 +248,7 @@ bool BlockPoolLFIndexStack::pop(int* aNodeIndex)
       // Set the head node to be the node that is after the head node.
       if (mX->mFreeListHead.compare_exchange_weak(tHead, LFIndex(mFreeListNext[tHead.mIndex].load(memory_order_relaxed).mIndex,tHead.mCount+1),memory_order_acquire,memory_order_relaxed)) break;
 
-      if (++tLoopCount==10000) throw 103;
+      if (++tLoopCount==10000) cc_throw(103);
    }
    mX->mFreeListSize.fetch_sub(1,memory_order_relaxed);
 
@@ -278,7 +279,7 @@ bool BlockPoolLFIndexStack::push(int aNodeIndex)
       // The pushed node is the new head node.
       atomic<short int>* tListHeadIndexPtr = (std::atomic<short int>*)&mX->mFreeListHead;
       if ((*tListHeadIndexPtr).compare_exchange_weak(tHead.mIndex, tNodeIndex,memory_order_release,memory_order_relaxed)) break;
-      if (++tLoopCount == 10000) throw 103;
+      if (++tLoopCount == 10000) cc_throw(103);
    }
 
    // Done.
