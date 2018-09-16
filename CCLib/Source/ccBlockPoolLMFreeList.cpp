@@ -11,7 +11,7 @@ Description:
 #include "cc_functions.h"
 #include "ccMemoryPtr.h"
 #include "ccBlockPoolLMIndexStack.h"
-#include "ccBlockPoolFreeList.h"
+#include "ccBlockPoolLMFreeList.h"
 
 namespace CC
 {
@@ -24,7 +24,7 @@ namespace CC
 //******************************************************************************
 // This local class calculates and stores the memory sizes needed by the class.
 
-class BlockPoolFreeList::MemorySize
+class BlockPoolLMFreeList::MemorySize
 {
 public:
    // Members.
@@ -47,7 +47,7 @@ public:
 // This returns the number of bytes that an instance of this class
 // will need to be allocated for it.
 
-int BlockPoolFreeList::getMemorySize(BlockPoolParms* aParms)
+int BlockPoolLMFreeList::getMemorySize(BlockPoolParms* aParms)
 {
    MemorySize tMemorySize(aParms);
    return tMemorySize.mMemorySize;
@@ -61,7 +61,7 @@ int BlockPoolFreeList::getMemorySize(BlockPoolParms* aParms)
 //******************************************************************************
 // Constructor.
 
-BlockPoolFreeList::BlockPoolFreeList()
+BlockPoolLMFreeList::BlockPoolLMFreeList()
 {
    // All null.
    mOwnMemoryFlag = false;
@@ -69,7 +69,7 @@ BlockPoolFreeList::BlockPoolFreeList()
    mBlockIndexStack = 0;
 }
 
-BlockPoolFreeList::~BlockPoolFreeList()
+BlockPoolLMFreeList::~BlockPoolLMFreeList()
 {
    finalize();
 }
@@ -92,7 +92,7 @@ BlockPoolFreeList::~BlockPoolFreeList()
 // When a block is deallocated, its index is pushed back onto the stack.
 //
 
-void BlockPoolFreeList::initialize(BlockPoolParms* aParms)
+void BlockPoolLMFreeList::initialize(BlockPoolParms* aParms)
 {
    //******************************************************************************
    //******************************************************************************
@@ -109,7 +109,7 @@ void BlockPoolFreeList::initialize(BlockPoolParms* aParms)
    // then allocate memory for it on the system heap.
    if (aParms->mMemory == 0)
    {
-      mMemory = malloc(BlockPoolFreeList::getMemorySize(aParms));
+      mMemory = malloc(BlockPoolLMFreeList::getMemorySize(aParms));
       mOwnMemoryFlag = true;
    }
    // If the instance of this class is to reside in external memory
@@ -152,7 +152,7 @@ void BlockPoolFreeList::initialize(BlockPoolParms* aParms)
 //******************************************************************************
 // Deallocate memory for the block pool.
 
-void BlockPoolFreeList::finalize()
+void BlockPoolLMFreeList::finalize()
 {
    mBlocks.finalize();
 
@@ -179,7 +179,7 @@ void BlockPoolFreeList::finalize()
 //******************************************************************************
 // Size, the number of blocks that are available to be allocated.
 
-int BlockPoolFreeList::size()
+int BlockPoolLMFreeList::size()
 { 
    if (mBlockIndexStack==0) return 0;
    return mBlockIndexStack->size();
@@ -191,7 +191,7 @@ int BlockPoolFreeList::size()
 // Get a block from the pool, this allocates a block.
 // Return true if successful, false if the block pool is empty.
 
-bool BlockPoolFreeList::allocate(void** aBlockPointer,BlockHandle* aBlockHandle)
+bool BlockPoolLMFreeList::allocate(void** aBlockPointer,BlockHandle* aBlockHandle)
 {
    int tBlockIndex = 0;
       
@@ -237,7 +237,7 @@ bool BlockPoolFreeList::allocate(void** aBlockPointer,BlockHandle* aBlockHandle)
 //******************************************************************************
 // Put a block back to the pool, this deallocates a block.
 
-void BlockPoolFreeList::deallocate(BlockHandle aBlockHandle)
+void BlockPoolLMFreeList::deallocate(BlockHandle aBlockHandle)
 {
    // Push the block index back onto the stack
    mBlockIndexStack->push(aBlockHandle.mBlockIndex);
@@ -248,7 +248,7 @@ void BlockPoolFreeList::deallocate(BlockHandle aBlockHandle)
 //******************************************************************************
 // Return a pointer to a block, given its memory handle.
 
-void* BlockPoolFreeList::getBlockPtr(BlockHandle aBlockHandle)
+void* BlockPoolLMFreeList::getBlockPtr(BlockHandle aBlockHandle)
 {
    // Return the address of the block within the block array.
    return mBlocks.getBlockPtr(aBlockHandle.mBlockIndex);
@@ -259,9 +259,9 @@ void* BlockPoolFreeList::getBlockPtr(BlockHandle aBlockHandle)
 //******************************************************************************
 // Helpers.
 
-void BlockPoolFreeList::show()
+void BlockPoolLMFreeList::show()
 {
-   printf("BlockPoolFreeList size %d $ %d\n", mParms->mPoolIndex,size());
+   printf("BlockPoolLMFreeList size %d $ %d\n", mParms->mPoolIndex,size());
 }
 
 //******************************************************************************

@@ -8,9 +8,12 @@ Free list block pool class
 //******************************************************************************
 //******************************************************************************
 
+#include <atomic>
+#include "ccLFIndex.h"
+#include "ccMemoryPtr.h"
+#include "ccBlockPool.h"
+#include "ccBlockHeader.h"
 #include "ccBlockPoolBase.h"
-#include "ccBlockBoxArray.h"
-#include "ccBlockPoolBaseIndexStack.h"
 
 namespace CC
 {
@@ -42,7 +45,68 @@ namespace CC
 // atomic cas treiber stack. It can also configured to be a normal stack
 // which is not thread safe, but is faster.
 
-class BlockPoolFreeList : public BlockPoolBase
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// State variables for the object. These are located in a separate class so 
+// that they can be located in external memory.
+
+class BlockPoolLFFreeListState
+{
+public:
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // This returns the number of bytes that an instance of this class
+   // will need to be allocated for it.
+
+   static int getMemorySize();
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   // Number of blocks allocated.
+   int mNumBlocks;
+
+   // Size of each block allocated.
+   int mBlockSize;
+
+   // Size of each block box allocated.
+   int mBlockBoxSize;
+
+   // Memory pool index for the block box array.
+   int mPoolIndex;
+
+   // Number of free list nodes allocated
+   int mFreeListNumNodes;
+
+   // Free list head node.
+   AtomicLFIndex mFreeListHead;
+
+   // Free list size.
+   std::atomic<int> mFreeListSize;
+   
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Constructor.
+   BlockPoolLFFreeListState();
+
+   // Initialize.
+   void initialize(BlockPoolParms* aParms);
+};
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Block pool class.
+
+class BlockPoolLFFreeList : public BlockPoolBase
 {
 public:
    typedef BlockPoolBase BaseClass;
@@ -54,10 +118,17 @@ public:
 
    // This returns the number of bytes that an instance of this class
    // will need to be allocated for it.
-
    static int getMemorySize(BlockPoolParms* aParms);
 
    class MemorySize;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Constants.
+
+   // This marks an invalid free list node.
+   static const short int  cInvalid = (short int)0x8000;
 
    //***************************************************************************
    //***************************************************************************
@@ -74,6 +145,26 @@ public:
    // on the system heap at initialization.
    void* mMemory;
 
+   // State variables for the block pool. These are located in a separate
+   // class so that they can be located in external memory.
+   BlockPoolLFFreeListState* mX;
+
+   // This allocates storage for the blocks on the system heap or in shared
+   // memory and provides pointer access to the allocated blocks. This is a block
+   // box array. A block box contains a block header and a block body. The
+   // header is invisible to the user and is used for things like resource
+   // counting and pointer to handle conversions. The block body is visible to 
+   // the user as a pointer to the block.
+   //
+   // Pointer to allocated memory for the block box array.
+   // This is an array of bytes of size NumBlocks*BlockBoxSize.
+   char* mBlockBoxArray;
+   // Same thing.
+   MemoryPtr mBlockBoxArrayPtr;
+
+   // Free List array for treiber stack.
+   AtomicLFIndex*    mFreeListNext;
+
    // A pointer to the parameters that were passed in at initialization.
    // Whoever owns this block pool (creates and initializes it) must maintain
    // storage for these parameters for the lifetime of the block pool.
@@ -85,29 +176,14 @@ public:
    // the block pool.
    BlockPoolParms* mParms;
 
-   // This allocates storage for the blocks on the system heap or in shared
-   // memory and provides pointer access to the allocated blocks. This is a block
-   // box array. A block box contains a block header and a block body. The
-   // header is invisible to the user and is used for things like resource
-   // counting and pointer to handle conversions. The block body is visible to 
-   // the user as a pointer to the block.
-   BlockBoxArray mBlocks;
-
-   // This is a free list stack of indices into the block array.
-   // When a block is allocated, an index is popped off of the stack.
-   // When a block is deallocated, its index is pushed back onto the stack.
-   // Based on the pool type this will be instantiated with a normal stack
-   // or a lock free treiber stack.
-   BlockPoolBaseIndexStack* mBlockIndexStack;
-
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Methods.
 
-   // Constructor,
-   BlockPoolFreeList();
-  ~BlockPoolFreeList();
+   // Constructor.
+   BlockPoolLFFreeList();
+  ~BlockPoolLFFreeList();
 
    // Initialize the block pool. It is passed block pool parameters.
    void initialize(BlockPoolParms* aParms);
@@ -128,6 +204,31 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
+   // Block box methods.
+
+   // Return a pointer to a block box, based on its block index.
+   char* getBlockBoxPtr(int aIndex);
+
+   // Return a pointer to a block header, based on its block index.
+   BlockHeader* getHeaderPtr(int aIndex);
+
+   // Return a pointer to a block body, based on its block index.
+   char* getBlockPtr(int aIndex);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Free list methods.
+
+   // Pop a value off of the stack. Return false if the stack is empty.
+   bool listPop(int* aValue);
+
+   // Push a value onto the stack. Return false if the stack is full.
+   bool listPush(int aValue);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Helper methods.
 
    // Size, the number of blocks that are available to be allocated.
@@ -135,6 +236,9 @@ public:
 
    // Show status and metrics for the block pool.
    void show();
+
+   // Get the handle of a block, given its address.
+   static BlockHandle getBlockHandle(void* aBlockPtr);
 };
 
 //******************************************************************************
