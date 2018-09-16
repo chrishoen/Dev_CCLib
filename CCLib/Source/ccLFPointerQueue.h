@@ -31,20 +31,22 @@ class LFPointerQueue : public CC::LFValueQueue <Element>
 {
 public:
 
+   typedef CC::LFValueQueue <Element> BaseClass;
+
    //******************************************************************************
    //******************************************************************************
    //******************************************************************************
    // These simplify queue access.
 
-   bool LFPointerQueue::writePtr (Element aValue)
+   bool writePtr (Element aValue)
    {
-      return tryWrite(aValue);
+      return BaseClass::tryWrite(aValue);
    }
 
-   Element LFPointerQueue::readPtr ()
+   Element readPtr ()
    {
       void* tValue;
-      if (!tryRead(&tValue)) return 0;
+      if (!BaseClass::tryRead(&tValue)) return 0;
       return tValue;
    }
 };

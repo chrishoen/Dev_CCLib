@@ -26,7 +26,7 @@ namespace Timing
    int mPopCount=0;
    int mPushCount=0;
 
-   atomic<int> mAX=0;
+   std::atomic<int> mAX;
    int mNC=0;
    int mNE=0;
 
