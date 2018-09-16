@@ -14,7 +14,26 @@ Description:
 
 namespace Some
 {
+// Constructors.
+Class1A::Class1A()
+{
+   mCode1 = 101;
+   mCode2 = 102;
+   mCode3 = 103;
+   mCode4 = 104;
+}
 
+
+// Destructor.
+Class1A::~Class1A()
+{
+}
+
+// Function.
+void Class1A::sayHello()
+{
+   printf("hello\n");
+}
 
 //******************************************************************************
 //******************************************************************************

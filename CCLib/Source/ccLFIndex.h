@@ -17,30 +17,6 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 // Lock Free Index used by CAS based algorithms.
-#if 0
-__declspec(align(8)) 
-struct LFIndex
-{
-   // Used as a node index.
-   int mIndex;
-   // Used to overcome the ABA problem.
-   int mCount;
-
-   // Constructor
-   LFIndex() NOEXCEPT
-   {
-      mIndex = 0;
-      mCount = 0;
-   }
-
-   // Constructor
-   LFIndex(int aIndex, int aCount) NOEXCEPT
-   {
-      mIndex = aIndex;
-      mCount = aCount;
-   }
-};
-#endif
 
 #pragma pack(push,1)
 typedef struct alignas(4) LFIndex
