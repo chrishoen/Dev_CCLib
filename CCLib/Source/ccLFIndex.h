@@ -17,7 +17,7 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 // Lock Free Index used by CAS based algorithms.
-
+#if 0
 __declspec(align(8)) 
 struct LFIndex
 {
@@ -40,6 +40,27 @@ struct LFIndex
       mCount = aCount;
    }
 };
+#endif
+
+#pragma pack(push,1)
+typedef struct alignas(4) LFIndex
+{
+   short int mIndex;
+   short int mCount;
+
+   LFIndex() noexcept
+   {
+      mIndex = 0;
+      mCount = 0;
+   }
+
+   LFIndex(short int aIndex, short int aCount) noexcept
+   {
+      mIndex = aIndex;
+      mCount = aCount;
+   }
+} LFIndex;
+#pragma pack(pop)
 
 // Operator
 inline bool operator==(const LFIndex& lhs, const LFIndex& rhs)

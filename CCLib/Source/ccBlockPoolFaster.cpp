@@ -514,7 +514,7 @@ bool BlockPoolFaster::listPush(int aNodeIndex)
       mFreeListNext[tNodeIndex].store(tHead,memory_order_relaxed);
 
       // The pushed node is the new head node.
-      atomic<int>* tListHeadIndexPtr = (std::atomic<int>*)&mX->mFreeListHead;
+      atomic<short int>* tListHeadIndexPtr = (std::atomic<short int>*)&mX->mFreeListHead;
       if ((*tListHeadIndexPtr).compare_exchange_weak(tHead.mIndex, tNodeIndex,memory_order_release,memory_order_relaxed)) break;
       if (++tLoopCount == 10000) throw 103;
    }

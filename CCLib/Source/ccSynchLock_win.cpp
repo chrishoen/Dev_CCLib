@@ -24,6 +24,7 @@ class SynchLock::Specific
 {
 public:
    SRWLOCK mSRWLock;
+   CRITICAL_SECTION mCriticalSection;
 };
 
 //******************************************************************************
@@ -33,7 +34,8 @@ public:
 SynchLock::SynchLock() 
 {
    mSpecific = new Specific;
-   InitializeSRWLock(&mSpecific->mSRWLock); 
+   InitializeCriticalSectionAndSpinCount(&mSpecific->mCriticalSection, 0x80000400);
+   InitializeSRWLock(&mSpecific->mSRWLock);
 }
 
 //******************************************************************************
@@ -42,6 +44,7 @@ SynchLock::SynchLock()
 
 SynchLock::~SynchLock() 
 {
+   DeleteCriticalSection(&mSpecific->mCriticalSection);
    delete mSpecific;
 }
 
@@ -51,6 +54,8 @@ SynchLock::~SynchLock()
 
 void SynchLock::lock()
 {
+   EnterCriticalSection(&mSpecific->mCriticalSection);
+   return;
    AcquireSRWLockExclusive(&mSpecific->mSRWLock);
 }
 
@@ -60,7 +65,9 @@ void SynchLock::lock()
 
 void SynchLock::unlock()
 {
-   ReleaseSRWLockExclusive(&mSpecific->mSRWLock); 
+   LeaveCriticalSection(&mSpecific->mCriticalSection);
+   return;
+   ReleaseSRWLockExclusive(&mSpecific->mSRWLock);
 }
 
 //******************************************************************************

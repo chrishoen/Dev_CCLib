@@ -141,7 +141,7 @@ public:
    AtomicLFIndex* mListNext;
 
    // Marks an invalid node.
-   static const int  cInvalid = 0x80000000;
+   static const short int  cInvalid = (short int)0x8000;
 
    //***************************************************************************
    //***************************************************************************
