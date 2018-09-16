@@ -23,8 +23,6 @@
     <ClCompile Include="Source\ccBlockPoolCentral.cpp" />
     <ClCompile Include="Source\ccBlockPoolFaster.cpp" />
     <ClCompile Include="Source\ccBlockPoolFreeList.cpp" />
-    <ClCompile Include="Source\ccBlockPoolIndexStack.cpp" />
-    <ClCompile Include="Source\ccBlockPoolLFIndexStack.cpp" />
     <ClCompile Include="Source\ccBlockPoolLMIndexStack.cpp" />
     <ClCompile Include="Source\ccBlockPoolParms.cpp" />
     <ClCompile Include="Source\ccLFObjectQueue.cpp" />
@@ -51,8 +49,6 @@
     <ClInclude Include="Source\ccBlockPoolFaster.h" />
     <ClInclude Include="Source\ccBlockPoolFreeList.h" />
     <ClInclude Include="Source\ccBlockPoolIndex.h" />
-    <ClInclude Include="Source\ccBlockPoolIndexStack.h" />
-    <ClInclude Include="Source\ccBlockPoolLFIndexStack.h" />
     <ClInclude Include="Source\ccBlockPoolLMIndexStack.h" />
     <ClInclude Include="Source\ccBlockPoolParms.h" />
     <ClInclude Include="Source\ccCallPointer.h" />

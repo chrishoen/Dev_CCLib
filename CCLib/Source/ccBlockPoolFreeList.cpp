@@ -10,7 +10,6 @@ Description:
 
 #include "cc_functions.h"
 #include "ccMemoryPtr.h"
-#include "ccBlockPoolIndexStack.h"
 #include "ccBlockPoolLMIndexStack.h"
 #include "ccBlockPoolFreeList.h"
 
@@ -37,16 +36,7 @@ public:
    MemorySize::MemorySize(BlockPoolParms* aParms)
    {
       mBlockBoxArraySize = BlockBoxArray::getMemorySize(aParms);
-
-      if (aParms->mLockFreeFlag)
-      {
-         mStackSize = BlockPoolLMIndexStack::getMemorySize(aParms);
-      }
-      else
-      {
-         mStackSize = BlockPoolIndexStack::getMemorySize(aParms);
-      }
-
+      mStackSize = BlockPoolLMIndexStack::getMemorySize(aParms);
       mMemorySize = mBlockBoxArraySize + mStackSize;
    }
 };
@@ -113,14 +103,7 @@ void BlockPoolFreeList::initialize(BlockPoolParms* aParms)
    finalize();
 
    // Create the index stack.
-   if (aParms->mLockFreeFlag)
-   {
-      mBlockIndexStack = new BlockPoolLMIndexStack;
-   }
-   else
-   {
-      mBlockIndexStack = new BlockPoolIndexStack;
-   }
+   mBlockIndexStack = new BlockPoolLMIndexStack;
 
    // If the instance of this class is not to reside in external memory
    // then allocate memory for it on the system heap.
