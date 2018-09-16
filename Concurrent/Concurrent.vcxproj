@@ -155,7 +155,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
-      <AdditionalIncludeDirectories>C:\Alpha\Lib\RisLib\include;..\LockFree\Source;..\CCLib\Source;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\CCLib\Source;C:\Alpha\Lib\RisLib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
@@ -167,9 +167,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\LockFree\Source\LFFreeList.cpp" />
-    <ClCompile Include="..\LockFree\Source\LFIntQueue.cpp" />
     <ClCompile Include="Source\CmdLineExec.cpp" />
+    <ClCompile Include="Source\LFFreeList.cpp" />
+    <ClCompile Include="Source\LFIntQueue.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
     <ClCompile Include="Source\MainMemory.cpp" />
@@ -196,10 +196,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\LockFree\Source\LFBackoff.h" />
-    <ClInclude Include="..\LockFree\Source\LFFreeList.h" />
-    <ClInclude Include="..\LockFree\Source\LFIndex.h" />
-    <ClInclude Include="..\LockFree\Source\LFIntQueue.h" />
     <ClInclude Include="Source\CmdLineExec.h" />
+    <ClInclude Include="Source\LFBackoff.h" />
+    <ClInclude Include="Source\LFFreeList.h" />
+    <ClInclude Include="Source\LFIndex.h" />
+    <ClInclude Include="Source\LFIntQueue.h" />
     <ClInclude Include="Source\MainInit.h" />
     <ClInclude Include="Source\MainMemory.h" />
     <ClInclude Include="Source\Parms.h" />
