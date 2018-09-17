@@ -7,7 +7,7 @@
    Type                 9
    NumWriters           2
 
-   NumElements      20000
+   NumElements      10000
 
    SleepLower          50
    SleepUpper         150

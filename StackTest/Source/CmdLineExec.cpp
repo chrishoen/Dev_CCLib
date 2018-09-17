@@ -49,7 +49,7 @@ void CmdLineExec::executeGo6(Ris::CmdLineCmd* aCmd)
 {
    CC::BlockPoolParms tBlockPoolParms;
    tBlockPoolParms.mPoolIndex     = 1;
-   tBlockPoolParms.mBlockPoolType = CC::cBlockPoolType_FreeList;
+   tBlockPoolParms.mBlockPoolType = CC::cBlockPoolType_LMFreeList;
    tBlockPoolParms.mNumBlocks     = 2;
    tBlockPoolParms.mBlockSize     = 1;
 
@@ -57,7 +57,7 @@ void CmdLineExec::executeGo6(Ris::CmdLineCmd* aCmd)
    tSize = CC::BlockPoolLMFreeList::getMemorySize(&tBlockPoolParms);
    Prn::print(0, "%d",tSize);
 
-   tBlockPoolParms.mBlockPoolType = CC::cBlockPoolType_FreeList;
+   tBlockPoolParms.mBlockPoolType = CC::cBlockPoolType_LMFreeList;
    tSize = CC::BlockPoolLMFreeList::getMemorySize(&tBlockPoolParms);
    Prn::print(0, "%d",tSize);
 }
