@@ -61,9 +61,6 @@
     <ClCompile Include="Source\MainMemory.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\someMyBlockA.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\stdafx.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -74,6 +71,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\LFIntQueue.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\someMyBlockX.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -135,9 +135,6 @@
     <ClInclude Include="Source\someBlockPoolIndex.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\someMyBlockA.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\stdafx.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -154,6 +151,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\LFIntQueue.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\someMyBlockX.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
