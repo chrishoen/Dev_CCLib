@@ -35,11 +35,10 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Throw an exception. Shouldn't be called.
-   static void* operator new(size_t sz);
-
-   // Allocate or deallocate a block from the block pool.
+   // Allocate a block from the block pool and call the constructor.
    static MyBlockA* create();
+   static MyBlockA* create(int aIdentifier);
+   // Deallocate a block from the block pool.
    static void  operator delete(void* ptr);
 
    // Constructors.
