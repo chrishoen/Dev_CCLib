@@ -14,7 +14,8 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 
-class MyBlockC : public CC::HasBlockHandle
+//class MyBlockC : public CC::HasBlockHandle
+class MyBlockC
 {
 public:
 
