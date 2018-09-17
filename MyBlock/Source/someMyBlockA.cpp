@@ -18,13 +18,26 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Allocate a block from the block pool at the given block pool index.
-// Return a pointer to the allocated block.
-// Return null if the block pool is empty.
+// Throw an exception. Use create instead.
 
 void* MyBlockA::operator new(size_t sz)
 {
-   Prn::print(0, "MyBlockA::new   %d",(int)sz);
+   Prn::print(0, "EXCEPTION MyBlockC new was called instead of create");
+   throw "MyBlockC new was called instead of create";
+   return 0;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Allocate a block from the block pool at the given block pool index.
+// Call the constructor with placement new.
+// Return a pointer to the allocated block.
+// Return null if the block pool is empty.
+
+MyBlockA* MyBlockA::create()
+{
+   Prn::print(0, "MyBlockA::create");
 
    // Block pointer.
    void* tBlockPointer = 0;
@@ -32,11 +45,18 @@ void* MyBlockA::operator new(size_t sz)
    // Try to allocate a block from the block pool.
    CC::allocateBlockPoolBlock(Some::cBlockPoolIndex_MyBlockA, (void**)&tBlockPointer, 0);
 
+   // If the allocation was successfull then 
+   if (tBlockPointer)
+   {
+      // Call the constructor with placement new.
+      ::operator new(sizeof(MyBlockA), tBlockPointer);
+   }
+
    // Return the pointer to the allocated block.
    // Return null if the block pool is empty.
-   return tBlockPointer;
+   return (MyBlockA*)tBlockPointer;
 }
-  
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -91,7 +111,7 @@ MyBlockA::MyBlockA(int aIdentifier)
 
 MyBlockA::~MyBlockA()
 {
-   Prn::print(0, "MyBlockA::destuctor   %d",mIdentifier);
+   Prn::print(0, "MyBlockA::destructor   %d",mIdentifier);
 }
 
 //****************************************************************************
