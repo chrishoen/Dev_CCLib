@@ -6,10 +6,7 @@
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-#include <new>
 #include "ccBlockPool.h"
-#include "someMyBlockA.h"
-
 namespace Some
 {
 
@@ -17,24 +14,24 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 
-class MyBlockR : public Some::MyBlockA
+class MyBlockC : public CC::HasBlockHandle
 {
 public:
 
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
-   // Memory management, constructors and destructors
+   // Memory management, constructors and destructors.
 
    // Allocate or deallocate a block from the block pool.
    static void* operator new      (size_t sz);
    static void  operator delete   (void* ptr);
 
    // Constructors.
-   MyBlockR();
-   MyBlockR(int aIdentifier);
+   MyBlockC();
+   MyBlockC(int aIdentifier);
    // Destructor.
-  ~MyBlockR();
+  ~MyBlockC();
 
    //--------------------------------------------------------------------------
    //--------------------------------------------------------------------------
