@@ -23,7 +23,7 @@ namespace CC
 // This encapsulates a stack of indices to be used with containers that 
 // implement free lists of blocks.
 
-class BlockPoolLMIndexStack : public BlockPoolBaseIndexStack
+class BlockPoolLCIndexStack : public BlockPoolBaseIndexStack
 {
 public:
 
@@ -81,8 +81,8 @@ public:
    // Methods.
 
    // Constructor.
-   BlockPoolLMIndexStack();
-  ~BlockPoolLMIndexStack();
+   BlockPoolLCIndexStack();
+  ~BlockPoolLCIndexStack();
 
    // Initialize the stack to either allocate memory from the system heap or
    // to use external memory that has already been allocated for it.

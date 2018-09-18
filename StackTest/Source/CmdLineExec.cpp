@@ -3,8 +3,8 @@
 #include <atomic>
 
 #include "ccValueQueue.h"
-#include "ccBlockPoolLMIndexStack.h"
-#include "ccBlockPoolLMFreeList.h"
+#include "ccBlockPoolLCIndexStack.h"
+#include "ccBlockPoolLCFreeList.h"
 #include "ccBlockPoolParms.h"
 
 #include "prnPrint.h"
@@ -49,16 +49,16 @@ void CmdLineExec::executeGo6(Ris::CmdLineCmd* aCmd)
 {
    CC::BlockPoolParms tBlockPoolParms;
    tBlockPoolParms.mPoolIndex     = 1;
-   tBlockPoolParms.mBlockPoolType = CC::cBlockPoolType_LMFreeList;
+   tBlockPoolParms.mBlockPoolType = CC::cBlockPoolType_LCFreeList;
    tBlockPoolParms.mNumBlocks     = 2;
    tBlockPoolParms.mBlockSize     = 1;
 
    int tSize=0;
-   tSize = CC::BlockPoolLMFreeList::getMemorySize(&tBlockPoolParms);
+   tSize = CC::BlockPoolLCFreeList::getMemorySize(&tBlockPoolParms);
    Prn::print(0, "%d",tSize);
 
-   tBlockPoolParms.mBlockPoolType = CC::cBlockPoolType_LMFreeList;
-   tSize = CC::BlockPoolLMFreeList::getMemorySize(&tBlockPoolParms);
+   tBlockPoolParms.mBlockPoolType = CC::cBlockPoolType_LCFreeList;
+   tSize = CC::BlockPoolLCFreeList::getMemorySize(&tBlockPoolParms);
    Prn::print(0, "%d",tSize);
 }
 
@@ -71,7 +71,7 @@ void CmdLineExec::executeGo11(Ris::CmdLineCmd* aCmd)
    CC::BlockPoolParms tBlockPoolParms;
    tBlockPoolParms.mNumBlocks = 4;
 
-   CC::BlockPoolLMIndexStack tStack;
+   CC::BlockPoolLCIndexStack tStack;
    tStack.initialize(&tBlockPoolParms);
    
    int tY = 999;
@@ -133,7 +133,7 @@ void CmdLineExec::executeGo12(Ris::CmdLineCmd* aCmd)
    CC::BlockPoolParms tBlockPoolParms;
    tBlockPoolParms.mNumBlocks = 4;
 
-   CC::BlockPoolLMIndexStack tStack;
+   CC::BlockPoolLCIndexStack tStack;
    tStack.initialize(&tBlockPoolParms);
    
    int tY = 999;
@@ -197,7 +197,7 @@ void CmdLineExec::executeGo21(Ris::CmdLineCmd* aCmd)
    CC::BlockPoolParms tBlockPoolParms;
    tBlockPoolParms.mNumBlocks = aCmd->argInt(1);
 
-   CC::BlockPoolLMIndexStack tStack;
+   CC::BlockPoolLCIndexStack tStack;
    tStack.initialize(&tBlockPoolParms);
 
    int tY = 999;
@@ -225,7 +225,7 @@ void CmdLineExec::executeGo22(Ris::CmdLineCmd* aCmd)
    CC::BlockPoolParms tBlockPoolParms;
    tBlockPoolParms.mNumBlocks = aCmd->argInt(1);
 
-   CC::BlockPoolLMIndexStack tStack;
+   CC::BlockPoolLCIndexStack tStack;
    tStack.initialize(&tBlockPoolParms);
 
    int tY = 999;
@@ -252,9 +252,9 @@ void CmdLineExec::executeGo31(Ris::CmdLineCmd* aCmd)
 
    CC::BlockPoolParms tBlockPoolParms;
    tBlockPoolParms.mNumBlocks = aCmd->argInt(1);
-   void* tMemory = malloc(CC::BlockPoolLMIndexStack::getMemorySize(&tBlockPoolParms));
+   void* tMemory = malloc(CC::BlockPoolLCIndexStack::getMemorySize(&tBlockPoolParms));
 
-   CC::BlockPoolLMIndexStack tStack;
+   CC::BlockPoolLCIndexStack tStack;
    tStack.initialize(&tBlockPoolParms,tMemory);
 
    int tY = 999;
@@ -283,9 +283,9 @@ void CmdLineExec::executeGo32(Ris::CmdLineCmd* aCmd)
 
    CC::BlockPoolParms tBlockPoolParms;
    tBlockPoolParms.mNumBlocks = aCmd->argInt(1);
-   void* tMemory = malloc(CC::BlockPoolLMIndexStack::getMemorySize(&tBlockPoolParms));
+   void* tMemory = malloc(CC::BlockPoolLCIndexStack::getMemorySize(&tBlockPoolParms));
 
-   CC::BlockPoolLMIndexStack tStack;
+   CC::BlockPoolLCIndexStack tStack;
    tStack.initialize(&tBlockPoolParms,tMemory);
 
    int tY = 999;
@@ -314,9 +314,9 @@ void CmdLineExec::executeGo41(Ris::CmdLineCmd* aCmd)
 
    CC::BlockPoolParms tBlockPoolParms;
    tBlockPoolParms.mNumBlocks = aCmd->argInt(1);
-   void* tMemory = malloc(CC::BlockPoolLMIndexStack::getMemorySize(&tBlockPoolParms));
+   void* tMemory = malloc(CC::BlockPoolLCIndexStack::getMemorySize(&tBlockPoolParms));
 
-   CC::BlockPoolLMIndexStack tStack;
+   CC::BlockPoolLCIndexStack tStack;
    tStack.initialize(&tBlockPoolParms,tMemory);
    
    int tY = 999;
@@ -379,9 +379,9 @@ void CmdLineExec::executeGo42(Ris::CmdLineCmd* aCmd)
 
    CC::BlockPoolParms tBlockPoolParms;
    tBlockPoolParms.mNumBlocks = aCmd->argInt(1);
-   void* tMemory = malloc(CC::BlockPoolLMIndexStack::getMemorySize(&tBlockPoolParms));
+   void* tMemory = malloc(CC::BlockPoolLCIndexStack::getMemorySize(&tBlockPoolParms));
 
-   CC::BlockPoolLMIndexStack tStack;
+   CC::BlockPoolLCIndexStack tStack;
    tStack.initialize(&tBlockPoolParms,tMemory);
    
    int tY = 999;

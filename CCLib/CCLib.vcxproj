@@ -21,9 +21,9 @@
   <ItemGroup>
     <ClCompile Include="Source\ccBlockBoxArray.cpp" />
     <ClCompile Include="Source\ccBlockPoolCentral.cpp" />
+    <ClCompile Include="Source\ccBlockPoolLCFreeList.cpp" />
+    <ClCompile Include="Source\ccBlockPoolLCIndexStack.cpp" />
     <ClCompile Include="Source\ccBlockPoolLFFreeList.cpp" />
-    <ClCompile Include="Source\ccBlockPoolLMFreeList.cpp" />
-    <ClCompile Include="Source\ccBlockPoolLMIndexStack.cpp" />
     <ClCompile Include="Source\ccBlockPoolParms.cpp" />
     <ClCompile Include="Source\ccCritcalSection_win.cpp" />
     <ClCompile Include="Source\ccLFObjectQueue.cpp" />
@@ -47,9 +47,9 @@
     <ClInclude Include="Source\ccBlockPoolBlock.h" />
     <ClInclude Include="Source\ccBlockPoolCentral.h" />
     <ClInclude Include="Source\ccBlockPoolIndex.h" />
+    <ClInclude Include="Source\ccBlockPoolLCFreeList.h" />
+    <ClInclude Include="Source\ccBlockPoolLCIndexStack.h" />
     <ClInclude Include="Source\ccBlockPoolLFFreeList.h" />
-    <ClInclude Include="Source\ccBlockPoolLMFreeList.h" />
-    <ClInclude Include="Source\ccBlockPoolLMIndexStack.h" />
     <ClInclude Include="Source\ccBlockPoolParms.h" />
     <ClInclude Include="Source\ccCallPointer.h" />
     <ClInclude Include="Source\ccContainers.h" />

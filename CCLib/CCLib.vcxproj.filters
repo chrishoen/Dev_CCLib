@@ -36,19 +36,19 @@
     <ClCompile Include="Source\ccLMObjectQueue.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ccBlockPoolLMIndexStack.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\cc_throw.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\ccBlockPoolLFFreeList.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ccBlockPoolLMFreeList.cpp">
+    <ClCompile Include="Source\ccCritcalSection_win.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ccCritcalSection_win.cpp">
+    <ClCompile Include="Source\ccBlockPoolLCFreeList.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ccBlockPoolLCIndexStack.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -143,19 +143,19 @@
     <ClInclude Include="Source\ccLMValueQueue.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccBlockPoolLMIndexStack.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\cc_throw.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccBlockPoolLFFreeList.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccBlockPoolLMFreeList.h">
+    <ClInclude Include="Source\ccCriticalSection.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccCriticalSection.h">
+    <ClInclude Include="Source\ccBlockPoolLCFreeList.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ccBlockPoolLCIndexStack.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

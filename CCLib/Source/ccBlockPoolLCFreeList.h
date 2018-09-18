@@ -46,7 +46,7 @@ namespace CC
 // atomic cas treiber stack. It can also configured to be a normal stack
 // which is not thread safe, but is faster.
 
-class BlockPoolLMFreeList : public BlockPoolBase
+class BlockPoolLCFreeList : public BlockPoolBase
 {
 public:
    typedef BlockPoolBase BaseClass;
@@ -110,8 +110,8 @@ public:
    // Methods.
 
    // Constructor,
-   BlockPoolLMFreeList();
-  ~BlockPoolLMFreeList();
+   BlockPoolLCFreeList();
+  ~BlockPoolLCFreeList();
 
    // Initialize the block pool. It is passed block pool parameters.
    void initialize(BlockPoolParms* aParms);
