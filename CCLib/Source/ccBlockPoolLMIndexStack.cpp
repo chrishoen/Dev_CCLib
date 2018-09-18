@@ -126,27 +126,14 @@ void BlockPoolLMIndexStack::initialize(BlockPoolParms* aParms,void* aMemory)
    mIndex = 0;
    mNumElements = aParms->mNumBlocks;
 
-   // Construct the element array.
-   if (aParms->mConstructorFlag)
-   {
-      // Call the constructor.
-      mElement = new(tArrayMemory) int[mNumElements];
-   }
-   else
-   {
-      // The constructor has already been called.
-      mElement = (int*)tArrayMemory;
-   }
+   // Construct the element array.Call the constructor with placement new.
+   mElement = new(tArrayMemory) int[mNumElements];
 
-   // Initialize the element array, if it has not already been initialized.
-   if (aParms->mConstructorFlag)
+   // Push the indices of the blocks in the array onto the index stack.
+   // For aAllocate==10 this will push 9,7,8,6,5,4,3,2,1,0
+   for (int i = mNumElements - 1; i >= 0; i--)
    {
-      // Push the indices of the blocks in the array onto the index stack.
-      // For aAllocate==10 this will push 9,7,8,6,5,4,3,2,1,0
-      for (int i = mNumElements - 1; i >= 0; i--)
-      {
-         push(i);
-      }
+      push(i);
    }
 }
 
