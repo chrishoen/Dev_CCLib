@@ -1,22 +1,20 @@
 # Dev_CCLib
-## container classes vstudio solution
+## concurrent container classes, vstudio, windows
 
 ## Classes
 
-ccBlockBoxArray.h \
+ccBlockBoxArray.h           - block pool block box array, a block box contains a block and a header\ 
 ccBlockHeader.h \
 ccBlockPool.h \
 ccBlockPoolBase.h \
-ccBlockPoolBaseIndexStack.h \
+ccBlockPoolBaseIndexStack.h - block pool index stack base class\
 ccBlockPoolBlock.h \
 ccBlockPoolCentral.h \
-ccBlockPoolFaster.h \
-ccBlockPoolFreeList.h \
 ccBlockPoolIndex.h \
-ccBlockPoolIndexStack.h \
-ccBlockPoolLFIndexStack.h \
+ccBlockPoolLFFreeList.h \
+ccBlockPoolLMFreeList.h \
+ccBlockPoolLMIndexStack.h \
 ccBlockPoolParms.h \
-ccBlockPoolShortTerm.h \
 ccCallPointer.h \
 ccContainers.h \
 ccContainers2.h \
@@ -31,12 +29,12 @@ ccLMValueQueue.h \
 ccMemoryPtr.h \
 ccRecursiveAnchor.h \
 ccSRSWValueQueue.h \
-ccSynch.h \
+ccSynchLock.h \
 ccTreeNode.h \
 ccTreeNodeDestroyer.h \
 ccTreeNodeVisitor.h \
 ccValueHistory.h \
 ccValueQueue.h \
 cc_functions.h \
-stdafx.h 
-
+cc_throw.h \
+stdafx.h \
