@@ -1,5 +1,14 @@
 # Dev_CCLib
-## concurrent container classes, vstudio, windows
+### concurrent container classes, vstudio, windows
+
+This is a library of C++ classes that provides some concurrent containers. Features include:
+   1. Block pool classes
+   2. Tree node classes
+   3. Queues, stacks, and free lists that are based on lock free atomic instuctions
+   4. Queues, stacks, and free lists that are based on mutexes 
+   5. Related utilities for memory pointer and index arithmetic
+   
+This library is written for Windows in Visual Studio. All of the code is portable to Linux, with the exception of ccSynchLock_win.cpp. Dev_CCLibLx is the Linux version of the library and uses ccSynchlock_linux.cpp.
 
 ## Classes
 ``` markdown
@@ -21,7 +30,7 @@ ccContainers.h                -- some legacy container class templates, queues, 
 ccContainers2.h               -- more of the same
 ccDefs.h                      -- some #defines
 ccDiagrams.h                  -- some documentation
-ccLFIndex.h                   -- lock free index struct used for CAS
+ccLFIndex.h                   -- lock free index struct used for CAS atomic instructions
 ccLFObjectQueue.h             -- single reader multiple writer lock free object queue
 ccLFPointerQueue.h            -- single reader multiple writer lock free pointer queue 
 ccLFValueQueue.h              -- single reader multiple writer lock free value queue 
@@ -29,7 +38,7 @@ ccLMObjectQueue.h             -- single reader multiple writer lock with mutex o
 ccLMValueQueue.h              -- single reader multiple writer lock with mutex pointer queue
 ccMemoryPtr.h                 -- single reader multiple writer lock with mutex value queue
 ccRecursiveAnchor.h           -- recursive anchor used by tree node visitors
-ccSRSWValueQueue.h            -- single reader single writer thread safe value queue, no mutex, no lock free atomics
+ccSRSWValueQueue.h            -- single reader single writer thread safe value queue, no mutex, no atomics
 ccSynchLock.h                 -- synchronization lock for critical sections
 ccTreeNode.h                  -- tree node class
 ccTreeNodeDestroyer.h         -- tree node destroyer, recursively destoys a tree
