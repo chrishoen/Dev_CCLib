@@ -33,9 +33,6 @@
     <ClCompile Include="Source\ccLFObjectQueue.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ccLMObjectQueue.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\cc_throw.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -49,6 +46,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\ccBlockPoolLCIndexStack.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ccLCObjectQueue.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -137,12 +137,6 @@
     <ClInclude Include="Source\ccLFObjectQueue.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccLMObjectQueue.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ccLMValueQueue.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\cc_throw.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -156,6 +150,12 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccBlockPoolLCIndexStack.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ccLCObjectQueue.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ccLCValueQueue.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

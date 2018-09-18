@@ -45,7 +45,7 @@ namespace CC
 // State variables for the stack. These are located in a separate class
 // so that they can be located in external memory.
 
-class LMValueQueueState
+class LCValueQueueState
 {
 public:
 
@@ -58,7 +58,7 @@ public:
    // will need to be allocated for it.
    static int getMemorySize()
    {
-      return cc_round_upto16(sizeof(LMValueQueueState));
+      return cc_round_upto16(sizeof(LCValueQueueState));
    }
 
    //***************************************************************************
@@ -77,7 +77,7 @@ public:
    // Methods.
 
    // Constructor.
-   LMValueQueueState()
+   LCValueQueueState()
    {
       // All null
       mNumElements = 0;
@@ -103,7 +103,7 @@ public:
 //******************************************************************************
 
 template <class Element>
-class LMValueQueue
+class LCValueQueue
 {
 public:
 
@@ -124,7 +124,7 @@ public:
       // Calculate and store memory sizes.
       MemorySize(int aNumElements)
       {
-         mStateSize         = LMValueQueueState::getMemorySize();
+         mStateSize         = LCValueQueueState::getMemorySize();
          mElementArraySize  = cc_round_upto16(cNewArrayExtraMemory + (aNumElements + 1)*sizeof(Element));
          mMemorySize = mStateSize + mElementArraySize;
       }
@@ -160,7 +160,7 @@ public:
 
    // State variables for the queue. These are located in a separate class
    // so that they can be located in externale memory.
-   LMValueQueueState* mX;
+   LCValueQueueState* mX;
 
    // Array of values, storage for the values.
    // Size is NumElements + 1.
@@ -181,7 +181,7 @@ public:
    // Methods.
 
    // Constructor.
-   LMValueQueue()
+   LCValueQueue()
    {
       // All null.
       mX = 0;
@@ -194,7 +194,7 @@ public:
       mCriticalSection = createCriticalSection();
    }
 
-   ~LMValueQueue()
+   ~LCValueQueue()
    {
       finalize();
       destroyCriticalSection(mCriticalSection);
@@ -224,7 +224,7 @@ public:
       // then allocate memory for it on the system heap.
       if (aMemory == 0)
       {
-         mMemory = malloc(LMValueQueue<Element>::getMemorySize(aNumElements));
+         mMemory = malloc(LCValueQueue<Element>::getMemorySize(aNumElements));
          mOwnMemoryFlag = true;
       }
       // If the instance of this class is to reside in external memory
@@ -248,12 +248,12 @@ public:
       if (aConstructorFlag)
       {
          // Call the constructor.
-         mX = new(tStateMemory)LMValueQueueState;
+         mX = new(tStateMemory)LCValueQueueState;
       }
       else
       {
          // The constructor has already been called.
-         mX = (LMValueQueueState*)tStateMemory;
+         mX = (LCValueQueueState*)tStateMemory;
       }
       // Initialize the state.
       mX->initialize(aNumElements,aConstructorFlag);

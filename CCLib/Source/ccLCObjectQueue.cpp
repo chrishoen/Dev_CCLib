@@ -12,7 +12,7 @@ Description:
 #include "cc_functions.h"
 #include "ccDefs.h"
 #include "ccMemoryPtr.h"
-#include "ccLMObjectQueue.h"
+#include "ccLCObjectQueue.h"
 
 using namespace std;
 
@@ -26,12 +26,12 @@ namespace CC
 //******************************************************************************
 // Constructor, initialize members for an empty stack of size zero 
 
-int LMObjectQueueState::getMemorySize()
+int LCObjectQueueState::getMemorySize()
 {
-   return cc_round_upto16(sizeof(LMObjectQueueState));
+   return cc_round_upto16(sizeof(LCObjectQueueState));
 }
 
-LMObjectQueueState::LMObjectQueueState()
+LCObjectQueueState::LCObjectQueueState()
 {
    // All null
    mNumElements=0;
@@ -40,7 +40,7 @@ LMObjectQueueState::LMObjectQueueState()
    mElementSize=0;
 }
 
-void LMObjectQueueState::initialize(int aNumElements,int aElementSize,bool aConstructorFlag)
+void LCObjectQueueState::initialize(int aNumElements,int aElementSize,bool aConstructorFlag)
 {
    // Do not initialize, if already initialized.
    if (!aConstructorFlag) return;
@@ -60,7 +60,7 @@ void LMObjectQueueState::initialize(int aNumElements,int aElementSize,bool aCons
 //***************************************************************************
 // This local class calculates and stores the memory sizes needed by the class.
 
-class LMObjectQueue::MemorySize
+class LCObjectQueue::MemorySize
 {
 public:
    // Members.
@@ -73,7 +73,7 @@ public:
    // Calculate and store memory sizes.
    MemorySize(int aNumElements,int aElementSize)
    {
-      mStateSize         = LMObjectQueueState::getMemorySize();
+      mStateSize         = LCObjectQueueState::getMemorySize();
       mQueueArraySize    = cc_round_upto16(cNewArrayExtraMemory + (aNumElements + 1)*sizeof(int));
       mListArraySize     = cc_round_upto16(cNewArrayExtraMemory + (aNumElements + 1)*sizeof(int));
       mElementArraySize  = cc_round_upto16(cNewArrayExtraMemory + (aNumElements + 1)*aElementSize);
@@ -87,7 +87,7 @@ public:
 // This returns the number of bytes that an instance of this class
 // will need to be allocated for it.
 
-int LMObjectQueue::getMemorySize(int aNumElements,int aElementSize)
+int LCObjectQueue::getMemorySize(int aNumElements,int aElementSize)
 {
    MemorySize tMemorySize(aNumElements,aElementSize);
    return tMemorySize.mMemorySize;
@@ -101,7 +101,7 @@ int LMObjectQueue::getMemorySize(int aNumElements,int aElementSize)
 //******************************************************************************
 // Constructor.
 
-LMObjectQueue::LMObjectQueue()
+LCObjectQueue::LCObjectQueue()
 {
    // All null.
    mX = 0;
@@ -117,7 +117,7 @@ LMObjectQueue::LMObjectQueue()
    mListCriticalSection = createCriticalSection();
 }
 
-LMObjectQueue::~LMObjectQueue()
+LCObjectQueue::~LCObjectQueue()
 {
    finalize();
 
@@ -130,12 +130,12 @@ LMObjectQueue::~LMObjectQueue()
 //***************************************************************************
 // Initialize
 
-void LMObjectQueue::initialize(int aNumElements,int aElementSize)
+void LCObjectQueue::initialize(int aNumElements,int aElementSize)
 {
    initialize(aNumElements,aElementSize,true,0);
 }
 
-void LMObjectQueue::initialize(int aNumElements,int aElementSize,bool aConstructorFlag, void* aMemory)
+void LCObjectQueue::initialize(int aNumElements,int aElementSize,bool aConstructorFlag, void* aMemory)
 {
    //------------------------------------------------------------------------
    //------------------------------------------------------------------------
@@ -149,7 +149,7 @@ void LMObjectQueue::initialize(int aNumElements,int aElementSize,bool aConstruct
    // then allocate memory for it on the system heap.
    if (aMemory == 0)
    {
-      mMemory = malloc(LMObjectQueue::getMemorySize(aNumElements,aElementSize));
+      mMemory = malloc(LCObjectQueue::getMemorySize(aNumElements,aElementSize));
       mOwnMemoryFlag = true;
    }
    // If the instance of this class is to reside in external memory
@@ -175,12 +175,12 @@ void LMObjectQueue::initialize(int aNumElements,int aElementSize,bool aConstruct
    if (aConstructorFlag)
    {
       // Call the constructor.
-      mX = new(tStateMemory)LMObjectQueueState;
+      mX = new(tStateMemory)LCObjectQueueState;
    }
    else
    {
       // The constructor has already been called.
-      mX = (LMObjectQueueState*)tStateMemory;
+      mX = (LCObjectQueueState*)tStateMemory;
    }
    // Initialize the state.
    mX->initialize(aNumElements,aElementSize,aConstructorFlag);
@@ -247,7 +247,7 @@ void LMObjectQueue::initialize(int aNumElements,int aElementSize,bool aConstruct
 //***************************************************************************
 //***************************************************************************
 
-void LMObjectQueue::finalize()
+void LCObjectQueue::finalize()
 {
    if (mOwnMemoryFlag)
    {
@@ -265,7 +265,7 @@ void LMObjectQueue::finalize()
 //***************************************************************************
 // Size
 
-int LMObjectQueue::size()
+int LCObjectQueue::size()
 {
    return mX->mListNumElements - mX->mListSize;
 }
@@ -275,7 +275,7 @@ int LMObjectQueue::size()
 //******************************************************************************
 // Return a pointer to an object, based on its object index.
 
-void* LMObjectQueue::elementAt(int aIndex)
+void* LCObjectQueue::elementAt(int aIndex)
 {
    return (void*)((char*)mElement + mX->mElementSize*aIndex);
 }
@@ -289,7 +289,7 @@ void* LMObjectQueue::elementAt(int aIndex)
 // is to be written is stored in the new node. The new node is then attached
 // to the queue tail node and the tail index is updated.
 
-void* LMObjectQueue::startWrite(int* aNodeIndex)
+void* LCObjectQueue::startWrite(int* aNodeIndex)
 {
    // Try to allocate a node from the free list.
    // Exit if it is empty.
@@ -316,7 +316,7 @@ void* LMObjectQueue::startWrite(int* aNodeIndex)
    return elementAt(tNodeIndex);
 }
 
-void LMObjectQueue::finishWrite(int aNodeIndex)
+void LCObjectQueue::finishWrite(int aNodeIndex)
 {
    // Lock.
    enterCriticalSection(mTailCriticalSection);
@@ -338,7 +338,7 @@ void LMObjectQueue::finishWrite(int aNodeIndex)
 // node, pushes the previous head node back onto the free list and updates the
 // head index.
 
-void* LMObjectQueue::startRead(int* aNodeIndex)
+void* LCObjectQueue::startRead(int* aNodeIndex)
 {
    // Store int temps.
    void* tElementPtr = 0;
@@ -360,7 +360,7 @@ void* LMObjectQueue::startRead(int* aNodeIndex)
    return tElementPtr;
 }
 
-void LMObjectQueue::finishRead(int aNodeIndex)
+void LCObjectQueue::finishRead(int aNodeIndex)
 {
    // Lock.
    enterCriticalSection(mListCriticalSection);
@@ -376,7 +376,7 @@ void LMObjectQueue::finishRead(int aNodeIndex)
 //******************************************************************************
 // This detaches the head node.
 
-bool LMObjectQueue::listPop(int* aNode)
+bool LCObjectQueue::listPop(int* aNode)
 {
    // Store the head node in a temp.
    // This is the node that will be detached.
@@ -401,7 +401,7 @@ bool LMObjectQueue::listPop(int* aNode)
 //***************************************************************************
 // Insert a node into the list before the list head node.
 
-bool LMObjectQueue::listPush(int aNode)
+bool LCObjectQueue::listPush(int aNode)
 {
    // Store the head node in a temp.
    int tHead = mX->mListHead;

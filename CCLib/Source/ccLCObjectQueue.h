@@ -40,7 +40,7 @@ namespace CC
 // State variables for the object. These are located in a separate class
 // so that they can be located in external memory.
 
-class LMObjectQueueState
+class LCObjectQueueState
 {
 public:
 
@@ -78,7 +78,7 @@ public:
    // Methods.
 
    // Constructor.
-   LMObjectQueueState();
+   LCObjectQueueState();
 
    // Initialize.
    void initialize(int aNumElements,int aElementSize,bool aConstructorFlag);
@@ -89,7 +89,7 @@ public:
 //******************************************************************************
 // Lock free object queue class.
 
-class LMObjectQueue
+class LCObjectQueue
 {
 public:
 
@@ -121,7 +121,7 @@ public:
 
    // State variables for the queue. These are located in a separate class
    // so that they can be located in externale memory.
-   LMObjectQueueState* mX;
+   LCObjectQueueState* mX;
 
    // Array of bytes, storage for the objects.
    // Size is NumElements + 1.
@@ -170,8 +170,8 @@ public:
    //    void* aMemory
 
    // Constructor.
-   LMObjectQueue();
-  ~LMObjectQueue();
+   LCObjectQueue();
+  ~LCObjectQueue();
 
    // Allocate memory for the queue and free list arrays and initialize the
    // queue variables. 
@@ -236,10 +236,10 @@ private:
 
    // includes
    #include <new>
-   #include "ccLMObjectQueue.h"
+   #include "ccLCObjectQueue.h"
 
    // Declare object queue
-   CC::LMObjectQueue mObjectQueue;
+   CC::LCObjectQueue mObjectQueue;
    // Initialize object queue
    mObjectQueue.initialize(100,sizeof(Class1A));
 
