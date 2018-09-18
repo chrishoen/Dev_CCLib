@@ -5,12 +5,22 @@
 Single Reader Multiple Writer Value Queue class template. 
 
 It is multiple writer single reader thread safe.
-It is uses thread synchronization (semaphores).
+It lockes with critcal sections for mutual exclusion, blocking.
 It is shared memory safe.
 
-This implements a value queue. 
+This implements a queue of fixed size objects, where the queue provides the
+memory allocation for the objects (memory for the objects is contained
+within the queue). The queue is thread safe. It uses mutexes to guard
+against concurrency contentions.
 
-It is thread safe for multiple writer and single reader threads.
+It is thread safe for separate multiple writer and single reader threads.
+
+It implements the Michael and Scott algorithm for blocking queues. It
+uses critcal sections for mutex protection. It maintains storage for the
+objects by implementing a free list that also uses critical section mutex
+protection.
+
+
 
 ==============================================================================*/
 //******************************************************************************

@@ -5,7 +5,7 @@
 Locked Mutex Packet Queue.
 
 It is multiple writer single reader thread safe.
-It lockes with semaphores, blocking.
+It lockes with critcal sections for mutual exclusion, blocking.
 It is shared memory safe.
 It is zero copy.
 
@@ -17,8 +17,9 @@ against concurrency contentions.
 It is thread safe for separate multiple writer and single reader threads.
 
 It implements the Michael and Scott algorithm for blocking queues. It 
-uses mutex protection. It maintains storage for the objects by implementing a
-free list that also uses mutex protection. 
+uses critcal sections for mutex protection. It maintains storage for the
+objects by implementing a free list that also uses critical section mutex
+protection. 
 
 =============================================================================*/
 

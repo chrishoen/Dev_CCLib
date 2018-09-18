@@ -2,6 +2,10 @@
 
 /*==============================================================================
 Free list block pool class
+
+This implements a free list block pool. It is thread safe, because
+it uses a synchronization lock around critical sections.
+
 ==============================================================================*/
 
 //******************************************************************************
