@@ -301,7 +301,6 @@ void Writer::writeType7(int aNumWrites)
       {
          Class1A* tObject = new(tPacket) Class1A;
          tObject->mCode1 = tCount;
-         tDelayA.delay();
          gShare.mLMObjectQueue.finishWrite(tIndex);
          tPass=true;
       }

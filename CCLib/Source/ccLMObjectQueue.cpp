@@ -8,6 +8,7 @@ Description:
 
 #include "stdafx.h"
 
+#include "ccCriticalSection.h"
 #include "cc_functions.h"
 #include "ccDefs.h"
 #include "ccMemoryPtr.h"
@@ -111,11 +112,17 @@ LMObjectQueue::LMObjectQueue()
    mElement = 0;
    mQueueNext = 0;
    mListNext = 0;
+
+   mTailCriticalSection = createCriticalSection();
+   mListCriticalSection = createCriticalSection();
 }
 
 LMObjectQueue::~LMObjectQueue()
 {
    finalize();
+
+   destroyCriticalSection(mTailCriticalSection);
+   destroyCriticalSection(mListCriticalSection);
 }
 
 //***************************************************************************
@@ -287,16 +294,19 @@ void* LMObjectQueue::startWrite(int* aNodeIndex)
    // Try to allocate a node from the free list.
    // Exit if it is empty.
 
-   mListMutex.lock();
+   // Lock.
+   enterCriticalSection(mListCriticalSection);
 
    int tNodeIndex;
    if (!listPop(&tNodeIndex))
    {
-      mListMutex.unlock();
+      // Unlock.
+      leaveCriticalSection(mListCriticalSection);
       return 0;
    }
 
-   mListMutex.unlock();
+   // Unlock.
+   leaveCriticalSection(mListCriticalSection);
 
    // Initialize the node.
    mQueueNext[tNodeIndex] = cInvalid;
@@ -308,13 +318,15 @@ void* LMObjectQueue::startWrite(int* aNodeIndex)
 
 void LMObjectQueue::finishWrite(int aNodeIndex)
 {
-   mTailMutex.lock();
+   // Lock.
+   enterCriticalSection(mTailCriticalSection);
 
    // Attach the node to the queue tail.
    mQueueNext[mX->mQueueTail] = aNodeIndex;
    mX->mQueueTail = aNodeIndex;
 
-   mTailMutex.unlock();
+   // Unlock.
+   leaveCriticalSection(mTailCriticalSection);
 }
 
 //******************************************************************************
@@ -350,9 +362,13 @@ void* LMObjectQueue::startRead(int* aNodeIndex)
 
 void LMObjectQueue::finishRead(int aNodeIndex)
 {
-   mListMutex.lock();
+   // Lock.
+   enterCriticalSection(mListCriticalSection);
+
    listPush(aNodeIndex);
-   mListMutex.unlock();
+
+   // Unlock.
+   leaveCriticalSection(mListCriticalSection);
 }
 
 //******************************************************************************
@@ -404,26 +420,4 @@ bool LMObjectQueue::listPush(int aNode)
 //***************************************************************************
 //***************************************************************************
 //***************************************************************************
-// Insert a node into the list before the list head node.
-
-void LMObjectQueue::lockList()
-{
-   mListMutex.lock();
-}
-
-void LMObjectQueue::unlockList()
-{
-   mListMutex.unlock();
-}
-
-void LMObjectQueue::lockTail()
-{
-   mTailMutex.lock();
-}
-
-void LMObjectQueue::unlockTail()
-{
-   mTailMutex.unlock();
-}
-
 }//namespace

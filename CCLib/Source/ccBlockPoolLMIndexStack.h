@@ -10,7 +10,6 @@ it uses a synchronization lock around critical sections.
 ==============================================================================*/
 
 #include "ccBlockPoolBaseIndexStack.h"
-#include "ccSynchLock.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -74,7 +73,7 @@ public:
    // Members.
 
    // This is a synchronization lock used to protect critical sections.
-   SynchLock mSynchLock;
+   void* mCriticalSection;
 
    //***************************************************************************
    //***************************************************************************

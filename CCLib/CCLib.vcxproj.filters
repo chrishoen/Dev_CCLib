@@ -39,9 +39,6 @@
     <ClCompile Include="Source\ccBlockPoolLMIndexStack.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ccSynchLock_win.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\cc_throw.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -49,6 +46,9 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\ccBlockPoolLMFreeList.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ccCritcalSection_win.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -146,9 +146,6 @@
     <ClInclude Include="Source\ccBlockPoolLMIndexStack.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccSynchLock.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\cc_throw.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -156,6 +153,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccBlockPoolLMFreeList.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ccCriticalSection.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

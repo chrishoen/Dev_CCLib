@@ -312,7 +312,6 @@ void Reader::readType7(int aNumReads)
       if (tObject)
       {
          tCount = tObject->mCode1;
-         tDelayB.delay();
          gShare.mLMObjectQueue.finishRead(tIndex);
       }
 

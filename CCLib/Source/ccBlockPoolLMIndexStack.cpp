@@ -8,6 +8,7 @@ Description:
 
 #include "stdafx.h"
 
+#include "ccCriticalSection.h"
 #include "cc_functions.h"
 #include "ccDefs.h"
 #include "ccMemoryPtr.h"
@@ -66,6 +67,8 @@ BlockPoolLMIndexStack::BlockPoolLMIndexStack()
 
    mNumElements = 0;
    mIndex = 0;
+
+   mCriticalSection = createCriticalSection();
 }
 
 //******************************************************************************
@@ -76,6 +79,8 @@ BlockPoolLMIndexStack::BlockPoolLMIndexStack()
 BlockPoolLMIndexStack::~BlockPoolLMIndexStack()
 {
    finalize();
+
+   destroyCriticalSection(mCriticalSection);
 }
 
 //******************************************************************************
@@ -162,13 +167,14 @@ void BlockPoolLMIndexStack::finalize()
 
 bool BlockPoolLMIndexStack::push(int aValue)
 {
-   // Enter critical section.
-   mSynchLock.lock();
+   // Lock.
+   enterCriticalSection(mCriticalSection);
 
    // Guard for stack full.
    if (mIndex == mNumElements)
    {
-      mSynchLock.unlock();
+      // Unlock.
+      leaveCriticalSection(mCriticalSection);
       return false;
    }
 
@@ -177,8 +183,8 @@ bool BlockPoolLMIndexStack::push(int aValue)
    // Increment the index.
    mIndex++;
 
-   // Leave critical section.
-   mSynchLock.unlock();
+   // Unlock.
+   leaveCriticalSection(mCriticalSection);
 
    // Done
    return true;
@@ -191,13 +197,14 @@ bool BlockPoolLMIndexStack::push(int aValue)
 
 bool BlockPoolLMIndexStack::pop(int* aValue)
 {
-   // Enter critical section.
-   mSynchLock.lock();
+   // Lock.
+   enterCriticalSection(mCriticalSection);
 
    // Guard for stack empty.
    if (mIndex == 0)
    {
-      mSynchLock.unlock();
+      // Unlock.
+      leaveCriticalSection(mCriticalSection);
       return false;
    }
 
@@ -206,8 +213,8 @@ bool BlockPoolLMIndexStack::pop(int* aValue)
    // Decrement the index.
    mIndex--;
 
-   // Leave critical section.
-   mSynchLock.unlock();
+   // Unlock.
+   leaveCriticalSection(mCriticalSection);
 
    // Return success.
    return true;

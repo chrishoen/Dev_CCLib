@@ -9,7 +9,7 @@
 
 #include <windows.h> 
 
-#include "ccSynchLock.h"
+#include "ccCriticalSection.h"
 
 #pragma unmanaged
 
@@ -19,55 +19,46 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Created a critical section. Pass the returned code to the following
+// functions.
 
-class SynchLock::Specific
+void* createCriticalSection()
 {
-public:
-   SRWLOCK mSRWLock;
-   CRITICAL_SECTION mCriticalSection;
-};
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-SynchLock::SynchLock() 
-{
-   mSpecific = new Specific;
-   InitializeCriticalSectionAndSpinCount(&mSpecific->mCriticalSection, 0x80000400);
-   InitializeSRWLock(&mSpecific->mSRWLock);
+   CRITICAL_SECTION* tCriticalSection = new CRITICAL_SECTION;
+   InitializeCriticalSectionAndSpinCount(tCriticalSection, 0x80000400);
+   return (void*)tCriticalSection;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Enter a critical section. This is used to lock a resource for a short
+// time interval.
 
-SynchLock::~SynchLock() 
+void enterCriticalSection(void* aCriticalSection)
 {
-   DeleteCriticalSection(&mSpecific->mCriticalSection);
-   delete mSpecific;
+   EnterCriticalSection((CRITICAL_SECTION*)aCriticalSection);
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Leave a critical section. This is used to unlock a resource.
 
-void SynchLock::lock()
+void leaveCriticalSection(void* aCriticalSection)
 {
-   EnterCriticalSection(&mSpecific->mCriticalSection);
-   return;
-   AcquireSRWLockExclusive(&mSpecific->mSRWLock);
+   LeaveCriticalSection((CRITICAL_SECTION*)aCriticalSection);
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Destroy a critical section.
 
-void SynchLock::unlock()
+void destroyCriticalSection(void* aCriticalSection)
 {
-   LeaveCriticalSection(&mSpecific->mCriticalSection);
-   return;
-   ReleaseSRWLockExclusive(&mSpecific->mSRWLock);
+   DeleteCriticalSection((CRITICAL_SECTION*)aCriticalSection);
+   delete aCriticalSection;
 }
 
 //******************************************************************************

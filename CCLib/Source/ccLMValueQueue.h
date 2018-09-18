@@ -21,7 +21,7 @@ It is thread safe for multiple writer and single reader threads.
 #include "ccDefs.h"
 #include "cc_functions.h"
 #include "ccMemoryPtr.h"
-#include "ccSynchLock.h"
+#include "ccCriticalSection.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -162,9 +162,8 @@ public:
    //***************************************************************************
    // Members.
 
-   // This is a mutex semaphore that is used to lock access to member 
-   // variables for write operations.
-   SynchLock mLock;
+   // Critical section.
+   void* mCriticalSection;
 
    //***************************************************************************
    //***************************************************************************
@@ -181,11 +180,14 @@ public:
 
       // All null
       mElement = 0;
+
+      mCriticalSection = createCriticalSection();
    }
 
    ~LMValueQueue()
    {
       finalize();
+      destroyCriticalSection(mCriticalSection);
    }
 
    //***************************************************************************
@@ -315,14 +317,15 @@ public:
    bool tryWrite (Element aElement)
    {
       // Lock.
-      mLock.lock();
+      enterCriticalSection(mCriticalSection);
 
       // Test if the queue is full.
       int tSize = mX->mPutIndex - mX->mGetIndex;
       if (tSize < 0) tSize = mX->mNumElements + tSize;
       if (tSize > mX->mNumElements - 2)
       {
-         mLock.unlock();
+         // Unlock.
+         leaveCriticalSection(mCriticalSection);
          return false;
       }
 
@@ -334,8 +337,8 @@ public:
       if(++tPutIndex == mX->mNumElements) tPutIndex = 0;
       mX->mPutIndex = tPutIndex;
 
-      // Done.
-      mLock.unlock();
+      // Unlock.
+      leaveCriticalSection(mCriticalSection);
       return true;
    }
 
