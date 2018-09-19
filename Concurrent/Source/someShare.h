@@ -79,8 +79,8 @@ public:
    CC::LFValueQueue<int>      mLFIntQueue;
    CC::SRSWValueQueue<int>    mSRSWIntQueue;
    CC::LCObjectQueue          mLCObjectQueue;
-   CC::LCValueQueue<int>      mLMIntQueue;
-   CC::LCValueQueue<void*>    mLMPointerQueue;
+   CC::LCValueQueue<int>      mLCIntQueue;
+   CC::LCValueQueue<void*>    mLCPointerQueue;
 
    //***************************************************************************
    //***************************************************************************

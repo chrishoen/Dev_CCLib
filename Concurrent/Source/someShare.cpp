@@ -60,13 +60,13 @@ void Share::initialize()
          mLCObjectQueue.initialize(gParms.mNumElements, sizeof(Class1A));
          break;
       case 8:
-         mLMIntQueue.initialize(gParms.mNumElements);
+         mLCIntQueue.initialize(gParms.mNumElements);
          break;
       case 9:
-         mLMPointerQueue.initialize(gParms.mNumElements);
+         mLCPointerQueue.initialize(gParms.mNumElements);
          break;
       case 10:
-         mLMPointerQueue.initialize(gParms.mNumElements);
+         mLCPointerQueue.initialize(gParms.mNumElements);
          break;
       case 11:
          break;
