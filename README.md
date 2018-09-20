@@ -62,6 +62,8 @@ Documents           -- some documentation
 Files               -- parameters files for Concurrent
 History             -- unit test for history container
 Labelled            -- unit test for labelled tree nodes
+LFCCLib             -- lock free version of CCLib
+LFConcurrent        -- lock free version of Concurrent
 LLogic              -- experiments with lukasiewicz fuzzy logic variables
 LockFree            -- unit test for integer lock free queue and free list
 Memory              -- unit test for memory pointer utilites
