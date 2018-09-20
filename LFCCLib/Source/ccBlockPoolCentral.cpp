@@ -155,7 +155,7 @@ bool allocateBlockPoolBlock(int aPoolIndex,void** aBlockPointer,BlockHandle* aBl
 
    // Check result.
    if (tSuccess) return true;
-   if (!mBlockPoolParms[aPoolIndex].mNoThrowFlag)
+   if (mBlockPoolParms[aPoolIndex].mThrowFlag)
    {
       printf("ERROR allocate BlockPool EMPTY %d\n", aPoolIndex);
       cc_throw(101);

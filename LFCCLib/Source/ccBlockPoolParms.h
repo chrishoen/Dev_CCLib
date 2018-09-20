@@ -21,7 +21,6 @@ namespace CC
 
    // Block pool types.
    static const int cBlockPoolType_LCFreeList   = 1;
-   static const int cBlockPoolType_LFFreeList   = 2;
 
 //******************************************************************************
 //******************************************************************************
@@ -62,10 +61,10 @@ public:
    // block pool.
    void* mMemory;
 
-   // If true then execptions will not be throw when an allocation is 
-   // requested on an empty block pool. If true then an exception will 
-   // thrown.
-   bool mNoThrowFlag;
+   // If true then execptions will be throw when an allocation is 
+   // requested on an empty block pool. If false then an exception will 
+   // not be thrown.
+   bool mThrowFlag;
 
    //***************************************************************************
    //***************************************************************************

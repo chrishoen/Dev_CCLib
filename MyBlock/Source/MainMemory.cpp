@@ -31,7 +31,7 @@ void main_memory_initialize()
    tBlockPoolParms.mBlockPoolType = CC::cBlockPoolType_LCFreeList;
    tBlockPoolParms.mNumBlocks     = 3;
    tBlockPoolParms.mBlockSize = sizeof(Some::MyBlockA);
-   tBlockPoolParms.mNoThrowFlag = true;
+   tBlockPoolParms.mThrowFlag     = false;
    CC::createBlockPool(&tBlockPoolParms);
 
    // Create block pool.
