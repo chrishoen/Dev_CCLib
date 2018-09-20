@@ -10,8 +10,6 @@ Description:
 
 #include "Parms.h"
 #include "LFBackoff.h"
-#include "LFFreeList.h"
-#include "LFIntQueue.h"
 #include "someMyBlockX.h"
 #include "someShare.h"
 #include "someWriter.h"
@@ -61,30 +59,6 @@ void Writer::show()
 
 void Writer::writeType1(int aNumWrites)
 {
-   LFBackoff tDelayA(gParms.mDelayA1,gParms.mDelayA2);
-
-   for (int i = 0; i < aNumWrites; i++)
-   {
-      bool tPass;
-      int tCount = mCount & 0xFFFF;
-
-      mMarkerWrite.doStart();
-      tPass = LFIntQueue::tryWrite(tCount);
-      mMarkerWrite.doStop();
-      tDelayA.delay();
-
-      if (tPass)
-      {
-         mCount++;
-         mPassCount++;
-         mCheckSum += tCount;
-      }
-      else
-      {
-         mCount++;
-         mFailCount++;
-      }
-   }
 }
 
 //******************************************************************************
@@ -93,34 +67,6 @@ void Writer::writeType1(int aNumWrites)
 
 void Writer::writeType2(int aNumWrites)
 {
-   LFBackoff tDelayA(gParms.mDelayA1,gParms.mDelayA2);
-
-   for (int i = 0; i < aNumWrites; i++)
-   {
-      bool tPass;
-      int tCount = mCount & 0xFFFF;
-
-      Class1A* tObject = new Class1A;
-      tObject->mCode1 = tCount;
-
-      mMarkerWrite.doStart();
-      tPass = gShare.mLFPointerQueue.writePtr(tObject);
-      mMarkerWrite.doStop();
-      tDelayA.delay();
-
-      if (tPass)
-      {
-         mCount++;
-         mPassCount++;
-         mCheckSum += tCount;
-      }
-      else
-      {
-         delete tObject;
-         mCount++;
-         mFailCount++;
-      }
-   }
 }
 
 //******************************************************************************
@@ -129,41 +75,6 @@ void Writer::writeType2(int aNumWrites)
 
 void Writer::writeType3(int aNumWrites)
 {
-   LFBackoff tDelayA(gParms.mDelayA1,gParms.mDelayA2);
-
-   for (int i = 0; i < aNumWrites; i++)
-   {
-      bool tPass = false;
-      int tCount = mCount & 0xFFFF;
-
-      mMarkerWrite.doStart();
-
-      int tIndex;
-      void* tPacket = gShare.mLFObjectQueue.startWrite(&tIndex);
-      if (tPacket)
-      {
-         Class1A* tObject = new(tPacket) Class1A;
-         tObject->mCode1 = tCount;
-         tDelayA.delay();
-         gShare.mLFObjectQueue.finishWrite(tIndex);
-         tPass=true;
-      }
-
-      mMarkerWrite.doStop();
-      tDelayA.delay();
-
-      if (tPass)
-      {
-         mCount++;
-         mPassCount++;
-         mCheckSum += tCount;
-      }
-      else
-      {
-         mCount++;
-         mFailCount++;
-      }
-   }
 }
 
 //******************************************************************************
@@ -172,46 +83,6 @@ void Writer::writeType3(int aNumWrites)
 
 void Writer::writeType4(int aNumWrites)
 {
-   LFBackoff tDelayA(gParms.mDelayA1,gParms.mDelayA2);
-
-   for (int i = 0; i < aNumWrites; i++)
-   {
-      MyBlockX* tObject = 0;
-      bool tPass = false;
-      int tCount = mCount & 0xFFFF;
-
-      mMarkerWrite.doStart();
-      tObject = new MyBlockX();
-      mMarkerWrite.doStop();
-
-      if (tObject)
-      {
-         tObject->mCode1 = tCount;
-         tPass = gShare.mLFValueQueue.tryWrite(tObject);
-      }
-      else
-      {
-         tPass=false;
-      }
-
-      tDelayA.delay();
-
-      if (tPass)
-      {
-         mCount++;
-         mPassCount++;
-         mCheckSum += tCount;
-      }
-      else
-      {
-         if (tObject)
-         {
-            delete tObject;
-         }
-         mCount++;
-         mFailCount++;
-      }
-   }
 }
 
 //******************************************************************************
@@ -220,31 +91,6 @@ void Writer::writeType4(int aNumWrites)
 
 void Writer::writeType5(int aNumWrites)
 {
-   LFBackoff tDelayA(gParms.mDelayA1,gParms.mDelayA2);
-
-   for (int i = 0; i < aNumWrites; i++)
-   {
-      bool tPass;
-      int tCount = mCount & 0xFFFF;
-
-      mMarkerWrite.doStart();
-      tPass = gShare.mLFIntQueue.tryWrite(tCount);
-      mMarkerWrite.doStop();
-
-      tDelayA.delay();
-
-      if (tPass)
-      {
-         mCount++;
-         mPassCount++;
-         mCheckSum += tCount;
-      }
-      else
-      {
-         mCount++;
-         mFailCount++;
-      }
-   }
 }
 
 //******************************************************************************

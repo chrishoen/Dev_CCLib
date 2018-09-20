@@ -31,9 +31,6 @@
     <ClCompile Include="Source\someThreads.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\someWriterThread.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\someReaderThread.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -41,12 +38,6 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\Timing.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\someWriterReader.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\someWriterReaderThread.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\someTester.cpp">
@@ -67,13 +58,10 @@
     <ClCompile Include="Source\Parms.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\LFFreeList.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\LFIntQueue.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\someMyBlockX.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\someWriterThread.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -99,25 +87,13 @@
     <ClInclude Include="Source\someThreads.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\someWriterThread.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\someReaderThread.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\someStatusThread.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="..\LockFree\Source\LFBackoff.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Timing.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\someWriterReader.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\someWriterReaderThread.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\someTester.h">
@@ -144,16 +120,10 @@
     <ClInclude Include="Source\LFBackoff.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\LFFreeList.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\LFIndex.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\LFIntQueue.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\someMyBlockX.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\someWriterThread.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

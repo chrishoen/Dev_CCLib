@@ -11,7 +11,6 @@ Description:
 #include "Parms.h"
 #include "someShare.h"
 #include "LFBackoff.h"
-#include "LFIntQueue.h"
 #include "someMyBlockX.h"
 #include "someReader.h"
 
@@ -76,31 +75,6 @@ void Reader::finishTrial()
 
 void Reader::readType1(int aNumReads)
 {
-   LFBackoff tDelayB(gParms.mDelayB1,gParms.mDelayB2);
-
-   for (int i = 0; i < aNumReads; i++)
-   {
-      bool tPass;
-      int tCount;
-
-      mMarkerRead.doStart();
-      tPass = LFIntQueue::tryRead(&tCount);
-      mMarkerRead.doStop();
-
-      tDelayB.delay();
-
-      if (tPass)
-      {
-         mCount++;
-         mPassCount++;
-         mCheckSum += tCount;
-      }
-      else
-      {
-         mCount++;
-         mFailCount++;
-      }
-   }
 }
 
 //******************************************************************************
@@ -109,37 +83,6 @@ void Reader::readType1(int aNumReads)
 
 void Reader::readType2(int aNumReads)
 {
-   LFBackoff tDelayB(gParms.mDelayB1,gParms.mDelayB2);
-
-   for (int i = 0; i < aNumReads; i++)
-   {
-      bool tPass;
-      int tCount;
-
-      mMarkerRead.doStart();
-      Class1A* tObject = (Class1A*)gShare.mLFPointerQueue.readPtr();
-      mMarkerRead.doStop();
-      tDelayB.delay();
-
-      tPass = tObject!=0;
-      if (tObject)
-      {
-         tCount = tObject->mCode1;
-         delete tObject;
-      }
-
-      if (tPass)
-      {
-         mCount++;
-         mPassCount++;
-         mCheckSum += tCount;
-      }
-      else
-      {
-         mCount++;
-         mFailCount++;
-      }
-   }
 }
 
 //******************************************************************************
@@ -148,41 +91,6 @@ void Reader::readType2(int aNumReads)
 
 void Reader::readType3(int aNumReads)
 {
-   LFBackoff tDelayB(gParms.mDelayB1,gParms.mDelayB2);
-
-   for (int i = 0; i < aNumReads; i++)
-   {
-      bool tPass;
-      int tCount;
-      int tIndex;
-
-      mMarkerRead.doStart();
-
-      Class1A* tObject = (Class1A*)gShare.mLFObjectQueue.startRead(&tIndex);
-      if (tObject)
-      {
-         tCount = tObject->mCode1;
-         tDelayB.delay();
-         gShare.mLFObjectQueue.finishRead(tIndex);
-      }
-
-      mMarkerRead.doStop();
-      tPass = tObject!=0;
-
-      tDelayB.delay();
-
-      if (tPass)
-      {
-         mCount++;
-         mPassCount++;
-         mCheckSum += tCount;
-      }
-      else
-      {
-         mCount++;
-         mFailCount++;
-      }
-   }
 }
 
 //******************************************************************************
@@ -191,39 +99,6 @@ void Reader::readType3(int aNumReads)
 
 void Reader::readType4(int aNumReads)
 {
-   LFBackoff tDelayB(gParms.mDelayB1,gParms.mDelayB2);
-
-   for (int i = 0; i < aNumReads; i++)
-   {
-      bool tPass;
-      int tCount;
-      MyBlockX* tObject = 0;
-
-      mMarkerRead.doStart();
-      tPass = gShare.mLFValueQueue.tryRead((void**)&tObject);
-      mMarkerRead.doStop();
-      tDelayB.delay();
-
-      if (tObject)
-      {
-         tCount = tObject->mCode1;
-         mMarkerRead.doStart();
-         delete tObject;
-         mMarkerRead.doStop();
-      }
-
-      if (tPass)
-      {
-         mCount++;
-         mPassCount++;
-         mCheckSum += tCount;
-      }
-      else
-      {
-         mCount++;
-         mFailCount++;
-      }
-   }
 }
 
 //******************************************************************************
@@ -232,31 +107,6 @@ void Reader::readType4(int aNumReads)
 
 void Reader::readType5(int aNumReads)
 {
-   LFBackoff tDelayB(gParms.mDelayB1,gParms.mDelayB2);
-
-   for (int i = 0; i < aNumReads; i++)
-   {
-      bool tPass;
-      int tCount;
-
-      mMarkerRead.doStart();
-      tPass = gShare.mLFIntQueue.tryRead(&tCount);
-      mMarkerRead.doStop();
-
-      tDelayB.delay();
-
-      if (tPass)
-      {
-         mCount++;
-         mPassCount++;
-         mCheckSum += tCount;
-      }
-      else
-      {
-         mCount++;
-         mFailCount++;
-      }
-   }
 }
 
 //******************************************************************************
@@ -472,14 +322,6 @@ void Reader::read(int aNumReads)
 
 void Reader::flushType1()
 {
-   while(true)
-   {
-      int tCount;
-      if (!LFIntQueue::tryRead(&tCount)) break;
-      mCount++;
-      mPassCount++;
-      mCheckSum += tCount;
-   }
 }
    
 //******************************************************************************
@@ -488,18 +330,6 @@ void Reader::flushType1()
 
 void Reader::flushType2()
 {
-   while(true)
-   {
-      Class1A* tObject = (Class1A*)gShare.mLFPointerQueue.readPtr();
-      if (!tObject) break;
-
-      int tCount = tObject->mCode1;
-      delete tObject;
-
-      mCount++;
-      mPassCount++;
-      mCheckSum += tCount;
-   }
 }
    
 //******************************************************************************
@@ -508,22 +338,6 @@ void Reader::flushType2()
 
 void Reader::flushType3()
 {
-   int tCount;
-   int tIndex;
-
-   while(true)
-   {
-
-      Class1A* tObject = (Class1A*)gShare.mLFObjectQueue.startRead(&tIndex);
-      if (!tObject) break;
-
-      tCount = tObject->mCode1;
-      gShare.mLFObjectQueue.finishRead(tIndex);
-
-      mCount++;
-      mPassCount++;
-      mCheckSum += tCount;
-   }
 }
    
 //******************************************************************************
@@ -532,20 +346,6 @@ void Reader::flushType3()
 
 void Reader::flushType4()
 {
-   while(true)
-   {
-      bool tPass;
-      MyBlockX* tObject = 0;
-      tPass = gShare.mLFValueQueue.tryRead((void**)&tObject);
-      if (!tPass) break;
-
-      int tCount = tObject->mCode1;
-      delete tObject;
-
-      mCount++;
-      mPassCount++;
-      mCheckSum += tCount;
-   }
 }
    
 //******************************************************************************
@@ -554,17 +354,6 @@ void Reader::flushType4()
 
 void Reader::flushType5()
 {
-   while(true)
-   {
-      int tCount;
-      bool tPass;
-      tPass = gShare.mLFIntQueue.tryRead(&tCount);
-      if (!tPass) break;
-
-      mCount++;
-      mPassCount++;
-      mCheckSum += tCount;
-   }
 }
    
 //******************************************************************************

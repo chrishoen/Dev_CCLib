@@ -168,8 +168,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\CmdLineExec.cpp" />
-    <ClCompile Include="Source\LFFreeList.cpp" />
-    <ClCompile Include="Source\LFIntQueue.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\MainInit.cpp" />
     <ClCompile Include="Source\MainMemory.cpp" />
@@ -185,8 +183,6 @@
     <ClCompile Include="Source\someThreads.cpp" />
     <ClCompile Include="Source\someWriter.cpp" />
     <ClCompile Include="Source\someShare.cpp" />
-    <ClCompile Include="Source\someWriterReader.cpp" />
-    <ClCompile Include="Source\someWriterReaderThread.cpp" />
     <ClCompile Include="Source\someWriterThread.cpp" />
     <ClCompile Include="Source\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -195,12 +191,8 @@
     <ClCompile Include="Source\Timing.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\LockFree\Source\LFBackoff.h" />
     <ClInclude Include="Source\CmdLineExec.h" />
     <ClInclude Include="Source\LFBackoff.h" />
-    <ClInclude Include="Source\LFFreeList.h" />
-    <ClInclude Include="Source\LFIndex.h" />
-    <ClInclude Include="Source\LFIntQueue.h" />
     <ClInclude Include="Source\MainInit.h" />
     <ClInclude Include="Source\MainMemory.h" />
     <ClInclude Include="Source\Parms.h" />
@@ -216,8 +208,6 @@
     <ClInclude Include="Source\someThreads.h" />
     <ClInclude Include="Source\someWriter.h" />
     <ClInclude Include="Source\someShare.h" />
-    <ClInclude Include="Source\someWriterReader.h" />
-    <ClInclude Include="Source\someWriterReaderThread.h" />
     <ClInclude Include="Source\someWriterThread.h" />
     <ClInclude Include="Source\stdafx.h" />
     <ClInclude Include="Source\Timing.h" />

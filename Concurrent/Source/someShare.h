@@ -9,11 +9,7 @@
 #include "risTimeMarker.h"
 #include "someWriter.h"
 #include "someReader.h"
-#include "someWriterReader.h"
 #include "someTester.h"
-#include "ccLFValueQueue.h"
-#include "ccLFObjectQueue.h"
-#include "ccLFPointerQueue.h"
 #include "ccSRSWValueQueue.h"
 #include "ccLCObjectQueue.h"
 #include "ccLCValueQueue.h"
@@ -47,7 +43,6 @@ public:
    int            mNumWriters;
 
    Writer         mWriter[cMaxNumWriters];
-   WriterReader   mWriterReader[cMaxNumWriters];
    Reader         mReader;
    Tester         mTester;
 
@@ -73,10 +68,6 @@ public:
    double              mTesterMeanTime1;
    double              mTesterMeanTime2;
 
-   CC::LFPointerQueue<void*>  mLFPointerQueue;
-   CC::LFValueQueue<void*>    mLFValueQueue;
-   CC::LFObjectQueue          mLFObjectQueue;
-   CC::LFValueQueue<int>      mLFIntQueue;
    CC::SRSWValueQueue<int>    mSRSWIntQueue;
    CC::LCObjectQueue          mLCObjectQueue;
    CC::LCValueQueue<int>      mLCIntQueue;
