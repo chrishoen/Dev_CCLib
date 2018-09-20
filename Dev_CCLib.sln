@@ -47,6 +47,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Files", "Files", "{D87D4E67
 		Files\SharedMemorySettings.txt = Files\SharedMemorySettings.txt
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LFCCLib", "LFCCLib\LFCCLib.vcxproj", "{5745985C-121E-44D4-A609-B45FD726C3DF}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LFConcurrent", "LFConcurrent\LFConcurrent.vcxproj", "{510F3779-46DF-480B-979C-E1998C107B01}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -207,6 +211,22 @@ Global
 		{786559E3-1E49-44AE-8450-E631C3797C31}.Release|Win32.Build.0 = Release|Win32
 		{786559E3-1E49-44AE-8450-E631C3797C31}.Release|x64.ActiveCfg = Release|x64
 		{786559E3-1E49-44AE-8450-E631C3797C31}.Release|x64.Build.0 = Release|x64
+		{5745985C-121E-44D4-A609-B45FD726C3DF}.Debug|Win32.ActiveCfg = Debug|Win32
+		{5745985C-121E-44D4-A609-B45FD726C3DF}.Debug|Win32.Build.0 = Debug|Win32
+		{5745985C-121E-44D4-A609-B45FD726C3DF}.Debug|x64.ActiveCfg = Debug|x64
+		{5745985C-121E-44D4-A609-B45FD726C3DF}.Debug|x64.Build.0 = Debug|x64
+		{5745985C-121E-44D4-A609-B45FD726C3DF}.Release|Win32.ActiveCfg = Release|Win32
+		{5745985C-121E-44D4-A609-B45FD726C3DF}.Release|Win32.Build.0 = Release|Win32
+		{5745985C-121E-44D4-A609-B45FD726C3DF}.Release|x64.ActiveCfg = Release|x64
+		{5745985C-121E-44D4-A609-B45FD726C3DF}.Release|x64.Build.0 = Release|x64
+		{510F3779-46DF-480B-979C-E1998C107B01}.Debug|Win32.ActiveCfg = Debug|Win32
+		{510F3779-46DF-480B-979C-E1998C107B01}.Debug|Win32.Build.0 = Debug|Win32
+		{510F3779-46DF-480B-979C-E1998C107B01}.Debug|x64.ActiveCfg = Debug|x64
+		{510F3779-46DF-480B-979C-E1998C107B01}.Debug|x64.Build.0 = Debug|x64
+		{510F3779-46DF-480B-979C-E1998C107B01}.Release|Win32.ActiveCfg = Release|Win32
+		{510F3779-46DF-480B-979C-E1998C107B01}.Release|Win32.Build.0 = Release|Win32
+		{510F3779-46DF-480B-979C-E1998C107B01}.Release|x64.ActiveCfg = Release|x64
+		{510F3779-46DF-480B-979C-E1998C107B01}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
