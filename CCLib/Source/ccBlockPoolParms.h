@@ -21,7 +21,6 @@ namespace CC
 
    // Block pool types.
    static const int cBlockPoolType_LCFreeList   = 1;
-   static const int cBlockPoolType_LFFreeList   = 2;
 
 //******************************************************************************
 //******************************************************************************

@@ -10,7 +10,6 @@
 #include "cc_throw.h"
 #include "ccBlockPoolBase.h"
 #include "ccBlockPoolLCFreeList.h"
-#include "ccBlockPoolLFFreeList.h"
 
 #include "ccBlockPool.h"
 
@@ -108,13 +107,6 @@ void createBlockPool(BlockPoolParms* aParms)
       case cBlockPoolType_LCFreeList :
       {
          mBlockPool[tPoolIndex] = new BlockPoolLCFreeList;
-         mBlockPool[tPoolIndex]->initialize(tParms);
-      }
-      break;
-      // Create and initialize the block pool.
-      case cBlockPoolType_LFFreeList :
-      {
-         mBlockPool[tPoolIndex] = new BlockPoolLFFreeList;
          mBlockPool[tPoolIndex]->initialize(tParms);
       }
       break;

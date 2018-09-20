@@ -23,11 +23,9 @@
     <ClCompile Include="Source\ccBlockPoolCentral.cpp" />
     <ClCompile Include="Source\ccBlockPoolLCFreeList.cpp" />
     <ClCompile Include="Source\ccBlockPoolLCIndexStack.cpp" />
-    <ClCompile Include="Source\ccBlockPoolLFFreeList.cpp" />
     <ClCompile Include="Source\ccBlockPoolParms.cpp" />
     <ClCompile Include="Source\ccCritcalSection_win.cpp" />
     <ClCompile Include="Source\ccLCObjectQueue.cpp" />
-    <ClCompile Include="Source\ccLFObjectQueue.cpp" />
     <ClCompile Include="Source\ccTreeNode.cpp" />
     <ClCompile Include="Source\ccTreeNodeDestroyer.cpp" />
     <ClCompile Include="Source\ccTreeNodeVisitor.cpp" />
@@ -49,7 +47,6 @@
     <ClInclude Include="Source\ccBlockPoolIndex.h" />
     <ClInclude Include="Source\ccBlockPoolLCFreeList.h" />
     <ClInclude Include="Source\ccBlockPoolLCIndexStack.h" />
-    <ClInclude Include="Source\ccBlockPoolLFFreeList.h" />
     <ClInclude Include="Source\ccBlockPoolParms.h" />
     <ClInclude Include="Source\ccCallPointer.h" />
     <ClInclude Include="Source\ccContainers.h" />
@@ -60,10 +57,6 @@
     <ClInclude Include="Source\ccLCObjectQueue.h" />
     <ClInclude Include="Source\ccLCValueQueue.h" />
     <ClInclude Include="Source\ccSRSWValueQueue.h" />
-    <ClInclude Include="Source\ccLFObjectQueue.h" />
-    <ClInclude Include="Source\ccLFIndex.h" />
-    <ClInclude Include="Source\ccLFPointerQueue.h" />
-    <ClInclude Include="Source\ccLFValueQueue.h" />
     <ClInclude Include="Source\ccMemoryPtr.h" />
     <ClInclude Include="Source\ccRecursiveAnchor.h" />
     <ClInclude Include="Source\ccTreeNode.h" />

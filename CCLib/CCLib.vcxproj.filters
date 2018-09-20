@@ -30,13 +30,7 @@
     <ClCompile Include="Source\stdafx.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ccLFObjectQueue.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Source\cc_throw.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ccBlockPoolLFFreeList.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="Source\ccCritcalSection_win.cpp">
@@ -83,12 +77,6 @@
     <ClInclude Include="Source\ccValueQueue.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccLFIndex.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ccLFPointerQueue.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\ccRecursiveAnchor.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -105,9 +93,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccBlockPoolBaseIndexStack.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ccLFValueQueue.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccBlockPoolBlock.h">
@@ -134,13 +119,7 @@
     <ClInclude Include="Source\ccSRSWValueQueue.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ccLFObjectQueue.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Source\cc_throw.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ccBlockPoolLFFreeList.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="Source\ccCriticalSection.h">
