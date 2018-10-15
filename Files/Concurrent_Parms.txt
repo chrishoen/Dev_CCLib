@@ -4,7 +4,7 @@
 // MODE1       heavy read    Type1
 
    Mode                 1
-   Type                 1
+   Type                 2
    NumWriters           1
 
    NumElements      10000

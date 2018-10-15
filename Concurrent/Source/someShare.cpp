@@ -40,6 +40,7 @@ void Share::initialize()
          mSRSWIntQueue.reset();
          break;
       case 2:
+         mSRSWObjectQueue.reset();
          break;
       case 3:
          break;

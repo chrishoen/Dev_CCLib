@@ -11,8 +11,10 @@
 #include "someReader.h"
 #include "someTester.h"
 #include "ccSRSWValueQueue.h"
+#include "ccSRSWObjectQueue.h"
 #include "ccLCObjectQueue.h"
 #include "ccLCValueQueue.h"
+#include "someClass1.h"
 
 namespace Some
 {
@@ -68,7 +70,9 @@ public:
    double              mTesterMeanTime1;
    double              mTesterMeanTime2;
 
-   CC::SRSWValueQueue<int,10000> mSRSWIntQueue;
+   CC::SRSWValueQueue<int, 10000>      mSRSWIntQueue;
+   CC::SRSWObjectQueue<Class1A, 10000> mSRSWObjectQueue;
+
    CC::LCObjectQueue             mLCObjectQueue;
    CC::LCValueQueue<int>         mLCIntQueue;
    CC::LCValueQueue<void*>       mLCPointerQueue;

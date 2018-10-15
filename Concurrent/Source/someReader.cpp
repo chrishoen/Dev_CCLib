@@ -108,6 +108,39 @@ void Reader::readType1(int aNumReads)
 
 void Reader::readType2(int aNumReads)
 {
+   LFBackoff tDelayB(gParms.mDelayB1, gParms.mDelayB2);
+
+   for (int i = 0; i < aNumReads; i++)
+   {
+      bool tPass;
+      int tCount;
+
+      mMarkerRead.doStart();
+
+      Class1A* tObject = gShare.mSRSWObjectQueue.startRead();
+      if (tObject)
+      {
+         tCount = tObject->mCode1;
+         gShare.mSRSWObjectQueue.finishRead();
+      }
+
+      mMarkerRead.doStop();
+      tPass = tObject != 0;
+
+      tDelayB.delay();
+
+      if (tPass)
+      {
+         mCount++;
+         mPassCount++;
+         mCheckSum += tCount;
+      }
+      else
+      {
+         mCount++;
+         mFailCount++;
+      }
+   }
 }
 
 //******************************************************************************

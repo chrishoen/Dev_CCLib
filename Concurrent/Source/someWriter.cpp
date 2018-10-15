@@ -92,6 +92,39 @@ void Writer::writeType1(int aNumWrites)
 
 void Writer::writeType2(int aNumWrites)
 {
+   LFBackoff tDelayA(gParms.mDelayA1, gParms.mDelayA2);
+
+   for (int i = 0; i < aNumWrites; i++)
+   {
+      bool tPass = false;
+      int tCount = mCount & 0xFFFF;
+
+      mMarkerWrite.doStart();
+
+      Class1A* tPacket = gShare.mSRSWObjectQueue.startWrite();
+      if (tPacket)
+      {
+         Class1A* tObject = new(tPacket) Class1A;
+         tObject->mCode1 = tCount;
+         gShare.mSRSWObjectQueue.finishWrite();
+         tPass = true;
+      }
+
+      mMarkerWrite.doStop();
+      tDelayA.delay();
+
+      if (tPass)
+      {
+         mCount++;
+         mPassCount++;
+         mCheckSum += tCount;
+      }
+      else
+      {
+         mCount++;
+         mFailCount++;
+      }
+   }
 }
 
 //******************************************************************************
