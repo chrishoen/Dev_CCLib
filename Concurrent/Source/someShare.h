@@ -68,10 +68,10 @@ public:
    double              mTesterMeanTime1;
    double              mTesterMeanTime2;
 
-   CC::SRSWValueQueue<int>    mSRSWIntQueue;
-   CC::LCObjectQueue          mLCObjectQueue;
-   CC::LCValueQueue<int>      mLCIntQueue;
-   CC::LCValueQueue<void*>    mLCPointerQueue;
+   CC::SRSWValueQueue<int,10000> mSRSWIntQueue;
+   CC::LCObjectQueue             mLCObjectQueue;
+   CC::LCValueQueue<int>         mLCIntQueue;
+   CC::LCValueQueue<void*>       mLCPointerQueue;
 
    //***************************************************************************
    //***************************************************************************

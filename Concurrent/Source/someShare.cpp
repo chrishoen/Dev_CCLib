@@ -37,7 +37,7 @@ void Share::initialize()
       switch (mType)
       {
       case 1:
-         mSRSWIntQueue.initialize(gParms.mNumElements);
+         mSRSWIntQueue.reset();
          break;
       case 2:
          break;
@@ -48,7 +48,7 @@ void Share::initialize()
       case 5:
          break;
       case 6:
-         mSRSWIntQueue.initialize(gParms.mNumElements);
+         mSRSWIntQueue.reset();
          break;
       case 7:
          mLCObjectQueue.initialize(gParms.mNumElements, sizeof(Class1A));

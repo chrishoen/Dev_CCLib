@@ -28,7 +28,7 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 
-template <class Element>
+template <class Element,int Size>
 class SRSWValueQueue
 {
 public:
@@ -36,19 +36,23 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Members.
+   // Constants.
 
-   // Number of elements allocated.
-   int mNumElements;
+   // Number of elements allocated is size + 1. There is an extra element
+   // allocated.
+   static const int cNumElements = Size + 1;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
 
    // Element access indices.
    int mPutIndex;
    int mGetIndex;
 
-   // Array of values, storage for the values.
-   // Size is NumElements + 1.
-   // Index range is 0..NumElements.
-   Element* mElement;
+   // Array of elements.
+   Element mElement[cNumElements];
 
    //***************************************************************************
    //***************************************************************************
@@ -58,46 +62,14 @@ public:
    // Constructor.
    SRSWValueQueue()
    {
-      // All null
-      mNumElements = 0;
-      mPutIndex = 0;
-      mGetIndex = 0;
-      mElement = 0;
+      reset();
    }
 
-   ~SRSWValueQueue()
+   void reset()
    {
-      finalize();
-   }
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Initialize.
-
-   void initialize(int aNumElements)
-   {
-      // Deallocate memory, if any exists.
-      finalize();
-
       // Initialize variables.
       mPutIndex = 0;
       mGetIndex = 0;
-
-      // Allocate memory for the array to have an extra element.
-      mNumElements = aNumElements + 1;
-      mElement = new Element[mNumElements];
-   }
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Finalize.
-
-   void finalize()
-   {
-      // Deallocate memory for the array.
-      if (mElement) delete mElement;
    }
 
    //***************************************************************************
@@ -109,7 +81,7 @@ public:
    int size()
    {
       int tSize = mPutIndex - mGetIndex;
-      if (tSize < 0) tSize = mNumElements + tSize;
+      if (tSize < 0) tSize = cNumElements + tSize;
       return tSize;
    }
 
@@ -120,9 +92,9 @@ public:
    // then it succeeds.
    // 
    // This tests if put operations are allowed. Puts are allowed if the 
-   // current size is less than or equal to Allocate - 2. If the size is equal
-   // to Allocate - 2 then the next put operation would put the size to
-   // mNumElements - 1, which is the max number of elements. This is the same
+   // current size is less than or equal to NumElements - 2. If the size is equal
+   // to NumElements - 2 then the next put operation would put the size to
+   // cNumElements - 1, which is the max number of elements. This is the same
    // as "is not full".
    // 
    // This puts an element to the queue and advances the put index. It does a 
@@ -133,17 +105,17 @@ public:
    {
       // Test if the queue is full.
       int tSize = mPutIndex - mGetIndex;
-      if (tSize < 0) tSize = mNumElements + tSize;
-      if (tSize > mNumElements - 2) return false;
+      if (tSize < 0) tSize = cNumElements + tSize;
+      if (tSize > cNumElements - 2) return false;
 
-      // Local put index
+      // Local put index.
       int tPutIndex = mPutIndex;
-      // Copy the source element into the element at the queue put index
+      // Copy the source element into the element at the queue put index.
       mElement[tPutIndex] = aElement;
-      // Advance the put index
-      if(++tPutIndex == mNumElements) tPutIndex = 0;
+      // Advance the put index.
+      if(++tPutIndex == cNumElements) tPutIndex = 0;
       mPutIndex = tPutIndex;
-      // Done
+      // Done.
       return true;
    }
 
@@ -162,15 +134,15 @@ public:
    {
       // Test if the queue is empty.
       int tSize = mPutIndex - mGetIndex;
-      if (tSize < 0) tSize = mNumElements + tSize;
+      if (tSize < 0) tSize = cNumElements + tSize;
       if (tSize == 0) return false;
 
-      // Local index
+      // Local index.
       int tGetIndex = mGetIndex;
-      // Copy the queue array element at the get index
+      // Copy the queue array element at the get index.
       *aValue = mElement[tGetIndex];
-      // Advance the get index
-      if(++tGetIndex == mNumElements) tGetIndex = 0;
+      // Advance the get index.
+      if(++tGetIndex == cNumElements) tGetIndex = 0;
       mGetIndex = tGetIndex;
 
       // Done.
