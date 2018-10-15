@@ -59,6 +59,31 @@ void Writer::show()
 
 void Writer::writeType1(int aNumWrites)
 {
+   LFBackoff tDelayA(gParms.mDelayA1, gParms.mDelayA2);
+
+   for (int i = 0; i < aNumWrites; i++)
+   {
+      bool tPass;
+      int tCount = mCount & 0xFFFF;
+
+      mMarkerWrite.doStart();
+      tPass = gShare.mSRSWIntQueue.tryWrite(tCount);
+      mMarkerWrite.doStop();
+
+      tDelayA.delay();
+
+      if (tPass)
+      {
+         mCount++;
+         mPassCount++;
+         mCheckSum += tCount;
+      }
+      else
+      {
+         mCount++;
+         mFailCount++;
+      }
+   }
 }
 
 //******************************************************************************

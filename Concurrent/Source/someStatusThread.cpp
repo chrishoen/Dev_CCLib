@@ -63,6 +63,7 @@ void StatusThread::threadRunFunction()
             int tQueueSize;
             switch (gShare.mType)
             {
+            case 1:  tQueueSize = gShare.mSRSWIntQueue.size(); break;
             case 6:  tQueueSize = gShare.mSRSWIntQueue.size(); break;
             case 7:  tQueueSize = gShare.mLCObjectQueue.size(); break;
             case 8:  tQueueSize = gShare.mLCIntQueue.size(); break;

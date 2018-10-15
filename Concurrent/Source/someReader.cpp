@@ -75,6 +75,31 @@ void Reader::finishTrial()
 
 void Reader::readType1(int aNumReads)
 {
+   LFBackoff tDelayB(gParms.mDelayB1, gParms.mDelayB2);
+
+   for (int i = 0; i < aNumReads; i++)
+   {
+      bool tPass;
+      int tCount;
+
+      mMarkerRead.doStart();
+      tPass = gShare.mSRSWIntQueue.tryRead(&tCount);
+      mMarkerRead.doStop();
+
+      tDelayB.delay();
+
+      if (tPass)
+      {
+         mCount++;
+         mPassCount++;
+         mCheckSum += tCount;
+      }
+      else
+      {
+         mCount++;
+         mFailCount++;
+      }
+   }
 }
 
 //******************************************************************************
@@ -322,6 +347,17 @@ void Reader::read(int aNumReads)
 
 void Reader::flushType1()
 {
+   while (true)
+   {
+      int tCount;
+      bool tPass;
+      tPass = gShare.mSRSWIntQueue.tryRead(&tCount);
+      if (!tPass) break;
+
+      mCount++;
+      mPassCount++;
+      mCheckSum += tCount;
+   }
 }
    
 //******************************************************************************

@@ -37,6 +37,7 @@ void Share::initialize()
       switch (mType)
       {
       case 1:
+         mSRSWIntQueue.initialize(gParms.mNumElements);
          break;
       case 2:
          break;
