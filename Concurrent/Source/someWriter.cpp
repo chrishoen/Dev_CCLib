@@ -198,7 +198,6 @@ void Writer::writeType7(int aNumWrites)
       int tCount = mCount & 0xFFFF;
 
       mMarkerWrite.doStart();
-
       int tIndex;
       void* tPacket = gShare.mLCObjectQueue.startWrite(&tIndex);
       if (tPacket)
@@ -207,9 +206,9 @@ void Writer::writeType7(int aNumWrites)
          tObject->mCode1 = tCount;
          gShare.mLCObjectQueue.finishWrite(tIndex);
          tPass=true;
+         mMarkerWrite.doStop();
       }
 
-      mMarkerWrite.doStop();
       tDelayA.delay();
 
       if (tPass)
@@ -329,13 +328,12 @@ void Writer::writeType10(int aNumWrites)
       {
          tObject->mCode1 = tCount;
          tPass = gShare.mLCPointerQueue.tryWrite(tObject);
+         mMarkerWrite.doStop();
       }
       else
       {
          tPass = false;
       }
-
-      mMarkerWrite.doStop();
 
       tDelayA.delay();
 
