@@ -2,11 +2,11 @@
 //********************************************************************
 //********************************************************************
 // MODE1       heavy read    Type7  mLCObjectQueue
-// MODE1       heavy read    Type10 mLCPointerQueue
+// MODE1       heavy read    Type10 mLCPointerQueue and new
 
    Mode                 1
-   Type                 10
    Type                 7
+   Type                 10
    NumWriters           2
 
    NumElements      10000

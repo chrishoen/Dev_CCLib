@@ -221,9 +221,9 @@ void Reader::readType7(int aNumReads)
       {
          tCount = tObject->mCode1;
          gShare.mLCObjectQueue.finishRead(tIndex);
+         mMarkerRead.doStop();
       }
 
-      mMarkerRead.doStop();
       tPass = tObject!=0;
 
       tDelayB.delay();
@@ -328,13 +328,14 @@ void Reader::readType10(int aNumReads)
       int tCount;
       Class1A* tObject = 0;
 
+      mMarkerRead.doStart();
+
       tPass = gShare.mLCPointerQueue.tryRead((void**)&tObject);
       tDelayB.delay();
 
       if (tObject)
       {
          tCount = tObject->mCode1;
-         mMarkerRead.doStart();
          delete tObject;
          mMarkerRead.doStop();
       }
