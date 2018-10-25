@@ -49,51 +49,7 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Class.
-
-   // This local class calculates and stores the memory sizes needed by the class.
-   class MemorySize
-   {
-   public:
-      // Members.
-      int mElementArraySize;
-      int mMemorySize;
-
-      // Calculate and store memory sizes.
-      MemorySize(int aNumElements)
-      {
-         mElementArraySize  = cc_round_upto16(cNewArrayExtraMemory + (aNumElements + 1)*sizeof(Element));
-         mMemorySize = mElementArraySize;
-      }
-   };
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Class.
-
-   // This returns the number of bytes that an instance of this class
-   // will need to be allocated for it.
-   static int getMemorySize(int aNumElements)
-   {
-      MemorySize tMemorySize(aNumElements);
-      return tMemorySize.mMemorySize;
-   }
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
    // Members.
-
-   // If this flag is false then the memory for this object was created
-   // externally. If it is true then the memory was allocated at 
-   // initialization and must be freed at finalization.
-   bool mOwnMemoryFlag;
-
-   // Pointer to memory for which the queue resides. This is either created
-   // externally and passed as an initialization parameter or it is created
-   // on the system heap at initialization.
-   void* mMemory;
 
    // Array of values, storage for the values.
    // Size is NumElements + 1.
@@ -128,8 +84,6 @@ public:
    // Constructor.
    LCValueQueue()
    {
-      mOwnMemoryFlag = false;
-      mMemory = 0;
       mElement = 0;
       mNumElements = 0;
       mPutIndex = 0;
@@ -148,12 +102,7 @@ public:
    //***************************************************************************
    // Initialize.
 
-   void initialize(int aNumElements)
-   {
-      initialize(aNumElements,true,0);
-   }
-
-   void initialize(int aNumElements,bool aConstructorFlag, void* aMemory)
+   void initialize(int aSize)
    {
       //************************************************************************
       //************************************************************************
@@ -163,41 +112,13 @@ public:
       // Deallocate memory, if any exists.
       finalize();
 
-      // If the instance of this class is not to reside in external memory
-      // then allocate memory for it on the system heap.
-      if (aMemory == 0)
-      {
-         mMemory = malloc(LCValueQueue<Element>::getMemorySize(aNumElements));
-         mOwnMemoryFlag = true;
-      }
-      // If the instance of this class is to reside in external memory
-      // then use the memory pointer that was passed in.
-      else
-      {
-         mMemory = aMemory;
-         mOwnMemoryFlag = false;
-      }
-
-      // Calculate memory sizes.
-      MemorySize tMemorySize(aNumElements);
-
-      // Calculate memory addresses.
-      MemoryPtr tMemoryPtr(mMemory);
-
-      char* tElementArrayMemory = tMemoryPtr.cfetch_add(tMemorySize.mElementArraySize);
-
-      // Construct the arrays.
-      mElement = new(tElementArrayMemory)Element[mNumElements];
-
-      //************************************************************************
-      //************************************************************************
-      //************************************************************************
-      // Initialize variables.
-
       // Allocate for one extra dummy node.
-      mNumElements = aNumElements + 1;
+      mNumElements = aSize + 1;
       mPutIndex = 0;
       mGetIndex = 0;
+
+      // Allocate memory for the array.
+      mElement = new Element[mNumElements];
    }
 
    //***************************************************************************
@@ -207,15 +128,9 @@ public:
 
    void finalize()
    {
-      if (mOwnMemoryFlag)
-      {
-         if (mMemory)
-         {
-            free(mMemory);
-         }
-      }
-      mMemory = 0;
-      mOwnMemoryFlag = false;
+      if (mElement == 0) return;
+      delete mElement;
+      mElement = 0;
    }
 
    //***************************************************************************

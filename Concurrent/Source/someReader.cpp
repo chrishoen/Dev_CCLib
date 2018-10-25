@@ -331,7 +331,6 @@ void Reader::readType10(int aNumReads)
       mMarkerRead.doStart();
 
       tPass = gShare.mLCPointerQueue.tryRead((void**)&tObject);
-      tDelayB.delay();
 
       if (tObject)
       {
@@ -339,6 +338,8 @@ void Reader::readType10(int aNumReads)
          delete tObject;
          mMarkerRead.doStop();
       }
+
+      tDelayB.delay();
 
       if (tPass)
       {
