@@ -51,15 +51,10 @@ public:
    //***************************************************************************
    // Members.
 
-   // Array of values, storage for the values.
-   // Size is NumElements + 1.
-   // Index range is 0..NumElements.
+   // Array of queue values, storage for the values.
+   // NumElements is Size + 1.
+   // Index range is 0..Size.
    Element* mElement;
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Members.
 
    // Number of elements allocated.
    int mNumElements;
@@ -104,15 +99,10 @@ public:
 
    void initialize(int aSize)
    {
-      //************************************************************************
-      //************************************************************************
-      //************************************************************************
-      // Initialize memory.
-
       // Deallocate memory, if any exists.
       finalize();
 
-      // Allocate for one extra dummy node.
+      // Allocate for one extra dummy element.
       mNumElements = aSize + 1;
       mPutIndex = 0;
       mGetIndex = 0;
