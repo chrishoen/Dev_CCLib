@@ -26,6 +26,7 @@
     <ClCompile Include="Source\ccBlockPoolParms.cpp" />
     <ClCompile Include="Source\ccCritcalSection_win.cpp" />
     <ClCompile Include="Source\ccLCObjectQueue.cpp" />
+    <ClCompile Include="Source\ccLCPointerQueue.cpp" />
     <ClCompile Include="Source\ccTreeNode.cpp" />
     <ClCompile Include="Source\ccTreeNodeDestroyer.cpp" />
     <ClCompile Include="Source\ccTreeNodeVisitor.cpp" />
@@ -55,6 +56,7 @@
     <ClInclude Include="Source\ccDefs.h" />
     <ClInclude Include="Source\ccDiagrams.h" />
     <ClInclude Include="Source\ccLCObjectQueue.h" />
+    <ClInclude Include="Source\ccLCPointerQueue.h" />
     <ClInclude Include="Source\ccLCValueQueue.h" />
     <ClInclude Include="Source\ccSRSWObjectQueue.h" />
     <ClInclude Include="Source\ccSRSWValueQueue.h" />

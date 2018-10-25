@@ -2,21 +2,10 @@
 
 /*==============================================================================
 
-Single Reader Multiple Writer Value Queue class template. 
-
+Value queue that uses critical sections as locks.
+Single Reader Multiple Writer Value Queue class template.
 It is multiple writer single reader thread safe.
-It lockes with critcal sections for mutual exclusion, blocking.
-It is shared memory safe.
-
-This implements a queue of fixed size objects, where the queue provides the
-memory allocation for the objects (memory for the objects is contained
-within the queue). The queue is thread safe. It uses mutexes to guard
-against concurrency contentions.
-
-It is thread safe for separate multiple writer and single reader threads.
-
-It is based on the single writer single reader queue with mutual
-exclusion critical sections added.
+It locks with critcal sections for mutual exclusion, blocking.
 
 ==============================================================================*/
 //******************************************************************************
@@ -40,6 +29,10 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Value queue that uses critical sections as locks.
+// Single reader multiple writer value queue class template.
+// It is multiple writer single reader thread safe.
+// It locks with critcal sections for mutual exclusion, blocking.
 
 template <class Element>
 class LCValueQueue

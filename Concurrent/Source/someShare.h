@@ -14,6 +14,7 @@
 #include "ccSRSWObjectQueue.h"
 #include "ccLCObjectQueue.h"
 #include "ccLCValueQueue.h"
+#include "ccLCPointerQueue.h"
 #include "someClass1.h"
 
 namespace Some
@@ -75,7 +76,7 @@ public:
 
    CC::LCObjectQueue             mLCObjectQueue;
    CC::LCValueQueue<int>         mLCIntQueue;
-   CC::LCValueQueue<void*>       mLCPointerQueue;
+   CC::LCPointerQueue            mLCPointerQueue;
 
    //***************************************************************************
    //***************************************************************************
