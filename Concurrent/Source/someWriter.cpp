@@ -322,8 +322,8 @@ void Writer::writeType10(int aNumWrites)
       int tCount = mCount & 0xFFFF;
 
       mMarkerWrite.doStart();
+
       tObject = new Class1A();
-      mMarkerWrite.doStop();
 
       if (tObject)
       {
@@ -334,6 +334,8 @@ void Writer::writeType10(int aNumWrites)
       {
          tPass = false;
       }
+
+      mMarkerWrite.doStop();
 
       tDelayA.delay();
 
