@@ -25,7 +25,7 @@ namespace CC
 void* createCriticalSection()
 {
    CRITICAL_SECTION* tCriticalSection = new CRITICAL_SECTION;
-   InitializeCriticalSectionAndSpinCount(tCriticalSection, 0x80000400);
+   InitializeCriticalSection(tCriticalSection);
    return (void*)tCriticalSection;
 }
 

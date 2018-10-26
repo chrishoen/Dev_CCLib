@@ -20,10 +20,10 @@
 
    DelayA1            2.0
    DelayA2            6.0
-   DelayB1            2.0
-   DelayB2            6.0
    DelayB1            0.0
    DelayB2            0.0
+   DelayB1            2.0
+   DelayB2            6.0
 
    EXIT
 
