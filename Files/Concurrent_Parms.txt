@@ -1,20 +1,16 @@
 //********************************************************************
 //********************************************************************
 //********************************************************************
-// MODE1       heavy read    Type7  mLCObjectQueue
-// MODE1       heavy read    Type10 mLCPointerQueue and new
+// MODE1       heavy read    Type3 mLCPointerQueue and new
 
    Mode                 1
-   Type                 7
-   Type                 10
+   Type                 3
    NumWriters           2
 
    NumElements      10000
 
    SleepLower          50
    SleepUpper         150
-   WriteLower        2500
-   WriteUpper        7500
    WriteLower       20000
    WriteUpper       60000
    ReadLower       200000
@@ -26,6 +22,8 @@
    DelayA2            6.0
    DelayB1            2.0
    DelayB2            6.0
+   DelayB1            0.0
+   DelayB2            0.0
 
    EXIT
 

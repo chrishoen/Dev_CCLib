@@ -149,6 +149,39 @@ void Reader::readType2(int aNumReads)
 
 void Reader::readType3(int aNumReads)
 {
+   LFBackoff tDelayB(gParms.mDelayB1, gParms.mDelayB2);
+
+   for (int i = 0; i < aNumReads; i++)
+   {
+      bool tPass = false;
+      int tCount;
+
+      mMarkerRead.doStart();
+
+      Class1A* tObject = (Class1A*)gShare.mLCPointerQueue.tryRead();
+
+      if (tObject)
+      {
+         tCount = tObject->mCode1;
+         delete tObject;
+         mMarkerRead.doStop();
+         tPass = true;
+      }
+
+      tDelayB.delay();
+
+      if (tPass)
+      {
+         mCount++;
+         mPassCount++;
+         mCheckSum += tCount;
+      }
+      else
+      {
+         mCount++;
+         mFailCount++;
+      }
+   }
 }
 
 //******************************************************************************
@@ -320,39 +353,6 @@ void Reader::readType9(int aNumReads)
 
 void Reader::readType10(int aNumReads)
 {
-   LFBackoff tDelayB(gParms.mDelayB1, gParms.mDelayB2);
-
-   for (int i = 0; i < aNumReads; i++)
-   {
-      bool tPass = false;
-      int tCount;
-
-      mMarkerRead.doStart();
-
-      Class1A* tObject = (Class1A*)gShare.mLCPointerQueue.tryRead();
-
-      if (tObject)
-      {
-         tCount = tObject->mCode1;
-         delete tObject;
-         mMarkerRead.doStop();
-         tPass = true;
-      }
-
-      tDelayB.delay();
-
-      if (tPass)
-      {
-         mCount++;
-         mPassCount++;
-         mCheckSum += tCount;
-      }
-      else
-      {
-         mCount++;
-         mFailCount++;
-      }
-   }
 }
 
 //******************************************************************************
@@ -409,6 +409,18 @@ void Reader::flushType2()
 
 void Reader::flushType3()
 {
+   while (true)
+   {
+      Class1A* tObject = (Class1A*)gShare.mLCPointerQueue.tryRead();
+      if (!tObject) break;
+
+      int tCount = tObject->mCode1;
+      delete tObject;
+
+      mCount++;
+      mPassCount++;
+      mCheckSum += tCount;
+   }
 }
    
 //******************************************************************************
@@ -515,18 +527,6 @@ void Reader::flushType9()
 
 void Reader::flushType10()
 {
-   while (true)
-   {
-      Class1A* tObject = (Class1A*)gShare.mLCPointerQueue.tryRead();
-      if (!tObject) break;
-
-      int tCount = tObject->mCode1;
-      delete tObject;
-
-      mCount++;
-      mPassCount++;
-      mCheckSum += tCount;
-   }
 }
 
 //******************************************************************************

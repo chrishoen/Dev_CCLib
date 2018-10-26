@@ -65,11 +65,11 @@ void StatusThread::threadRunFunction()
             {
             case 1:  tQueueSize = gShare.mSRSWIntQueue.size(); break;
             case 2:  tQueueSize = gShare.mSRSWObjectQueue.size(); break;
+            case 3:  tQueueSize = gShare.mLCPointerQueue.size(); break;
             case 6:  tQueueSize = gShare.mSRSWIntQueue.size(); break;
             case 7:  tQueueSize = gShare.mLCObjectQueue.size(); break;
             case 8:  tQueueSize = gShare.mLCIntQueue.size(); break;
             case 9:  tQueueSize = CC::getBlockPoolSize(cBlockPoolIndex_MyBlockX); break;
-            case 10: tQueueSize = CC::getBlockPoolSize(cBlockPoolIndex_MyBlockX); break;
             }
 
             Prn::print(Prn::ThreadRun1, "%s$   %s   %s %8d",

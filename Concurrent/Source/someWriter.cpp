@@ -133,6 +133,47 @@ void Writer::writeType2(int aNumWrites)
 
 void Writer::writeType3(int aNumWrites)
 {
+   LFBackoff tDelayA(gParms.mDelayA1, gParms.mDelayA2);
+
+   for (int i = 0; i < aNumWrites; i++)
+   {
+      Class1A* tObject = 0;
+      bool tPass = false;
+      int tCount = mCount & 0xFFFF;
+
+      mMarkerWrite.doStart();
+
+      tObject = new Class1A();
+
+      if (tObject)
+      {
+         tObject->mCode1 = tCount;
+         tPass = gShare.mLCPointerQueue.tryWrite(tObject);
+         mMarkerWrite.doStop();
+      }
+      else
+      {
+         tPass = false;
+      }
+
+      tDelayA.delay();
+
+      if (tPass)
+      {
+         mCount++;
+         mPassCount++;
+         mCheckSum += tCount;
+      }
+      else
+      {
+         if (tObject)
+         {
+            delete tObject;
+         }
+         mCount++;
+         mFailCount++;
+      }
+   }
 }
 
 //******************************************************************************
@@ -312,47 +353,6 @@ void Writer::writeType9(int aNumWrites)
 
 void Writer::writeType10(int aNumWrites)
 {
-   LFBackoff tDelayA(gParms.mDelayA1, gParms.mDelayA2);
-
-   for (int i = 0; i < aNumWrites; i++)
-   {
-      Class1A* tObject = 0;
-      bool tPass = false;
-      int tCount = mCount & 0xFFFF;
-
-      mMarkerWrite.doStart();
-
-      tObject = new Class1A();
-
-      if (tObject)
-      {
-         tObject->mCode1 = tCount;
-         tPass = gShare.mLCPointerQueue.tryWrite(tObject);
-         mMarkerWrite.doStop();
-      }
-      else
-      {
-         tPass = false;
-      }
-
-      tDelayA.delay();
-
-      if (tPass)
-      {
-         mCount++;
-         mPassCount++;
-         mCheckSum += tCount;
-      }
-      else
-      {
-         if (tObject)
-         {
-            delete tObject;
-         }
-         mCount++;
-         mFailCount++;
-      }
-   }
 }
 
 //******************************************************************************

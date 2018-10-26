@@ -43,6 +43,7 @@ void Share::initialize()
          mSRSWObjectQueue.reset();
          break;
       case 3:
+         mLCPointerQueue.initialize(gParms.mNumElements);
          break;
       case 4:
          break;
@@ -61,7 +62,6 @@ void Share::initialize()
          mLCPointerQueue.initialize(gParms.mNumElements);
          break;
       case 10:
-         mLCPointerQueue.initialize(gParms.mNumElements);
          break;
       case 11:
          break;
