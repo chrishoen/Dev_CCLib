@@ -25,7 +25,7 @@ Parms::Parms()
 void Parms::reset()
 {
    BaseClass::reset();
-   strcpy(BaseClass::mDefaultFileName, "Concurrent_Parms.txt");
+   BaseClass::setFileName_RelAlphaFiles("CCLib/Concurrent_Parms.txt");
    BaseClass::mUseSections = false;
 
    mMode = 1;
