@@ -1,5 +1,5 @@
 # Dev_CCLib
-### concurrent container classes, vstudio, windows
+### concurrent container classes, vstudio, cmake windows and linux
 
 This is a library of C++ classes that provides some concurrent containers. Features include:
    1. Block pool classes
@@ -7,8 +7,13 @@ This is a library of C++ classes that provides some concurrent containers. Featu
    3. Queues, stacks, and free lists that are based on lock free atomic instuctions
    4. Queues, stacks, and free lists that are based on mutexes 
    5. Related utilities for memory pointer and index arithmetic
-   
-This library is written for Windows in Visual Studio. All of the code is portable to Linux, with the exception of ccSynchLock_win.cpp. Dev_CCLibLx is the Linux version of the library and uses ccSynchlock_linux.cpp.
+
+This library is written for Windows and Linux in Visual Studio, using the cmake paradigm. The classes are based on Win32 or pthread realtime functions for threads and sockets and such. The library is portable. The details of the provided functionality that are specific to Win32 are contained in a small set of `*_win.cpp` or `*_linux.cpp`files. It is the intention of the library that programs built under Windows can be rebuilt seamlessly under Linux. CMake is used to implement the cross platform functionality.
+
+The solution contains the library project and a set of associated unit test projects.
+
+The current linux version builds on an ASUS TinkerBoard running debian stretch. The only build prerequisite is the gcc build-essentials.
+This library depends on RisLib.
 
 ## Classes
 ``` markdown
