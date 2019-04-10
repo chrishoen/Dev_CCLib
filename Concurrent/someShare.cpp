@@ -149,7 +149,7 @@ void Share::update()
    {
    case 1: update1 (); break;
    case 2: update2 (); break;
-   case 7: update3 (); break;
+   case 3: update3 (); break;
    }
 }
    

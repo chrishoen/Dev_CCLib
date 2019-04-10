@@ -44,6 +44,7 @@ void main_initialize(int argc,char** argv)
    Prn::setFilter(Prn::QCallRun4,  false);
 
    // Read parms files.
+   gParms.reset();
    gParms.readFile();
 
    Prn::print(0,"Concurrent*******************************************BEGIN");
