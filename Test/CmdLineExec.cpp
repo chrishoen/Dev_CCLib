@@ -1,21 +1,30 @@
 #include "stdafx.h"
 
-#include <atomic>
-
+#include "risProgramTime.h"
 #include "CmdLineExec.h"
 
-using namespace std;
-
-// change201
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 CmdLineExec::CmdLineExec()
 {
 }
-//******************************************************************************
+
 void CmdLineExec::reset()
 {
 }
+
 //******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// This class is the program command line executive. It processes user
+// command line inputs and executes them. It inherits from the command line
+// command executive base class, which provides an interface for executing
+// command line commands. It provides an override execute function that is
+// called by a console executive when it receives a console command line input.
+// The execute function then executes the command.
+
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
    if(aCmd->isCmd("RESET"  ))  reset();
@@ -36,11 +45,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0, "sizeof(size_t)  %d", (int)sizeof(size_t));
-   Prn::print(0, "sizeof(int[10]) %d", (int)sizeof(int[10]));
-   Prn::print(0, "sizeof(atomic<int>[10]) %d", (int)sizeof(atomic<int>[10]));
-
-
+   Prn::print(0, "IsNumber %s", my_string_from_bool(aCmd->isArgNumber(1)));
 }
 
 //******************************************************************************
@@ -49,40 +54,37 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,0.99);
-
-   double tC = aCmd->argDouble(1);
-   double tX = (1.0 + tC)/2.0;
-
-   Prn::print(0, "%8.7f %8.7f",tC,tX);
+   double tTime = Ris::getCurrentProgramTime();
+   Prn::print(0, "time %10.4f", tTime);
 }
 
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1,10);
-   int tN = aCmd->argInt(1);
+   char tString[200];
 
-   for (int i = 0; i < tN; i++)
+   while (true)
    {
-      Prn::print(0, "%d",i);
+      fgets(tString, 200, stdin);
+      printf("CMD %d %s", (int)strlen(tString), tString);
+      if (strcmp(tString, "e\n") == 0) break;
    }
 
-   Prn::print(0, "");
-
-   for (int i = tN-1; i >= 0; i--)
-   {
-      Prn::print(0, "%d",i);
-   }
 }
 
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
 }
 
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 
 void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)

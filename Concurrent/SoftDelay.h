@@ -26,7 +26,7 @@ public:
 #if defined (_MSC_VER)
       tN = lround(305 * aDelay - 6.0);
 #else
-      tN = lround(305 * aDelay - 6.0);
+      tN = lround(270 * aDelay - 6.0);
 #endif
       if (tN<0) tN=0;
       return tN;
