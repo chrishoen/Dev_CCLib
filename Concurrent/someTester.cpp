@@ -10,6 +10,7 @@ Description:
 
 #include "Parms.h"
 #include "LFBackoff.h"
+#include "SoftDelay.h"
 #include "someShare.h"
 #include "someTester.h"
 
@@ -72,6 +73,19 @@ void Tester::test1(int aNumIter)
 
 void Tester::test2(int aNumIter)
 {
+   LFBackoff tDelayB(gParms.mDelayB1, gParms.mDelayB2);
+
+   SoftDelay tSoftDelay(gParms.mDelayA1);
+
+   for (int i = 0; i < aNumIter; i++)
+   {
+      mMarkerTest1.doStart();
+      tSoftDelay.delay();
+      mMarkerTest1.doStop();
+      tDelayB.delay();
+
+      mCount++;
+   }
 }
 
 //******************************************************************************
