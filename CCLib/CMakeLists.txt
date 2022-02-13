@@ -1,25 +1,11 @@
 ﻿cmake_minimum_required (VERSION 3.8)
+set (project "CCLib")
+project(${project} CXX)
+my_find_src_files (src_files ${project})
+add_library (${project} STATIC ${src_files})
+my_add_compile_options (${project})
+my_add_pch (${project})
 
-project (CCLib CXX)
+target_include_directories(${project} PUBLIC ${PROJECT_SOURCE_DIR})
 
-my_find_src_files (src_files CCLib)
-my_find_inc_files (inc_files)
-if (MSVC)
-   add_library (CCLib STATIC ${src_files})
-else()
-   add_library (CCLib SHARED ${src_files})
-endif()
-my_add_compile_options (CCLib)
-my_add_pch (CCLib)
-
-target_include_directories(CCLib PUBLIC ${PROJECT_SOURCE_DIR})
-
-my_inc_import_RisLib(CCLib)
-
-if (MSVC)
-   install(FILES ${inc_files} DESTINATION "C:\\MyTools\\MyLib\\include\\CCLib")
-   install(TARGETS CCLib DESTINATION "C:\\MyTools\\MyLib\\lib")
-else()
-   install(FILES ${inc_files} DESTINATION "/usr/local/include/CCLib")
-   install(TARGETS CCLib DESTINATION "/usr/local/lib")
-endif()
+my_inc_import_RisLib(${project})

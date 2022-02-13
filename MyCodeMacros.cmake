@@ -38,9 +38,6 @@ endfunction()
 #*******************************************************************************
 
 function(my_add_compile_options _target)
-   message(STATUS "my_add_compile_options************************ " ${_target})
-   #message(STATUS "CMAKE_CXX_FLAGS************************ " ${CMAKE_CXX_FLAGS})
-   #message(STATUS "CMAKE_CXX_FLAGS_RELEASE**************** " ${CMAKE_CXX_FLAGS_RELEASE})
 
    if(MSVC)
       target_compile_options(${_target} PRIVATE "/WX")
@@ -73,6 +70,7 @@ function(my_add_compile_options _target)
 #     target_compile_options(${_target} PRIVATE "-w")
 #     target_compile_options(${_target} PRIVATE "-Werror")
 #     target_compile_options(${_target} PRIVATE "-Wfatal-errors")
+      target_compile_options(${_target} PRIVATE "-Wno-unused-result")
       target_compile_options(${_target} PRIVATE "-Wno-stringop-overflow")
       target_compile_options(${_target} PRIVATE "-Wno-deprecated-declarations")
       target_compile_options(${_target} PRIVATE "-Wno-delete-incomplete")
