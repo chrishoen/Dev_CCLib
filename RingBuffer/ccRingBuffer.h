@@ -20,6 +20,7 @@ It is thread safe for separate single writer and multiple reader threads.
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+#include <atomic>
 
 namespace CC
 {
@@ -37,12 +38,10 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Members. All if these must be set by an inheriting class.
+   // Members. All of these must be set by an inheriting class.
 
-   // Major and minor moduli. The major modulus must be a multiple of
-   // the minor modulus. 
-   int mMajorMod;
-   int mMinorMod;
+   // Number of elements in the ring buffer.
+   int mNumElements;
 
    // Size of each element in the ring buffer.
    int mElementSize;
@@ -56,14 +55,12 @@ public:
    //***************************************************************************
    // Members. State variables.
 
-   // The major index of the last element that was written to. If this is
-   // equal to negative one then no writes have occured and the ring buffer
-   // is empty.
-   int mMajorWriteIndex;
-
-   // If true then at least MinorMod writes have occured and the ring
-   // buffer memory is full.
-   bool mFullFlag;
+   // The index of the last element that was written to. If this is equal to
+   // negative one then no writes have occured and the ring buffer is empty.
+   // This single variable encapsulates the state of the ring buffer. It
+   // can only be written to by a single writer thread and it can be read
+   // by multiple reader threads.
+   std::atomic_llong mWriteIndex;
 
    //***************************************************************************
    //***************************************************************************
@@ -130,8 +127,8 @@ public:
    // The ring buffer.
    BaseRingBuffer* mRB;
 
-   // The major index of the last element that was read.
-   int mMajorReadIndex;
+   // The index of the last element that was read.
+   long long mReadIndex;
 
    // Temporary element used during read.
    void* mTempElement;

@@ -28,12 +28,10 @@ namespace CC
 
 void BaseRingBuffer::reset()
 {
-   mMajorMod = 0;
-   mMinorMod = 0;
+   mNumElements = 0;
    mElementSize = 0;
    mElements = 0;
-   mMajorWriteIndex = -1;
-   mFullFlag = false;
+   mWriteIndex = -1;
 }
 
 //******************************************************************************
@@ -72,36 +70,33 @@ void* RingBufferWriter::elementAt(int aIndex)
 
 void RingBufferWriter::doWriteElement(void* aElement)
 {
-   // Major index of the last element that was written to.
-   int tMajorIndex = mRB->mMajorWriteIndex;
+   // Index of the last element that was written to.
+   long long tWriteIndex = mRB->mWriteIndex.load(std::memory_order_relaxed);
 
    // Test for the first write.
-   if (tMajorIndex == -1)
+   if (tWriteIndex == -1)
    {
       // This is the first element written to. 
-      tMajorIndex = 0;
+      tWriteIndex = 0;
    }
    else
    {
-      // Advance the major index to the next element to write to.
-      ++tMajorIndex %= mRB->mMajorMod;
+      // Advance the index to the next element to write to.
+      ++tWriteIndex;
    }
 
-   // Minor index of the next element to write to.
-   int tMinorIndex = tMajorIndex % mRB->mMinorMod;
+   // Memory index of the next element to write to.
+   int tMemIndex = tWriteIndex % mRB->mNumElements;
 
    // Address of the next element to write to.
-   void* tPtr = elementAt(tMinorIndex);
+   void* tPtr = elementAt(tMemIndex);
 
    // Copy the element into the array.
    memcpy(tPtr, aElement, mRB->mElementSize);
 
    // Update the global state. This should be the only place that this
    // happens.
-   mRB->mMajorWriteIndex = tMajorIndex;
-
-   // Test for buffer full.
-   if (tMajorIndex == mRB->mMinorMod - 1) mRB->mFullFlag = true;
+   mRB->mWriteIndex.store(tWriteIndex,std::memory_order_relaxed);
 }
 
 //******************************************************************************
@@ -115,7 +110,7 @@ void RingBufferWriter::doWriteElement(void* aElement)
 RingBufferReader::RingBufferReader()
 {
    mRB = 0;
-   mMajorReadIndex = 0;
+   mReadIndex = 0;
    mTempElement = 0;
    mDropCount = 0;
    mNoReadCount = 0;
@@ -134,7 +129,7 @@ void RingBufferReader::initialize(BaseRingBuffer* aRingBuffer)
    mDropCount = 0;
    mNoReadCount = 0;
    mRetryCount = 0;
-   mMajorReadIndex = mRB->mMajorWriteIndex;
+   mReadIndex = mRB->mWriteIndex.load(std::memory_order_relaxed);
 }
 
 //******************************************************************************
@@ -159,26 +154,28 @@ bool RingBufferReader::doReadElement(void* aElement)
 restart:
    // Store a copy of the write index because it might be changed
    // asynchronously by the writer.
-   int tMajorWriteIndex = mRB->mMajorWriteIndex;
+   long long tWriteIndex = mRB->mWriteIndex.load(std::memory_order_relaxed);
 
-   // Calculate the end points of the buffer memory region.
-   int tTail = 0;
-   int tHead = 0;
-   if (!mRB->mFullFlag)
+   // Calculate the end points of the buffer memory region. The memory
+   // region that contains valid data is in the closed interval
+   // [Tail .. Head]
+   long long tTail = 0;
+   long long tHead = 0;
+   if (tWriteIndex < mRB->mNumElements)
    {
       tTail = 0;
-      tHead = tMajorWriteIndex;
+      tHead = tWriteIndex;
    }
    else
    {
       // Tail + MinorMod - 1 = Head
-      tTail = (tMajorWriteIndex - (mRB->mMinorMod - 1)) % mRB->mMajorMod;
-      tHead = tMajorWriteIndex;
+      tTail = tWriteIndex - ((long long)mRB->mNumElements - 1);
+      tHead = tWriteIndex;
    }
 
    // Forward distance from the tail to the head,
    // Tail + Dist = Head
-   int tDist = tHead - tTail % mRB->mMajorMod;
+   long long tDist = tHead - tTail;
 
    // Test for no elements available for read.
    if (tDist == 0)
@@ -189,29 +186,29 @@ restart:
    }
 
    // Test if the distance puts the read outside of the buffer range.
-   else if (tDist >= mRB->mMinorMod)
+   else if (tDist >= mRB->mNumElements)
    {
       // Set the read index to the element at the end of the buffer range.
-      mMajorReadIndex = tTail;
+      mReadIndex = tTail;
    }
    else
    {
-      // Advance the major index to the next element to read from.
-      ++mMajorReadIndex %= mRB->mMajorMod;
+      // Advance to the next element to read from.
+      mReadIndex++;
    }
 
-   // Minor index of the next element to read from.
-   int tMinorIndex = mMajorReadIndex % mRB->mMinorMod;
+   // Memory index of the next element to read from.
+   int tMemIndex = mReadIndex % mRB->mNumElements;
 
    // Address of the next element to read from.
-   void* tPtr = elementAt(tMinorIndex);
+   void* tPtr = elementAt(tMemIndex);
 
    // Copy the array element into the temp element.
    memcpy(mTempElement, tPtr, mRB->mElementSize);
 
    // If the write index changed during the read then the ring buffer 
    // was written to asynchronously by the writer so retry the read.
-   if (tMajorWriteIndex != mRB->mMajorWriteIndex)
+   if (tWriteIndex != mRB->mWriteIndex.load(std::memory_order_relaxed))
    {
       mRetryCount++;
       goto restart;
