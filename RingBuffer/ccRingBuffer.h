@@ -46,8 +46,8 @@ public:
    // Size of each element in the ring buffer.
    size_t mElementSize;
 
-   // The address of the first element in the buffer element array. The ring 
-   // buffer memory must contain contiguous storage for MinorMod elements.
+   // The address of the first element in the buffer element array.
+   // Inheriting classes supply the element array.
    void* mElements;
 
    //***************************************************************************
@@ -59,7 +59,8 @@ public:
    // negative one then no writes have occured and the ring buffer is empty.
    // This single variable encapsulates the state of the ring buffer. It
    // can only be written to by a single writer thread and it can be read
-   // by multiple reader threads.
+   // by multiple reader threads. Buffer memory is addressed via this index
+   // modulo the number of elements.
    std::atomic<long long> mWriteIndex;
 
    //***************************************************************************
