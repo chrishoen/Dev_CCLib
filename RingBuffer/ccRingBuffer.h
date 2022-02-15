@@ -107,8 +107,7 @@ public:
    //***************************************************************************
    // Methods.
    
-   // Copy to the array element after the current major index, modulo the
-   // minor modulus. Increment the major index, modulo the major modulus.
+   // Write an element to the array, updating the write index state variable.
    void doWriteElement(void* aElement);
 };
 
@@ -163,8 +162,8 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Copy to the array element after the current major index, modulo the
-   // minor modulus. Increment the major index, modulo the major modulus.
+   // Read an element from the array, updating state variables. Return
+   // true if successful. 
    bool doReadElement(void* aElement);
 };
 

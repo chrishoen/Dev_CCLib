@@ -63,27 +63,17 @@ void* RingBufferWriter::elementAt(long long aIndex)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Copy to the array element after the current major index, modulo the
-// minor modulus. Increment the major index, modulo the major modulus.
+// Write an element to the array, updating the write index state variable.
 
 void RingBufferWriter::doWriteElement(void* aElement)
 {
    // Index of the last element that was written to.
    long long tWriteIndex = mRB->mWriteIndex.load(std::memory_order_relaxed);
 
-   // Test for the first write.
-   if (tWriteIndex == -1)
-   {
-      // This is the first element written to. 
-      tWriteIndex = 0;
-   }
-   else
-   {
-      // Advance the index to the next element to write to.
-      ++tWriteIndex;
-   }
+   // Advance the index to the next element to write to.
+   tWriteIndex++;
 
-   // Address of the next element to write to.
+   // Get the address of the next element to write to.
    void* tPtr = elementAt(tWriteIndex);
 
    // Copy the element into the array.
@@ -142,9 +132,8 @@ void* RingBufferReader::elementAt(long long aIndex)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Copy to the array element after the current major index, modulo the
-// minor modulus. Increment the major index, modulo the major modulus.
-//
+// Read an element from the array, updating state variables. Return
+// true if successful. 
 
 bool RingBufferReader::doReadElement(void* aElement)
 {
@@ -152,6 +141,10 @@ bool RingBufferReader::doReadElement(void* aElement)
    // the read. The write index is the index of the last element that was
    // written to.
    long long tWriteIndex = mRB->mWriteIndex.load(std::memory_order_relaxed);
+
+   // Store the initial read index. This will be used to calculate
+   // the drop count.
+   long long tLastReadIndex = mReadIndex;
 
 restart:
 
@@ -166,7 +159,7 @@ restart:
 
    // Calculate the end points of the buffer memory region. The memory
    // region that contains valid data is in the closed interval
-   // [Tail .. Head]
+   // [Tail .. Head] where 0 <= Head - Tail <= NumElements - 1
    // 
    // Here's an example of a buffer with NumElements = 4 at the beginning,
    // with only three elements, so it is not full.
@@ -225,9 +218,6 @@ restart:
    // 127
    else if (tDist >= mRB->mNumElements)
    {
-      // Increment the drop count.
-      mDropCount += (int)(tTail - mReadIndex + 1);
-
       // Set the read index to the last element included in the buffer range.
       mReadIndex = tTail;
    }
@@ -273,6 +263,11 @@ restart:
    // The read of the temp element was successful so copy the temp
    // element into the argument element.
    memcpy(aElement, mTempElement, mRB->mElementSize);
+
+   // Increment the drop count.
+   mDropCount += (int)(mReadIndex - tLastReadIndex + 1);
+
+   // Success. 
    return true;
 }
 
