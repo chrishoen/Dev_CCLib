@@ -55,10 +55,12 @@ void RingBufferWriter::initialize(BaseRingBuffer* aRingBuffer)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Return a pointer to an element, based on an index.
+// Return a pointer to an element, based on an index modulo
+// the number of elements.
 
 void* RingBufferWriter::elementAt(long long aIndex)
 {
+   aIndex %= mRB->mNumElements;
    return (void*)((char*)mRB->mElements + mRB->mElementSize * aIndex);
 }
 
@@ -85,11 +87,8 @@ void RingBufferWriter::doWriteElement(void* aElement)
       ++tWriteIndex;
    }
 
-   // Memory index of the next element to write to.
-   long long tMemIndex = tWriteIndex % mRB->mNumElements;
-
    // Address of the next element to write to.
-   void* tPtr = elementAt(tMemIndex);
+   void* tPtr = elementAt(tWriteIndex);
 
    // Copy the element into the array.
    memcpy(tPtr, aElement, mRB->mElementSize);
@@ -135,11 +134,13 @@ void RingBufferReader::initialize(BaseRingBuffer* aRingBuffer)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Return a pointer to an element, based on an index.
+// Return a pointer to an element, based on an index modulo
+// the number of elements.
 
 void* RingBufferReader::elementAt(long long aIndex)
 {
-   return (void*)((char*)mRB->mElements + (size_t)mRB->mElementSize * aIndex);
+   aIndex %= mRB->mNumElements;
+   return (void*)((char*)mRB->mElements + mRB->mElementSize * aIndex);
 }
 
 //******************************************************************************
@@ -237,11 +238,8 @@ restart:
       mReadIndex++;
    }
 
-   // Memory index of the next element to read from.
-   long long tMemIndex = mReadIndex % mRB->mNumElements;
-
    // Address of the next element to read from.
-   void* tPtr = elementAt(tMemIndex);
+   void* tPtr = elementAt(mReadIndex);
 
    // Copy the array element into the temp element.
    memcpy(mTempElement, tPtr, mRB->mElementSize);
@@ -265,7 +263,8 @@ restart:
    // Get the final write index. 
    tWriteIndex = mRB->mWriteIndex.load(std::memory_order_relaxed);
 
-   // If the read was overwritten then retry it.
+   // If the read was overwritten then retry it. The final write index
+   // becomes the next initial write index at the top of the loop.
    if (tWriteIndex - mReadIndex >= mRB->mNumElements)
    {
       mRetryCount++;

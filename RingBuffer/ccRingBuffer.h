@@ -97,7 +97,8 @@ public:
    RingBufferWriter();
    void initialize(BaseRingBuffer* aRingBuffer);
 
-   // Return a pointer to an element, based on an index.
+   // Return a pointer to an element, based on an index modulo
+   // the number of elements.
    void* elementAt(long long aIndex);
 
    //***************************************************************************
@@ -152,7 +153,8 @@ public:
    ~RingBufferReader();
    void initialize(BaseRingBuffer* aRingBuffer);
 
-   // Return a pointer to an element, based on an index.
+   // Return a pointer to an element, based on an index modulo
+   // the number of elements.
    void* elementAt(long long aIndex);
 
    //***************************************************************************
