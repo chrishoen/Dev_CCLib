@@ -59,7 +59,11 @@ public:
    // The major index of the last element that was written to. If this is
    // equal to negative one then no writes have occured and the ring buffer
    // is empty.
-   int mMajorIndex;
+   int mMajorWriteIndex;
+
+   // If true then at least MinorMod writes have occured and the ring
+   // buffer memory is full.
+   bool mFullFlag;
 
    //***************************************************************************
    //***************************************************************************
@@ -131,6 +135,15 @@ public:
 
    // Temporary element used during read.
    void* mTempElement;
+
+   // The number of elements that were dropped.
+   int mDropCount;
+
+   // The number of reads that had nothing available to read.
+   int mNoReadCount;
+
+   // The number of reads that were retried.
+   int mRetryCount;
 
    //***************************************************************************
    //***************************************************************************
