@@ -151,8 +151,8 @@ void* RingBufferReader::elementAt(long long aIndex)
 
 bool RingBufferReader::doReadElement(void* aElement)
 {
-   // Store a copy of the write index because it might be changed
-   // asynchronously by the writer.
+   // Get the initial write index. This might change asynchronously
+   // during the read.
    long long tWriteIndex = mRB->mWriteIndex.load(std::memory_order_relaxed);
 
 restart:
@@ -212,9 +212,23 @@ restart:
    }
 
    // Test if the distance puts the read outside of the buffer range.
+   // Here's an example of this, where ReadIndex is behind Tail
+   // and the number of dropped elements is Tail - ReadIndex + 1.
+   // 
+   // 120          ReadIndex      is less than Tail
+   // 121  dropped
+   // 122  dropped
+   // 123  xxxx    Tail
+   // 124  xxxx
+   // 125  xxxx
+   // 126  xxxx    Head
+   // 127
    else if (tDist >= mRB->mNumElements)
    {
-      // Set the read index to the element at the end of the buffer range.
+      // Increment the drop count.
+      mDropCount += (int)(tTail - mReadIndex + 1);
+
+      // Set the read index to the last element included in the buffer range.
       mReadIndex = tTail;
    }
    else
@@ -232,12 +246,27 @@ restart:
    // Copy the array element into the temp element.
    memcpy(mTempElement, tPtr, mRB->mElementSize);
 
-   // If the write index changed during the read then the ring buffer 
-   // was written to asynchronously by the writer so retry the read.
-   long long tWriteIndexTemp = tWriteIndex;
+   // If, during the read, the ring buffer was written to asynchronously
+   // by the writer and the read was overwritten, then retry the read.
+   //  
+   // Here's an example of this.
+   // 
+   // ReadIndex is the index of the last element that was read.
+   // WriteIndex is the index of the last element that was written.
+   // 
+   // 122 
+   // 123  3  ReadIndex
+   // 124  0  Initial WriteIndex
+   // 125  1  
+   // 126  2  Final WriteIndex is OK
+   // 127  3  Final WriteIndex has overwritten the read
+   // 128  0  
+
+   // Get the final write index. 
    tWriteIndex = mRB->mWriteIndex.load(std::memory_order_relaxed);
 
-   if (tWriteIndex != tWriteIndexTemp)
+   // If the read was overwritten then retry it.
+   if (tWriteIndex - mReadIndex >= mRB->mNumElements)
    {
       mRetryCount++;
       goto restart;
