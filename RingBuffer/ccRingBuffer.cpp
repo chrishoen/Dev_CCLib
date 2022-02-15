@@ -8,10 +8,6 @@ Description:
 
 #include "stdafx.h"
 
-#include "ccCriticalSection.h"
-#include "cc_functions.h"
-#include "ccDefs.h"
-#include "ccMemoryPtr.h"
 #include "ccRingBuffer.h"
 
 using namespace std;
@@ -152,13 +148,15 @@ void* RingBufferReader::elementAt(long long aIndex)
 
 bool RingBufferReader::doReadElement(void* aElement)
 {
-   // Get the initial write index. This might change asynchronously
-   // during the read.
+   // Get the initial write index. This might change asynchronously during
+   // the read. The write index is the index of the last element that was
+   // written to.
    long long tWriteIndex = mRB->mWriteIndex.load(std::memory_order_relaxed);
 
 restart:
 
-   // Test for invalid data.
+   // Test for invalid data. This means that the writer has not yet
+   // written any elements.
    if (tWriteIndex < 0)
    {
       // The writer is not ready.
@@ -207,7 +205,8 @@ restart:
    // Test for no elements available for read.
    if (tDist == 0)
    {
-      // There's nothing to read. The reader is caught up with the writer. 
+      // There's nothing to read. The reader has already caught up with
+      // the writer. 
       mNotReadyCount++;
       return false; 
    }
@@ -238,10 +237,10 @@ restart:
       mReadIndex++;
    }
 
-   // Address of the next element to read from.
+   // Get the address of the next element to read from.
    void* tPtr = elementAt(mReadIndex);
 
-   // Copy the array element into the temp element.
+   // Copy that element into the temp element.
    memcpy(mTempElement, tPtr, mRB->mElementSize);
 
    // If, during the read, the ring buffer was written to asynchronously
@@ -256,8 +255,8 @@ restart:
    // 123  3  ReadIndex
    // 124  0  Initial WriteIndex
    // 125  1  
-   // 126  2  Final WriteIndex is OK
-   // 127  3  Final WriteIndex has overwritten the read
+   // 126  2  Final WriteIndex     is OK
+   // 127  3  Final WriteIndex     has overwritten the read
    // 128  0  
 
    // Get the final write index. 

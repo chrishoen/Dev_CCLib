@@ -60,7 +60,7 @@ public:
    // This single variable encapsulates the state of the ring buffer. It
    // can only be written to by a single writer thread and it can be read
    // by multiple reader threads.
-   std::atomic_llong mWriteIndex;
+   std::atomic<long long> mWriteIndex;
 
    //***************************************************************************
    //***************************************************************************
