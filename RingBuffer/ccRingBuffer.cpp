@@ -57,9 +57,9 @@ void RingBufferWriter::initialize(BaseRingBuffer* aRingBuffer)
 //******************************************************************************
 // Return a pointer to an element, based on an index.
 
-void* RingBufferWriter::elementAt(int aIndex)
+void* RingBufferWriter::elementAt(long long aIndex)
 {
-   return (void*)((char*)mRB->mElements + (size_t)mRB->mElementSize * aIndex);
+   return (void*)((char*)mRB->mElements + mRB->mElementSize * aIndex);
 }
 
 //******************************************************************************
@@ -86,7 +86,7 @@ void RingBufferWriter::doWriteElement(void* aElement)
    }
 
    // Memory index of the next element to write to.
-   int tMemIndex = tWriteIndex % mRB->mNumElements;
+   long long tMemIndex = tWriteIndex % mRB->mNumElements;
 
    // Address of the next element to write to.
    void* tPtr = elementAt(tMemIndex);
@@ -113,7 +113,7 @@ RingBufferReader::RingBufferReader()
    mReadIndex = 0;
    mTempElement = 0;
    mDropCount = 0;
-   mNoReadCount = 0;
+   mNotReadyCount = 0;
    mRetryCount = 0;
 }
 
@@ -127,7 +127,7 @@ void RingBufferReader::initialize(BaseRingBuffer* aRingBuffer)
    mRB = aRingBuffer;
    mTempElement = (void*)new char[mRB->mElementSize];
    mDropCount = 0;
-   mNoReadCount = 0;
+   mNotReadyCount = 0;
    mRetryCount = 0;
    mReadIndex = mRB->mWriteIndex.load(std::memory_order_relaxed);
 }
@@ -137,7 +137,7 @@ void RingBufferReader::initialize(BaseRingBuffer* aRingBuffer)
 //******************************************************************************
 // Return a pointer to an element, based on an index.
 
-void* RingBufferReader::elementAt(int aIndex)
+void* RingBufferReader::elementAt(long long aIndex)
 {
    return (void*)((char*)mRB->mElements + (size_t)mRB->mElementSize * aIndex);
 }
@@ -151,25 +151,51 @@ void* RingBufferReader::elementAt(int aIndex)
 
 bool RingBufferReader::doReadElement(void* aElement)
 {
-restart:
    // Store a copy of the write index because it might be changed
    // asynchronously by the writer.
    long long tWriteIndex = mRB->mWriteIndex.load(std::memory_order_relaxed);
 
+restart:
+
+   // Test for invalid data.
+   if (tWriteIndex < 0)
+   {
+      // The writer is not ready.
+      mNotReadyCount++;
+      return false;
+   }
+
    // Calculate the end points of the buffer memory region. The memory
    // region that contains valid data is in the closed interval
    // [Tail .. Head]
+   // 
+   // Here's an example of a buffer with NumElements = 4 at the beginning,
+   // with only three elements, so it is not full.
+   // 
+   // 0    xxxx  Tail
+   // 1    xxxx
+   // 2    xxxx  Head  so Head - Tail = 2, which is less than NumElements - 1
+   // 3
+   // 
+   // Here's an example of a buffer with NumElements = 4 that is full.
+   // 122
+   // 123  xxxx  Tail
+   // 124  xxxx
+   // 125  xxxx
+   // 126  xxxx  Head  so Head - Tail = 3 = NumElements - 1
+   // 127
+
    long long tTail = 0;
    long long tHead = 0;
-   if (tWriteIndex < mRB->mNumElements)
+   if (tWriteIndex < mRB->mNumElements - 1)
    {
       tTail = 0;
       tHead = tWriteIndex;
    }
    else
    {
-      // Tail + MinorMod - 1 = Head
-      tTail = tWriteIndex - ((long long)mRB->mNumElements - 1);
+      // Tail + NumElements - 1 = Head
+      tTail = tWriteIndex - (mRB->mNumElements - 1);
       tHead = tWriteIndex;
    }
 
@@ -181,7 +207,7 @@ restart:
    if (tDist == 0)
    {
       // There's nothing to read. The reader is caught up with the writer. 
-      mNoReadCount++;
+      mNotReadyCount++;
       return false; 
    }
 
@@ -198,7 +224,7 @@ restart:
    }
 
    // Memory index of the next element to read from.
-   int tMemIndex = mReadIndex % mRB->mNumElements;
+   long long tMemIndex = mReadIndex % mRB->mNumElements;
 
    // Address of the next element to read from.
    void* tPtr = elementAt(tMemIndex);
@@ -208,13 +234,17 @@ restart:
 
    // If the write index changed during the read then the ring buffer 
    // was written to asynchronously by the writer so retry the read.
-   if (tWriteIndex != mRB->mWriteIndex.load(std::memory_order_relaxed))
+   long long tWriteIndexTemp = tWriteIndex;
+   tWriteIndex = mRB->mWriteIndex.load(std::memory_order_relaxed);
+
+   if (tWriteIndex != tWriteIndexTemp)
    {
       mRetryCount++;
       goto restart;
    }
 
-   // Copy the temp element into the argument element.
+   // The read of the temp element was successful so copy the temp
+   // element into the argument element.
    memcpy(aElement, mTempElement, mRB->mElementSize);
    return true;
 }

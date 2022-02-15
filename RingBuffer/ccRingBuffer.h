@@ -41,10 +41,10 @@ public:
    // Members. All of these must be set by an inheriting class.
 
    // Number of elements in the ring buffer.
-   int mNumElements;
+   long long mNumElements;
 
    // Size of each element in the ring buffer.
-   int mElementSize;
+   size_t mElementSize;
 
    // The address of the first element in the buffer element array. The ring 
    // buffer memory must contain contiguous storage for MinorMod elements.
@@ -98,7 +98,7 @@ public:
    void initialize(BaseRingBuffer* aRingBuffer);
 
    // Return a pointer to an element, based on an index.
-   void* elementAt(int aIndex);
+   void* elementAt(long long aIndex);
 
    //***************************************************************************
    //***************************************************************************
@@ -137,7 +137,7 @@ public:
    int mDropCount;
 
    // The number of reads that had nothing available to read.
-   int mNoReadCount;
+   int mNotReadyCount;
 
    // The number of reads that were retried.
    int mRetryCount;
@@ -153,7 +153,7 @@ public:
    void initialize(BaseRingBuffer* aRingBuffer);
 
    // Return a pointer to an element, based on an index.
-   void* elementAt(int aIndex);
+   void* elementAt(long long aIndex);
 
    //***************************************************************************
    //***************************************************************************
