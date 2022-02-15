@@ -21,10 +21,6 @@ It is thread safe for separate single writer and multiple reader threads.
 //******************************************************************************
 //******************************************************************************
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
 namespace CC
 {
 
@@ -60,11 +56,10 @@ public:
    //***************************************************************************
    // Members. State variables.
 
-   // The major index of the next element to be written to. 
+   // The major index of the last element that was written to. If this is
+   // equal to negative one then no writes have occured and the ring buffer
+   // is empty.
    int mMajorIndex;
-
-   // If true then writes have occured since initialization.
-   bool mEmpty;
 
    //***************************************************************************
    //***************************************************************************
@@ -73,21 +68,12 @@ public:
 
    // No constructor.
    virtual void reset();
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Helper methods.
-
-   // Return a pointer to an element, based on an index modulo the minor
-   // modulus.
-   void* elementAt(int aIndex);
 };
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Lock free object queue class.
+// Ring buffer writer class.
 
 class RingBufferWriter
 {
@@ -96,21 +82,10 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Members. These are copied from a ring buffer instance at initialization.
+   // Members.
 
    // The ring buffer.
    BaseRingBuffer* mRB;
-
-   // Major and minor moduli. The major modulus must be a multiple of
-   // the minor modulus. 
-   int mMajorMod;
-   int mMinorMod;
-
-   // Size of each element in the ring buffer.
-   int mElementSize;
-
-   // The address of the first element in the ring buffer element array.
-   void* mElements;
 
    //***************************************************************************
    //***************************************************************************
@@ -121,24 +96,63 @@ public:
    RingBufferWriter();
    void initialize(BaseRingBuffer* aRingBuffer);
 
+   // Return a pointer to an element, based on an index.
+   void* elementAt(int aIndex);
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Methods.
    
-   // Copy an element to the element array at the current major index modulo
-   // the minor modulus. Increment the major index modulo the major modulus.
-   // Set the empty flag false.
+   // Copy to the array element after the current major index, modulo the
+   // minor modulus. Increment the major index, modulo the major modulus.
    void doWriteElement(void* aElement);
+};
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Ring buffer reader class.
+
+class RingBufferReader
+{
+public:
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Helper methods.
+   // Members.
 
-   // Return a pointer to an element, based on an index modulo the minor
-   // modulus.
+   // The ring buffer.
+   BaseRingBuffer* mRB;
+
+   // The major index of the last element that was read.
+   int mMajorReadIndex;
+
+   // Temporary element used during read.
+   void* mTempElement;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Constructor.
+   RingBufferReader();
+   ~RingBufferReader();
+   void initialize(BaseRingBuffer* aRingBuffer);
+
+   // Return a pointer to an element, based on an index.
    void* elementAt(int aIndex);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Copy to the array element after the current major index, modulo the
+   // minor modulus. Increment the major index, modulo the major modulus.
+   bool doReadElement(void* aElement);
 };
 
 //******************************************************************************

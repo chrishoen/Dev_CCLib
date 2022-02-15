@@ -28,27 +28,12 @@ namespace CC
 
 void BaseRingBuffer::reset()
 {
-   // All null
    mMajorMod = 0;
    mMinorMod = 0;
    mElementSize = 0;
    mElements = 0;
-   mMajorIndex = 0;
-   mEmpty = 0;
+   mMajorIndex = -1;
 }
-
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Return a pointer to an element, based on an index modulo the minor
-// modulus.
-
-void* BaseRingBuffer::elementAt(int aIndex)
-{
-   return (void*)((char*)mElements + (size_t)mElementSize*(aIndex % mMinorMod));
-}
-
 
 //******************************************************************************
 //******************************************************************************
@@ -61,20 +46,11 @@ void* BaseRingBuffer::elementAt(int aIndex)
 RingBufferWriter::RingBufferWriter()
 {
    mRB = 0;
-   mMajorMod = 0;
-   mMinorMod = 0;
-   mElementSize = 0;
-   mElements = 0;
 }
-
 
 void RingBufferWriter::initialize(BaseRingBuffer* aRingBuffer)
 {
    mRB = aRingBuffer;
-   mMajorMod = aRingBuffer->mMajorMod;
-   mMinorMod = aRingBuffer->mMinorMod;
-   mElementSize = aRingBuffer->mElementSize;
-   mElements = aRingBuffer->mElements;
 }
 
 //******************************************************************************
@@ -84,36 +60,119 @@ void RingBufferWriter::initialize(BaseRingBuffer* aRingBuffer)
 
 void* RingBufferWriter::elementAt(int aIndex)
 {
-   return (void*)((char*)mElements + (size_t)mElementSize * aIndex);
+   return (void*)((char*)mRB->mElements + (size_t)mRB->mElementSize * aIndex);
 }
 
-
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Copy an element to the element array at the current major index modulo
-// the minor modulus. Increment the major index modulo the major modulus.
-// Set the empty flag false.
+// Copy to the array element after the current major index, modulo the
+// minor modulus. Increment the major index, modulo the major modulus.
 
 void RingBufferWriter::doWriteElement(void* aElement)
 {
-   // Index of the next element to write to.
+   // Major index of the last element that was written to.
    int tMajorIndex = mRB->mMajorIndex;
-   int tMinorIndex = tMajorIndex % mMinorMod;
+
+   // Test for the first write.
+   if (tMajorIndex == -1)
+   {
+      // This is the first element written to. 
+      tMajorIndex = 0;
+   }
+   else
+   {
+      // Advance the major index to the next element to write to.
+      ++tMajorIndex %= mRB->mMajorMod;
+   }
+
+   // Minor index of the next element to write to.
+   int tMinorIndex = tMajorIndex % mRB->mMinorMod;
 
    // Address of the next element to write to.
    void* tPtr = elementAt(tMinorIndex);
 
    // Copy the element into the array.
-   memcpy(tPtr, aElement, mElementSize);
-
-   // Advance the index so that it points to the next element to write to.
-   ++tMajorIndex %= mMajorMod;
+   memcpy(tPtr, aElement, mRB->mElementSize);
 
    // Update the global state. This should be the only place that this
    // happens.
    mRB->mMajorIndex = tMajorIndex;
-   mRB->mEmpty = false;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Constructor.
+
+RingBufferReader::RingBufferReader()
+{
+   mRB = 0;
+   mMajorReadIndex = 0;
+   mTempElement = 0;
+}
+
+RingBufferReader::~RingBufferReader()
+{
+   if (mTempElement) delete mTempElement;
+}
+
+void RingBufferReader::initialize(BaseRingBuffer* aRingBuffer)
+{
+   mRB = aRingBuffer;
+   mTempElement = (void*)new char[mRB->mElementSize];
+   mMajorReadIndex = mRB->mMajorIndex;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Return a pointer to an element, based on an index.
+
+void* RingBufferReader::elementAt(int aIndex)
+{
+   return (void*)((char*)mRB->mElements + (size_t)mRB->mElementSize * aIndex);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Copy to the array element after the current major index, modulo the
+// minor modulus. Increment the major index, modulo the major modulus.
+
+bool RingBufferReader::doReadElement(void* aElement)
+{
+   return false;
+   // Major index of the last element that was written to.
+   int tMajorIndex = mRB->mMajorIndex;
+
+   // Test for the first write.
+   if (tMajorIndex == -1)
+   {
+      // This is the first element written to. 
+      tMajorIndex = 0;
+   }
+   else
+   {
+      // Advance the major index to the next element to write to.
+      ++tMajorIndex %= mRB->mMajorMod;
+   }
+
+   // Minor index of the next element to write to.
+   int tMinorIndex = tMajorIndex % mRB->mMinorMod;
+
+   // Address of the next element to write to.
+   void* tPtr = elementAt(tMinorIndex);
+
+   // Copy the element into the array.
+   memcpy(tPtr, aElement, mRB->mElementSize);
+
+   // Update the global state. This should be the only place that this
+   // happens.
+   mRB->mMajorIndex = tMajorIndex;
 }
 
 //******************************************************************************
