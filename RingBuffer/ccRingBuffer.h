@@ -51,8 +51,8 @@ public:
    // Size of each element in the ring buffer.
    int mElementSize;
 
-   // The address of the first element in the buffer. The ring buffer memory
-   // must contain contiguous storage for MinorMod elements.
+   // The address of the first element in the buffer element array. The ring 
+   // buffer memory must contain contiguous storage for MinorMod elements.
    void* mElements;
 
    //***************************************************************************
@@ -63,16 +63,21 @@ public:
    // The major index of the next element to be written to. 
    int mMajorIndex;
 
-   // If true then at no writes have occured since initialization.
+   // If true then writes have occured since initialization.
    bool mEmpty;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Members.
+   // Methods.
 
    // No constructor.
    virtual void reset();
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Helper methods.
 
    // Return a pointer to an element, based on an index modulo the minor
    // modulus.
@@ -88,50 +93,51 @@ class RingBufferWriter
 {
 public:
 
-   // Allocate memory for the queue and free list arrays and initialize the
-   // queue variables. 
-   void initialize(int aNumElements,int aElementSize);
-   void initialize(int aNumElements,int aElementSize,bool aConstructorFlag, void* aMemory);
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members. These are copied from a ring buffer instance at initialization.
 
-   // Deallocate memory.
-   void finalize();
+   // The ring buffer.
+   BaseRingBuffer* mRB;
 
-   // Queue size
-   int size();
+   // Major and minor moduli. The major modulus must be a multiple of
+   // the minor modulus. 
+   int mMajorMod;
+   int mMinorMod;
+
+   // Size of each element in the ring buffer.
+   int mElementSize;
+
+   // The address of the first element in the ring buffer element array.
+   void* mElements;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Queue and Free List Methods. These write or read objects from the queue
-   // and pop or push node indices from the free list.
+   // Methods.
 
-   // These are used to enqueue an object. StartWrite pops an object from the 
-   // free list and returns a pointer to it. If the queue is full then it 
-   // returns null. After writing to the object, FinishWrite is called to 
-   // enqueue it at the queue tail. The node index is passed between the two
-   // methods.
+   // Constructor.
+   RingBufferWriter();
+   void initialize(BaseRingBuffer* aRingBuffer);
 
-   void* startWrite  (int* aNodeIndex);
-   void  finishWrite (int  aNodeIndex);
-
-   // These are used to dequeue an object. StartRead dequeues an object from the 
-   // queue head and returns a pointer to it. After reading from the object,
-   // FinishRead is called to push it onto the free list. The node index is 
-   // passed between the two methods.
-
-   void* startRead   (int* aNodeIndex);
-   void  finishRead  (int  aNodeIndex);
-
-   // These are called by the above write and read methods. 
-   bool  listPop     (int* aNode);
-   bool  listPush    (int  aNode);
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+   
+   // Copy an element to the element array at the current major index modulo
+   // the minor modulus. Increment the major index modulo the major modulus.
+   // Set the empty flag false.
+   void doWriteElement(void* aElement);
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Helper methods.
-private:
-   // Return a pointer to an object, based on its object index.
+
+   // Return a pointer to an element, based on an index modulo the minor
+   // modulus.
    void* elementAt(int aIndex);
 };
 
@@ -139,64 +145,4 @@ private:
 //******************************************************************************
 //******************************************************************************
 }//namespace
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Example
-
-#if 0
-   //---------------------------------------------------------------------------
-   // Management
-
-   // includes
-   #include <new>
-   #include "ccRingBuffer.h"
-
-   // Declare object queue
-   CC::RingBuffer mObjectQueue;
-   // Initialize object queue
-   mObjectQueue.initialize(100,sizeof(Class1A));
-
-   //---------------------------------------------------------------------------
-   // Enqueue an object
-
-   // Example counter
-   int tWriteCount;
-   // This is passed between StartWrite and FinishWrite
-   int tWriteIndex;
-
-   // Try to start a write to allocate an object
-   void* tElement = mObjectQueue.startWrite(&tWriteIndex);
-   // If the queue is not full
-   if (tElement)
-   {
-      // Create a new object with placement new on the allocated object.
-      // Placement new must be used with any classes that use vtables.
-      Class1A* tObject = new(tElement) Class1A;
-      // Access the new object
-      tObject->mCode1 = tWriteCount;
-      // Finish the write
-      mObjectQueue.finishWrite(tWriteIndex);
-   }
-
-   //---------------------------------------------------------------------------
-   // Dequeue an object 
-
-   // Example counter
-   int tReadCount;
-   // This is passed between StartRead and FinishRead
-   int tReadIndex;
-
-   // Try to start an object read, returns a pointer to an object
-   Class1A* tObject = (Class1A*)mObjectQueue.startRead(&tReadIndex);
-   // If the queue is not empty
-   if (tObject)
-   {
-      // Access the object
-      tReadCount = tObject->mCode1;
-      // Finish the read
-      mObjectQueue.finishRead(tReadIndex);
-   }
-#endif
 
