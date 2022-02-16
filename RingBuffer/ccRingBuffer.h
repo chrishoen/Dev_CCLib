@@ -8,12 +8,46 @@ It is single writer multiple reader thread safe.
 It is non blocking
 It is shared memory safe.
 
-This implements a ring buffer of fixed size objects, where the ring buffer
-provides the memory allocation for the objects (memory for the objects is contained
-within the ring buffer). The ring buffer is thread safe. It uses mutexes to guard 
-against concurrency contentions.
+This implements a ring buffer of fixed size objects.
 
-It is thread safe for separate single writer and multiple reader threads.
+
+The ring buffer is based on the idea of an infinite memory of contiguous
+fixed size elements that is written to sequentially by a single writer.
+Writes are indexed by according to a long long WriteIndex, which is
+effectively infinite.
+
+The actual memory is finite, the size of which is specified by NumElements
+and ElementSize. Writes into the memory are performed using modulo
+arithmetic.
+
+Writes are executed as
+   ElementArray[++WriteIndex % NumElements] = NewElement
+
+where WriteIndex is the index of the last array element that was written to.
+
+Readers can read from the memory as long as the reads are within the bounds
+of a Head and Tail, where
+
+   TailIndex = HeadIndex - (NumElements - 1)
+   HeadIndex = WriteIndex, the index of the last element written to.
+so
+   HeadIndex - TailIndex = NumElements - 1
+
+Here's an example of a buffer with NumElements = 4 that is past the
+initialization stage. It is full. The write index is in the first column
+and the modulo of it is in the second column.
+
+122 2
+123 3  xxxx  Tail
+124 0  xxxx
+125 1  xxxx
+126 2  xxxx  Head  so Head - Tail = 3 = NumElements - 1
+127 3
+
+A reader can read any one element of 123,124,125,126.
+During a read of 123, an asynchrounous write could occur and the
+read would be overwritten. In this case the read would be retried.
+Reads are also accomplished with modulo arithmetic.
 
 =============================================================================*/
 
@@ -48,7 +82,7 @@ public:
 
    // The address of the first element in the buffer element array.
    // Inheriting classes supply the element array.
-   void* mElements;
+   void* mElementArray;
 
    //***************************************************************************
    //***************************************************************************
@@ -75,7 +109,8 @@ public:
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Ring buffer writer class.
+// Ring buffer writer class. There should only be one instance of this class
+// for the single writer.
 
 class RingBufferWriter
 {
@@ -114,7 +149,8 @@ public:
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Ring buffer reader class.
+// Ring buffer reader class. There can be multiple instance of this class
+// for multiple readers.
 
 class RingBufferReader
 {

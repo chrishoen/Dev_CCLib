@@ -26,7 +26,7 @@ void BaseRingBuffer::reset()
 {
    mNumElements = 0;
    mElementSize = 0;
-   mElements = 0;
+   mElementArray = 0;
    mWriteIndex = -1;
 }
 
@@ -57,7 +57,7 @@ void RingBufferWriter::initialize(BaseRingBuffer* aRingBuffer)
 void* RingBufferWriter::elementAt(long long aIndex)
 {
    aIndex %= mRB->mNumElements;
-   return (void*)((char*)mRB->mElements + mRB->mElementSize * aIndex);
+   return (void*)((char*)mRB->mElementArray + mRB->mElementSize * aIndex);
 }
 
 //******************************************************************************
@@ -126,7 +126,7 @@ void RingBufferReader::initialize(BaseRingBuffer* aRingBuffer)
 void* RingBufferReader::elementAt(long long aIndex)
 {
    aIndex %= mRB->mNumElements;
-   return (void*)((char*)mRB->mElements + mRB->mElementSize * aIndex);
+   return (void*)((char*)mRB->mElementArray + mRB->mElementSize * aIndex);
 }
 
 //******************************************************************************
