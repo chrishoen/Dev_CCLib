@@ -173,15 +173,18 @@ public:
    //***************************************************************************
    // Methods.
    
-   // Write an element to the array, updating the write index state variable.
-   void doWriteElement(void* aElement);
+   // Write an element to the array at the next element to write to, copying
+   // it from the function argument. Update the write index state variable
+   // so that it contains the index of the last element written to.
+   void doWrite(void* aElement);
 
    // Return a pointer to the next element to write to. Do not update the
    // write index state variable.
-   void* startWriteElement();
+   void* startWrite();
 
-   // Update the write index state variable after a write is finished.
-   void* finishWriteElement();
+   // Update the write index state variable after a started write is finished
+   // so that it contains the index of the last element written to.
+   void finishWrite();
 };
 
 //******************************************************************************
@@ -274,9 +277,18 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Read an element from the array, updating state variables. Return
-   // true if successful. 
-   bool doReadElement(void* aElement);
+   // Read an element from the array, copying it to the function argument.
+   // Return true if successful.
+   bool doRead(void* aElement);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods. Helpers.
+
+   // Internal test function that can be used by inheritors to perform
+   // ring buffer performance tests.
+   virtual void doTest(long long aReadIndex, void* aElement) {}
 };
 
 //******************************************************************************

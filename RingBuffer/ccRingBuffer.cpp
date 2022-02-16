@@ -64,9 +64,11 @@ void* RingBufferWriter::elementAt(long long aIndex)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Write an element to the array, updating the write index state variable.
+// Write an element to the array at the next element to write to, copying
+// it from the function argument. Update the write index state variable
+// so that it contains the index of the last element written to.
 
-void RingBufferWriter::doWriteElement(void* aElement)
+void RingBufferWriter::doWrite(void* aElement)
 {
    // Index of the last element that was written to.
    long long tWriteIndex = mRB->mWriteIndex.load(std::memory_order_relaxed);
@@ -82,7 +84,30 @@ void RingBufferWriter::doWriteElement(void* aElement)
 
    // Update the global state. This should be the only place that this
    // happens.
-   mRB->mWriteIndex.store(tWriteIndex,std::memory_order_relaxed);
+   mRB->mWriteIndex.store(tWriteIndex, std::memory_order_relaxed);
+}
+
+// Return a pointer to the next element to write to. Do not update the
+// write index state variable.
+void* RingBufferWriter::startWrite()
+{
+   // Index of the last element that was written to.
+   long long tWriteIndex = mRB->mWriteIndex.load(std::memory_order_relaxed);
+
+   // Advance the index to the next element to write to.
+   tWriteIndex++;
+
+   // Return the address of the next element to write to.
+   return elementAt(tWriteIndex);
+}
+
+// Update the write index state variable after a started write is finished
+// so that it contains the index of the last element written to.
+void RingBufferWriter::finishWrite()
+{
+   // Increment the global state. This should be the only other place that this
+   // happens.
+   mRB->mWriteIndex.fetch_add(1, std::memory_order_relaxed);
 }
 
 //******************************************************************************
@@ -140,10 +165,10 @@ void* RingBufferReader::elementAt(long long aIndex)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Read an element from the array, updating state variables. Return
-// true if successful. 
+// Read an element from the array, copying it to the function argument.
+// Return true if successful.
 
-bool RingBufferReader::doReadElement(void* aElement)
+bool RingBufferReader::doRead(void* aElement)
 {
    // Get the initial write index. This might change asynchronously during
    // the read. The write index is the index of the last element that was
@@ -276,6 +301,10 @@ restart:
    // Increment the drop count. If none were dropped then the
    // read index should be the previous read index plus one.
    mDropCount += (int)(mReadIndex - mLastReadIndex + 1);
+
+   // Internal test function that can be used by inheritors to perform
+   // ring buffer performance tests.
+   doTest(mReadIndex, mTempElement);
 
    // Success. 
    return true;
