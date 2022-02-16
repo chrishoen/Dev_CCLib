@@ -149,7 +149,7 @@ bool RingBufferReader::doReadElement(void* aElement)
 restart:
 
    // Test for invalid data. This means that the writer has not yet
-   // written any elements.
+   // written any elements or is resetting the buffer.
    if (tWriteIndex < 0)
    {
       // The writer is not ready.
@@ -157,33 +157,46 @@ restart:
       return false;
    }
 
-   // Calculate the end points of the buffer memory region. The memory
-   // region that contains valid data is in the closed interval
+   // Test for the first read being uninitialized.
+   if (mReadIndex < 0)
+   {
+      // This might still be less than zero.
+      mReadIndex = tWriteIndex - 1;
+   }
+    
+   // Calculate the head and tail indices of the buffer memory region.
+   // The indices that contain valid data are in the closed interval
    // [Tail .. Head] where 0 <= Head - Tail <= NumElements - 1
    // 
-   // Here's an example of a buffer with NumElements = 4 at the beginning,
-   // with only three elements, so it is not full.
+   // Here's an example of a buffer with NumElements = 4 that is still
+   // in the initialization stage. It only has three elements written to it,
+   // so it is not full.
    // 
-   // 0    xxxx  Tail
-   // 1    xxxx
-   // 2    xxxx  Head  so Head - Tail = 2, which is less than NumElements - 1
-   // 3
+   //   0  0 xxxx  Tail
+   //   1  1 xxxx
+   //   2  2 xxxx  Head  so Head - Tail = 2, which is less than NumElements - 1
+   //   3  3
+   //   4  0
    // 
-   // Here's an example of a buffer with NumElements = 4 that is full.
-   // 122
-   // 123  xxxx  Tail
-   // 124  xxxx
-   // 125  xxxx
-   // 126  xxxx  Head  so Head - Tail = 3 = NumElements - 1
-   // 127
+   // Here's an example of a buffer with NumElements = 4 that is past the
+   // initialization stage. It is full.
+   // 122 2
+   // 123 3  xxxx  Tail
+   // 124 0  xxxx
+   // 125 1  xxxx
+   // 126 2  xxxx  Head  so Head - Tail = 3 = NumElements - 1
+   // 127 3
 
    long long tTail = 0;
    long long tHead = 0;
+
+   // If in the initialization stage and the buffer is not full.
    if (tWriteIndex < mRB->mNumElements - 1)
    {
       tTail = 0;
       tHead = tWriteIndex;
    }
+   // Else the buffer is full.
    else
    {
       // Tail + NumElements - 1 = Head
@@ -191,7 +204,7 @@ restart:
       tHead = tWriteIndex;
    }
 
-   // Forward distance from the tail to the head,
+   // Calculate the forward distance from the tail to the head,
    // Tail + Dist = Head
    long long tDist = tHead - tTail;
 
@@ -227,6 +240,7 @@ restart:
       mReadIndex++;
    }
 
+   // At this point ReadIndex is the index of the next element to read from. 
    // Get the address of the next element to read from.
    void* tPtr = elementAt(mReadIndex);
 
@@ -264,7 +278,8 @@ restart:
    // element into the argument element.
    memcpy(aElement, mTempElement, mRB->mElementSize);
 
-   // Increment the drop count.
+   // Increment the drop count. If none were dropped then the
+   // read index should be the previous read index plus one.
    mDropCount += (int)(mReadIndex - tLastReadIndex + 1);
 
    // Success. 
