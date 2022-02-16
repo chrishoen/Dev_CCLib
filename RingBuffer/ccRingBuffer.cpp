@@ -28,7 +28,7 @@ void BaseRingBuffer::reset()
    mElementSize = 0;
    mElementArray = 0;
    mReadyGuard = 0;
-   mWriteIndex = -1;
+   mWriteIndex = LLONG_MIN;
 }
 
 //******************************************************************************
@@ -106,11 +106,11 @@ void RingBufferReader::resetVars()
    mDropCount = 0;
    mNotReadyCount = 0;
    mRetryCount = 0;
-   mReadIndex = 0;
-   mLastReadIndex = 0;
-   mTail = 0;
-   mReady = 0;
-   mHead = 0;
+   mReadIndex = LLONG_MIN;
+   mLastReadIndex = LLONG_MIN;
+   mTail = LLONG_MIN;
+   mReady = LLONG_MIN;
+   mHead = LLONG_MIN;
 }
 
 void RingBufferReader::initialize(BaseRingBuffer* aRingBuffer)
@@ -158,7 +158,7 @@ restart:
 
    // Test for invalid data. This means that the writer has not yet
    // written any elements or is resetting the buffer.
-   if (tWriteIndex < 0)
+   if (tWriteIndex == LLONG_MIN)
    {
       // The writer is not ready.
       mFirstFlag = true;
@@ -190,7 +190,7 @@ restart:
       mTail = tWriteIndex - (mRB->mNumElements - 1);
       mReady = tWriteIndex - mRB->mReadyGuard;
       mHead = tWriteIndex;
-      mLastReadIndex = mTail;
+      mLastReadIndex = LLONG_MIN;
       mReadIndex = mReady;
    }
    else
