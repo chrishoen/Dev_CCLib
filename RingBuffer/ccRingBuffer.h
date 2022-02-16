@@ -33,21 +33,49 @@ of a Head and Tail, where
 so
    HeadIndex - TailIndex = NumElements - 1
 
-Here's an example of a buffer with NumElements = 4 that is past the
+Here's an example of a buffer with NumElements = 8 that is past the
 initialization stage. It is full. The write index is in the first column
 and the modulo of it is in the second column.
 
 122 2
 123 3  xxxx  Tail
-124 0  xxxx
-125 1  xxxx
-126 2  xxxx  Head  so Head - Tail = 3 = NumElements - 1
-127 3
+124 4  xxxx
+125 5  xxxx
+126 6  xxxx
+127 7  xxxx
+128 0  xxxx
+129 1  xxxx
+130 2  xxxx  Head  so Head - Tail = 7 = NumElements - 1
+131 3
 
-A reader can read any one element of 123,124,125,126.
+A reader can read any one element of 123 .. 130.
 During a read of 123, an asynchrounous write could occur and the
 read would be overwritten. In this case the read would be retried.
 Reads are also accomplished with modulo arithmetic.
+
+As a complication, consider a buffer where the writer writes an
+element to the array that only contains partial data. After writing
+a few more elements, the writer wants to go back and update a previous
+element. A ready read guard is provided for this case.
+
+Here's an example of a buffer with NumElements = 8 and ReadyGuard = 3
+A reader can read any one element of 123 .. 127. The writer can go
+back and modify any one element of 128 .. 130.
+
+122 2
+123 3  xxxx  Tail
+124 4  xxxx
+125 5  xxxx
+126 6  xxxx
+127 7  xxxx  Ready = Head - ReadyGuard = 130 - 3
+128 0  yyyy
+129 1  yyyy
+130 2  yyyy  Head  so Head - Tail = 7 = NumElements - 1
+131 3
+
+ReadyGuard = 0 means no read ready guard. Then the reader can read
+any element of 123 .. 130 and the writer cannot modify any elements
+once they have been written.
 
 =============================================================================*/
 
@@ -83,6 +111,9 @@ public:
    // The address of the first element in the buffer element array.
    // Inheriting classes supply the element array.
    void* mElementArray;
+
+   // Read ready guard.
+   long long mReadyGuard;
 
    //***************************************************************************
    //***************************************************************************
@@ -166,6 +197,9 @@ public:
 
    // The index of the last element that was read.
    long long mReadIndex;
+
+   // If true then this is the first read.
+   bool mFirstFlag;
 
    // Temporary element used during read.
    void* mTempElement;

@@ -27,6 +27,7 @@ void BaseRingBuffer::reset()
    mNumElements = 0;
    mElementSize = 0;
    mElementArray = 0;
+   mReadyGuard = 0;
    mWriteIndex = -1;
 }
 
@@ -114,7 +115,8 @@ void RingBufferReader::initialize(BaseRingBuffer* aRingBuffer)
    mDropCount = 0;
    mNotReadyCount = 0;
    mRetryCount = 0;
-   mReadIndex = mRB->mWriteIndex.load(std::memory_order_relaxed);
+   mReadIndex = -1;
+   mFirstFlag = true;
 }
 
 //******************************************************************************
@@ -153,94 +155,111 @@ restart:
    if (tWriteIndex < 0)
    {
       // The writer is not ready.
+      mFirstFlag = true;
       mNotReadyCount++;
       return false;
    }
 
-   // Test for the first read being uninitialized.
-   if (mReadIndex < 0)
-   {
-      // This might still be less than zero.
-      mReadIndex = tWriteIndex - 1;
-   }
-    
-   // Calculate the head and tail indices of the buffer memory region.
-   // The indices that contain valid data are in the closed interval
-   // [Tail .. Head] where 0 <= Head - Tail <= NumElements - 1
+   // Calculate the head and tail.
    // 
-   // Here's an example of a buffer with NumElements = 4 that is still
-   // in the initialization stage. It only has three elements written to it,
-   // so it is not full.
    // 
-   //   0  0 xxxx  Tail
-   //   1  1 xxxx
-   //   2  2 xxxx  Head  so Head - Tail = 2, which is less than NumElements - 1
-   //   3  3
-   //   4  0
+   // Here's an example of a buffer with NumElements = 8 and ReadyGuard = 3.
+   // Two elements have been written to. The buffer is not full.
    // 
-   // Here's an example of a buffer with NumElements = 4 that is past the
-   // initialization stage. It is full.
+   // The write index is in the first column and the modulo of it is in the
+   // second column.
+   // 
+   // The buffer contains written elements on the closed interval [0 .. 1].
+   // No elements can be read because Ready is negative.
+   //  -7 1
+   //  -6 2  ....  Tail = WriteIndex - (NumElements - 1) = -6
+   //  -5 3  ....
+   //  -4 4  ....
+   //  -3 5  ....
+   //  -2 6  ....  Ready = WriteIndex - ReadyGuard = -2
+   //  -1 7  ....
+   //   0 0  yyyy
+   //   1 1  yyyy  Head  = WriteIndex = 1
+   //   2 2
+
+   // Here's an example of a buffer with NumElements = 8 and ReadyGuard = 3.
+   // All elements have been written to. The buffer is full.
+   // 
+   // The buffer contains written elements on the closed interval [123 .. 130].
+   // Elements can be read on [123 .. 127]
    // 122 2
-   // 123 3  xxxx  Tail
-   // 124 0  xxxx
-   // 125 1  xxxx
-   // 126 2  xxxx  Head  so Head - Tail = 3 = NumElements - 1
-   // 127 3
+   // 123 3  xxxx  Tail = WriteIndex - (NumElements - 1)
+   // 124 4  xxxx
+   // 125 5  xxxx
+   // 126 6  xxxx
+   // 127 7  xxxx  Ready = WriteIndex - ReadyGuard
+   // 128 0  yyyy
+   // 129 1  yyyy
+   // 130 2  yyyy  Head  = WriteIndex
+   // 131 3
 
-   long long tTail = 0;
-   long long tHead = 0;
+   // Note that Tail and Ready can be negative.
+   long long tTail = tWriteIndex - (mRB->mNumElements - 1);
+   long long tHead = tWriteIndex;
+   long long tReady = tWriteIndex - mRB->mReadyGuard;
 
-   // If in the initialization stage and the buffer is not full.
-   if (tWriteIndex < mRB->mNumElements - 1)
+   // Test for the first read.
+   if (mFirstFlag)
    {
-      tTail = 0;
-      tHead = tWriteIndex;
-   }
-   // Else the buffer is full.
-   else
-   {
-      // Tail + NumElements - 1 = Head
-      tTail = tWriteIndex - (mRB->mNumElements - 1);
-      tHead = tWriteIndex;
-   }
-
-   // Calculate the forward distance from the tail to the head,
-   // Tail + Dist = Head
-   long long tDist = tHead - tTail;
-
-   // Test for no elements available for read.
-   if (tDist == 0)
-   {
-      // There's nothing to read. The reader has already caught up with
-      // the writer. 
-      mNotReadyCount++;
-      return false; 
-   }
-
-   // Test if the distance puts the read outside of the buffer range.
-   // Here's an example of this, where ReadIndex is behind Tail
-   // and the number of dropped elements is Tail - ReadIndex + 1.
-   // 
-   // 120          ReadIndex      is less than Tail
-   // 121  dropped
-   // 122  dropped
-   // 123  xxxx    Tail
-   // 124  xxxx
-   // 125  xxxx
-   // 126  xxxx    Head
-   // 127
-   else if (tDist >= mRB->mNumElements)
-   {
-      // Set the read index to the last element included in the buffer range.
-      mReadIndex = tTail;
+      mFirstFlag = false;
+      // Set the read index to the next element to read.
+      mReadIndex = tReady;
    }
    else
    {
-      // Advance to the next element to read from.
+      // Set the read index to the next element to read.
       mReadIndex++;
    }
 
-   // At this point ReadIndex is the index of the next element to read from. 
+   // Test for no elements available for read.
+   if (mReadIndex > tReady)
+   {
+      // Set the read index to back the last element that was read.
+      mReadIndex = tReady;
+      // There's nothing to read yet.
+      mNotReadyCount++;
+      return false;
+   }
+
+   // Test if the read is outside of the buffer range.
+   // 
+   // Here's an example of this, where ReadIndex is behind Tail.
+   // The oldest element that can be read is at Tail.
+   // 
+   // 120 0  dropped ReadIndex 
+   // 121 1  dropped
+   // 122 2  dropped
+   // 123 3  xxxx    Tail = WriteIndex - (NumElements - 1)
+   // 124 4  xxxx
+   // 125 5  xxxx
+   // 126 6  xxxx
+   // 127 7  xxxx    Ready = WriteIndex - ReadyGuard
+   // 128 0  yyyy
+   // 129 1  yyyy
+   // 130 2  yyyy    Head  = WriteIndex
+   // 131 3
+   else if (mReadIndex < tTail)
+   {
+      // Set the read index to the tail, the oldest element that can be
+      // read.
+      mReadIndex = tTail;
+   }
+
+   // Test for negative ReadIndex. This can happen when the buffer
+   // isn't full yet.
+   if (mReadIndex < 0)
+   {
+      // There's nothing to read. There aren't enough elements in the buffer.
+      mNotReadyCount++;
+      return false;
+   }
+
+   // At this point ReadIndex is the index of the next element to read from.
    // Get the address of the next element to read from.
    void* tPtr = elementAt(mReadIndex);
 
