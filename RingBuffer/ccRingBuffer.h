@@ -195,9 +195,6 @@ public:
    // The ring buffer.
    BaseRingBuffer* mRB;
 
-   // The index of the last element that was read.
-   long long mReadIndex;
-
    // If true then this is the first read.
    bool mFirstFlag;
 
@@ -216,11 +213,49 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
+   // Members. State variables.
+
+   // Here's an example of a buffer with NumElements = 8 and ReadyGuard = 3.
+   // All elements have been written to. The buffer is full.
+   // 
+   // The buffer contains written elements on the closed interval [123 .. 130].
+   // Elements can be read on [123 .. 127]
+   // 122 2
+   // 123 3  xxxx  Tail = WriteIndex - (NumElements - 1)
+   // 124 4  xxxx
+   // 125 5  xxxx
+   // 126 6  xxxx
+   // 127 7  xxxx  Ready = WriteIndex - ReadyGuard
+   // 128 0  yyyy
+   // 129 1  yyyy
+   // 130 2  yyyy  Head  = WriteIndex
+   // 131 3
+
+   // Depending on the context, the last element that was read from or
+   // the next element to read from.
+   long long mReadIndex;
+
+   // The previous read index.
+   long long mLastReadIndex;
+
+   // The oldest element that was written to.
+   long long mTail;
+
+   // The youngest element that can be read from.
+   long long mReady;
+
+   // The youngest element that was written to.
+   long long mHead;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Methods.
 
    // Constructor.
    RingBufferReader();
    ~RingBufferReader();
+   void resetVars();
    void initialize(BaseRingBuffer* aRingBuffer);
 
    // Return a pointer to an element, based on an index modulo

@@ -96,27 +96,33 @@ void RingBufferWriter::doWriteElement(void* aElement)
 RingBufferReader::RingBufferReader()
 {
    mRB = 0;
-   mReadIndex = 0;
    mTempElement = 0;
+   resetVars();
+}
+
+void RingBufferReader::resetVars()
+{
+   mFirstFlag = false;
    mDropCount = 0;
    mNotReadyCount = 0;
    mRetryCount = 0;
+   mReadIndex = 0;
+   mLastReadIndex = 0;
+   mTail = 0;
+   mReady = 0;
+   mHead = 0;
+}
+
+void RingBufferReader::initialize(BaseRingBuffer* aRingBuffer)
+{
+   resetVars();
+   mRB = aRingBuffer;
+   mTempElement = (void*)new char[mRB->mElementSize];
 }
 
 RingBufferReader::~RingBufferReader()
 {
    if (mTempElement) delete mTempElement;
-}
-
-void RingBufferReader::initialize(BaseRingBuffer* aRingBuffer)
-{
-   mRB = aRingBuffer;
-   mTempElement = (void*)new char[mRB->mElementSize];
-   mDropCount = 0;
-   mNotReadyCount = 0;
-   mRetryCount = 0;
-   mReadIndex = -1;
-   mFirstFlag = true;
 }
 
 //******************************************************************************
@@ -144,9 +150,9 @@ bool RingBufferReader::doReadElement(void* aElement)
    // written to.
    long long tWriteIndex = mRB->mWriteIndex.load(std::memory_order_relaxed);
 
-   // Store the initial read index. This will be used to calculate
-   // the drop count.
-   long long tLastReadIndex = mReadIndex;
+   // Store the initial read index. This is the index of the last element
+   // that was read.
+   mLastReadIndex = mReadIndex;
 
 restart:
 
@@ -159,28 +165,6 @@ restart:
       mNotReadyCount++;
       return false;
    }
-
-   // Calculate the head and tail.
-   // 
-   // 
-   // Here's an example of a buffer with NumElements = 8 and ReadyGuard = 3.
-   // Two elements have been written to. The buffer is not full.
-   // 
-   // The write index is in the first column and the modulo of it is in the
-   // second column.
-   // 
-   // The buffer contains written elements on the closed interval [0 .. 1].
-   // No elements can be read because Ready is negative.
-   //  -7 1
-   //  -6 2  ....  Tail = WriteIndex - (NumElements - 1) = -6
-   //  -5 3  ....
-   //  -4 4  ....
-   //  -3 5  ....
-   //  -2 6  ....  Ready = WriteIndex - ReadyGuard = -2
-   //  -1 7  ....
-   //   0 0  yyyy
-   //   1 1  yyyy  Head  = WriteIndex = 1
-   //   2 2
 
    // Here's an example of a buffer with NumElements = 8 and ReadyGuard = 3.
    // All elements have been written to. The buffer is full.
@@ -198,63 +182,52 @@ restart:
    // 130 2  yyyy  Head  = WriteIndex
    // 131 3
 
-   // Note that Tail and Ready can be negative.
-   long long tTail = tWriteIndex - (mRB->mNumElements - 1);
-   long long tHead = tWriteIndex;
-   long long tReady = tWriteIndex - mRB->mReadyGuard;
-
    // Test for the first read.
    if (mFirstFlag)
    {
       mFirstFlag = false;
-      // Set the read index to the next element to read.
-      mReadIndex = tReady;
+      // Calulate the state variables.
+      mTail = tWriteIndex - (mRB->mNumElements - 1);
+      mReady = tWriteIndex - mRB->mReadyGuard;
+      mHead = tWriteIndex;
+      mLastReadIndex = mTail;
+      mReadIndex = mReady;
    }
    else
    {
-      // Set the read index to the next element to read.
-      mReadIndex++;
+      // Calulate the state variables.
+      mTail = tWriteIndex - (mRB->mNumElements - 1);
+      mReady = tWriteIndex - mRB->mReadyGuard;
+      mHead = tWriteIndex;
+
+      // Ready is the youngest element that can be read. If it has already
+      // been read then no elements are available to be read, so exit.
+      if (mLastReadIndex == mReady)
+      {
+         // There's nothing to read.
+         mReadIndex = mReady; //????
+         mNotReadyCount++;
+         return false;
+      }
+
+      // If the last element read is behind the tail then read from
+      // the tail.
+      if (mLastReadIndex < mTail)
+      {
+         mReadIndex = mTail;
+      }
+      // Else read the next element.
+      else
+      {
+         mReadIndex = mLastReadIndex + 1;
+      }
    }
 
-   // Test for no elements available for read.
-   if (mReadIndex > tReady)
-   {
-      // Set the read index to back the last element that was read.
-      mReadIndex = tReady;
-      // There's nothing to read yet.
-      mNotReadyCount++;
-      return false;
-   }
-
-   // Test if the read is outside of the buffer range.
-   // 
-   // Here's an example of this, where ReadIndex is behind Tail.
-   // The oldest element that can be read is at Tail.
-   // 
-   // 120 0  dropped ReadIndex 
-   // 121 1  dropped
-   // 122 2  dropped
-   // 123 3  xxxx    Tail = WriteIndex - (NumElements - 1)
-   // 124 4  xxxx
-   // 125 5  xxxx
-   // 126 6  xxxx
-   // 127 7  xxxx    Ready = WriteIndex - ReadyGuard
-   // 128 0  yyyy
-   // 129 1  yyyy
-   // 130 2  yyyy    Head  = WriteIndex
-   // 131 3
-   else if (mReadIndex < tTail)
-   {
-      // Set the read index to the tail, the oldest element that can be
-      // read.
-      mReadIndex = tTail;
-   }
-
-   // Test for negative ReadIndex. This can happen when the buffer
+   // Test for negative NextRead. This can happen when the buffer
    // isn't full yet.
    if (mReadIndex < 0)
    {
-      // There's nothing to read. There aren't enough elements in the buffer.
+      // There's nothing to read.
       mNotReadyCount++;
       return false;
    }
@@ -299,7 +272,7 @@ restart:
 
    // Increment the drop count. If none were dropped then the
    // read index should be the previous read index plus one.
-   mDropCount += (int)(mReadIndex - tLastReadIndex + 1);
+   mDropCount += (int)(mReadIndex - mLastReadIndex + 1);
 
    // Success. 
    return true;
