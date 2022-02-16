@@ -175,6 +175,13 @@ public:
    
    // Write an element to the array, updating the write index state variable.
    void doWriteElement(void* aElement);
+
+   // Return a pointer to the next element to write to. Do not update the
+   // write index state variable.
+   void* startWriteElement();
+
+   // Update the write index state variable after a write is finished.
+   void* finishWriteElement();
 };
 
 //******************************************************************************
@@ -232,10 +239,10 @@ public:
    // 131 3
 
    // Depending on the context, the last element that was read from or
-   // the next element to read from.
+   // the next element to read from. Successfully or not.
    long long mReadIndex;
 
-   // The previous read index.
+   // The previous read index for the last successful read.
    long long mLastReadIndex;
 
    // The oldest element that was written to.

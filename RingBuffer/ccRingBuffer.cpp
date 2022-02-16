@@ -150,8 +150,7 @@ bool RingBufferReader::doReadElement(void* aElement)
    // written to.
    long long tWriteIndex = mRB->mWriteIndex.load(std::memory_order_relaxed);
 
-   // Store the initial read index. This is the index of the last element
-   // that was read.
+   // Store the last successful read index.
    mLastReadIndex = mReadIndex;
 
 restart:
@@ -223,7 +222,7 @@ restart:
       }
    }
 
-   // Test for negative NextRead. This can happen when the buffer
+   // Test for negative ReadIndex. This can happen when the buffer
    // isn't full yet.
    if (mReadIndex < 0)
    {
@@ -246,14 +245,18 @@ restart:
    // 
    // ReadIndex is the index of the last element that was read.
    // WriteIndex is the index of the last element that was written.
-   // 
-   // 122 
-   // 123  3  ReadIndex
-   // 124  0  Initial WriteIndex
-   // 125  1  
-   // 126  2  Final WriteIndex     is OK
-   // 127  3  Final WriteIndex     has overwritten the read
-   // 128  0  
+
+   // 122 2
+   // 123 3   ReadIndex
+   // 124 4   Initial WriteIndex
+   // 125 5  
+   // 126 6  
+   // 127 7  
+   // 128 0  
+   // 129 1  
+   // 130 2  Final WriteIndex is OK                     Write - Read = 7
+   // 131 3  Final WriteIndex has overwritten the read  Write - Read = 8
+   // 132 4  Final WriteIndex has overwritten the read  Write - Read = 9
 
    // Get the final write index. 
    tWriteIndex = mRB->mWriteIndex.load(std::memory_order_relaxed);
