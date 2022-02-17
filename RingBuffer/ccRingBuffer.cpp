@@ -122,6 +122,7 @@ RingBufferReader::RingBufferReader()
 {
    mRB = 0;
    mTempElement = 0;
+   mTestFunction = 0;
    resetVars();
 }
 
@@ -304,7 +305,7 @@ restart:
 
    // Internal test function that can be used by inheritors to perform
    // ring buffer performance tests.
-   doTest(mReadIndex, mTempElement);
+   if(mTestFunction) mTestFunction(mReadIndex, mTempElement);
 
    // Success. 
    return true;

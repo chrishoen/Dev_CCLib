@@ -82,7 +82,13 @@ once they have been written.
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+
 #include <atomic>
+#include <functional>
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
 namespace CC
 {
@@ -260,11 +266,20 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
+
+   // Internal test function pointer that can be used by owners or
+   // inheritors to perform ring buffer performance tests. If this is
+   // set then it is called at the end of a successful read.
+   std::function<void(long long, void*)> mTestFunction;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Methods.
 
    // Constructor.
    RingBufferReader();
-   ~RingBufferReader();
+   virtual ~RingBufferReader();
    void resetVars();
    void initialize(BaseRingBuffer* aRingBuffer);
 
@@ -280,15 +295,6 @@ public:
    // Read an element from the array, copying it to the function argument.
    // Return true if successful.
    bool doRead(void* aElement);
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods. Helpers.
-
-   // Internal test function that can be used by inheritors to perform
-   // ring buffer performance tests.
-   virtual void doTest(long long aReadIndex, void* aElement) {}
 };
 
 //******************************************************************************
