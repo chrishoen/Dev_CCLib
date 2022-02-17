@@ -218,7 +218,9 @@ public:
    void* mTempElement;
 
    // The number of reads that had nothing available to read.
-   int mNotReadyCount;
+   int mNotReadyCount1;
+   int mNotReadyCount2;
+   int mNotReadyCount3;
 
    // The number of elements that were dropped.
    int mDropCount;

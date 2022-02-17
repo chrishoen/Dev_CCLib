@@ -92,11 +92,13 @@ void StatusThread::threadRunFunction()
          }
          case 4:
          {
-            Prn::print(Prn::ThreadRun1, "%s$   %s %s READ %d %d  %d TEST %d %d",
+            Prn::print(Prn::ThreadRun1, "%s$   %lld %lld RDY %d %d %d DROP %d %d TEST %d %d",
                mProcString,
-               my_stringLL(tString1, gShare.mRingBuffer.mWriteIndex.load(std::memory_order_relaxed)),
-               my_stringLL(tString1, gShare.mRingBufferReader.mReadIndex),
-               gShare.mRingBufferReader.mNotReadyCount,
+               gShare.mRingBuffer.mWriteIndex.load(std::memory_order_relaxed),
+               gShare.mRingBufferReader.mReadIndex,
+               gShare.mRingBufferReader.mNotReadyCount1,
+               gShare.mRingBufferReader.mNotReadyCount2,
+               gShare.mRingBufferReader.mNotReadyCount3,
                gShare.mRingBufferReader.mDropCount,
                gShare.mRingBufferReader.mRetryCount,
                gShare.mRingBufferTester.mPassCount,

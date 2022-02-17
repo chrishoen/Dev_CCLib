@@ -270,11 +270,13 @@ void Share::show4()
    Prn::print(0, "");
 
    Prn::print(0, "");
-   Prn::print(0, "Writer.mMeanTime       %16.5f", mWriterMeanTime);
-   Prn::print(0, "Reader.mMeanTime       %16.5f", mReaderMeanTime);
+   Prn::print(0, "mWriteIndex            %16lld", gShare.mRingBuffer.mWriteIndex.load(std::memory_order_relaxed));
+   Prn::print(0, "Reader.mReadIndex      %16lld", gShare.mRingBufferReader.mReadIndex);
 
    Prn::print(0, "");
-   Prn::print(0, "Reader.NotReadyCount   %16d", gShare.mRingBufferReader.mNotReadyCount);
+   Prn::print(0, "Reader.NotReadyCount1  %16d", gShare.mRingBufferReader.mNotReadyCount1);
+   Prn::print(0, "Reader.NotReadyCount2  %16d", gShare.mRingBufferReader.mNotReadyCount2);
+   Prn::print(0, "Reader.NotReadyCount3  %16d", gShare.mRingBufferReader.mNotReadyCount3);
    Prn::print(0, "Reader.DropCount       %16d", gShare.mRingBufferReader.mDropCount);
    Prn::print(0, "Reader.RetryCount      %16d", gShare.mRingBufferReader.mRetryCount);
    Prn::print(0, "");

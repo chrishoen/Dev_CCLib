@@ -129,7 +129,9 @@ RingBufferReader::RingBufferReader()
 void RingBufferReader::resetVars()
 {
    mFirstFlag = false;
-   mNotReadyCount = 0;
+   mNotReadyCount1 = 0;
+   mNotReadyCount2 = 0;
+   mNotReadyCount3 = 0;
    mDropCount = 0;
    mRetryCount = 0;
    mReadIndex = LLONG_MIN;
@@ -187,7 +189,7 @@ restart:
    {
       // The writer is not ready.
       mFirstFlag = true;
-      mNotReadyCount++;
+      mNotReadyCount1++;
       return false;
    }
 
@@ -231,7 +233,7 @@ restart:
       {
          // There's nothing to read.
          mReadIndex = mReady; //????
-         mNotReadyCount++;
+         mNotReadyCount2++;
          return false;
       }
 
@@ -253,7 +255,7 @@ restart:
    if (mReadIndex < 0)
    {
       // There's nothing to read.
-      mNotReadyCount++;
+      mNotReadyCount3++;
       return false;
    }
 
