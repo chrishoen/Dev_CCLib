@@ -273,10 +273,11 @@ void Share::show4()
    Prn::print(0, "Writer.mMeanTime   %16.5f", mWriterMeanTime);
    Prn::print(0, "Reader.mMeanTime   %16.5f", mReaderMeanTime);
 
-   double tReaderPass = (double)mReaderPassCount / (double)mReaderCount;
+   Prn::print(0, "Reader.NotReadyCount   %-6d", gShare.mRingBufferReader.mNotReadyCount);
+   Prn::print(0, "Reader.DropCount       %-6d", gShare.mRingBufferReader.mDropCount);
+   Prn::print(0, "Tester.mPassCount      %-6d", gShare.mRingBufferTester.mPassCount);
+   Prn::print(0, "Tester.mFailCount      %-6d", gShare.mRingBufferTester.mFailCount);
 
-   Prn::print(0, "");
-   Prn::print(0, "ReaderPass         %16.5f", tReaderPass);
 }
 
 //******************************************************************************
@@ -287,10 +288,10 @@ void Share::show()
 {
    switch (gShare.mMode)
    {
-   case 1: show12 (); break;
-   case 2: show12 (); break;
+   case 1: show12(); break;
+   case 2: show12(); break;
    case 3: show3(); break;
-   case 4: show3(); break;
+   case 4: show4(); break;
    }
 }
 
