@@ -131,8 +131,15 @@ public:
    // This single variable encapsulates the state of the ring buffer. It
    // can only be written to by a single writer thread and it can be read
    // by multiple reader threads. Buffer memory is addressed via this index
-   // modulo the number of elements.
+   // modulo the number of elements. This is set by the writer immediately
+   // after it has written to the element.
    std::atomic<long long> mWriteIndex;
+
+   // This is set by the writer immediately before it writes to the element.
+   // Once the write has completed, the two are equal. They are only
+   // different during the write. This is used to detect if reads have been
+   // overwritten.
+   std::atomic<long long> mPreWriteIndex;
 
    //***************************************************************************
    //***************************************************************************
