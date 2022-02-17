@@ -19,6 +19,7 @@ namespace Some
 
 void TestRingBuffer::initialize()
 {
+   BaseClass::reset();
    BaseClass::mNumElements = cNumElements;
    BaseClass::mElementSize = sizeof(TestRecord);
    BaseClass::mElementArray = (void*)&mElementArrayMemory[0];

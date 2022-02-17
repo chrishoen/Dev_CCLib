@@ -7,6 +7,7 @@ Description:
 //******************************************************************************
 
 #include "stdafx.h"
+#include <limits.h>
 
 #include "ccRingBuffer.h"
 
@@ -14,6 +15,13 @@ using namespace std;
 
 namespace CC
 {
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Constants.
+
+static const long long cInvalidValue = -9223372036854775807;
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -28,7 +36,7 @@ void BaseRingBuffer::reset()
    mElementSize = 0;
    mElementArray = 0;
    mReadyGuard = 0;
-   mWriteIndex = LLONG_MIN;
+   mWriteIndex = cInvalidValue;
 }
 
 //******************************************************************************
@@ -75,7 +83,14 @@ void RingBufferWriter::doWrite(void* aElement)
    long long tWriteIndex = mRB->mWriteIndex.load(std::memory_order_relaxed);
 
    // Advance the index to the next element to write to.
-   tWriteIndex++;
+   if (tWriteIndex < 0)
+   {
+      tWriteIndex = 0;
+   }
+   else
+   {
+      tWriteIndex++;
+   }
 
    // Get the address of the next element to write to.
    void* tPtr = elementAt(tWriteIndex);
@@ -100,7 +115,14 @@ void* RingBufferWriter::startWrite()
    long long tWriteIndex = mRB->mWriteIndex.load(std::memory_order_relaxed);
 
    // Advance the index to the next element to write to.
-   tWriteIndex++;
+   if (tWriteIndex < 0)
+   {
+      tWriteIndex = 0;
+   }
+   else
+   {
+      tWriteIndex++;
+   }
 
    // Return the address of the next element to write to.
    return elementAt(tWriteIndex);
@@ -139,11 +161,11 @@ void RingBufferReader::resetVars()
    mNotReadyCount3 = 0;
    mDropCount = 0;
    mRetryCount = 0;
-   mReadIndex = LLONG_MIN;
-   mLastReadIndex = LLONG_MIN;
-   mTail = LLONG_MIN;
-   mReady = LLONG_MIN;
-   mHead = LLONG_MIN;
+   mReadIndex = cInvalidValue;
+   mLastReadIndex = cInvalidValue;
+   mTail = cInvalidValue;
+   mReady = cInvalidValue;
+   mHead = cInvalidValue;
 }
 
 void RingBufferReader::initialize(BaseRingBuffer* aRingBuffer)
@@ -190,7 +212,7 @@ restart:
 
    // Test for invalid data. This means that the writer has not yet
    // written any elements or is resetting the buffer.
-   if (tWriteIndex == LLONG_MIN)
+   if (tWriteIndex == cInvalidValue)
    {
       // The writer is not ready.
       mFirstFlag = true;
@@ -222,7 +244,7 @@ restart:
       mTail = tWriteIndex - (mRB->mNumElements - 1);
       mReady = tWriteIndex - mRB->mReadyGuard;
       mHead = tWriteIndex;
-      mLastReadIndex = LLONG_MIN;
+      mLastReadIndex = cInvalidValue;
       mReadIndex = mReady;
    }
    else

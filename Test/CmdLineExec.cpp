@@ -49,16 +49,14 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1, 0);
-   aCmd->setArgDefault(2, true);
-   unsigned tValue = 0x0000ffff;
-   Prn::print(0, "%08x", tValue);
+   static const long long cInvalidValue = -9223372036854775807;
+   long long tValue = cInvalidValue;
 
-   int tBitNum = aCmd->argInt(1);
-   bool tBitValue = aCmd->argBool(2);
-   Ris::setBit(&tValue, tBitNum, tBitValue);
+   Prn::print(0, "tValue    %0llx", tValue);
+   Prn::print(0, "tValue    %lld", tValue);
 
-   Prn::print(0, "%08x", tValue);
+   Prn::print(0, "LLONG_MIN %0llx", LLONG_MIN);
+   Prn::print(0, "LLONG_MIN %lld", LLONG_MIN);
 }
 
 //******************************************************************************
@@ -67,16 +65,15 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1, 0);
-   unsigned tValue = 0;
-   tValue = 0x00000000;
-   tValue = 0x0000ffff;
-   Prn::print(0, "%08x", tValue);
+   long long tValue1 = LLONG_MIN;
+   long long tValue2 = -tValue1;
 
-   int tBitNum = aCmd->argInt(1);
-   bool tBitValue = Ris::getBit(tValue, tBitNum);
+   Prn::print(0, "tValue1   %0llx", tValue1);
+   Prn::print(0, "tValue1   %lld", tValue1);
+   Prn::print(0, "tValue2   %0llx", tValue2);
+   Prn::print(0, "tValue2   %lld", tValue2);
 
-   Prn::print(0, "%d", tBitValue);
+
 }
 
 //******************************************************************************
@@ -85,19 +82,6 @@ void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1, 0);
-   aCmd->setArgDefault(2, true);
-   unsigned tValue1 = 0;
-   unsigned tValue2 = 0;
-   tValue1 = 0x00000000;
-   tValue1 = 0x0000ffff;
-   Prn::print(0, "%08x", tValue1);
-
-   int tBitNum = aCmd->argInt(1);
-   bool tBitValue = aCmd->argBool(2);
-   tValue2 = Ris::setBit(tValue1, tBitNum, tBitValue);
-
-   Prn::print(0, "%08x", tValue2);
 }
 
 //******************************************************************************
@@ -106,16 +90,6 @@ void CmdLineExec::executeGo3(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 {
-   aCmd->setArgDefault(1, 0);
-   aCmd->setArgDefault(2, true);
-   unsigned char tValue = 0x0f;
-   Prn::print(0, "%02x", tValue);
-
-   int tBitNum = aCmd->argInt(1);
-   bool tBitValue = aCmd->argBool(2);
-   Ris::setBit(&tValue, tBitNum, tBitValue);
-
-   Prn::print(0, "%02x", tValue);
 }
 
 //******************************************************************************

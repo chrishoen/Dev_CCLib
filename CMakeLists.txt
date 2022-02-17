@@ -13,6 +13,7 @@ my_special1()
 add_subdirectory ("CCLib")
 add_subdirectory ("Concurrent")
 add_subdirectory ("RingBuffer")
+add_subdirectory ("Test")
 return()
 
 add_subdirectory ("CCLib")
