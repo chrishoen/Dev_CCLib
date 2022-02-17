@@ -355,8 +355,10 @@ void Writer::writeType10(int aNumWrites)
 {
    Some::TestRecord tRecord;
    long long tWriteIndex = gShare.mRingBuffer.mWriteIndex.load(std::memory_order_relaxed);
+   if (tWriteIndex < 0) tWriteIndex = 0;
+   else                 tWriteIndex++;
  
-   tRecord.doSet1(++tWriteIndex);
+   tRecord.doSet1(tWriteIndex);
    gShare.mRingBufferWriter.doWrite((void*)&tRecord);
 }
 

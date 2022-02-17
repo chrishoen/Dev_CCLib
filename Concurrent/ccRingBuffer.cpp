@@ -303,7 +303,10 @@ restart:
 
    // Increment the drop count. If none were dropped then the
    // read index should be the previous read index plus one.
-   mDropCount += (int)(mReadIndex - (mLastReadIndex + 1));
+   if (mLastReadIndex > 0)
+   {
+      mDropCount += (int)(mReadIndex - (mLastReadIndex + 1));
+   }
 
    // Internal test function that can be used by inheritors to perform
    // ring buffer performance tests.
