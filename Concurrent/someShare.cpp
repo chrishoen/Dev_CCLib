@@ -277,6 +277,7 @@ void Share::show4()
    Prn::print(0, "Reader.DropCount       %-6d", gShare.mRingBufferReader.mDropCount);
    Prn::print(0, "Tester.mPassCount      %-6d", gShare.mRingBufferTester.mPassCount);
    Prn::print(0, "Tester.mFailCount      %-6d", gShare.mRingBufferTester.mFailCount);
+   Prn::print(0, "Tester.mTestCount      %-6d", gShare.mRingBufferTester.mTestCount);
 
 }
 

@@ -355,6 +355,7 @@ void Reader::readType10(int aNumReads)
 {
    Some::TestRecord tRecord;
    gShare.mRingBufferReader.doRead((void*)&tRecord);
+   gShare.mRingBufferTester.mTestCount++;
 }
 
 //******************************************************************************
