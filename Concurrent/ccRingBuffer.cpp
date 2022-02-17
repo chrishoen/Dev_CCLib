@@ -128,7 +128,7 @@ RingBufferReader::RingBufferReader()
 
 void RingBufferReader::resetVars()
 {
-   mFirstFlag = false;
+   mFirstFlag = true;
    mNotReadyCount1 = 0;
    mNotReadyCount2 = 0;
    mNotReadyCount3 = 0;
