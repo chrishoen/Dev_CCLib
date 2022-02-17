@@ -353,6 +353,8 @@ void Reader::readType9(int aNumReads)
 
 void Reader::readType10(int aNumReads)
 {
+   Some::TestRecord tRecord;
+   gShare.mRingBufferReader.doRead((void*)&tRecord);
 }
 
 //******************************************************************************

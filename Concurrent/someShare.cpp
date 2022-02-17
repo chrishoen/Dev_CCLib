@@ -62,6 +62,13 @@ void Share::initialize()
          mLCPointerQueue.initialize(gParms.mNumElements);
          break;
       case 10:
+         mRingBuffer.initialize();
+         mRingBufferWriter.initialize(&mRingBuffer);
+         mRingBufferReader.initialize(&mRingBuffer);
+         mRingBufferReader.mTestFunction = std::bind(
+            &Some::TestTester::doTest, &mRingBufferTester,
+            std::placeholders::_1, std::placeholders::_2);
+         mRingBufferTester.reset();
          break;
       case 11:
          break;

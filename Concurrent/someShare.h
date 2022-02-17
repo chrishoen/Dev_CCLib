@@ -17,6 +17,10 @@
 #include "ccLCPointerQueue.h"
 #include "someClass1.h"
 
+#include "ccRingBuffer.h"
+#include "someTestRingBuffer.h"
+#include "someTestTester.h"
+
 namespace Some
 {
 //******************************************************************************
@@ -77,6 +81,11 @@ public:
    CC::LCObjectQueue             mLCObjectQueue;
    CC::LCValueQueue<int>         mLCIntQueue;
    CC::LCPointerQueue            mLCPointerQueue;
+
+   Some::TestRingBuffer          mRingBuffer;
+   CC::RingBufferWriter          mRingBufferWriter;
+   CC::RingBufferReader          mRingBufferReader;
+   Some::TestTester              mRingBufferTester;
 
    //***************************************************************************
    //***************************************************************************

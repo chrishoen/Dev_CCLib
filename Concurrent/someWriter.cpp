@@ -353,6 +353,9 @@ void Writer::writeType9(int aNumWrites)
 
 void Writer::writeType10(int aNumWrites)
 {
+   Some::TestRecord tRecord;
+   tRecord.doSet1(gShare.mRingBuffer.mWriteIndex.load(std::memory_order_relaxed));
+   gShare.mRingBufferWriter.doWrite((void*)&tRecord);
 }
 
 //******************************************************************************
