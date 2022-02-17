@@ -22,7 +22,7 @@ void TestRingBuffer::initialize()
    BaseClass::mNumElements = cNumElements;
    BaseClass::mElementSize = sizeof(TestRecord);
    BaseClass::mElementArray = (void*)&mElementArrayMemory[0];
-   BaseClass::mReadyGuard = 10;
+   BaseClass::mReadyGuard = 0;
 }
 
 //******************************************************************************

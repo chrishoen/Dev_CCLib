@@ -217,11 +217,11 @@ public:
    // Temporary element used during read.
    void* mTempElement;
 
-   // The number of elements that were dropped.
-   int mDropCount;
-
    // The number of reads that had nothing available to read.
    int mNotReadyCount;
+
+   // The number of elements that were dropped.
+   int mDropCount;
 
    // The number of reads that were retried.
    int mRetryCount;
@@ -295,6 +295,13 @@ public:
    // Read an element from the array, copying it to the function argument.
    // Return true if successful.
    bool doRead(void* aElement);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods. helpers.
+
+   void doTest1();
 };
 
 //******************************************************************************

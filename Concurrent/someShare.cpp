@@ -262,23 +262,24 @@ void Share::show4()
    Prn::print(0, "");
    Prn::print(0, "TOTAL");
    Prn::print(0, "");
-   Prn::print(0, "Writer.mCount      %16s", my_stringLLU(tString, mWriterCount));
+   Prn::print(0, "Writer.mCount          %16s", my_stringLLU(tString, mWriterCount));
    Prn::print(0, "");
-   Prn::print(0, "Reader.mCount      %16s", my_stringLLU(tString, mReaderCount));
-   Prn::print(0, "Reader.mPassCount  %16s", my_stringLLU(tString, mReaderPassCount));
-   Prn::print(0, "Reader.mFailCount  %16s", my_stringLLU(tString, mReaderFailCount));
+   Prn::print(0, "Reader.mCount          %16s", my_stringLLU(tString, mReaderCount));
+   Prn::print(0, "Reader.mPassCount      %16s", my_stringLLU(tString, mReaderPassCount));
+   Prn::print(0, "Reader.mFailCount      %16s", my_stringLLU(tString, mReaderFailCount));
    Prn::print(0, "");
 
    Prn::print(0, "");
-   Prn::print(0, "Writer.mMeanTime   %16.5f", mWriterMeanTime);
-   Prn::print(0, "Reader.mMeanTime   %16.5f", mReaderMeanTime);
+   Prn::print(0, "Writer.mMeanTime       %16.5f", mWriterMeanTime);
+   Prn::print(0, "Reader.mMeanTime       %16.5f", mReaderMeanTime);
 
-   Prn::print(0, "Reader.NotReadyCount   %-6d", gShare.mRingBufferReader.mNotReadyCount);
-   Prn::print(0, "Reader.DropCount       %-6d", gShare.mRingBufferReader.mDropCount);
-   Prn::print(0, "Tester.mPassCount      %-6d", gShare.mRingBufferTester.mPassCount);
-   Prn::print(0, "Tester.mFailCount      %-6d", gShare.mRingBufferTester.mFailCount);
-   Prn::print(0, "Tester.mTestCount      %-6d", gShare.mRingBufferTester.mTestCount);
-
+   Prn::print(0, "");
+   Prn::print(0, "Reader.NotReadyCount   %16d", gShare.mRingBufferReader.mNotReadyCount);
+   Prn::print(0, "Reader.DropCount       %16d", gShare.mRingBufferReader.mDropCount);
+   Prn::print(0, "Reader.RetryCount      %16d", gShare.mRingBufferReader.mRetryCount);
+   Prn::print(0, "");
+   Prn::print(0, "Tester.mPassCount      %16d", gShare.mRingBufferTester.mPassCount);
+   Prn::print(0, "Tester.mFailCount      %16d", gShare.mRingBufferTester.mFailCount);
 }
 
 //******************************************************************************
