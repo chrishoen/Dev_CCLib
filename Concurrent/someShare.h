@@ -103,10 +103,12 @@ public:
    void update1();
    void update2();
    void update3();
+   void update4();
    void update();
 
    void show12();
    void show3();
+   void show4();
    void show();
 
    void putDummy(void* aPointer);

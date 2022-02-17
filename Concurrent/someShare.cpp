@@ -62,13 +62,6 @@ void Share::initialize()
          mLCPointerQueue.initialize(gParms.mNumElements);
          break;
       case 10:
-         mRingBuffer.initialize();
-         mRingBufferWriter.initialize(&mRingBuffer);
-         mRingBufferReader.initialize(&mRingBuffer);
-         mRingBufferReader.mTestFunction = std::bind(
-            &Some::TestTester::doTest, &mRingBufferTester,
-            std::placeholders::_1, std::placeholders::_2);
-         mRingBufferTester.reset();
          break;
       case 11:
          break;
@@ -78,6 +71,15 @@ void Share::initialize()
       case 22:
          break;
       }
+      break;
+   case 4:
+      mRingBuffer.initialize();
+      mRingBufferWriter.initialize(&mRingBuffer);
+      mRingBufferReader.initialize(&mRingBuffer);
+      mRingBufferReader.mTestFunction = std::bind(
+         &Some::TestTester::doTest, &mRingBufferTester,
+         std::placeholders::_1, std::placeholders::_2);
+      mRingBufferTester.reset();
       break;
    }
 
@@ -135,6 +137,7 @@ void Share::update1()
 void Share::update2()
 {
 }
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -150,13 +153,35 @@ void Share::update3()
 //******************************************************************************
 //******************************************************************************
 
+void Share::update4()
+{
+   mWriterCount = 0;
+   mWriterMeanTime = 0.0;
+
+   for (int i = 0; i < mNumWriters; i++)
+   {
+      mWriterCount += mWriter[i].mCount;
+      mWriterMeanTimePop += mWriter[i].mMeanTimePop / mNumWriters;
+   }
+
+   mReaderCount = mReader.mCount;
+   mReaderPassCount = mReader.mPassCount;
+   mReaderFailCount = mReader.mFailCount;
+   mReaderMeanTime = mReader.mMeanTimeRead;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void Share::update()
 {
    switch (gShare.mMode)
    {
    case 1: update1 (); break;
    case 2: update2 (); break;
-   case 3: update3 (); break;
+   case 3: update3(); break;
+   case 4: update4(); break;
    }
 }
    
@@ -228,13 +253,44 @@ void Share::show3()
 //******************************************************************************
 //******************************************************************************
 
+void Share::show4()
+{
+   char tString[40];
+
+   Prn::print(0, "");
+   Prn::print(0, "");
+   Prn::print(0, "");
+   Prn::print(0, "TOTAL");
+   Prn::print(0, "");
+   Prn::print(0, "Writer.mCount      %16s", my_stringLLU(tString, mWriterCount));
+   Prn::print(0, "");
+   Prn::print(0, "Reader.mCount      %16s", my_stringLLU(tString, mReaderCount));
+   Prn::print(0, "Reader.mPassCount  %16s", my_stringLLU(tString, mReaderPassCount));
+   Prn::print(0, "Reader.mFailCount  %16s", my_stringLLU(tString, mReaderFailCount));
+   Prn::print(0, "");
+
+   Prn::print(0, "");
+   Prn::print(0, "Writer.mMeanTime   %16.5f", mWriterMeanTime);
+   Prn::print(0, "Reader.mMeanTime   %16.5f", mReaderMeanTime);
+
+   double tReaderPass = (double)mReaderPassCount / (double)mReaderCount;
+
+   Prn::print(0, "");
+   Prn::print(0, "ReaderPass         %16.5f", tReaderPass);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void Share::show()
 {
    switch (gShare.mMode)
    {
    case 1: show12 (); break;
    case 2: show12 (); break;
-   case 3: show3  (); break;
+   case 3: show3(); break;
+   case 4: show3(); break;
    }
 }
 

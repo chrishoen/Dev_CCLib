@@ -56,11 +56,13 @@ public:
    void start1();
    void start2();
    void start3();
+   void start4();
    void start();
 
    void stop1();
    void stop2();
    void stop3();
+   void stop4();
    void stop();
 };
 

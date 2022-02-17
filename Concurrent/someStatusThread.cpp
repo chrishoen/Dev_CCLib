@@ -90,6 +90,13 @@ void StatusThread::threadRunFunction()
                gShare.mTest,
                my_stringLLU(tString1, gShare.mTester.mCount));
          }
+         case 4:
+         {
+            Prn::print(Prn::ThreadRun1, "%s$   %s %s",
+               mProcString,
+               my_stringLL(tString1, gShare.mRingBuffer.mWriteIndex.load(std::memory_order_relaxed)),
+               my_stringLL(tString1, gShare.mRingBufferReader.mReadIndex));
+         }
          break;
       }
    }
