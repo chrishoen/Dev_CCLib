@@ -161,17 +161,28 @@ void Share::update3()
 void Share::update4()
 {
    mWriterCount = 0;
+   mWriterPassCount = 0;
+   mWriterFailCount = 0;
+   mWriterCheckSum = 0;
    mWriterMeanTime = 0.0;
+   mWriterMeanTimePop = 0.0;
+   mWriterMeanTimePush = 0.0;
 
    for (int i = 0; i < mNumWriters; i++)
    {
       mWriterCount += mWriter[i].mCount;
+      mWriterPassCount += mWriter[i].mPassCount;
+      mWriterFailCount += mWriter[i].mFailCount;
+      mWriterCheckSum += mWriter[i].mCheckSum;
+      mWriterMeanTime += mWriter[i].mMeanTimeWrite / mNumWriters;
       mWriterMeanTimePop += mWriter[i].mMeanTimePop / mNumWriters;
+      mWriterMeanTimePush += mWriter[i].mMeanTimePush / mNumWriters;
    }
 
    mReaderCount = mReader.mCount;
    mReaderPassCount = mReader.mPassCount;
    mReaderFailCount = mReader.mFailCount;
+   mReaderCheckSum = mReader.mCheckSum;
    mReaderMeanTime = mReader.mMeanTimeRead;
 }
 

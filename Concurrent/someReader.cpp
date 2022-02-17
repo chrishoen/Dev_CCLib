@@ -354,7 +354,9 @@ void Reader::readType9(int aNumReads)
 void Reader::readType10(int aNumReads)
 {
    Some::TestRecord tRecord;
+   mMarkerRead.doStart();
    bool tPass = gShare.mRingBufferReader.doRead((void*)&tRecord);
+   mMarkerRead.doStop();
 
    if (tPass)
    {
