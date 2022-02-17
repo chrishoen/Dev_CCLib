@@ -101,8 +101,8 @@ void StatusThread::threadRunFunction()
                gShare.mRingBufferReader.mNotReadyCount3,
                gShare.mRingBufferReader.mDropCount,
                gShare.mRingBufferReader.mRetryCount,
-               gShare.mRingBufferTester.mPassCount,
-               gShare.mRingBufferTester.mFailCount);
+               gShare.mRingBufferTester.mReadPassCount,
+               gShare.mRingBufferTester.mReadFailCount);
 
          }
          break;

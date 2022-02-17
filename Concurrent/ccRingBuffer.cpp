@@ -42,6 +42,7 @@ void BaseRingBuffer::reset()
 RingBufferWriter::RingBufferWriter()
 {
    mRB = 0;
+   mTestFunction = 0;
 }
 
 void RingBufferWriter::initialize(BaseRingBuffer* aRingBuffer)
@@ -81,6 +82,10 @@ void RingBufferWriter::doWrite(void* aElement)
 
    // Copy the element into the array.
    memcpy(tPtr, aElement, mRB->mElementSize);
+
+   // Internal test function that can be used by inheritors to perform
+   // ring buffer performance tests.
+   if (mTestFunction) mTestFunction(tWriteIndex, tPtr);
 
    // Update the global state. This should be the only place that this
    // happens.

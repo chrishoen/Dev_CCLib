@@ -11,32 +11,71 @@ Description:
 #include "someTestRecord.h"
 #include "someTestTester.h"
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 namespace Some
 {
-TestTester::TestTester()
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+   TestTester::TestTester()
 {
    reset();
 }
 
 void TestTester::reset()
 {
-   mPassCount = 0;
-   mFailCount = 0;
+   mFirstWriteFlag = true;
+   mFirstReadFlag = true;
+
+   mFirstWriteIndex = 0;
+   mFirstReadIndex = 0;
+
+   mReadPassCount = 0;
+   mReadFailCount = 0;
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
-
-void TestTester::doTest(long long aReadIndex, void* aElement)
+void TestTester::doWriteTest(long long aWriteIndex, void* aElement)
 {
+   if (mFirstWriteFlag)
+   {
+      mFirstWriteFlag = false;
+      mFirstWriteIndex = aWriteIndex;
+   }
+
+   TestRecord* tRecord = (TestRecord*)aElement;
+
+   tRecord->doSet1(aWriteIndex);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void TestTester::doReadTest(long long aReadIndex, void* aElement)
+{
+   if (mFirstReadFlag)
+   {
+      mFirstReadFlag = false;
+      mFirstReadIndex = aReadIndex;
+   }
+
    TestRecord* tRecord = (TestRecord*)aElement;
 
    if (tRecord->doTest1(aReadIndex))
    {
-      mPassCount++;
+      mReadPassCount++;
    }
    else
    {
-      mFailCount++;
+      mReadFailCount++;
    }
 }
 

@@ -24,9 +24,14 @@ public:
    //***************************************************************************
    // Members.
 
-   int mPassCount;
-   int mFailCount;
-   int mTestCount;
+   bool mFirstWriteFlag;
+   bool mFirstReadFlag;
+
+   long long mFirstWriteIndex;
+   long long mFirstReadIndex;
+
+   int mReadPassCount;
+   int mReadFailCount;
 
    //***************************************************************************
    //***************************************************************************
@@ -37,8 +42,9 @@ public:
    TestTester();
    void reset();
 
-   // Set.
-   void doTest(long long aReadIndex, void* aElement);
+   // Test functions.
+   void doWriteTest(long long aWriteIndex, void* aElement);
+   void doReadTest(long long aReadIndex, void* aElement);
 
 };
 
