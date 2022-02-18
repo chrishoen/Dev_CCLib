@@ -81,7 +81,7 @@ void* RingBufferWriter::elementAt(long long aIndex)
 void RingBufferWriter::doWrite(void* aElement)
 {
    // Index of the last element that was written to.
-   long long tWriteIndex = mRB->mWriteIndex.load(std::memory_order_relaxed);
+   long long tWriteIndex = mRB->mWriteIndex.load(std::memory_order_seq_cst);
 
    // Advance the index to the next element to write to.
    if (tWriteIndex < 0)
@@ -94,7 +94,7 @@ void RingBufferWriter::doWrite(void* aElement)
    }
 
    // Store the write index before the write.
-   mRB->mPreWriteIndex.store(tWriteIndex, std::memory_order_relaxed);
+   mRB->mPreWriteIndex.store(tWriteIndex, std::memory_order_seq_cst);
 
    // Get the address of the next element to write to.
    void* tPtr = elementAt(tWriteIndex);
@@ -107,7 +107,7 @@ void RingBufferWriter::doWrite(void* aElement)
    if (mTestFunction) mTestFunction(tWriteIndex, tPtr);
 
    // Store the write index after the write.
-   mRB->mWriteIndex.store(tWriteIndex, std::memory_order_relaxed);
+   mRB->mWriteIndex.store(tWriteIndex, std::memory_order_seq_cst);
 }
 
 // Return a pointer to the next element to write to. Do not update the
@@ -115,7 +115,7 @@ void RingBufferWriter::doWrite(void* aElement)
 void* RingBufferWriter::startWrite()
 {
    // Index of the last element that was written to.
-   long long tWriteIndex = mRB->mWriteIndex.load(std::memory_order_relaxed);
+   long long tWriteIndex = mRB->mWriteIndex.load(std::memory_order_seq_cst);
 
    // Advance the index to the next element to write to.
    if (tWriteIndex < 0)
@@ -128,7 +128,7 @@ void* RingBufferWriter::startWrite()
    }
 
    // Store the write index before the write.
-   mRB->mPreWriteIndex.store(tWriteIndex, std::memory_order_relaxed);
+   mRB->mPreWriteIndex.store(tWriteIndex, std::memory_order_seq_cst);
 
    // Return the address of the next element to write to.
    return elementAt(tWriteIndex);
@@ -139,7 +139,7 @@ void* RingBufferWriter::startWrite()
 void RingBufferWriter::finishWrite()
 {
    // Store the write index after the write.
-   mRB->mWriteIndex.fetch_add(1, std::memory_order_relaxed);
+   mRB->mWriteIndex.fetch_add(1, std::memory_order_seq_cst);
 }
 
 //******************************************************************************
@@ -205,15 +205,15 @@ void* RingBufferReader::elementAt(long long aIndex)
 
 bool RingBufferReader::doRead(void* aElement)
 {
-   // Get the initial write index. This might change asynchronously during
-   // the read. The write index is the index of the last element that was
-   // written to.
-   long long tWriteIndex = mRB->mWriteIndex.load(std::memory_order_relaxed);
-
    // Store the last successful read index.
    mLastReadIndex = mReadIndex;
 
 restart:
+
+   // Get the initial write index. This might change asynchronously during
+   // the read. The write index is the index of the last element that was
+   // written to.
+   long long tWriteIndex = mRB->mWriteIndex.load(std::memory_order_seq_cst);
 
    // Test for invalid data. This means that the writer has not yet
    // written any elements or is resetting the buffer.
@@ -319,11 +319,11 @@ restart:
    // 132 4  Final WriteIndex has overwritten the read  Write - Read = 9
 
    // Get the final write index. 
-   tWriteIndex = mRB->mPreWriteIndex.load(std::memory_order_relaxed);
+   long long tPreWriteIndex = mRB->mPreWriteIndex.load(std::memory_order_seq_cst);
 
    // If the read was overwritten then retry it. The final write index
    // becomes the next initial write index at the top of the loop.
-   if (tWriteIndex - mRB->mReadyGuard - mReadIndex >= mRB->mNumElements)
+   if (tPreWriteIndex + mRB->mReadyGuard - mReadIndex >= mRB->mNumElements)
    {
       mRetryCount++;
       goto restart;
