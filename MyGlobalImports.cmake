@@ -2,37 +2,14 @@
 #*******************************************************************************
 #*******************************************************************************
 
-function(my_init_global_import_variables)
-
-   if(MSVC)
-      set (MyRisLibIncludePath "C:/MyTools/MyLib/include/RisLib" PARENT_SCOPE)
-      set (MyRisLibImportPath  "C:/MyTools/MyLib/lib/RisLib.lib" PARENT_SCOPE)
-      set (MyDspLibIncludePath "C:/MyTools/MyLib/include/DspLib" PARENT_SCOPE)
-      set (MyDspLibImportPath  "C:/MyTools/MyLib/lib/DspLib.lib" PARENT_SCOPE)
-   elseif(CMAKE_SYSTEM_VERSION EQUAL 101)
-      set (MyRisLibIncludePath "C:/MyTools/MyLib/include/RisLib" PARENT_SCOPE)
-      set (MyRisLibImportPath  "C:/MyTools/MyLib/lib/libRisLib.so" PARENT_SCOPE)
-      set (MyDspLibIncludePath "C:/MyTools/MyLib/include/DspLib" PARENT_SCOPE)
-      set (MyDspLibImportPath  "C:/MyTools/MyLib/lib/libDspLib.so" PARENT_SCOPE)
-   else()
-      set (MyRisLibIncludePath "/opt/prime/include/RisLib" PARENT_SCOPE)
-      set (MyRisLibImportPath  "/opt/prime/lib/libRisLib.so" PARENT_SCOPE)
-      set (MyDspLibIncludePath "/opt/prime/include/DspLib" PARENT_SCOPE)
-      set (MyDspLibImportPath  "/opt/prime/lib/libDspLib.so" PARENT_SCOPE)
-   endif()
-
-endfunction()
-
-#*******************************************************************************
-#*******************************************************************************
-#*******************************************************************************
-
 function(my_lib_import_RisLib _target)
 
    if (MSVC)
       set (MyRisLibImportPath  "C:/MyTools/MyLib/lib/RisLib.lib")
-   elseif (MYMODE STREQUAL beagle)
+   elseif (MYMODE STREQUAL "beagle")
       set (MyRisLibImportPath  "C:/MyTools/MyLib/lib/libRisLib.so")
+   elseif (MYMODE STREQUAL "steno-arm")
+      set (MyRisLibImportPath  "/mnt/c/Prime/DevelopLib/Dev_RisLib/out/build/steno-arm/RisLib/libRisLib.so")
    else()
       set (MyRisLibImportPath  "/opt/prime/lib/libRisLib.so")
    endif()
@@ -56,8 +33,10 @@ endfunction()
 
 function(my_inc_import_RisLib _target)
 
-   if (MSVC OR MYMODE STREQUAL beagle)
+   if (MSVC OR MYMODE STREQUAL "beagle")
       set (MyRisLibIncludePath "C:/MyTools/MyLib/include/RisLib")
+   elseif(MYMODE STREQUAL "steno-arm")
+      set (MyRisLibIncludePath "/mnt/c/Prime/AAA_Stenograph/NextGen/src_linux/gui/local/include/RisLib")
    else()
       set (MyRisLibIncludePath "/opt/prime/include/RisLib")
    endif()
@@ -75,7 +54,7 @@ function(my_lib_import_DspLib _target)
 
    if (MSVC)
       set (MyDspLibImportPath  "C:/MyTools/MyLib/lib/DspLib.lib")
-   elseif (MYMODE STREQUAL beagle)
+   elseif (MYMODE STREQUAL "beagle")
       set (MyDspLibImportPath  "C:/MyTools/MyLib/lib/libDspLib.so")
    else()
       set (MyDspLibImportPath  "/opt/prime/lib/libDspLib.so")
@@ -90,7 +69,7 @@ endfunction()
 
 function(my_inc_import_DspLib _target)
 
-   if (MSVC OR MYMODE STREQUAL beagle)
+   if (MSVC OR MYMODE STREQUAL "beagle")
       set (MyDspLibIncludePath "C:/MyTools/MyLib/include/DspLib")
    else()
       set (MyDspLibIncludePath "/opt/prime/include/DspLib")

@@ -83,6 +83,27 @@
                "type": "STRING"
             }
          ]
+      },
+      {
+         "name": "steno-arm",
+         "generator": "Ninja",
+         "configurationType": "Release",
+         "buildRoot": "${projectDir}\\out\\build\\${name}",
+         "installRoot": "${projectDir}\\out\\install\\${name}",
+         "cmakeExecutable": "cmake",
+         "cmakeCommandArgs": "",
+         "buildCommandArgs": "",
+         "ctestCommandArgs": "",
+         "inheritEnvironments": [ "linux_arm" ],
+         "wslPath": "${defaultWSLPath}",
+         "cmakeToolchain": "${projectDir}\\imx8mm-toolchain.cmake",
+         "variables": [
+            {
+               "name": "MYMODE",
+               "value": "steno-arm",
+               "type": "STRING"
+            }
+         ]
       }
    ]
 }

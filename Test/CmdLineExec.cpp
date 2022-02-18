@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <stdio.h>
-#include "string.h"
+#include <limits.h>
 
 #include "risProgramTime.h"
 #include "risBitUtils.h"
