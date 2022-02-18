@@ -39,16 +39,14 @@ void RingParms::reset()
    }
 
    mTestMode = 1;
-   mTestThreadProcessor = -1;
-   mTestThreadPriority = 80;
-   mPollProcessor = false;
-
    mMonitorThreadPeriod = 0;
    mStatPeriod = 0;
-   mTestThreadPeriodUs = 0;
+   mPollProcessor = false;
 
-   mRandomThreadPeriodUs1 = 0;
-   mRandomThreadPeriodUs2 = 0;
+   mWriterThreadProcessor = -1;
+   mWriterThreadPriority = 80;
+   mWriterThreadPeriodUs1 = 0;
+   mWriterThreadPeriodUs2 = 0;
 
 }
 
@@ -65,15 +63,13 @@ void RingParms::show()
    printf("\n");
    printf("TestMode                 %-10d\n", mTestMode);
    printf("\n");
-   printf("TestThreadProcessor      %-10d\n", mTestThreadProcessor);
-   printf("TestThreadPriority       %-10d\n", mTestThreadPriority);
-   printf("PollProcessor            %-10s\n", my_string_from_bool(mPollProcessor));
-   printf("\n");
    printf("MonitorThreadPeriod      %-10d\n", mMonitorThreadPeriod);
    printf("StatPeriod               %-10d\n", mStatPeriod);
-   printf("TestThreadPeriodUs       %-10d\n", mTestThreadPeriodUs);
+   printf("PollProcessor            %-10s\n", my_string_from_bool(mPollProcessor));
    printf("\n");
-   printf("RandomThreadPeriodUs     %-10d  %-10d\n", mRandomThreadPeriodUs1, mRandomThreadPeriodUs2);
+   printf("WriterThreadProcessor    %-10d\n", mWriterThreadProcessor);
+   printf("WriterThreadPriority     %-10d\n", mWriterThreadPriority);
+   printf("WriterThreadPeriodUs     %-10d  %-10d\n", mWriterThreadPeriodUs1, mWriterThreadPeriodUs2);
    printf("\n");
 }
 
@@ -88,20 +84,18 @@ void RingParms::execute(Ris::CmdLineCmd* aCmd)
 {
    if (!isTargetSection(aCmd)) return;
 
-   if (aCmd->isCmd("TestMode"))              mTestMode = aCmd->argInt(1);
+   if (aCmd->isCmd("TestMode"))                mTestMode = aCmd->argInt(1);
 
-   if (aCmd->isCmd("TestThreadProcessor"))   mTestThreadProcessor = aCmd->argInt(1);
-   if (aCmd->isCmd("TestThreadPriority"))    mTestThreadPriority = aCmd->argInt(1);
-   if (aCmd->isCmd("PollProcessor"))         mPollProcessor = aCmd->argBool(1);
+   if (aCmd->isCmd("MonitorThreadPeriod"))     mMonitorThreadPeriod = aCmd->argInt(1);
+   if (aCmd->isCmd("StatPeriod"))              mStatPeriod = aCmd->argInt(1);
+   if (aCmd->isCmd("PollProcessor"))           mPollProcessor = aCmd->argBool(1);
 
-   if (aCmd->isCmd("MonitorThreadPeriod"))   mMonitorThreadPeriod = aCmd->argInt(1);
-   if (aCmd->isCmd("StatPeriod"))            mStatPeriod = aCmd->argInt(1);
-   if (aCmd->isCmd("TestThreadPeriodUs"))    mTestThreadPeriodUs = aCmd->argInt(1);
-
-   if (aCmd->isCmd("RandomThreadPeriodUs"))
+   if (aCmd->isCmd("WriterThreadProcessor"))   mWriterThreadProcessor = aCmd->argInt(1);
+   if (aCmd->isCmd("WriterThreadPriority"))    mWriterThreadPriority = aCmd->argInt(1);
+   if (aCmd->isCmd("WriterThreadPeriodUs"))
    {
-      mRandomThreadPeriodUs1 = aCmd->argInt(1);
-      mRandomThreadPeriodUs2 = aCmd->argInt(2);
+      mWriterThreadPeriodUs1 = aCmd->argInt(1);
+      mWriterThreadPeriodUs2 = aCmd->argInt(2);
    }
 }
 

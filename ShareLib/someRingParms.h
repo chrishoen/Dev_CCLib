@@ -70,19 +70,16 @@ public:
    // Test mode 1,2.
    int  mTestMode;
 
-   // Processor variables.
-   int  mTestThreadProcessor;
-   int  mTestThreadPriority;
-   bool mPollProcessor;
-
-   // Timer thread variables.
+   // Monitor variables.
    int  mMonitorThreadPeriod;
    int  mStatPeriod;
-   int  mTestThreadPeriodUs;
+   bool mPollProcessor;
 
-   // Random thread variables.
-   int  mRandomThreadPeriodUs1;
-   int  mRandomThreadPeriodUs2;
+   // Thread variables.
+   int  mWriterThreadProcessor;
+   int  mWriterThreadPriority;
+   int  mWriterThreadPeriodUs1;
+   int  mWriterThreadPeriodUs2;
 
    //***************************************************************************
    //***************************************************************************

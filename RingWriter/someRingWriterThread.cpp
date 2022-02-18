@@ -31,12 +31,12 @@ RingWriterThread::RingWriterThread()
    BaseClass::setThreadPriority(Ris::Threads::gPriorities.mTimerTest);
    BaseClass::setThreadPriority(
       Ris::Threads::Priority(
-         gRingParms.mTestThreadProcessor,
-         gRingParms.mTestThreadPriority));
+         gRingParms.mWriterThreadProcessor,
+         gRingParms.mWriterThreadPriority));
 
    BaseClass::mPollProcessor = gRingParms.mPollProcessor;
-   BaseClass::mTimerPeriodUs1 = gRingParms.mRandomThreadPeriodUs1;
-   BaseClass::mTimerPeriodUs2 = gRingParms.mRandomThreadPeriodUs2;
+   BaseClass::mTimerPeriodUs1 = gRingParms.mWriterThreadPeriodUs1;
+   BaseClass::mTimerPeriodUs2 = gRingParms.mWriterThreadPeriodUs2;
    BaseClass::mStatPeriod = gRingParms.mStatPeriod;
 }
 
