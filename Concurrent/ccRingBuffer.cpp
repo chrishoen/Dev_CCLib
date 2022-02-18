@@ -323,7 +323,7 @@ restart:
       mRetryCount++;
       goto restart;
    }
-
+   // mark it here.
    // The read of the temp element was successful so copy the temp
    // element into the argument element.
    memcpy(aElement, mTempElement, mRB->mElementSize);
