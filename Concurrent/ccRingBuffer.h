@@ -232,7 +232,8 @@ public:
    int mNotReadyCount3;
 
    // The number of elements that were dropped.
-   int mDropCount;
+   int mDropCount1;
+   int mDropCount2;
 
    // The number of reads that were retried.
    int mRetryCount;

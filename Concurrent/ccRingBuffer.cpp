@@ -159,7 +159,8 @@ void RingBufferReader::resetVars()
    mNotReadyCount1 = 0;
    mNotReadyCount2 = 0;
    mNotReadyCount3 = 0;
-   mDropCount = 0;
+   mDropCount1 = 0;
+   mDropCount2 = 0;
    mRetryCount = 0;
    mReadIndex = cInvalidValue;
    mLastReadIndex = cInvalidValue;
@@ -207,9 +208,9 @@ bool RingBufferReader::doRead(void* aElement)
 
    // Store the last successful read index.
    mLastReadIndex = mReadIndex;
-
+#if 0
 restart:
-
+#endif
    // Test for invalid data. This means that the writer has not yet
    // written any elements or is resetting the buffer.
    if (tWriteIndex == cInvalidValue)
@@ -259,16 +260,16 @@ restart:
       if (mLastReadIndex == mReady)
       {
          // There's nothing to read.
-         mReadIndex = mReady; //????
+         //mReadIndex = mReady; //????
          mNotReadyCount2++;
          return false;
       }
 
       // If the last element read is behind the tail then read from
       // the tail.
-      if (mLastReadIndex < mTail)
+      if (mLastReadIndex < mTail + 1)
       {
-         mReadIndex = mTail;
+         mReadIndex = mTail + 1;
       }
       // Else read the next element.
       else
@@ -315,7 +316,7 @@ restart:
 
    // Get the final write index. 
    tWriteIndex = mRB->mWriteIndex.load(std::memory_order_relaxed);
-
+#if 0
    // If the read was overwritten then retry it. The final write index
    // becomes the next initial write index at the top of the loop.
    if (tWriteIndex - mReadIndex >= mRB->mNumElements)
@@ -323,21 +324,34 @@ restart:
       mRetryCount++;
       goto restart;
    }
-   // mark it here.
+#endif
+   
+   // If the read was or might have been overwritten then drop it.
+   if (tWriteIndex - mReadIndex >= mRB->mNumElements - 1)
+   {
+      // Increment the drop count. If none were dropped then the
+      // read index should be the previous read index plus one.
+      if (mLastReadIndex > 0)
+      {
+         mDropCount1 += (int)(mReadIndex - (mLastReadIndex + 1));
+      }
+      return false;
+   }
+
    // The read of the temp element was successful so copy the temp
    // element into the argument element.
    memcpy(aElement, mTempElement, mRB->mElementSize);
+
+   // Internal test function that can be used by inheritors to perform
+   // ring buffer performance tests.
+   if (mTestFunction) mTestFunction(mReadIndex, mTempElement);
 
    // Increment the drop count. If none were dropped then the
    // read index should be the previous read index plus one.
    if (mLastReadIndex > 0)
    {
-      mDropCount += (int)(mReadIndex - (mLastReadIndex + 1));
+      mDropCount2 += (int)(mReadIndex - (mLastReadIndex + 1));
    }
-
-   // Internal test function that can be used by inheritors to perform
-   // ring buffer performance tests.
-   if(mTestFunction) mTestFunction(mReadIndex, mTempElement);
 
    // Success. 
    return true;

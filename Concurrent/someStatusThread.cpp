@@ -92,15 +92,15 @@ void StatusThread::threadRunFunction()
          }
          case 4:
          {
-            Prn::print(Prn::ThreadRun1, "%s$   %3lld %3lld NRDY %d %d %d DROP %d RETRY %d TEST %d %d",
+            Prn::print(Prn::ThreadRun1, "%s$   %3lld %3lld NRDY %d %d %d DROP %d %d TEST %d %d",
                mProcString,
                gShare.mRingBuffer.mWriteIndex.load(std::memory_order_relaxed),
                gShare.mRingBufferReader.mReadIndex,
                gShare.mRingBufferReader.mNotReadyCount1,
                gShare.mRingBufferReader.mNotReadyCount2,
                gShare.mRingBufferReader.mNotReadyCount3,
-               gShare.mRingBufferReader.mDropCount,
-               gShare.mRingBufferReader.mRetryCount,
+               gShare.mRingBufferReader.mDropCount1,
+               gShare.mRingBufferReader.mDropCount2,
                gShare.mRingBufferTester.mReadPassCount,
                gShare.mRingBufferTester.mReadFailCount);
 

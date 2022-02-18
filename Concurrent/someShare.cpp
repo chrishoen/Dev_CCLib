@@ -296,8 +296,8 @@ void Share::show4()
    Prn::print(0, "Reader.NotReadyCount1      %16d", gShare.mRingBufferReader.mNotReadyCount1);
    Prn::print(0, "Reader.NotReadyCount2      %16d", gShare.mRingBufferReader.mNotReadyCount2);
    Prn::print(0, "Reader.NotReadyCount3      %16d", gShare.mRingBufferReader.mNotReadyCount3);
-   Prn::print(0, "Reader.DropCount           %16d", gShare.mRingBufferReader.mDropCount);
-   Prn::print(0, "Reader.RetryCount          %16d", gShare.mRingBufferReader.mRetryCount);
+   Prn::print(0, "Reader.DropCount1          %16d", gShare.mRingBufferReader.mDropCount1);
+   Prn::print(0, "Reader.DropCount2          %16d", gShare.mRingBufferReader.mDropCount2);
    Prn::print(0, "");
    Prn::print(0, "Tester.mReadPassCount      %16d", gShare.mRingBufferTester.mReadPassCount);
    Prn::print(0, "Tester.mReadFailCount      %16d", gShare.mRingBufferTester.mReadFailCount);
