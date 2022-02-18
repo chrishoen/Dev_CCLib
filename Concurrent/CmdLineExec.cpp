@@ -240,10 +240,6 @@ void CmdLineExec::executeDelay1(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-inline int convertFromUsec(double aDelay)
-{
-}
-
 void CmdLineExec::executeDelay2(Ris::CmdLineCmd* aCmd)
 {
    double tX = aCmd->argDouble(1);

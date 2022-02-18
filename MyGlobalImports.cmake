@@ -27,6 +27,7 @@ function(my_lib_import_RisLib _target)
       target_link_libraries(${_target} pthread)
       target_link_libraries(${_target} rt)
       target_link_libraries(${_target} readline)
+      target_link_libraries(${_target} atomic)
    endif()
 
 endfunction()
