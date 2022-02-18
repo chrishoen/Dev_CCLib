@@ -30,7 +30,7 @@ Ris::SharedMemory gSharedMemory;
 
 void Share::initialize()
 {
-   mRingBuffer.initialize();
+   mTestRingBuffer.initialize();
 }
 
 //******************************************************************************

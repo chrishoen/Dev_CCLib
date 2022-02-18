@@ -12,6 +12,8 @@ Description:
 #include "risProgramTime.h"
 #include "risThreadsPriorities.h"
 
+#include "smShare.h"
+
 #include "someRingParms.h"
 #include "someRingWriterThread.h"
 
@@ -33,7 +35,7 @@ MonitorThread::MonitorThread()
    BaseClass::mTimerPeriod = gRingParms.mMonitorThreadPeriod;
 
    // Set member variables.
-   mShowCode = 1;
+   mShowCode = 0;
 }
 
 //******************************************************************************
@@ -44,9 +46,10 @@ void MonitorThread::executeOnTimer(int aTimeCount)
 {
    if (mShowCode == 1)
    {
-      Prn::print(Prn::Show1, "Timer1 %5d %2d $$",
+      Prn::print(Prn::Show1, "%3d %2d $$ %3lld",
          aTimeCount,
-         gRingWriterThread->mThreadCurrentProcessor);
+         gRingWriterThread->mThreadCurrentProcessor,
+         SM::gShare->mTestRingBuffer.mWriteIndex.load(std::memory_order_relaxed));
    }
    else if (mShowCode == 2)
    {

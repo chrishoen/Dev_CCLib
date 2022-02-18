@@ -1,7 +1,7 @@
 #pragma once
 
 /*==============================================================================
-Timer test thread.
+Ring buffer writer thread.
 ==============================================================================*/
 
 //******************************************************************************
@@ -10,8 +10,17 @@ Timer test thread.
 
 #include "risThreadsRandomThread.h"
 
+#include "ccRingBuffer.h"
+#include "someTestRingBuffer.h"
+#include "someTestTester.h"
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 namespace Some
 {
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -26,6 +35,12 @@ public:
    //******************************************************************************
    // Members.
 
+   // Ring buffer writer.
+   CC::RingBufferWriter          mRingWriter;
+
+   // Test ring buffer tester.
+   Some::TestTester              mRingTester;
+
    //******************************************************************************
    //******************************************************************************
    //******************************************************************************
@@ -34,8 +49,23 @@ public:
    // Constructor.
    RingWriterThread();
 
-   // Base class overloads.
-   void executeOnTimer(int aTimeCount) override;
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Thread base class overloads.
+
+   // Thread init function. This is called by the base class immedidately 
+   // after the thread starts running. It creates and launches the 
+   // child SerialMsgThread.
+   void threadInitFunction() override;
+
+   // Thread exit function. This is called by the base class immedidately
+   // before the thread is terminated. It shuts down the child SerialMsgThread.
+   void threadExitFunction() override;
+
+   // Execute periodically. This is called by the base class timer.
+   void executeOnTimer(int aTimerCount) override;
+
 };
 
 //******************************************************************************
