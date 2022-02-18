@@ -32,6 +32,9 @@ public:
    //***************************************************************************
    // Methods
 
+   // Virtual destructor.
+   virtual ~BlockPoolBaseIndexStack() {}
+
    // Initialize the stack to either allocate memory from the system heap or
    // to use external memory that has already been allocated for it.
    // If aMemory is null then it mallocs from the system heap. If not, then

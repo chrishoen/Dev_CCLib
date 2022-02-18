@@ -29,6 +29,9 @@ public:
    //***************************************************************************
    // Abstract Methods.
 
+   // Virtual destructor.
+   virtual ~BlockPoolBase() {}
+
    // Initialize the block pool. It is passed block pool parameters.
    virtual void initialize(BlockPoolParms* aParms)=0;
 

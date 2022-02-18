@@ -234,7 +234,7 @@ void LCObjectQueue::initialize(int aNumElements,int aElementSize,bool aConstruct
       }
 
       // Pop the dummy node.
-      int tDummyNode;
+      int tDummyNode = 0;
       listPop(&tDummyNode);
 
       // Initialize queue head and tail.

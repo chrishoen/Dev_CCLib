@@ -61,7 +61,7 @@ void TesterThread::threadRunFunction()
          // Thread loop termination
          if (gParms.mTerminate != 0)
          {
-            if (gShare.mTester.mCount > gParms.mTerminate)
+            if ((int)gShare.mTester.mCount > gParms.mTerminate)
             {
                gShare.mTerminateFlag = true;
             }

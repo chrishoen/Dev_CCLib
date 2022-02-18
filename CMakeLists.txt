@@ -10,6 +10,8 @@ include(MySpecial.cmake)
 project ("Dev_CCLib")
 my_special1() 
 
+add_subdirectory ("CCLib")
+add_subdirectory ("Concurrent")
 add_subdirectory ("Test")
 return()
 

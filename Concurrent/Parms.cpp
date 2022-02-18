@@ -4,6 +4,7 @@
 
 #include "stdafx.h"
 
+#include "risPortableCalls.h"
 #include "risCmdLineFile.h"
 
 #define  _PARMS_CPP_
@@ -25,8 +26,15 @@ Parms::Parms()
 void Parms::reset()
 {
    BaseClass::reset();
-   BaseClass::setFileName_RelAlphaFiles("CCLib/Concurrent_Parms.txt");
    BaseClass::mUseSections = false;
+   if (Ris::portableIsWindows())
+   {
+      BaseClass::setFileName_RelAlphaFiles("CCLib/Concurrent_Parms.txt");
+   }
+   else
+   {
+      BaseClass::setFilePath_RelativeToBaseDir("files/Concurrent_Parms.txt");
+   }
 
    mMode = 1;
    mNumWriters = 1;

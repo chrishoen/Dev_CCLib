@@ -89,6 +89,7 @@ void StatusThread::threadRunFunction()
                mProcString,
                gShare.mTest,
                my_stringLLU(tString1, gShare.mTester.mCount));
+            break;
          }
          case 4:
          {
