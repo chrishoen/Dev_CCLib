@@ -10,9 +10,7 @@ Shared memory region.
 
 #include <atomic>
 
-#include "ccRingBuffer.h"
 #include "someTestRingBuffer.h"
-#include "someTestTester.h"
 
 
 //******************************************************************************
@@ -58,9 +56,6 @@ public:
    // Members.
 
    Some::TestRingBuffer  mRingBuffer;
-   CC::RingBufferWriter  mRingWriter;
-   CC::RingBufferReader  mRingReader;
-   Some::TestTester      mRingTester;
 
    //***************************************************************************
    //***************************************************************************

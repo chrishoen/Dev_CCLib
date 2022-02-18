@@ -12,6 +12,7 @@ my_special1()
 
 add_subdirectory ("CCLib")
 add_subdirectory ("ShareLib")
+add_subdirectory ("RingWriter")
 return()
 
 add_subdirectory ("CCLib")

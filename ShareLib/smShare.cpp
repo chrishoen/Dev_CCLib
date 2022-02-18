@@ -31,17 +31,6 @@ Ris::SharedMemory gSharedMemory;
 void Share::initialize()
 {
    mRingBuffer.initialize();
-   mRingWriter.initialize(&mRingBuffer);
-   mRingReader.initialize(&mRingBuffer);
-   mRingTester.reset();
-
-   mRingWriter.mTestFunction = std::bind(
-      &Some::TestTester::doWriteTest, &mRingTester,
-      std::placeholders::_1, std::placeholders::_2);
-
-   mRingReader.mTestFunction = std::bind(
-      &Some::TestTester::doReadTest, &mRingTester,
-      std::placeholders::_1, std::placeholders::_2);
 }
 
 //******************************************************************************
