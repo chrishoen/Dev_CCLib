@@ -29,12 +29,11 @@ MonitorThread::MonitorThread()
 {
    // Set base class variables.
    BaseClass::setThreadName("Monitor");
-
-   // Set base class variables.
    BaseClass::setThreadPriority(Ris::Threads::gPriorities.mMonitor);
-
-   // Set timer period.
    BaseClass::mTimerPeriod = gRingParms.mMonitorThreadPeriod;
+
+   // Set member variables.
+   mShowCode = 1;
 }
 
 //******************************************************************************
@@ -43,17 +42,26 @@ MonitorThread::MonitorThread()
 
 void MonitorThread::executeOnTimer(int aTimeCount)
 {
-   if (gRingWriterThread->mStatPollFlag)
+   if (mShowCode == 1)
    {
-      gRingWriterThread->mStatPollFlag = false;
-      Prn::print(0, "Timer1 %5d %2d $$ %10.1f %10.1f %10.1f %10.1f $$ %10.1f",
-         gRingWriterThread->mStatCount,
-         gRingWriterThread->mThreadCurrentProcessor,
-         gRingWriterThread->mStatJitterMean,
-         gRingWriterThread->mStatJitterStdDev,
-         gRingWriterThread->mStatJitterMin,
-         gRingWriterThread->mStatJitterMax,
-         gRingWriterThread->mStatJitterMaxMax);
+      Prn::print(Prn::Show1, "Timer1 %5d %2d $$",
+         aTimeCount,
+         gRingWriterThread->mThreadCurrentProcessor);
+   }
+   else if (mShowCode == 2)
+   {
+      if (gRingWriterThread->mStatPollFlag)
+      {
+         gRingWriterThread->mStatPollFlag = false;
+         Prn::print(Prn::Show1, "Timer1 %5d %2d $$ %10.1f %10.1f %10.1f %10.1f $$ %10.1f",
+            gRingWriterThread->mStatCount,
+            gRingWriterThread->mThreadCurrentProcessor,
+            gRingWriterThread->mStatJitterMean,
+            gRingWriterThread->mStatJitterStdDev,
+            gRingWriterThread->mStatJitterMin,
+            gRingWriterThread->mStatJitterMax,
+            gRingWriterThread->mStatJitterMaxMax);
+      }
    }
 }
 
