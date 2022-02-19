@@ -15,7 +15,7 @@ Description:
 #include "smShare.h"
 
 #include "someRingParms.h"
-#include "someRingWriterThread.h"
+#include "someRingReaderThread.h"
 
 #define  _SOMEMONITORTHREAD_CPP_
 #include "someMonitorThread.h"
@@ -46,23 +46,33 @@ void MonitorThread::executeOnTimer(int aTimeCount)
 {
    if (mShowCode == 1)
    {
-      Prn::print(Prn::Show1, "%2d $$ %3lld",
-         gRingWriterThread->mThreadCurrentProcessor,
-         SM::gShare->mTestRingBuffer.mWriteIndex.load(std::memory_order_relaxed));
+      Prn::print(Prn::Show1, "%1d$   %3lld %3lld NRDY %d %d %d DROP %d %d TEST %d %d",
+         gRingReaderThread->mThreadCurrentProcessor,
+         SM::gShare->mTestRingBuffer.mWriteIndex.load(std::memory_order_relaxed),
+         gRingReaderThread->mRingReader.mReadIndex,
+         gRingReaderThread->mRingReader.mNotReadyCount1,
+         gRingReaderThread->mRingReader.mNotReadyCount2,
+         gRingReaderThread->mRingReader.mNotReadyCount3,
+         gRingReaderThread->mRingReader.mDropCount1,
+         gRingReaderThread->mRingReader.mDropCount2,
+         gRingReaderThread->mRingTester.mReadPassCount,
+         gRingReaderThread->mRingTester.mReadFailCount);
+
    }
+
    else if (mShowCode == 2)
    {
-      if (gRingWriterThread->mStatPollFlag)
+      if (gRingReaderThread->mStatPollFlag)
       {
-         gRingWriterThread->mStatPollFlag = false;
+         gRingReaderThread->mStatPollFlag = false;
          Prn::print(Prn::Show1, "Timer1 %5d %2d $$ %10.1f %10.1f %10.1f %10.1f $$ %10.1f",
-            gRingWriterThread->mStatCount,
-            gRingWriterThread->mThreadCurrentProcessor,
-            gRingWriterThread->mStatJitterMean,
-            gRingWriterThread->mStatJitterStdDev,
-            gRingWriterThread->mStatJitterMin,
-            gRingWriterThread->mStatJitterMax,
-            gRingWriterThread->mStatJitterMaxMax);
+            gRingReaderThread->mStatCount,
+            gRingReaderThread->mThreadCurrentProcessor,
+            gRingReaderThread->mStatJitterMean,
+            gRingReaderThread->mStatJitterStdDev,
+            gRingReaderThread->mStatJitterMin,
+            gRingReaderThread->mStatJitterMax,
+            gRingReaderThread->mStatJitterMaxMax);
       }
    }
 }

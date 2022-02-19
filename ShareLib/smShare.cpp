@@ -30,6 +30,7 @@ Ris::SharedMemory gSharedMemory;
 
 void Share::initialize()
 {
+   printf("Share::initialize *************************************\n");
    mTestRingBuffer.initialize();
 }
 

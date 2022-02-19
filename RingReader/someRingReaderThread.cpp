@@ -15,8 +15,8 @@ Description:
 #include "someRingParms.h"
 #include "smShare.h"
 
-#define  _SOMERINGWRITERTHREAD_CPP_
-#include "someRingWriterThread.h"
+#define  _SOMERINGREADERTHREAD_CPP_
+#include "someRingReaderThread.h"
 
 namespace Some
 {
@@ -26,20 +26,20 @@ namespace Some
 //******************************************************************************
 // Constuctor.
 
-RingWriterThread::RingWriterThread()
+RingReaderThread::RingReaderThread()
 {
    // Set base class variables.
    BaseClass::setThreadName("TimerTest");
    BaseClass::setThreadPriority(Ris::Threads::gPriorities.mTimerTest);
    BaseClass::setThreadPriority(
       Ris::Threads::Priority(
-         gRingParms.mWriterThreadProcessor,
-         gRingParms.mWriterThreadPriority));
+         gRingParms.mReaderThreadProcessor,
+         gRingParms.mReaderThreadPriority));
 
    BaseClass::mPollProcessor = gRingParms.mPollProcessor;
    BaseClass::mStatPeriod = gRingParms.mStatPeriod;
-   BaseClass::mTimerPeriodUs1 = gRingParms.mWriterThreadPeriodUs1;
-   BaseClass::mTimerPeriodUs2 = gRingParms.mWriterThreadPeriodUs2;
+   BaseClass::mTimerPeriodUs1 = gRingParms.mReaderThreadPeriodUs1;
+   BaseClass::mTimerPeriodUs2 = gRingParms.mReaderThreadPeriodUs2;
 }
 
 //******************************************************************************
@@ -49,7 +49,7 @@ RingWriterThread::RingWriterThread()
 // after the thread starts running. It creates and launches the 
 // child SerialMsgThread.
 
-void RingWriterThread::threadInitFunction()
+void RingReaderThread::threadInitFunction()
 {
    SM::gShare->show(0);
       
@@ -57,11 +57,11 @@ void RingWriterThread::threadInitFunction()
    mRingTester.reset();
 
    // Initialize the writer.
-   mRingWriter.initialize(&SM::gShare->mTestRingBuffer);
+   mRingReader.initialize(&SM::gShare->mTestRingBuffer);
 
    // Initialize the writer test function pointer.
-   mRingWriter.mTestFunction = std::bind(
-      &Some::TestTester::doWriteTest, &mRingTester,
+   mRingReader.mTestFunction = std::bind(
+      &Some::TestTester::doReadTest, &mRingTester,
       std::placeholders::_1, std::placeholders::_2);
 }
 
@@ -71,7 +71,7 @@ void RingWriterThread::threadInitFunction()
 // Thread exit function. This is called by the base class immedidately
 // before the thread is terminated. It shuts down the child SerialMsgThread.
 
-void RingWriterThread::threadExitFunction()
+void RingReaderThread::threadExitFunction()
 {
 }
 
@@ -80,29 +80,12 @@ void RingWriterThread::threadExitFunction()
 //******************************************************************************
 // Execute periodically. This is called by the base class timer.
 
-void RingWriterThread::executeOnTimer(int aTimerCount)
+void RingReaderThread::executeOnTimer(int aTimerCount)
 {
-   // Index of the last element that was written to.
-   long long tWriteIndex = SM::gShare->mTestRingBuffer.mWriteIndex.load(std::memory_order_relaxed);
-
-   // Advance the index to the next element to write to.
-   if (tWriteIndex < 0)
-   {
-      tWriteIndex = 0;
-   }
-   else
-   {
-      tWriteIndex++;
-   }
-
-   // Update the global state. This should be the only place that this
-   // happens.
-   SM::gShare->mTestRingBuffer.mWriteIndex.store(tWriteIndex, std::memory_order_relaxed);
    return;
-
-   // Write a test record to the ring buffer.
+   // Read a test record to the ring buffer.
    Some::TestRecord tRecord;
-   mRingWriter.doWrite((void*)&tRecord);
+   mRingReader.doRead((void*)&tRecord);
 }
 
 //******************************************************************************

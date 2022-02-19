@@ -81,6 +81,12 @@ public:
    int  mWriterThreadPeriodUs1;
    int  mWriterThreadPeriodUs2;
 
+   // Thread variables.
+   int  mReaderThreadProcessor;
+   int  mReaderThreadPriority;
+   int  mReaderThreadPeriodUs1;
+   int  mReaderThreadPeriodUs2;
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************

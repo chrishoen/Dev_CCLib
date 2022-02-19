@@ -1,93 +1,88 @@
 #include "stdafx.h"
 
-#include <sys/mman.h>
-
 #include "risThreadsProcess.h"
-#include "risBaseDir.h"
+#include "risCmdLineConsole.h"
+#include "CmdLineExec.h"
+#include "MainInit.h"
+
 #include "someRingParms.h"
-#include "smShare.h"
+#include "someRingReaderThread.h"
+#include "someMonitorThread.h"
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Initialize program resources.
 
-void main_initialize(int argc,char** argv)
+int main(int argc,char** argv)
 {
-   printf("RingWriter Program****************************************BEGIN\n");
-   printf("RingWriter Program****************************************BEGIN\n");
-   printf("RingWriter Program****************************************BEGIN\n\n");
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Initialize program.
+
+   main_initialize(argc,argv);
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Lock memory.
+   // Launch program threads.
 
-   mlockall(MCL_CURRENT | MCL_FUTURE);
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Program.
-
-   // Enter process.
-   Ris::Threads::enterProcessHigh();
-
-   // Set the base directory to the current directory.
-   Ris::setBaseDirectoryToCurrent();
+   if (true)
+   {
+      Some::gRingReaderThread = new Some::RingReaderThread;
+      Some::gRingReaderThread->launchThread();
+   }
+   if (true)
+   {
+      Some::gMonitorThread = new Some::MonitorThread;
+      Some::gMonitorThread->launchThread();
+   }
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Initialize.
+   // Show program threads.
 
-   // Initialize shared memory.
-   SM::initializeShare();
+   Ris::Threads::showCurrentThreadInfo();
+   if (Some::gRingReaderThread) Some::gRingReaderThread->showThreadInfo();
+   if (Some::gMonitorThread) Some::gMonitorThread->showThreadInfo();
 
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Initialize print facility.
-
-   // Initialize print.
-   Prn::resetPrint();
-   Prn::initializePrint();
-
-   // Initialize print filters.
-   Prn::setFilter(Prn::Show1, true);
-   Prn::setFilter(Prn::Show2, false);
-   Prn::setFilter(Prn::Show3, false);
-   Prn::setFilter(Prn::Show4, false);
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Read parameters files.
+   // Start user command line executive, wait for user to exit.
 
-   // Read parameters files.
-   Some::gRingParms.reset();
-   Some::gRingParms.readSection("default");
-}
+   CmdLineExec* exec = new CmdLineExec;
+   Ris::executeCmdLineConsole(exec);
+   delete exec;
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Finalize program resources.
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Shutdown program Threads.
 
-void main_finalize()
-{
-   // Finalize print facility.
-   Prn::finalizePrint();
+   if (Some::gRingReaderThread)
+   {
+      Some::gRingReaderThread->shutdownThread();
+      delete Some::gRingReaderThread;
+      Some::gRingReaderThread = 0;
+   }
 
-   // Finalize shared memory.
-   SM::finalizeShare();
+   if (Some::gMonitorThread)
+   {
+      Some::gMonitorThread->shutdownThread();
+      delete Some::gMonitorThread;
+      Some::gMonitorThread = 0;
+   }
 
-   // Exit process.
-   Ris::Threads::exitProcess();
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Finalize program.
 
-   // Done.
-   printf("\n");
-   printf("RingWriter Program****************************************END\n\n");
+   main_finalize();
+   return 0;
 }
 
 //******************************************************************************

@@ -48,6 +48,11 @@ void RingParms::reset()
    mWriterThreadPeriodUs1 = 0;
    mWriterThreadPeriodUs2 = 0;
 
+   mReaderThreadProcessor = -1;
+   mReaderThreadPriority = 80;
+   mReaderThreadPeriodUs1 = 0;
+   mReaderThreadPeriodUs2 = 0;
+
 }
 
 //******************************************************************************
@@ -70,6 +75,10 @@ void RingParms::show()
    printf("WriterThreadProcessor    %-10d\n", mWriterThreadProcessor);
    printf("WriterThreadPriority     %-10d\n", mWriterThreadPriority);
    printf("WriterThreadPeriodUs     %-10d  %-10d\n", mWriterThreadPeriodUs1, mWriterThreadPeriodUs2);
+   printf("\n");
+   printf("ReaderThreadProcessor    %-10d\n", mReaderThreadProcessor);
+   printf("ReaderThreadPriority     %-10d\n", mReaderThreadPriority);
+   printf("ReaderThreadPeriodUs     %-10d  %-10d\n", mReaderThreadPeriodUs1, mReaderThreadPeriodUs2);
    printf("\n");
 }
 
@@ -96,6 +105,14 @@ void RingParms::execute(Ris::CmdLineCmd* aCmd)
    {
       mWriterThreadPeriodUs1 = aCmd->argInt(1);
       mWriterThreadPeriodUs2 = aCmd->argInt(2);
+   }
+
+   if (aCmd->isCmd("ReaderThreadProcessor"))   mReaderThreadProcessor = aCmd->argInt(1);
+   if (aCmd->isCmd("ReaderThreadPriority"))    mReaderThreadPriority = aCmd->argInt(1);
+   if (aCmd->isCmd("ReaderThreadPeriodUs"))
+   {
+      mReaderThreadPeriodUs1 = aCmd->argInt(1);
+      mReaderThreadPeriodUs2 = aCmd->argInt(2);
    }
 }
 

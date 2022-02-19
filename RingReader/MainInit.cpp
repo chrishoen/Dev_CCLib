@@ -14,9 +14,9 @@
 
 void main_initialize(int argc,char** argv)
 {
-   printf("RingWriter Program****************************************BEGIN\n");
-   printf("RingWriter Program****************************************BEGIN\n");
-   printf("RingWriter Program****************************************BEGIN\n\n");
+   printf("RingReader Program****************************************BEGIN\n");
+   printf("RingReader Program****************************************BEGIN\n");
+   printf("RingReader Program****************************************BEGIN\n\n");
 
    //***************************************************************************
    //***************************************************************************
@@ -87,7 +87,7 @@ void main_finalize()
 
    // Done.
    printf("\n");
-   printf("RingWriter Program****************************************END\n\n");
+   printf("RingReader Program****************************************END\n\n");
 }
 
 //******************************************************************************
