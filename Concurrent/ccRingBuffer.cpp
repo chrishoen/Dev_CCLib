@@ -277,13 +277,13 @@ bool RingBufferReader::doRead(void* aElement)
    // WriteIndex is the index of the last element that was written.
 
    // 122 2
-   // 123 3   ReadIndex
-   // 124 4   Initial WriteIndex
-   // 125 5  
-   // 126 6  
-   // 127 7  
-   // 128 0  
-   // 129 1  
+   // 123 3  ReadIndex
+   // 124 4  OK
+   // 125 5  OK
+   // 126 6  OK
+   // 127 7  OK
+   // 128 0  OK 
+   // 129 1  OK
    // 130 2  Final WriteIndex is OK                     Write 
    // 131 3  Final WriteIndex has overwritten the read  Write - Read = 8
    // 132 4  Final WriteIndex has overwritten the read  Write - Read = 9
@@ -293,7 +293,7 @@ bool RingBufferReader::doRead(void* aElement)
    
    // If the read was or might have been overwritten then drop it.
 // if (tWriteIndex - mReadIndex >= mRB->mNumElements - 1) original
-   if (tWriteIndex - mReadIndex > mRB->mNumElements - 1)
+   if (tWriteIndex > mReadIndex + (mRB->mNumElements - 1))
       {
       // Increment the drop count. If none were dropped then the
       // read index should be the previous read index plus one.
