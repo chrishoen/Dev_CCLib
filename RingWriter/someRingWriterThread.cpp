@@ -82,24 +82,6 @@ void RingWriterThread::threadExitFunction()
 
 void RingWriterThread::executeOnTimer(int aTimerCount)
 {
-   // Index of the last element that was written to.
-   long long tWriteIndex = SM::gShare->mTestRingBuffer.mWriteIndex.load(std::memory_order_relaxed);
-
-   // Advance the index to the next element to write to.
-   if (tWriteIndex < 0)
-   {
-      tWriteIndex = 0;
-   }
-   else
-   {
-      tWriteIndex++;
-   }
-
-   // Update the global state. This should be the only place that this
-   // happens.
-   SM::gShare->mTestRingBuffer.mWriteIndex.store(tWriteIndex, std::memory_order_relaxed);
-   return;
-
    // Write a test record to the ring buffer.
    Some::TestRecord tRecord;
    mRingWriter.doWrite((void*)&tRecord);
@@ -109,3 +91,26 @@ void RingWriterThread::executeOnTimer(int aTimerCount)
 //******************************************************************************
 //******************************************************************************
 }//namespace
+
+
+
+#if 0
+// Index of the last element that was written to.
+long long tWriteIndex = SM::gShare->mTestRingBuffer.mWriteIndex.load(std::memory_order_relaxed);
+
+// Advance the index to the next element to write to.
+if (tWriteIndex < 0)
+{
+   tWriteIndex = 0;
+}
+else
+{
+   tWriteIndex++;
+}
+
+// Update the global state. This should be the only place that this
+// happens.
+SM::gShare->mTestRingBuffer.mWriteIndex.store(tWriteIndex, std::memory_order_relaxed);
+return;
+#endif
+
