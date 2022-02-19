@@ -28,64 +28,53 @@ where WriteIndex is the index of the last array element that was written to.
 Readers can read from the memory as long as the reads are within the bounds
 of a Head and Tail, where
 
-   TailIndex = HeadIndex - (NumElements - 2)
+   TailIndex = HeadIndex - (NumElements - 1)
    HeadIndex = WriteIndex, the index of the last element written to.
 so
-   HeadIndex - TailIndex = NumElements - 2
+   HeadIndex - TailIndex = NumElements - 1
 
 Here's an example of a buffer with NumElements = 8 that is past the
 initialization stage. It is full. The write index is in the first column
 and the modulo of it is in the second column.
 
 122 2
-123 3  zzzz
-124 4  xxxx  Tail = WriteIndex - (NumElements - 2)
+123 3  xxxx  Tail
+124 4  xxxx
 125 5  xxxx
 126 6  xxxx
 127 7  xxxx
 128 0  xxxx
 129 1  xxxx
-130 2  xxxx  Head  = WriteIndex
-131 3  zzzz 
+130 2  xxxx  Head  so Head - Tail = 7 = NumElements - 1
+131 3
 
-Only elements marked with xxxx can be safely read, on the closed interval
-[Tail .. Head]
-
-A reader can read always safely read any one element of 124 .. 130.
-During a read of 123, an asynchrounous write to 131 could occur and
-the read would be overwritten.
+A reader can read any one element of 123 .. 130.
+During a read of 123, an asynchrounous write could occur and the
+read would be overwritten. In this case the read would be retried.
+Reads are also accomplished with modulo arithmetic.
 
 As a complication, consider a buffer where the writer writes an
 element to the array that only contains partial data. After writing
 a few more elements, the writer wants to go back and update a previous
 element. A ready read guard is provided for this case.
 
-Here's an example of a buffer with NumElements = 8 and ReadGap = 3
-A reader can read any one element of 124 .. 127. The writer can go
+Here's an example of a buffer with NumElements = 8 and ReadyGuard = 3
+A reader can read any one element of 123 .. 127. The writer can go
 back and modify any one element of 128 .. 130.
 
 122 2
-123 3  zzzz
-124 4  xxxx  Tail  = WriteIndex - (NumElements - 2)
+123 3  xxxx  Tail
+124 4  xxxx
 125 5  xxxx
 126 6  xxxx
-127 7  xxxx  Ready = WriteIndex - ReadGap = 130 - 3
+127 7  xxxx  Ready = Head - ReadyGuard = 130 - 3
 128 0  yyyy
 129 1  yyyy
-130 2  yyyy  Head  = WriteIndex
-131 3  zzzz
+130 2  yyyy  Head  so Head - Tail = 7 = NumElements - 1
+131 3
 
-A reader can read always safely read any one element of 124 .. 127.
-
-Only elements marked with xxxx can be safely read, on the closed interval
-[Tail .. Ready] = [WriteIndex - (NumElements - 2) .. WriteIndex - ReadGap]
-
-After writing to the Head, the writer can go back and modify elements
-marked with yyyy on the closed interval
-[Ready + 1 .. Head] = [WriteIndex - (ReadGap - 1) .. WriteIndex]
-
-ReadGap = 0 means no read ready gap. Then the reader can read
-any element of 124 .. 130 and the writer cannot modify any elements
+ReadyGuard = 0 means no read ready guard. Then the reader can read
+any element of 123 .. 130 and the writer cannot modify any elements
 once they have been written.
 
 =============================================================================*/
@@ -125,8 +114,8 @@ public:
    // Size of each element in the ring buffer.
    size_t mElementSize;
 
-   // Read gap.
-   long long mReadGap;
+   // Read ready guard.
+   long long mReadyGuard;
 
    //***************************************************************************
    //***************************************************************************
@@ -250,22 +239,21 @@ public:
    //***************************************************************************
    // Members. State variables.
 
-   // Here's an example of a buffer with NumElements = 8 and ReadGap = 3.
+   // Here's an example of a buffer with NumElements = 8 and ReadyGuard = 3.
+   // All elements have been written to. The buffer is full.
    // 
    // The buffer contains written elements on the closed interval [123 .. 130].
-   // Elements can be read on [124 .. 127]. While the reader is reading, the
-   // writer could possible write to 131 == 123.
-   // 
+   // Elements can be read on [123 .. 127]
    // 122 2
-   // 123 3  zzzz
-   // 124 4  xxxx  Tail  = WriteIndex - (NumElements - 2)
+   // 123 3  xxxx  Tail = WriteIndex - (NumElements - 1)
+   // 124 4  xxxx
    // 125 5  xxxx
    // 126 6  xxxx
-   // 127 7  xxxx  Ready = WriteIndex - ReadGap
+   // 127 7  xxxx  Ready = WriteIndex - ReadyGuard
    // 128 0  yyyy
    // 129 1  yyyy
    // 130 2  yyyy  Head  = WriteIndex
-   // 131 3  zzzz
+   // 131 3
 
    // Depending on the context, the last element that was read from or
    // the next element to read from. Successfully or not.
@@ -274,7 +262,7 @@ public:
    // The previous read index for the last successful read.
    long long mLastReadIndex;
 
-   // The oldest element that can be read from.
+   // The oldest element that was written to.
    long long mTail;
 
    // The youngest element that can be read from.

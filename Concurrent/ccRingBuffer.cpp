@@ -34,7 +34,7 @@ void BaseRingBuffer::initialize()
 {
    mNumElements = 0;
    mElementSize = 0;
-   mReadyGuard = 0;
+   mReadGap = 0;
    mWriteIndex = cInvalidValue;
 }
 
@@ -194,29 +194,30 @@ bool RingBufferReader::doRead(void* aElement)
       return false;
    }
 
-   // Here's an example of a buffer with NumElements = 8 and ReadyGuard = 3.
-   // All elements have been written to. The buffer is full.
+   // Here's an example of a buffer with NumElements = 8 and ReadGap = 3.
    // 
    // The buffer contains written elements on the closed interval [123 .. 130].
-   // Elements can be read on [123 .. 127]
+   // Elements can be read on [124 .. 127]. While the reader is reading, the
+   // writer could possible write to 131 == 123.
+   // 
    // 122 2
-   // 123 3  xxxx  Tail = WriteIndex - (NumElements - 1)
-   // 124 4  xxxx
+   // 123 3  zzzz
+   // 124 4  xxxx  Tail  = WriteIndex - (NumElements - 2)
    // 125 5  xxxx
    // 126 6  xxxx
-   // 127 7  xxxx  Ready = WriteIndex - ReadyGuard
+   // 127 7  xxxx  Ready = WriteIndex - ReadGap
    // 128 0  yyyy
    // 129 1  yyyy
    // 130 2  yyyy  Head  = WriteIndex
-   // 131 3
+   // 131 3  zzzz
 
    // Test for the first read.
    if (mFirstFlag)
    {
       mFirstFlag = false;
       // Calulate the state variables.
-      mTail = tWriteIndex - (mRB->mNumElements - 1);
-      mReady = tWriteIndex - mRB->mReadyGuard;
+      mTail = tWriteIndex - (mRB->mNumElements - 2);
+      mReady = tWriteIndex - mRB->mReadGap;
       mHead = tWriteIndex;
       mLastReadIndex = cInvalidValue;
       mReadIndex = mReady;
@@ -224,8 +225,8 @@ bool RingBufferReader::doRead(void* aElement)
    else
    {
       // Calulate the state variables.
-      mTail = tWriteIndex - (mRB->mNumElements - 1);
-      mReady = tWriteIndex - mRB->mReadyGuard;
+      mTail = tWriteIndex - (mRB->mNumElements - 2);
+      mReady = tWriteIndex - mRB->mReadGap;
       mHead = tWriteIndex;
 
       // Ready is the youngest element that can be read. If it has already
@@ -240,9 +241,9 @@ bool RingBufferReader::doRead(void* aElement)
 
       // If the last element read is behind the tail then read from
       // the tail.
-      if (mLastReadIndex < mTail + 1)
+      if (mLastReadIndex < mTail)
       {
-         mReadIndex = mTail + 1;
+         mReadIndex = mTail;
       }
       // Else read the next element.
       else
@@ -268,8 +269,8 @@ bool RingBufferReader::doRead(void* aElement)
    memcpy(mTempElement, tPtr, mRB->mElementSize);
 
    // If, during the read, the ring buffer was written to asynchronously
-   // by the writer and the read was overwritten, then retry the read.
-   //  
+   // by the writer, so the read was overwritten, then drop the read.
+   //   
    // Here's an example of this.
    // 
    // ReadIndex is the index of the last element that was read.
@@ -283,7 +284,7 @@ bool RingBufferReader::doRead(void* aElement)
    // 127 7  
    // 128 0  
    // 129 1  
-   // 130 2  Final WriteIndex is OK                     Write - Read = 7
+   // 130 2  Final WriteIndex is OK                     Write 
    // 131 3  Final WriteIndex has overwritten the read  Write - Read = 8
    // 132 4  Final WriteIndex has overwritten the read  Write - Read = 9
 
@@ -291,8 +292,9 @@ bool RingBufferReader::doRead(void* aElement)
    tWriteIndex = mRB->mWriteIndex.load(std::memory_order_relaxed);
    
    // If the read was or might have been overwritten then drop it.
-   if (tWriteIndex - mReadIndex >= mRB->mNumElements - 1)
-   {
+// if (tWriteIndex - mReadIndex >= mRB->mNumElements - 1) original
+   if (tWriteIndex - mReadIndex > mRB->mNumElements - 1)
+      {
       // Increment the drop count. If none were dropped then the
       // read index should be the previous read index plus one.
       if (mLastReadIndex > 0)
