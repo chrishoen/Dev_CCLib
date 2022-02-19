@@ -51,7 +51,11 @@ public:
    // Methods.
 
    // No constructor. This sets the base class variables.
-   void initialize();
+   void initialize() override;
+
+   // Return a pointer to an element, based on an index modulo
+   // the number of elements.
+   void* elementAt(long long aIndex) override;
 };
 
 //******************************************************************************

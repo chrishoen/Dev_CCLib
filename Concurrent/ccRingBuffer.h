@@ -114,10 +114,6 @@ public:
    // Size of each element in the ring buffer.
    size_t mElementSize;
 
-   // The address of the first element in the buffer element array.
-   // Inheriting classes supply the element array.
-   void* mElementArray;
-
    // Read ready guard.
    long long mReadyGuard;
 
@@ -140,7 +136,11 @@ public:
    // Methods.
 
    // No constructor.
-   virtual void reset();
+   virtual void initialize();
+
+   // Return a pointer to an element, based on an index modulo
+   // the number of elements.
+   virtual void* elementAt(long long aIndex) = 0;
 };
 
 //******************************************************************************
@@ -178,10 +178,6 @@ public:
    // Constructor.
    RingBufferWriter();
    void initialize(BaseRingBuffer* aRingBuffer);
-
-   // Return a pointer to an element, based on an index modulo
-   // the number of elements.
-   void* elementAt(long long aIndex);
 
    //***************************************************************************
    //***************************************************************************
@@ -295,10 +291,6 @@ public:
    void resetVars();
    void initialize(BaseRingBuffer* aRingBuffer);
 
-   // Return a pointer to an element, based on an index modulo
-   // the number of elements.
-   void* elementAt(long long aIndex);
-
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -307,13 +299,6 @@ public:
    // Read an element from the array, copying it to the function argument.
    // Return true if successful.
    bool doRead(void* aElement);
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods. helpers.
-
-   void doTest1();
 };
 
 //******************************************************************************

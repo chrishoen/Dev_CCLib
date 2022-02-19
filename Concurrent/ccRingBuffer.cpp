@@ -30,11 +30,10 @@ static const long long cInvalidValue = -9223372036854775807;
 //******************************************************************************
 // No constructor. 
 
-void BaseRingBuffer::reset()
+void BaseRingBuffer::initialize()
 {
    mNumElements = 0;
    mElementSize = 0;
-   mElementArray = 0;
    mReadyGuard = 0;
    mWriteIndex = cInvalidValue;
 }
@@ -61,18 +60,6 @@ void RingBufferWriter::initialize(BaseRingBuffer* aRingBuffer)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Return a pointer to an element, based on an index modulo
-// the number of elements.
-
-void* RingBufferWriter::elementAt(long long aIndex)
-{
-   aIndex %= mRB->mNumElements;
-   return (void*)((char*)mRB->mElementArray + mRB->mElementSize * aIndex);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
 // Write an element to the array at the next element to write to, copying
 // it from the function argument. Update the write index state variable
 // so that it contains the index of the last element written to.
@@ -93,7 +80,7 @@ void RingBufferWriter::doWrite(void* aElement)
    }
 
    // Get the address of the next element to write to.
-   void* tPtr = elementAt(tWriteIndex);
+   void* tPtr = mRB->elementAt(tWriteIndex);
 
    // Copy the element into the array.
    memcpy(tPtr, aElement, mRB->mElementSize);
@@ -125,7 +112,7 @@ void* RingBufferWriter::startWrite()
    }
 
    // Return the address of the next element to write to.
-   return elementAt(tWriteIndex);
+   return mRB->elementAt(tWriteIndex);
 }
 
 // Update the write index state variable after a started write is finished
@@ -184,18 +171,6 @@ RingBufferReader::~RingBufferReader()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Return a pointer to an element, based on an index modulo
-// the number of elements.
-
-void* RingBufferReader::elementAt(long long aIndex)
-{
-   aIndex %= mRB->mNumElements;
-   return (void*)((char*)mRB->mElementArray + mRB->mElementSize * aIndex);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
 // Read an element from the array, copying it to the function argument.
 // Return true if successful.
 
@@ -208,9 +183,7 @@ bool RingBufferReader::doRead(void* aElement)
 
    // Store the last successful read index.
    mLastReadIndex = mReadIndex;
-#if 0
-restart:
-#endif
+
    // Test for invalid data. This means that the writer has not yet
    // written any elements or is resetting the buffer.
    if (tWriteIndex == cInvalidValue)
@@ -289,7 +262,7 @@ restart:
 
    // At this point ReadIndex is the index of the next element to read from.
    // Get the address of the next element to read from.
-   void* tPtr = elementAt(mReadIndex);
+   void* tPtr = mRB->elementAt(mReadIndex);
 
    // Copy that element into the temp element.
    memcpy(mTempElement, tPtr, mRB->mElementSize);
@@ -316,15 +289,6 @@ restart:
 
    // Get the final write index. 
    tWriteIndex = mRB->mWriteIndex.load(std::memory_order_relaxed);
-#if 0
-   // If the read was overwritten then retry it. The final write index
-   // becomes the next initial write index at the top of the loop.
-   if (tWriteIndex - mReadIndex >= mRB->mNumElements)
-   {
-      mRetryCount++;
-      goto restart;
-   }
-#endif
    
    // If the read was or might have been overwritten then drop it.
    if (tWriteIndex - mReadIndex >= mRB->mNumElements - 1)

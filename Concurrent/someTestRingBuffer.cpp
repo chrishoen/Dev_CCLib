@@ -19,11 +19,22 @@ namespace Some
 
 void TestRingBuffer::initialize()
 {
-   BaseClass::reset();
+   BaseClass::initialize();
    BaseClass::mNumElements = cNumElements;
    BaseClass::mElementSize = sizeof(TestRecord);
-   BaseClass::mElementArray = (void*)&mElementArrayMemory[0];
    BaseClass::mReadyGuard = 20;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Return a pointer to an element, based on an index modulo
+// the number of elements.
+
+void* TestRingBuffer::elementAt(long long aIndex)
+{
+   aIndex %= mNumElements;
+   return (void*)((char*)&mElementArrayMemory[0] + mElementSize * aIndex);
 }
 
 //******************************************************************************
