@@ -35,7 +35,7 @@ MonitorThread::MonitorThread()
    BaseClass::mTimerPeriod = gRingParms.mMonitorThreadPeriod;
 
    // Set member variables.
-   mShowCode = 0;
+   mShowCode = 1;
 }
 
 //******************************************************************************

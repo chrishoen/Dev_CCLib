@@ -55,7 +55,7 @@ void Share::show(int aPF)
 void initializeShare()
 {
    // Create or open the shared memory.
-   bool tFirstFlag = gSharedMemory.initialize("AAAASHARE2", 4096*32);
+   bool tFirstFlag = gSharedMemory.initialize("AAAASHARE2", 1024*1024);
 
    // Create the global instance.
    gShare = new (gSharedMemory.mMemory) Share;

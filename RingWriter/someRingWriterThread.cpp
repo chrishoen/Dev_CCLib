@@ -51,6 +51,8 @@ RingWriterThread::RingWriterThread()
 
 void RingWriterThread::threadInitFunction()
 {
+   SM::gShare->show(0);
+      
    // Initialize the tester.
    mRingTester.reset();
 
