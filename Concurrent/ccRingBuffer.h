@@ -94,7 +94,6 @@ once they have been written.
 //******************************************************************************
 
 #include <atomic>
-#include <functional>
 
 //******************************************************************************
 //******************************************************************************
@@ -109,7 +108,7 @@ namespace CC
 // Ring buffer. This contains variables that describe a ring buffer
 // and its state.
 
-class RingBuffer
+class RingBufferState
 {
 public:
 
@@ -127,15 +126,6 @@ public:
    // Read gap.
    long long mReadGap;
 
-   // Memory for the ring buffer element array. This is created on the heap at 
-   // initialization.
-   void* mElementArrayMemory;
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Members. State variables.
-
    // The index of the last element that was written to. If this is equal to
    // negative one then no writes have occured and the ring buffer is empty.
    // This single variable encapsulates the state of the ring buffer. It
@@ -150,16 +140,40 @@ public:
    // Methods.
 
    // Constructor.
-   RingBuffer();
-   ~RingBuffer();
-
+   RingBufferState();
+   virtual ~RingBufferState() {}
    void initialize(int aNumElements, size_t aElementSize, int aReadGap);
+};
 
-   // Return a pointer to an element, based on an index modulo
-   // the number of elements.
-   void* elementAt(long long aIndex);
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Ring buffer. This contains variables that describe a ring buffer
+// and its state.
 
-   void show();
+class RingBufferHeap : public RingBufferState
+{
+public:
+   typedef RingBufferState BaseClass;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+    
+   // Memory for the ring buffer element array. This is created on the heap at 
+   // initialization.
+   void* mElementArrayMemory;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Constructor.
+   RingBufferHeap();
+   ~RingBufferHeap();
+   void initialize(int aNumElements, size_t aElementSize, int aReadGap);
 };
 
 //******************************************************************************
@@ -178,7 +192,11 @@ public:
    // Members.
 
    // The ring buffer.
-   RingBuffer* mRB;
+   RingBufferState* mRB;
+
+   // Memory for the ring buffer element array. This is created on the heap at 
+   // initialization.
+   void* mElementArrayMemory;
 
    //***************************************************************************
    //***************************************************************************
@@ -190,7 +208,11 @@ public:
    virtual ~RingBufferWriter() {};
    void resetVars();
    virtual void resetTest() {}
-   void initialize(RingBuffer* aRingBuffer);
+   void initialize(RingBufferState* aRingBufferState, void* aElementArrayMemory);
+
+   // Return a pointer to an element, based on an index modulo
+   // the number of elements.
+   void* elementAt(long long aIndex);
 
    //***************************************************************************
    //***************************************************************************
@@ -217,7 +239,7 @@ public:
    
    // Internal test function that can be override inheritors to perform
    // ring buffer performance tests.
-   virtual void doWriteTest(long long aIndex, void* aElement) {}
+   virtual void doTest(long long aIndex, void* aElement) {}
 };
 
 //******************************************************************************
@@ -236,7 +258,11 @@ public:
    // Members.
 
    // The ring buffer.
-   RingBuffer* mRB;
+   RingBufferState* mRB;
+
+   // Memory for the ring buffer element array. This is created on the heap at 
+   // initialization.
+   void* mElementArrayMemory;
 
    // If true then this is the first read.
    bool mFirstFlag;
@@ -301,7 +327,11 @@ public:
    virtual ~RingBufferReader() {};
    void resetVars();
    virtual void resetTest() {}
-   void initialize(RingBuffer* aRingBuffer);
+   void initialize(RingBufferState* aRingBuffer, void* aElementArrayMemory);
+
+   // Return a pointer to an element, based on an index modulo
+   // the number of elements.
+   void* elementAt(long long aIndex);
 
    //***************************************************************************
    //***************************************************************************
@@ -319,7 +349,7 @@ public:
 
    // Internal test function that can be override inheritors to perform
    // ring buffer performance tests.
-   virtual void doReadTest(long long aIndex, void* aElement) {}
+   virtual void doTest(long long aIndex, void* aElement) {}
 };
 
 //******************************************************************************

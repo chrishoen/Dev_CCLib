@@ -74,8 +74,8 @@ void Share::initialize()
       break;
    case 4:
       mRingBuffer.initialize();
-      mRingWriter.initialize(&mRingBuffer);
-      mRingReader.initialize(&mRingBuffer);
+      mRingWriter.initialize(&mRingBuffer, mRingBuffer.mElementArrayMemory);
+      mRingReader.initialize(&mRingBuffer, mRingBuffer.mElementArrayMemory);
       break;
    }
 

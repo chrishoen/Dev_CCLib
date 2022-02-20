@@ -23,11 +23,11 @@ namespace Some
 //******************************************************************************
 // Test ring buffer.
 
-class TestRingBuffer : public CC::RingBuffer
+class TestRingBuffer : public CC::RingBufferHeap
 {
 public:
 
-   typedef CC::RingBuffer BaseClass;
+   typedef CC::RingBufferHeap BaseClass;
 
    //***************************************************************************
    //***************************************************************************
@@ -76,7 +76,7 @@ public:
       mFirstWriteIndex = 0;
    }
 
-   void doWriteTest(long long aWriteIndex, void* aElement) override
+   void doTest(long long aWriteIndex, void* aElement) override
    {
       if (mFirstWriteFlag)
       {
@@ -130,7 +130,7 @@ public:
       mTestFailCount = 0;
    }
 
-   void doReadTest(long long aReadIndex, void* aElement) override
+   void doTest(long long aReadIndex, void* aElement) override
    {
       if (mFirstReadFlag)
       {

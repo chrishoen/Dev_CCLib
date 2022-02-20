@@ -31,39 +31,44 @@ static const long long cInvalidValue = -9223372036854775807;
 //******************************************************************************
 // Constructor. 
 
-RingBuffer::RingBuffer()
+RingBufferState::RingBufferState()
 {
    mNumElements = 0;
    mElementSize = 0;
    mReadGap = 0;
-   mElementArrayMemory = 0;
    mWriteIndex = cInvalidValue;
 }
 
-RingBuffer::~RingBuffer()
-{
-   if (mElementArrayMemory) free(mElementArrayMemory);
-}
-
-void RingBuffer::initialize(int aNumElements, size_t aElementSize, int aReadGap)
+void RingBufferState::initialize(int aNumElements, size_t aElementSize, int aReadGap)
 {
    mNumElements = aNumElements;
    mElementSize = aElementSize;
    mReadGap = aReadGap;
-   mElementArrayMemory = malloc(aNumElements * aElementSize);
    mWriteIndex.store(cInvalidValue,std::memory_order_relaxed);
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Return a pointer to an element, based on an index modulo
-// the number of elements.
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Constructor. 
 
-void* RingBuffer::elementAt(long long aIndex)
+RingBufferHeap::RingBufferHeap()
 {
-   aIndex %= mNumElements;
-   return (void*)((char*)mElementArrayMemory + mElementSize * aIndex);
+   mElementArrayMemory = 0;
+}
+
+RingBufferHeap::~RingBufferHeap()
+{
+   if (mElementArrayMemory) free(mElementArrayMemory);
+}
+
+void RingBufferHeap::initialize(int aNumElements, size_t aElementSize, int aReadGap)
+{
+   BaseClass::initialize(aNumElements, aElementSize, aReadGap);
+   mElementArrayMemory = malloc(aNumElements * aElementSize);
 }
 
 //******************************************************************************
@@ -80,15 +85,28 @@ RingBufferWriter::RingBufferWriter()
    resetVars();
 }
 
-void RingBufferWriter::initialize(RingBuffer* aRingBuffer)
+void RingBufferWriter::initialize(RingBufferState* aRingBufferState, void* aElementArrayMemory)
 {
    resetVars();
-   mRB = aRingBuffer;
+   mRB = aRingBufferState;
+   mElementArrayMemory = aElementArrayMemory;
 }
 
 void RingBufferWriter::resetVars()
 {
    resetTest();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Return a pointer to an element, based on an index modulo
+// the number of elements.
+
+void* RingBufferWriter::elementAt(long long aIndex)
+{
+   aIndex %= mRB->mNumElements;
+   return (void*)((char*)mElementArrayMemory + mRB->mElementSize * aIndex);
 }
 
 //******************************************************************************
@@ -114,14 +132,14 @@ void RingBufferWriter::doWrite(void* aElement)
    }
 
    // Get the address of the next element to write to.
-   void* tPtr = mRB->elementAt(tWriteIndex);
+   void* tPtr = elementAt(tWriteIndex);
 
    // Copy the element into the array.
    memcpy(tPtr, aElement, mRB->mElementSize);
 
    // Internal test function that can be used by inheritors to perform
    // ring buffer performance tests.
-   doWriteTest(tWriteIndex, tPtr);
+   doTest(tWriteIndex, tPtr);
 
    // Update the global state. This should be the only place that this
    // happens.
@@ -146,7 +164,7 @@ void* RingBufferWriter::startWrite()
    }
 
    // Get the address of the next element to write to.
-   void* tPtr = mRB->elementAt(tWriteIndex);
+   void* tPtr = elementAt(tWriteIndex);
 
    // Return the address of the next element to write to.
    return tPtr;
@@ -170,11 +188,11 @@ void RingBufferWriter::finishWrite()
    }
 
    // Get the address of the next element to write to.
-   void* tPtr = mRB->elementAt(tWriteIndex);
+   void* tPtr = elementAt(tWriteIndex);
 
    // Internal test function that can be used by inheritors to perform
    // ring buffer performance tests.
-   doWriteTest(tWriteIndex, tPtr);
+   doTest(tWriteIndex, tPtr);
 
    // Update the global state. This should be the only place that this
    // happens.
@@ -195,10 +213,11 @@ RingBufferReader::RingBufferReader()
    resetVars();
 }
 
-void RingBufferReader::initialize(RingBuffer* aRingBuffer)
+void RingBufferReader::initialize(RingBufferState* aRingBufferState, void* aElementArrayMemory)
 {
    resetVars();
-   mRB = aRingBuffer;
+   mRB = aRingBufferState;
+   mElementArrayMemory = aElementArrayMemory;
 }
 
 void RingBufferReader::resetVars()
@@ -216,6 +235,18 @@ void RingBufferReader::resetVars()
    mReady = cInvalidValue;
    mHead = cInvalidValue;
    resetTest();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Return a pointer to an element, based on an index modulo
+// the number of elements.
+
+void* RingBufferReader::elementAt(long long aIndex)
+{
+   aIndex %= mRB->mNumElements;
+   return (void*)((char*)mElementArrayMemory + mRB->mElementSize * aIndex);
 }
 
 //******************************************************************************
@@ -313,7 +344,7 @@ bool RingBufferReader::doRead(void* aElement)
 
    // At this point ReadIndex is the index of the next element to read from.
    // Get the address of the next element to read from.
-   void* tPtr = mRB->elementAt(mReadIndex);
+   void* tPtr = elementAt(mReadIndex);
 
    // Copy that element into the argument element.
    memcpy(aElement, tPtr, mRB->mElementSize);
@@ -356,7 +387,7 @@ bool RingBufferReader::doRead(void* aElement)
 
    // Internal test function that can be used by inheritors to perform
    // ring buffer performance tests.
-   doReadTest(mReadIndex, aElement);
+   doTest(mReadIndex, aElement);
 
    // Increment the drop count. If none were dropped then the
    // read index should be the previous read index plus one.
