@@ -6,10 +6,9 @@ Ring buffer of fixed size opaque objects.
 
 It is single writer multiple reader thread safe.
 It is non blocking
-It is shared memory safe.
+It is not shared memory safe.
 
 This implements a ring buffer of fixed size objects.
-
 
 The ring buffer is based on the idea of an infinite memory of contiguous
 fixed size elements that is written to sequentially by a single writer.
@@ -107,17 +106,17 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Base ring buffer. This contains variables that describe a ring buffer
+// Ring buffer. This contains variables that describe a ring buffer
 // and its state.
 
-class BaseRingBuffer
+class RingBuffer
 {
 public:
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Members. All of these must be set by an inheriting class.
+   // Members.
 
    // Number of elements in the ring buffer.
    long long mNumElements;
@@ -127,6 +126,10 @@ public:
 
    // Read gap.
    long long mReadGap;
+
+   // Memory for the ring buffer element array. This is created on the heap at 
+   // initialization.
+   void* mElementArrayMemory;
 
    //***************************************************************************
    //***************************************************************************
@@ -146,12 +149,17 @@ public:
    //***************************************************************************
    // Methods.
 
-   // No constructor.
-   virtual void initialize();
+   // Constructor.
+   RingBuffer();
+   ~RingBuffer();
+
+   void initialize(int aNumElements, size_t aElementSize, int aReadGap);
 
    // Return a pointer to an element, based on an index modulo
    // the number of elements.
-   virtual void* elementAt(long long aIndex) = 0;
+   void* elementAt(long long aIndex);
+
+   void show();
 };
 
 //******************************************************************************
@@ -170,16 +178,7 @@ public:
    // Members.
 
    // The ring buffer.
-   BaseRingBuffer* mRB;
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-
-   // Internal test function pointer that can be used by owners or
-   // inheritors to perform ring buffer performance tests. If this is
-   // set then it is called before a write.
-   std::function<void(long long, void*)> mTestFunction;
+   RingBuffer* mRB;
 
    //***************************************************************************
    //***************************************************************************
@@ -188,7 +187,10 @@ public:
 
    // Constructor.
    RingBufferWriter();
-   void initialize(BaseRingBuffer* aRingBuffer);
+   virtual ~RingBufferWriter() {};
+   void resetVars();
+   virtual void resetTest() {}
+   void initialize(RingBuffer* aRingBuffer);
 
    //***************************************************************************
    //***************************************************************************
@@ -207,6 +209,15 @@ public:
    // Update the write index state variable after a started write is finished
    // so that it contains the index of the last element written to.
    void finishWrite();
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+   
+   // Internal test function that can be override inheritors to perform
+   // ring buffer performance tests.
+   virtual void doWriteTest(long long aIndex, void* aElement) {}
 };
 
 //******************************************************************************
@@ -225,13 +236,10 @@ public:
    // Members.
 
    // The ring buffer.
-   BaseRingBuffer* mRB;
+   RingBuffer* mRB;
 
    // If true then this is the first read.
    bool mFirstFlag;
-
-   // Temporary element used during read.
-   void* mTempElement;
 
    // The number of reads that had nothing available to read.
    int mNotReadyCount1;
@@ -286,22 +294,14 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-
-   // Internal test function pointer that can be used by owners or
-   // inheritors to perform ring buffer performance tests. If this is
-   // set then it is called at the end of a successful read.
-   std::function<void(long long, void*)> mTestFunction;
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
    // Methods.
 
    // Constructor.
    RingBufferReader();
-   virtual ~RingBufferReader();
+   virtual ~RingBufferReader() {};
    void resetVars();
-   void initialize(BaseRingBuffer* aRingBuffer);
+   virtual void resetTest() {}
+   void initialize(RingBuffer* aRingBuffer);
 
    //***************************************************************************
    //***************************************************************************
@@ -311,6 +311,15 @@ public:
    // Read an element from the array, copying it to the function argument.
    // Return true if successful.
    bool doRead(void* aElement);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // Internal test function that can be override inheritors to perform
+   // ring buffer performance tests.
+   virtual void doReadTest(long long aIndex, void* aElement) {}
 };
 
 //******************************************************************************

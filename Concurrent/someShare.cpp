@@ -74,17 +74,8 @@ void Share::initialize()
       break;
    case 4:
       mRingBuffer.initialize();
-      mRingBufferWriter.initialize(&mRingBuffer);
-      mRingBufferReader.initialize(&mRingBuffer);
-      mRingBufferTester.reset();
-
-      mRingBufferWriter.mTestFunction = std::bind(
-         &Some::TestTester::doWriteTest, &mRingBufferTester,
-         std::placeholders::_1, std::placeholders::_2);
-
-      mRingBufferReader.mTestFunction = std::bind(
-         &Some::TestTester::doReadTest, &mRingBufferTester,
-         std::placeholders::_1, std::placeholders::_2);
+      mRingWriter.initialize(&mRingBuffer);
+      mRingReader.initialize(&mRingBuffer);
       break;
    }
 
@@ -290,20 +281,20 @@ void Share::show4()
 
    Prn::print(0, "");
    Prn::print(0, "mWriteIndex                %16lld", gShare.mRingBuffer.mWriteIndex.load(std::memory_order_relaxed));
-   Prn::print(0, "Reader.mReadIndex          %16lld", gShare.mRingBufferReader.mReadIndex);
+   Prn::print(0, "Reader.mReadIndex          %16lld", gShare.mRingReader.mReadIndex);
 
    Prn::print(0, "");
-   Prn::print(0, "Reader.NotReadyCount1      %16d", gShare.mRingBufferReader.mNotReadyCount1);
-   Prn::print(0, "Reader.NotReadyCount2      %16d", gShare.mRingBufferReader.mNotReadyCount2);
-   Prn::print(0, "Reader.NotReadyCount3      %16d", gShare.mRingBufferReader.mNotReadyCount3);
-   Prn::print(0, "Reader.DropCount1          %16d", gShare.mRingBufferReader.mDropCount1);
-   Prn::print(0, "Reader.DropCount2          %16d", gShare.mRingBufferReader.mDropCount2);
+   Prn::print(0, "Reader.NotReadyCount1      %16d", gShare.mRingReader.mNotReadyCount1);
+   Prn::print(0, "Reader.NotReadyCount2      %16d", gShare.mRingReader.mNotReadyCount2);
+   Prn::print(0, "Reader.NotReadyCount3      %16d", gShare.mRingReader.mNotReadyCount3);
+   Prn::print(0, "Reader.DropCount1          %16d", gShare.mRingReader.mDropCount1);
+   Prn::print(0, "Reader.DropCount2          %16d", gShare.mRingReader.mDropCount2);
+
    Prn::print(0, "");
-   Prn::print(0, "Tester.mReadPassCount      %16d", gShare.mRingBufferTester.mReadPassCount);
-   Prn::print(0, "Tester.mReadFailCount      %16d", gShare.mRingBufferTester.mReadFailCount);
-   Prn::print(0, "");
-   Prn::print(0, "Tester.mFirstWriteIndex    %16lld", gShare.mRingBufferTester.mFirstWriteIndex);
-   Prn::print(0, "Tester.mFirstReadIndex     %16lld", gShare.mRingBufferTester.mFirstReadIndex);
+   Prn::print(0, "Writer.mFirstWriteIndex    %16lld", gShare.mRingWriter.mFirstWriteIndex);
+   Prn::print(0, "Reader.mFirstReadIndex     %16lld", gShare.mRingReader.mFirstReadIndex);
+   Prn::print(0, "Reader.TestPassCount       %16d",   gShare.mRingReader.mTestPassCount);
+   Prn::print(0, "Reader.TestFailCount       %16d",   gShare.mRingReader.mTestFailCount);
 }
 
 //******************************************************************************

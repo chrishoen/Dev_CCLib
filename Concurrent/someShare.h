@@ -19,7 +19,6 @@
 
 #include "ccRingBuffer.h"
 #include "someTestRingBuffer.h"
-#include "someTestTester.h"
 
 namespace Some
 {
@@ -83,9 +82,8 @@ public:
    CC::LCPointerQueue            mLCPointerQueue;
 
    Some::TestRingBuffer          mRingBuffer;
-   CC::RingBufferWriter          mRingBufferWriter;
-   CC::RingBufferReader          mRingBufferReader;
-   Some::TestTester              mRingBufferTester;
+   Some::TestRingWriter          mRingWriter;
+   Some::TestRingReader          mRingReader;
 
    //***************************************************************************
    //***************************************************************************

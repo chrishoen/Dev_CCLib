@@ -356,7 +356,7 @@ void Writer::writeType10(int aNumWrites)
    Some::TestRecord tRecord;
 
    mMarkerWrite.doStart();
-   gShare.mRingBufferWriter.doWrite((void*)&tRecord);
+   gShare.mRingWriter.doWrite((void*)&tRecord);
    mMarkerWrite.doStop();
 
    mCount++;

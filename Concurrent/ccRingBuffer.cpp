@@ -15,6 +15,7 @@ using namespace std;
 
 namespace CC
 {
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -28,14 +29,41 @@ static const long long cInvalidValue = -9223372036854775807;
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// No constructor. 
+// Constructor. 
 
-void BaseRingBuffer::initialize()
+RingBuffer::RingBuffer()
 {
    mNumElements = 0;
    mElementSize = 0;
    mReadGap = 0;
+   mElementArrayMemory = 0;
    mWriteIndex = cInvalidValue;
+}
+
+RingBuffer::~RingBuffer()
+{
+   if (mElementArrayMemory) free(mElementArrayMemory);
+}
+
+void RingBuffer::initialize(int aNumElements, size_t aElementSize, int aReadGap)
+{
+   mNumElements = aNumElements;
+   mElementSize = aElementSize;
+   mReadGap = aReadGap;
+   mElementArrayMemory = malloc(aNumElements * aElementSize);
+   mWriteIndex.store(cInvalidValue,std::memory_order_relaxed);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Return a pointer to an element, based on an index modulo
+// the number of elements.
+
+void* RingBuffer::elementAt(long long aIndex)
+{
+   aIndex %= mNumElements;
+   return (void*)((char*)mElementArrayMemory + mElementSize * aIndex);
 }
 
 //******************************************************************************
@@ -49,12 +77,18 @@ void BaseRingBuffer::initialize()
 RingBufferWriter::RingBufferWriter()
 {
    mRB = 0;
-   mTestFunction = 0;
+   resetVars();
 }
 
-void RingBufferWriter::initialize(BaseRingBuffer* aRingBuffer)
+void RingBufferWriter::initialize(RingBuffer* aRingBuffer)
 {
+   resetVars();
    mRB = aRingBuffer;
+}
+
+void RingBufferWriter::resetVars()
+{
+   resetTest();
 }
 
 //******************************************************************************
@@ -87,7 +121,7 @@ void RingBufferWriter::doWrite(void* aElement)
 
    // Internal test function that can be used by inheritors to perform
    // ring buffer performance tests.
-   if (mTestFunction) mTestFunction(tWriteIndex, tPtr);
+   doWriteTest(tWriteIndex, tPtr);
 
    // Update the global state. This should be the only place that this
    // happens.
@@ -111,17 +145,40 @@ void* RingBufferWriter::startWrite()
       tWriteIndex++;
    }
 
+   // Get the address of the next element to write to.
+   void* tPtr = mRB->elementAt(tWriteIndex);
+
    // Return the address of the next element to write to.
-   return mRB->elementAt(tWriteIndex);
+   return tPtr;
 }
 
 // Update the write index state variable after a started write is finished
 // so that it contains the index of the last element written to.
 void RingBufferWriter::finishWrite()
 {
-   // Increment the global state. This should be the only other place that this
+   // Index of the last element that was written to.
+   long long tWriteIndex = mRB->mWriteIndex.load(std::memory_order_relaxed);
+
+   // Advance the index to the next element to write to.
+   if (tWriteIndex < 0)
+   {
+      tWriteIndex = 0;
+   }
+   else
+   {
+      tWriteIndex++;
+   }
+
+   // Get the address of the next element to write to.
+   void* tPtr = mRB->elementAt(tWriteIndex);
+
+   // Internal test function that can be used by inheritors to perform
+   // ring buffer performance tests.
+   doWriteTest(tWriteIndex, tPtr);
+
+   // Update the global state. This should be the only place that this
    // happens.
-   mRB->mWriteIndex.fetch_add(1, std::memory_order_relaxed);
+   mRB->mWriteIndex.store(tWriteIndex, std::memory_order_relaxed);
 }
 
 //******************************************************************************
@@ -135,9 +192,13 @@ void RingBufferWriter::finishWrite()
 RingBufferReader::RingBufferReader()
 {
    mRB = 0;
-   mTempElement = 0;
-   mTestFunction = 0;
    resetVars();
+}
+
+void RingBufferReader::initialize(RingBuffer* aRingBuffer)
+{
+   resetVars();
+   mRB = aRingBuffer;
 }
 
 void RingBufferReader::resetVars()
@@ -154,18 +215,7 @@ void RingBufferReader::resetVars()
    mTail = cInvalidValue;
    mReady = cInvalidValue;
    mHead = cInvalidValue;
-}
-
-void RingBufferReader::initialize(BaseRingBuffer* aRingBuffer)
-{
-   resetVars();
-   mRB = aRingBuffer;
-   mTempElement = (void*)new char[mRB->mElementSize];
-}
-
-RingBufferReader::~RingBufferReader()
-{
-   if (mTempElement) delete mTempElement;
+   resetTest();
 }
 
 //******************************************************************************
@@ -265,8 +315,8 @@ bool RingBufferReader::doRead(void* aElement)
    // Get the address of the next element to read from.
    void* tPtr = mRB->elementAt(mReadIndex);
 
-   // Copy that element into the temp element.
-   memcpy(mTempElement, tPtr, mRB->mElementSize);
+   // Copy that element into the argument element.
+   memcpy(aElement, tPtr, mRB->mElementSize);
 
    // If, during the read, the ring buffer was written to asynchronously
    // by the writer, so the read was overwritten, then drop the read.
@@ -304,13 +354,9 @@ bool RingBufferReader::doRead(void* aElement)
       return false;
    }
 
-   // The read of the temp element was successful so copy the temp
-   // element into the argument element.
-   memcpy(aElement, mTempElement, mRB->mElementSize);
-
    // Internal test function that can be used by inheritors to perform
    // ring buffer performance tests.
-   if (mTestFunction) mTestFunction(mReadIndex, mTempElement);
+   doReadTest(mReadIndex, aElement);
 
    // Increment the drop count. If none were dropped then the
    // read index should be the previous read index plus one.

@@ -355,7 +355,7 @@ void Reader::readType10(int aNumReads)
 {
    Some::TestRecord tRecord;
    mMarkerRead.doStart();
-   bool tPass = gShare.mRingBufferReader.doRead((void*)&tRecord);
+   bool tPass = gShare.mRingReader.doRead((void*)&tRecord);
    mMarkerRead.doStop();
 
    if (tPass)

@@ -69,6 +69,8 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
+   Some::TestRecord tRecord;
+   gShare.mRingWriter.doWrite((void*)&tRecord);
 }
 
 //******************************************************************************
