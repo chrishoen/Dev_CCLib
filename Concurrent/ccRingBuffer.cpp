@@ -29,15 +29,7 @@ static const long long cInvalidValue = -9223372036854775807;
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Constructor. 
-
-RingBufferState::RingBufferState()
-{
-   mNumElements = 0;
-   mElementSize = 0;
-   mReadGap = 0;
-   mWriteIndex = cInvalidValue;
-}
+// No constructor. 
 
 void RingBufferState::initialize(int aNumElements, size_t aElementSize, int aReadGap)
 {

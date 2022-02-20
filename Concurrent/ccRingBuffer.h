@@ -139,8 +139,7 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Constructor.
-   RingBufferState();
+   // No constructor.
    virtual ~RingBufferState() {}
    void initialize(int aNumElements, size_t aElementSize, int aReadGap);
 };
@@ -175,6 +174,38 @@ public:
    ~HeapRingBuffer();
    void initialize(int aNumElements, size_t aElementSize, int aReadGap);
    void finalize();
+};
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Ring buffer. This contains variables that describe a ring buffer
+// and its state.
+
+template <class Element, int NumElements, int ReadGap>
+class MemoryRingBuffer : public RingBufferState
+{
+public:
+   typedef RingBufferState BaseClass;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   // Memory for the ring buffer element array.
+   Element mElementArrayMemory[NumElements];
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   // No constructor.
+   void initialize()
+   {
+      this->BaseClass::initialize(NumElements, sizeof(Element), ReadGap);
+   }
 };
 
 //******************************************************************************
