@@ -53,16 +53,10 @@ void RingWriterThread::threadInitFunction()
 {
    SM::gShare->show(0);
       
-   // Initialize the tester.
-   mRingTester.reset();
-
    // Initialize the writer.
-   mRingWriter.initialize(&SM::gShare->mTestRingBuffer);
-
-   // Initialize the writer test function pointer.
-   mRingWriter.mTestFunction = std::bind(
-      &Some::TestTester::doWriteTest, &mRingTester,
-      std::placeholders::_1, std::placeholders::_2);
+   mRingWriter.initialize(
+      &SM::gShare->mTestRingBuffer, 
+      &SM::gShare->mTestRingBuffer.mElementArrayMemory);
 }
 
 //******************************************************************************

@@ -10,9 +10,7 @@ Ring buffer writer thread.
 
 #include "risThreadsRandomThread.h"
 
-#include "ccRingBuffer.h"
 #include "someTestRingBuffer.h"
-#include "someTestTester.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -36,10 +34,7 @@ public:
    // Members.
 
    // Ring buffer writer.
-   CC::RingBufferWriter          mRingWriter;
-
-   // Test ring buffer tester.
-   Some::TestTester              mRingTester;
+   TestRingWriter mRingWriter;
 
    //******************************************************************************
    //******************************************************************************

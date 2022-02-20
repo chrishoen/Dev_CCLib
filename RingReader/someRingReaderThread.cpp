@@ -53,16 +53,10 @@ void RingReaderThread::threadInitFunction()
 {
    SM::gShare->show(0);
       
-   // Initialize the tester.
-   mRingTester.reset();
-
    // Initialize the writer.
-   mRingReader.initialize(&SM::gShare->mTestRingBuffer);
-
-   // Initialize the writer test function pointer.
-   mRingReader.mTestFunction = std::bind(
-      &Some::TestTester::doReadTest, &mRingTester,
-      std::placeholders::_1, std::placeholders::_2);
+   mRingReader.initialize(
+      &SM::gShare->mTestRingBuffer,
+      &SM::gShare->mTestRingBuffer.mElementArrayMemory);
 }
 
 //******************************************************************************
@@ -82,7 +76,6 @@ void RingReaderThread::threadExitFunction()
 
 void RingReaderThread::executeOnTimer(int aTimerCount)
 {
-   return;
    // Read a test record to the ring buffer.
    Some::TestRecord tRecord;
    mRingReader.doRead((void*)&tRecord);

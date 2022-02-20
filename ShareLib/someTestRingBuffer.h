@@ -21,41 +21,122 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Test ring buffer. This contains variables that describe a ring buffer
-// and its state. It also contains non heap memory for the ring buffer
-// storage. It is shared memory safe.
+// Test ring buffer.
 
-class TestRingBuffer : public CC::BaseRingBuffer
+class TestRingBuffer : public CC::MemoryRingBuffer<TestRecord, 100, 20>
 {
 public:
+};
 
-   typedef CC::BaseRingBuffer BaseClass;
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Test ring buffer writer.
 
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Constants.
-
-   static const int cNumElements = 100;
+class TestRingWriter : public CC::RingBufferWriter
+{
+public:
+   typedef CC::RingBufferWriter BaseClass;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Members.
 
-   TestRecord mElementArrayMemory[cNumElements];
+   // Test variables.
+   bool mFirstWriteFlag;
+   long long mFirstWriteIndex;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Methods.
 
-   // No constructor. This sets the base class variables.
-   void initialize() override;
+   TestRingWriter()
+   {
+      mFirstWriteFlag = true;
+      mFirstWriteIndex = 0;
+   }
 
-   // Return a pointer to an element, based on an index modulo
-   // the number of elements.
-   void* elementAt(long long aIndex) override;
+   void resetTest() override
+   {
+      mFirstWriteFlag = true;
+      mFirstWriteIndex = 0;
+   }
+
+   void doTest(long long aWriteIndex, void* aElement) override
+   {
+      if (mFirstWriteFlag)
+      {
+         mFirstWriteFlag = false;
+         mFirstWriteIndex = aWriteIndex;
+      }
+      TestRecord* tRecord = (TestRecord*)aElement;
+      tRecord->doSet1(aWriteIndex);
+   }
+};
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Test ring buffer writer.
+
+class TestRingReader : public CC::RingBufferReader
+{
+public:
+   typedef CC::RingBufferReader BaseClass;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   // Test variables.
+   bool mFirstReadFlag;
+   long long mFirstReadIndex;
+   int mTestPassCount;
+   int mTestFailCount;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   TestRingReader()
+   {
+      mFirstReadFlag = true;
+      mFirstReadIndex = 0;
+      mTestPassCount = 0;
+      mTestFailCount = 0;
+   }
+
+   void resetTest() override
+   {
+      mFirstReadFlag = true;
+      mFirstReadIndex = 0;
+      mTestPassCount = 0;
+      mTestFailCount = 0;
+   }
+
+   void doTest(long long aReadIndex, void* aElement) override
+   {
+      if (mFirstReadFlag)
+      {
+         mFirstReadFlag = false;
+         mFirstReadIndex = aReadIndex;
+      }
+
+      TestRecord* tRecord = (TestRecord*)aElement;
+
+      if (tRecord->doTest1(aReadIndex))
+      {
+         mTestPassCount++;
+      }
+      else
+      {
+         mTestFailCount++;
+      }
+   }
 };
 
 //******************************************************************************

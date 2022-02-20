@@ -55,8 +55,8 @@ void MonitorThread::executeOnTimer(int aTimeCount)
          gRingReaderThread->mRingReader.mNotReadyCount3,
          gRingReaderThread->mRingReader.mDropCount1,
          gRingReaderThread->mRingReader.mDropCount2,
-         gRingReaderThread->mRingTester.mReadPassCount,
-         gRingReaderThread->mRingTester.mReadFailCount);
+         gRingReaderThread->mRingReader.mTestPassCount,
+         gRingReaderThread->mRingReader.mTestFailCount);
 
    }
 
