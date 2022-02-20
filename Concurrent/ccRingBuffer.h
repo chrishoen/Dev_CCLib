@@ -151,7 +151,7 @@ public:
 // Ring buffer. This contains variables that describe a ring buffer
 // and its state.
 
-class RingBufferHeap : public RingBufferState
+class HeapRingBuffer : public RingBufferState
 {
 public:
    typedef RingBufferState BaseClass;
@@ -171,9 +171,10 @@ public:
    // Methods.
 
    // Constructor.
-   RingBufferHeap();
-   ~RingBufferHeap();
+   HeapRingBuffer();
+   ~HeapRingBuffer();
    void initialize(int aNumElements, size_t aElementSize, int aReadGap);
+   void finalize();
 };
 
 //******************************************************************************

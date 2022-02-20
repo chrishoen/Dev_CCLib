@@ -23,11 +23,11 @@ namespace Some
 //******************************************************************************
 // Test ring buffer.
 
-class TestRingBuffer : public CC::RingBufferHeap
+class TestRingBuffer : public CC::HeapRingBuffer
 {
 public:
 
-   typedef CC::RingBufferHeap BaseClass;
+   typedef CC::HeapRingBuffer BaseClass;
 
    //***************************************************************************
    //***************************************************************************

@@ -55,20 +55,30 @@ void RingBufferState::initialize(int aNumElements, size_t aElementSize, int aRea
 //******************************************************************************
 // Constructor. 
 
-RingBufferHeap::RingBufferHeap()
+HeapRingBuffer::HeapRingBuffer()
 {
    mElementArrayMemory = 0;
 }
 
-RingBufferHeap::~RingBufferHeap()
+HeapRingBuffer::~HeapRingBuffer()
 {
-   if (mElementArrayMemory) free(mElementArrayMemory);
+   finalize();
 }
 
-void RingBufferHeap::initialize(int aNumElements, size_t aElementSize, int aReadGap)
+void HeapRingBuffer::initialize(int aNumElements, size_t aElementSize, int aReadGap)
 {
    BaseClass::initialize(aNumElements, aElementSize, aReadGap);
+   finalize();
    mElementArrayMemory = malloc(aNumElements * aElementSize);
+}
+
+void HeapRingBuffer::finalize()
+{
+   if (mElementArrayMemory)
+   {
+      free(mElementArrayMemory);
+      mElementArrayMemory = 0;
+   }
 }
 
 //******************************************************************************
