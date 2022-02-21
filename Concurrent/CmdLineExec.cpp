@@ -69,8 +69,18 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   Some::TestRecord tRecord;
-   gShare.mRingWriter.doWrite((void*)&tRecord);
+   int tv_nsec = 999999999;
+   int tv_sec = 1;
+
+   int s = tv_sec;
+   int ms = tv_nsec / 1.0e6; // Convert nanoseconds to milliseconds
+   Prn::print(0, "ms1 %d  %d", s, ms);
+   if (ms > 999) {
+      s++;
+      ms = 0;
+   }
+
+   Prn::print(0, "ms2 %d  %d", s, ms);
 }
 
 //******************************************************************************

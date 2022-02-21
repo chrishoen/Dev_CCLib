@@ -46,6 +46,17 @@ and the modulo of it is in the second column.
 129 1  xxxx
 130 2  xxxx  Head  = WriteIndex
 131 3  zzzz 
+NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW
+122 2
+123 3  zzzz
+124 4  xxxx  Tail = WriteIndex - (NumElements - 1)
+125 5  xxxx
+126 6  xxxx
+127 7  xxxx
+128 0  xxxx
+129 1  xxxx
+130 2  xxxx  Head  = WriteIndex - 1
+131 3  zzzz  WriteIndex next element to write to
 
 Only elements marked with xxxx can be safely read, on the closed interval
 [Tail .. Head]
