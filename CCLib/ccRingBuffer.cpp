@@ -243,9 +243,6 @@ bool RingBufferReader::doRead(void* aElement)
       return false;
    }
 
-   // Store the last successful read index.
-   mLastReadIndex = mReadIndex;
-
    // Here's an example of a buffer with NumElements = 8 and ReadGap = 3.
    // 
    // The buffer contains written elements on the closed interval [123 .. 130].
@@ -358,21 +355,20 @@ bool RingBufferReader::doRead(void* aElement)
    // Internal test function that can be used by inheritors to perform
    // ring buffer consistency tests. This is called with the index of
    // the read and the element that was read.
-   if (mReadIndex < 0)
-   {
-      printf("LINE102\n");
-   }
    doTest(mReadIndex, aElement);
 
    // Increment the index to the next element to read from.
    mReadIndex++;
 
    // Increment the drop count. If none were dropped then the
-   // read index should be the previous read index plus one.
+   // read index should be the last succesful read index plus one.
    if (mLastReadIndex > 0)
    {
       mDropCount2 += (int)(mReadIndex - (mLastReadIndex + 1));
    }
+
+   // Store the last successful read index.
+   mLastReadIndex = mReadIndex;
 
    // Success. 
    return true;
