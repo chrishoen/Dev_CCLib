@@ -12,6 +12,10 @@ my_special1()
 
 add_subdirectory ("CCLib")
 add_subdirectory ("Concurrent")
+return()
+
+add_subdirectory ("CCLib")
+add_subdirectory ("Concurrent")
 add_subdirectory ("ShareLib")
 add_subdirectory ("RingWriter")
 add_subdirectory ("RingReader")

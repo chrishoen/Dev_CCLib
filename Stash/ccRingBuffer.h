@@ -20,20 +20,17 @@ and ElementSize. Writes into the memory are performed using modulo
 arithmetic.
 
 Writes are executed as
-   ElementArray[WriteIndex % NumElements] = NewElement
-   ++WriteIndex %= NumElements
+   ElementArray[++WriteIndex % NumElements] = NewElement
 
-where WriteIndex is the index of the next array element to write to.
+where WriteIndex is the index of the last array element that was written to.
 
 Readers can read from the memory as long as the reads are within the bounds
 of a Head and Tail, where
 
-   TailIndex = HeadIndex - (NumElements - 1)
-   HeadIndex = WriteIndex - 1, the index of the last element written to.
+   TailIndex = HeadIndex - (NumElements - 2)
+   HeadIndex = WriteIndex, the index of the last element written to.
 so
    HeadIndex - TailIndex = NumElements - 2
-
-   WriteIndex - 1 - HeadIndex - (NumElements - 1)
 
 Here's an example of a buffer with NumElements = 8 that is past the
 initialization stage. It is full. The write index is in the first column
@@ -52,19 +49,17 @@ and the modulo of it is in the second column.
 NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW
 122 2
 123 3  zzzz
-124 4  xxxx  WriteIndex - (NumElements - 1)
+124 4  xxxx  Tail = WriteIndex - (NumElements - 1)
 125 5  xxxx
 126 6  xxxx
 127 7  xxxx
 128 0  xxxx
 129 1  xxxx
-130 2  xxxx  WriteIndex - 1
-131 3  zzzz  WriteIndex is the next element to write to
+130 2  xxxx  Head  = WriteIndex - 1
+131 3  zzzz  WriteIndex next element to write to
 
 Only elements marked with xxxx can be safely read, on the closed interval
-[Tail .. Head] = [WriteIndex - (NumElements - 1) .. WriteIndex - 1]
-Head - Tail =  (Numelements - 2)
-
+[Tail .. Head]
 
 A reader can read always safely read any one element of 124 .. 130.
 During a read of 123, an asynchrounous write to 131 could occur and
@@ -90,18 +85,6 @@ back and modify any one element of 128 .. 130.
 130 2  yyyy  Head  = WriteIndex
 131 3  zzzz
 
-NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW NEW
-122 2
-123 3  zzzz
-124 4  xxxx  WriteIndex - (NumElements - 1)
-125 5  xxxx
-126 6  xxxx
-127 7  xxxx
-128 0  yyyy  WriteIndex - ReadGap
-129 1  yyyy
-130 2  yyyy  WriteIndex - 1
-131 3  zzzz  WriteIndex is the next element to write to
-
 A reader can read always safely read any one element of 124 .. 127.
 
 Only elements marked with xxxx can be safely read, on the closed interval
@@ -121,7 +104,6 @@ once they have been written.
 //******************************************************************************
 //******************************************************************************
 
-#include <stddef.h>
 #include <atomic>
 
 //******************************************************************************
@@ -155,17 +137,13 @@ public:
    // Read gap.
    long long mReadGap;
 
-   // The index of the next element to write to. If this is equal to
-   // zero then no writes have occured and the ring buffer is empty.
+   // The index of the last element that was written to. If this is equal to
+   // negative one then no writes have occured and the ring buffer is empty.
    // This single variable encapsulates the state of the ring buffer. It
    // can only be written to by a single writer thread and it can be read
    // by multiple reader threads. Buffer memory is addressed via this index
-   // modulo the number of elements. This variable is surrounded by padding
-   // so that it is on a separate cache line.
-
-   long long mPadding1[8];
+   // modulo the number of elements.
    std::atomic<long long> mWriteIndex;
-   long long mPadding2[8];
 
    //***************************************************************************
    //***************************************************************************
@@ -259,7 +237,8 @@ public:
    // The ring buffer.
    RingBufferState* mRB;
 
-   // The ring buffer element array memory.
+   // Memory for the ring buffer element array. This is created on the heap at 
+   // initialization.
    void* mElementArrayMemory;
 
    //***************************************************************************
@@ -301,9 +280,8 @@ public:
    //***************************************************************************
    // Methods.
    
-   // Internal test function that can be used by inheritors to perform
-   // ring buffer consistency tests. This is called with the index of
-   // the write and the element that was written.
+   // Internal test function that can be override inheritors to perform
+   // ring buffer performance tests.
    virtual void doTest(long long aIndex, void* aElement) {}
 };
 
@@ -325,7 +303,8 @@ public:
    // The ring buffer.
    RingBufferState* mRB;
 
-   // The ring buffer element array memory.
+   // Memory for the ring buffer element array. This is created on the heap at 
+   // initialization.
    void* mElementArrayMemory;
 
    // If true then this is the first read.
@@ -365,7 +344,8 @@ public:
    // 130 2  yyyy  Head  = WriteIndex
    // 131 3  zzzz
 
-   // The next element to read from.
+   // Depending on the context, the last element that was read from or
+   // the next element to read from. Successfully or not.
    long long mReadIndex;
 
    // The previous read index for the last successful read.
@@ -410,9 +390,8 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Internal test function that can be used by inheritors to perform
-   // ring buffer consistency tests. This is called with the index of
-   // the read and the element that was read.
+   // Internal test function that can be override inheritors to perform
+   // ring buffer performance tests.
    virtual void doTest(long long aIndex, void* aElement) {}
 };
 
