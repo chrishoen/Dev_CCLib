@@ -194,7 +194,6 @@ void RingBufferReader::resetVars()
    mFirstFlag = true;
    mReadIndex = -1;
    mLastReadIndex = -1;
-   mBehind = 0;
    mNotReadyCount1 = 0;
    mNotReadyCount2 = 0;
    mNotReadyCount3 = 0;
@@ -218,6 +217,16 @@ void* RingBufferReader::elementAt(long long aIndex)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Return the number of elements that are available to be read.
+
+int RingBufferReader::available()
+{
+   return mRB->mWriteIndex.load(std::memory_order_relaxed) - mReadIndex - 1;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Read an element from the array, copying it to the function argument.
 // Return true if successful.
 
@@ -234,7 +243,6 @@ bool RingBufferReader::doRead(void* aElement)
       // The writer is not ready.
       mFirstFlag = true;
       mNotReadyCount1++;
-      mBehind = 0;
       return false;
    }
 
@@ -267,7 +275,6 @@ bool RingBufferReader::doRead(void* aElement)
       if (mReadIndex < 0)
       {
          // There's nothing to read.
-         mBehind = tWriteIndex - mRB->mReadGap - mReadIndex;
          mNotReadyCount2++;
          return false;
       }
@@ -281,7 +288,6 @@ bool RingBufferReader::doRead(void* aElement)
          // Set the next read for the youngest available element.
          mReadIndex = tWriteIndex - mRB->mReadGap - 1;
          // There's nothing to read.
-         mBehind = tWriteIndex - mRB->mReadGap - mReadIndex;
          mNotReadyCount2++;
          return false;
       }
@@ -291,7 +297,6 @@ bool RingBufferReader::doRead(void* aElement)
       if (mReadIndex == tWriteIndex - mRB->mReadGap - 1)
       {
          // There's nothing to read.
-         mBehind = tWriteIndex - mRB->mReadGap - mReadIndex;
          mNotReadyCount3++;
          return false;
       }
@@ -340,18 +345,12 @@ bool RingBufferReader::doRead(void* aElement)
    // Get the final write index. If a write occurred during the read then
    // this will be different than the write index at the beginning of the
    // read.
-   tWriteIndex = mRB->mWriteIndex.load(std::memory_order_relaxed);
+   long long tFinalWriteIndex = mRB->mWriteIndex.load(std::memory_order_relaxed);
    
    // If the read was or might have been overwritten then drop it.
-   if (tWriteIndex > mReadIndex + (mRB->mNumElements - 1))
-      {
-      // Increment the drop count. If none were dropped then the
-      // read index should be the previous read index plus one.
-      mBehind = tWriteIndex - mRB->mReadGap - mReadIndex;
-      if (mLastReadIndex > 0)
-      {
-         mDropCount1 += (int)(mReadIndex - (mLastReadIndex + 1));
-      }
+   if (tFinalWriteIndex > mReadIndex + (mRB->mNumElements - 1))
+   {
+      mDropCount1 += (int)(tFinalWriteIndex - mReadIndex);
       return false;
    }
 
@@ -372,8 +371,6 @@ bool RingBufferReader::doRead(void* aElement)
 
    // Store the last successful read index.
    mLastReadIndex = mReadIndex;
-
-   mBehind = tWriteIndex - mRB->mReadGap - mReadIndex;
 
    // Success. 
    return true;

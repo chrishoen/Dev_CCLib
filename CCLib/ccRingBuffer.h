@@ -334,10 +334,6 @@ public:
    // If true then this is the first read.
    bool mFirstFlag;
 
-   // How far behind the read index is from the write index. This should
-   // usually be one.
-   int mBehind;
-
    // The number of reads that had nothing available to read.
    int mNotReadyCount1;
    int mNotReadyCount2;
@@ -362,6 +358,9 @@ public:
    // Return a pointer to an element, based on an index modulo the number
    // of elements.
    void* elementAt(long long aIndex);
+
+   // Return the number of elements that are available to be read.
+   int available();
 
    //***************************************************************************
    //***************************************************************************

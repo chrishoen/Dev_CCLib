@@ -97,7 +97,7 @@ void StatusThread::threadRunFunction()
                mProcString,
                gShare.mRingBuffer.mWriteIndex.load(std::memory_order_relaxed),
                gShare.mRingReader.mReadIndex,
-               gShare.mRingReader.mBehind,
+               gShare.mRingReader.available(),
                gShare.mRingReader.mNotReadyCount1,
                gShare.mRingReader.mNotReadyCount2,
                gShare.mRingReader.mNotReadyCount3,
