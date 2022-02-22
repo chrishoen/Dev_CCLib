@@ -28,7 +28,8 @@ namespace SM
 // 
 // 1) No constructors.
 // 2) No pointers.
-// 3) No dynamic memory, this means no std::string, no std::vector, ...
+// 3) No dynamic memory, this means no std::vector, ...
+// 4) No vtables, this means no virtual functions.
 //
 //******************************************************************************
 //******************************************************************************

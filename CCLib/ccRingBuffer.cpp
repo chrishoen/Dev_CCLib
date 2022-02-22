@@ -102,8 +102,8 @@ void RingBufferWriter::resetVars()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Return a pointer to an element, based on an index modulo
-// the number of elements.
+// Return a pointer to an element, based on an index modulo the number
+// of elements.
 
 void* RingBufferWriter::elementAt(long long aIndex)
 {
@@ -114,9 +114,9 @@ void* RingBufferWriter::elementAt(long long aIndex)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Write an element to the array at the next element to write to, copying
-// it from the function argument. Update the write index state variable
-// so that it contains the index of the next element to write to.
+// Write an element to the array at the write index, copying it from
+// the function argument. Increment the write index state variable so 
+// that it contains the index of the next element to write to.
 
 void RingBufferWriter::doWrite(void* aElement)
 {
@@ -137,8 +137,13 @@ void RingBufferWriter::doWrite(void* aElement)
    mRB->mWriteIndex.fetch_add(1, std::memory_order_relaxed);
 }
 
-// Return a pointer to the next element to write to. Do not update the
-// write index state variable.
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Return a pointer to the next element to write to, which is the element
+// at the write index. Do not increment the  write index state. The caller
+// can then execute its own write operation.
+
 void* RingBufferWriter::startWrite()
 {
    // Get the index of the next element to write to.
@@ -151,9 +156,8 @@ void* RingBufferWriter::startWrite()
    return tPtr;
 }
 
-// Update the write index state variable after a started write is finished
-// so that it contains, after the write, the index of the next element to
-// write to.
+// Increment the write index state variable after a started write is
+// finished so that it contains the index of the last element written to.
 void RingBufferWriter::finishWrite()
 {
    // Get the index of the next element to write to.
@@ -200,20 +204,16 @@ void RingBufferReader::resetVars()
    mNotReadyCount3 = 0;
    mDropCount1 = 0;
    mDropCount2 = 0;
-   mRetryCount = 0;
    mReadIndex = -1;
    mLastReadIndex = -1;
-   mTail = -1;
-   mReady = -1;
-   mHead = -1;
    resetTest();
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Return a pointer to an element, based on an index modulo
-// the number of elements.
+// Return a pointer to an element, based on an index modulo the number
+// of elements.
 
 void* RingBufferReader::elementAt(long long aIndex)
 {
