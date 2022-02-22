@@ -359,18 +359,18 @@ bool RingBufferReader::doRead(void* aElement)
    // the read and the element that was read.
    doTest(mReadIndex, aElement);
 
-   // Increment the index to the next element to read from.
-   mReadIndex++;
-
-   // Increment the drop count. If none were dropped then the
-   // read index should be the last succesful read index plus one.
+   // Increment the drop count. If none were dropped then the read index
+   // should be the index of the last succesful read plus one.
    if (mLastReadIndex > 0)
    {
       mDropCount2 += (int)(mReadIndex - (mLastReadIndex + 1));
    }
 
-   // Store the last successful read index.
+   // Store the index for the last successful read.
    mLastReadIndex = mReadIndex;
+
+   // Increment the index to the next element to read from.
+   mReadIndex++;
 
    // Success. 
    return true;
