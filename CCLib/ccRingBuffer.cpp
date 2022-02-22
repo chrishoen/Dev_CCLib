@@ -233,9 +233,6 @@ bool RingBufferReader::doRead(void* aElement)
    // the read. The write index is the index of the next element to write to.
    long long tWriteIndex = mRB->mWriteIndex.load(std::memory_order_relaxed);
 
-   // Store the last successful read index.
-   mLastReadIndex = mReadIndex;
-
    // Test for invalid data. This means that the writer has not yet
    // written any elements or is resetting the buffer.
    if (tWriteIndex == 0)
@@ -245,6 +242,9 @@ bool RingBufferReader::doRead(void* aElement)
       mNotReadyCount1++;
       return false;
    }
+
+   // Store the last successful read index.
+   mLastReadIndex = mReadIndex;
 
    // Here's an example of a buffer with NumElements = 8 and ReadGap = 3.
    // 
@@ -257,7 +257,7 @@ bool RingBufferReader::doRead(void* aElement)
    // 124 4  xxxx  WriteIndex - (NumElements - 1)
    // 125 5  xxxx
    // 126 6  xxxx
-   // 127 7  xxxx  WriteIndex - ReadGap - 1
+   // 127 7  xxxx  WriteIndex - ReadGap + 1
    // 128 0  yyyy
    // 129 1  yyyy
    // 130 2  yyyy  WriteIndex - 1
@@ -267,20 +267,36 @@ bool RingBufferReader::doRead(void* aElement)
    if (mFirstFlag)
    {
       mFirstFlag = false;
-      mReadIndex = tWriteIndex - mRB->mReadGap;
+      mReadIndex = tWriteIndex - mRB->mReadGap - 1;
+
+      // Test for negative ReadIndex. This can happen when the buffer
+      // doesn't have enough available elements to read yet.
+      if (mReadIndex < 0)
+      {
+         mNotReadyCount2++;
+         return false;
+      }
    }
    else
    {
+      // Test for negative ReadIndex. This can happen when the buffer
+      // doesn't have enough available elements to read yet.
+      if (mReadIndex < 0)
+      {
+         mReadIndex = tWriteIndex - mRB->mReadGap - 1;
+         mNotReadyCount2++;
+         return false;
+      }
+
       // Ready is the youngest element that can be read. If it has already
       // been read then no elements are available to be read, so exit.
 
       // If the oldest element that can be read has already been read
       // then no elements are available to be read, so exit.
-      if (mReadIndex == tWriteIndex - mRB->mReadGap)
+      if (mReadIndex == tWriteIndex - mRB->mReadGap - 1)
       {
          // There's nothing to read.
-         //mReadIndex = mReady; //????
-         mNotReadyCount2++;
+         mNotReadyCount3++;
          return false;
       }
 
@@ -290,15 +306,7 @@ bool RingBufferReader::doRead(void* aElement)
       {
          mReadIndex = tWriteIndex - (mRB->mNumElements - 1);
       }
-   }
 
-   // Test for negative ReadIndex. This can happen when the buffer
-   // isn't full yet.
-   if (mReadIndex < 0)
-   {
-      // There's nothing to read.
-      mNotReadyCount3++;
-      return false;
    }
 
    // At this point ReadIndex is the index of the next element to read from.
@@ -350,6 +358,10 @@ bool RingBufferReader::doRead(void* aElement)
    // Internal test function that can be used by inheritors to perform
    // ring buffer consistency tests. This is called with the index of
    // the read and the element that was read.
+   if (mReadIndex < 0)
+   {
+      printf("LINE102\n");
+   }
    doTest(mReadIndex, aElement);
 
    // Increment the index to the next element to read from.
