@@ -280,15 +280,16 @@ void Share::show4()
    Prn::print(0, "Reader.mMeanTime           %16.5f", mReaderMeanTime);
 
    Prn::print(0, "");
-   Prn::print(0, "mWriteIndex                %16lld", gShare.mRingBuffer.mWriteIndex.load(std::memory_order_relaxed));
-   Prn::print(0, "Reader.mReadIndex          %16lld", gShare.mRingReader.mReadIndex);
+   Prn::print(0, "mNextWriteIndex            %16lld", gShare.mRingBuffer.mNextWriteIndex.load(std::memory_order_relaxed));
+   Prn::print(0, "Reader.mLastReadIndex      %16lld", gShare.mRingReader.mLastReadIndex);
 
    Prn::print(0, "");
    Prn::print(0, "Reader.NotReadyCount1      %16d", gShare.mRingReader.mNotReadyCount1);
    Prn::print(0, "Reader.NotReadyCount2      %16d", gShare.mRingReader.mNotReadyCount2);
    Prn::print(0, "Reader.NotReadyCount3      %16d", gShare.mRingReader.mNotReadyCount3);
-   Prn::print(0, "Reader.DropCount1          %16d", gShare.mRingReader.mDropCount1);
-   Prn::print(0, "Reader.DropCount2          %16d", gShare.mRingReader.mDropCount2);
+   Prn::print(0, "Reader.ErrorCount          %16d", gShare.mRingReader.mErrorCount);
+   Prn::print(0, "Reader.DropCount           %16d", gShare.mRingReader.mDropCount);
+   Prn::print(0, "Reader.OverwriteCounti     %16d", gShare.mRingReader.mOverwriteCount);
 
    Prn::print(0, "");
    Prn::print(0, "Writer.mFirstWriteIndex    %16lld", gShare.mRingWriter.mFirstWriteIndex);

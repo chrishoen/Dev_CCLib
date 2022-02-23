@@ -29,7 +29,7 @@ void RingBufferState::initialize(int aNumElements, size_t aElementSize, int aRea
    mNumElements = aNumElements;
    mElementSize = aElementSize;
    mReadGap = aReadGap;
-   mWriteIndex.store(0,std::memory_order_relaxed);
+   mNextWriteIndex.store(0,std::memory_order_relaxed);
 }
 
 //******************************************************************************
@@ -114,7 +114,7 @@ void* RingBufferWriter::elementAt(long long aIndex)
 void RingBufferWriter::doWrite(void* aElement)
 {
    // Get the index of the next element to write to.
-   long long tWriteIndex = mRB->mWriteIndex.load(std::memory_order_relaxed);
+   long long tWriteIndex = mRB->mNextWriteIndex.load(std::memory_order_relaxed);
 
    // Get the address of the next element to write to.
    void* tPtr = elementAt(tWriteIndex);
@@ -127,7 +127,7 @@ void RingBufferWriter::doWrite(void* aElement)
    doTest(tWriteIndex, tPtr);
 
    // Increment the write index to the next element to write to.
-   mRB->mWriteIndex.fetch_add(1, std::memory_order_relaxed);
+   mRB->mNextWriteIndex.fetch_add(1, std::memory_order_relaxed);
 }
 
 //******************************************************************************
@@ -140,7 +140,7 @@ void RingBufferWriter::doWrite(void* aElement)
 void* RingBufferWriter::startWrite()
 {
    // Get the index of the next element to write to.
-   long long tWriteIndex = mRB->mWriteIndex.load(std::memory_order_relaxed);
+   long long tWriteIndex = mRB->mNextWriteIndex.load(std::memory_order_relaxed);
 
    // Get the address of the next element to write to.
    void* tPtr = elementAt(tWriteIndex);
@@ -154,7 +154,7 @@ void* RingBufferWriter::startWrite()
 void RingBufferWriter::finishWrite()
 {
    // Get the index of the next element to write to.
-   long long tWriteIndex = mRB->mWriteIndex.load(std::memory_order_relaxed);
+   long long tWriteIndex = mRB->mNextWriteIndex.load(std::memory_order_relaxed);
 
    // Get the address of the next element to write to.
    void* tPtr = elementAt(tWriteIndex);
@@ -165,7 +165,7 @@ void RingBufferWriter::finishWrite()
    doTest(tWriteIndex, tPtr);
 
    // Increment the write index to the next element to write to.
-   mRB->mWriteIndex.fetch_add(1, std::memory_order_relaxed);
+   mRB->mNextWriteIndex.fetch_add(1, std::memory_order_relaxed);
 }
 
 //******************************************************************************
@@ -192,13 +192,13 @@ void RingBufferReader::initialize(RingBufferState* aRingBufferState, void* aElem
 void RingBufferReader::resetVars()
 {
    mFirstFlag = true;
-   mReadIndex = -1;
-   mLastReadIndex = -1;
+   mLastReadIndex = 0;
    mNotReadyCount1 = 0;
    mNotReadyCount2 = 0;
    mNotReadyCount3 = 0;
-   mDropCount1 = 0;
-   mDropCount2 = 0;
+   mErrorCount = 0;
+   mDropCount = 0;
+   mOverwriteCount = 0;
    resetTest();
 }
 
@@ -221,7 +221,8 @@ void* RingBufferReader::elementAt(long long aIndex)
 
 int RingBufferReader::available()
 {
-   return mRB->mWriteIndex.load(std::memory_order_relaxed) - mReadIndex - 1;
+   long long tMaxAvailable = mRB->mNextWriteIndex.load(std::memory_order_relaxed) - 1 - mRB->mReadGap;
+   return  tMaxAvailable - mLastReadIndex;
 }
 
 //******************************************************************************
@@ -232,17 +233,34 @@ int RingBufferReader::available()
 
 bool RingBufferReader::doRead(void* aElement)
 {
+   long long tMinAvailable = 0;
+   long long tMaxAvailable = 0;
+   long long tNextReadIndex = 0;
+
    // Get the initial write index. This might change asynchronously during
    // the read. The write index is the index of the next element to write to.
-   long long tWriteIndex = mRB->mWriteIndex.load(std::memory_order_relaxed);
+   long long tNextWriteIndex = mRB->mNextWriteIndex.load(std::memory_order_relaxed);
 
    // Test for invalid data. This means that the writer has not yet
    // written any elements or is resetting the buffer.
-   if (tWriteIndex == 0)
+   if (tNextWriteIndex == 0)
    {
       // The writer is not ready.
       mFirstFlag = true;
       mNotReadyCount1++;
+      return false;
+   }
+
+   // Calculate limits.
+   tMinAvailable = tNextWriteIndex - (mRB->mNumElements - 1);
+   tMaxAvailable = tNextWriteIndex - 1 - mRB->mReadGap;
+
+   // If the max available is negative no elements are available, so exit.
+   if (tMaxAvailable < 0)
+   {
+      // Set the read for the behind the maximum available element.
+      mLastReadIndex = tMaxAvailable - 1;
+      mNotReadyCount2++;
       return false;
    }
 
@@ -267,51 +285,39 @@ bool RingBufferReader::doRead(void* aElement)
    if (mFirstFlag)
    {
       mFirstFlag = false;
-      // Set the read for the youngest available element.
-      mReadIndex = tWriteIndex - mRB->mReadGap - 1;
+      // Set the read for the behind the maximum available element.
+      mLastReadIndex = tMaxAvailable - 1;
+   }
 
-      // Test for negative ReadIndex. This can happen when the buffer
-      // doesn't have enough available elements to read yet.
-      if (mReadIndex < 0)
-      {
-         // There's nothing to read.
-         mNotReadyCount2++;
-         return false;
-      }
+   // If the maximum available element has already been read then
+   // no elements are available, so exit.
+   if (mLastReadIndex == tMaxAvailable)
+   {
+      // There's nothing to read.
+      mNotReadyCount3++;
+      return false;
+   }
+
+   // If the next element to read is behind the minimum available, 
+   // then read from the minimum available.
+   if (mLastReadIndex < tMinAvailable)
+   {
+      tNextReadIndex = tMinAvailable;
    }
    else
    {
-      // Test for negative ReadIndex. This can happen when the buffer
-      // doesn't have enough available elements to read yet.
-      if (mReadIndex < 0)
-      {
-         // Set the next read for the youngest available element.
-         mReadIndex = tWriteIndex - mRB->mReadGap - 1;
-         // There's nothing to read.
-         mNotReadyCount2++;
-         return false;
-      }
-
-      // If the youngest available element has already been read
-      // then no elements are available, so exit.
-      if (mReadIndex == tWriteIndex - mRB->mReadGap - 1)
-      {
-         // There's nothing to read.
-         mNotReadyCount3++;
-         return false;
-      }
-
-      // If the next element to read is behind the oldest available, 
-      // then read from it.
-      if (mReadIndex < tWriteIndex - (mRB->mNumElements - 1))
-      {
-         mReadIndex = tWriteIndex - (mRB->mNumElements - 1);
-      }
+      tNextReadIndex = mLastReadIndex + 1;
    }
 
-   // At this point ReadIndex is the index of the next element to read from.
+   // This should never happen.
+   if (tNextReadIndex < 0)
+   {
+      mErrorCount++;
+      return false;
+   }
+
    // Get the address of the next element to read from.
-   void* tPtr = elementAt(mReadIndex);
+   void* tPtr = elementAt(tNextReadIndex);
 
    // Copy that element into the argument element.
    memcpy(aElement, tPtr, mRB->mElementSize);
@@ -345,32 +351,31 @@ bool RingBufferReader::doRead(void* aElement)
    // Get the final write index. If a write occurred during the read then
    // this will be different than the write index at the beginning of the
    // read.
-   long long tFinalWriteIndex = mRB->mWriteIndex.load(std::memory_order_relaxed);
-   
+   tNextWriteIndex = mRB->mNextWriteIndex.load(std::memory_order_relaxed);
+   tMinAvailable = tNextWriteIndex - (mRB->mNumElements - 1);
+   tMaxAvailable = tNextWriteIndex - 1 - mRB->mReadGap;
+
    // If the read was or might have been overwritten then drop it.
-   if (tFinalWriteIndex > mReadIndex + (mRB->mNumElements - 1))
+   if (tNextReadIndex < tMinAvailable)
    {
-      mDropCount1 += (int)(tFinalWriteIndex - mReadIndex);
+      mOverwriteCount++;
       return false;
    }
 
    // Internal test function that can be used by inheritors to perform
    // ring buffer consistency tests. This is called with the index of
    // the read and the element that was read.
-   doTest(mReadIndex, aElement);
+   doTest(tNextReadIndex, aElement);
 
    // Increment the drop count. If none were dropped then the read index
    // should be the index of the last succesful read plus one.
    if (mLastReadIndex > 0)
    {
-      mDropCount2 += (int)(mReadIndex - (mLastReadIndex + 1));
+      mDropCount += (int)(tNextReadIndex - (mLastReadIndex + 1));
    }
 
    // Store the index for the last successful read.
-   mLastReadIndex = mReadIndex;
-
-   // Increment the index to the next element to read from.
-   mReadIndex++;
+   mLastReadIndex = tNextReadIndex;
 
    // Success. 
    return true;

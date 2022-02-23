@@ -157,7 +157,7 @@ public:
    // so that it is on a separate cache line.
 
    long long mPadding1[8];
-   std::atomic<long long> mWriteIndex;
+   std::atomic<long long> mNextWriteIndex;
    long long mPadding2[8];
 
    //***************************************************************************
@@ -326,9 +326,6 @@ public:
    void* mElementArrayMemory;
 
    // The next element to read from.
-   long long mReadIndex;
-
-   // The index for the last successful read.
    long long mLastReadIndex;
 
    // If true then this is the first read.
@@ -340,8 +337,13 @@ public:
    int mNotReadyCount3;
 
    // The number of elements that were dropped.
-   int mDropCount1;
-   int mDropCount2;
+   int mDropCount;
+
+   // The number of overwrites that occurred.
+   int mOverwriteCount;
+
+   // Internal debug error count;
+   int mErrorCount;
 
    //***************************************************************************
    //***************************************************************************
