@@ -347,6 +347,9 @@ public:
    // The number of overwrites that occurred.
    int mOverwriteCount;
 
+   // The max number of difference between two consecutive read operations.
+   int mMaxDeltaRead;
+
    // Internal debug error count;
    int mErrorCount;
 

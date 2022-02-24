@@ -206,6 +206,7 @@ void RingBufferReader::resetVars()
    mNotReadyCount3 = 0;
    mErrorCount = 0;
    mDropCount = 0;
+   mMaxDeltaRead = 0;
    mOverwriteCount = 0;
    resetTest();
 }
@@ -359,7 +360,9 @@ bool RingBufferReader::doRead(void* aElement)
    // should be the index of the last succesful read plus one.
    if (mLastReadIndex > 0)
    {
-      mDropCount += (int)(tNextReadIndex - (mLastReadIndex + 1));
+      int tDeltaRead = (int)(tNextReadIndex - mLastReadIndex);
+      if (tDeltaRead > mMaxDeltaRead) mMaxDeltaRead = tDeltaRead;
+      mDropCount += tDeltaRead - 1;
    }
 
    // Store the index for the last successful read.

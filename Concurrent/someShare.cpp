@@ -289,7 +289,8 @@ void Share::show4()
    Prn::print(0, "Reader.NotReadyCount3      %16d", gShare.mRingReader.mNotReadyCount3);
    Prn::print(0, "Reader.ErrorCount          %16d", gShare.mRingReader.mErrorCount);
    Prn::print(0, "Reader.DropCount           %16d", gShare.mRingReader.mDropCount);
-   Prn::print(0, "Reader.OverwriteCounti     %16d", gShare.mRingReader.mOverwriteCount);
+   Prn::print(0, "Reader.mMaxDeltaRead       %16d", gShare.mRingReader.mMaxDeltaRead);
+   Prn::print(0, "Reader.OverwriteCount      %16d", gShare.mRingReader.mOverwriteCount);
 
    Prn::print(0, "");
    Prn::print(0, "Writer.mFirstWriteIndex    %16lld", gShare.mRingWriter.mFirstWriteIndex);
