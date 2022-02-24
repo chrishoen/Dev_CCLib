@@ -47,16 +47,30 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
+typedef union PackedS
+{
+   unsigned char mUint8;
+   unsigned short mUint16;
+   unsigned int mUint32;
+   int mInt32;
+} PackedT;
+
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   static const long long cInvalidValue = -9223372036854775807;
-   long long tValue = cInvalidValue;
+   PackedT tP; tP.mInt32 = 0;
+   tP.mUint8 = 0xff;
+   Prn::print(0, "mUint8     %x", tP.mInt32);
 
-   Prn::print(0, "tValue    %0llx", tValue);
-   Prn::print(0, "tValue    %lld", tValue);
+   tP.mUint8 += 1;
+   Prn::print(0, "mUint8     %x", tP.mInt32);
 
-   Prn::print(0, "LLONG_MIN %0llx", LLONG_MIN);
-   Prn::print(0, "LLONG_MIN %lld", LLONG_MIN);
+   tP.mUint8 += 1;
+   Prn::print(0, "mUint8     %x", tP.mInt32);
+
+   tP.mUint8 = 0;
+   tP.mUint8 -= 1;
+
+   Prn::print(0, "mUint8     %x", tP.mInt32);
 }
 
 //******************************************************************************
@@ -65,14 +79,6 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
-   long long tValue1 = LLONG_MIN;
-   long long tValue2 = -tValue1;
-
-   Prn::print(0, "tValue1   %0llx", tValue1);
-   Prn::print(0, "tValue1   %lld", tValue1);
-   Prn::print(0, "tValue2   %0llx", tValue2);
-   Prn::print(0, "tValue2   %lld", tValue2);
-
 
 }
 
