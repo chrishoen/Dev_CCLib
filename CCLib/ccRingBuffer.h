@@ -38,7 +38,6 @@ of the indices of a min and max available, where
 where
    MaxAvailable - MinAvailable = NumElements - 1
 
-
 Here's an example of a buffer with NumElements = 8 that is past the
 initialization stage. It is full. The write index is in the first column
 and the modulo of it is in the second column.
@@ -107,7 +106,6 @@ different processes (who therefore have different address spaces):
 4) No vtables, this means no virtual functions.
 
 =============================================================================*/
-
 
 //******************************************************************************
 //******************************************************************************
@@ -255,6 +253,10 @@ public:
    // The ring buffer element array memory.
    void* mElementArrayMemory;
 
+   // If true then call an inheritor supplied test function after a
+   // write operation.
+   bool mTestFlag;
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -330,7 +332,11 @@ public:
    // If true then this is the first read.
    bool mFirstFlag;
 
-   // The number of reads that had nothing available to read.
+   // If true then call an inheritor supplied test function after a
+   // read operation.
+   bool mTestFlag;
+
+   // The number of reads that had no elements available to read.
    int mNotReadyCount1;
    int mNotReadyCount2;
    int mNotReadyCount3;

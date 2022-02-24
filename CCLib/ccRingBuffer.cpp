@@ -77,6 +77,7 @@ void HeapRingBuffer::finalize()
 RingBufferWriter::RingBufferWriter()
 {
    mRB = 0;
+   mTestFlag = false;
    resetVars();
 }
 
@@ -124,7 +125,10 @@ void RingBufferWriter::doWrite(void* aElement)
 
    // Internal test function that can be used by inheritors to perform
    // ring buffer performance tests.
-   doTest(tWriteIndex, tPtr);
+   if (mTestFlag)
+   {
+      doTest(tWriteIndex, tPtr);
+   }
 
    // Increment the write index to the next element to write to.
    mRB->mNextWriteIndex.fetch_add(1, std::memory_order_relaxed);
@@ -153,16 +157,19 @@ void* RingBufferWriter::startWrite()
 // finished so that it contains the index of the last element written to.
 void RingBufferWriter::finishWrite()
 {
-   // Get the index of the next element to write to.
-   long long tWriteIndex = mRB->mNextWriteIndex.load(std::memory_order_relaxed);
+   if (mTestFlag)
+   {
+      // Get the index of the next element to write to.
+      long long tWriteIndex = mRB->mNextWriteIndex.load(std::memory_order_relaxed);
 
-   // Get the address of the next element to write to.
-   void* tPtr = elementAt(tWriteIndex);
+      // Get the address of the next element to write to.
+      void* tPtr = elementAt(tWriteIndex);
 
-   // Internal test function that can be used by inheritors to perform
-   // ring buffer consistency tests. This is called with the index of
-   // the write and the element that was written.
-   doTest(tWriteIndex, tPtr);
+      // Internal test function that can be used by inheritors to perform
+      // ring buffer consistency tests. This is called with the index of
+      // the write and the element that was written.
+      doTest(tWriteIndex, tPtr);
+   }
 
    // Increment the write index to the next element to write to.
    mRB->mNextWriteIndex.fetch_add(1, std::memory_order_relaxed);
@@ -179,6 +186,7 @@ void RingBufferWriter::finishWrite()
 RingBufferReader::RingBufferReader()
 {
    mRB = 0;
+   mTestFlag = false;
    resetVars();
 }
 
@@ -342,7 +350,10 @@ bool RingBufferReader::doRead(void* aElement)
    // Internal test function that can be used by inheritors to perform
    // ring buffer consistency tests. This is called with the index of
    // the read and the element that was read.
-   doTest(tNextReadIndex, aElement);
+   if (mTestFlag)
+   {
+      doTest(tNextReadIndex, aElement);
+   }
 
    // Increment the drop count. If none were dropped then the read index
    // should be the index of the last succesful read plus one.
