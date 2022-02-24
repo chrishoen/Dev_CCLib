@@ -238,7 +238,8 @@ bool RingBufferReader::doRead(void* aElement)
    long long tNextReadIndex = 0;
 
    // Get the initial write index. This might change asynchronously during
-   // the read. The write index is the index of the next element to write to.
+   // the read. The write index is the index of the next element that the 
+   // writer will write to.
    long long tNextWriteIndex = mRB->mNextWriteIndex.load(std::memory_order_relaxed);
 
    // Test for invalid data. This means that the writer has not yet
@@ -251,11 +252,12 @@ bool RingBufferReader::doRead(void* aElement)
       return false;
    }
 
-   // Calculate limits.
+   // Calculate the indices of the limits of available elements.
    tMinAvailable = tNextWriteIndex - (mRB->mNumElements - 1);
    tMaxAvailable = tNextWriteIndex - 1 - mRB->mReadGap;
 
-   // If the max available is negative no elements are available, so exit.
+   // If the max available element is negative then no elements are
+   // available yet, so exit. This can happen with a nonzero read gap.
    if (tMaxAvailable < 0)
    {
       // Set the read for the behind the maximum available element.
@@ -264,28 +266,26 @@ bool RingBufferReader::doRead(void* aElement)
       return false;
    }
 
-   // Here's an example of a buffer with NumElements = 8 and ReadGap = 3.
-   // 
-   // The buffer contains written elements on the closed interval [123 .. 130].
-   // Elements can be read on [124 .. 127]. While the reader is reading, the
-   // writer could possibly write to 131 == 123.
-   // 
+   // Here's an example of a buffer with NumElements = 8 and ReadGap = 3
+   // A reader can read any one element of 124 .. 127. The writer can go
+   // back and modify any one element of 128 .. 130.
+   //
    // 122 2
    // 123 3  zzzz
-   // 124 4  xxxx  WriteIndex - (NumElements - 1) oldest available
+   // 124 4  xxxx  NextWriteIndex - (NumElements - 1) = MinAvailable
    // 125 5  xxxx
    // 126 6  xxxx
-   // 127 7  xxxx  WriteIndex - ReadGap + 1       youngest available
-   // 128 0  yyyy
+   // 127 7  xxxx  NextWriteIndex - ReadGap - 1 = MaxAvailable
+   // 128 0  yyyy  NextWriteIndex - ReadGap
    // 129 1  yyyy
-   // 130 2  yyyy  WriteIndex - 1
-   // 131 3  zzzz  WriteIndex
+   // 130 2  yyyy  NextWriteIndex - 1
+   // 131 3  zzzz  NextWriteIndex is the next element to write to
 
    // Test for the first read.
    if (mFirstFlag)
    {
       mFirstFlag = false;
-      // Set the read for the behind the maximum available element.
+      // Set the read for the element behind the maximum available element.
       mLastReadIndex = tMaxAvailable - 1;
    }
 
@@ -298,12 +298,13 @@ bool RingBufferReader::doRead(void* aElement)
       return false;
    }
 
-   // If the next element to read is behind the minimum available, 
-   // then read from the minimum available.
+   // If the last element read is behind the minimum available element, 
+   // then read from the minimum available element.
    if (mLastReadIndex < tMinAvailable)
    {
       tNextReadIndex = tMinAvailable;
    }
+   // Else read from the next one.
    else
    {
       tNextReadIndex = mLastReadIndex + 1;
@@ -316,46 +317,22 @@ bool RingBufferReader::doRead(void* aElement)
       return false;
    }
 
-   // Get the address of the next element to read from.
+   // Get the address of the next element to read.
    void* tPtr = elementAt(tNextReadIndex);
 
    // Copy that element into the argument element.
    memcpy(aElement, tPtr, mRB->mElementSize);
 
-   // At this point ReadIndex is the index of the last element that was
-   // read from.
-
    // If, during the read, the ring buffer was written to asynchronously
    // by the writer, then test if the read was possibly or actually
    // overwritten. If it was then drop the read.
-   //   
-   // Here's an example of this.
-   // 
-   // ReadIndex is the index of the last element that was read.
-   // Final WriteIndex is the index of the next element to write to,
-   // taken after the read occurred.
-
-   // 122 2
-   // 123 3  ReadIndex the read occurred here
-   // 124 4  OK
-   // 125 5  OK
-   // 126 6  OK
-   // 127 7  OK
-   // 128 0  OK 
-   // 129 1  OK
-   // 130 2  OK
-   // 131 3  Final WriteIndex could possibly overwrite the read
-   // 132 4  Final WriteIndex has overwritten the read
-   // 133 5  Final WriteIndex has overwritten the read
 
    // Get the final write index. If a write occurred during the read then
    // this will be different than the write index at the beginning of the
-   // read.
+   // read. If the read element was less than the final min available
+   // element then the read was or could have been overwritten, so drop it.
    tNextWriteIndex = mRB->mNextWriteIndex.load(std::memory_order_relaxed);
    tMinAvailable = tNextWriteIndex - (mRB->mNumElements - 1);
-   tMaxAvailable = tNextWriteIndex - 1 - mRB->mReadGap;
-
-   // If the read was or might have been overwritten then drop it.
    if (tNextReadIndex < tMinAvailable)
    {
       mOverwriteCount++;

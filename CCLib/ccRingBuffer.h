@@ -25,20 +25,19 @@ and ElementSize. Writes into the memory are performed using modulo arithmetic
 with NumElements.
 
 Writes are concepually executed as
-   ElementArray[WriteIndex % NumElements] = NewElement
-   ++WriteIndex %= NumElements
+   ElementArray[NextWriteIndex % NumElements] = NewElement
+   ++NextWriteIndex %= NumElements
 
-where WriteIndex is the index of the next array element to write to.
+where NextWriteIndex is the index of the next array element to write to.
 
 Readers can read from the memory as long as the reads are within the bounds
-of a Head and Tail, where
+of the indices of a min and max available, where
 
-   TailIndex = HeadIndex - (NumElements - 1)
-   HeadIndex = WriteIndex - 1, the index of the last element written to.
-so
-   HeadIndex - TailIndex = NumElements - 2
+   MinAvailable = NextWriteIndex - (NumElements - 1)
+   MaxAvailable = NextWriteIndex - 1
+where
+   MaxAvailable - MinAvailable = NumElements - 1
 
-   WriteIndex - 1 - HeadIndex - (NumElements - 1)
 
 Here's an example of a buffer with NumElements = 8 that is past the
 initialization stage. It is full. The write index is in the first column
@@ -46,19 +45,19 @@ and the modulo of it is in the second column.
 
 122 2
 123 3  zzzz
-124 4  xxxx  WriteIndex - (NumElements - 1)
+124 4  xxxx  NextWriteIndex - (NumElements - 1) = MinAvailable
 125 5  xxxx
 126 6  xxxx
 127 7  xxxx
 128 0  xxxx
 129 1  xxxx
-130 2  xxxx  WriteIndex - 1
-131 3  zzzz  WriteIndex is the next element to write to
+130 2  xxxx  NextWriteIndex - 1 = MaxAvailable
+131 3  zzzz  NextWriteIndex is the next element to write to
 
 Only elements marked with xxxx can be safely read. They are on the closed
 interval
-[Tail .. Head] = [WriteIndex - (NumElements - 1) .. WriteIndex - 1]
-Head - Tail =  (Numelements - 2)
+[MinAvailable .. MaxAvailable] = 
+[NextWriteIndex - (NumElements - 1) .. NextWriteIndex - 1]
 
 A reader can read always safely read any one element of 124 .. 130.
 During a read of 123, an asynchrounous write to 131 could occur and
@@ -76,23 +75,23 @@ back and modify any one element of 128 .. 130.
 
 122 2
 123 3  zzzz
-124 4  xxxx  WriteIndex - (NumElements - 1)
+124 4  xxxx  NextWriteIndex - (NumElements - 1) = MinAvailable
 125 5  xxxx
 126 6  xxxx
-127 7  xxxx  WriteIndex - ReadGap - 1
-128 0  yyyy  WriteIndex - ReadGap
+127 7  xxxx  NextWriteIndex - ReadGap - 1  = MaxAvailable
+128 0  yyyy  NextWriteIndex - ReadGap
 129 1  yyyy
-130 2  yyyy  WriteIndex - 1
-131 3  zzzz  WriteIndex is the next element to write to
+130 2  yyyy  NextWriteIndex - 1
+131 3  zzzz  NextWriteIndex is the next element to write to
 
 A reader can read always safely read any one element of 124 .. 127.
 
 Only elements marked with xxxx can be safely read on the closed interval
 [WriteIndex - (NumElements - 1) .. WriteIndex - ReadGap - 1]
 
-After writing an element marked zzzz, the writer can go back and modify
+While writing an element marked zzzz, the writer can go back and modify
 elements marked with yyyy on the closed interval
-[WriteIndex - ReadGap .. WriteIndex - 1]
+[WriteIndex - ReadGap .. WriteIndex]
 
 ReadGap = 0 means no read gap. Then the reader can read any element of
 124 .. 130 and the writer cannot modify any elements once they have been
@@ -325,7 +324,7 @@ public:
    // The ring buffer element array memory.
    void* mElementArrayMemory;
 
-   // The next element to read from.
+   // The index of the last successful read.
    long long mLastReadIndex;
 
    // If true then this is the first read.
