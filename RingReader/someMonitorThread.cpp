@@ -46,18 +46,19 @@ void MonitorThread::executeOnTimer(int aTimeCount)
 {
    if (mShowCode == 1)
    {
-      Prn::print(Prn::Show1, "%1d$   %3lld %3lld NRDY %d %d %d DROP %d %d TEST %d %d",
+      Prn::print(Prn::Show1, "%1d$   %3lld %3lld  %3d NRDY %d %d %d DROP %d %d OVER %d TEST %d %d",
          gRingReaderThread->mThreadCurrentProcessor,
-         SM::gShare->mTestRingBuffer.mWriteIndex.load(std::memory_order_relaxed),
-         gRingReaderThread->mRingReader.mReadIndex,
+         SM::gShare->mTestRingBuffer.mNextWriteIndex.load(std::memory_order_relaxed),
+         gRingReaderThread->mRingReader.mLastReadIndex,
+         gRingReaderThread->mRingReader.available(),
          gRingReaderThread->mRingReader.mNotReadyCount1,
          gRingReaderThread->mRingReader.mNotReadyCount2,
          gRingReaderThread->mRingReader.mNotReadyCount3,
-         gRingReaderThread->mRingReader.mDropCount1,
-         gRingReaderThread->mRingReader.mDropCount2,
+         gRingReaderThread->mRingReader.mDropCount,
+         gRingReaderThread->mRingReader.mMaxDeltaRead,
+         gRingReaderThread->mRingReader.mOverwriteCount,
          gRingReaderThread->mRingReader.mTestPassCount,
          gRingReaderThread->mRingReader.mTestFailCount);
-
    }
 
    else if (mShowCode == 2)

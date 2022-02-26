@@ -23,9 +23,21 @@ namespace Some
 //******************************************************************************
 // Test ring buffer.
 
-class TestRingBuffer : public CC::MemoryRingBuffer<TestRecord, 100, 20>
+class TestRingBuffer : public CC::HeapRingBuffer
 {
 public:
+
+   typedef CC::HeapRingBuffer BaseClass;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods.
+
+   void initialize()
+   {
+      BaseClass::initialize(100, sizeof(TestRecord), 20);
+   }
 };
 
 //******************************************************************************
@@ -60,6 +72,7 @@ public:
 
    void resetTest() override
    {
+      BaseClass::mTestFlag = true;
       mFirstWriteFlag = true;
       mFirstWriteIndex = 0;
    }
@@ -112,6 +125,7 @@ public:
 
    void resetTest() override
    {
+      BaseClass::mTestFlag = true;
       mFirstReadFlag = true;
       mFirstReadIndex = 0;
       mTestPassCount = 0;

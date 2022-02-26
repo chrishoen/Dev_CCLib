@@ -13,6 +13,8 @@ target_include_directories(${project} PUBLIC ${PROJECT_SOURCE_DIR})
 my_inc_import_CCLib(${project})
 my_inc_import_RisLib(${project})
 
+return()
+
 if (MSVC)
    install(FILES ${inc_files} DESTINATION "C:/MyTools/MyLib/include/ShareLib")
    install(TARGETS ${project} DESTINATION "C:/MyTools/MyLib/lib")
