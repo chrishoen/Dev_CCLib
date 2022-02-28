@@ -77,6 +77,10 @@ void HeapRingBuffer::finalize()
 RingBufferWriter::RingBufferWriter()
 {
    mRB = 0;
+   mNumElements = 0;
+   mElementSize = 0;
+   mReadGap = 0;
+   mElementArrayMemory = 0;
    mTestFlag = false;
    resetVars();
 }
@@ -85,6 +89,9 @@ void RingBufferWriter::initialize(RingBufferState* aRingBufferState, void* aElem
 {
    resetVars();
    mRB = aRingBufferState;
+   mNumElements = mRB->mNumElements;
+   mElementSize = mRB->mElementSize;
+   mReadGap = mRB->mReadGap;
    mElementArrayMemory = aElementArrayMemory;
 }
 
@@ -101,8 +108,8 @@ void RingBufferWriter::resetVars()
 
 void* RingBufferWriter::elementAt(long long aIndex)
 {
-   aIndex %= mRB->mNumElements;
-   return (void*)((char*)mElementArrayMemory + mRB->mElementSize * aIndex);
+   aIndex %= mNumElements;
+   return (void*)((char*)mElementArrayMemory + mElementSize * aIndex);
 }
 
 //******************************************************************************
@@ -121,7 +128,7 @@ void RingBufferWriter::doWrite(void* aElement)
    void* tPtr = elementAt(tWriteIndex);
 
    // Copy the element into the array.
-   memcpy(tPtr, aElement, mRB->mElementSize);
+   memcpy(tPtr, aElement, mElementSize);
 
    // Internal test function that can be used by inheritors to perform
    // ring buffer performance tests.
@@ -186,6 +193,10 @@ void RingBufferWriter::finishWrite()
 RingBufferReader::RingBufferReader()
 {
    mRB = 0;
+   mNumElements = 0;
+   mElementSize = 0;
+   mReadGap = 0;
+   mElementArrayMemory = 0;
    mTestFlag = false;
    resetVars();
 }
@@ -194,6 +205,9 @@ void RingBufferReader::initialize(RingBufferState* aRingBufferState, void* aElem
 {
    resetVars();
    mRB = aRingBufferState;
+   mNumElements = mRB->mNumElements;
+   mElementSize = mRB->mElementSize;
+   mReadGap = mRB->mReadGap;
    mElementArrayMemory = aElementArrayMemory;
 }
 
@@ -219,8 +233,8 @@ void RingBufferReader::resetVars()
 
 void* RingBufferReader::elementAt(long long aIndex)
 {
-   aIndex %= mRB->mNumElements;
-   return (void*)((char*)mElementArrayMemory + mRB->mElementSize * aIndex);
+   aIndex %= mNumElements;
+   return (void*)((char*)mElementArrayMemory + mElementSize * aIndex);
 }
 
 //******************************************************************************
@@ -230,7 +244,7 @@ void* RingBufferReader::elementAt(long long aIndex)
 
 int RingBufferReader::available()
 {
-   long long tMaxAvailable = mRB->mNextWriteIndex.load(std::memory_order_relaxed) - 1 - mRB->mReadGap;
+   long long tMaxAvailable = mRB->mNextWriteIndex.load(std::memory_order_relaxed) - 1 - mReadGap;
    return  tMaxAvailable - mLastReadIndex;
 }
 
@@ -262,8 +276,8 @@ bool RingBufferReader::doRead(void* aElement)
    }
 
    // Calculate the indices of the limits of available elements.
-   tMinAvailable = tNextWriteIndex - (mRB->mNumElements - 1);
-   tMaxAvailable = tNextWriteIndex - 1 - mRB->mReadGap;
+   tMinAvailable = tNextWriteIndex - (mNumElements - 1);
+   tMaxAvailable = tNextWriteIndex - 1 - mReadGap;
 
    // If the max available element is negative then no elements are
    // available yet, so exit. This can happen with a nonzero read gap.
@@ -330,7 +344,7 @@ bool RingBufferReader::doRead(void* aElement)
    void* tPtr = elementAt(tNextReadIndex);
 
    // Copy that element into the argument element.
-   memcpy(aElement, tPtr, mRB->mElementSize);
+   memcpy(aElement, tPtr, mElementSize);
 
    // If, during the read, the ring buffer was written to asynchronously
    // by the writer, then test if the read was possibly or actually
@@ -341,7 +355,7 @@ bool RingBufferReader::doRead(void* aElement)
    // read. If the read element was less than the final min available
    // element then the read was or could have been overwritten, so drop it.
    tNextWriteIndex = mRB->mNextWriteIndex.load(std::memory_order_relaxed);
-   tMinAvailable = tNextWriteIndex - (mRB->mNumElements - 1);
+   tMinAvailable = tNextWriteIndex - (mNumElements - 1);
    if (tNextReadIndex < tMinAvailable)
    {
       mOverwriteCount++;

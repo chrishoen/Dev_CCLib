@@ -253,6 +253,20 @@ public:
    // The ring buffer element array memory.
    void* mElementArrayMemory;
 
+   // Number of elements in the ring buffer.
+   long long mNumElements;
+
+   // Size of each element in the ring buffer.
+   size_t mElementSize;
+
+   // Read gap.
+   long long mReadGap;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
    // If true then call an inheritor supplied test function after a
    // write operation.
    bool mTestFlag;
@@ -325,6 +339,20 @@ public:
 
    // The ring buffer element array memory.
    void* mElementArrayMemory;
+
+   // Number of elements in the ring buffer.
+   long long mNumElements;
+
+   // Size of each element in the ring buffer.
+   size_t mElementSize;
+
+   // Read gap.
+   long long mReadGap;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
 
    // The index of the last successful read.
    long long mLastReadIndex;
