@@ -40,6 +40,9 @@ RingWriterThread::RingWriterThread()
    BaseClass::mStatPeriod = gRingParms.mStatPeriod;
    BaseClass::mTimerPeriodUs1 = gRingParms.mWriterThreadPeriodUs1;
    BaseClass::mTimerPeriodUs2 = gRingParms.mWriterThreadPeriodUs2;
+
+   // Set member variables.
+   mTPFlag = true;
 }
 
 //******************************************************************************
@@ -76,6 +79,8 @@ void RingWriterThread::threadExitFunction()
 
 void RingWriterThread::executeOnTimer(int aTimerCount)
 {
+   // Guard.
+   if (!mTPFlag) return;
    // Write a test record to the ring buffer.
    Some::TestRecord tRecord;
    mRingWriter.doWrite((void*)&tRecord);

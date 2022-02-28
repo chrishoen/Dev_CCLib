@@ -36,6 +36,9 @@ public:
    // Ring buffer writer.
    TestRingReader mRingReader;
 
+   // If true then perform timer processing.
+   bool mTPFlag;
+
    //******************************************************************************
    //******************************************************************************
    //******************************************************************************
@@ -47,10 +50,10 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Thread base class overloads.
+   // Methods. Thread base class overloads.
 
-   // Thread init function. This is called by the base class immedidately 
-   // after the thread starts running. It creates and launches the 
+   // Thread init function. This is called by the base class immedidately
+   // after the thread starts running. It creates and launches the
    // child SerialMsgThread.
    void threadInitFunction() override;
 
@@ -61,6 +64,13 @@ public:
    // Execute periodically. This is called by the base class timer.
    void executeOnTimer(int aTimerCount) override;
 
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods. Helpers.
+
+   // Show.
+   void show();
 };
 
 //******************************************************************************

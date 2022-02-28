@@ -26,8 +26,8 @@ void CmdLineExec::reset()
 
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
-   if (aCmd->isCmd("S"))   Prn::suppressPrint();
-   if (aCmd->isCmd("U"))   Prn::unsuppressPrint();
+   if (aCmd->isCmd("S"))   executeSuspend(aCmd);
+   if (aCmd->isCmd("U"))   executeUnsuspend(aCmd);
    if (aCmd->isCmd("0"))   gMonitorThread->mShowCode = 0;
    if (aCmd->isCmd("1"))   gMonitorThread->mShowCode = 1;
    if (aCmd->isCmd("2"))   gMonitorThread->mShowCode = 2;
@@ -35,6 +35,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("GO1"))  executeGo1(aCmd);
    if (aCmd->isCmd("GO2"))  executeGo2(aCmd);
    if (aCmd->isCmd("GO3"))  executeGo3(aCmd);
+   if (aCmd->isCmd("Show"))  executeShow(aCmd);
    if (aCmd->isCmd("Parms"))  executeParms(aCmd);
 }
 
@@ -60,6 +61,35 @@ void CmdLineExec::executeGo2 (Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3 (Ris::CmdLineCmd* aCmd)
 {
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeSuspend(Ris::CmdLineCmd* aCmd)
+{
+   gRingReaderThread->mTPFlag = false;
+   Prn::suppressPrint();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeUnsuspend(Ris::CmdLineCmd* aCmd)
+{
+   gRingReaderThread->mTPFlag = true;
+   Prn::unsuppressPrint();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeShow(Ris::CmdLineCmd* aCmd)
+{
+   gRingReaderThread->show();
 }
 
 //******************************************************************************
