@@ -111,9 +111,11 @@ void RingReaderThread::show()
    Prn::print(0, "Reader.TestPassCount       %16d", mRingReader.mTestPassCount);
    Prn::print(0, "Reader.TestFailCount       %16d", mRingReader.mTestFailCount);
 
-   int tSum = mRingReader.mTestPassCount + mRingReader.mDropCount;
+   int tSum1 = mRingReader.mTestPassCount + mRingReader.mDropCount;
+   int tSum2 = tSum1 + (int)mRingReader.mFirstReadIndex;
    Prn::print(0, "");
-   Prn::print(0, "Reader Sum                 %16d", tSum);
+   Prn::print(0, "Reader Sum1                %16d", tSum1);
+   Prn::print(0, "Reader Sum2                %16d", tSum2);
 
 }
 
