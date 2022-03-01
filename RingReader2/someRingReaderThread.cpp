@@ -1,13 +1,10 @@
 /*==============================================================================
-Description:
 ==============================================================================*/
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 #include "stdafx.h"
-
-#include <time.h>
 
 #include "risProgramTime.h"
 #include "risThreadsPriorities.h"
@@ -18,28 +15,26 @@ Description:
 #define  _SOMERINGREADERTHREAD_CPP_
 #include "someRingReaderThread.h"
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 namespace Some
 {
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Constuctor.
+// Constructor.
 
 RingReaderThread::RingReaderThread()
 {
    // Set base class variables.
-   BaseClass::setThreadName("TimerTest");
-   BaseClass::setThreadPriority(Ris::Threads::gPriorities.mTimerTest);
+   BaseClass::setThreadName("Reader");
    BaseClass::setThreadPriority(
       Ris::Threads::Priority(
          gRingParms.mReaderThreadProcessor,
          gRingParms.mReaderThreadPriority));
-
-   BaseClass::mPollProcessor = gRingParms.mPollProcessor;
-   BaseClass::mStatPeriod = gRingParms.mStatPeriod;
-   BaseClass::mTimerPeriodUs1 = gRingParms.mReaderThreadPeriodUs1;
-   BaseClass::mTimerPeriodUs2 = gRingParms.mReaderThreadPeriodUs2;
 
    // Set member variables.
    mTPFlag = true;
@@ -48,14 +43,13 @@ RingReaderThread::RingReaderThread()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Thread init function. This is called by the base class immedidately 
-// after the thread starts running. It creates and launches the 
-// child SerialMsgThread.
+// Thread init function. This is called by the base class immediately
+// after the thread starts running. It initializes the serial port.
 
 void RingReaderThread::threadInitFunction()
 {
    SM::gShare->show(0);
-      
+
    // Initialize the writer.
    mRingReader.initialize(
       &SM::gShare->mTestRingBuffer,
@@ -65,35 +59,26 @@ void RingReaderThread::threadInitFunction()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Thread exit function. This is called by the base class immedidately
-// before the thread is terminated. It shuts down the child SerialMsgThread.
+// Thread exit function. This is called by the base class immediately
+// before the thread is terminated. It is close the serial port.
 
 void RingReaderThread::threadExitFunction()
 {
+   printf("someRingReaderThread::threadExitFunction\n");
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Execute periodically. This is called by the base class timer.
+// Thread shutdown function. This is called out of the context of
+// this thread. It aborts the serial port receive and waits for the
+// thread to terminate after execution of the thread exit function.
 
-void RingReaderThread::executeOnTimer(int aTimerCount)
+void RingReaderThread::shutdownThread()
 {
-   // Guard.
-   if (!mTPFlag) return;
-
-   if (gRingParms.mTestMode == 1)
-   {
-      // Read a test record to the ring buffer.
-      Some::TestRecord tRecord;
-      mRingReader.doRead((void*)&tRecord);
-   }
-   else
-   {
-      // Read a test record to the ring buffer.
-      Some::TestRecord tRecord;
-      mRingReader.doRead2((void*)&tRecord);
-   }
+   printf("someRingReaderThread::shutdownThread\n");
+   // Wait for thread to terminate.
+   BaseClass::shutdownThread();
 }
 
 //******************************************************************************
@@ -126,7 +111,34 @@ void RingReaderThread::show()
    Prn::print(0, "");
    Prn::print(0, "Reader Sum1                %16d", tSum1);
    Prn::print(0, "Reader Sum2                %16d", tSum2);
+}
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Thread run function. This is called by the base class immediately
+// after the thread init function. It runs a loop that blocks on 
+// serial port receives and then processes them. The loop terminates
+// when the serial port receive is aborted.
+
+void RingReaderThread::threadRunFunction()
+{
+   // Guard.
+
+   while (true)
+   {
+      if (BaseClass::mTerminateFlag) return;
+      if (!mTPFlag)
+      {
+         Ris::sleepUs(gRingParms.mSleepAfterNotReadyUs);
+         continue;
+      }
+
+      Some::TestRecord tRecord;
+      mRingReader.doRead((void*)&tRecord);
+      if (mRingReader.mNotReadyFlag) Ris::sleepUs(gRingParms.mSleepAfterNotReadyUs);
+      if (mRingReader.mOverwriteFlag) Ris::sleepUs(gRingParms.mSleepAfterOverwriteUs);
+   }
 }
 
 //******************************************************************************

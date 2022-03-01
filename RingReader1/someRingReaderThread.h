@@ -25,8 +25,9 @@ namespace Some
 
 class RingReaderThread : public Ris::Threads::BaseRandomThread
 {
-public:
+private:
    typedef Ris::Threads::BaseRandomThread BaseClass;
+public:
 
    //******************************************************************************
    //******************************************************************************

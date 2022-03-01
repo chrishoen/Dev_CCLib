@@ -20,7 +20,6 @@ public:
   void executeGo3(Ris::CmdLineCmd* aCmd);
   void executeSuspend(Ris::CmdLineCmd* aCmd);
   void executeUnsuspend(Ris::CmdLineCmd* aCmd);
-  void executeAbort(Ris::CmdLineCmd* aCmd);
   void executeShow(Ris::CmdLineCmd* aCmd);
   void executeParms(Ris::CmdLineCmd* aCmd);
 };

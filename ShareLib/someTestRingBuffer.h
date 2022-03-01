@@ -116,7 +116,6 @@ public:
    // Test variables.
    int mSleepAfterNotReadyUs;
    int mSleepAfterOverwriteUs;
-   bool mAbortFlag;
 
    //***************************************************************************
    //***************************************************************************
@@ -131,7 +130,6 @@ public:
       mTestFailCount = 0;
       mSleepAfterNotReadyUs = gRingParms.mSleepAfterNotReadyUs;
       mSleepAfterOverwriteUs = gRingParms.mSleepAfterOverwriteUs;
-      mAbortFlag = false;
    }
 
    void resetTest() override
@@ -162,19 +160,6 @@ public:
          mTestFailCount++;
       }
    }
-
-   bool doRead2(void* aElement)
-   {
-      while (true)
-      {
-         if (doRead(aElement)) return true;
-         if (mNotReadyFlag) Ris::sleepUs(mSleepAfterNotReadyUs);
-         if (mOverwriteFlag) Ris::sleepUs(mSleepAfterOverwriteUs);
-         if (mAbortFlag) return false;
-      }
-   }
-
-
 };
 
 //******************************************************************************
