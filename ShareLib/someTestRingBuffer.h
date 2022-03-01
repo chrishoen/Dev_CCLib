@@ -8,7 +8,9 @@ Test ring buffer.
 //******************************************************************************
 //******************************************************************************
 
+#include "risSleep.h"
 #include "ccRingBuffer.h"
+#include "someRingParms.h"
 #include "someTestRecord.h"
 
 //******************************************************************************
@@ -25,9 +27,9 @@ namespace Some
 
 class TestRingBuffer : public CC::HeapRingBuffer
 {
-public:
-
+private:
    typedef CC::HeapRingBuffer BaseClass;
+public:
 
    //***************************************************************************
    //***************************************************************************
@@ -47,8 +49,9 @@ public:
 
 class TestRingWriter : public CC::RingBufferWriter
 {
-public:
+private:
    typedef CC::RingBufferWriter BaseClass;
+public:
 
    //***************************************************************************
    //***************************************************************************
@@ -96,8 +99,9 @@ public:
 
 class TestRingReader : public CC::RingBufferReader
 {
-public:
+private:
    typedef CC::RingBufferReader BaseClass;
+public:
 
    //***************************************************************************
    //***************************************************************************
@@ -109,6 +113,10 @@ public:
    long long mFirstReadIndex;
    int mTestPassCount;
    int mTestFailCount;
+   // Test variables.
+   int mSleepAfterNotReadyUs;
+   int mSleepAfterOverwriteUs;
+   bool mAbortFlag;
 
    //***************************************************************************
    //***************************************************************************
@@ -121,6 +129,9 @@ public:
       mFirstReadIndex = 0;
       mTestPassCount = 0;
       mTestFailCount = 0;
+      mSleepAfterNotReadyUs = gRingParms.mSleepAfterNotReadyUs;
+      mSleepAfterOverwriteUs = gRingParms.mSleepAfterOverwriteUs;
+      mAbortFlag = false;
    }
 
    void resetTest() override
@@ -151,6 +162,19 @@ public:
          mTestFailCount++;
       }
    }
+
+   bool doRead2(void* aElement)
+   {
+      while (true)
+      {
+         if (doRead(aElement)) return true;
+         if (mNotReadyFlag) Ris::sleepUs(mSleepAfterNotReadyUs);
+         if (mOverwriteFlag) Ris::sleepUs(mSleepAfterOverwriteUs);
+         if (mAbortFlag) return false;
+      }
+   }
+
+
 };
 
 //******************************************************************************

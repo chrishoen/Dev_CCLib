@@ -38,7 +38,6 @@ void RingParms::reset()
       BaseClass::setFilePath_RelativeToBaseDir("files/Ring_Parms.txt");
    }
 
-   mTestMode = 1;
    mMonitorThreadPeriod = 0;
    mStatPeriod = 0;
    mPollProcessor = false;
@@ -53,6 +52,9 @@ void RingParms::reset()
    mReaderThreadPeriodUs1 = 0;
    mReaderThreadPeriodUs2 = 0;
 
+   mTestMode = 0;
+   mSleepAfterNotReadyUs = 0;
+   mSleepAfterOverwriteUs = 0;
 }
 
 //******************************************************************************
@@ -66,8 +68,6 @@ void RingParms::show()
    printf("RingParms************************************************ %s\n", mTargetSection);
 
    printf("\n");
-   printf("TestMode                 %-10d\n", mTestMode);
-   printf("\n");
    printf("MonitorThreadPeriod      %-10d\n", mMonitorThreadPeriod);
    printf("StatPeriod               %-10d\n", mStatPeriod);
    printf("PollProcessor            %-10s\n", my_string_from_bool(mPollProcessor));
@@ -79,6 +79,10 @@ void RingParms::show()
    printf("ReaderThreadProcessor    %-10d\n", mReaderThreadProcessor);
    printf("ReaderThreadPriority     %-10d\n", mReaderThreadPriority);
    printf("ReaderThreadPeriodUs     %-10d  %-10d\n", mReaderThreadPeriodUs1, mReaderThreadPeriodUs2);
+   printf("\n");
+   printf("TestMode                 %-10d\n", mTestMode);
+   printf("SleepAfterNotReadyUs     %-10d\n", mSleepAfterNotReadyUs);
+   printf("mSleepAfterOverwriteUs   %-10d\n", mSleepAfterOverwriteUs);
    printf("\n");
 }
 
@@ -92,8 +96,6 @@ void RingParms::show()
 void RingParms::execute(Ris::CmdLineCmd* aCmd)
 {
    if (!isTargetSection(aCmd)) return;
-
-   if (aCmd->isCmd("TestMode"))                mTestMode = aCmd->argInt(1);
 
    if (aCmd->isCmd("MonitorThreadPeriod"))     mMonitorThreadPeriod = aCmd->argInt(1);
    if (aCmd->isCmd("StatPeriod"))              mStatPeriod = aCmd->argInt(1);
@@ -114,6 +116,10 @@ void RingParms::execute(Ris::CmdLineCmd* aCmd)
       mReaderThreadPeriodUs1 = aCmd->argInt(1);
       mReaderThreadPeriodUs2 = aCmd->argInt(2);
    }
+
+   if (aCmd->isCmd("TestMode"))                mTestMode = aCmd->argInt(1);
+   if (aCmd->isCmd("SleepAfterNotReadyUs"))    mSleepAfterNotReadyUs = aCmd->argInt(1);
+   if (aCmd->isCmd("SleepAfterOverwriteUs"))   mSleepAfterOverwriteUs = aCmd->argInt(1);
 }
 
 //******************************************************************************

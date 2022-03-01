@@ -81,9 +81,19 @@ void RingReaderThread::executeOnTimer(int aTimerCount)
 {
    // Guard.
    if (!mTPFlag) return;
-   // Read a test record to the ring buffer.
-   Some::TestRecord tRecord;
-   mRingReader.doRead((void*)&tRecord);
+
+   if (gRingParms.mTestMode == 1)
+   {
+      // Read a test record to the ring buffer.
+      Some::TestRecord tRecord;
+      mRingReader.doRead((void*)&tRecord);
+   }
+   else
+   {
+      // Read a test record to the ring buffer.
+      Some::TestRecord tRecord;
+      mRingReader.doRead2((void*)&tRecord);
+   }
 }
 
 //******************************************************************************

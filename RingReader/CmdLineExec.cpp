@@ -26,8 +26,11 @@ void CmdLineExec::reset()
 
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
+   
+
    if (aCmd->isCmd("S"))   executeSuspend(aCmd);
    if (aCmd->isCmd("U"))   executeUnsuspend(aCmd);
+   if (aCmd->isCmd("A"))   executeAbort(aCmd);
    if (aCmd->isCmd("0"))   gMonitorThread->mShowCode = 0;
    if (aCmd->isCmd("1"))   gMonitorThread->mShowCode = 1;
    if (aCmd->isCmd("2"))   gMonitorThread->mShowCode = 2;
@@ -42,7 +45,6 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-
 void CmdLineExec::executeGo1 (Ris::CmdLineCmd* aCmd)
 {
 }
@@ -61,6 +63,14 @@ void CmdLineExec::executeGo2 (Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3 (Ris::CmdLineCmd* aCmd)
 {
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+void CmdLineExec::executeAbort(Ris::CmdLineCmd* aCmd)
+{
+   gRingReaderThread->mRingReader.mAbortFlag = true;
 }
 
 //******************************************************************************

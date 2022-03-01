@@ -67,9 +67,6 @@ public:
    //***************************************************************************
    // Members.
 
-   // Test mode 1,2.
-   int  mTestMode;
-
    // Monitor variables.
    int  mMonitorThreadPeriod;
    int  mStatPeriod;
@@ -86,6 +83,13 @@ public:
    int  mReaderThreadPriority;
    int  mReaderThreadPeriodUs1;
    int  mReaderThreadPeriodUs2;
+
+   // Test mode 1,2.
+   int  mTestMode;
+
+   // Read sleep times.
+   int mSleepAfterNotReadyUs;
+   int mSleepAfterOverwriteUs;
 
    //***************************************************************************
    //***************************************************************************

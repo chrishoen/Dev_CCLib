@@ -222,6 +222,8 @@ void RingBufferReader::resetVars()
    mDropCount = 0;
    mMaxDeltaRead = 0;
    mOverwriteCount = 0;
+   mNotReadyFlag = false;
+   mOverwriteFlag = false;
    resetTest();
 }
 
@@ -256,6 +258,11 @@ int RingBufferReader::available()
 
 bool RingBufferReader::doRead(void* aElement)
 {
+   // Do this first.
+   mNotReadyFlag = false;
+   mOverwriteFlag = false;
+
+   // Local variables.
    long long tMinAvailable = 0;
    long long tMaxAvailable = 0;
    long long tNextReadIndex = 0;
@@ -272,6 +279,7 @@ bool RingBufferReader::doRead(void* aElement)
       // The writer is not ready.
       mFirstFlag = true;
       mNotReadyCount1++;
+      mNotReadyFlag = true;
       return false;
    }
 
@@ -286,6 +294,7 @@ bool RingBufferReader::doRead(void* aElement)
       // Set the read for the behind the maximum available element.
       mLastReadIndex = tMaxAvailable - 1;
       mNotReadyCount2++;
+      mNotReadyFlag = true;
       return false;
    }
 
@@ -318,6 +327,7 @@ bool RingBufferReader::doRead(void* aElement)
    {
       // There's nothing to read.
       mNotReadyCount3++;
+      mNotReadyFlag = true;
       return false;
    }
 
@@ -337,6 +347,7 @@ bool RingBufferReader::doRead(void* aElement)
    if (tNextReadIndex < 0)
    {
       mErrorCount++;
+      mNotReadyFlag = true;
       return false;
    }
 
@@ -359,6 +370,7 @@ bool RingBufferReader::doRead(void* aElement)
    if (tNextReadIndex < tMinAvailable)
    {
       mOverwriteCount++;
+      mOverwriteFlag = true;
       return false;
    }
 

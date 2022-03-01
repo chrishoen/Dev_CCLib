@@ -381,6 +381,12 @@ public:
    // Internal debug error count;
    int mErrorCount;
 
+   // If true then the last read operation resulted in not ready condition.
+   bool mNotReadyFlag;
+
+   // If true then the last read operation resulted in an overwrite condition.
+   bool mOverwriteFlag;
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
