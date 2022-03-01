@@ -46,7 +46,7 @@ void MonitorThread::executeOnTimer(int aTimeCount)
 {
    if (mShowCode == 1)
    {
-      Prn::print(Prn::Show1, "%2d $$ %3lld",
+      Prn::print(Prn::Show1, "%1d$   %3lld",
          gRingWriterThread->mThreadCurrentProcessor,
          SM::gShare->mTestRingBuffer.mNextWriteIndex.load(std::memory_order_relaxed));
    }

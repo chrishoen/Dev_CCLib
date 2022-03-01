@@ -125,15 +125,22 @@ void RingReaderThread::threadRunFunction()
 {
    // Guard.
 
+   int tCount = 0;
    while (true)
    {
+      // Process thread execution variables.
       if (BaseClass::mTerminateFlag) return;
+      if (tCount % 1000 == 0)
+      {
+         BaseClass::getThreadProcessorNumber();
+      }
       if (!mTPFlag)
       {
          Ris::sleepUs(gRingParms.mSleepAfterNotReadyUs);
          continue;
       }
 
+      // Read a record.
       Some::TestRecord tRecord;
       mRingReader.doRead((void*)&tRecord);
       if (mRingReader.mNotReadyFlag) Ris::sleepUs(gRingParms.mSleepAfterNotReadyUs);
