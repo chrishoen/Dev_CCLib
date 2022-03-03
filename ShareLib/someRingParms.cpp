@@ -53,6 +53,7 @@ void RingParms::reset()
    mReaderThreadPeriodUs2 = 0;
 
    mTestMode = 0;
+   mNumWrites = 1;
    mSleepAfterNotReadyUs = 0;
    mSleepAfterOverwriteUs = 0;
 }
@@ -81,6 +82,7 @@ void RingParms::show()
    printf("ReaderThreadPeriodUs     %-10d  %-10d\n", mReaderThreadPeriodUs1, mReaderThreadPeriodUs2);
    printf("\n");
    printf("TestMode                 %-10d\n", mTestMode);
+   printf("NumWrites                %-10d\n", mNumWrites);
    printf("SleepAfterNotReadyUs     %-10d\n", mSleepAfterNotReadyUs);
    printf("mSleepAfterOverwriteUs   %-10d\n", mSleepAfterOverwriteUs);
    printf("\n");
@@ -118,6 +120,7 @@ void RingParms::execute(Ris::CmdLineCmd* aCmd)
    }
 
    if (aCmd->isCmd("TestMode"))                mTestMode = aCmd->argInt(1);
+   if (aCmd->isCmd("NumWrites"))               mNumWrites = aCmd->argInt(1);
    if (aCmd->isCmd("SleepAfterNotReadyUs"))    mSleepAfterNotReadyUs = aCmd->argInt(1);
    if (aCmd->isCmd("SleepAfterOverwriteUs"))   mSleepAfterOverwriteUs = aCmd->argInt(1);
 }

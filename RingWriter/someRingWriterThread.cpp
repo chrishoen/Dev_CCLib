@@ -81,9 +81,13 @@ void RingWriterThread::executeOnTimer(int aTimerCount)
 {
    // Guard.
    if (!mTPFlag) return;
-   // Write a test record to the ring buffer.
-   Some::TestRecord tRecord;
-   mRingWriter.doWrite((void*)&tRecord);
+
+   // Write some test records to the ring buffer.
+   for (int i = 0; i < gRingParms.mNumWrites; i++)
+   {
+      Some::TestRecord tRecord;
+      mRingWriter.doWrite((void*)&tRecord);
+   }
 }
 
 //******************************************************************************

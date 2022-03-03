@@ -68,24 +68,25 @@ public:
    // Members.
 
    // Monitor variables.
-   int  mMonitorThreadPeriod;
-   int  mStatPeriod;
+   int mMonitorThreadPeriod;
+   int mStatPeriod;
    bool mPollProcessor;
 
    // Thread variables.
-   int  mWriterThreadProcessor;
-   int  mWriterThreadPriority;
-   int  mWriterThreadPeriodUs1;
-   int  mWriterThreadPeriodUs2;
+   int mWriterThreadProcessor;
+   int mWriterThreadPriority;
+   int mWriterThreadPeriodUs1;
+   int mWriterThreadPeriodUs2;
 
    // Thread variables.
-   int  mReaderThreadProcessor;
-   int  mReaderThreadPriority;
-   int  mReaderThreadPeriodUs1;
-   int  mReaderThreadPeriodUs2;
+   int mReaderThreadProcessor;
+   int mReaderThreadPriority;
+   int mReaderThreadPeriodUs1;
+   int mReaderThreadPeriodUs2;
 
    // Test mode 1,2.
-   int  mTestMode;
+   int mTestMode;
+   int mNumWrites;
 
    // Read sleep times.
    int mSleepAfterNotReadyUs;
