@@ -82,6 +82,20 @@ template <typename T> T inline mod_mult(T aMod, T aA, T aB)
    return (aA * aB) % aMod;
 }
 
+// Increment.
+template <typename T> void inline mod_increment(T aMod, T* aA)
+{
+   mod_normalize(aMod, aA);
+   *aA = (*aA + 1) % aMod;
+}
+
+// Decrement.
+template <typename T> void inline mod_decrement(T aMod, T* aA)
+{
+   mod_normalize(aMod, aA);
+   *aA = (*aA != 0) ? *aA - 1: aMod - 1;
+}
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************

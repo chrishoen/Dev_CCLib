@@ -43,6 +43,8 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("GO8"))    executeGo8(aCmd);
    if (aCmd->isCmd("GO91"))   executeGo91(aCmd);
    if (aCmd->isCmd("GO92"))   executeGo92(aCmd);
+   if (aCmd->isCmd("GO201"))  executeGo201(aCmd);
+   if (aCmd->isCmd("GO202"))  executeGo202(aCmd);
 }
 
 //******************************************************************************
@@ -257,6 +259,42 @@ void CmdLineExec::executeGo8(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo91(Ris::CmdLineCmd* aCmd)
 {
+   int tMod = 10;
+   int tN1 = 0;
+   int tN2 = 0;
+
+   for (int i = 0; i < tMod; i++)
+   {
+      tN1 = i;
+      tN2 = i;
+      CC::mod_increment(tMod, &tN1);
+      CC::mod_decrement(tMod, &tN2);
+      Prn::print(0, "%3d %3d %3d", i, tN1, tN2);
+   }
+}
+
+void CmdLineExec::executeGo92(Ris::CmdLineCmd* aCmd)
+{
+   unsigned tMod = 10;
+   unsigned tN1 = 0;
+   unsigned tN2 = 0;
+
+   for (unsigned i = 0; i < tMod; i++)
+   {
+      tN1 = i;
+      tN2 = i;
+      CC::mod_increment(tMod, &tN1);
+      CC::mod_decrement(tMod, &tN2);
+      Prn::print(0, "%3u %3u %3u", i, tN1, tN2);
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGo201(Ris::CmdLineCmd* aCmd)
+{
 
    int tMod = 10;
    int tN1 = 0;
@@ -293,7 +331,7 @@ void CmdLineExec::executeGo91(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeGo92(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeGo202(Ris::CmdLineCmd* aCmd)
 {
    unsigned tMod = 97;
    unsigned tN1 = 0;
