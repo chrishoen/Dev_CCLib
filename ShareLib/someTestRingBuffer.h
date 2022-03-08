@@ -158,6 +158,13 @@ public:
       else
       {
          mTestFailCount++;
+         printf("TEST FAIL************** BEGIN\n");
+         printf("ReadIndex        %lld\n", aReadIndex);
+         printf("LastReadIndex    %lld\n", mLastReadIndex);
+         printf("Code[0]          %lld\n", tRecord->mCode[0]);
+         printf("Code[6]          %lld\n", tRecord->mCode[6]);
+         printf("TEST FAIL************** END\n");
+         exit(0);
       }
    }
 };
