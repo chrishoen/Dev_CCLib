@@ -215,8 +215,9 @@ void RingReaderThread::doTest2()
       }
 
       Prn::print(0, "RESTART %d", tCount1);
-      //Ris::RandomSleepMs tRandomSleep(gRingParms.mRestartSleepMs1, gRingParms.mRestartSleepMs2);
-      //tRandomSleep.doSleep();
+      Ris::RandomSleepMs tRandomSleep(gRingParms.mRestartSleepMs1, gRingParms.mRestartSleepMs2);
+      tRandomSleep.doSleep();
+      tCount1++;
    }
 }
 
