@@ -44,6 +44,8 @@ MonitorThread::MonitorThread()
 
 void MonitorThread::executeOnTimer(int aTimeCount)
 {
+   if (gRingReaderThread->mStopFlag) return;
+
    if (mShowCode == 1)
    {
       Prn::print(Prn::Show1, "%1d$   %3lld %3lld  %3d NRDY %d %d %d DROP %d %d OVER %d TEST %d %d",

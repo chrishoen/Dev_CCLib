@@ -51,7 +51,7 @@ void RingReaderThread::threadInitFunction()
 {
    SM::gShare->show(0);
 
-   // Initialize the writer.
+   // Initialize the reader.
    mRingReader.initialize(
       &SM::gShare->mTestRingBuffer,
       &SM::gShare->mTestRingBuffer.mElementArrayMemory);
@@ -154,7 +154,7 @@ void RingReaderThread::doTest1()
    {
       // Process thread execution variables.
       if (BaseClass::mTerminateFlag) return;
-      if (tCount % 1000 == 0)
+      if (tCount % 5000 == 0)
       {
          BaseClass::getThreadProcessorNumber();
       }
@@ -191,6 +191,10 @@ void RingReaderThread::doTest2()
       {
          // Process thread execution variables.
          if (BaseClass::mTerminateFlag) return;
+         if (tCount2 % 5000 == 0)
+         {
+            BaseClass::getThreadProcessorNumber();
+         }
          if (!mTPFlag)
          {
             Ris::sleepUs(gRingParms.mSleepAfterNotReadyUs);
@@ -217,6 +221,10 @@ void RingReaderThread::doTest2()
       Prn::print(0, "RESTART %d", tCount1);
       Ris::RandomSleepMs tRandomSleep(gRingParms.mRestartSleepMs1, gRingParms.mRestartSleepMs2);
       tRandomSleep.doSleep();
+      // Initialize the reader.
+      mRingReader.initialize(
+         &SM::gShare->mTestRingBuffer,
+         &SM::gShare->mTestRingBuffer.mElementArrayMemory);
       tCount1++;
    }
 }
