@@ -86,6 +86,7 @@ void RingWriterThread::executeOnTimer(int aTimerCount)
    for (int i = 0; i < gRingParms.mNumWrites; i++)
    {
       Some::TestRecord tRecord;
+      tRecord.doSet1(11);
       mRingWriter.doWrite((void*)&tRecord);
    }
 }
