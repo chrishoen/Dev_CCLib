@@ -92,6 +92,11 @@ public:
    int mSleepAfterNotReadyUs;
    int mSleepAfterOverwriteUs;
 
+   // Restart test variables.
+   int mRestartLoopCount;
+   int mRestartSleepMs1;
+   int mRestartSleepMs2;
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************

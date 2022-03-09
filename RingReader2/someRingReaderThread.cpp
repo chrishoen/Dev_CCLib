@@ -38,6 +38,7 @@ RingReaderThread::RingReaderThread()
 
    // Set member variables.
    mTPFlag = true;
+   mStopFlag = false;
 }
 
 //******************************************************************************
@@ -131,8 +132,23 @@ void RingReaderThread::show()
 
 void RingReaderThread::threadRunFunction()
 {
-   // Guard.
+   if (gRingParms.mTestMode == 1)
+   {
+      doTest1();
+   }
+   else
+   {
+      doTest2();
+   }
+}
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Test.
+
+void RingReaderThread::doTest1()
+{
    int tCount = 0;
    while (true)
    {
@@ -154,6 +170,53 @@ void RingReaderThread::threadRunFunction()
       mRingReader.doRead((void*)&tRecord);
       if (mRingReader.mNotReadyFlag) Ris::sleepUs(gRingParms.mSleepAfterNotReadyUs);
       if (mRingReader.mOverwriteFlag) Ris::sleepUs(gRingParms.mSleepAfterOverwriteUs);
+      tCount++;
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Test.
+
+void RingReaderThread::doTest2()
+{
+   int tCount1 = 0;
+   while (true)
+   {
+      if (BaseClass::mTerminateFlag) return;
+
+      int tCount2 = 0;
+      while (true)
+      {
+         // Process thread execution variables.
+         if (BaseClass::mTerminateFlag) return;
+         if (!mTPFlag)
+         {
+            Ris::sleepUs(gRingParms.mSleepAfterNotReadyUs);
+            continue;
+         }
+
+         // Read a record.
+         Some::TestRecord tRecord;
+         tRecord.doSet1(22);
+         mRingReader.doRead((void*)&tRecord);
+         if (mRingReader.mNotReadyFlag) Ris::sleepUs(gRingParms.mSleepAfterNotReadyUs);
+         if (mRingReader.mOverwriteFlag) Ris::sleepUs(gRingParms.mSleepAfterOverwriteUs);
+
+         if (mRingReader.mTestFailCount > 0) mStopFlag = true;
+         if (mStopFlag) break;
+         if (++tCount2 == gRingParms.mRestartLoopCount) break;
+      }
+      if (mStopFlag)
+      {
+         Prn::print(0, "STOPPED");
+         return;
+      }
+
+      Prn::print(0, "RESTART %d", tCount1);
+      //Ris::RandomSleepMs tRandomSleep(gRingParms.mRestartSleepMs1, gRingParms.mRestartSleepMs2);
+      //tRandomSleep.doSleep();
    }
 }
 
