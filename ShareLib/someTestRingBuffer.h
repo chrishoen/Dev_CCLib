@@ -113,6 +113,9 @@ public:
    long long mFirstReadIndex;
    int mTestPassCount;
    int mTestFailCount;
+   long long mTestFailReadIndex;
+   long long mTestFailCode0;
+   long long mTestFailCode6;
    // Test variables.
    int mSleepAfterNotReadyUs;
    int mSleepAfterOverwriteUs;
@@ -128,6 +131,9 @@ public:
       mFirstReadIndex = 0;
       mTestPassCount = 0;
       mTestFailCount = 0;
+      mTestFailReadIndex = 0;
+      mTestFailCode0 = 0;
+      mTestFailCode6 = 0;
       mSleepAfterNotReadyUs = gRingParms.mSleepAfterNotReadyUs;
       mSleepAfterOverwriteUs = gRingParms.mSleepAfterOverwriteUs;
    }
@@ -139,6 +145,9 @@ public:
       mFirstReadIndex = 0;
       mTestPassCount = 0;
       mTestFailCount = 0;
+      mTestFailReadIndex = 0;
+      mTestFailCode0 = 0;
+      mTestFailCode6 = 0;
    }
 
    void doTest(long long aReadIndex, void* aElement) override
@@ -158,13 +167,9 @@ public:
       else
       {
          mTestFailCount++;
-         printf("TEST FAIL************** BEGIN\n");
-         printf("ReadIndex        %lld\n", aReadIndex);
-         printf("LastReadIndex    %lld\n", mLastReadIndex);
-         printf("Code[0]          %lld\n", tRecord->mCode[0]);
-         printf("Code[6]          %lld\n", tRecord->mCode[6]);
-         printf("TEST FAIL************** END\n");
-         exit(0);
+         mTestFailReadIndex = aReadIndex;
+         mTestFailCode0 = tRecord->mCode[0];
+         mTestFailCode6 = tRecord->mCode[6];
       }
    }
 };
