@@ -31,7 +31,6 @@ bool TestRecord::doTest1(long long aCode)
 {
    bool tPass = true;
    for (int i = 0; i < cNumCodes; i++) if (mCode[i] != aCode) tPass = false;
-   for (int i = 0; i < cNumCodes; i++) mCode[i] = 0;
    return tPass;
 }
 

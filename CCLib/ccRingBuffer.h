@@ -33,10 +33,10 @@ where NextWriteIndex is the index of the next array element to write to.
 Readers can read from the memory as long as the reads are within the bounds
 of the indices of a min and max available, where
 
-   MinAvailable = NextWriteIndex - (NumElements - 1)
-   MaxAvailable = NextWriteIndex - 1
+   MinReadIndex = NextWriteIndex - (NumElements - 1)
+   MaxReadIndex = NextWriteIndex - 1
 where
-   MaxAvailable - MinAvailable = NumElements - 1
+   MaxReadIndex - MinReadIndex = NumElements - 1
 
 Here's an example of a buffer with NumElements = 8 that is past the
 initialization stage. It is full. The write index is in the first column
@@ -44,18 +44,18 @@ and the modulo of it is in the second column.
 
 122 2
 123 3  zzzz
-124 4  xxxx  NextWriteIndex - (NumElements - 1) = MinAvailable
+124 4  xxxx  NextWriteIndex - (NumElements - 1) = MinReadIndex
 125 5  xxxx
 126 6  xxxx
 127 7  xxxx
 128 0  xxxx
 129 1  xxxx
-130 2  xxxx  NextWriteIndex - 1 = MaxAvailable
+130 2  xxxx  NextWriteIndex - 1 = MaxReadIndex
 131 3  zzzz  NextWriteIndex is the next element to write to
 
 Only elements marked with xxxx can be safely read. They are on the closed
 interval
-[MinAvailable .. MaxAvailable] = 
+[MinReadIndex .. MaxReadIndex] = 
 [NextWriteIndex - (NumElements - 1) .. NextWriteIndex - 1]
 
 A reader can read always safely read any one element of 124 .. 130.
@@ -74,10 +74,10 @@ back and modify any one element of 128 .. 130.
 
 122 2
 123 3  zzzz
-124 4  xxxx  NextWriteIndex - (NumElements - 1) = MinAvailable
+124 4  xxxx  NextWriteIndex - (NumElements - 1) = MinReadIndex
 125 5  xxxx
 126 6  xxxx
-127 7  xxxx  NextWriteIndex - ReadGap - 1  = MaxAvailable
+127 7  xxxx  NextWriteIndex - ReadGap - 1  = MaxReadIndex
 128 0  yyyy  NextWriteIndex - ReadGap
 129 1  yyyy
 130 2  yyyy  NextWriteIndex - 1

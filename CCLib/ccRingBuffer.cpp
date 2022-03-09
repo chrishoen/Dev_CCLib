@@ -246,8 +246,8 @@ void* RingBufferReader::elementAt(long long aIndex)
 
 int RingBufferReader::available()
 {
-   long long tMaxAvailable = mRB->mNextWriteIndex.load(std::memory_order_relaxed) - 1 - mReadGap;
-   return  tMaxAvailable - mLastReadIndex;
+   long long tMaxReadIndex = mRB->mNextWriteIndex.load(std::memory_order_relaxed) - 1 - mReadGap;
+   return  tMaxReadIndex - mLastReadIndex;
 }
 
 //******************************************************************************
@@ -255,6 +255,21 @@ int RingBufferReader::available()
 //******************************************************************************
 // Read an element from the array, copying it to the function argument.
 // Return true if successful.
+// 
+// Here's an example of a buffer with NumElements = 8 and ReadGap = 3
+// A reader can read any one element of 124 .. 127. The writer can go
+// back and modify any one element of 128 .. 130.
+//
+// 122 2
+// 123 3  zzzz
+// 124 4  xxxx  NextWriteIndex - (NumElements - 1) = MinReadIndex
+// 125 5  xxxx
+// 126 6  xxxx
+// 127 7  xxxx  NextWriteIndex - ReadGap - 1 = MaxReadIndex
+// 128 0  yyyy  NextWriteIndex - ReadGap
+// 129 1  yyyy
+// 130 2  yyyy  NextWriteIndex - 1
+// 131 3  zzzz  NextWriteIndex is the next element to write to
 
 bool RingBufferReader::doRead(void* aElement)
 {
@@ -263,8 +278,8 @@ bool RingBufferReader::doRead(void* aElement)
    mOverwriteFlag = false;
 
    // Local variables.
-   long long tMinAvailable = 0;
-   long long tMaxAvailable = 0;
+   long long tMinReadIndex = 0;
+   long long tMaxReadIndex = 0;
    long long tNextReadIndex = 0;
 
    // Get the initial write index. This might change asynchronously during
@@ -284,63 +299,51 @@ bool RingBufferReader::doRead(void* aElement)
    }
 
    // Calculate the indices of the limits of available elements.
-   tMinAvailable = tNextWriteIndex - (mNumElements - 1);
-   tMaxAvailable = tNextWriteIndex - 1 - mReadGap;
+   tMinReadIndex = tNextWriteIndex - (mNumElements - 1);
+   tMaxReadIndex = tNextWriteIndex - 1 - mReadGap;
 
    // If the max available element is negative then no elements are
    // available yet, so exit. This can happen with a nonzero read gap.
-   if (tMaxAvailable < 0)
+   if (tMaxReadIndex < 0)
    {
       // Set the read for the behind the maximum available element.
-      mLastReadIndex = tMaxAvailable - 1;
+      mLastReadIndex = tMaxReadIndex - 1;
       mNotReadyCount2++;
       mNotReadyFlag = true;
       return false;
    }
 
-   // Here's an example of a buffer with NumElements = 8 and ReadGap = 3
-   // A reader can read any one element of 124 .. 127. The writer can go
-   // back and modify any one element of 128 .. 130.
-   //
-   // 122 2
-   // 123 3  zzzz
-   // 124 4  xxxx  NextWriteIndex - (NumElements - 1) = MinAvailable
-   // 125 5  xxxx
-   // 126 6  xxxx
-   // 127 7  xxxx  NextWriteIndex - ReadGap - 1 = MaxAvailable
-   // 128 0  yyyy  NextWriteIndex - ReadGap
-   // 129 1  yyyy
-   // 130 2  yyyy  NextWriteIndex - 1
-   // 131 3  zzzz  NextWriteIndex is the next element to write to
-
    // Test for the first read.
    if (mFirstFlag)
    {
       mFirstFlag = false;
-      // Set the read for the element behind the maximum available element.
-      mLastReadIndex = tMaxAvailable - 1;
+      // Set the read for the maximum available element.
+      mLastReadIndex = tMaxReadIndex - 1;
+      tNextReadIndex = tMaxReadIndex;
    }
-
-   // If the maximum available element has already been read then
-   // no elements are available, so exit.
-   if (mLastReadIndex == tMaxAvailable)
-   {
-      // There's nothing to read.
-      mNotReadyCount3++;
-      mNotReadyFlag = true;
-      return false;
-   }
-
-   // If the last element read is behind the minimum available element, 
-   // then read from the minimum available element.
-   if (mLastReadIndex < tMinAvailable)
-   {
-      tNextReadIndex = tMinAvailable;
-   }
-   // Else read from the next one.
    else
    {
-      tNextReadIndex = mLastReadIndex + 1;
+      // If the maximum available element has already been read then
+      // no elements are available, so exit.
+      if (mLastReadIndex == tMaxReadIndex)
+      {
+         // There's nothing to read.
+         mNotReadyCount3++;
+         mNotReadyFlag = true;
+         return false;
+      }
+
+      // If the last element read is behind the minimum available element, 
+      // then read from the minimum available element.
+      if (mLastReadIndex < tMinReadIndex)
+      {
+         tNextReadIndex = tMinReadIndex;
+      }
+      // Else read from the next one.
+      else
+      {
+         tNextReadIndex = mLastReadIndex + 1;
+      }
    }
 
    // This should never happen.
@@ -366,8 +369,8 @@ bool RingBufferReader::doRead(void* aElement)
    // read. If the read element was less than the final min available
    // element then the read was or could have been overwritten, so drop it.
    tNextWriteIndex = mRB->mNextWriteIndex.load(std::memory_order_relaxed);
-   tMinAvailable = tNextWriteIndex - (mNumElements - 1);
-   if (tNextReadIndex < tMinAvailable)
+   tMinReadIndex = tNextWriteIndex - (mNumElements - 1);
+   if (tNextReadIndex < tMinReadIndex)
    {
       mOverwriteCount++;
       mOverwriteFlag = true;

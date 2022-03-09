@@ -107,8 +107,12 @@ void RingReaderThread::show()
    Prn::print(0, "Reader.TestFailCount       %16d", mRingReader.mTestFailCount);
 
    Prn::print(0, "Reader.TestFailReadIndex   %16d", mRingReader.mTestFailReadIndex);
-   Prn::print(0, "Reader.mTestFailCode0      %16d", mRingReader.mTestFailCode0);
-   Prn::print(0, "Reader.mTestFailCode6      %16d", mRingReader.mTestFailCode6);
+
+   Prn::print(0, "");
+   for (int i = 0; i < 7; i++)
+   {
+   Prn::print(0, "Reader.mTestFailCode[%1d]    %16d", i, mRingReader.mTestFailCode[i]);
+   }
 
    int tSum1 = mRingReader.mTestPassCount + mRingReader.mDropCount;
    int tSum2 = tSum1 + (int)mRingReader.mFirstReadIndex;
@@ -146,6 +150,7 @@ void RingReaderThread::threadRunFunction()
 
       // Read a record.
       Some::TestRecord tRecord;
+      tRecord.doSet1(22);
       mRingReader.doRead((void*)&tRecord);
       if (mRingReader.mNotReadyFlag) Ris::sleepUs(gRingParms.mSleepAfterNotReadyUs);
       if (mRingReader.mOverwriteFlag) Ris::sleepUs(gRingParms.mSleepAfterOverwriteUs);

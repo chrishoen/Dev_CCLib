@@ -114,8 +114,7 @@ public:
    int mTestPassCount;
    int mTestFailCount;
    long long mTestFailReadIndex;
-   long long mTestFailCode0;
-   long long mTestFailCode6;
+   long long mTestFailCode[7];
    // Test variables.
    int mSleepAfterNotReadyUs;
    int mSleepAfterOverwriteUs;
@@ -132,8 +131,7 @@ public:
       mTestPassCount = 0;
       mTestFailCount = 0;
       mTestFailReadIndex = 0;
-      mTestFailCode0 = 0;
-      mTestFailCode6 = 0;
+      for (int i = 0; i < 7;i++)mTestFailCode[i] = 0;
       mSleepAfterNotReadyUs = gRingParms.mSleepAfterNotReadyUs;
       mSleepAfterOverwriteUs = gRingParms.mSleepAfterOverwriteUs;
    }
@@ -146,8 +144,7 @@ public:
       mTestPassCount = 0;
       mTestFailCount = 0;
       mTestFailReadIndex = 0;
-      mTestFailCode0 = 0;
-      mTestFailCode6 = 0;
+      for (int i = 0; i < 7; i++)mTestFailCode[i] = 0;
    }
 
    void doTest(long long aReadIndex, void* aElement) override
@@ -168,9 +165,13 @@ public:
       {
          mTestFailCount++;
          mTestFailReadIndex = aReadIndex;
-         mTestFailCode0 = tRecord->mCode[0];
-         mTestFailCode6 = tRecord->mCode[6];
+         for (int i = 0; i < 7; i++)
+         {
+            mTestFailCode[i] = tRecord->mCode[i];
+         }
       }
+
+      tRecord->doSet1(1);
    }
 };
 
