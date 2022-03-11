@@ -21,13 +21,13 @@ TestRecord::TestRecord()
 }
 
 // Set.
-void TestRecord::doSet1(long long aCode)
+void TestRecord::doSet(long long aCode)
 {
    for (int i = 0; i < cNumCodes; i++) mCode[i] = aCode;
 }
 
 // Test.
-bool TestRecord::doTest1(long long aCode)
+bool TestRecord::doTest(long long aCode)
 {
    bool tPass = true;
    for (int i = 0; i < cNumCodes; i++) if (mCode[i] != aCode) tPass = false;

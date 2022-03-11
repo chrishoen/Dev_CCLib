@@ -137,7 +137,7 @@ void RingReaderThread::threadRunFunction()
 {
    if (gRingParms.mTestMode == 1)
    {
-      doTest1();
+      doTest();
    }
    else
    {
@@ -150,7 +150,7 @@ void RingReaderThread::threadRunFunction()
 //******************************************************************************
 // Test.
 
-void RingReaderThread::doTest1()
+void RingReaderThread::doTest()
 {
    int tCount = 0;
    while (true)
@@ -169,7 +169,6 @@ void RingReaderThread::doTest1()
 
       // Read a record.
       Some::TestRecord tRecord;
-      tRecord.doSet1(22);
       mRingReader.doRead((void*)&tRecord);
       if (mRingReader.mNotReadyFlag) Ris::sleepUs(gRingParms.mSleepAfterNotReadyUs);
       if (mRingReader.mOverwriteFlag) Ris::sleepUs(gRingParms.mSleepAfterOverwriteUs);
@@ -206,7 +205,6 @@ void RingReaderThread::doTest2()
 
          // Read a record.
          Some::TestRecord tRecord;
-         tRecord.doSet1(22);
          mRingReader.doRead((void*)&tRecord);
          if (mRingReader.mNotReadyFlag) Ris::sleepUs(gRingParms.mSleepAfterNotReadyUs);
          if (mRingReader.mOverwriteFlag) Ris::sleepUs(gRingParms.mSleepAfterOverwriteUs);

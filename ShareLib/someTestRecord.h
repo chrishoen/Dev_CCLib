@@ -40,14 +40,11 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Constructors.
-   TestRecord();
-  
    // Set.
-   void doSet1(long long aCode);
+   void doSet(long long aCode);
 
    // Test.
-   bool doTest1(long long aCode);
+   bool doTest(long long aCode);
 };
 
 //******************************************************************************

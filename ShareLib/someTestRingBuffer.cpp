@@ -44,7 +44,7 @@ void TestRingWriter::doTest(long long aWriteIndex, void* aElement)
       mFirstWriteIndex = aWriteIndex;
    }
    TestRecord* tRecord = (TestRecord*)aElement;
-   tRecord->doSet1(aWriteIndex);
+   tRecord->doSet(aWriteIndex);
 }
 
 //******************************************************************************
@@ -90,7 +90,7 @@ void TestRingReader::doTest(long long aReadIndex, void* aElement)
 
    TestRecord* tRecord = (TestRecord*)aElement;
 
-   if (tRecord->doTest1(aReadIndex))
+   if (tRecord->doTest(aReadIndex))
    {
       mTestPassCount++;
    }
@@ -104,7 +104,7 @@ void TestRingReader::doTest(long long aReadIndex, void* aElement)
       }
    }
 
-   tRecord->doSet1(13);
+   tRecord->doSet(101);
 }
 
 

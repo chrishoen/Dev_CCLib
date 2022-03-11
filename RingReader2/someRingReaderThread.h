@@ -82,7 +82,7 @@ public:
    // Methods.
 
    // Tests.
-   void doTest1();
+   void doTest();
    void doTest2();
 
    // Show.

@@ -85,7 +85,7 @@ public:
          mFirstWriteIndex = aWriteIndex;
       }
       TestRecord* tRecord = (TestRecord*)aElement;
-      tRecord->doSet1(aWriteIndex);
+      tRecord->doSet(aWriteIndex);
    }
 };
 
@@ -142,7 +142,7 @@ public:
 
       TestRecord* tRecord = (TestRecord*)aElement;
 
-      if (tRecord->doTest1(aReadIndex))
+      if (tRecord->doTest(aReadIndex))
       {
          mTestPassCount++;
       }
