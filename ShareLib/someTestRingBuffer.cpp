@@ -104,6 +104,7 @@ void TestRingReader::doTest(long long aReadIndex, void* aElement)
       }
    }
 
+   // Test if we read the same record more than once.
    tRecord->doSet(101);
 }
 
