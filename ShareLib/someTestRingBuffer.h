@@ -25,21 +25,9 @@ namespace Some
 //******************************************************************************
 // Test ring buffer.
 
-class TestRingBuffer : public CC::HeapRingBuffer
+class TestRingBuffer : public CC::MemoryRingBuffer<TestRecord, 100, 20>
 {
-private:
-   typedef CC::HeapRingBuffer BaseClass;
 public:
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.
-
-   void initialize()
-   {
-      BaseClass::initialize(100, sizeof(TestRecord), 20);
-   }
 };
 
 //******************************************************************************
@@ -67,29 +55,12 @@ public:
    //***************************************************************************
    // Methods.
 
-   TestRingWriter()
-   {
-      mFirstWriteFlag = true;
-      mFirstWriteIndex = 0;
-   }
+   // Constructor.
+   TestRingWriter();
 
-   void resetTest() override
-   {
-      BaseClass::mTestFlag = true;
-      mFirstWriteFlag = true;
-      mFirstWriteIndex = 0;
-   }
-
-   void doTest(long long aWriteIndex, void* aElement) override
-   {
-      if (mFirstWriteFlag)
-      {
-         mFirstWriteFlag = false;
-         mFirstWriteIndex = aWriteIndex;
-      }
-      TestRecord* tRecord = (TestRecord*)aElement;
-      tRecord->doSet1(aWriteIndex);
-   }
+   // Test methods.
+   void resetTest() override;
+   void doTest(long long aWriteIndex, void* aElement) override;
 };
 
 //******************************************************************************
@@ -115,6 +86,7 @@ public:
    int mTestFailCount;
    long long mTestFailReadIndex;
    long long mTestFailCode[7];
+
    // Test variables.
    int mSleepAfterNotReadyUs;
    int mSleepAfterOverwriteUs;
@@ -124,55 +96,12 @@ public:
    //***************************************************************************
    // Methods.
 
-   TestRingReader()
-   {
-      mFirstReadFlag = true;
-      mFirstReadIndex = 0;
-      mTestPassCount = 0;
-      mTestFailCount = 0;
-      mTestFailReadIndex = 0;
-      for (int i = 0; i < 7;i++)mTestFailCode[i] = 0;
-      mSleepAfterNotReadyUs = gRingParms.mSleepAfterNotReadyUs;
-      mSleepAfterOverwriteUs = gRingParms.mSleepAfterOverwriteUs;
-   }
+   // Constructor.
+   TestRingReader();
 
-   void resetTest() override
-   {
-      BaseClass::mTestFlag = true;
-      mFirstReadFlag = true;
-      mFirstReadIndex = 0;
-      mTestPassCount = 0;
-      mTestFailCount = 0;
-      mTestFailReadIndex = 0;
-      for (int i = 0; i < 7; i++)mTestFailCode[i] = 0;
-   }
-
-   void doTest(long long aReadIndex, void* aElement) override
-   {
-      if (mFirstReadFlag)
-      {
-         mFirstReadFlag = false;
-         mFirstReadIndex = aReadIndex;
-      }
-
-      TestRecord* tRecord = (TestRecord*)aElement;
-
-      if (tRecord->doTest1(aReadIndex))
-      {
-         mTestPassCount++;
-      }
-      else
-      {
-         mTestFailCount++;
-         mTestFailReadIndex = aReadIndex;
-         for (int i = 0; i < 7; i++)
-         {
-            mTestFailCode[i] = tRecord->mCode[i];
-         }
-      }
-
-      tRecord->doSet1(13);
-   }
+   // Test methods.
+   void resetTest() override;
+   void doTest(long long aReadIndex, void* aElement) override;
 };
 
 //******************************************************************************
