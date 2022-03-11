@@ -10,16 +10,15 @@ Description:
 
 #include "someTestRecord.h"
 
-// Global instance of the block pool
-
 namespace Some
 {
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Set.
+// Set and test.
 
+// Set.
 void TestRecord::doSet(long long aCode)
 {
    for (int i = 0; i < cNumCodes; i++) mCode[i] = aCode;
