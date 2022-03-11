@@ -171,7 +171,7 @@ public:
          }
       }
 
-      tRecord->doSet1(1);
+      tRecord->doSet1(13);
    }
 };
 

@@ -51,12 +51,12 @@ void RingReaderThread::threadInitFunction()
 {
    SM::gShare->show(0);
 
-   Ris::sleepMs(500);
+   //Ris::sleepMs(500);
    // Initialize the reader.
    mRingReader.initialize(
       &SM::gShare->mTestRingBuffer,
       &SM::gShare->mTestRingBuffer.mElementArrayMemory);
-   Ris::sleepMs(500);
+   //Ris::sleepMs(500);
 }
 
 //******************************************************************************
@@ -68,6 +68,7 @@ void RingReaderThread::threadInitFunction()
 void RingReaderThread::threadExitFunction()
 {
    printf("someRingReaderThread::threadExitFunction\n");
+   show();
 }
 
 //******************************************************************************

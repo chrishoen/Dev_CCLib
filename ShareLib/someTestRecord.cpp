@@ -17,7 +17,7 @@ namespace Some
 // Constructors.
 TestRecord::TestRecord()
 {
-   for (int i = 0; i < cNumCodes; i++) mCode[i] = 0;
+   for (int i = 0; i < cNumCodes; i++) mCode[i] = 11;
 }
 
 // Set.
