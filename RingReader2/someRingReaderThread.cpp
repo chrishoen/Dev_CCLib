@@ -39,6 +39,12 @@ RingReaderThread::RingReaderThread()
    // Set member variables.
    mTPFlag = true;
    mStopFlag = false;
+
+   // Seed random generator and random sleep.
+   std::random_device tRandomDevice;
+   mRandomGenerator.seed(tRandomDevice());
+   mRandomDistribution = std::uniform_int_distribution<>(0, gRingParms.mCoastRandom);
+   mCoastSleep.initialize(gRingParms.mCoastSleepMs1, gRingParms.mCoastSleepMs2);
 }
 
 //******************************************************************************
@@ -51,12 +57,10 @@ void RingReaderThread::threadInitFunction()
 {
    SM::gShare->show(0);
 
-   //Ris::sleepMs(500);
    // Initialize the reader.
    mRingReader.initialize(
       &SM::gShare->mTestRingBuffer,
       &SM::gShare->mTestRingBuffer.mElementArrayMemory);
-   //Ris::sleepMs(500);
 }
 
 //******************************************************************************
@@ -111,13 +115,13 @@ void RingReaderThread::show()
    Prn::print(0, "Reader.TestFailCount       %16d", mRingReader.mTestFailCount);
 
    Prn::print(0, "Reader.TestFailReadIndex   %16d", mRingReader.mTestFailReadIndex);
-
+#if 0
    Prn::print(0, "");
    for (int i = 0; i < 7; i++)
    {
    Prn::print(0, "Reader.mTestFailCode[%1d]    %16d", i, mRingReader.mTestFailCode[i]);
    }
-
+#endif
    int tSum1 = mRingReader.mTestPassCount + mRingReader.mDropCount;
    int tSum2 = tSum1 + (int)mRingReader.mFirstReadIndex;
    Prn::print(0, "");
@@ -137,7 +141,7 @@ void RingReaderThread::threadRunFunction()
 {
    if (gRingParms.mTestMode == 1)
    {
-      doTest();
+      doTest1();
    }
    else
    {
@@ -150,7 +154,7 @@ void RingReaderThread::threadRunFunction()
 //******************************************************************************
 // Test.
 
-void RingReaderThread::doTest()
+void RingReaderThread::doTest1()
 {
    int tCount = 0;
    while (true)
@@ -183,50 +187,33 @@ void RingReaderThread::doTest()
 
 void RingReaderThread::doTest2()
 {
-   int tCount1 = 0;
+   int tCount = 0;
    while (true)
    {
+      // Process thread execution variables.
       if (BaseClass::mTerminateFlag) return;
-
-      int tCount2 = 0;
-      while (true)
+      if (tCount % 5000 == 0)
       {
-         // Process thread execution variables.
-         if (BaseClass::mTerminateFlag) return;
-         if (tCount2 % 5000 == 0)
-         {
-            BaseClass::getThreadProcessorNumber();
-         }
-         if (!mTPFlag)
-         {
-            Ris::sleepUs(gRingParms.mSleepAfterNotReadyUs);
-            continue;
-         }
-
-         // Read a record.
-         Some::TestRecord tRecord;
-         mRingReader.doRead((void*)&tRecord);
-         if (mRingReader.mNotReadyFlag) Ris::sleepUs(gRingParms.mSleepAfterNotReadyUs);
-         if (mRingReader.mOverwriteFlag) Ris::sleepUs(gRingParms.mSleepAfterOverwriteUs);
-
-         if (mRingReader.mTestFailCount > 0) mStopFlag = true;
-         if (mStopFlag) break;
-         if (++tCount2 == gRingParms.mRestartLoopCount) break;
+         BaseClass::getThreadProcessorNumber();
       }
-      if (mStopFlag)
+      if (!mTPFlag)
       {
-         Prn::print(0, "STOPPED");
-         return;
+         Ris::sleepUs(gRingParms.mSleepAfterNotReadyUs);
+         continue;
       }
 
-      Prn::print(0, "RESTART %d", tCount1);
-      Ris::RandomSleepMs tRandomSleep(gRingParms.mRestartSleepMs1, gRingParms.mRestartSleepMs2);
-      tRandomSleep.doSleep();
-      // Initialize the reader.
-      mRingReader.initialize(
-         &SM::gShare->mTestRingBuffer,
-         &SM::gShare->mTestRingBuffer.mElementArrayMemory);
-      tCount1++;
+      if (mRandomDistribution(mRandomGenerator) == 0)
+      {
+         printf("COAST\n");
+         mCoastSleep.doSleep();
+      }
+
+      // Read a record.
+      Some::TestRecord tRecord;
+      mRingReader.doRead((void*)&tRecord);
+      if (mRingReader.mNotReadyFlag) Ris::sleepUs(gRingParms.mSleepAfterNotReadyUs);
+      if (mRingReader.mOverwriteFlag) Ris::sleepUs(gRingParms.mSleepAfterOverwriteUs);
+      tCount++;
    }
 }
 

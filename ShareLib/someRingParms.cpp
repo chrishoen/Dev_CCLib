@@ -57,9 +57,9 @@ void RingParms::reset()
    mSleepAfterNotReadyUs = 0;
    mSleepAfterOverwriteUs = 0;
 
-   mRestartLoopCount = 0;
-   mRestartSleepMs1 = 0;
-   mRestartSleepMs2 = 0;
+   mCoastRandom = 0;
+   mCoastSleepMs1 = 0;
+   mCoastSleepMs2 = 0;
 
 }
 
@@ -91,9 +91,9 @@ void RingParms::show()
    printf("SleepAfterNotReadyUs     %-10d\n", mSleepAfterNotReadyUs);
    printf("mSleepAfterOverwriteUs   %-10d\n", mSleepAfterOverwriteUs);
    printf("\n");
-   printf("RestartLoopCount         %-10d\n", mRestartLoopCount);
-   printf("RestartSleepMs1          %-10d\n", mRestartSleepMs1);
-   printf("RestartSleepMs2          %-10d\n", mRestartSleepMs2);
+   printf("CoastRandom              %-10d\n", mCoastRandom);
+   printf("CoastSleepMs1            %-10d\n", mCoastSleepMs1);
+   printf("CoastSleepMs2            %-10d\n", mCoastSleepMs2);
    printf("\n");
 }
 
@@ -133,9 +133,9 @@ void RingParms::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("SleepAfterNotReadyUs"))    mSleepAfterNotReadyUs = aCmd->argInt(1);
    if (aCmd->isCmd("SleepAfterOverwriteUs"))   mSleepAfterOverwriteUs = aCmd->argInt(1);
 
-   if (aCmd->isCmd("RestartLoopCount"))        mRestartLoopCount = aCmd->argInt(1);
-   if (aCmd->isCmd("RestartSleepMs1"))         mRestartSleepMs1 = aCmd->argInt(1);
-   if (aCmd->isCmd("RestartSleepMs2"))         mRestartSleepMs2 = aCmd->argInt(1);
+   if (aCmd->isCmd("CoastRandom"))             mCoastRandom = aCmd->argInt(1);
+   if (aCmd->isCmd("CoastSleepMs1"))           mCoastSleepMs1 = aCmd->argInt(1);
+   if (aCmd->isCmd("CoastSleepMs2"))           mCoastSleepMs2 = aCmd->argInt(1);
 }
 
 //******************************************************************************

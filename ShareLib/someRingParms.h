@@ -92,10 +92,10 @@ public:
    int mSleepAfterNotReadyUs;
    int mSleepAfterOverwriteUs;
 
-   // Restart test variables.
-   int mRestartLoopCount;
-   int mRestartSleepMs1;
-   int mRestartSleepMs2;
+   // Coast test variables.
+   int mCoastRandom;
+   int mCoastSleepMs1;
+   int mCoastSleepMs2;
 
    //***************************************************************************
    //***************************************************************************
