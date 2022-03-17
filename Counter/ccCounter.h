@@ -17,7 +17,7 @@ namespace CC
 // This class implements a counter modulo M.
 // 
 
-class CounterM
+class CounterN
 {
 public:
 
@@ -27,7 +27,7 @@ public:
    // Members.
 
    // Modulus.
-   int mModM;
+   int mDivisor;
 
    // Counter value.
    int mValue;
@@ -47,15 +47,15 @@ public:
    // Methods.
 
    // Constructor,
-   CounterM();
-   CounterM(int aModM);
+   CounterN();
+   CounterN(int aDivisor);
    void reset();
-   void initialize(int aModM);
+   void initialize(int aDivisor);
 
    // Set value.
    void set(int aValue);
    void increment();
-   void decrement();
+   bool decrement();
 
 };
 

@@ -1,13 +1,6 @@
 #include "stdafx.h"
 
-#include <stdlib.h>
-#include <stddef.h>
-#include <stdio.h>
-#include <limits.h>
-
-#include "risProgramTime.h"
-#include "risBitUtils.h"
-#include "my_functions.h"
+#include "ccCounter.h"
 #include "CmdLineExec.h"
 
 //******************************************************************************
@@ -47,30 +40,22 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-typedef union PackedS
-{
-   unsigned char mUint8;
-   unsigned short mUint16;
-   unsigned int mUint32;
-   int mInt32;
-} PackedT;
-
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   PackedT tP; tP.mInt32 = 0;
-   tP.mUint8 = 0xff;
-   Prn::print(0, "mUint8     %x", tP.mInt32);
+   aCmd->setArgDefault(1, 20);
+   int tLoop = aCmd->argInt(1);
 
-   tP.mUint8 += 1;
-   Prn::print(0, "mUint8     %x", tP.mInt32);
+   CC::CounterN tCountN(5);
+   CC::CounterN tCountM(4);
 
-   tP.mUint8 += 1;
-   Prn::print(0, "mUint8     %x", tP.mInt32);
-
-   tP.mUint8 = 0;
-   tP.mUint8 -= 1;
-
-   Prn::print(0, "mUint8     %x", tP.mInt32);
+   for (int i = 0; i < tLoop; i++)
+   {
+      Prn::print(0, "N %4d %4d %4d    M %4d %4d %4d",
+         tCountN.mValue, tCountN.mQuotient, tCountN.mRemainder,
+         tCountM.mValue, tCountM.mQuotient, tCountM.mRemainder);
+      tCountN.increment();
+      tCountM.set(tCountN.mQuotient);
+   }
 }
 
 //******************************************************************************
@@ -104,10 +89,6 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 {
-   printf("printf\n");
-   Prn::print(0, "Prn::print 0");
-   Prn::print(Prn::Show1, "Prn::print Prn::Show1");
-   Prn::print(Prn::Show2, "Prn::print Prn::Show");
 }
 
 //******************************************************************************
@@ -116,12 +97,5 @@ void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo6(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0, "Ris::portableGetCurrentDir() %s", Ris::portableGetCurrentDir());
-   Prn::print(0, "Ris::portableGetProgramDir() %s", Ris::portableGetProgramDir());
-   double tTime = Ris::getProgramTime();
-   unsigned int tTimeMS = Ris::getCpuTimeUIntMS();
-
-   Prn::print(0, "Ris::getProgramTime           %10.6f", tTime);
-   Prn::print(0, "Ris::getCpuTimeUIntMs         %10d", tTimeMS);
 }
 

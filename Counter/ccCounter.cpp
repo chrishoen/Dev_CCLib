@@ -14,21 +14,47 @@
 namespace CC
 {
 
-   CounterM::CounterM()
-   {}
-   CounterM::CounterM(int aModM)
-   {}
-   void CounterM::reset()
-   {}
-   void CounterM::initialize(int aModM)
-   {}
+CounterN::CounterN()
+{
+   mDivisor = 1;
+   reset();
+}
+CounterN::CounterN(int aDivisor)
+{
+   mDivisor = aDivisor;
+   reset();
+}
+void CounterN::reset()
+{
+   mValue = 0;
+   mQuotient = 0;
+   mRemainder = 0;
+}
+void CounterN::initialize(int aDivisor)
+{
+   mDivisor = aDivisor;
+   reset();
+}
 
-   void CounterM::set(int aValue)
-   {}
-   void CounterM::increment()
-   {}
-   void CounterM::decrement()
-   {}
+void CounterN::set(int aValue)
+{
+   mValue = aValue;
+   mQuotient = mValue / mDivisor;
+   mRemainder = mValue % mDivisor;
+}
+void CounterN::increment()
+{
+   mValue++;
+   mQuotient = mValue / mDivisor;
+   mRemainder = mValue % mDivisor;
+}
+bool CounterN::decrement()
+{
+   if (--mValue < 0) mValue = 0;
+   mQuotient = mValue / mDivisor;
+   mRemainder = mValue % mDivisor;
+   return mValue == 0;
+}
 
 
 //******************************************************************************

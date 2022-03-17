@@ -27,7 +27,7 @@ void main_initialize(int argc,char** argv)
    Prn::setFilter(Prn::Show3, false);
    Prn::setFilter(Prn::Show4, false);
 
-   Prn::print(0, "Test*******************************************BEGIN");
+   Prn::print(0, "Counter*******************************************BEGIN");
 }
 
 //******************************************************************************
@@ -37,7 +37,7 @@ void main_initialize(int argc,char** argv)
 
 void main_finalize()
 {
-   Prn::print(0,"Test*******************************************END");
+   Prn::print(0,"Counter*******************************************END");
 
    // Close print
    Prn::finalizePrint();
