@@ -9,8 +9,8 @@ Serial test thread that contains a serial port.
 //******************************************************************************
 
 #include <random>
-#include "risThreadsThreads.h"
 #include "risSleep.h"
+#include "risThreadsThreads.h"
 #include "someTestRingBuffer.h"
 
 //******************************************************************************
@@ -56,7 +56,7 @@ public:
    std::uniform_int_distribution<> mRandomDistribution;
 
    // Random sleep.
-   Ris::RandomSleepMs mCoastSleep;
+   Ris::RandomSleepMs mSuspendSleep;
 
    //***************************************************************************
    //***************************************************************************

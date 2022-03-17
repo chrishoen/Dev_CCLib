@@ -52,14 +52,15 @@ void RingParms::reset()
    mReaderThreadPeriodUs1 = 0;
    mReaderThreadPeriodUs2 = 0;
 
-   mTestMode = 0;
+   mWriteTestMode = 0;
+   mReadTestMode = 0;
    mNumWrites = 1;
    mSleepAfterNotReadyUs = 0;
    mSleepAfterOverwriteUs = 0;
 
-   mCoastRandom = 0;
-   mCoastSleepMs1 = 0;
-   mCoastSleepMs2 = 0;
+   mSuspendRandom = 0;
+   mSuspendSleepMs1 = 0;
+   mSuspendSleepMs2 = 0;
 
 }
 
@@ -86,14 +87,15 @@ void RingParms::show()
    printf("ReaderThreadPriority     %-10d\n", mReaderThreadPriority);
    printf("ReaderThreadPeriodUs     %-10d  %-10d\n", mReaderThreadPeriodUs1, mReaderThreadPeriodUs2);
    printf("\n");
-   printf("TestMode                 %-10d\n", mTestMode);
+   printf("WriteTestMode            %-10d\n", mWriteTestMode);
+   printf("ReadTestMode             %-10d\n", mReadTestMode);
    printf("NumWrites                %-10d\n", mNumWrites);
    printf("SleepAfterNotReadyUs     %-10d\n", mSleepAfterNotReadyUs);
    printf("mSleepAfterOverwriteUs   %-10d\n", mSleepAfterOverwriteUs);
    printf("\n");
-   printf("CoastRandom              %-10d\n", mCoastRandom);
-   printf("CoastSleepMs1            %-10d\n", mCoastSleepMs1);
-   printf("CoastSleepMs2            %-10d\n", mCoastSleepMs2);
+   printf("SuspendRandom            %-10d\n", mSuspendRandom);
+   printf("SuspendSleepMs1          %-10d\n", mSuspendSleepMs1);
+   printf("SuspendSleepMs2          %-10d\n", mSuspendSleepMs2);
    printf("\n");
 }
 
@@ -128,14 +130,15 @@ void RingParms::execute(Ris::CmdLineCmd* aCmd)
       mReaderThreadPeriodUs2 = aCmd->argInt(2);
    }
 
-   if (aCmd->isCmd("TestMode"))                mTestMode = aCmd->argInt(1);
+   if (aCmd->isCmd("WriteTestMode"))           mWriteTestMode = aCmd->argInt(1);
+   if (aCmd->isCmd("ReadTestMode"))            mReadTestMode = aCmd->argInt(1);
    if (aCmd->isCmd("NumWrites"))               mNumWrites = aCmd->argInt(1);
    if (aCmd->isCmd("SleepAfterNotReadyUs"))    mSleepAfterNotReadyUs = aCmd->argInt(1);
    if (aCmd->isCmd("SleepAfterOverwriteUs"))   mSleepAfterOverwriteUs = aCmd->argInt(1);
 
-   if (aCmd->isCmd("CoastRandom"))             mCoastRandom = aCmd->argInt(1);
-   if (aCmd->isCmd("CoastSleepMs1"))           mCoastSleepMs1 = aCmd->argInt(1);
-   if (aCmd->isCmd("CoastSleepMs2"))           mCoastSleepMs2 = aCmd->argInt(1);
+   if (aCmd->isCmd("SuspendRandom"))           mSuspendRandom = aCmd->argInt(1);
+   if (aCmd->isCmd("SuspendSleepMs1"))         mSuspendSleepMs1 = aCmd->argInt(1);
+   if (aCmd->isCmd("SuspendSleepMs2"))         mSuspendSleepMs2 = aCmd->argInt(1);
 }
 
 //******************************************************************************

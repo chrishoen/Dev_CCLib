@@ -43,8 +43,8 @@ RingReaderThread::RingReaderThread()
    // Seed random generator and random sleep.
    std::random_device tRandomDevice;
    mRandomGenerator.seed(tRandomDevice());
-   mRandomDistribution = std::uniform_int_distribution<>(0, gRingParms.mCoastRandom);
-   mCoastSleep.initialize(gRingParms.mCoastSleepMs1, gRingParms.mCoastSleepMs2);
+   mRandomDistribution = std::uniform_int_distribution<>(0, gRingParms.mSuspendRandom);
+   mSuspendSleep.initialize(gRingParms.mSuspendSleepMs1, gRingParms.mSuspendSleepMs2);
 }
 
 //******************************************************************************
@@ -139,11 +139,11 @@ void RingReaderThread::show()
 
 void RingReaderThread::threadRunFunction()
 {
-   if (gRingParms.mTestMode == 1)
+   if (gRingParms.mReadTestMode == 1)
    {
       doTest1();
    }
-   else
+   else if (gRingParms.mReadTestMode == 2)
    {
       doTest2();
    }
@@ -204,8 +204,8 @@ void RingReaderThread::doTest2()
 
       if (mRandomDistribution(mRandomGenerator) == 0)
       {
-         printf("COAST\n");
-         mCoastSleep.doSleep();
+         printf("SUSPEND\n");
+         mSuspendSleep.doSleep();
       }
 
       // Read a record.

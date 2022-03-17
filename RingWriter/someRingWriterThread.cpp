@@ -43,6 +43,12 @@ RingWriterThread::RingWriterThread()
 
    // Set member variables.
    mTPFlag = true;
+
+   // Seed random generator and random sleep.
+   std::random_device tRandomDevice;
+   mRandomGenerator.seed(tRandomDevice());
+   mRandomDistribution = std::uniform_int_distribution<>(0, gRingParms.mSuspendRandom);
+   mSuspendSleep.initialize(gRingParms.mSuspendSleepMs1, gRingParms.mSuspendSleepMs2);
 }
 
 //******************************************************************************
@@ -79,6 +85,23 @@ void RingWriterThread::threadExitFunction()
 
 void RingWriterThread::executeOnTimer(int aTimerCount)
 {
+   if (gRingParms.mWriteTestMode == 1)
+   {
+      doTest1();
+   }
+   else if(gRingParms.mWriteTestMode == 2)
+   {
+      doTest2();
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Execute periodically. This is called by the base class timer.
+
+void RingWriterThread::doTest1()
+{
    // Guard.
    if (!mTPFlag) return;
 
@@ -93,27 +116,31 @@ void RingWriterThread::executeOnTimer(int aTimerCount)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Execute periodically. This is called by the base class timer.
+
+void RingWriterThread::doTest2()
+{
+   // Guard.
+   if (!mTPFlag) return;
+
+   // Write some test records to the ring buffer.
+   for (int i = 0; i < gRingParms.mNumWrites; i++)
+   {
+      if (mRandomDistribution(mRandomGenerator) == 0)
+      {
+         printf("SUSPEND\n");
+         mSuspendSleep.doSleep();
+      }
+
+      Some::TestRecord tRecord;
+      mRingWriter.doWrite((void*)&tRecord);
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 }//namespace
 
 
-
-#if 0
-// Index of the last element that was written to.
-long long tWriteIndex = SM::gShare->mTestRingBuffer.mWriteIndex.load(std::memory_order_relaxed);
-
-// Advance the index to the next element to write to.
-if (tWriteIndex < 0)
-{
-   tWriteIndex = 0;
-}
-else
-{
-   tWriteIndex++;
-}
-
-// Update the global state. This should be the only place that this
-// happens.
-SM::gShare->mTestRingBuffer.mWriteIndex.store(tWriteIndex, std::memory_order_relaxed);
-return;
-#endif
 

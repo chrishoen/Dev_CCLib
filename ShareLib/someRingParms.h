@@ -85,17 +85,18 @@ public:
    int mReaderThreadPeriodUs2;
 
    // Test mode 1,2.
-   int mTestMode;
+   int mWriteTestMode;
+   int mReadTestMode;
    int mNumWrites;
 
    // Read sleep times.
    int mSleepAfterNotReadyUs;
    int mSleepAfterOverwriteUs;
 
-   // Coast test variables.
-   int mCoastRandom;
-   int mCoastSleepMs1;
-   int mCoastSleepMs2;
+   // Suspend test variables.
+   int mSuspendRandom;
+   int mSuspendSleepMs1;
+   int mSuspendSleepMs2;
 
    //***************************************************************************
    //***************************************************************************
