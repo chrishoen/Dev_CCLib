@@ -64,6 +64,19 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo2(Ris::CmdLineCmd* aCmd)
 {
+   aCmd->setArgDefault(1, 100);
+   int tLoop = aCmd->argInt(1);
+
+   CC::CounterN tCountN(10);
+   CC::CounterN tCountM(4);
+
+   for (int i = 0; i < tLoop; i++)
+   {
+      Prn::print(0, "N %4d M  %4d",
+         tCountN.mValue, tCountM.mRemainder);
+      tCountN.increment();
+      tCountM.set(tCountN.mQuotient);
+   }
 
 }
 
