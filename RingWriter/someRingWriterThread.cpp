@@ -93,6 +93,10 @@ void RingWriterThread::executeOnTimer(int aTimerCount)
    {
       doTest2();
    }
+   else if (gRingParms.mWriteTestMode == 3)
+   {
+      doTest3();
+   }
 }
 
 //******************************************************************************
@@ -134,6 +138,25 @@ void RingWriterThread::doTest2()
 
       Some::TestRecord tRecord;
       mRingWriter.doWrite((void*)&tRecord);
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Execute periodically. This is called by the base class timer.
+
+void RingWriterThread::doTest3()
+{
+   // Guard.
+   if (!mTPFlag) return;
+
+   // Write some test records to the ring buffer.
+   for (int i = 0; i < gRingParms.mNumWrites; i++)
+   {
+      Some::TestRecord* tPtr = (Some::TestRecord*)mRingWriter.startWrite();
+      tPtr->doSet(101);
+      mRingWriter.finishWrite();
    }
 }
 
