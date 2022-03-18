@@ -10,6 +10,13 @@ include(MySpecial.cmake)
 project ("Dev_CCLib")
 my_special1() 
 
+add_subdirectory ("CCLib")
+add_subdirectory ("Concurrent")
+add_subdirectory ("ShareLib")
+add_subdirectory ("RingWriter")
+add_subdirectory ("RingReader2")
+return()
+
 add_subdirectory ("Counter")
 return()
 
@@ -20,10 +27,6 @@ add_subdirectory ("RingReader2")
 return()
 
 add_subdirectory ("Modulo")
-return()
-
-add_subdirectory ("CCLib")
-add_subdirectory ("Concurrent")
 return()
 
 add_subdirectory ("CCLib")

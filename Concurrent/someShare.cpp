@@ -73,9 +73,6 @@ void Share::initialize()
       }
       break;
    case 4:
-      mRingBuffer.initialize();
-      mRingWriter.initialize(&mRingBuffer, mRingBuffer.mElementArrayMemory);
-      mRingReader.initialize(&mRingBuffer, mRingBuffer.mElementArrayMemory);
       break;
    }
 
@@ -278,25 +275,6 @@ void Share::show4()
    Prn::print(0, "");
    Prn::print(0, "Writer.mMeanTime           %16.5f", mWriterMeanTime);
    Prn::print(0, "Reader.mMeanTime           %16.5f", mReaderMeanTime);
-
-   Prn::print(0, "");
-   Prn::print(0, "mNextWriteIndex            %16lld", gShare.mRingBuffer.mNextWriteIndex.load(std::memory_order_relaxed));
-   Prn::print(0, "Reader.mLastReadIndex      %16lld", gShare.mRingReader.mLastReadIndex);
-
-   Prn::print(0, "");
-   Prn::print(0, "Reader.NotReadyCount1      %16d", gShare.mRingReader.mNotReadyCount1);
-   Prn::print(0, "Reader.NotReadyCount2      %16d", gShare.mRingReader.mNotReadyCount2);
-   Prn::print(0, "Reader.NotReadyCount3      %16d", gShare.mRingReader.mNotReadyCount3);
-   Prn::print(0, "Reader.ErrorCount          %16d", gShare.mRingReader.mErrorCount);
-   Prn::print(0, "Reader.DropCount           %16d", gShare.mRingReader.mDropCount);
-   Prn::print(0, "Reader.mMaxDeltaRead       %16d", gShare.mRingReader.mMaxDeltaRead);
-   Prn::print(0, "Reader.OverwriteCount      %16d", gShare.mRingReader.mOverwriteCount);
-
-   Prn::print(0, "");
-   Prn::print(0, "Writer.mFirstWriteIndex    %16lld", gShare.mRingWriter.mFirstWriteIndex);
-   Prn::print(0, "Reader.mFirstReadIndex     %16lld", gShare.mRingReader.mFirstReadIndex);
-   Prn::print(0, "Reader.TestPassCount       %16d",   gShare.mRingReader.mTestPassCount);
-   Prn::print(0, "Reader.TestFailCount       %16d",   gShare.mRingReader.mTestFailCount);
 }
 
 //******************************************************************************

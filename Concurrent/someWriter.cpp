@@ -353,13 +353,6 @@ void Writer::writeType9(int aNumWrites)
 
 void Writer::writeType10(int aNumWrites)
 {
-   Some::TestRecord tRecord;
-
-   mMarkerWrite.doStart();
-   gShare.mRingWriter.doWrite((void*)&tRecord);
-   mMarkerWrite.doStop();
-
-   mCount++;
 }
 
 //******************************************************************************
