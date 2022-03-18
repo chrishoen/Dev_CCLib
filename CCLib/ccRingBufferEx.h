@@ -1,54 +1,41 @@
 #pragma once
 
 /*==============================================================================
-Test ring buffer.
+Ring buffer extensions.
 =============================================================================*/
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-#include "risSleep.h"
-#include "ccRingBufferEx.h"
-#include "someRingParms.h"
-#include "someTestRecord.h"
+#include "ccRingBuffer.h"
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-namespace Some
+namespace CC
 {
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Test ring buffer.
+// Heap ring buffer. This provides a ring buffer that has memory for an
+// element array on the heap. This class is not shared memory safe.
 
-class TestRingBuffer : public CC::MemoryRingBuffer<TestRecord, 100, 20>
+class HeapRingBuffer : public RingBufferState
 {
 public:
-};
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Test ring buffer writer.
-
-class TestRingWriter : public CC::RingBufferWriter
-{
-private:
-   typedef CC::RingBufferWriter BaseClass;
-public:
+   typedef RingBufferState BaseClass;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Members.
-
-   // Test variables.
-   bool mFirstWriteFlag;
-   long long mFirstWriteIndex;
+    
+   // Memory for the ring buffer element array. This is created on the heap at 
+   // initialization.
+   void* mElementArrayMemory;
 
    //***************************************************************************
    //***************************************************************************
@@ -56,52 +43,42 @@ public:
    // Methods.
 
    // Constructor.
-   TestRingWriter();
-
-   // Test methods.
-   void resetTest() override;
-   void doTest(long long aWriteIndex, void* aElement) override;
+   HeapRingBuffer();
+   ~HeapRingBuffer();
+   void initialize(int aNumElements, size_t aElementSize, int aReadGap);
+   void finalize();
 };
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Test ring buffer writer.
+// Memory ring buffer. This provides a ring buffer that has static memory
+// for an element array. This class is shared memory safe.
 
-class TestRingReader : public CC::RingBufferReader
+template <class Element, int NumElements, int ReadGap>
+class MemoryRingBuffer : public RingBufferState
 {
-private:
-   typedef CC::RingBufferReader BaseClass;
 public:
+   typedef RingBufferState BaseClass;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Members.
 
-   // Test variables.
-   bool mFirstReadFlag;
-   long long mFirstReadIndex;
-   int mTestPassCount;
-   int mTestFailCount;
-   long long mTestFailReadIndex;
-   long long mTestFailCode[7];
-
-   // Test variables.
-   int mSleepAfterNotReadyUs;
-   int mSleepAfterOverwriteUs;
+   // Memory for the ring buffer element array.
+   Element mElementArrayMemory[NumElements];
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Methods.
 
-   // Constructor.
-   TestRingReader();
-
-   // Test methods.
-   void resetTest() override;
-   void doTest(long long aReadIndex, void* aElement) override;
+   // No constructor.
+   void initialize()
+   {
+      BaseClass::initialize(NumElements, sizeof(Element), ReadGap);
+   }
 };
 
 //******************************************************************************
