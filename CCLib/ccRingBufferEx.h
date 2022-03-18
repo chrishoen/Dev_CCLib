@@ -53,7 +53,8 @@ public:
 //******************************************************************************
 //******************************************************************************
 // Memory ring buffer. This provides a ring buffer that has static memory
-// for an element array. This class is shared memory safe.
+// for an element array. This class is shared memory safe as long as
+// the indivual elements are shared memory safe. 
 
 template <class Element, int NumElements, int ReadGap>
 class MemoryRingBuffer : public RingBufferState
