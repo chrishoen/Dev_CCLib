@@ -69,13 +69,21 @@ void RingBufferWriter::resetVars()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Helpers.
+// 
 // Return a pointer to an element, based on an index modulo the number
 // of elements.
-
 void* RingBufferWriter::elementAt(long long aIndex)
 {
    aIndex %= mNumElements;
    return (void*)((char*)mElementArrayMemory + mElementSize * aIndex);
+}
+
+// Return the index of the next element to write to.
+long long RingBufferWriter::getNextWriteIndex()
+{
+   // Return the index of the next element to write to.
+   return mRB->mNextWriteIndex.load(std::memory_order_relaxed);
 }
 
 //******************************************************************************

@@ -8,6 +8,7 @@ Description:
 
 #include "stdafx.h"
 
+#include "someRingParms.h"
 #include "someTestRingBuffer.h"
 
 namespace Some
@@ -38,11 +39,18 @@ void TestRingWriter::resetTest()
 
 void TestRingWriter::doTest(long long aWriteIndex, void* aElement)
 {
+   // Store the first write index.
    if (mFirstWriteFlag)
    {
       mFirstWriteFlag = false;
       mFirstWriteIndex = aWriteIndex;
    }
+
+   // For test3, do not set the record values. It will be set
+   // explicitly by the thread.
+   //if (gRingParms.mWriteTestMode == 3) return;
+
+   // Set the record value.
    TestRecord* tRecord = (TestRecord*)aElement;
    tRecord->doSet(aWriteIndex);
 }
@@ -82,14 +90,15 @@ void TestRingReader::resetTest()
 
 void TestRingReader::doTest(long long aReadIndex, void* aElement)
 {
+   // Store the first read index.
    if (mFirstReadFlag)
    {
       mFirstReadFlag = false;
       mFirstReadIndex = aReadIndex;
    }
 
+   // Test the record against the read index.
    TestRecord* tRecord = (TestRecord*)aElement;
-
    if (tRecord->doTest(aReadIndex))
    {
       mTestPassCount++;
@@ -97,6 +106,7 @@ void TestRingReader::doTest(long long aReadIndex, void* aElement)
    else
    {
       mTestFailCount++;
+      // Store the code that the failure occured at.
       mTestFailReadIndex = aReadIndex;
       for (int i = 0; i < 7; i++)
       {
@@ -104,7 +114,7 @@ void TestRingReader::doTest(long long aReadIndex, void* aElement)
       }
    }
 
-   // Test if we read the same record more than once.
+   // Set a dummy value to see if we read the same record more than once.
    tRecord->doSet(101);
 }
 

@@ -154,8 +154,20 @@ void RingWriterThread::doTest3()
    // Write some test records to the ring buffer.
    for (int i = 0; i < gRingParms.mNumWrites; i++)
    {
+      // Start a write and set the next record to a dummy value.
       Some::TestRecord* tPtr = (Some::TestRecord*)mRingWriter.startWrite();
-      tPtr->doSet(101);
+      tPtr->doSet(102);
+#if 0
+      // Get the write index of the element that lags behind the write index 
+      // by the read gap. This is  the last element that can safely be written to.
+      long long tLaggingWriteIndex = mRingWriter.getNextWriteIndex() - mRingWriter.mReadGap;
+      // Get the corresponding element pointer.
+      Some::TestRecord* tLaggingPtr = (Some::TestRecord*)mRingWriter.elementAt(tLaggingWriteIndex);
+      // Set the value for test3, for which the value is not automatically set 
+      // by the test function.
+      tLaggingPtr->doSet(tLaggingWriteIndex);
+#endif
+      // Finish the write.
       mRingWriter.finishWrite();
    }
 }

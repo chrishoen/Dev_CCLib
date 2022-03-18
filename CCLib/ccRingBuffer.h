@@ -219,9 +219,17 @@ public:
    virtual void resetTest() {}
    void initialize(RingBufferState* aRingBufferState, void* aElementArrayMemory);
 
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods. Helpers.
+
    // Return a pointer to an element, based on an index modulo the number
    // of elements.
    void* elementAt(long long aIndex);
+
+   // Return the index of the next element to write to.
+   long long getNextWriteIndex();
 
    //***************************************************************************
    //***************************************************************************
