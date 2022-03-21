@@ -75,14 +75,14 @@ public:
    // Thread variables.
    int mWriterThreadProcessor;
    int mWriterThreadPriority;
-   int mWriterThreadPeriodUs1;
-   int mWriterThreadPeriodUs2;
+   int mWriterThreadMeanMs;
+   int mWriterThreadRandomUs;
 
    // Thread variables.
    int mReaderThreadProcessor;
    int mReaderThreadPriority;
-   int mReaderThreadPeriodUs1;
-   int mReaderThreadPeriodUs2;
+   int mReaderThreadMeanMs;
+   int mReaderThreadRandomUs;
 
    // Test mode 1,2.
    int mWriteTestMode;
@@ -95,8 +95,8 @@ public:
 
    // Suspend test variables.
    int mSuspendRandom;
-   int mSuspendSleepMs1;
-   int mSuspendSleepMs2;
+   int mSuspendSleepMeanMs;
+   int mSuspendSleepRandomMs;
 
    //***************************************************************************
    //***************************************************************************

@@ -44,7 +44,7 @@ RingReaderThread::RingReaderThread()
    std::random_device tRandomDevice;
    mRandomGenerator.seed(tRandomDevice());
    mRandomDistribution = std::uniform_int_distribution<>(0, gRingParms.mSuspendRandom);
-   mSuspendSleep.initialize(gRingParms.mSuspendSleepMs1, gRingParms.mSuspendSleepMs2);
+   mSuspendSleep.initialize(gRingParms.mSuspendSleepMeanMs, gRingParms.mSuspendSleepRandomMs);
 }
 
 //******************************************************************************

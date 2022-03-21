@@ -37,8 +37,8 @@ RingReaderThread::RingReaderThread()
 
    BaseClass::mPollProcessor = gRingParms.mPollProcessor;
    BaseClass::mStatPeriod = gRingParms.mStatPeriod;
-   BaseClass::mTimerPeriodUs1 = gRingParms.mReaderThreadPeriodUs1;
-   BaseClass::mTimerPeriodUs2 = gRingParms.mReaderThreadPeriodUs2;
+   BaseClass::mIntervalMeanMs = gRingParms.mReaderThreadMeanMs;
+   BaseClass::mIntervalRandomUs = gRingParms.mReaderThreadRandomUs;
    BaseClass::mPollProcessor = true;
 
    // Set member variables.

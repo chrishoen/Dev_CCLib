@@ -44,13 +44,13 @@ void RingParms::reset()
 
    mWriterThreadProcessor = -1;
    mWriterThreadPriority = 80;
-   mWriterThreadPeriodUs1 = 0;
-   mWriterThreadPeriodUs2 = 0;
+   mWriterThreadMeanMs = 0;
+   mWriterThreadRandomUs = 0;
 
    mReaderThreadProcessor = -1;
    mReaderThreadPriority = 80;
-   mReaderThreadPeriodUs1 = 0;
-   mReaderThreadPeriodUs2 = 0;
+   mReaderThreadMeanMs = 0;
+   mReaderThreadRandomUs = 0;
 
    mWriteTestMode = 0;
    mReadTestMode = 0;
@@ -59,9 +59,8 @@ void RingParms::reset()
    mSleepAfterOverwriteUs = 0;
 
    mSuspendRandom = 0;
-   mSuspendSleepMs1 = 0;
-   mSuspendSleepMs2 = 0;
-
+   mSuspendSleepMeanMs = 0;
+   mSuspendSleepRandomMs = 0;
 }
 
 //******************************************************************************
@@ -75,27 +74,29 @@ void RingParms::show()
    printf("RingParms************************************************ %s\n", mTargetSection);
 
    printf("\n");
-   printf("MonitorThreadPeriod      %-10d\n", mMonitorThreadPeriod);
-   printf("StatPeriod               %-10d\n", mStatPeriod);
-   printf("PollProcessor            %-10s\n", my_string_from_bool(mPollProcessor));
+   printf("MonitorThreadPeriod          %-10d\n", mMonitorThreadPeriod);
+   printf("StatPeriod                   %-10d\n", mStatPeriod);
+   printf("PollProcessor                %-10s\n", my_string_from_bool(mPollProcessor));
    printf("\n");
-   printf("WriterThreadProcessor    %-10d\n", mWriterThreadProcessor);
-   printf("WriterThreadPriority     %-10d\n", mWriterThreadPriority);
-   printf("WriterThreadPeriodUs     %-10d  %-10d\n", mWriterThreadPeriodUs1, mWriterThreadPeriodUs2);
+   printf("WriterThreadProcessor        %-10d\n", mWriterThreadProcessor);
+   printf("WriterThreadPriority         %-10d\n", mWriterThreadPriority);
+   printf("WriterThreadMeanMs           %-10d\n", mWriterThreadMeanMs);
+   printf("WriterThreadRandomUs         %-10d\n", mWriterThreadRandomUs);
    printf("\n");
-   printf("ReaderThreadProcessor    %-10d\n", mReaderThreadProcessor);
-   printf("ReaderThreadPriority     %-10d\n", mReaderThreadPriority);
-   printf("ReaderThreadPeriodUs     %-10d  %-10d\n", mReaderThreadPeriodUs1, mReaderThreadPeriodUs2);
+   printf("ReaderThreadProcessor        %-10d\n", mReaderThreadProcessor);
+   printf("ReaderThreadPriority         %-10d\n", mReaderThreadPriority);
+   printf("ReaderThreadMeanMs           %-10d\n", mReaderThreadMeanMs);
+   printf("ReaderThreadRandomUs         %-10d\n", mReaderThreadRandomUs);
    printf("\n");
-   printf("WriteTestMode            %-10d\n", mWriteTestMode);
-   printf("ReadTestMode             %-10d\n", mReadTestMode);
-   printf("NumWrites                %-10d\n", mNumWrites);
-   printf("SleepAfterNotReadyUs     %-10d\n", mSleepAfterNotReadyUs);
-   printf("mSleepAfterOverwriteUs   %-10d\n", mSleepAfterOverwriteUs);
+   printf("WriteTestMode                %-10d\n", mWriteTestMode);
+   printf("ReadTestMode                 %-10d\n", mReadTestMode);
+   printf("NumWrites                    %-10d\n", mNumWrites);
+   printf("SleepAfterNotReadyUs         %-10d\n", mSleepAfterNotReadyUs);
+   printf("mSleepAfterOverwriteUs       %-10d\n", mSleepAfterOverwriteUs);
    printf("\n");
-   printf("SuspendRandom            %-10d\n", mSuspendRandom);
-   printf("SuspendSleepMs1          %-10d\n", mSuspendSleepMs1);
-   printf("SuspendSleepMs2          %-10d\n", mSuspendSleepMs2);
+   printf("SuspendRandom                %-10d\n", mSuspendRandom);
+   printf("SuspendSleepMeanMs           %-10d\n", mSuspendSleepMeanMs);
+   printf("SuspendSleepRandomMs         %-10d\n", mSuspendSleepRandomMs);
    printf("\n");
 }
 
@@ -116,19 +117,13 @@ void RingParms::execute(Ris::CmdLineCmd* aCmd)
 
    if (aCmd->isCmd("WriterThreadProcessor"))   mWriterThreadProcessor = aCmd->argInt(1);
    if (aCmd->isCmd("WriterThreadPriority"))    mWriterThreadPriority = aCmd->argInt(1);
-   if (aCmd->isCmd("WriterThreadPeriodUs"))
-   {
-      mWriterThreadPeriodUs1 = aCmd->argInt(1);
-      mWriterThreadPeriodUs2 = aCmd->argInt(2);
-   }
+   if (aCmd->isCmd("WriterThreadMeanMs"))      mWriterThreadMeanMs = aCmd->argInt(1);
+   if (aCmd->isCmd("WriterThreadRandomUs"))    mWriterThreadRandomUs = aCmd->argInt(1);
 
    if (aCmd->isCmd("ReaderThreadProcessor"))   mReaderThreadProcessor = aCmd->argInt(1);
    if (aCmd->isCmd("ReaderThreadPriority"))    mReaderThreadPriority = aCmd->argInt(1);
-   if (aCmd->isCmd("ReaderThreadPeriodUs"))
-   {
-      mReaderThreadPeriodUs1 = aCmd->argInt(1);
-      mReaderThreadPeriodUs2 = aCmd->argInt(2);
-   }
+   if (aCmd->isCmd("ReaderThreadMeanMs"))      mReaderThreadMeanMs = aCmd->argInt(1);
+   if (aCmd->isCmd("ReaderThreadRandomUs"))    mReaderThreadRandomUs = aCmd->argInt(1);
 
    if (aCmd->isCmd("WriteTestMode"))           mWriteTestMode = aCmd->argInt(1);
    if (aCmd->isCmd("ReadTestMode"))            mReadTestMode = aCmd->argInt(1);
@@ -137,8 +132,8 @@ void RingParms::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("SleepAfterOverwriteUs"))   mSleepAfterOverwriteUs = aCmd->argInt(1);
 
    if (aCmd->isCmd("SuspendRandom"))           mSuspendRandom = aCmd->argInt(1);
-   if (aCmd->isCmd("SuspendSleepMs1"))         mSuspendSleepMs1 = aCmd->argInt(1);
-   if (aCmd->isCmd("SuspendSleepMs2"))         mSuspendSleepMs2 = aCmd->argInt(1);
+   if (aCmd->isCmd("SuspendSleepMeanMs"))      mSuspendSleepMeanMs = aCmd->argInt(1);
+   if (aCmd->isCmd("SuspendSleepRandomMs"))    mSuspendSleepRandomMs = aCmd->argInt(1);
 }
 
 //******************************************************************************

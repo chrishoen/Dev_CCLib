@@ -38,8 +38,8 @@ RingWriterThread::RingWriterThread()
 
    BaseClass::mPollProcessor = gRingParms.mPollProcessor;
    BaseClass::mStatPeriod = gRingParms.mStatPeriod;
-   BaseClass::mTimerPeriodUs1 = gRingParms.mWriterThreadPeriodUs1;
-   BaseClass::mTimerPeriodUs2 = gRingParms.mWriterThreadPeriodUs2;
+   BaseClass::mIntervalMeanMs = gRingParms.mWriterThreadMeanMs;
+   BaseClass::mIntervalRandomUs = gRingParms.mWriterThreadRandomUs;
 
    // Set member variables.
    mTPFlag = true;
@@ -48,7 +48,7 @@ RingWriterThread::RingWriterThread()
    std::random_device tRandomDevice;
    mRandomGenerator.seed(tRandomDevice());
    mRandomDistribution = std::uniform_int_distribution<>(0, gRingParms.mSuspendRandom);
-   mSuspendSleep.initialize(gRingParms.mSuspendSleepMs1, gRingParms.mSuspendSleepMs2);
+   mSuspendSleep.initialize(gRingParms.mSuspendSleepMeanMs, gRingParms.mSuspendSleepRandomMs);
 }
 
 //******************************************************************************
