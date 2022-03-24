@@ -104,6 +104,7 @@ different processes (who therefore have different address spaces):
 2) No pointers.
 3) No dynamic memory, this means no std::vector, ...
 4) No vtables, this means no virtual functions.
+5) Be careful with your loads and stores.
 
 =============================================================================*/
 
