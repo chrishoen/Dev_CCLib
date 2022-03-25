@@ -302,6 +302,10 @@ public:
    // The index of the last successful read.
    long long mLastReadIndex;
 
+   // Saved index of the last successful read. This is used to 
+   // undo a read.
+   long long mSaveLastReadIndex;
+
    // If true then this is the first read.
    bool mFirstFlag;
 
@@ -359,6 +363,10 @@ public:
    // Read an element from the array, copying it to the function argument.
    // Return true if successful.
    bool doRead(void* aElement);
+
+   // Undo the last read operation. This sets the last read index to 
+   // the saved last read index.
+   void doUndoLastRead();
 
    //***************************************************************************
    //***************************************************************************

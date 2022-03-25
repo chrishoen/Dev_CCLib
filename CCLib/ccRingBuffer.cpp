@@ -368,11 +368,26 @@ bool RingBufferReader::doRead(void* aElement)
       mDropCount += tDeltaRead - 1;
    }
 
-   // Store the index for the last successful read.
+   // Save the index for the last successful read. This is used to 
+   // undo this read operation.
+   mSaveLastReadIndex = mLastReadIndex;
+
+   // Store the new index for the last successful read.
    mLastReadIndex = tNextReadIndex;
 
    // Success. 
    return true;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Undo the last read operation. This sets the last read index to 
+// the saved last read index.
+
+void RingBufferReader::doUndoLastRead()
+{
+   mLastReadIndex = mSaveLastReadIndex;
 }
 
 //******************************************************************************
