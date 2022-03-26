@@ -227,6 +227,17 @@ int RingBufferReader::available()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Restart read operations. This sets the first flag true so that
+// the next read will start at the last element that was written.
+
+void RingBufferReader::doRestart()
+{
+   mFirstFlag = true;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Read an element from the array, copying it to the function argument.
 // Return true if successful.
 // 

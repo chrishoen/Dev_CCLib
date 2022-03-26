@@ -360,6 +360,10 @@ public:
    //***************************************************************************
    // Methods.
 
+   // Restart read operations. This sets the first flag true so that
+   // the next read will start at the last element that was written.
+   virtual void doRestart();
+
    // Read an element from the array, copying it to the function argument.
    // Return true if successful.
    bool doRead(void* aElement);
