@@ -83,7 +83,7 @@ void* RingBufferWriter::elementAt(long long aIndex)
 long long RingBufferWriter::getNextWriteIndex()
 {
    // Return the index of the next element to write to.
-   return mRB->mNextWriteIndex.load(std::memory_order_acquire);
+   return mRB->mNextWriteIndex.load(std::memory_order_relaxed);
 }
 
 //******************************************************************************
@@ -96,7 +96,7 @@ long long RingBufferWriter::getNextWriteIndex()
 void RingBufferWriter::doWrite(void* aElement)
 {
    // Get the index of the next element to write to.
-   long long tWriteIndex = mRB->mNextWriteIndex.load(std::memory_order_acquire);
+   long long tWriteIndex = mRB->mNextWriteIndex.load(std::memory_order_relaxed);
 
    // Get the address of the next element to write to.
    void* tPtr = elementAt(tWriteIndex);
@@ -112,7 +112,8 @@ void RingBufferWriter::doWrite(void* aElement)
    }
 
    // Increment the write index to the next element to write to.
-   mRB->mNextWriteIndex.fetch_add(1, std::memory_order_acq_rel);
+   std::atomic_thread_fence(std::memory_order_release);
+   mRB->mNextWriteIndex.fetch_add(1, std::memory_order_relaxed);
 }
 
 //******************************************************************************
@@ -125,7 +126,7 @@ void RingBufferWriter::doWrite(void* aElement)
 void* RingBufferWriter::startWrite()
 {
    // Get the index of the next element to write to.
-   long long tWriteIndex = mRB->mNextWriteIndex.load(std::memory_order_acquire);
+   long long tWriteIndex = mRB->mNextWriteIndex.load(std::memory_order_relaxed);
 
    // Get the address of the next element to write to.
    void* tPtr = elementAt(tWriteIndex);
@@ -141,7 +142,7 @@ void RingBufferWriter::finishWrite()
    if (mTestFlag)
    {
       // Get the index of the next element to write to.
-      long long tWriteIndex = mRB->mNextWriteIndex.load(std::memory_order_acquire);
+      long long tWriteIndex = mRB->mNextWriteIndex.load(std::memory_order_relaxed);
 
       // Get the address of the next element to write to.
       void* tPtr = elementAt(tWriteIndex);
@@ -153,7 +154,8 @@ void RingBufferWriter::finishWrite()
    }
 
    // Increment the write index to the next element to write to.
-   mRB->mNextWriteIndex.fetch_add(1, std::memory_order_acq_rel);
+   std::atomic_thread_fence(std::memory_order_release);
+   mRB->mNextWriteIndex.fetch_add(1, std::memory_order_relaxed);
 }
 
 //******************************************************************************
@@ -221,7 +223,9 @@ void* RingBufferReader::elementAt(long long aIndex)
 int RingBufferReader::available()
 {
    long long tMaxReadIndex = mRB->mNextWriteIndex.load(std::memory_order_acquire) - 1 - mReadGap;
-   return  tMaxReadIndex - mLastReadIndex;
+   int tDiff = tMaxReadIndex - mLastReadIndex;
+   if (tDiff > mNumElements - 1) tDiff = mNumElements - 1;
+   return tDiff;
 }
 
 //******************************************************************************
