@@ -113,7 +113,7 @@ void RingBufferWriter::doWrite(void* aElement)
 
    // Increment the write index to the next element to write to.
    std::atomic_thread_fence(std::memory_order_release);
-   mRB->mNextWriteIndex.fetch_add(1, std::memory_order_relaxed);
+   mRB->mNextWriteIndex.fetch_add(1, std::memory_order_release);
 }
 
 //******************************************************************************
@@ -155,7 +155,7 @@ void RingBufferWriter::finishWrite()
 
    // Increment the write index to the next element to write to.
    std::atomic_thread_fence(std::memory_order_release);
-   mRB->mNextWriteIndex.fetch_add(1, std::memory_order_relaxed);
+   mRB->mNextWriteIndex.fetch_add(1, std::memory_order_release);
 }
 
 //******************************************************************************
