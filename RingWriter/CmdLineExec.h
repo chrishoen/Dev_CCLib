@@ -14,6 +14,7 @@ public:
 
   void reset();
   void execute(Ris::CmdLineCmd* aCmd);
+  void special(int aSpecial);
 
   void executeGo1(Ris::CmdLineCmd* aCmd);
   void executeGo2(Ris::CmdLineCmd* aCmd);

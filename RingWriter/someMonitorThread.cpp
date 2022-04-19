@@ -35,8 +35,18 @@ MonitorThread::MonitorThread()
    BaseClass::mTimerPeriod = gRingParms.mMonitorThreadPeriod;
 
    // Set member variables.
-   mShowCode = 1;
+   mShowCode = 0;
+
+   // Bind member variables.
+   mMon_NextWriteIndex.bind(&SM::gShare->mTestRingBuffer.mNextWriteIndex);
 }
+
+// Update status variables.
+void MonitorThread::update()
+{
+   mMon_NextWriteIndex.update();
+}
+
 
 //******************************************************************************
 //******************************************************************************
@@ -44,13 +54,20 @@ MonitorThread::MonitorThread()
 
 void MonitorThread::executeOnTimer(int aTimeCount)
 {
+   update();
+
    if (mShowCode == 1)
+   {
+      Prn::print(Prn::Show1, "NextWriteIndex           %-10lld  %lld",
+         mMon_NextWriteIndex.mValue, mMon_NextWriteIndex.mDelta);
+   }
+   else if (mShowCode == 2)
    {
       Prn::print(Prn::Show1, "%1d$   %3lld",
          gRingWriterThread->mThreadCurrentProcessor,
          SM::gShare->mTestRingBuffer.mNextWriteIndex.load(std::memory_order_relaxed));
    }
-   else if (mShowCode == 2)
+   else if (mShowCode == 3)
    {
       if (gRingWriterThread->mStatPollFlag)
       {
