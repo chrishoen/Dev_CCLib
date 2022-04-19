@@ -336,6 +336,9 @@ public:
    // If true then the last read operation resulted in an overwrite condition.
    bool mOverwriteFlag;
 
+   // The number of successful reads.
+   int mReadCount;
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************

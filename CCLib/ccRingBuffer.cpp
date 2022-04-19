@@ -200,6 +200,7 @@ void RingBufferReader::resetVars()
    mOverwriteCount = 0;
    mNotReadyFlag = false;
    mOverwriteFlag = false;
+   mReadCount = 0;
    resetTest();
 }
 
@@ -306,6 +307,7 @@ bool RingBufferReader::doRead(void* aElement)
    if (mFirstFlag)
    {
       mFirstFlag = false;
+      mReadCount = 0;
       // Set the read for the maximum available element.
       mLastReadIndex = tMaxReadIndex - 1;
       tNextReadIndex = tMaxReadIndex;
@@ -391,6 +393,7 @@ bool RingBufferReader::doRead(void* aElement)
    mLastReadIndex = tNextReadIndex;
 
    // Success. 
+   mReadCount++;
    return true;
 }
 

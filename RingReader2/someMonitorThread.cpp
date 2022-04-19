@@ -68,6 +68,7 @@ void MonitorThread::executeOnTimer(int aTimeCount)
       Prn::print(Prn::Show1, "LastReadIndex            %-10lld  %lld",
          mMon_LastReadIndex.mValue, mMon_LastReadIndex.mDelta);
 
+      Prn::print(Prn::Show1, "ReadCount                %-10d", tReader->mReadCount);
       Prn::print(Prn::Show1, "available                %-10d", tReader->available());
       Prn::print(Prn::Show1, "NotReadyCount1           %-10d", tReader->mNotReadyCount1);
       Prn::print(Prn::Show1, "NotReadyCount2           %-10d", tReader->mNotReadyCount2);
