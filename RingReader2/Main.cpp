@@ -130,7 +130,8 @@ restart:
    if (Some::gRingReaderThread) Some::gRingReaderThread->showThreadInfo();
    if (Some::gMonitorThread) Some::gMonitorThread->showThreadInfo();
 
-   Ris::RandomSleepMs tSleep(4500, 5500);
+   Ris::RandomSleepMs tSleep;
+   tSleep.initializeMsMs(5000, 500);
    tSleep.doSleep();
 
    if (Some::gRingReaderThread->mRingReader.mTestFailCount > 0) tRestartFlag = false;
