@@ -12,6 +12,7 @@ function(my_special1)
    message(STATUS "CMAKE_CXX_FLAGS          " ${CMAKE_CXX_FLAGS})
    message(STATUS "CMAKE_SYSROOT            " ${CMAKE_SYSROOT})
    message(STATUS "CMAKE_TOOLCHAIN_FILE     " ${CMAKE_TOOLCHAIN_FILE})
+   message(STATUS "MYMODE                 " ${MYMODE})
    message(STATUS "my_special1***********************************************************END")
 
    return()

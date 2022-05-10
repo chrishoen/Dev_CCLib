@@ -16,6 +16,9 @@ add_subdirectory ("RingWriter")
 add_subdirectory ("RingReader2")
 return()
 
+add_subdirectory ("Test")
+return()
+
 add_subdirectory ("Counter")
 return()
 

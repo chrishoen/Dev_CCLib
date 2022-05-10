@@ -17,7 +17,7 @@ set (CMAKE_C_FLAGS
 
 set (CMAKE_CXX_COMPILER "${CROSS_COMPILER_PREFIX}g++" CACHE FILEPATH "")
 set (CMAKE_CXX_FLAGS 
-"-O3 -DNDEBUG -Wall -Wextra -Wno-unused-parameter -Wno-unused-result -Wno-unused-variable -Wno-unused-function -Wno-unused-local-typedefs -Wno-cast-function-type -Wno-reorder -fno-strict-aliasing -pipe -g -feliminate-unused-debug-types -frecord-gcc-switches -fno-omit-frame-pointer -mcpu=cortex-a53+crc+crypto -fstack-protector-strong  -D_FORTIFY_SOURCE=2 --sysroot=${CMAKE_SYSROOT}"
+"-O3 -DNDEBUG -Wall -Wextra -Wno-unused-parameter -Wno-unused-result -Wno-unused-variable -Wno-unused-function -fno-strict-aliasing -pipe -g -feliminate-unused-debug-types -frecord-gcc-switches -fno-omit-frame-pointer -mcpu=cortex-a53+crc+crypto -fstack-protector-strong  -D_FORTIFY_SOURCE=2 --sysroot=${CMAKE_SYSROOT}"
  CACHE STRING "")
 
 
