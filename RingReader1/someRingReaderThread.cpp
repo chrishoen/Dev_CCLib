@@ -56,10 +56,12 @@ void RingReaderThread::threadInitFunction()
 {
    SM::gShare->show(0);
       
-   // Initialize the writer.
+   // Initialize the reader.
    mRingReader.initialize(
       &SM::gShare->mTestRingBuffer,
       &SM::gShare->mTestRingBuffer.mElementArrayMemory);
+
+   //mRingReader.doRestartAtMin();
 }
 
 //******************************************************************************
