@@ -225,9 +225,9 @@ void* RingBufferReader::elementAt(long long aIndex)
 int RingBufferReader::available()
 {
    long long tMaxReadIndex = mRB->mNextWriteIndex.load(std::memory_order_acquire) - 1 - mReadGap;
-   int tDiff = tMaxReadIndex - mLastReadIndex;
+   long long tDiff = tMaxReadIndex - mLastReadIndex;
    if (tDiff > mNumElements - 1) tDiff = mNumElements - 1;
-   return tDiff;
+   return (int)tDiff;
 }
 
 //******************************************************************************
