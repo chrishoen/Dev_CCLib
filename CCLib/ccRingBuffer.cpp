@@ -190,6 +190,7 @@ void RingBufferReader::initialize(RingBufferState* aRingBufferState, void* aElem
 void RingBufferReader::resetVars()
 {
    mFirstFlag = true;
+   mRestartAtMax = true;
    mLastReadIndex = 0;
    mNotReadyCount1 = 0;
    mNotReadyCount2 = 0;
@@ -232,12 +233,23 @@ int RingBufferReader::available()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Restart read operations. This sets the first flag true so that
-// the next read will start at the last element that was written.
+// Restart read operations.
 
-void RingBufferReader::doRestart()
+// Restart read operations. This sets the first flag true so that
+// the next read will start at the last element that was written,
+// which is the max available.
+void RingBufferReader::doRestartAtMax()
 {
    mFirstFlag = true;
+   mRestartAtMax = true;
+}
+
+// Restart read operations. This sets the first flag true so that
+// the next read will start at the minimum available.
+void RingBufferReader::doRestartAtMin()
+{
+   mFirstFlag = true;
+   mRestartAtMax = false;
 }
 
 //******************************************************************************
@@ -309,8 +321,17 @@ bool RingBufferReader::doRead(void* aElement)
       mFirstFlag = false;
       mReadCount = 0;
       // Set the read for the maximum available element.
-      mLastReadIndex = tMaxReadIndex - 1;
-      tNextReadIndex = tMaxReadIndex;
+      if (mRestartAtMax)
+      {
+         mLastReadIndex = tMaxReadIndex - 1;
+         tNextReadIndex = tMaxReadIndex;
+      }
+      // Set the read for the minimum available element.
+      else
+      {
+         mLastReadIndex = tMinReadIndex - 1;
+         tNextReadIndex = tMinReadIndex;
+      }
    }
    else
    {

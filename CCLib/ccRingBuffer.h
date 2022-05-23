@@ -309,6 +309,10 @@ public:
    // If true then this is the first read.
    bool mFirstFlag;
 
+   // If true then restart reads at the max available,
+   // else restart reads at the min available.
+   bool mRestartAtMax;
+
    // If true then call an inheritor supplied test function after a
    // read operation.
    bool mTestFlag;
@@ -364,8 +368,13 @@ public:
    // Methods.
 
    // Restart read operations. This sets the first flag true so that
-   // the next read will start at the last element that was written.
-   virtual void doRestart();
+   // the next read will start at the last element that was written,
+   // which is the max available.
+   virtual void doRestartAtMax();
+
+   // Restart read operations. This sets the first flag true so that
+   // the next read will start at the minimum available.
+   virtual void doRestartAtMin();
 
    // Read an element from the array, copying it to the function argument.
    // Return true if successful.
