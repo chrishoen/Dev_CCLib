@@ -53,6 +53,7 @@ public:
    // Methods.
 
    // Execute specific commands.
+   void executeShow(Ris::CmdLineCmd* aCmd);
    void executePut(Ris::CmdLineCmd* aCmd);
    void executeGet(Ris::CmdLineCmd* aCmd);
 

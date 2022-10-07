@@ -13,9 +13,11 @@ CC::RingBufferReader mRingReader;
 
 CmdLineExec::CmdLineExec()
 {
-   mRingBuffer.initialize(10, 2, 0);
+   mRingBuffer.initialize(4, 2, 0);
    mRingWriter.initialize(&mRingBuffer, &mRingBuffer.mElementArrayMemory);
    mRingReader.initialize(&mRingBuffer, &mRingBuffer.mElementArrayMemory);
+   short tDummy = 0;
+   mRingWriter.doWrite(&tDummy);
 }
 
 void CmdLineExec::reset()
@@ -37,6 +39,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("RESET"))   reset();
    if (aCmd->isCmd("PUT"))    executePut(aCmd);
    if (aCmd->isCmd("GET"))    executeGet(aCmd);
+   if (aCmd->isCmd("SHOW"))   executeShow(aCmd);
    if (aCmd->isCmd("GO1"))    executeGo1(aCmd);
    if (aCmd->isCmd("GO2"))    executeGo2(aCmd);
    if (aCmd->isCmd("GO3"))    executeGo3(aCmd);
@@ -51,7 +54,6 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executePut(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0, "PUT");
    aCmd->setArgDefault(1, 0);
    short tValue = (short)aCmd->argInt(1);
    mRingWriter.doWrite(&tValue);
@@ -72,6 +74,15 @@ void CmdLineExec::executeGet(Ris::CmdLineCmd* aCmd)
    {
       Prn::print(0, "GET EMPTY");
    }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeShow(Ris::CmdLineCmd* aCmd)
+{
+   Prn::print(0, "AVAILABLE %d", mRingReader.available());
 }
 
 //******************************************************************************
