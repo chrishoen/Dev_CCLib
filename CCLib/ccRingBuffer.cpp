@@ -119,6 +119,22 @@ void RingBufferWriter::doWrite(void* aElement)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Write an array of elements to the array at the write index. Increment
+// the write index accordingly.
+
+void RingBufferWriter::doWriteArray(void* aElement, int aNumElements)
+{
+   char* tPtr = (char*)aElement;
+   for (int i = 0; i < aNumElements; i++)
+   {
+      doWrite((void*)tPtr);
+      tPtr += mRB->mElementSize;
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Return a pointer to the next element to write to, which is the element
 // at the write index. Do not increment the  write index state. The caller
 // can then execute its own write operation.
@@ -427,6 +443,24 @@ bool RingBufferReader::doRead(void* aElement)
 void RingBufferReader::doUndoLastRead()
 {
    mLastReadIndex = mSaveLastReadIndex;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Read an element from the array, copying it to the function argument.
+// Return true if successful.
+
+bool RingBufferReader::doReadArray(void* aElement, int aNumElements)
+{
+   char* tPtr = (char*)aElement;
+   for (int i = 0; i < aNumElements; i++)
+   {
+      bool tPass = doRead((void*)tPtr);
+      tPtr += mRB->mElementSize;
+      if (!tPass) return false;
+   }
+   return true;
 }
 
 //******************************************************************************

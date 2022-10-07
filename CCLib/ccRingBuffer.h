@@ -242,6 +242,10 @@ public:
    // that it contains the index of the next element to write to.
    void doWrite(void* aElement);
 
+   // Write an array of elements to the array at the write index. Increment
+   // the write index accordingly.
+   void doWriteArray(void* aElement, int aNumElements);
+
    // Return a pointer to the next element to write to, which is the element
    // at the write index. Do not increment the  write index state. The caller
    // can then execute its own write operation.
@@ -379,6 +383,10 @@ public:
    // Read an element from the array, copying it to the function argument.
    // Return true if successful.
    bool doRead(void* aElement);
+
+   // Read an element from the array, copying it to the function argument.
+   // Return true if successful.
+   bool doReadArray(void* aElement, int aNumElements);
 
    // Undo the last read operation. This sets the last read index to 
    // the saved last read index.
