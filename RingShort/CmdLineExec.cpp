@@ -24,6 +24,9 @@ void CmdLineExec::reset()
    mRingBuffer.initialize();
    mRingWriter.initialize(&mRingBuffer, &mRingBuffer.mElementArrayMemory);
    mRingReader.initialize(&mRingBuffer, &mRingBuffer.mElementArrayMemory);
+   short tDummy = -99;
+   mRingWriter.doWrite(&tDummy);
+   mRingReader.doRead(&tDummy);
 
    for (int i = 0; i < 1000; i++)
    {
@@ -124,10 +127,9 @@ void CmdLineExec::executeGetArray(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeShow(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0, "AVAILABLE %d %lld %lld",
-      mRingReader.available(),
-      mRingBuffer.mNextWriteIndex.load(std::memory_order_acquire),
-      mRingReader.mLastReadIndex);
+   Prn::print(0, "AVAILABLE       %d", mRingReader.available());
+   Prn::print(0, "mNextWriteIndex %lld", mRingBuffer.mNextWriteIndex.load(std::memory_order_acquire));
+   Prn::print(0, "mLastReadIndex  %lld", mRingReader.mLastReadIndex);
 }
 
 //******************************************************************************
