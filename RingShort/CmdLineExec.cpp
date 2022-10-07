@@ -7,21 +7,20 @@
 //******************************************************************************
 //******************************************************************************
 
-CC::HeapRingBuffer mRingBuffer;
+CC::MemoryRingBuffer<short, 5, 0> mRingBuffer;
 CC::RingBufferWriter mRingWriter;
 CC::RingBufferReader mRingReader;
 
 CmdLineExec::CmdLineExec()
 {
-   mRingBuffer.initialize(4, 2, 0);
-   mRingWriter.initialize(&mRingBuffer, &mRingBuffer.mElementArrayMemory);
-   mRingReader.initialize(&mRingBuffer, &mRingBuffer.mElementArrayMemory);
-   short tDummy = 0;
-   mRingWriter.doWrite(&tDummy);
 }
 
 void CmdLineExec::reset()
 {
+   Prn::print(0, "RESET");
+   mRingBuffer.initialize();
+   mRingWriter.initialize(&mRingBuffer, &mRingBuffer.mElementArrayMemory);
+   mRingReader.initialize(&mRingBuffer, &mRingBuffer.mElementArrayMemory);
 }
 
 //******************************************************************************
