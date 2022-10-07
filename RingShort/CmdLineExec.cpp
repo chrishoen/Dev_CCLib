@@ -1,21 +1,21 @@
 #include "stdafx.h"
 
-#include <stdlib.h>
-#include <stddef.h>
-#include <stdio.h>
-#include <limits.h>
-
-#include "risProgramTime.h"
-#include "risBitUtils.h"
-#include "my_functions.h"
+#include "ccRingBufferEx.h"
 #include "CmdLineExec.h"
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
+CC::HeapRingBuffer mRingBuffer;
+CC::RingBufferWriter mRingWriter;
+CC::RingBufferReader mRingReader;
+
 CmdLineExec::CmdLineExec()
 {
+   mRingBuffer.initialize(10, 2, 0);
+   mRingWriter.initialize(&mRingBuffer, &mRingBuffer.mElementArrayMemory);
+   mRingReader.initialize(&mRingBuffer, &mRingBuffer.mElementArrayMemory);
 }
 
 void CmdLineExec::reset()
@@ -35,6 +35,8 @@ void CmdLineExec::reset()
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
    if(aCmd->isCmd("RESET"))   reset();
+   if (aCmd->isCmd("PUT"))    executePut(aCmd);
+   if (aCmd->isCmd("GET"))    executeGet(aCmd);
    if (aCmd->isCmd("GO1"))    executeGo1(aCmd);
    if (aCmd->isCmd("GO2"))    executeGo2(aCmd);
    if (aCmd->isCmd("GO3"))    executeGo3(aCmd);
@@ -47,30 +49,38 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-typedef union PackedS
+void CmdLineExec::executePut(Ris::CmdLineCmd* aCmd)
 {
-   unsigned char mUint8;
-   unsigned short mUint16;
-   unsigned int mUint32;
-   int mInt32;
-} PackedT;
+   Prn::print(0, "PUT");
+   aCmd->setArgDefault(1, 0);
+   short tValue = (short)aCmd->argInt(1);
+   mRingWriter.doWrite(&tValue);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeGet(Ris::CmdLineCmd* aCmd)
+{
+   short tValue = 0;
+   if (mRingReader.doRead(&tValue))
+   {
+      Prn::print(0, "GET %d", tValue);
+   }
+   else
+   {
+      Prn::print(0, "GET EMPTY");
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
 void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
 {
-   PackedT tP; tP.mInt32 = 0;
-   tP.mUint8 = 0xff;
-   Prn::print(0, "mUint8     %x", tP.mInt32);
-
-   tP.mUint8 += 1;
-   Prn::print(0, "mUint8     %x", tP.mInt32);
-
-   tP.mUint8 += 1;
-   Prn::print(0, "mUint8     %x", tP.mInt32);
-
-   tP.mUint8 = 0;
-   tP.mUint8 -= 1;
-
-   Prn::print(0, "mUint8     %x", tP.mInt32);
+   Prn::print(0, "GO1");
 }
 
 //******************************************************************************
@@ -104,10 +114,6 @@ void CmdLineExec::executeGo4(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 {
-   printf("printf\n");
-   Prn::print(0, "Prn::print 0");
-   Prn::print(Prn::Show1, "Prn::print Prn::Show1");
-   Prn::print(Prn::Show2, "Prn::print Prn::Show");
 }
 
 //******************************************************************************
@@ -116,12 +122,5 @@ void CmdLineExec::executeGo5(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo6(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0, "Ris::portableGetBinDir() %s", Ris::portableGetBinDir());
-   Prn::print(0, "Ris::portableGetBinDir() %s", Ris::portableGetBinDir());
-   double tTime = Ris::getProgramTime();
-   unsigned int tTimeMS = Ris::getCpuTimeUIntMS();
-
-   Prn::print(0, "Ris::getProgramTime           %10.6f", tTime);
-   Prn::print(0, "Ris::getCpuTimeUIntMs         %10d", tTimeMS);
 }
 
