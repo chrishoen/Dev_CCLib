@@ -111,14 +111,8 @@ void CmdLineExec::executeGetArray(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1, 1);
    int tNumElements = aCmd->argInt(1);
-   if (mRingReader.doReadArray(&mReadArray, tNumElements))
-   {
-      Prn::print(0, "GET PASS");
-   }
-   else
-   {
-      Prn::print(0, "GET EMPTY");
-   }
+   int tCount = mRingReader.doReadArray(&mReadArray, tNumElements);
+   Prn::print(0, "GET ARRAY %d", tCount);
 }
 
 //******************************************************************************
