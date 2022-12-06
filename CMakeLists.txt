@@ -11,6 +11,10 @@ project ("Dev_CCLib")
 my_special1() 
 
 add_subdirectory ("CCLib")
+add_subdirectory ("Fifo")
+return()
+
+add_subdirectory ("CCLib")
 add_subdirectory ("RingShort")
 return()
 
