@@ -1,14 +1,17 @@
 ﻿cmake_minimum_required (VERSION 3.8)
 
-set (CMAKE_USER_MAKE_RULES_OVERRIDE "${CMAKE_CURRENT_LIST_DIR}/MyOverrides.cmake")
-include(MyCodeMacros.cmake)
-include(MyGlobalImports.cmake)
-include(MyLocalImports.cmake)
-include(MyPrecompiledHeader.cmake)
-include(MySpecial.cmake)
+set(CMAKE_EXPORT_COMPILE_COMMANDS true)
+set(MY_MACRO_DIR "${CMAKE_CURRENT_SOURCE_DIR}/zzzMacros")
+set(CMAKE_USER_MAKE_RULES_OVERRIDE "${MY_MACRO_DIR}/MyOverrides.cmake")
+include("${MY_MACRO_DIR}/MyCodeMacros.cmake")
+include("${MY_MACRO_DIR}/MyGlobalImports.cmake")
+include("${MY_MACRO_DIR}/MyLocalImports.cmake")
+include("${MY_MACRO_DIR}/MyPrecompiledHeader.cmake")
+include("${MY_MACRO_DIR}/MySpecial.cmake")
 
 project ("Dev_CCLib")
-my_special1() 
+my_print_cmake_vars()
+
 
 add_subdirectory ("CCLib")
 add_subdirectory ("Fifo")
