@@ -9,6 +9,7 @@ Program command line executive.
 //******************************************************************************
 
 #include "risCmdLineExec.h"
+#include "ccFifo.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -28,6 +29,8 @@ public:
    //***************************************************************************
    //***************************************************************************
    // Members.
+
+   CC::Fifo<int, 4> mFifo;
 
    //***************************************************************************
    //***************************************************************************
@@ -55,11 +58,7 @@ public:
    // Execute specific commands.
    void executePut(Ris::CmdLineCmd* aCmd);
    void executeGet(Ris::CmdLineCmd* aCmd);
-   void executePutArray(Ris::CmdLineCmd* aCmd);
-   void executeGetArray(Ris::CmdLineCmd* aCmd);
    void executeShow(Ris::CmdLineCmd* aCmd);
-   void executeShow2(Ris::CmdLineCmd* aCmd);
-   void executeShowArray(Ris::CmdLineCmd* aCmd);
 
    void executeGo1(Ris::CmdLineCmd* aCmd);
    void executeGo2(Ris::CmdLineCmd* aCmd);

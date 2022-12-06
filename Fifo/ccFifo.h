@@ -68,7 +68,7 @@ public:
    //***************************************************************************
    // This writes an element to the queue.
 
-   bool doWrite (Element& aElement)
+   bool doPut (Element& aElement)
    {
       // Copy the source element into the element at the queue put index.
       mElement[mPutIndex] = aElement;
@@ -86,13 +86,13 @@ public:
    //***************************************************************************
    // This reads an element from the tail.
    
-   Element& doRead()
+   Element& doGet()
    {
       // Calculate the get index.
-      int tGetIndex = (mPutIndex + Size - 1) % Size;
+      int tGetIndex = (mPutIndex + Size) % Size;
 
       // Return the element at the get index.
-      return = mElement[tGetIndex];
+      return mElement[tGetIndex];
    }
 
    //***************************************************************************
@@ -106,7 +106,7 @@ public:
       int tGetIndex = (mPutIndex + aGetIndex) % Size;
 
       // Return the element at the get index.
-      return = mElement[tGetIndex];
+      return mElement[tGetIndex];
    }
 };
 
