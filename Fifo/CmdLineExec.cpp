@@ -35,6 +35,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("RESET"))   reset();
    if (aCmd->isCmd("PUT"))    executePut(aCmd);
    if (aCmd->isCmd("GET"))    executeGet(aCmd);
+   if (aCmd->isCmd("AT"))     executeAt(aCmd);
    if (aCmd->isCmd("SHOW"))   executeShow(aCmd);
 
    if (aCmd->isCmd("GO1"))    executeGo1(aCmd);
@@ -66,6 +67,19 @@ void CmdLineExec::executeGet(Ris::CmdLineCmd* aCmd)
 {
    int tValue = mFifo.doGet();
    Prn::print(0, "GET %d", tValue);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeAt(Ris::CmdLineCmd* aCmd)
+{
+   aCmd->setArgDefault(1, 0);
+   int tIndex = aCmd->argInt(1);
+
+   int tValue = mFifo.elementAt(tIndex);
+   Prn::print(0, "AT  %d", tValue);
 }
 
 //******************************************************************************
