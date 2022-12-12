@@ -36,6 +36,8 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("PUT"))    executePut(aCmd);
    if (aCmd->isCmd("GET"))    executeGet(aCmd);
    if (aCmd->isCmd("AT"))     executeAt(aCmd);
+   if (aCmd->isCmd("MARK1"))  executeMark1(aCmd);
+   if (aCmd->isCmd("MARK2"))  executeMark2(aCmd);
    if (aCmd->isCmd("SHOW"))   executeShow(aCmd);
 
    if (aCmd->isCmd("GO1"))    executeGo1(aCmd);
@@ -86,10 +88,42 @@ void CmdLineExec::executeAt(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
+void CmdLineExec::executeMark1(Ris::CmdLineCmd* aCmd)
+{
+   for (int i = 0; i < 4; i++)
+   {
+      mNDelay.elementAt(i) *= -1;
+   }
+}
+
+void CmdLineExec::executeMark2(Ris::CmdLineCmd* aCmd)
+{
+   for (int i = 0; i < 4; i++)
+   {
+      mNDelay.elementAt(i) += 1000 + 100 * i;
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void CmdLineExec::executeShow(Ris::CmdLineCmd* aCmd)
 {
    Prn::print(0, "FullFlag    %s", my_string_from_bool(mNDelay.mFullFlag));
    Prn::print(0, "PutIndex    %d", mNDelay.mPutIndex);
+
+   Prn::print(0, "");
+   for (int i = 0; i < 4; i++)
+   {
+      Prn::print(0, "elementAt    %d %d", i, mNDelay.elementAt(i));
+   }
+
+   Prn::print(0, "");
+   for (int i = 4; i --> 0;)
+   {
+      Prn::print(0, "history      %d %d", i, mNDelay.elementAt(i));
+   }
 }
 
 //******************************************************************************

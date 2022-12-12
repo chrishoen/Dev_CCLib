@@ -2,7 +2,7 @@
 
 /*==============================================================================
 
-NDelay memory class template. 
+Fixed delay memory class template. 
 
 It is not thread safe.
 It is not shared memory safe.
@@ -22,8 +22,10 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// This template implements a memory structure that provides a fixed
+// delay. It can be used for digital filters.
 
-template <class Element,int Size>
+template <class T,int N>
 class NDelay
 {
 public:
@@ -33,17 +35,15 @@ public:
    //***************************************************************************
    // Members.
 
-   // Element index of the next element to put to.
+   // Index of the next element to put to. This increments indefinitely 
+   // with every put operation. 
    int mPutIndex;
-
-   // Number of put operations that have been executed.
-   int mPutCount;
 
    // If true then the queue is full and get operations can commence.
    bool mFullFlag;
 
    // Array of elements.
-   Element mElement[Size];
+   T mElement[N];
 
    //***************************************************************************
    //***************************************************************************
@@ -59,54 +59,55 @@ public:
    void reset()
    {
       mPutIndex = 0;
-      mPutCount = 0;
       mFullFlag = false;
    }
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // This writes an element to the queue.
+   // This writes an element to the head of the queue.
 
-   bool doPut (Element& aElement)
+   bool doPut (T& aValue)
    {
-      // Copy the source element into the element at the queue put index.
-      mElement[mPutIndex] = aElement;
+      // Copy the value into the element at the queue put index.
+      mElement[mPutIndex % N] = aValue;
 
       // Advance the put index.
-      ++mPutIndex %= Size;
+      ++mPutIndex;
 
-      // Advance the put count and set the valid flag.
-      mFullFlag = ++mPutCount >= Size;
-      return mFullFlag;
+      // Set the full flag.
+      return mFullFlag = mPutIndex >= N;
    }
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // This reads an element from the tail.
+   // This reads an element from the tail. This is only valid if 
+   // the queue is full. The tail is always a fixed length from the
+   // put index.
    
-   Element& doGet()
+   T& doGet()
    {
       // Calculate the get index.
-      int tGetIndex = (mPutIndex + Size) % Size;
+      int tGetIndex = mPutIndex + N;
 
       // Return the element at the get index.
-      return mElement[tGetIndex];
+      return mElement[tGetIndex % N];
    }
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // This reads an element from the tail.
+   // This returns a pointer to an element that is relative
+   // to the first gettable element.
 
-   Element& elementAt(int aGetIndex)
+   T& elementAt(int aIndex)
    {
       // Calculate the get index.
-      int tGetIndex = (mPutIndex + aGetIndex) % Size;
+      int tGetIndex = (mPutIndex - 1 - aIndex);
 
       // Return the element at the get index.
-      return mElement[tGetIndex];
+      return mElement[tGetIndex % N];
    }
 };
 
@@ -117,9 +118,9 @@ public:
 
 #if 0
 
-Z^-3   Z^-2  Z^-1  1
-k-3    k-2   k-1   k
+    Z^-3   Z^-2  Z^-1  1
+    k-3    k-2   k-1   k
 
-0      1     2     3
+k   0      1     2     3
 
 #endif
