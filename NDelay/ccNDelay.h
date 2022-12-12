@@ -22,8 +22,8 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This template implements a memory structure that provides a fixed
-// delay. It can be used for digital filters.
+// This template implements an N element memory structure of type T that
+// provides a fixed delay. It can be used for digital filters.
 
 template <class T,int N>
 class NDelay
@@ -122,5 +122,24 @@ public:
     k-3    k-2   k-1   k
 
 k   0      1     2     3
+
+
+NDelay<int, 4>
+
+PutIndex
+0
+1
+2   put 101  
+3   put 102
+4   put 103
+5   put 104     
+6   put 105   get = 102
+7             get = 103
+8             get = 104
+9             get = 105
+7
+8
+
+
 
 #endif
