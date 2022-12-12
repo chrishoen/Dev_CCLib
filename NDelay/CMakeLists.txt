@@ -1,6 +1,6 @@
 ﻿cmake_minimum_required(VERSION 3.10)
 
-set (project "Fifo")
+set (project "NDelay")
 project(${project} CXX)
 my_find_src_files (src_files ${project})
 add_executable (${project} ${src_files})

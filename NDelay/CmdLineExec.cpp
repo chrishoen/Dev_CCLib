@@ -13,10 +13,10 @@ CmdLineExec::CmdLineExec()
 void CmdLineExec::reset()
 {
    Prn::print(0, "RESET");
-   mFifo.reset();
+   mNDelay.reset();
    for (int i = 0; i < 4; i++)
    {
-      mFifo.doPut(i);
+      mNDelay.doPut(i);
    }
 }
 
@@ -55,8 +55,8 @@ void CmdLineExec::executePut(Ris::CmdLineCmd* aCmd)
    aCmd->setArgDefault(1, 0);
    int tValue = aCmd->argInt(1);
 
-   mFifo.doPut(tValue);
-   Prn::print(0, "PUT %s", my_string_from_bool(mFifo.mFullFlag));
+   mNDelay.doPut(tValue);
+   Prn::print(0, "PUT %s", my_string_from_bool(mNDelay.mFullFlag));
 }
 
 //******************************************************************************
@@ -65,7 +65,7 @@ void CmdLineExec::executePut(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGet(Ris::CmdLineCmd* aCmd)
 {
-   int tValue = mFifo.doGet();
+   int tValue = mNDelay.doGet();
    Prn::print(0, "GET %d", tValue);
 }
 
@@ -78,7 +78,7 @@ void CmdLineExec::executeAt(Ris::CmdLineCmd* aCmd)
    aCmd->setArgDefault(1, 0);
    int tIndex = aCmd->argInt(1);
 
-   int tValue = mFifo.elementAt(tIndex);
+   int tValue = mNDelay.elementAt(tIndex);
    Prn::print(0, "AT  %d", tValue);
 }
 
@@ -88,8 +88,8 @@ void CmdLineExec::executeAt(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeShow(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0, "FullFlag    %s", my_string_from_bool(mFifo.mFullFlag));
-   Prn::print(0, "PutIndex    %d", mFifo.mPutIndex);
+   Prn::print(0, "FullFlag    %s", my_string_from_bool(mNDelay.mFullFlag));
+   Prn::print(0, "PutIndex    %d", mNDelay.mPutIndex);
 }
 
 //******************************************************************************

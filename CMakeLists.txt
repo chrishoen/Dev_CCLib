@@ -14,7 +14,7 @@ my_print_cmake_vars()
 
 
 add_subdirectory ("CCLib")
-add_subdirectory ("Fifo")
+add_subdirectory ("NDelay")
 return()
 
 add_subdirectory ("CCLib")

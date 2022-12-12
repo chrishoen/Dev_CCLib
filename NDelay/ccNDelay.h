@@ -2,7 +2,7 @@
 
 /*==============================================================================
 
-Fifo memory class template. 
+NDelay memory class template. 
 
 It is not thread safe.
 It is not shared memory safe.
@@ -24,7 +24,7 @@ namespace CC
 //******************************************************************************
 
 template <class Element,int Size>
-class Fifo
+class NDelay
 {
 public:
 
@@ -51,7 +51,7 @@ public:
    // Methods.
 
    // Constructor.
-   Fifo()
+   NDelay()
    {
       reset();
    }
