@@ -13,10 +13,10 @@ CmdLineExec::CmdLineExec()
 void CmdLineExec::reset()
 {
    Prn::print(0, "RESET");
-   mNDelay.reset();
+   mRingBuffer.initialize();
    for (int i = 0; i < 4; i++)
    {
-      mNDelay.doPut(i);
+      mRingBuffer.doWrite(i);
    }
 }
 
