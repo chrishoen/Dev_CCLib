@@ -117,8 +117,8 @@ public:
    //***************************************************************************
    // Methods. Helpers.
 
-   // Return a reference to an element, based on an index modulo the number
-   // of elements.
+   // Return a reference to an array element at an index modulo the
+   // number of elements.
    T& elementAt(long long aIndex);
 
    //***************************************************************************
@@ -178,11 +178,11 @@ void SRWObjectRingBuffer<T, N>::finalize()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Return a reference to an element, based on an index modulo the number
-// of elements.
+// Return a reference to an array element at an index modulo the
+// number of elements.
 
 template <class T, int N>
-T& SRWObjectRingBuffer<T, N>::elementAt(long long aIndex)
+inline T& SRWObjectRingBuffer<T, N>::elementAt(long long aIndex)
 {
    aIndex %= N;
    return mElements[aIndex];
