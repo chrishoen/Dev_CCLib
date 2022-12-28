@@ -14,7 +14,7 @@ my_print_cmake_vars()
 
 
 add_subdirectory ("CCLib")
-add_subdirectory ("NDelay")
+add_subdirectory ("SRWRingBuffer")
 return()
 
 add_subdirectory ("CCLib")
