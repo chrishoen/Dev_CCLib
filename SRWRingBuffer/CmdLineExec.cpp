@@ -16,7 +16,7 @@ void CmdLineExec::reset()
    mRingBuffer.initialize();
    for (int i = 0; i < 4; i++)
    {
-      mRingBuffer.doWrite(i);
+      mRingBuffer.doWrite(&i);
    }
 }
 
@@ -57,8 +57,8 @@ void CmdLineExec::executePut(Ris::CmdLineCmd* aCmd)
    aCmd->setArgDefault(1, 0);
    int tValue = aCmd->argInt(1);
 
-   mNDelay.doPut(tValue);
-   Prn::print(0, "PUT %s", my_string_from_bool(mNDelay.mFullFlag));
+   mRingBuffer.doWrite(&tValue);
+   Prn::print(0, "PUT %s", my_string_from_bool(mRingBuffer.mFullFlag));
 }
 
 //******************************************************************************
@@ -67,8 +67,16 @@ void CmdLineExec::executePut(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGet(Ris::CmdLineCmd* aCmd)
 {
-   int tValue = mNDelay.doGet();
-   Prn::print(0, "GET %d", tValue);
+   int tValue = 0;
+   
+   if (mRingBuffer.tryRead(&tValue))
+   {
+      Prn::print(0, "READ %d", tValue);
+   }
+   else
+   {
+      Prn::print(0, "READ FAIL");
+   }
 }
 
 //******************************************************************************
@@ -80,8 +88,8 @@ void CmdLineExec::executeAt(Ris::CmdLineCmd* aCmd)
    aCmd->setArgDefault(1, 0);
    int tIndex = aCmd->argInt(1);
 
-   int tValue = mNDelay.elementAt(tIndex);
-   Prn::print(0, "AT  %d", tValue);
+   int* tPtr = mRingBuffer.atOffset(tIndex);
+   Prn::print(0, "AT  %d", *tPtr);
 }
 
 //******************************************************************************
@@ -92,7 +100,8 @@ void CmdLineExec::executeMark1(Ris::CmdLineCmd* aCmd)
 {
    for (int i = 0; i < 4; i++)
    {
-      mNDelay.elementAt(i) *= -1;
+      int* tPtr = mRingBuffer.atOffset(i);
+      *tPtr *= -1;
    }
 }
 
@@ -100,7 +109,8 @@ void CmdLineExec::executeMark2(Ris::CmdLineCmd* aCmd)
 {
    for (int i = 0; i < 4; i++)
    {
-      mNDelay.elementAt(i) += 1000 + 100 * i;
+      int* tPtr = mRingBuffer.atOffset(i);
+      *tPtr += 1000 + 100 * i;
    }
 }
 
@@ -110,19 +120,20 @@ void CmdLineExec::executeMark2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeShow(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0, "FullFlag    %s", my_string_from_bool(mNDelay.mFullFlag));
-   Prn::print(0, "PutIndex    %d", mNDelay.mPutIndex);
+   Prn::print(0, "FullFlag    %s", my_string_from_bool(mRingBuffer.mFullFlag));
+   Prn::print(0, "WriteIndex  %d", mRingBuffer.mNextWriteIndex);
 
    Prn::print(0, "");
    for (int i = 0; i < 4; i++)
    {
-      Prn::print(0, "elementAt    %d %d", i, mNDelay.elementAt(i));
+      Prn::print(0, "atOffset     %d %d", i, *mRingBuffer.atOffset(i));
    }
 
+   return;
    Prn::print(0, "");
    for (int i = 4; i --> 0;)
    {
-      Prn::print(0, "history      %d %d", i, mNDelay.elementAt(i));
+      Prn::print(0, "history      %d %d", i, mRingBuffer.elementAt(i));
    }
 }
 

@@ -101,6 +101,18 @@ public:
    // zero then no writes have occured and the ring buffer is empty.
    long long mNextWriteIndex;
 
+   // The index of the next element to read from.
+   long long mNextReadIndex;
+
+   // Min and max possible read indices. These provided a lower and
+   // upper bound on possible reads. These are updated by the write
+   // operation.
+   long long mMinReadIndex;
+   long long mMaxReadIndex;
+
+   // If true then the at least N writes have been executed.
+   bool mFullFlag;
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -124,12 +136,41 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Methods.
+   // Methods. Write.
 
    // Write an element to the array at the write index. Increment the
    // write index state variable so that it contains the index of the
    // next element to write to.
-   void doWrite(T& aElement);
+   void doWrite(T* aElement);
+
+   // Return a pointer to an element at an offset relative to the 
+   // next write index - 1. An offset of zero corresponds to the
+   // last element that was written and so, corresponds to the
+   // max read index. This can be used for implementing digital
+   // filters where, after a write, offset = 0..N-1 corresponds
+   // to K, K-1, .. K-(N-1).
+   T* atOffset(int aOffset);
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods. Read.
+
+   // Return the number of elements that are available to be read.
+   int numReadAvailable();
+
+   // Restart read operations. This sets the first flag true so that
+   // the next read will start at the last element that was written,
+   // which is the max available.
+   void doStartReadAtMax();
+
+   // Restart read operations. This sets the first flag true so that
+   // the next read will start at the minimum available.
+   void doStartReadAtMin();
+
+   // Read an element from the array, copying it to the function argument.
+   // Return true if successful.
+   bool tryRead(T* aElement);
 };
 
 //******************************************************************************
@@ -161,8 +202,12 @@ template <class T, int N>
 void SRWObjectRingBuffer<T, N>::initialize()
 {
    finalize();
-   mNextWriteIndex = 0;
    mElements = new T[N];
+   mNextWriteIndex = 0;
+   mNextReadIndex = 0;
+   mMinReadIndex = 0;
+   mMaxReadIndex = 0;
+   mFullFlag = false;
 }
 
 template <class T, int N>
@@ -175,6 +220,9 @@ void SRWObjectRingBuffer<T, N>::finalize()
    }
 }
 
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -196,9 +244,108 @@ inline T& SRWObjectRingBuffer<T, N>::elementAt(long long aIndex)
 // next element to write to.
 
 template <class T, int N>
-void SRWObjectRingBuffer<T, N>::doWrite(T& aElement)
+void SRWObjectRingBuffer<T, N>::doWrite(T* aElement)
 {
-   elementAt(mNextWriteIndex++) = aElement;
+   // Copy the input element to the array.
+   elementAt(mNextWriteIndex) = *aElement;
+
+   // Update the state variables.
+   mNextWriteIndex++;
+   mMinReadIndex = mNextWriteIndex - (N - 1);
+   mMaxReadIndex = mNextWriteIndex - 1;
+   if(mMinReadIndex < 0) mMinReadIndex = 0;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Return a pointer to an element at an offset relative to the 
+// next write index - 1. An offset of zero corresponds to the
+// last element that was written and so, corresponds to the
+// max read index. This can be used for implementing digital
+// filters where, after a write, offset = 0..N-1 corresponds
+// to K, K-1, .. K-(N-1).
+
+template <class T, int N>
+T* SRWObjectRingBuffer<T, N>::atOffset(int aOffset)
+{
+   int tIndex = (mMinReadIndex - aOffset) % N;
+   return &mElements[tIndex];
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Return the number of elements that are available to be read.
+
+template <class T, int N>
+int SRWObjectRingBuffer<T, N>::numReadAvailable()
+{
+   long long tDiff = mMaxReadIndex - mLastReadIndex;
+   if (tDiff > mNumElements - 1) tDiff = mNumElements - 1;
+   return (int)tDiff;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Restart read operations. This sets the first flag true so that
+// the next read will start at the last element that was written,
+// which is the max available.
+
+template <class T, int N>
+void SRWObjectRingBuffer<T, N>::doStartReadAtMax()
+{
+   mNextReadIndex = mMaxReadIndex;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Restart read operations. This sets the first flag true so that
+// the next read will start at the minimum available.
+
+template <class T, int N>
+void SRWObjectRingBuffer<T, N>::doStartReadAtMin()
+{
+   mNextReadIndex = mMinReadIndex;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Read an element from the array, copying it to the function argument.
+// Return true if successful.
+
+template <class T, int N>
+bool SRWObjectRingBuffer<T, N>::tryRead(T* aElement)
+{
+   // Test for no written data yet.
+   if (mNextWriteIndex == 0)
+   {
+      return false;
+   }
+
+   // Test for no new data available.
+   if (mNextReadIndex > mMaxReadIndex)
+   {
+      return false;
+   }
+
+   // Test for dropped data.
+   if (mNextReadIndex < mMinReadIndex)
+   {
+      mNextReadIndex = mMinReadIndex;
+   }
+
+   // Copy the array element to the output. Update the state.
+   *aElement = elementAt(mNextReadIndex++);
+
+   // Done.
+   return true;
 }
 
 //******************************************************************************
