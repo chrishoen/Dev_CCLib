@@ -13,11 +13,17 @@ CmdLineExec::CmdLineExec()
 void CmdLineExec::reset()
 {
    Prn::print(0, "RESET");
-   mRingBuffer.initialize();
+   mObjectRing.initialize();
    for (int i = 0; i < 4; i++)
    {
-      mRingBuffer.doWrite(&i);
+      mObjectRing.doWrite(&i);
    }
+}
+
+void CmdLineExec::init()
+{
+   Prn::print(0, "INIT");
+   mObjectRing.initialize();
 }
 
 //******************************************************************************
@@ -32,13 +38,13 @@ void CmdLineExec::reset()
 
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
-   if(aCmd->isCmd("RESET"))   reset();
-   if (aCmd->isCmd("PUT"))    executePut(aCmd);
-   if (aCmd->isCmd("GET"))    executeGet(aCmd);
-   if (aCmd->isCmd("AT"))     executeAt(aCmd);
-   if (aCmd->isCmd("MARK1"))  executeMark1(aCmd);
-   if (aCmd->isCmd("MARK2"))  executeMark2(aCmd);
-   if (aCmd->isCmd("SHOW"))   executeShow(aCmd);
+   if (aCmd->isCmd("RESET"))  reset();
+   if (aCmd->isCmd("INIT"))   init();
+   if (aCmd->isCmd("PUTO"))   executePutObject(aCmd);
+   if (aCmd->isCmd("GETO"))   executeGetObject(aCmd);
+   if (aCmd->isCmd("ATO"))    executeAtObject(aCmd);
+   if (aCmd->isCmd("MARKO"))  executeMarkObject(aCmd);
+   if (aCmd->isCmd("SHOWO"))  executeShowObject(aCmd);
 
    if (aCmd->isCmd("GO1"))    executeGo1(aCmd);
    if (aCmd->isCmd("GO2"))    executeGo2(aCmd);
@@ -52,30 +58,41 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executePut(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executePutObject(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1, 0);
+   aCmd->setArgDefault(2, 1);
    int tValue = aCmd->argInt(1);
+   int tLoop = aCmd->argInt(2);
 
-   mRingBuffer.doWrite(&tValue);
-   Prn::print(0, "PUT %s", my_string_from_bool(mRingBuffer.mFullFlag));
+   for (int i = 0; i < tLoop; i++)
+   {
+      int tTemp = tValue + i;
+      mObjectRing.doWrite(&tTemp);
+      Prn::print(0, "PUT %5s %4d", my_string_from_bool(mObjectRing.mFullFlag), tTemp);
+   }
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeGet(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeGetObject(Ris::CmdLineCmd* aCmd)
 {
+   aCmd->setArgDefault(1, 1);
+   int tLoop = aCmd->argInt(1);
    int tValue = 0;
    
-   if (mRingBuffer.tryRead(&tValue))
+   for (int i = 0; i < tLoop; i++)
    {
-      Prn::print(0, "READ %d", tValue);
-   }
-   else
-   {
-      Prn::print(0, "READ FAIL");
+      if (mObjectRing.tryRead(&tValue))
+      {
+         Prn::print(0, "READ %d", tValue);
+      }
+      else
+      {
+         Prn::print(0, "READ FAIL");
+      }
    }
 }
 
@@ -83,12 +100,12 @@ void CmdLineExec::executeGet(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeAt(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeAtObject(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1, 0);
    int tIndex = aCmd->argInt(1);
 
-   int* tPtr = mRingBuffer.atOffset(tIndex);
+   int* tPtr = mObjectRing.atOffset(tIndex);
    Prn::print(0, "AT  %d", *tPtr);
 }
 
@@ -96,20 +113,11 @@ void CmdLineExec::executeAt(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeMark1(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeMarkObject(Ris::CmdLineCmd* aCmd)
 {
    for (int i = 0; i < 4; i++)
    {
-      int* tPtr = mRingBuffer.atOffset(i);
-      *tPtr *= -1;
-   }
-}
-
-void CmdLineExec::executeMark2(Ris::CmdLineCmd* aCmd)
-{
-   for (int i = 0; i < 4; i++)
-   {
-      int* tPtr = mRingBuffer.atOffset(i);
+      int* tPtr = mObjectRing.atOffset(i);
       *tPtr += 1000 + 100 * i;
    }
 }
@@ -118,25 +126,25 @@ void CmdLineExec::executeMark2(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeShow(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeShowObject(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0, "FullFlag      %s", my_string_from_bool(mRingBuffer.mFullFlag));
-   Prn::print(0, "available     %d", mRingBuffer.available());
-   Prn::print(0, "WriteIndex    %d", mRingBuffer.mNextWriteIndex);
-   Prn::print(0, "MaxReadIndex  %d", mRingBuffer.mMaxReadIndex);
-   Prn::print(0, "MinReadIndex  %d", mRingBuffer.mMinReadIndex);
+   Prn::print(0, "FullFlag      %s", my_string_from_bool(mObjectRing.mFullFlag));
+   Prn::print(0, "available     %d", mObjectRing.available());
+   Prn::print(0, "WriteIndex    %d", mObjectRing.mNextWriteIndex);
+   Prn::print(0, "MaxReadIndex  %d", mObjectRing.mMaxReadIndex);
+   Prn::print(0, "MinReadIndex  %d", mObjectRing.mMinReadIndex);
 
    Prn::print(0, "");
    for (int i = 0; i < 4; i++)
    {
-      Prn::print(0, "atOffset     %d %d", i, *mRingBuffer.atOffset(i));
+      Prn::print(0, "atOffset     %d %d", i, *mObjectRing.atOffset(i));
    }
 
    return;
    Prn::print(0, "");
    for (int i = 4; i --> 0;)
    {
-      Prn::print(0, "history      %d %d", i, mRingBuffer.elementAt(i));
+      Prn::print(0, "history      %d %d", i, mObjectRing.elementAt(i));
    }
 }
 

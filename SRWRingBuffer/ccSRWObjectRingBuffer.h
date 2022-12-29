@@ -251,6 +251,7 @@ void SRWObjectRingBuffer<T, N>::doWrite(T* aElement)
 
    // Update the state variables.
    mNextWriteIndex++;
+   mFullFlag = mNextWriteIndex >= N;
    mMaxReadIndex = mNextWriteIndex - 1;
    mMinReadIndex = mNextWriteIndex - N;
    if(mMinReadIndex < 0) mMinReadIndex = 0;

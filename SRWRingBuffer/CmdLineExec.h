@@ -30,7 +30,7 @@ public:
    //***************************************************************************
    // Members.
 
-   CC::SRWObjectRingBuffer<int, 4> mRingBuffer;
+   CC::SRWObjectRingBuffer<int, 4> mObjectRing;
 
    //***************************************************************************
    //***************************************************************************
@@ -39,6 +39,7 @@ public:
 
    CmdLineExec();
    void reset() override;
+   void init();
 
    //***************************************************************************
    //***************************************************************************
@@ -56,12 +57,11 @@ public:
    // Methods.
 
    // Execute specific commands.
-   void executePut(Ris::CmdLineCmd* aCmd);
-   void executeGet(Ris::CmdLineCmd* aCmd);
-   void executeAt(Ris::CmdLineCmd* aCmd);
-   void executeMark1(Ris::CmdLineCmd* aCmd);
-   void executeMark2(Ris::CmdLineCmd* aCmd);
-   void executeShow(Ris::CmdLineCmd* aCmd);
+   void executePutObject(Ris::CmdLineCmd* aCmd);
+   void executeGetObject(Ris::CmdLineCmd* aCmd);
+   void executeAtObject(Ris::CmdLineCmd* aCmd);
+   void executeMarkObject(Ris::CmdLineCmd* aCmd);
+   void executeShowObject(Ris::CmdLineCmd* aCmd);
 
    void executeGo1(Ris::CmdLineCmd* aCmd);
    void executeGo2(Ris::CmdLineCmd* aCmd);

@@ -1,7 +1,7 @@
 ﻿cmake_minimum_required(VERSION 3.10)
 
 if (MSVC)
-   install(TARGETS ${project} DESTINATION "C:/aaa_prime/CCLib")
+   install(TARGETS ${project} DESTINATION "C:/aaa_prime/RisLib")
 elseif(MYMODE STREQUAL "prime-ubu")
    install(TARGETS ${project} DESTINATION "/opt/prime/bin")
 elseif (MYMODE STREQUAL "prime-arm7")
