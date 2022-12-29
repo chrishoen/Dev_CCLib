@@ -15,8 +15,6 @@ void main_initialize(int argc,char** argv)
    //***************************************************************************
    // Enter process
 
-   Ris::Threads::enterProcessHigh();
-
    // Initialize print facility
    Prn::resetPrint();
    Prn::initializePrint();
@@ -27,7 +25,7 @@ void main_initialize(int argc,char** argv)
    Prn::setFilter(Prn::Show3, false);
    Prn::setFilter(Prn::Show4, false);
 
-   Prn::print(0, "NDelay*******************************************BEGIN");
+   Prn::print(0, "SRWRingBuffer*******************************************BEGIN");
 }
 
 //******************************************************************************
@@ -37,7 +35,7 @@ void main_initialize(int argc,char** argv)
 
 void main_finalize()
 {
-   Prn::print(0,"NDelay*******************************************END");
+   Prn::print(0, "SRWRingBuffer*******************************************END");
 
    // Close print
    Prn::finalizePrint();

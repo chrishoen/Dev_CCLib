@@ -184,7 +184,7 @@ public:
 template <class T, int N>
 SRWObjectRingBuffer<T, N>::SRWObjectRingBuffer()
 {
-   mNextWriteIndex = 0;
+   mElements = 0;
    initialize();
 }
 
