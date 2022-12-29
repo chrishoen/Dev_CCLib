@@ -32,7 +32,7 @@ where NextWriteIndex is the index of the next array element to write to.
 Readers can read from the memory as long as the reads are within the bounds
 of the indices of a min and max available, where
 
-   MinReadIndex = NextWriteIndex - (NumElements - 1)
+   MinReadIndex = NextWriteIndex - NumElements
    MaxReadIndex = NextWriteIndex - 1
 where
    MaxReadIndex - MinReadIndex = NumElements - 1
@@ -41,9 +41,9 @@ Here's an example of a buffer with NumElements = 8 that is past the
 initialization stage. It is full. The write index is in the first column
 and the modulo of it is in the second column.
 
-122 2
-123 3  zzzz
-124 4  xxxx  NextWriteIndex - (NumElements - 1) = MinReadIndex
+122 2  yyyy
+123 3  xxxx  NextWriteIndex - NumElements = MinReadIndex
+124 4  xxxx
 125 5  xxxx
 126 6  xxxx
 127 7  xxxx
@@ -55,7 +55,7 @@ and the modulo of it is in the second column.
 Only elements marked with xxxx can be safely read. They are on the closed
 interval
 [MinReadIndex .. MaxReadIndex] = 
-[NextWriteIndex - (NumElements - 1) .. NextWriteIndex - 1]
+[NextWriteIndex - NumElements .. NextWriteIndex - 1]
 
 A reader can read always safely read any one element of 124 .. 130.
 During a read of 123, an asynchrounous write to 131 could occur and
@@ -157,7 +157,7 @@ public:
    // Methods. Read.
 
    // Return the number of elements that are available to be read.
-   int numReadAvailable();
+   int available();
 
    // Restart read operations. This sets the first flag true so that
    // the next read will start at the last element that was written,
@@ -251,8 +251,8 @@ void SRWObjectRingBuffer<T, N>::doWrite(T* aElement)
 
    // Update the state variables.
    mNextWriteIndex++;
-   mMinReadIndex = mNextWriteIndex - (N - 1);
    mMaxReadIndex = mNextWriteIndex - 1;
+   mMinReadIndex = mNextWriteIndex - N;
    if(mMinReadIndex < 0) mMinReadIndex = 0;
 }
 
@@ -269,8 +269,9 @@ void SRWObjectRingBuffer<T, N>::doWrite(T* aElement)
 template <class T, int N>
 T* SRWObjectRingBuffer<T, N>::atOffset(int aOffset)
 {
-   int tIndex = (mMinReadIndex - aOffset) % N;
-   return &mElements[tIndex];
+   int tIndex = (int)(mMaxReadIndex - aOffset);
+   if (tIndex < 0) tIndex = 0;
+   return &mElements[tIndex % N];
 }
 
 //******************************************************************************
@@ -282,10 +283,10 @@ T* SRWObjectRingBuffer<T, N>::atOffset(int aOffset)
 // Return the number of elements that are available to be read.
 
 template <class T, int N>
-int SRWObjectRingBuffer<T, N>::numReadAvailable()
+int SRWObjectRingBuffer<T, N>::available()
 {
-   long long tDiff = mMaxReadIndex - mLastReadIndex;
-   if (tDiff > mNumElements - 1) tDiff = mNumElements - 1;
+   long long tDiff = mMaxReadIndex - mNextReadIndex + 1;
+   if (tDiff > N) tDiff = N;
    return (int)tDiff;
 }
 

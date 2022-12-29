@@ -120,8 +120,11 @@ void CmdLineExec::executeMark2(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeShow(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0, "FullFlag    %s", my_string_from_bool(mRingBuffer.mFullFlag));
-   Prn::print(0, "WriteIndex  %d", mRingBuffer.mNextWriteIndex);
+   Prn::print(0, "FullFlag      %s", my_string_from_bool(mRingBuffer.mFullFlag));
+   Prn::print(0, "available     %d", mRingBuffer.available());
+   Prn::print(0, "WriteIndex    %d", mRingBuffer.mNextWriteIndex);
+   Prn::print(0, "MaxReadIndex  %d", mRingBuffer.mMaxReadIndex);
+   Prn::print(0, "MinReadIndex  %d", mRingBuffer.mMinReadIndex);
 
    Prn::print(0, "");
    for (int i = 0; i < 4; i++)
