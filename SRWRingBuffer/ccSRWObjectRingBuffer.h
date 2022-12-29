@@ -252,8 +252,8 @@ inline T& SRWObjectRingBuffer<T, N>::elementAt(long long aIndex)
 //******************************************************************************
 //******************************************************************************
 // Write an element to the array at the write index. Increment the
-// write index state variable so that it contains the index of the
-// next element to write to.
+// write index so that it contains the index of the next element to
+// write to.
 
 template <class T, int N>
 void SRWObjectRingBuffer<T, N>::doWrite(T* aElement)
@@ -303,9 +303,9 @@ int SRWObjectRingBuffer<T, N>::available()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Restart read operations. This sets the first flag true so that
-// the next read will start at the last element that was written,
-// which is the max available.
+// Start read operations. This sets the next read index to the maximum
+// possible read index, which is the most recent element that was
+// written.
 
 template <class T, int N>
 void SRWObjectRingBuffer<T, N>::doStartReadAtMax()
@@ -316,8 +316,8 @@ void SRWObjectRingBuffer<T, N>::doStartReadAtMax()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Restart read operations. This sets the first flag true so that
-// the next read will start at the minimum available.
+// Start read operations. This sets the next read index to the minimum
+// possible read index, which is the oldest element that was written.
 
 template <class T, int N>
 void SRWObjectRingBuffer<T, N>::doStartReadAtMin()
@@ -328,8 +328,8 @@ void SRWObjectRingBuffer<T, N>::doStartReadAtMin()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Read an element from the array, copying it to the function argument.
-// Return true if successful.
+// Read an element from the array at the next read index, copying it to
+// the function argument. Return true if successful.
 
 template <class T, int N>
 bool SRWObjectRingBuffer<T, N>::tryRead(T* aElement)
