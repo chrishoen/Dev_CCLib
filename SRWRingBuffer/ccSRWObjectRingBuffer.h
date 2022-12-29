@@ -7,12 +7,15 @@ Ring buffer of fixed size opaque objects.
 It is single reader single writer for a single thread.
 It is lock free and non blocking
 
-This accomodates a single writer and multiple indepenent readers. The writer 
-writes to the buffer with no knowledge of the readers and the readers can read
-from the buffer independantly from each other. There is no locking of the
-buffer. Each reader maintains its own state and manages its own logic for
-keeping track of buffer indices and dropping of elements and testing for
-overwrites.
+This class template defines a ring buffer that has a single reader and a single 
+writer where read and write operations are performed in a single thread. Read 
+and write operations are not concurrent, they are sequential:
+   1) the writer writes to the buffer, optionally modifying previously
+      written elements.
+   2) the reader reads from the buffer.
+
+This can be used to store histories of time sequences of samples.
+It can also be used in implementations of digital filters.
 
 The ring buffer is based on the idea of an infinite memory of contiguous
 fixed size elements that is written to sequentially by a single writer. Writes
@@ -24,13 +27,12 @@ and ElementSize. Writes into the memory are performed using modulo arithmetic
 with NumElements.
 
 Writes are concepually executed as
-   ElementArray[NextWriteIndex % NumElements] = NewElement
-   ++NextWriteIndex %= NumElements
+   ElementArray[NextWriteIndex++ % NumElements] = NewElement
 
 where NextWriteIndex is the index of the next array element to write to.
 
-Readers can read from the memory as long as the reads are within the bounds
-of the indices of a min and max available, where
+Reads can be executed as long as they are within the bounds of the indices of
+a min and max available, where
 
    MinReadIndex = NextWriteIndex - NumElements
    MaxReadIndex = NextWriteIndex - 1
@@ -57,10 +59,23 @@ interval
 [MinReadIndex .. MaxReadIndex] = 
 [NextWriteIndex - NumElements .. NextWriteIndex - 1]
 
-A reader can read always safely read any one element of 124 .. 130.
-During a read of 123, an asynchrounous write to 131 could occur and
-the read would be overwritten. So, any read from less than 124 is
-not allowed.
+A reader can read always safely read any one element of 123 .. 130.
+
+If the buffer is being used to store a history of samples then previously
+written samples can be accessed according to an offset relative to the
+last written sample. The offset is shown in the third column.
+
+122 2     yyyy
+123 3  7  xxxx  NextWriteIndex - NumElements is the oldest element
+124 4  6  xxxx
+125 5  5  xxxx
+126 6  4  xxxx
+127 7  3  xxxx
+128 0  2  xxxx
+129 1  1  xxxx
+130 2  0  xxxx  NextWriteIndex - 1 is the most recent element
+131 3     zzzz  NextWriteIndex is the next element to write to
+
 
 =============================================================================*/
 
@@ -80,8 +95,8 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This template implements an N element memory structure of type T that
-// provides a fixed delay. It can be used for digital filters.
+// This class template implements an N element memory structure of type T
+// that provides a single reader single writer ring buffer.
 
 template <class T, int N>
 class SRWObjectRingBuffer
@@ -93,8 +108,8 @@ public:
    //***************************************************************************
    // Members.
 
-   // Array of elements. This is allocated on the heap in the
-   // initialize function.
+   // Array of elements. This is allocated on the heap by the constructor
+   // and initialize function.
    T* mElements;
 
    // The index of the next element to write to. If this is equal to
@@ -106,7 +121,7 @@ public:
 
    // Min and max possible read indices. These provided a lower and
    // upper bound on possible reads. These are updated by the write
-   // operation.
+   // function.
    long long mMinReadIndex;
    long long mMaxReadIndex;
 
@@ -139,8 +154,8 @@ public:
    // Methods. Write.
 
    // Write an element to the array at the write index. Increment the
-   // write index state variable so that it contains the index of the
-   // next element to write to.
+   // write index so that it contains the index of the next element to
+   // write to.
    void doWrite(T* aElement);
 
    // Return a pointer to an element at an offset relative to the 
@@ -159,17 +174,17 @@ public:
    // Return the number of elements that are available to be read.
    int available();
 
-   // Restart read operations. This sets the first flag true so that
-   // the next read will start at the last element that was written,
-   // which is the max available.
+   // Start read operations. This sets the next read index to the maximum
+   // possible read index, which is the most recent element that was
+   // written.
    void doStartReadAtMax();
 
-   // Restart read operations. This sets the first flag true so that
-   // the next read will start at the minimum available.
+   // Start read operations. This sets the next read index to the minimum
+   // possible read index, which is the oldest element that was written.
    void doStartReadAtMin();
 
-   // Read an element from the array, copying it to the function argument.
-   // Return true if successful.
+   // Read an element from the array at the next read index, copying it to
+   // the function argument. Return true if successful.
    bool tryRead(T* aElement);
 };
 
@@ -223,9 +238,6 @@ void SRWObjectRingBuffer<T, N>::finalize()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
 // Return a reference to an array element at an index modulo the
 // number of elements.
 
@@ -275,9 +287,6 @@ T* SRWObjectRingBuffer<T, N>::atOffset(int aOffset)
    return &mElements[tIndex % N];
 }
 
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
