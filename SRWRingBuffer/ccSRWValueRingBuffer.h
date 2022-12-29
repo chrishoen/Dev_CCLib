@@ -2,7 +2,7 @@
 
 /*==============================================================================
 
-Ring buffer of objects.
+Ring buffer of values.
 
 It is single reader single writer for a single thread.
 It is lock free and non blocking
@@ -14,7 +14,11 @@ thread. Operations are not concurrent, they are sequential:
       written elements.
    2) the reader reads from the buffer.
 
-This can be used to store histories of time sequences of sample objects
+This is a ring buffer of values, as opposed to objects, where a value
+type would be a primitive: int, double, long long and an object type
+would be a class.
+
+This can be used to store histories of time sequences of sample values
 It can also be used in implementations of digital filters.
 
 The ring buffer is based on the idea of an infinite memory of contiguous
@@ -93,7 +97,7 @@ namespace CC
 // that provides a single reader single writer ring buffer.
 
 template <class T, int N>
-class SRWObjectRingBuffer
+class SRWValueRingBuffer
 {
 public:
 
@@ -128,8 +132,8 @@ public:
    // Methods.
 
    // Constructor.
-   SRWObjectRingBuffer();
-   ~SRWObjectRingBuffer();
+   SRWValueRingBuffer();
+   ~SRWValueRingBuffer();
    void initialize();
    void finalize();
 
@@ -150,17 +154,11 @@ public:
    // Write an element to the array at the write index. Increment the
    // write index so that it contains the index of the next element to
    // write to.
-   void doWrite(T* aElement);
+   void doWrite(T aElement);
 
-   // Return a pointer to the next element to write to, which is the element
-   // at the next write index. Do not increment the write index. The caller
-   // can then manually execute its own write operation. This can be used
-   // for zero copy.
-   T* startWrite();
-
-   // Increment the write index state variable after a started write is
-   // finished so that it contains the index of the last element written to.
-   void finishWrite();
+   // Write an array of source elements to the array at the write index.
+   // Increment the write index accordingly.
+   void doWriteArray(T* aElementSourceArray, int aNumElements);
 
    //***************************************************************************
    //***************************************************************************
@@ -195,6 +193,14 @@ public:
    // Read an element from the array at the next read index, copying it to
    // the function argument. Return true if successful.
    bool tryRead(T* aElement);
+
+   // Read an element from the array at the next read index and return it.
+   T doRead();
+
+   // Read a number of elements from the array, copying them to the
+   // function argument destination array. Return the number of elements
+   // that were copied.
+   int doReadArray(T* aElementDestinArray, int aNumElements);
 };
 
 //******************************************************************************
@@ -206,14 +212,14 @@ public:
 // Constructor.
 
 template <class T, int N>
-SRWObjectRingBuffer<T, N>::SRWObjectRingBuffer()
+SRWValueRingBuffer<T, N>::SRWValueRingBuffer()
 {
    mElements = 0;
    initialize();
 }
 
 template <class T, int N>
-SRWObjectRingBuffer<T, N>::~SRWObjectRingBuffer()
+SRWValueRingBuffer<T, N>::~SRWValueRingBuffer()
 {
    if (mElements)
    {
@@ -223,7 +229,7 @@ SRWObjectRingBuffer<T, N>::~SRWObjectRingBuffer()
 }
 
 template <class T, int N>
-void SRWObjectRingBuffer<T, N>::initialize()
+void SRWValueRingBuffer<T, N>::initialize()
 {
    finalize();
    mElements = new T[N];
@@ -235,7 +241,7 @@ void SRWObjectRingBuffer<T, N>::initialize()
 }
 
 template <class T, int N>
-void SRWObjectRingBuffer<T, N>::finalize()
+void SRWValueRingBuffer<T, N>::finalize()
 {
    if (mElements)
    {
@@ -251,7 +257,7 @@ void SRWObjectRingBuffer<T, N>::finalize()
 // number of elements.
 
 template <class T, int N>
-inline T& SRWObjectRingBuffer<T, N>::elementAt(long long aIndex)
+inline T& SRWValueRingBuffer<T, N>::elementAt(long long aIndex)
 {
    aIndex %= N;
    return mElements[aIndex];
@@ -265,10 +271,10 @@ inline T& SRWObjectRingBuffer<T, N>::elementAt(long long aIndex)
 // write to.
 
 template <class T, int N>
-void SRWObjectRingBuffer<T, N>::doWrite(T* aElement)
+inline void SRWValueRingBuffer<T, N>::doWrite(T aElement)
 {
    // Copy the input element to the array.
-   elementAt(mNextWriteIndex) = *aElement;
+   elementAt(mNextWriteIndex) = aElement;
 
    // Update the state variables.
    mNextWriteIndex++;
@@ -281,32 +287,16 @@ void SRWObjectRingBuffer<T, N>::doWrite(T* aElement)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Return a pointer to the next element to write to, which is the element
-// at the next write index. Do not increment the write index. The caller
-// can then manually execute its own write operation. This can be used
-// for zero copy.
+// Write an array of source elements to the array at the write index.
+// Increment the write index accordingly.
 
 template <class T, int N>
-T* SRWObjectRingBuffer<T, N>::startWrite()
+inline void SRWValueRingBuffer<T, N>::doWriteArray(T* aElementSourceArray, int aNumElements)
 {
-   return &elementAt(mNextWriteIndex);
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Increment the write index state variable after a started write is
-// finished so that it contains the index of the last element written to.
-
-template <class T, int N>
-void SRWObjectRingBuffer<T, N>::finishWrite()
-{
-   // Update the state variables.
-   mNextWriteIndex++;
-   mFullFlag = mNextWriteIndex >= N;
-   mMaxReadIndex = mNextWriteIndex - 1;
-   mMinReadIndex = mNextWriteIndex - N;
-   if (mMinReadIndex < 0) mMinReadIndex = 0;
+   for (int i = 0; i < aNumElements; i++)
+   {
+      doWrite(aElementSourceArray[i]);
+   }
 }
 
 //******************************************************************************
@@ -320,7 +310,7 @@ void SRWObjectRingBuffer<T, N>::finishWrite()
 // to K, K-1, .. K-(N-1).
 
 template <class T, int N>
-T* SRWObjectRingBuffer<T, N>::atOffset(int aOffset)
+inline T* SRWValueRingBuffer<T, N>::atOffset(int aOffset)
 {
    int tIndex = (int)(mMaxReadIndex - aOffset);
    if (tIndex < 0) tIndex = 0;
@@ -333,7 +323,7 @@ T* SRWObjectRingBuffer<T, N>::atOffset(int aOffset)
 // Return the number of elements that are available to be read.
 
 template <class T, int N>
-int SRWObjectRingBuffer<T, N>::available()
+inline int SRWValueRingBuffer<T, N>::available()
 {
    long long tDiff = mMaxReadIndex - mNextReadIndex + 1;
    if (tDiff > N) tDiff = N;
@@ -348,7 +338,7 @@ int SRWObjectRingBuffer<T, N>::available()
 // written.
 
 template <class T, int N>
-void SRWObjectRingBuffer<T, N>::doStartReadAtMax()
+inline void SRWValueRingBuffer<T, N>::doStartReadAtMax()
 {
    mNextReadIndex = mMaxReadIndex;
 }
@@ -360,7 +350,7 @@ void SRWObjectRingBuffer<T, N>::doStartReadAtMax()
 // possible read index, which is the oldest element that was written.
 
 template <class T, int N>
-void SRWObjectRingBuffer<T, N>::doStartReadAtMin()
+inline void SRWValueRingBuffer<T, N>::doStartReadAtMin()
 {
    mNextReadIndex = mMinReadIndex;
 }
@@ -372,7 +362,7 @@ void SRWObjectRingBuffer<T, N>::doStartReadAtMin()
 // the function argument. Return true if successful.
 
 template <class T, int N>
-bool SRWObjectRingBuffer<T, N>::tryRead(T* aElement)
+inline bool SRWValueRingBuffer<T, N>::tryRead(T* aElement)
 {
    // Test for no written data yet.
    if (mNextWriteIndex == 0)
@@ -397,6 +387,32 @@ bool SRWObjectRingBuffer<T, N>::tryRead(T* aElement)
 
    // Done.
    return true;
+}
+
+// Read an element from the array at the next read index and return it.
+template <class T, int N>
+inline T SRWValueRingBuffer<T, N>::doRead()
+{
+   return elementAt(mNextReadIndex++);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Read a number of elements from the array, copying them to the
+// function argument destination array. Return the number of elements
+// that were copied.
+
+template <class T, int N>
+inline int SRWValueRingBuffer<T, N>::doReadArray(T* aElementDestinArray, int aNumElements)
+{
+   int tCount = 0;
+   for (int i = 0; i < aNumElements; i++)
+   {
+      if (!tryRead(&aElementDestinArray[i])) break;
+      tCount++;
+   }
+   return tCount;
 }
 
 //******************************************************************************

@@ -10,6 +10,7 @@ Program command line executive.
 
 #include "risCmdLineExec.h"
 #include "ccSRWObjectRingBuffer.h"
+#include "ccSRWValueRingBuffer.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -31,6 +32,10 @@ public:
    // Members.
 
    CC::SRWObjectRingBuffer<int, 4> mObjectRing;
+   CC::SRWValueRingBuffer<int, 4> mValueRing;
+
+   int mWriteArray[1000];
+   int mReadArray[1000];
 
    //***************************************************************************
    //***************************************************************************
@@ -62,6 +67,16 @@ public:
    void executeAtObject(Ris::CmdLineCmd* aCmd);
    void executeMarkObject(Ris::CmdLineCmd* aCmd);
    void executeShowObject(Ris::CmdLineCmd* aCmd);
+
+   void executePutValue(Ris::CmdLineCmd* aCmd);
+   void executeGetValue(Ris::CmdLineCmd* aCmd);
+   void executeAtValue(Ris::CmdLineCmd* aCmd);
+   void executeMarkValue(Ris::CmdLineCmd* aCmd);
+   void executeShowValue(Ris::CmdLineCmd* aCmd);
+
+   void executePutArray(Ris::CmdLineCmd* aCmd);
+   void executeGetArray(Ris::CmdLineCmd* aCmd);
+   void executeShowArray(Ris::CmdLineCmd* aCmd);
 
    void executeGo1(Ris::CmdLineCmd* aCmd);
    void executeGo2(Ris::CmdLineCmd* aCmd);
