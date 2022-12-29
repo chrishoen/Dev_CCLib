@@ -7,14 +7,14 @@ Ring buffer of fixed size opaque objects.
 It is single reader single writer for a single thread.
 It is lock free and non blocking
 
-This class template defines a ring buffer that has a single reader and a single 
-writer where read and write operations are performed in a single thread. Read 
-and write operations are not concurrent, they are sequential:
+This class template defines a ring buffer that has a single reader and a
+single writer where read and write operations are performed in a single
+thread. Operations are not concurrent, they are sequential:
    1) the writer writes to the buffer, optionally modifying previously
       written elements.
    2) the reader reads from the buffer.
 
-This can be used to store histories of time sequences of samples.
+This can be used to store histories of time sequences of sample objects
 It can also be used in implementations of digital filters.
 
 The ring buffer is based on the idea of an infinite memory of contiguous
@@ -59,11 +59,12 @@ interval
 [MinReadIndex .. MaxReadIndex] = 
 [NextWriteIndex - NumElements .. NextWriteIndex - 1]
 
-A reader can read always safely read any one element of 123 .. 130.
+A reader can always safely read any one element of 123 .. 130.
 
 If the buffer is being used to store a history of samples then previously
 written samples can be accessed according to an offset relative to the
-last written sample. The offset is shown in the third column.
+last written sample. The offset is shown in the third column. This can
+be useful when implementing digital filters.
 
 122 2     yyyy
 123 3  7  xxxx  NextWriteIndex - NumElements is the oldest element
@@ -76,14 +77,7 @@ last written sample. The offset is shown in the third column.
 130 2  0  xxxx  NextWriteIndex - 1 is the most recent element
 131 3     zzzz  NextWriteIndex is the next element to write to
 
-
 =============================================================================*/
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-#include <stddef.h>
 
 //******************************************************************************
 //******************************************************************************
@@ -158,6 +152,25 @@ public:
    // write to.
    void doWrite(T* aElement);
 
+   // Write an array of source elements to the array at the write index.
+   // Increment the write index accordingly.
+   void doWriteArray(T* aElementSourceArray, int aNumElements);
+
+   // Return a pointer to the next element to write to, which is the element
+   // at the next write index. Do not increment the write index. The caller
+   // can then manually execute its own write operation. This can be used
+   // for zero copy.
+   T* startWrite();
+
+   // Increment the write index state variable after a started write is
+   // finished so that it contains the index of the last element written to.
+   void finishWrite();
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods. Offset.
+   
    // Return a pointer to an element at an offset relative to the 
    // next write index - 1. An offset of zero corresponds to the
    // last element that was written and so, corresponds to the
@@ -272,6 +285,52 @@ void SRWObjectRingBuffer<T, N>::doWrite(T* aElement)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Write an array of source elements to the array at the write index.
+// Increment the write index accordingly.
+
+template <class T, int N>
+void SRWObjectRingBuffer<T, N>::doWriteArray(T* aElementSourceArray, int aNumElements)
+{
+   for (int i = 0; i < aNumElements; i++)
+   {
+      doWrite(&aElementSourceArray[i]);
+   }
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Return a pointer to the next element to write to, which is the element
+// at the next write index. Do not increment the write index. The caller
+// can then manually execute its own write operation. This can be used
+// for zero copy.
+
+template <class T, int N>
+T* SRWObjectRingBuffer<T, N>::startWrite()
+{
+   return &elementAt(mNextWriteIndex);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Increment the write index state variable after a started write is
+// finished so that it contains the index of the last element written to.
+
+template <class T, int N>
+void SRWObjectRingBuffer<T, N>::finishWrite()
+{
+   // Update the state variables.
+   mNextWriteIndex++;
+   mFullFlag = mNextWriteIndex >= N;
+   mMaxReadIndex = mNextWriteIndex - 1;
+   mMinReadIndex = mNextWriteIndex - N;
+   if (mMinReadIndex < 0) mMinReadIndex = 0;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Return a pointer to an element at an offset relative to the 
 // next write index - 1. An offset of zero corresponds to the
 // last element that was written and so, corresponds to the
@@ -352,7 +411,7 @@ bool SRWObjectRingBuffer<T, N>::tryRead(T* aElement)
       mNextReadIndex = mMinReadIndex;
    }
 
-   // Copy the array element to the output. Update the state.
+   // Copy the array element to the output. Update the read index.
    *aElement = elementAt(mNextReadIndex++);
 
    // Done.
