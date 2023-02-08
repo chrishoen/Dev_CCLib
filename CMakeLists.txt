@@ -13,8 +13,6 @@ project ("Dev_CCLib")
 my_print_cmake_vars()
 
 
-add_subdirectory ("CCLib")
-return()
 
 add_subdirectory ("CCLib")
 add_subdirectory ("SRWRingBuffer")
