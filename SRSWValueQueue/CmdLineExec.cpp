@@ -12,7 +12,7 @@
 //******************************************************************************
 //******************************************************************************
 
-CC::SRSWValueQueue<char, 4> gQueue;
+CC::SRSWValueQueue<int, 4> gQueue;
 
 CmdLineExec::CmdLineExec()
 {
@@ -56,9 +56,9 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executePut(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1, 1);
-   char tChar = aCmd->argInt(1);
+   int tValue = aCmd->argInt(1);
 
-   if (gQueue.tryWrite(tChar))
+   if (gQueue.tryWrite(tValue))
    {
       Prn::print(0, "WRITE PASS  $$ %d", gQueue.size());
    }
@@ -74,11 +74,11 @@ void CmdLineExec::executePut(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGet(Ris::CmdLineCmd* aCmd)
 {
-   char tChar = 0;
+   int tValue = 0;
 
-   if (gQueue.tryRead(&tChar))
+   if (gQueue.tryRead(&tValue))
    {
-      Prn::print(0, "READ PASS   $$ %d", gQueue.size());
+      Prn::print(0, "READ PASS   $$ %d", tValue);
    }
    else
    {
