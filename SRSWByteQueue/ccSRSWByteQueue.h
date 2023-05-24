@@ -22,7 +22,7 @@ It is thread safe for separate single writer and single reader threads.
 //******************************************************************************
 // Queue structure and initializer.
 
-typedef struct SRSWByteQueue
+typedef struct SRSWByteQueueS
 {
    // Number of elements allocated is size + 1. There is an extra element
    // allocated.
@@ -33,7 +33,7 @@ typedef struct SRSWByteQueue
    int mGetIndex;
    // Array of elements. This must be preallocated before initialization.
    char* mElement;
-}  SRSWByteQueueT;
+}  SRSWByteQueue;
 
 inline void SRSWByteQueue_initialize(SRSWByteQueue* aQueue, char* aElements, int aSize)
 {
