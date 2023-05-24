@@ -14,7 +14,7 @@ my_print_cmake_vars()
 
 
 
-add_subdirectory ("SRSWByteQueue")
+add_subdirectory ("SRSWValueQueue")
 return()
 
 add_subdirectory ("CCLib")
