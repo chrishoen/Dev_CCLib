@@ -25,20 +25,18 @@ and ElementSize. Writes into the memory are performed using modulo arithmetic
 with NumElements.
 
 Writes are concepually executed as
-   ElementArray[WriteIndex % NumElements] = NewElement
-   ++WriteIndex %= NumElements
+   ElementArray[NextWriteIndex % NumElements] = NewElement
+   NextWriteIndex++
 
-where WriteIndex is the index of the next array element to write to.
+where NextWriteIndex is the index of the next array element to write to.
 
 Readers can read from the memory as long as the reads are within the bounds
-of a Head and Tail, where
+of the indices of a min and max available, where
 
-   TailIndex = HeadIndex - (NumElements - 1)
-   HeadIndex = WriteIndex - 1, the index of the last element written to.
-so
-   HeadIndex - TailIndex = NumElements - 2
-
-   WriteIndex - 1 - HeadIndex - (NumElements - 1)
+   MinReadIndex = NextWriteIndex - (NumElements - 1)
+   MaxReadIndex = NextWriteIndex - 1
+where
+   MaxReadIndex - MinReadIndex = NumElements - 1
 
 Here's an example of a buffer with NumElements = 8 that is past the
 initialization stage. It is full. The write index is in the first column
@@ -46,19 +44,19 @@ and the modulo of it is in the second column.
 
 122 2
 123 3  zzzz
-124 4  xxxx  WriteIndex - (NumElements - 1)
+124 4  xxxx  NextWriteIndex - (NumElements - 1) = MinReadIndex
 125 5  xxxx
 126 6  xxxx
 127 7  xxxx
 128 0  xxxx
 129 1  xxxx
-130 2  xxxx  WriteIndex - 1
-131 3  zzzz  WriteIndex is the next element to write to
+130 2  xxxx  NextWriteIndex - 1 = MaxReadIndex
+131 3  zzzz  NextWriteIndex is the next element to write to
 
 Only elements marked with xxxx can be safely read. They are on the closed
 interval
-[Tail .. Head] = [WriteIndex - (NumElements - 1) .. WriteIndex - 1]
-Head - Tail =  (Numelements - 2)
+[MinReadIndex .. MaxReadIndex] = 
+[NextWriteIndex - (NumElements - 1) .. NextWriteIndex - 1]
 
 A reader can read always safely read any one element of 124 .. 130.
 During a read of 123, an asynchrounous write to 131 could occur and
@@ -76,23 +74,23 @@ back and modify any one element of 128 .. 130.
 
 122 2
 123 3  zzzz
-124 4  xxxx  WriteIndex - (NumElements - 1)
+124 4  xxxx  NextWriteIndex - (NumElements - 1) = MinReadIndex
 125 5  xxxx
 126 6  xxxx
-127 7  xxxx  WriteIndex - ReadGap - 1
-128 0  yyyy  WriteIndex - ReadGap
+127 7  xxxx  NextWriteIndex - ReadGap - 1  = MaxReadIndex
+128 0  yyyy  NextWriteIndex - ReadGap
 129 1  yyyy
-130 2  yyyy  WriteIndex - 1
-131 3  zzzz  WriteIndex is the next element to write to
+130 2  yyyy  NextWriteIndex - 1
+131 3  zzzz  NextWriteIndex is the next element to write to
 
 A reader can read always safely read any one element of 124 .. 127.
 
 Only elements marked with xxxx can be safely read on the closed interval
 [WriteIndex - (NumElements - 1) .. WriteIndex - ReadGap - 1]
 
-After writing an element marked zzzz, the writer can go back and modify
+While writing an element marked zzzz, the writer can go back and modify
 elements marked with yyyy on the closed interval
-[WriteIndex - ReadGap .. WriteIndex - 1]
+[WriteIndex - ReadGap .. WriteIndex]
 
 ReadGap = 0 means no read gap. Then the reader can read any element of
 124 .. 130 and the writer cannot modify any elements once they have been
@@ -106,9 +104,9 @@ different processes (who therefore have different address spaces):
 2) No pointers.
 3) No dynamic memory, this means no std::vector, ...
 4) No vtables, this means no virtual functions.
+5) Be careful with your loads and stores.
 
 =============================================================================*/
-
 
 //******************************************************************************
 //******************************************************************************
@@ -157,7 +155,7 @@ public:
    // so that it is on a separate cache line.
 
    long long mPadding1[8];
-   std::atomic<long long> mWriteIndex;
+   std::atomic<long long> mNextWriteIndex;
    long long mPadding2[8];
 
    //***************************************************************************
@@ -168,70 +166,6 @@ public:
    // No constructor.
    virtual ~RingBufferState() {}
    void initialize(int aNumElements, size_t aElementSize, int aReadGap);
-};
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Heap ring buffer. This provides a ring buffer that has memory for an
-// element array on the heap. This class is not shared memory safe.
-
-class HeapRingBuffer : public RingBufferState
-{
-public:
-   typedef RingBufferState BaseClass;
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Members.
-    
-   // Memory for the ring buffer element array. This is created on the heap at 
-   // initialization.
-   void* mElementArrayMemory;
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.
-
-   // Constructor.
-   HeapRingBuffer();
-   ~HeapRingBuffer();
-   void initialize(int aNumElements, size_t aElementSize, int aReadGap);
-   void finalize();
-};
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Memory ring buffer. This provides a ring buffer that has static memory
-// for an element array. This class is shared memory safe.
-
-template <class Element, int NumElements, int ReadGap>
-class MemoryRingBuffer : public RingBufferState
-{
-public:
-   typedef RingBufferState BaseClass;
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Members.
-
-   // Memory for the ring buffer element array.
-   Element mElementArrayMemory[NumElements];
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Methods.
-
-   // No constructor.
-   void initialize()
-   {
-      BaseClass::initialize(NumElements, sizeof(Element), ReadGap);
-   }
 };
 
 //******************************************************************************
@@ -256,6 +190,24 @@ public:
    // The ring buffer element array memory.
    void* mElementArrayMemory;
 
+   // Number of elements in the ring buffer.
+   long long mNumElements;
+
+   // Size of each element in the ring buffer.
+   size_t mElementSize;
+
+   // Read gap.
+   long long mReadGap;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   // If true then call an inheritor supplied test function after a
+   // write operation.
+   bool mTestFlag;
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
@@ -268,9 +220,17 @@ public:
    virtual void resetTest() {}
    void initialize(RingBufferState* aRingBufferState, void* aElementArrayMemory);
 
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Methods. Helpers.
+
    // Return a pointer to an element, based on an index modulo the number
    // of elements.
    void* elementAt(long long aIndex);
+
+   // Return the index of the next element to write to.
+   long long getNextWriteIndex();
 
    //***************************************************************************
    //***************************************************************************
@@ -281,6 +241,10 @@ public:
    // the function argument. Increment the write index state variable so 
    // that it contains the index of the next element to write to.
    void doWrite(void* aElement);
+
+   // Write an array of source elements to the array at the write index.
+   // Increment the write index accordingly.
+   void doWriteArray(void* aElementSourceArray, int aNumElements);
 
    // Return a pointer to the next element to write to, which is the element
    // at the write index. Do not increment the  write index state. The caller
@@ -325,23 +289,63 @@ public:
    // The ring buffer element array memory.
    void* mElementArrayMemory;
 
-   // The next element to read from.
-   long long mReadIndex;
+   // Number of elements in the ring buffer.
+   long long mNumElements;
 
-   // The index for the last successful read.
+   // Size of each element in the ring buffer.
+   size_t mElementSize;
+
+   // Read gap.
+   long long mReadGap;
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Members.
+
+   // The index of the last successful read.
    long long mLastReadIndex;
+
+   // Saved index of the last successful read. This is used to 
+   // undo a read.
+   long long mSaveLastReadIndex;
 
    // If true then this is the first read.
    bool mFirstFlag;
 
-   // The number of reads that had nothing available to read.
+   // If true then restart reads at the max available,
+   // else restart reads at the min available.
+   bool mRestartAtMax;
+
+   // If true then call an inheritor supplied test function after a
+   // read operation.
+   bool mTestFlag;
+
+   // The number of reads that had no elements available to read.
    int mNotReadyCount1;
    int mNotReadyCount2;
    int mNotReadyCount3;
 
    // The number of elements that were dropped.
-   int mDropCount1;
-   int mDropCount2;
+   int mDropCount;
+
+   // The number of overwrites that occurred.
+   int mOverwriteCount;
+
+   // The max number of difference between two consecutive read operations.
+   int mMaxDeltaRead;
+
+   // Internal debug error count;
+   int mErrorCount;
+
+   // If true then the last read operation resulted in not ready condition.
+   bool mNotReadyFlag;
+
+   // If true then the last read operation resulted in an overwrite condition.
+   bool mOverwriteFlag;
+
+   // The number of successful reads.
+   int mReadCount;
 
    //***************************************************************************
    //***************************************************************************
@@ -367,9 +371,27 @@ public:
    //***************************************************************************
    // Methods.
 
+   // Restart read operations. This sets the first flag true so that
+   // the next read will start at the last element that was written,
+   // which is the max available.
+   virtual void doRestartAtMax();
+
+   // Restart read operations. This sets the first flag true so that
+   // the next read will start at the minimum available.
+   virtual void doRestartAtMin();
+
    // Read an element from the array, copying it to the function argument.
    // Return true if successful.
    bool doRead(void* aElement);
+
+   // Read a number of elements from the array, copying them to the
+   // function argument destination array. Return the number of elements
+   // that were copied.
+   int doReadArray(void* aElementDestinArray, int aNumElements);
+
+   // Undo the last read operation. This sets the last read index to 
+   // the saved last read index.
+   void doUndoLastRead();
 
    //***************************************************************************
    //***************************************************************************
