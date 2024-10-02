@@ -64,6 +64,7 @@
 #include <memory.h> // to allow <,> comparisons
 #include <string.h> // to allow <,> comparisons, for qnx gcc
 
+
 ////////////////////////////////////////////////////////////////////////////////
 //						Configuration options
 //

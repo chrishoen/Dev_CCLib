@@ -2,7 +2,7 @@
 #*******************************************************************************
 #*******************************************************************************
 
-function(my_print_cmake_vars)
+function(my_show_cmake_vars)
 
    message(STATUS "my_special1***********************************************************BEGIN")
    message(STATUS "CMAKE_SYSTEM_PROCESSOR   " ${CMAKE_SYSTEM_PROCESSOR})
@@ -20,14 +20,16 @@ function(my_print_cmake_vars)
    message(STATUS "CMAKE_TOOLCHAIN_FILE     " ${CMAKE_TOOLCHAIN_FILE})
    message(STATUS "CMAKE_SYSTEM             " ${CMAKE_SYSTEM})
    message(STATUS "CMAKE_BUILD_TYPE         " ${CMAKE_BUILD_TYPE})
-   message(STATUS "CMAKE_INSTALL_PREFIX     " ${CMAKE_INSTALL_PREFIX})
-   message(STATUS "CMAKE_BINARY_DIR         " ${CMAKE_BINARY_DIR})
-
+   message(STATUS "CMAKE_CXX_FLAGS_RELEASE_INIT " ${CMAKE_CXX_FLAGS_RELEASE_INIT})
+   message(STATUS "CMAKE_CXX_FLAGS_DEBUG_INIT   " ${CMAKE_CXX_FLAGS_DEBUG_INIT})
 
    message(STATUS "PROJECT_SOURCE_DIR       " ${PROJECT_SOURCE_DIR})
-   message(STATUS "THIRD_PARTY_LIB_DIR      " ${THIRD_PARTY_LIB_DIR})
    message(STATUS "MYMODE                   " ${MYMODE})
    message(STATUS "my_special1***********************************************************END")
+
+   return()
+   message(STATUS "CMAKE_INSTALL_PREFIX     " ${CMAKE_INSTALL_PREFIX})
+   message(STATUS "CMAKE_BINARY_DIR         " ${CMAKE_BINARY_DIR})
 endfunction()
 
 #*******************************************************************************

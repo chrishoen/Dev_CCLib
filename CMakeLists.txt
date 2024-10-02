@@ -1,4 +1,4 @@
-﻿cmake_minimum_required (VERSION 3.8)
+﻿cmake_minimum_required (VERSION 3.10)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS true)
 set(MY_MACRO_DIR "${CMAKE_CURRENT_SOURCE_DIR}/zzzMacros")
@@ -9,10 +9,19 @@ include("${MY_MACRO_DIR}/MyLocalImports.cmake")
 include("${MY_MACRO_DIR}/MyPrecompiledHeader.cmake")
 include("${MY_MACRO_DIR}/MySpecial.cmake")
 
-project ("Dev_CCLib")
-my_print_cmake_vars()
+
+project ("Dev_Example")
+my_append_compile_flags()
+my_show_cmake_vars()
 
 
+
+add_subdirectory ("CCLib")
+add_subdirectory ("ShareLib")
+add_subdirectory ("RingWriter")
+add_subdirectory ("RingReader1")
+add_subdirectory ("RingReader2")
+return()
 
 add_subdirectory ("SRSWByteQueue")
 return()
