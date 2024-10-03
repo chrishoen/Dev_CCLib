@@ -42,7 +42,7 @@ RingWriterThread::RingWriterThread()
    BaseClass::mIntervalRandomUs = gRingParms.mWriterThreadRandomUs;
 
    // Set member variables.
-   mTPFlag = true;
+   mTPFlag = false;
 
    // Seed random generator and random sleep.
    std::random_device tRandomDevice;

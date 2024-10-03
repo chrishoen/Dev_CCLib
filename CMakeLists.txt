@@ -18,6 +18,12 @@ my_show_cmake_vars()
 
 add_subdirectory ("CCLib")
 add_subdirectory ("RingLib")
+add_subdirectory ("RingTest1")
+add_subdirectory ("RingTest2")
+return()
+
+add_subdirectory ("CCLib")
+add_subdirectory ("RingLib")
 add_subdirectory ("RingWriter")
 add_subdirectory ("RingReader1")
 add_subdirectory ("RingReader2")

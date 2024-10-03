@@ -4,8 +4,9 @@
 #include "CmdLineExec.h"
 
 #include "someRingParms.h"
+#include "someRingReaderThread2.h"
 #include "someRingWriterThread.h"
-#include "someMonitorThread.h"
+#include "someMonitorThread2.h"
 using namespace Some;
 
 //******************************************************************************
@@ -30,6 +31,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("GO1"))  executeGo1(aCmd);
    if (aCmd->isCmd("GO2"))  executeGo2(aCmd);
    if (aCmd->isCmd("GO3"))  executeGo3(aCmd);
+   if (aCmd->isCmd("Show"))  executeShow(aCmd);
    if (aCmd->isCmd("Parms"))  executeParms(aCmd);
 }
 
@@ -39,13 +41,12 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::special(int aSpecial)
 {
-   gMonitorThread->mShowCode = aSpecial;
+   gMonitorThread2->mShowCode = aSpecial;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-
 void CmdLineExec::executeGo1 (Ris::CmdLineCmd* aCmd)
 {
 }
@@ -72,7 +73,8 @@ void CmdLineExec::executeGo3 (Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeSuspend(Ris::CmdLineCmd* aCmd)
 {
-   gRingWriterThread->mTPFlag = false;
+   gRingReaderThread2->mTPFlag = false;
+   Prn::suppressPrint();
 }
 
 //******************************************************************************
@@ -81,7 +83,17 @@ void CmdLineExec::executeSuspend(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeUnsuspend(Ris::CmdLineCmd* aCmd)
 {
-   gRingWriterThread->mTPFlag = true;
+   gRingReaderThread2->mTPFlag = true;
+   Prn::unsuppressPrint();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeShow(Ris::CmdLineCmd* aCmd)
+{
+   gRingReaderThread2->show();
 }
 
 //******************************************************************************
