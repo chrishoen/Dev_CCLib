@@ -8,6 +8,7 @@ Description:
 
 #include "stdafx.h"
 #include <limits.h>
+#include "ccIntrinsics.h"
 
 #include "ccRingBuffer.h"
 

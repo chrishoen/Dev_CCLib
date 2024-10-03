@@ -23,3 +23,23 @@ inline long long saferead_i64(long long* aValuePtr)
    }
    return -1;
 }
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+// Memory barriers.
+
+inline void memory_barrier()
+{
+   asm volatile ("dsb sy" ::: "memory");
+}
+
+inline void load_barrier()
+{
+   asm volatile("dsb ld" : : : "memory");
+}
+
+inline void store_barrier()
+{
+   asm volatile("dsb st" : : : "memory");
+}
