@@ -9,7 +9,7 @@ Description:
 #include "stdafx.h"
 
 #include "someRingParms.h"
-#include "someTestRingBuffer.h"
+#include "someTestRing.h"
 
 namespace Some
 {

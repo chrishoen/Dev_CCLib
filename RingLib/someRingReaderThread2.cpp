@@ -59,8 +59,8 @@ void RingReaderThread2::threadInitFunction()
 
    // Initialize the reader.
    mRingReader.initialize(
-      &SM::gShare->mTestRingBuffer,
-      &SM::gShare->mTestRingBuffer.mElementArrayMemory);
+      &SM::gShare->mTestRing,
+      &SM::gShare->mTestRing.mElementArrayMemory);
 }
 
 //******************************************************************************
@@ -97,7 +97,7 @@ void RingReaderThread2::shutdownThread()
 void RingReaderThread2::show()
 {
    Prn::print(0, "");
-   Prn::print(0, "mNextWriteIndex            %16lld", SM::gShare->mTestRingBuffer.mNextWriteIndex.load(std::memory_order_relaxed));
+   Prn::print(0, "mNextWriteIndex            %16lld", SM::gShare->mTestRing.mNextWriteIndex.load(std::memory_order_relaxed));
    Prn::print(0, "Reader.mLastReadIndex      %16lld", mRingReader.mLastReadIndex);
 
    Prn::print(0, "");

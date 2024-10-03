@@ -38,7 +38,7 @@ MonitorThread2::MonitorThread2()
    mShowCode = 0;
 
    // Bind member variables.
-   mMon_NextWriteIndex.bind(&SM::gShare->mTestRingBuffer.mNextWriteIndex);
+   mMon_NextWriteIndex.bind(&SM::gShare->mTestRing.mNextWriteIndex);
    mMon_LastReadIndex.bind(&gRingReaderThread2->mRingReader.mLastReadIndex);
 }
 
@@ -85,7 +85,7 @@ void MonitorThread2::executeOnTimer(int aTimeCount)
    {
       Prn::print(Prn::Show1, "%1d$   %3lld %3lld  %3d NRDY %d %d %d DROP %d %d OVER %d TEST %d %d",
          gRingReaderThread2->mThreadCurrentProcessor,
-         SM::gShare->mTestRingBuffer.mNextWriteIndex.load(std::memory_order_relaxed),
+         SM::gShare->mTestRing.mNextWriteIndex.load(std::memory_order_relaxed),
          gRingReaderThread2->mRingReader.mLastReadIndex,
          gRingReaderThread2->mRingReader.available(),
          gRingReaderThread2->mRingReader.mNotReadyCount1,

@@ -64,8 +64,8 @@ void RingWriterThread::threadInitFunction()
       
    // Initialize the writer.
    mRingWriter.initialize(
-      &SM::gShare->mTestRingBuffer, 
-      &SM::gShare->mTestRingBuffer.mElementArrayMemory);
+      &SM::gShare->mTestRing, 
+      &SM::gShare->mTestRing.mElementArrayMemory);
 }
 
 //******************************************************************************

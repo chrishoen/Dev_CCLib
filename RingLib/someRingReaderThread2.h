@@ -11,7 +11,7 @@ Serial test thread that contains a serial port.
 #include <random>
 #include "risSleep.h"
 #include "risThreadsThreads.h"
-#include "someTestRingBuffer.h"
+#include "someTestRing.h"
 
 //******************************************************************************
 //******************************************************************************

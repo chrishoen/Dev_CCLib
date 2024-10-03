@@ -10,7 +10,7 @@ Ring buffer writer thread.
 
 #include "risThreadsRandomThread.h"
 
-#include "someTestRingBuffer.h"
+#include "someTestRing.h"
 
 //******************************************************************************
 //******************************************************************************

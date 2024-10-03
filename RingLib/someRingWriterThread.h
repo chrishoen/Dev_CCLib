@@ -12,7 +12,7 @@ Ring buffer writer thread.
 #include "risSleep.h"
 #include "risThreadsRandomThread.h"
 
-#include "someTestRingBuffer.h"
+#include "someTestRing.h"
 
 //******************************************************************************
 //******************************************************************************
