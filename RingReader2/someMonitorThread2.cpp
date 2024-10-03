@@ -15,10 +15,10 @@ Description:
 #include "smShare.h"
 
 #include "someRingParms.h"
-#include "someRingReaderThread.h"
+#include "someRingReaderThread2.h"
 
-#define  _SOMEMONITORTHREAD_CPP_
-#include "someMonitorThread.h"
+#define  _SOMEMONITORTHREAD2_CPP_
+#include "someMonitorThread2.h"
 
 namespace Some
 {
@@ -27,7 +27,7 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 
-MonitorThread::MonitorThread()
+MonitorThread2::MonitorThread2()
 {
    // Set base class variables.
    BaseClass::setThreadName("Monitor");
@@ -39,11 +39,11 @@ MonitorThread::MonitorThread()
 
    // Bind member variables.
    mMon_NextWriteIndex.bind(&SM::gShare->mTestRingBuffer.mNextWriteIndex);
-   mMon_LastReadIndex.bind(&gRingReaderThread->mRingReader.mLastReadIndex);
+   mMon_LastReadIndex.bind(&gRingReaderThread2->mRingReader.mLastReadIndex);
 }
 
 // Update status variables.
-void MonitorThread::update()
+void MonitorThread2::update()
 {
    mMon_NextWriteIndex.update();
    mMon_LastReadIndex.update();
@@ -53,13 +53,13 @@ void MonitorThread::update()
 //******************************************************************************
 //******************************************************************************
 
-void MonitorThread::executeOnTimer(int aTimeCount)
+void MonitorThread2::executeOnTimer(int aTimeCount)
 {
-   if (gRingReaderThread->mStopFlag) return;
+   if (gRingReaderThread2->mStopFlag) return;
 
    update();
 
-   TestRingReader* tReader = &gRingReaderThread->mRingReader;
+   TestRingReader* tReader = &gRingReaderThread2->mRingReader;
 
    if (mShowCode == 1)
    {
@@ -84,18 +84,18 @@ void MonitorThread::executeOnTimer(int aTimeCount)
    if (mShowCode == 2)
    {
       Prn::print(Prn::Show1, "%1d$   %3lld %3lld  %3d NRDY %d %d %d DROP %d %d OVER %d TEST %d %d",
-         gRingReaderThread->mThreadCurrentProcessor,
+         gRingReaderThread2->mThreadCurrentProcessor,
          SM::gShare->mTestRingBuffer.mNextWriteIndex.load(std::memory_order_relaxed),
-         gRingReaderThread->mRingReader.mLastReadIndex,
-         gRingReaderThread->mRingReader.available(),
-         gRingReaderThread->mRingReader.mNotReadyCount1,
-         gRingReaderThread->mRingReader.mNotReadyCount2,
-         gRingReaderThread->mRingReader.mNotReadyCount3,
-         gRingReaderThread->mRingReader.mDropCount,
-         gRingReaderThread->mRingReader.mMaxDeltaRead,
-         gRingReaderThread->mRingReader.mOverwriteCount,
-         gRingReaderThread->mRingReader.mTestPassCount,
-         gRingReaderThread->mRingReader.mTestFailCount);
+         gRingReaderThread2->mRingReader.mLastReadIndex,
+         gRingReaderThread2->mRingReader.available(),
+         gRingReaderThread2->mRingReader.mNotReadyCount1,
+         gRingReaderThread2->mRingReader.mNotReadyCount2,
+         gRingReaderThread2->mRingReader.mNotReadyCount3,
+         gRingReaderThread2->mRingReader.mDropCount,
+         gRingReaderThread2->mRingReader.mMaxDeltaRead,
+         gRingReaderThread2->mRingReader.mOverwriteCount,
+         gRingReaderThread2->mRingReader.mTestPassCount,
+         gRingReaderThread2->mRingReader.mTestFailCount);
    }
 }
 

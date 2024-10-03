@@ -4,8 +4,8 @@
 #include "CmdLineExec.h"
 
 #include "someRingParms.h"
-#include "someRingReaderThread.h"
-#include "someMonitorThread.h"
+#include "someRingReaderThread1.h"
+#include "someMonitorThread1.h"
 using namespace Some;
 
 //******************************************************************************
@@ -39,7 +39,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::special(int aSpecial)
 {
-   gMonitorThread->mShowCode = aSpecial;
+   gMonitorThread1->mShowCode = aSpecial;
 }
 
 //******************************************************************************
@@ -71,7 +71,7 @@ void CmdLineExec::executeGo3 (Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeSuspend(Ris::CmdLineCmd* aCmd)
 {
-   gRingReaderThread->mTPFlag = false;
+   gRingReaderThread1->mTPFlag = false;
    Prn::suppressPrint();
 }
 
@@ -81,7 +81,7 @@ void CmdLineExec::executeSuspend(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeUnsuspend(Ris::CmdLineCmd* aCmd)
 {
-   gRingReaderThread->mTPFlag = true;
+   gRingReaderThread1->mTPFlag = true;
    Prn::unsuppressPrint();
 }
 
@@ -91,7 +91,7 @@ void CmdLineExec::executeUnsuspend(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeShow(Ris::CmdLineCmd* aCmd)
 {
-   gRingReaderThread->show();
+   gRingReaderThread1->show();
 }
 
 //******************************************************************************

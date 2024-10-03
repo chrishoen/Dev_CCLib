@@ -26,7 +26,7 @@ namespace Some
 // This is a thread that uses a serial port. It initializes and configures
 // the port based on a parms file and then loops on port receives.
 
-class RingReaderThread : public Ris::Threads::BaseThread
+class RingReaderThread2 : public Ris::Threads::BaseThread
 {
 private:
    typedef Ris::Threads::BaseThread BaseClass;
@@ -64,7 +64,7 @@ public:
    // Methods.
 
    // Constructor.
-   RingReaderThread();
+   RingReaderThread2();
 
    //***************************************************************************
    //***************************************************************************
@@ -108,10 +108,10 @@ public:
 //******************************************************************************
 // Global instance.
 
-#ifdef _SOMERINGREADERTHREAD_CPP_
-RingReaderThread* gRingReaderThread = 0;
+#ifdef _SOMERINGREADERTHREAD2_CPP_
+RingReaderThread2* gRingReaderThread2 = 0;
 #else
-extern  RingReaderThread* gRingReaderThread;
+extern  RingReaderThread2* gRingReaderThread2;
 #endif
 
 //******************************************************************************

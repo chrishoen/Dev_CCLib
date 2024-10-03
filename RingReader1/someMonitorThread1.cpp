@@ -15,10 +15,10 @@ Description:
 #include "smShare.h"
 
 #include "someRingParms.h"
-#include "someRingReaderThread.h"
+#include "someRingReaderThread1.h"
 
-#define  _SOMEMONITORTHREAD_CPP_
-#include "someMonitorThread.h"
+#define  _SOMEMONITORTHREAD1_CPP_
+#include "someMonitorThread1.h"
 
 namespace Some
 {
@@ -27,7 +27,7 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 
-MonitorThread::MonitorThread()
+MonitorThread1::MonitorThread1()
 {
    // Set base class variables.
    BaseClass::setThreadName("Monitor");
@@ -39,11 +39,11 @@ MonitorThread::MonitorThread()
 
    // Bind member variables.
    mMon_NextWriteIndex.bind(&SM::gShare->mTestRingBuffer.mNextWriteIndex);
-   mMon_LastReadIndex.bind(&gRingReaderThread->mRingReader.mLastReadIndex);
+   mMon_LastReadIndex.bind(&gRingReaderThread1->mRingReader.mLastReadIndex);
 }
 
 // Update status variables.
-void MonitorThread::update()
+void MonitorThread1::update()
 {
    mMon_NextWriteIndex.update();
    mMon_LastReadIndex.update();
@@ -53,11 +53,11 @@ void MonitorThread::update()
 //******************************************************************************
 //******************************************************************************
 
-void MonitorThread::executeOnTimer(int aTimeCount)
+void MonitorThread1::executeOnTimer(int aTimeCount)
 {
    update();
 
-   TestRingReader* tReader = &gRingReaderThread->mRingReader;
+   TestRingReader* tReader = &gRingReaderThread1->mRingReader;
 
    if (mShowCode == 1)
    {
@@ -82,18 +82,18 @@ void MonitorThread::executeOnTimer(int aTimeCount)
    if (mShowCode == 2)
    {
       Prn::print(Prn::Show1, "%1d$   %3lld %3lld  %3d NRDY %d %d %d DROP %d %d OVER %d TEST %d %d",
-         gRingReaderThread->mThreadCurrentProcessor,
+         gRingReaderThread1->mThreadCurrentProcessor,
          SM::gShare->mTestRingBuffer.mNextWriteIndex.load(std::memory_order_relaxed),
-         gRingReaderThread->mRingReader.mLastReadIndex,
-         gRingReaderThread->mRingReader.available(),
-         gRingReaderThread->mRingReader.mNotReadyCount1,
-         gRingReaderThread->mRingReader.mNotReadyCount2,
-         gRingReaderThread->mRingReader.mNotReadyCount3,
-         gRingReaderThread->mRingReader.mDropCount,
-         gRingReaderThread->mRingReader.mMaxDeltaRead,
-         gRingReaderThread->mRingReader.mOverwriteCount,
-         gRingReaderThread->mRingReader.mTestPassCount,
-         gRingReaderThread->mRingReader.mTestFailCount);
+         gRingReaderThread1->mRingReader.mLastReadIndex,
+         gRingReaderThread1->mRingReader.available(),
+         gRingReaderThread1->mRingReader.mNotReadyCount1,
+         gRingReaderThread1->mRingReader.mNotReadyCount2,
+         gRingReaderThread1->mRingReader.mNotReadyCount3,
+         gRingReaderThread1->mRingReader.mDropCount,
+         gRingReaderThread1->mRingReader.mMaxDeltaRead,
+         gRingReaderThread1->mRingReader.mOverwriteCount,
+         gRingReaderThread1->mRingReader.mTestPassCount,
+         gRingReaderThread1->mRingReader.mTestFailCount);
    }
 }
 

@@ -15,8 +15,8 @@ Description:
 #include "someRingParms.h"
 #include "smShare.h"
 
-#define  _SOMERINGREADERTHREAD_CPP_
-#include "someRingReaderThread.h"
+#define  _SOMERINGREADERTHREAD1_CPP_
+#include "someRingReaderThread1.h"
 
 namespace Some
 {
@@ -26,7 +26,7 @@ namespace Some
 //******************************************************************************
 // Constuctor.
 
-RingReaderThread::RingReaderThread()
+RingReaderThread1::RingReaderThread1()
 {
    // Set base class variables.
    BaseClass::setThreadName("Reader");
@@ -52,7 +52,7 @@ RingReaderThread::RingReaderThread()
 // after the thread starts running. It creates and launches the 
 // child SerialMsgThread.
 
-void RingReaderThread::threadInitFunction()
+void RingReaderThread1::threadInitFunction()
 {
    SM::gShare->show(0);
       
@@ -70,7 +70,7 @@ void RingReaderThread::threadInitFunction()
 // Thread exit function. This is called by the base class immedidately
 // before the thread is terminated. It shuts down the child SerialMsgThread.
 
-void RingReaderThread::threadExitFunction()
+void RingReaderThread1::threadExitFunction()
 {
 }
 
@@ -79,7 +79,7 @@ void RingReaderThread::threadExitFunction()
 //******************************************************************************
 // Execute periodically. This is called by the base class timer.
 
-void RingReaderThread::executeOnTimer(int aTimerCount)
+void RingReaderThread1::executeOnTimer(int aTimerCount)
 {
    // Guard.
    if (!mTPFlag) return;
@@ -94,7 +94,7 @@ void RingReaderThread::executeOnTimer(int aTimerCount)
 //******************************************************************************
 // Execute periodically. This is called by the base class timer.
 
-void RingReaderThread::show()
+void RingReaderThread1::show()
 {
    Prn::print(0, "");
    Prn::print(0, "mNextWriteIndex            %16lld", SM::gShare->mTestRingBuffer.mNextWriteIndex.load(std::memory_order_relaxed));

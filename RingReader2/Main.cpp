@@ -6,8 +6,8 @@
 #include "MainInit.h"
 
 #include "someRingParms.h"
-#include "someRingReaderThread.h"
-#include "someMonitorThread.h"
+#include "someRingReaderThread2.h"
+#include "someMonitorThread2.h"
 
 #include "risSleep.h"
 
@@ -31,13 +31,13 @@ int main(int argc,char** argv)
 
    if (true)
    {
-      Some::gRingReaderThread = new Some::RingReaderThread;
-      Some::gRingReaderThread->launchThread();
+      Some::gRingReaderThread2 = new Some::RingReaderThread2;
+      Some::gRingReaderThread2->launchThread();
    }
    if (true)
    {
-      Some::gMonitorThread = new Some::MonitorThread;
-      Some::gMonitorThread->launchThread();
+      Some::gMonitorThread2 = new Some::MonitorThread2;
+      Some::gMonitorThread2->launchThread();
    }
 
    //***************************************************************************
@@ -46,8 +46,8 @@ int main(int argc,char** argv)
    // Show program threads.
 
    Ris::Threads::showCurrentThreadInfo();
-   if (Some::gRingReaderThread) Some::gRingReaderThread->showThreadInfo();
-   if (Some::gMonitorThread) Some::gMonitorThread->showThreadInfo();
+   if (Some::gRingReaderThread2) Some::gRingReaderThread2->showThreadInfo();
+   if (Some::gMonitorThread2) Some::gMonitorThread2->showThreadInfo();
 
 
    //***************************************************************************
@@ -64,18 +64,18 @@ int main(int argc,char** argv)
    //***************************************************************************
    // Shutdown program Threads.
 
-   if (Some::gRingReaderThread)
+   if (Some::gRingReaderThread2)
    {
-      Some::gRingReaderThread->shutdownThread();
-      delete Some::gRingReaderThread;
-      Some::gRingReaderThread = 0;
+      Some::gRingReaderThread2->shutdownThread();
+      delete Some::gRingReaderThread2;
+      Some::gRingReaderThread2 = 0;
    }
 
-   if (Some::gMonitorThread)
+   if (Some::gMonitorThread2)
    {
-      Some::gMonitorThread->shutdownThread();
-      delete Some::gMonitorThread;
-      Some::gMonitorThread = 0;
+      Some::gMonitorThread2->shutdownThread();
+      delete Some::gMonitorThread2;
+      Some::gMonitorThread2 = 0;
    }
 
    //***************************************************************************
@@ -112,13 +112,13 @@ restart:
 
    if (true)
    {
-      Some::gRingReaderThread = new Some::RingReaderThread;
-      Some::gRingReaderThread->launchThread();
+      Some::gRingReaderThread2 = new Some::RingReaderThread2;
+      Some::gRingReaderThread2->launchThread();
    }
    if (true)
    {
-      Some::gMonitorThread = new Some::MonitorThread;
-      Some::gMonitorThread->launchThread();
+      Some::gMonitorThread2 = new Some::MonitorThread2;
+      Some::gMonitorThread2->launchThread();
    }
 
    //***************************************************************************
@@ -127,32 +127,32 @@ restart:
    // Show program threads.
 
    Ris::Threads::showCurrentThreadInfo();
-   if (Some::gRingReaderThread) Some::gRingReaderThread->showThreadInfo();
-   if (Some::gMonitorThread) Some::gMonitorThread->showThreadInfo();
+   if (Some::gRingReaderThread2) Some::gRingReaderThread2->showThreadInfo();
+   if (Some::gMonitorThread2) Some::gMonitorThread2->showThreadInfo();
 
    Ris::RandomSleepMs tSleep;
    tSleep.initialize(5000, 500);
    tSleep.doSleep();
 
-   if (Some::gRingReaderThread->mRingReader.mTestFailCount > 0) tRestartFlag = false;
+   if (Some::gRingReaderThread2->mRingReader.mTestFailCount > 0) tRestartFlag = false;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Shutdown program Threads.
 
-   if (Some::gRingReaderThread)
+   if (Some::gRingReaderThread2)
    {
-      Some::gRingReaderThread->shutdownThread();
-      delete Some::gRingReaderThread;
-      Some::gRingReaderThread = 0;
+      Some::gRingReaderThread2->shutdownThread();
+      delete Some::gRingReaderThread2;
+      Some::gRingReaderThread2 = 0;
    }
 
-   if (Some::gMonitorThread)
+   if (Some::gMonitorThread2)
    {
-      Some::gMonitorThread->shutdownThread();
-      delete Some::gMonitorThread;
-      Some::gMonitorThread = 0;
+      Some::gMonitorThread2->shutdownThread();
+      delete Some::gMonitorThread2;
+      Some::gMonitorThread2 = 0;
    }
 
    //***************************************************************************

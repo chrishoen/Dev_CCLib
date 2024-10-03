@@ -12,8 +12,8 @@
 #include "someRingParms.h"
 #include "smShare.h"
 
-#define  _SOMERINGREADERTHREAD_CPP_
-#include "someRingReaderThread.h"
+#define  _SOMERINGREADERTHREAD2_CPP_
+#include "someRingReaderThread2.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -27,7 +27,7 @@ namespace Some
 //******************************************************************************
 // Constructor.
 
-RingReaderThread::RingReaderThread()
+RingReaderThread2::RingReaderThread2()
 {
    // Set base class variables.
    BaseClass::setThreadName("Reader");
@@ -53,7 +53,7 @@ RingReaderThread::RingReaderThread()
 // Thread init function. This is called by the base class immediately
 // after the thread starts running. It initializes the serial port.
 
-void RingReaderThread::threadInitFunction()
+void RingReaderThread2::threadInitFunction()
 {
    SM::gShare->show(0);
 
@@ -69,9 +69,9 @@ void RingReaderThread::threadInitFunction()
 // Thread exit function. This is called by the base class immediately
 // before the thread is terminated. It is close the serial port.
 
-void RingReaderThread::threadExitFunction()
+void RingReaderThread2::threadExitFunction()
 {
-   printf("someRingReaderThread::threadExitFunction\n");
+   printf("someRingReaderThread2::threadExitFunction\n");
    show();
 }
 
@@ -82,9 +82,9 @@ void RingReaderThread::threadExitFunction()
 // this thread. It aborts the serial port receive and waits for the
 // thread to terminate after execution of the thread exit function.
 
-void RingReaderThread::shutdownThread()
+void RingReaderThread2::shutdownThread()
 {
-   printf("someRingReaderThread::shutdownThread\n");
+   printf("someRingReaderThread2::shutdownThread\n");
    // Wait for thread to terminate.
    BaseClass::shutdownThread();
 }
@@ -94,7 +94,7 @@ void RingReaderThread::shutdownThread()
 //******************************************************************************
 // Execute periodically. This is called by the base class timer.
 
-void RingReaderThread::show()
+void RingReaderThread2::show()
 {
    Prn::print(0, "");
    Prn::print(0, "mNextWriteIndex            %16lld", SM::gShare->mTestRingBuffer.mNextWriteIndex.load(std::memory_order_relaxed));
@@ -137,7 +137,7 @@ void RingReaderThread::show()
 // serial port receives and then processes them. The loop terminates
 // when the serial port receive is aborted.
 
-void RingReaderThread::threadRunFunction()
+void RingReaderThread2::threadRunFunction()
 {
    if (gRingParms.mReadTestMode == 1)
    {
@@ -154,7 +154,7 @@ void RingReaderThread::threadRunFunction()
 //******************************************************************************
 // Test.
 
-void RingReaderThread::doTest1()
+void RingReaderThread2::doTest1()
 {
    int tCount = 0;
    while (true)
@@ -185,7 +185,7 @@ void RingReaderThread::doTest1()
 //******************************************************************************
 // Test.
 
-void RingReaderThread::doTest2()
+void RingReaderThread2::doTest2()
 {
    int tCount = 0;
    while (true)

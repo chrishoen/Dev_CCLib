@@ -23,7 +23,7 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 
-class RingReaderThread : public Ris::Threads::BaseRandomThread
+class RingReaderThread1 : public Ris::Threads::BaseRandomThread
 {
 private:
    typedef Ris::Threads::BaseRandomThread BaseClass;
@@ -46,7 +46,7 @@ public:
    // Methods.
 
    // Constructor.
-   RingReaderThread();
+   RingReaderThread1();
 
    //***************************************************************************
    //***************************************************************************
@@ -79,10 +79,10 @@ public:
 //******************************************************************************
 // Global instance
 
-#ifdef _SOMERINGREADERTHREAD_CPP_
-          RingReaderThread* gRingReaderThread = 0;
+#ifdef _SOMERINGREADERTHREAD1_CPP_
+          RingReaderThread1* gRingReaderThread1 = 0;
 #else
-   extern RingReaderThread* gRingReaderThread;
+   extern RingReaderThread1* gRingReaderThread1;
 #endif
 
 //******************************************************************************
