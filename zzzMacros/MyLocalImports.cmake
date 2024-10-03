@@ -18,15 +18,15 @@ endfunction()
 #*******************************************************************************
 #*******************************************************************************
 
-function(my_lib_import_ShareLib _target)
+function(my_lib_import_RingLib _target)
 
-   target_link_libraries(${_target} ShareLib)
+   target_link_libraries(${_target} RingLib)
 
 endfunction()
 
-function(my_inc_import_ShareLib _target)
+function(my_inc_import_RingLib _target)
 
-   target_include_directories(${_target} PRIVATE $<TARGET_PROPERTY:ShareLib,INTERFACE_INCLUDE_DIRECTORIES>)
+   target_include_directories(${_target} PRIVATE $<TARGET_PROPERTY:RingLib,INTERFACE_INCLUDE_DIRECTORIES>)
 
 endfunction()
 
