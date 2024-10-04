@@ -97,7 +97,7 @@ void RingReaderThread1::executeOnTimer(int aTimerCount)
 void RingReaderThread1::show()
 {
    Prn::print(0, "");
-   Prn::print(0, "mNextWriteIndex            %16lld", SM::gShare->mTestRing.mNextWriteIndex.load(std::memory_order_relaxed));
+   Prn::print(0, "mNextWriteIndex            %16lld", SM::gShare->mTestRing.mNextWriteIndex);
    Prn::print(0, "Reader.mLastReadIndex      %16lld", mRingReader.mLastReadIndex);
 
    Prn::print(0, "");

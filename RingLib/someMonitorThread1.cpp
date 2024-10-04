@@ -83,7 +83,7 @@ void MonitorThread1::executeOnTimer(int aTimeCount)
    {
       Prn::print(Prn::Show1, "%1d$   %3lld %3lld  %3d NRDY %d %d %d DROP %d %d OVER %d TEST %d %d",
          gRingReaderThread1->mThreadCurrentProcessor,
-         SM::gShare->mTestRing.mNextWriteIndex.load(std::memory_order_relaxed),
+         SM::gShare->mTestRing.mNextWriteIndex,
          gRingReaderThread1->mRingReader.mLastReadIndex,
          gRingReaderThread1->mRingReader.available(),
          gRingReaderThread1->mRingReader.mNotReadyCount1,

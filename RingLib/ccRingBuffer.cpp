@@ -30,7 +30,8 @@ void RingBufferState::initialize(int aNumElements, size_t aElementSize, int aRea
    mNumElements = aNumElements;
    mElementSize = aElementSize;
    mReadGap = aReadGap;
-   mNextWriteIndex.store(0,std::memory_order_release);
+   store_barrier();
+   mNextWriteIndex = 0;
 }
 
 //******************************************************************************
@@ -84,7 +85,7 @@ void* RingBufferWriter::elementAt(long long aIndex)
 long long RingBufferWriter::getNextWriteIndex()
 {
    // Return the index of the next element to write to.
-   return mRB->mNextWriteIndex.load(std::memory_order_relaxed);
+   return mRB->mNextWriteIndex;
 }
 
 //******************************************************************************
@@ -97,7 +98,7 @@ long long RingBufferWriter::getNextWriteIndex()
 void RingBufferWriter::doWrite(void* aElement)
 {
    // Get the index of the next element to write to.
-   long long tWriteIndex = mRB->mNextWriteIndex.load(std::memory_order_relaxed);
+   long long tWriteIndex = mRB->mNextWriteIndex;
 
    // Get the address of the next element to write to.
    void* tPtr = elementAt(tWriteIndex);
@@ -113,8 +114,8 @@ void RingBufferWriter::doWrite(void* aElement)
    }
 
    // Increment the write index to the next element to write to.
-   std::atomic_thread_fence(std::memory_order_release);
-   mRB->mNextWriteIndex.fetch_add(1, std::memory_order_relaxed);
+   store_barrier();
+   mRB->mNextWriteIndex++;
 }
 
 //******************************************************************************
@@ -143,7 +144,7 @@ void RingBufferWriter::doWriteArray(void* aElementSourceArray, int aNumElements)
 void* RingBufferWriter::startWrite()
 {
    // Get the index of the next element to write to.
-   long long tWriteIndex = mRB->mNextWriteIndex.load(std::memory_order_relaxed);
+   long long tWriteIndex = mRB->mNextWriteIndex;
 
    // Get the address of the next element to write to.
    void* tPtr = elementAt(tWriteIndex);
@@ -159,7 +160,7 @@ void RingBufferWriter::finishWrite()
    if (mTestFlag)
    {
       // Get the index of the next element to write to.
-      long long tWriteIndex = mRB->mNextWriteIndex.load(std::memory_order_relaxed);
+      long long tWriteIndex = mRB->mNextWriteIndex;
 
       // Get the address of the next element to write to.
       void* tPtr = elementAt(tWriteIndex);
@@ -171,8 +172,8 @@ void RingBufferWriter::finishWrite()
    }
 
    // Increment the write index to the next element to write to.
-   std::atomic_thread_fence(std::memory_order_release);
-   mRB->mNextWriteIndex.fetch_add(1, std::memory_order_relaxed);
+   store_barrier();
+   mRB->mNextWriteIndex++;
 }
 
 //******************************************************************************
@@ -241,7 +242,7 @@ void* RingBufferReader::elementAt(long long aIndex)
 
 int RingBufferReader::available()
 {
-   long long tMaxReadIndex = mRB->mNextWriteIndex.load(std::memory_order_acquire) - 1 - mReadGap;
+   long long tMaxReadIndex = saferead_i64(&mRB->mNextWriteIndex) - 1 - mReadGap;
    long long tDiff = tMaxReadIndex - mLastReadIndex;
    if (tDiff > mNumElements - 1) tDiff = mNumElements - 1;
    return (int)tDiff;
@@ -304,7 +305,8 @@ bool RingBufferReader::doRead(void* aElement)
    // Get the initial write index. This might change asynchronously during
    // the read. The write index is the index of the next element that the 
    // writer will write to.
-   long long tNextWriteIndex = mRB->mNextWriteIndex.load(std::memory_order_acquire);
+   long long tNextWriteIndex = saferead_i64(&mRB->mNextWriteIndex);
+   load_barrier();
 
    // Test for invalid data. This means that the writer has not yet
    // written any elements or is resetting the buffer.
@@ -397,7 +399,8 @@ bool RingBufferReader::doRead(void* aElement)
    // this will be different than the write index at the beginning of the
    // read. If the read element was less than the final min available
    // element then the read was or could have been overwritten, so drop it.
-   tNextWriteIndex = mRB->mNextWriteIndex.load(std::memory_order_acquire);
+   tNextWriteIndex = saferead_i64(&mRB->mNextWriteIndex);
+   load_barrier();
    tMinReadIndex = tNextWriteIndex - (mNumElements - 1);
    if (tNextReadIndex < tMinReadIndex)
    {
