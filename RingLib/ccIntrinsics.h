@@ -36,10 +36,12 @@ inline void memory_barrier()
 
 inline void load_barrier()
 {
-   asm volatile("dsb ld" : : : "memory");
+   asm volatile ("dsb sy" ::: "memory");
+// asm volatile("dsb ld" : : : "memory");
 }
 
 inline void store_barrier()
 {
-   asm volatile("dsb st" : : : "memory");
+   asm volatile ("dsb sy" ::: "memory");
+// asm volatile("dsb st" : : : "memory");
 }
