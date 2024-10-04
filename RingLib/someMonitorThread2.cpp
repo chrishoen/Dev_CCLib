@@ -38,8 +38,8 @@ MonitorThread2::MonitorThread2()
    mShowCode = 0;
 
    // Bind member variables.
-   mMon_NextWriteIndex.bind(&SM::gShare->mTestRing.mNextWriteIndex);
-   mMon_LastReadIndex.bind(&gRingReaderThread2->mRingReader.mLastReadIndex);
+   mMon_NextWriteIndex.bind((long long*)&SM::gShare->mTestRing.mNextWriteIndex);
+   mMon_LastReadIndex.bind((long long*)&gRingReaderThread2->mRingReader.mLastReadIndex);
 }
 
 // Update status variables.

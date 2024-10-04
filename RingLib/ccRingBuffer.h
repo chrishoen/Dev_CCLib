@@ -148,7 +148,7 @@ public:
    // so that it is on a separate cache line.
 
    long long mPadding1[8];
-   long long mNextWriteIndex;
+   volatile long long mNextWriteIndex;
    long long mPadding2[8];
 
    //***************************************************************************

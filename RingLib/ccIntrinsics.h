@@ -9,7 +9,7 @@ Intrinsics for memory barriers and safe memory accesses.
 //******************************************************************************
 // Safe read of 64 bits from shared memory on a 32 bit cpu.
 
-inline long long saferead_i64(long long* aValuePtr)
+inline long long saferead_i64(volatile long long* aValuePtr)
 {
    // Loop to do two consecutive reads. If the top 32 bits of both are
    // the same then done. If they're never the same and the loop finishes
