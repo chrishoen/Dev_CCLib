@@ -116,6 +116,7 @@ void RingBufferWriter::doWrite(void* aElement)
    // Increment the write index to the next element to write to.
    store_barrier();
    mRB->mNextWriteIndex++;
+   store_barrier();
 }
 
 //******************************************************************************
@@ -399,6 +400,7 @@ bool RingBufferReader::doRead(void* aElement)
    // this will be different than the write index at the beginning of the
    // read. If the read element was less than the final min available
    // element then the read was or could have been overwritten, so drop it.
+   load_barrier();
    tNextWriteIndex = saferead_i64(&mRB->mNextWriteIndex);
    load_barrier();
    tMinReadIndex = tNextWriteIndex - (mNumElements - 1);
