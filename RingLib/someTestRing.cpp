@@ -67,7 +67,7 @@ TestRingReader::TestRingReader()
    mTestPassCount = 0;
    mTestFailCount = 0;
    mTestFailReadIndex = 0;
-   for (int i = 0; i < 7; i++)mTestFailCode[i] = 0;
+   for (int i = 0; i < 7; i++) mTestFailCode[i] = 0;
    mSleepAfterNotReadyUs = gRingParms.mSleepAfterNotReadyUs;
    mSleepAfterOverwriteUs = gRingParms.mSleepAfterOverwriteUs;
 }
@@ -85,7 +85,7 @@ void TestRingReader::resetTest()
    mTestPassCount = 0;
    mTestFailCount = 0;
    mTestFailReadIndex = 0;
-   for (int i = 0; i < 7; i++)mTestFailCode[i] = 0;
+   for (int i = 0; i < 7; i++) mTestFailCode[i] = 0;
 }
 
 void TestRingReader::doTest(long long aReadIndex, void* aElement)
