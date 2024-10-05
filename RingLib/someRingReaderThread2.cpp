@@ -204,7 +204,7 @@ void RingReaderThread2::doTest2()
 
       if (mRandomDistribution(mRandomGenerator) == 0)
       {
-         printf("SUSPEND\n");
+         printf("RD SUSPEND\n");
          mSuspendSleep.doSleep();
       }
 

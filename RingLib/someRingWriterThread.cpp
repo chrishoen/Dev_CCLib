@@ -29,7 +29,7 @@ namespace Some
 RingWriterThread::RingWriterThread()
 {
    // Set base class variables.
-   BaseClass::setThreadName("TimerTest");
+   BaseClass::setThreadName("Writer");
    BaseClass::setThreadPriority(Ris::Threads::gPriorities.mTimerTest);
    BaseClass::setThreadPriority(
       Ris::Threads::Priority(
@@ -132,7 +132,7 @@ void RingWriterThread::doTest2()
    {
       if (mRandomDistribution(mRandomGenerator) == 0)
       {
-         printf("SUSPEND\n");
+         printf("WR SUSPEND\n");
          mSuspendSleep.doSleep();
       }
 
