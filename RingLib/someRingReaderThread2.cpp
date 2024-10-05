@@ -72,7 +72,6 @@ void RingReaderThread2::threadInitFunction()
 void RingReaderThread2::threadExitFunction()
 {
    printf("someRingReaderThread2::threadExitFunction\n");
-   show();
 }
 
 //******************************************************************************
@@ -87,46 +86,6 @@ void RingReaderThread2::shutdownThread()
    printf("someRingReaderThread2::shutdownThread\n");
    // Wait for thread to terminate.
    BaseClass::shutdownThread();
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Execute periodically. This is called by the base class timer.
-
-void RingReaderThread2::show()
-{
-   Prn::print(0, "");
-   Prn::print(0, "mNextWriteIndex            %16lld", SM::gShare->mTestRing.mNextWriteIndex);
-   Prn::print(0, "Reader.mLastReadIndex      %16lld", mRingReader.mLastReadIndex);
-
-   Prn::print(0, "");
-   Prn::print(0, "Reader.NotReadyCount1      %16d", mRingReader.mNotReadyCount1);
-   Prn::print(0, "Reader.NotReadyCount2      %16d", mRingReader.mNotReadyCount2);
-   Prn::print(0, "Reader.NotReadyCount3      %16d", mRingReader.mNotReadyCount3);
-   Prn::print(0, "Reader.ErrorCount          %16d", mRingReader.mErrorCount);
-   Prn::print(0, "Reader.DropCount           %16d", mRingReader.mDropCount);
-   Prn::print(0, "Reader.mMaxDeltaRead       %16d", mRingReader.mMaxDeltaRead);
-   Prn::print(0, "Reader.OverwriteCount      %16d", mRingReader.mOverwriteCount);
-
-   Prn::print(0, "");
-   Prn::print(0, "Reader.mFirstReadIndex     %16lld", mRingReader.mFirstReadIndex);
-   Prn::print(0, "Reader.TestPassCount       %16d", mRingReader.mTestPassCount);
-   Prn::print(0, "Reader.TestFailCount       %16d", mRingReader.mTestFailCount);
-
-   Prn::print(0, "Reader.TestFailReadIndex   %16d", mRingReader.mTestFailReadIndex);
-#if 0
-   Prn::print(0, "");
-   for (int i = 0; i < 7; i++)
-   {
-   Prn::print(0, "Reader.mTestFailCode[%1d]    %16d", i, mRingReader.mTestFailCode[i]);
-   }
-#endif
-   int tSum1 = mRingReader.mTestPassCount + mRingReader.mDropCount;
-   int tSum2 = tSum1 + (int)mRingReader.mFirstReadIndex;
-   Prn::print(0, "");
-   Prn::print(0, "Reader Sum1                %16d", tSum1);
-   Prn::print(0, "Reader Sum2                %16d", tSum2);
 }
 
 //******************************************************************************

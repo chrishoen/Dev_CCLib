@@ -31,7 +31,6 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("GO1"))  executeGo1(aCmd);
    if (aCmd->isCmd("GO2"))  executeGo2(aCmd);
    if (aCmd->isCmd("GO3"))  executeGo3(aCmd);
-   if (aCmd->isCmd("Show"))  executeShow(aCmd);
    if (aCmd->isCmd("Parms"))  executeParms(aCmd);
 }
 
@@ -65,35 +64,6 @@ void CmdLineExec::executeGo2 (Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeGo3 (Ris::CmdLineCmd* aCmd)
 {
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void CmdLineExec::executeSuspend(Ris::CmdLineCmd* aCmd)
-{
-   gRingReaderThread2->mTPFlag = false;
-   Prn::suppressPrint();
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void CmdLineExec::executeUnsuspend(Ris::CmdLineCmd* aCmd)
-{
-   gRingReaderThread2->mTPFlag = true;
-   Prn::unsuppressPrint();
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void CmdLineExec::executeShow(Ris::CmdLineCmd* aCmd)
-{
-   gRingReaderThread2->show();
 }
 
 //******************************************************************************

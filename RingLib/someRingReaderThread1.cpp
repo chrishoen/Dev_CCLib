@@ -92,37 +92,4 @@ void RingReaderThread1::executeOnTimer(int aTimerCount)
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Execute periodically. This is called by the base class timer.
-
-void RingReaderThread1::show()
-{
-   Prn::print(0, "");
-   Prn::print(0, "mNextWriteIndex            %16lld", SM::gShare->mTestRing.mNextWriteIndex);
-   Prn::print(0, "Reader.mLastReadIndex      %16lld", mRingReader.mLastReadIndex);
-
-   Prn::print(0, "");
-   Prn::print(0, "Reader.NotReadyCount1      %16d", mRingReader.mNotReadyCount1);
-   Prn::print(0, "Reader.NotReadyCount2      %16d", mRingReader.mNotReadyCount2);
-   Prn::print(0, "Reader.NotReadyCount3      %16d", mRingReader.mNotReadyCount3);
-   Prn::print(0, "Reader.ErrorCount          %16d", mRingReader.mErrorCount);
-   Prn::print(0, "Reader.DropCount           %16d", mRingReader.mDropCount);
-   Prn::print(0, "Reader.mMaxDeltaRead       %16d", mRingReader.mMaxDeltaRead);
-   Prn::print(0, "Reader.OverwriteCount      %16d", mRingReader.mOverwriteCount);
-
-   Prn::print(0, "");
-   Prn::print(0, "Reader.mFirstReadIndex     %16lld", mRingReader.mFirstReadIndex);
-   Prn::print(0, "Reader.TestPassCount       %16d", mRingReader.mTestPassCount);
-   Prn::print(0, "Reader.TestFailCount       %16d", mRingReader.mTestFailCount);
-
-   int tSum1 = mRingReader.mTestPassCount + mRingReader.mDropCount;
-   int tSum2 = tSum1 + (int)mRingReader.mFirstReadIndex;
-   Prn::print(0, "");
-   Prn::print(0, "Reader Sum1                %16d", tSum1);
-   Prn::print(0, "Reader Sum2                %16d", tSum2);
-
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
 }//namespace

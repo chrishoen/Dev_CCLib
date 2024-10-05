@@ -35,7 +35,7 @@ public:
    // Members. Monitor variables.
 
    // Ring buffer indices.
-   Ris::MonitorAtomic<long long> mMon_NextWriteIndex;
+   Ris::Monitor<long long> mMon_NextWriteIndex;
 
    //***************************************************************************
    //***************************************************************************

@@ -38,7 +38,7 @@ MonitorThread::MonitorThread()
    mShowCode = 0;
 
    // Bind member variables.
-   mMon_NextWriteIndex.bind(&SM::gShare->mTestRingBuffer.mNextWriteIndex);
+   mMon_NextWriteIndex.bind((long long*)&SM::gShare->mTestRing.mNextWriteIndex);
 }
 
 // Update status variables.
@@ -65,7 +65,7 @@ void MonitorThread::executeOnTimer(int aTimeCount)
    {
       Prn::print(Prn::Show1, "%1d$   %3lld",
          gRingWriterThread->mThreadCurrentProcessor,
-         SM::gShare->mTestRingBuffer.mNextWriteIndex.load(std::memory_order_relaxed));
+         SM::gShare->mTestRing.mNextWriteIndex);
    }
    else if (mShowCode == 3)
    {
