@@ -87,10 +87,6 @@ public:
    long long mTestFailReadIndex;
    long long mTestFailCode[7];
 
-   // Test variables.
-   int mSleepAfterNotReadyUs;
-   int mSleepAfterOverwriteUs;
-
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************

@@ -8,7 +8,6 @@ Description:
 
 #include "stdafx.h"
 
-#include "someRingParms.h"
 #include "someTestRing.h"
 
 namespace Some
@@ -68,8 +67,6 @@ TestRingReader::TestRingReader()
    mTestFailCount = 0;
    mTestFailReadIndex = 0;
    for (int i = 0; i < 7; i++) mTestFailCode[i] = 0;
-   mSleepAfterNotReadyUs = gRingParms.mSleepAfterNotReadyUs;
-   mSleepAfterOverwriteUs = gRingParms.mSleepAfterOverwriteUs;
 }
 
 //******************************************************************************
