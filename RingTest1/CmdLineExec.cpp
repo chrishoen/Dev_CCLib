@@ -49,6 +49,7 @@ void CmdLineExec::special(int aSpecial)
 //******************************************************************************
 void CmdLineExec::executeGo1 (Ris::CmdLineCmd* aCmd)
 {
+   Some::gRingWriterThread->mSuspendSleep.doSleep();
 }
 
 //******************************************************************************
