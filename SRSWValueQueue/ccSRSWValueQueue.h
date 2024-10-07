@@ -42,7 +42,8 @@ public:
    int mPutIndex;
    int mGetIndex;
 
-   // Array of elements.
+   // Array of elements. The number of occupied elements varies
+   // 0..NumElements-1
    Element mElement[NumElements];
 
    //***************************************************************************
@@ -82,27 +83,27 @@ public:
    // This attempts to write a value to the queue. If the queue is not full
    // then it succeeds.
    // 
-   // The queue is full when it has NumElements - 1 occupied elements. 
-   // Note: this is NumElements - 1, not NumElements. The queue only uses
-   // at most NumElements - 1. It reserves one element to act as a buffer
+   // The queue is full when it has NumElements-1 occupied elements. 
+   // Note: this is NumElements-1, not NumElements. The queue only uses
+   // at most NumElements-1. It reserves one element to act as a buffer
    // between puts and gets, so that concurrent puts and gets on the same
    // element are avoided.
    // 
    // This tests if put operations are allowed, if the queue is not full.
    // Puts are allowed if the  current number of occupied elements is less
-   // than NumElements - 1. If puts are allowed then it copies the new
+   // than NumElements-1. If puts are allowed then it copies the new
    // element to the array and increments the put index.
    // 
 
    bool tryWrite (Element aElement)
    {
+      // Local put index.
+      int tPutIndex = mPutIndex;
       // Test if the queue is full.
-      int tOccupied = mPutIndex - mGetIndex;
+      int tOccupied = tPutIndex - mGetIndex;
       if (tOccupied < 0) tOccupied = NumElements + tOccupied;
       if (tOccupied >= NumElements - 1) return false;
 
-      // Local put index.
-      int tPutIndex = mPutIndex;
       // Copy the source element into the element at the queue put index.
       mElement[tPutIndex] = aElement;
       // Advance the put index.
@@ -125,13 +126,13 @@ public:
   
    bool tryRead(Element* aValue)
    {
+      // Local index.
+      int tGetIndex = mGetIndex;
       // Test if the queue is empty.
-      int tOccupied = mPutIndex - mGetIndex;
+      int tOccupied = mPutIndex - tGetIndex;
       if (tOccupied < 0) tOccupied = NumElements + tOccupied;
       if (tOccupied == 0) return false;
 
-      // Local index.
-      int tGetIndex = mGetIndex;
       // Copy the queue array element at the get index.
       *aValue = mElement[tGetIndex];
       // Advance the get index.
