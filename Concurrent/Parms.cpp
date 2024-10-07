@@ -29,7 +29,7 @@ void Parms::reset()
    BaseClass::mUseSections = false;
    if (Ris::portableIsWindows())
    {
-      BaseClass::setFileName_RelAlphaFiles("CCLib/Concurrent_Parms.txt");
+      BaseClass::setFilePath("c:/aaa_prime/files/Concurrent_Parms.txt");
    }
    else
    {

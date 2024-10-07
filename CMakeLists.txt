@@ -15,6 +15,9 @@ my_append_compile_flags()
 my_show_cmake_vars()
 
 
+add_subdirectory ("CCLib")
+add_subdirectory ("Concurrent")
+return()
 
 add_subdirectory ("CCLib")
 add_subdirectory ("RingLib")

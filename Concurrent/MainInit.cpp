@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include "risThreadsProcess.h"
+#include "risBaseDir.h"
 
 #include "Parms.h"
 
@@ -11,6 +12,9 @@
 
 void main_initialize(int argc,char** argv)
 {
+   // Set the base directory to the current directory.
+   Ris::setBaseDirectoryToCurrent();
+
    // Enter process.
    Ris::Threads::setProcessTimerResolution(10);
    Ris::Threads::setProcessAffinityMask(0x3E);

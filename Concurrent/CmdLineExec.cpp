@@ -73,7 +73,7 @@ void CmdLineExec::executeGo1(Ris::CmdLineCmd* aCmd)
    int tv_sec = 1;
 
    int s = tv_sec;
-   int ms = tv_nsec / 1.0e6; // Convert nanoseconds to milliseconds
+   int ms = tv_nsec / 1000000; // Convert nanoseconds to milliseconds
    Prn::print(0, "ms1 %d  %d", s, ms);
    if (ms > 999) {
       s++;
