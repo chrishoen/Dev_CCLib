@@ -9,6 +9,9 @@ Program command line executive.
 //******************************************************************************
 
 #include "risCmdLineExec.h"
+#include "ccSRSWValueQueue.h"
+#include "ccSRSWObjectQueue.h"
+#include "someClass1.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -28,6 +31,9 @@ public:
    //***************************************************************************
    //***************************************************************************
    // Members.
+
+   CC::SRSWValueQueue<int, 5> mIntQueue;
+   CC::SRSWObjectQueue<Some::Class1, 5> mObjectQueue;
 
    //***************************************************************************
    //***************************************************************************
@@ -53,9 +59,13 @@ public:
    // Methods.
 
    // Execute specific commands.
-   void executePut(Ris::CmdLineCmd* aCmd);
-   void executeGet(Ris::CmdLineCmd* aCmd);
-   void executeShow(Ris::CmdLineCmd* aCmd);
+   void executeVPut(Ris::CmdLineCmd* aCmd);
+   void executeVGet(Ris::CmdLineCmd* aCmd);
+   void executeVShow(Ris::CmdLineCmd* aCmd);
+
+   void executeOPut(Ris::CmdLineCmd* aCmd);
+   void executeOGet(Ris::CmdLineCmd* aCmd);
+   void executeOShow(Ris::CmdLineCmd* aCmd);
 
    void executeGo1(Ris::CmdLineCmd* aCmd);
    void executeGo2(Ris::CmdLineCmd* aCmd);
