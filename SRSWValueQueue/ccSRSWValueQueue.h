@@ -28,19 +28,10 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 
-template <class Element,int Size>
+template <class Element,int NumElements>
 class SRSWValueQueue
 {
 public:
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Constants.
-
-   // Number of elements allocated is size + 1. There is an extra element
-   // allocated.
-   static const int cNumElements = Size + 1;
 
    //***************************************************************************
    //***************************************************************************
@@ -52,7 +43,7 @@ public:
    int mGetIndex;
 
    // Array of elements.
-   Element mElement[cNumElements];
+   Element mElement[NumElements];
 
    //***************************************************************************
    //***************************************************************************
@@ -75,14 +66,14 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // This is the current size of the queue. It is the difference between the 
-   // mPutIndex and the mGetIndex.
+   // This is the current size of the queue. It is the number of occupied
+   // elements.
 
    int size()
    {
-      int tSize = mPutIndex - mGetIndex;
-      if (tSize < 0) tSize = cNumElements + tSize;
-      return tSize;
+      int tOccupied = mPutIndex - mGetIndex;
+      if (tOccupied < 0) tOccupied = NumElements + tOccupied;
+      return tOccupied;
    }
 
    //***************************************************************************
@@ -91,29 +82,31 @@ public:
    // This attempts to write a value to the queue. If the queue is not full
    // then it succeeds.
    // 
-   // This tests if put operations are allowed. Puts are allowed if the 
-   // current size is less than or equal to NumElements - 2. If the size is equal
-   // to NumElements - 2 then the next put operation would put the size to
-   // cNumElements - 1, which is the max number of elements. This is the same
-   // as "is not full".
+   // The queue is full when it has NumElements - 1 occupied elements. 
+   // Note: this is NumElements - 1, not NumElements. The queue only uses
+   // at most NumElements - 1. It reserves one element to act as a buffer
+   // between puts and gets, so that concurrent puts and gets on the same
+   // element are avoided.
    // 
-   // This puts an element to the queue and advances the put index. It does a 
-   // copy from a source element into the queue array element at the put index.
-   // It uses a temp index variable so that writing to the index is atomic.
+   // This tests if put operations are allowed, if the queue is not full.
+   // Puts are allowed if the  current number of occupied elements is less
+   // than NumElements - 1. If puts are allowed then it copies the new
+   // element to the array and increments the put index.
+   // 
 
    bool tryWrite (Element aElement)
    {
       // Test if the queue is full.
-      int tSize = mPutIndex - mGetIndex;
-      if (tSize < 0) tSize = cNumElements + tSize;
-      if (tSize > cNumElements - 2) return false;
+      int tOccupied = mPutIndex - mGetIndex;
+      if (tOccupied < 0) tOccupied = NumElements + tOccupied;
+      if (tOccupied >= NumElements - 1) return false;
 
       // Local put index.
       int tPutIndex = mPutIndex;
       // Copy the source element into the element at the queue put index.
       mElement[tPutIndex] = aElement;
       // Advance the put index.
-      if(++tPutIndex == cNumElements) tPutIndex = 0;
+      if(++tPutIndex == NumElements) tPutIndex = 0;
       mPutIndex = tPutIndex;
       // Done.
       return true;
@@ -123,26 +116,26 @@ public:
    //***************************************************************************
    //***************************************************************************
    // This attempts to read a value to the queue. If the queue is not empty
-   // then it succeeds.
+   // then it succeeds. The queue is not empty if the put index is not equal
+   // to the get index.
    //
    // This gets an element from the queue and advances the get index. It does a 
    // copy from the queue array element at the get index into a destination
-   // element. It uses a temp index variable so that writing to the index is
-   // atomic. Note that the destination element must be of element size.
+   // element.
   
    bool tryRead(Element* aValue)
    {
       // Test if the queue is empty.
-      int tSize = mPutIndex - mGetIndex;
-      if (tSize < 0) tSize = cNumElements + tSize;
-      if (tSize == 0) return false;
+      int tOccupied = mPutIndex - mGetIndex;
+      if (tOccupied < 0) tOccupied = NumElements + tOccupied;
+      if (tOccupied == 0) return false;
 
       // Local index.
       int tGetIndex = mGetIndex;
       // Copy the queue array element at the get index.
       *aValue = mElement[tGetIndex];
       // Advance the get index.
-      if(++tGetIndex == cNumElements) tGetIndex = 0;
+      if(++tGetIndex == NumElements) tGetIndex = 0;
       mGetIndex = tGetIndex;
 
       // Done.
