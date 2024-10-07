@@ -2,10 +2,10 @@
 
 /*==============================================================================
 
-Single Reader Writer Value Queue Class Template. 
+Single reader single writer value queue class template. 
 
 It is single writer single reader thread safe.
-It is uses no thread synchronization.
+It is lock free and non blocking.
 It is shared memory safe.
 
 This implements a value queue. 
@@ -51,12 +51,7 @@ public:
    //***************************************************************************
    // Methods.
 
-   // Constructor.
-   SRSWValueQueue()
-   {
-      reset();
-   }
-
+   // No constructor.
    void reset()
    {
       // Initialize variables.
