@@ -10,6 +10,7 @@
 #include "risThreadsPriorities.h"
 
 #include "someQueueParms.h"
+#include "someTester.h"
 #include "smShare.h"
 
 #define  _SOMERINGREADERTHREAD2_CPP_
@@ -56,11 +57,6 @@ QueueReaderThread2::QueueReaderThread2()
 void QueueReaderThread2::threadInitFunction()
 {
    SM::gShare->show(0);
-
-   // Initialize the reader.
-   mQueueReader.initialize(
-      &SM::gShare->mTestQueue,
-      &SM::gShare->mTestQueue.mElementArrayMemory);
 }
 
 //******************************************************************************
@@ -131,10 +127,11 @@ void QueueReaderThread2::doTest1()
       }
 
       // Read a record.
-      Some::TestRecord tRecord;
-      mQueueReader.doRead((void*)&tRecord);
-      if (mQueueReader.mNotReadyFlag) Ris::sleepUs(gQueueParms.mSleepAfterNotReadyUs);
-      if (mQueueReader.mOverwriteFlag) Ris::sleepUs(gQueueParms.mSleepAfterOverwriteUs);
+      if (!doReadTest())
+      {
+         // If the queue was empty then sleep.
+         Ris::sleepUs(gQueueParms.mSleepAfterNotReadyUs);
+      }
       tCount++;
    }
 }
@@ -168,10 +165,11 @@ void QueueReaderThread2::doTest2()
       }
 
       // Read a record.
-      Some::TestRecord tRecord;
-      mQueueReader.doRead((void*)&tRecord);
-      if (mQueueReader.mNotReadyFlag) Ris::sleepUs(gQueueParms.mSleepAfterNotReadyUs);
-      if (mQueueReader.mOverwriteFlag) Ris::sleepUs(gQueueParms.mSleepAfterOverwriteUs);
+      if (!doReadTest())
+      {
+         // If the queue was empty then sleep.
+         Ris::sleepUs(gQueueParms.mSleepAfterNotReadyUs);
+      }
       tCount++;
    }
 }

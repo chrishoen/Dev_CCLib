@@ -99,7 +99,7 @@ public:
       // Test if the queue is full.
       int tOccupied = tWriteIndex - mReadIndex;
       if (tOccupied < 0) tOccupied = NumElements + tOccupied;
-      if (tOccupied >= NumElements - 1) return false;
+      if (tOccupied >= NumElements - 1) return 0;
 
       // Return a pointer to the element at the write index.
       return &mElement[tWriteIndex];

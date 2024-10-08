@@ -13,6 +13,7 @@ Description:
 #include "risThreadsPriorities.h"
 
 #include "someQueueParms.h"
+#include "someTester.h"
 #include "smShare.h"
 
 #define  _SOMERINGWRITERTHREAD_CPP_
@@ -61,11 +62,6 @@ QueueWriterThread::QueueWriterThread()
 void QueueWriterThread::threadInitFunction()
 {
    SM::gShare->show(0);
-      
-   // Initialize the writer.
-   mQueueWriter.initialize(
-      &SM::gShare->mTestQueue, 
-      &SM::gShare->mTestQueue.mElementArrayMemory);
 }
 
 //******************************************************************************
@@ -112,8 +108,8 @@ void QueueWriterThread::doTest1()
    // Write some test records to the queue buffer.
    for (int i = 0; i < gQueueParms.mNumWrites; i++)
    {
-      Some::TestRecord tRecord;
-      mQueueWriter.doWrite((void*)&tRecord);
+      // Write to the queue.
+      doWriteTest();
    }
 }
 
@@ -136,8 +132,8 @@ void QueueWriterThread::doTest2()
          mSuspendSleep.doSleep();
       }
 
-      Some::TestRecord tRecord;
-      mQueueWriter.doWrite((void*)&tRecord);
+      // Write to the queue.
+      doWriteTest();
    }
 }
 
@@ -154,27 +150,8 @@ void QueueWriterThread::doTest3()
    // Write some test records to the queue buffer.
    for (int i = 0; i < gQueueParms.mNumWrites; i++)
    {
-      // Start a write and set the next record to a dummy value.
-      Some::TestRecord* tPtr = (Some::TestRecord*)mQueueWriter.startWrite();
-      tPtr->doSet(102);
-
-      // Get the write index of the element that lags behind the write index 
-      // by the read gap. This is  the last element that can safely be written to.
-      long long tLaggingWriteIndex = mQueueWriter.getNextWriteIndex() - mQueueWriter.mReadGap;
-
-      // Test that the entire read gap has been written to. 
-      if (tLaggingWriteIndex >= 0)
-      {
-         // Get the corresponding element pointer.
-         Some::TestRecord* tLaggingPtr = (Some::TestRecord*)mQueueWriter.elementAt(tLaggingWriteIndex);
-
-         // Set the value for test3, for which the value is not automatically set 
-         // by the test function.
-         tLaggingPtr->doSet(tLaggingWriteIndex);
-      }
-
-      // Finish the write.
-      mQueueWriter.finishWrite();
+      // Write to the queue.
+      doWriteTest();
    }
 }
 

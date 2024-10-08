@@ -84,6 +84,9 @@ public:
    int mReaderThreadMeanMs;
    int mReaderThreadRandomUs;
 
+   // Select 1,2.
+   int mSelect;
+
    // Test mode 1,2.
    int mWriteTestMode;
    int mReadTestMode;

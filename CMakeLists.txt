@@ -16,6 +16,8 @@ my_show_cmake_vars()
 
 
 add_subdirectory ("QueueLib")
+add_subdirectory ("QueueTest1")
+add_subdirectory ("QueueTest2")
 return()
 
 add_subdirectory ("SRSWQueue")

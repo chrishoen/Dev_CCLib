@@ -10,11 +10,9 @@ my_add_compile_options (${project})
 my_add_pch (${project})
 
 my_inc_import_RisLib(${project})
-my_inc_import_CCLib(${project})
 my_inc_import_QueueLib(${project})
 
 my_lib_import_QueueLib(${project})
-my_lib_import_CCLib(${project})
 my_lib_import_RisLib(${project})
 
 

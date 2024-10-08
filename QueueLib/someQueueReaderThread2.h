@@ -11,7 +11,6 @@ Serial test thread that contains a serial port.
 #include <random>
 #include "risSleep.h"
 #include "risThreadsThreads.h"
-#include "someTestQueue.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -36,9 +35,6 @@ public:
    //***************************************************************************
    //***************************************************************************
    // Members.
-
-   // Queue buffer reader.
-   TestQueueReader mQueueReader;
 
    // If true then perform timer processing.
    bool mTPFlag;

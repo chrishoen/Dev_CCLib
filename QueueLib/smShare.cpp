@@ -33,6 +33,7 @@ void Share::initialize()
    printf("Share::initialize *************************************\n");
    mValueQueue.reset();
    mObjectQueue.reset();
+   mSX.reset();
 }
 
 //******************************************************************************

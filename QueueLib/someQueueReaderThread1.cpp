@@ -13,6 +13,7 @@ Description:
 #include "risThreadsPriorities.h"
 
 #include "someQueueParms.h"
+#include "someTester.h"
 #include "smShare.h"
 
 #define  _SOMERINGREADERTHREAD1_CPP_
@@ -55,13 +56,6 @@ QueueReaderThread1::QueueReaderThread1()
 void QueueReaderThread1::threadInitFunction()
 {
    SM::gShare->show(0);
-      
-   // Initialize the reader.
-   mQueueReader.initialize(
-      &SM::gShare->mTestQueue,
-      &SM::gShare->mTestQueue.mElementArrayMemory);
-
-   //mQueueReader.doRestartAtMin();
 }
 
 //******************************************************************************
@@ -84,9 +78,10 @@ void QueueReaderThread1::executeOnTimer(int aTimerCount)
    // Guard.
    if (!mTPFlag) return;
 
-   // Read a test record to the queue buffer.
-   Some::TestRecord tRecord;
-   mQueueReader.doRead((void*)&tRecord);
+   // Read from the queue.
+   Some::doReadTest();
+
+
 }
 
 //******************************************************************************

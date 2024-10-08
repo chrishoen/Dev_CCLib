@@ -13,6 +13,7 @@ Shared memory region.
 #include "ccSRSWValueQueue.h"
 #include "ccSRSWObjectQueue.h"
 #include "someClass1.h"
+#include "someStateSX.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -57,8 +58,12 @@ public:
    //***************************************************************************
    // Members.
 
+   // Queues
    CC::SRSWValueQueue<int, 100> mValueQueue;
    CC::SRSWObjectQueue<Some::Class1, 100> mObjectQueue;
+
+   // State.
+   Some::State mSX;
 
    //***************************************************************************
    //***************************************************************************

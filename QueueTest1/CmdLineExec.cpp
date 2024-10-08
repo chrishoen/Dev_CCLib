@@ -6,7 +6,7 @@
 #include "someQueueParms.h"
 #include "someQueueReaderThread1.h"
 #include "someQueueWriterThread.h"
-#include "someMonitorThread1.h"
+#include "someMonitorThread.h"
 using namespace Some;
 
 //******************************************************************************
@@ -40,7 +40,7 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::special(int aSpecial)
 {
-   gMonitorThread1->mShowCode = aSpecial;
+   gMonitorThread->mShowCode = aSpecial;
 }
 
 //******************************************************************************

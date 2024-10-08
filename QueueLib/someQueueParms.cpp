@@ -52,6 +52,7 @@ void QueueParms::reset()
    mReaderThreadMeanMs = 0;
    mReaderThreadRandomUs = 0;
 
+   mSelect = 0;
    mWriteTestMode = 0;
    mReadTestMode = 0;
    mNumWrites = 1;
@@ -87,6 +88,8 @@ void QueueParms::show()
    printf("ReaderThreadPriority         %-10d\n", mReaderThreadPriority);
    printf("ReaderThreadMeanMs           %-10d\n", mReaderThreadMeanMs);
    printf("ReaderThreadRandomUs         %-10d\n", mReaderThreadRandomUs);
+   printf("\n");
+   printf("Select                       %-10d\n", mSelect);
    printf("\n");
    printf("WriteTestMode                %-10d\n", mWriteTestMode);
    printf("ReadTestMode                 %-10d\n", mReadTestMode);
@@ -124,6 +127,8 @@ void QueueParms::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("ReaderThreadPriority"))    mReaderThreadPriority = aCmd->argInt(1);
    if (aCmd->isCmd("ReaderThreadMeanMs"))      mReaderThreadMeanMs = aCmd->argInt(1);
    if (aCmd->isCmd("ReaderThreadRandomUs"))    mReaderThreadRandomUs = aCmd->argInt(1);
+
+   if (aCmd->isCmd("Select"))                  mSelect = aCmd->argInt(1);
 
    if (aCmd->isCmd("WriteTestMode"))           mWriteTestMode = aCmd->argInt(1);
    if (aCmd->isCmd("ReadTestMode"))            mReadTestMode = aCmd->argInt(1);
