@@ -68,6 +68,7 @@ void MonitorThread::executeOnTimer(int aTimeCount)
          mMon_ReadCount.mValue, mMon_ReadCount.mDelta);
       Prn::print(Prn::Show1, "ReadPassCount            %-10d", SM::gShare->mSX.mReadPassCount);
       Prn::print(Prn::Show1, "ReadEmptyCount           %-10d", SM::gShare->mSX.mReadEmptyCount);
+      Prn::print(Prn::Show1, "ReadErrorCount           %-10d", SM::gShare->mSX.mReadErrorCount);
       Prn::print(Prn::Show1, "");
    }
 
