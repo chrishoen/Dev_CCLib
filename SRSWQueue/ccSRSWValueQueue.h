@@ -2,7 +2,7 @@
 
 /*==============================================================================
 
-Single reader single writer value queue class template. 
+Single reader single writer value queue class template.
 
 It is single writer single reader thread safe.
 It is lock free and non blocking.
@@ -90,7 +90,7 @@ public:
    // element to the array and increments the put index.
    // 
 
-   bool tryWrite (Element aElement)
+   bool tryPut (Element aElement)
    {
       // Local put index.
       int tPutIndex = mPutIndex;
@@ -119,7 +119,7 @@ public:
    // copy from the queue array element at the get index into a destination
    // element.
   
-   bool tryRead(Element* aValue)
+   bool tryGet(Element* aValue)
    {
       // Local index.
       int tGetIndex = mGetIndex;

@@ -60,7 +60,7 @@ void CmdLineExec::executeVPut(Ris::CmdLineCmd* aCmd)
    aCmd->setArgDefault(1, 1);
    int tValue = aCmd->argInt(1);
 
-   if (mIntQueue.tryWrite(tValue))
+   if (mIntQueue.tryPut(tValue))
    {
       Prn::print(0, "PUT PASS  $$ %d", mIntQueue.size());
    }
@@ -74,7 +74,7 @@ void CmdLineExec::executeVGet(Ris::CmdLineCmd* aCmd)
 {
    int tValue = 0;
 
-   if (mIntQueue.tryRead(&tValue))
+   if (mIntQueue.tryGet(&tValue))
    {
       Prn::print(0, "GET PASS   $$ %d", tValue);
    }

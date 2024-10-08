@@ -13,7 +13,7 @@ Description:
 namespace Some
 {
 // Constructors.
-Class1::Class1()
+void Class1::reset()
 {
    mCode1 = 101;
    mCode2 = 102;

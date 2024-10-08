@@ -2,13 +2,13 @@
 
 /*==============================================================================
 
-Single Reader Writer Object Queue Class Template. 
+Single reader single writer object queue class template.
 
 It is single writer single reader thread safe.
-It is uses no thread synchronization.
+It is lock free and non blocking.
 It is shared memory safe.
 
-This implements a value queue. 
+This implements an object queue.
 
 It is thread safe for separate single writer and single reader threads.
 
@@ -28,19 +28,10 @@ namespace CC
 //******************************************************************************
 //******************************************************************************
 
-template <class Element,int Size>
+template <class Element,int NumElements>
 class SRSWObjectQueue
 {
 public:
-
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Constants.
-
-   // Number of elements allocated is size + 1. There is an extra element
-   // allocated.
-   static const int cNumElements = Size + 1;
 
    //***************************************************************************
    //***************************************************************************
@@ -51,20 +42,16 @@ public:
    int mPutIndex;
    int mGetIndex;
 
-   // Array of elements.
-   Element mElement[cNumElements];
+   // Array of elements. The number of occupied elements varies
+   // 0..NumElements-1
+   Element mElement[NumElements];
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Methods.
 
-   // Constructor.
-   SRSWObjectQueue()
-   {
-      reset();
-   }
-
+   // No constructor.
    void reset()
    {
       // Initialize variables.
@@ -75,14 +62,14 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // This is the current size of the queue. It is the difference between the 
-   // mPutIndex and the mGetIndex.
+   // This is the current size of the queue. It is the number of occupied
+   // elements.
 
    int size()
    {
-      int tSize = mPutIndex - mGetIndex;
-      if (tSize < 0) tSize = cNumElements + tSize;
-      return tSize;
+      int tOccupied = mPutIndex - mGetIndex;
+      if (tOccupied < 0) tOccupied = NumElements + tOccupied;
+      return tOccupied;
    }
 
    //***************************************************************************
@@ -91,31 +78,37 @@ public:
    // This attempts to write a value to the queue. If the queue is not full
    // then it succeeds.
    // 
-   // This tests if put operations are allowed. Puts are allowed if the 
-   // current size is less than or equal to NumElements - 2. If the size is equal
-   // to NumElements - 2 then the next put operation would put the size to
-   // cNumElements - 1, which is the max number of elements. This is the same
-   // as "is not full".
+   // The queue is full when it has NumElements-1 occupied elements. 
+   // Note: this is NumElements-1, not NumElements. The queue only uses
+   // at most NumElements-1. It reserves one element to act as a buffer
+   // between puts and gets, so that concurrent puts and gets on the same
+   // element are avoided.
    // 
-   // This puts an element to the queue and advances the put index. It does a 
-   // copy from a source element into the queue array element at the put index.
-   // It uses a temp index variable so that writing to the index is atomic.
+   // This tests if put operations are allowed, if the queue is not full.
+   // Puts are allowed if the  current number of occupied elements is less
+   // than NumElements-1. If puts are allowed then it returns a pointer
+   // to the element to put to.
+   // 
 
    Element* startPut()
    {
-      // If the queue is full then return zero.
-      int tSize = mPutIndex - mGetIndex;
-      if (tSize < 0) tSize = cNumElements + tSize;
-      if (tSize > cNumElements - 2) return 0;
+      // Local put index.
+      int tPutIndex = mPutIndex;
+      // Test if the queue is full.
+      int tOccupied = tPutIndex - mGetIndex;
+      if (tOccupied < 0) tOccupied = NumElements + tOccupied;
+      if (tOccupied >= NumElements - 1) return false;
 
       // Return a pointer to the element at the put index.
-      return &mElement[mPutIndex];
+      return &mElement[tPutIndex];
    }
 
    void finishPut()
    {
+      // Local put index.
       int tPutIndex = mPutIndex;
-      if (++tPutIndex == cNumElements) tPutIndex = 0;
+      // Advance the put index.
+      if (++tPutIndex == NumElements) tPutIndex = 0;
       mPutIndex = tPutIndex;
    }
 
@@ -123,19 +116,20 @@ public:
    //***************************************************************************
    //***************************************************************************
    // This attempts to read a value to the queue. If the queue is not empty
-   // then it succeeds.
+   // then it succeeds. The queue is not empty if the put index is not equal
+   // to the get index.
    //
-   // This gets an element from the queue and advances the get index. It does a 
-   // copy from the queue array element at the get index into a destination
-   // element. It uses a temp index variable so that writing to the index is
-   // atomic. Note that the destination element must be of element size.
+   // If the queue is empty, return a null pointer. 
+   // If the queue is not empty, return a pointer to the element to get from.
   
    Element* startGet()
    {
-      // If the queue is empty then return zero.
-      int tSize = mPutIndex - mGetIndex;
-      if (tSize < 0) tSize = cNumElements + tSize;
-      if (tSize == 0) return 0;
+      // Local index.
+      int tGetIndex = mGetIndex;
+      // Test if the queue is empty.
+      int tOccupied = mPutIndex - tGetIndex;
+      if (tOccupied < 0) tOccupied = NumElements + tOccupied;
+      if (tOccupied == 0) return 0;
 
       // Return a pointer to the element at the get index.
       return &mElement[mGetIndex];
@@ -146,7 +140,7 @@ public:
       // Local index.
       int tGetIndex = mGetIndex;
       // Advance the get index.
-      if (++tGetIndex == cNumElements) tGetIndex = 0;
+      if (++tGetIndex == NumElements) tGetIndex = 0;
       mGetIndex = tGetIndex;
    }
 };
