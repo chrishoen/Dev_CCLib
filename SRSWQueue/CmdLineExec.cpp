@@ -35,12 +35,12 @@ void CmdLineExec::reset()
 void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
    if(aCmd->isCmd("RESET"))   reset();
-   if (aCmd->isCmd("VP"))     executeVPut(aCmd);
-   if (aCmd->isCmd("VG"))     executeVGet(aCmd);
+   if (aCmd->isCmd("VW"))     executeVWrite(aCmd);
+   if (aCmd->isCmd("VR"))     executeVRead(aCmd);
    if (aCmd->isCmd("VS"))     executeVShow(aCmd);
 
-   if (aCmd->isCmd("OP"))     executeOPut(aCmd);
-   if (aCmd->isCmd("OG"))     executeOGet(aCmd);
+   if (aCmd->isCmd("OW"))     executeOWrite(aCmd);
+   if (aCmd->isCmd("OR"))     executeORead(aCmd);
    if (aCmd->isCmd("OS"))     executeOShow(aCmd);
 
    if (aCmd->isCmd("GO1"))    executeGo1(aCmd);
@@ -55,12 +55,12 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeVPut(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeVWrite(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1, 1);
    int tValue = aCmd->argInt(1);
 
-   if (mIntQueue.tryPut(tValue))
+   if (mIntQueue.tryWrite(tValue))
    {
       Prn::print(0, "PUT PASS  $$ %d", mIntQueue.size());
    }
@@ -70,11 +70,11 @@ void CmdLineExec::executeVPut(Ris::CmdLineCmd* aCmd)
    }
 }
 
-void CmdLineExec::executeVGet(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeVRead(Ris::CmdLineCmd* aCmd)
 {
    int tValue = 0;
 
-   if (mIntQueue.tryGet(&tValue))
+   if (mIntQueue.tryRead(&tValue))
    {
       Prn::print(0, "GET PASS   $$ %d", tValue);
    }
@@ -87,8 +87,8 @@ void CmdLineExec::executeVGet(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeVShow(Ris::CmdLineCmd* aCmd)
 {
    Prn::print(0, "SIZE   $$ %d", mIntQueue.size());
-   Prn::print(0, "PUTI   $$ %d", mIntQueue.mPutIndex);
-   Prn::print(0, "GETI   $$ %d", mIntQueue.mGetIndex);
+   Prn::print(0, "PUTI   $$ %d", mIntQueue.mWriteIndex);
+   Prn::print(0, "GETI   $$ %d", mIntQueue.mReadIndex);
 
    for (int i = 0; i < 5; i++)
    {
@@ -100,13 +100,13 @@ void CmdLineExec::executeVShow(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeOPut(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeOWrite(Ris::CmdLineCmd* aCmd)
 {
    aCmd->setArgDefault(1, 1);
-   if (Some::Class1* tClass1 = mObjectQueue.startPut())
+   if (Some::Class1* tClass1 = mObjectQueue.startWrite())
    {
       tClass1->mCode1 = aCmd->argInt(1);
-      mObjectQueue.finishPut();
+      mObjectQueue.finishWrite();
       Prn::print(0, "PUT PASS  $$ %d", mObjectQueue.size());
    }
    else
@@ -115,12 +115,12 @@ void CmdLineExec::executeOPut(Ris::CmdLineCmd* aCmd)
    }
 }
 
-void CmdLineExec::executeOGet(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeORead(Ris::CmdLineCmd* aCmd)
 {
-   if (Some::Class1* tClass1 = mObjectQueue.startGet())
+   if (Some::Class1* tClass1 = mObjectQueue.startRead())
    {
       Prn::print(0, "PUT PASS  $$ %d", tClass1->mCode1);
-      mObjectQueue.finishGet();
+      mObjectQueue.finishRead();
    }
    else
    {
@@ -131,8 +131,8 @@ void CmdLineExec::executeOGet(Ris::CmdLineCmd* aCmd)
 void CmdLineExec::executeOShow(Ris::CmdLineCmd* aCmd)
 {
    Prn::print(0, "SIZE   $$ %d", mObjectQueue.size());
-   Prn::print(0, "PUTI   $$ %d", mObjectQueue.mPutIndex);
-   Prn::print(0, "GETI   $$ %d", mObjectQueue.mGetIndex);
+   Prn::print(0, "PUTI   $$ %d", mObjectQueue.mWriteIndex);
+   Prn::print(0, "GETI   $$ %d", mObjectQueue.mReadIndex);
 
    for (int i = 0; i < 5; i++)
    {

@@ -59,12 +59,12 @@ public:
    // Methods.
 
    // Execute specific commands.
-   void executeVPut(Ris::CmdLineCmd* aCmd);
-   void executeVGet(Ris::CmdLineCmd* aCmd);
+   void executeVWrite(Ris::CmdLineCmd* aCmd);
+   void executeVRead(Ris::CmdLineCmd* aCmd);
    void executeVShow(Ris::CmdLineCmd* aCmd);
 
-   void executeOPut(Ris::CmdLineCmd* aCmd);
-   void executeOGet(Ris::CmdLineCmd* aCmd);
+   void executeOWrite(Ris::CmdLineCmd* aCmd);
+   void executeORead(Ris::CmdLineCmd* aCmd);
    void executeOShow(Ris::CmdLineCmd* aCmd);
 
    void executeGo1(Ris::CmdLineCmd* aCmd);
