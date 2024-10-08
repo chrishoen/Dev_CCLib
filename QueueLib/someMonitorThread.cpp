@@ -16,6 +16,7 @@ Description:
 
 #include "someQueueParms.h"
 #include "someQueueReaderThread1.h"
+#include "someQueueReaderThread2.h"
 
 #define  _SOMEMONITORTHREAD1_CPP_
 #include "someMonitorThread.h"
@@ -74,8 +75,12 @@ void MonitorThread::executeOnTimer(int aTimeCount)
 
    if (mShowCode == 2)
    {
+      int tProcNum = 9;
+      if (gQueueReaderThread1) tProcNum = gQueueReaderThread1->mThreadCurrentProcessor;
+      if (gQueueReaderThread2) tProcNum = gQueueReaderThread2->mThreadCurrentProcessor;
+
       Prn::print(Prn::Show1, "%1d$   WR %5d %5d %5d RD %5d %5d %5d ERR %d",
-         gQueueReaderThread1->mThreadCurrentProcessor,
+         tProcNum,
          SM::gShare->mSX.mWriteCount,
          SM::gShare->mSX.mWritePassCount,
          SM::gShare->mSX.mWriteFullCount,
