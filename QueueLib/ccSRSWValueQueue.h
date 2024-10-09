@@ -18,6 +18,9 @@ different processes (who therefore have different address spaces):
 4) No vtables, this means no virtual functions.
 5) Be careful with your loads and stores.
 ==============================================================================*/
+
+#include "ccIntrinsics.h" 
+
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -100,6 +103,8 @@ public:
 
       // Copy the queue array element at the write index.
       mElement[tWriteIndex] = aElement;
+      store_barrier();
+
       // Advance the write index.
       if(++tWriteIndex == NumElements) tWriteIndex = 0;
       mWriteIndex = tWriteIndex;
@@ -132,6 +137,7 @@ public:
       if (tOccupied == 0) return false;
 
       // Copy the queue array element at the read index.
+      load_barrier();
       *aValue = mElement[tReadIndex];
       // Advance the read index.
       if(++tReadIndex == NumElements) tReadIndex = 0;
