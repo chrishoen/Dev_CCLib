@@ -8,6 +8,7 @@ Description:
 #include "stdafx.h"
 
 
+#include "someQueueParms.h"
 #include "someStateSX.h"
 
 namespace Some
@@ -20,6 +21,7 @@ namespace Some
 
 void State::reset()
 {
+   mQueueSelect = gQueueParms.mSelect;
    mWriteCount = 0;
    mWritePassCount = 0;
    mWriteFullCount = 0;

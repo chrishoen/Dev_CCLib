@@ -20,6 +20,7 @@ add_subdirectory ("QueueTest1")
 add_subdirectory ("QueueTest2")
 return()
 
+add_subdirectory ("QueueLib")
 add_subdirectory ("SRSWQueue")
 return()
 

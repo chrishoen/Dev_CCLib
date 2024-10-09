@@ -58,8 +58,17 @@ void MonitorThread::executeOnTimer(int aTimeCount)
 {
    update();
 
+   int tSize = -1;
+   if (SM::gShare->mSX.mQueueSelect == 1) tSize = SM::gShare->mValueQueue.size();
+   if (SM::gShare->mSX.mQueueSelect == 2) tSize = SM::gShare->mObjectQueue.size();
+
+   int tProcNum = 9;
+   if (gQueueReaderThread1) tProcNum = gQueueReaderThread1->mThreadCurrentProcessor;
+   if (gQueueReaderThread2) tProcNum = gQueueReaderThread2->mThreadCurrentProcessor;
+
    if (mShowCode == 1)
    {
+      Prn::print(Prn::Show1, "Size                     %-10d", tSize);
       Prn::print(Prn::Show1, "WriteCount               %-10lld  %lld",
          mMon_WriteCount.mValue, mMon_WriteCount.mDelta);
       Prn::print(Prn::Show1, "WritePassCount           %-10d", SM::gShare->mSX.mWritePassCount);
@@ -75,12 +84,8 @@ void MonitorThread::executeOnTimer(int aTimeCount)
 
    if (mShowCode == 2)
    {
-      int tProcNum = 9;
-      if (gQueueReaderThread1) tProcNum = gQueueReaderThread1->mThreadCurrentProcessor;
-      if (gQueueReaderThread2) tProcNum = gQueueReaderThread2->mThreadCurrentProcessor;
-
-      Prn::print(Prn::Show1, "%1d$   WR %5d %5d %5d RD %5d %5d %5d ERR %d",
-         tProcNum,
+      Prn::print(Prn::Show1, "%1d %3d $   WR %5d %5d %5d RD %5d %5d %5d ERR %d",
+         tProcNum, tSize,
          SM::gShare->mSX.mWriteCount,
          SM::gShare->mSX.mWritePassCount,
          SM::gShare->mSX.mWriteFullCount,

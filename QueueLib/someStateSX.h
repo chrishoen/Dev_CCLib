@@ -27,6 +27,9 @@ public:
    //***************************************************************************
    // Members:
 
+   // Queue variables.
+   int mQueueSelect;
+
    // Test variables.
    int mWriteCount;
    int mWritePassCount;
