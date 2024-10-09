@@ -44,7 +44,7 @@ QueueReaderThread2::QueueReaderThread2()
    // Seed random generator and random sleep.
    std::random_device tRandomDevice;
    mRandomGenerator.seed(tRandomDevice());
-   mRandomDistribution = std::uniform_int_distribution<>(0, gQueueParms.mSuspendRandom);
+   mRandomDistribution = std::uniform_int_distribution<>(0, gQueueParms.mReadSuspendRandom);
    mSuspendSleep.initialize(gQueueParms.mSuspendSleepMeanMs, gQueueParms.mSuspendSleepRandomMs * 1000);
 }
 

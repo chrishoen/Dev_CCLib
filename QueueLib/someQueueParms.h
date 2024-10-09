@@ -97,7 +97,8 @@ public:
    int mSleepAfterOverwriteUs;
 
    // Suspend test variables.
-   int mSuspendRandom;
+   int mWriteSuspendRandom;
+   int mReadSuspendRandom;
    int mSuspendSleepMeanMs;
    int mSuspendSleepRandomMs;
 

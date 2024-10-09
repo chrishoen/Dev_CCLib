@@ -48,7 +48,7 @@ QueueWriterThread::QueueWriterThread()
    // Seed random generator and random sleep.
    std::random_device tRandomDevice;
    mRandomGenerator.seed(tRandomDevice());
-   mRandomDistribution = std::uniform_int_distribution<>(0, gQueueParms.mSuspendRandom);
+   mRandomDistribution = std::uniform_int_distribution<>(0, gQueueParms.mWriteSuspendRandom);
    mSuspendSleep.initialize(gQueueParms.mSuspendSleepMeanMs, gQueueParms.mSuspendSleepRandomMs * 1000);
 }
 
@@ -123,15 +123,15 @@ void QueueWriterThread::doTest2()
    // Guard.
    if (!mTPFlag) return;
 
+   if (mRandomDistribution(mRandomGenerator) == 0)
+   {
+      printf("WR SUSPEND\n");
+      mSuspendSleep.doSleep();
+   }
+
    // Write some test records to the queue buffer.
    for (int i = 0; i < gQueueParms.mNumWrites; i++)
    {
-      if (mRandomDistribution(mRandomGenerator) == 0)
-      {
-         printf("WR SUSPEND\n");
-         mSuspendSleep.doSleep();
-      }
-
       // Write to the queue.
       doWriteTest();
    }

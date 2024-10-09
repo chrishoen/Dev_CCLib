@@ -59,7 +59,8 @@ void QueueParms::reset()
    mSleepAfterNotReadyUs = 0;
    mSleepAfterOverwriteUs = 0;
 
-   mSuspendRandom = 0;
+   mWriteSuspendRandom = 0;
+   mReadSuspendRandom = 0;
    mSuspendSleepMeanMs = 0;
    mSuspendSleepRandomMs = 0;
 }
@@ -97,7 +98,8 @@ void QueueParms::show()
    printf("SleepAfterNotReadyUs         %-10d\n", mSleepAfterNotReadyUs);
    printf("mSleepAfterOverwriteUs       %-10d\n", mSleepAfterOverwriteUs);
    printf("\n");
-   printf("SuspendRandom                %-10d\n", mSuspendRandom);
+   printf("WriteSuspendRandom           %-10d\n", mWriteSuspendRandom);
+   printf("ReadSuspendRandom            %-10d\n", mReadSuspendRandom);
    printf("SuspendSleepMeanMs           %-10d\n", mSuspendSleepMeanMs);
    printf("SuspendSleepRandomMs         %-10d\n", mSuspendSleepRandomMs);
    printf("\n");
@@ -136,7 +138,8 @@ void QueueParms::execute(Ris::CmdLineCmd* aCmd)
    if (aCmd->isCmd("SleepAfterNotReadyUs"))    mSleepAfterNotReadyUs = aCmd->argInt(1);
    if (aCmd->isCmd("SleepAfterOverwriteUs"))   mSleepAfterOverwriteUs = aCmd->argInt(1);
 
-   if (aCmd->isCmd("SuspendRandom"))           mSuspendRandom = aCmd->argInt(1);
+   if (aCmd->isCmd("WriteSuspendRandom"))      mWriteSuspendRandom = aCmd->argInt(1);
+   if (aCmd->isCmd("ReadSuspendRandom"))       mReadSuspendRandom = aCmd->argInt(1);
    if (aCmd->isCmd("SuspendSleepMeanMs"))      mSuspendSleepMeanMs = aCmd->argInt(1);
    if (aCmd->isCmd("SuspendSleepRandomMs"))    mSuspendSleepRandomMs = aCmd->argInt(1);
 }
