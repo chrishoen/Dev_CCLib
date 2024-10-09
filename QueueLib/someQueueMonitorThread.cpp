@@ -18,8 +18,8 @@ Description:
 #include "someQueueReaderThread1.h"
 #include "someQueueReaderThread2.h"
 
-#define  _SOMEMONITORTHREAD1_CPP_
-#include "someMonitorThread.h"
+#define  _SOMEQUEUEMONITORTHREAD1_CPP_
+#include "someQueueMonitorThread.h"
 
 namespace Some
 {
@@ -28,12 +28,12 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 
-MonitorThread::MonitorThread()
+QueueMonitorThread::QueueMonitorThread()
 {
    // Set base class variables.
    BaseClass::setThreadName("Monitor");
    BaseClass::setThreadPriority(Ris::Threads::gPriorities.mMonitor);
-   BaseClass::mTimerPeriod = gQueueParms.mMonitorThreadPeriod;
+   BaseClass::mTimerPeriod = 1000;
 
    // Set member variables.
    mShowCode = 0;
@@ -44,7 +44,7 @@ MonitorThread::MonitorThread()
 }
 
 // Update status variables.
-void MonitorThread::update()
+void QueueMonitorThread::update()
 {
    mMon_WriteCount.update();
    mMon_ReadCount.update();
@@ -54,7 +54,7 @@ void MonitorThread::update()
 //******************************************************************************
 //******************************************************************************
 
-void MonitorThread::executeOnTimer(int aTimeCount)
+void QueueMonitorThread::executeOnTimer(int aTimeCount)
 {
    update();
 

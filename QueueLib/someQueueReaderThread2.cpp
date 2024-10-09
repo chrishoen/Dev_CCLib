@@ -10,7 +10,7 @@
 #include "risThreadsPriorities.h"
 
 #include "someQueueParms.h"
-#include "someTester.h"
+#include "someQueueTester.h"
 #include "smShare.h"
 
 #define  _SOMERINGREADERTHREAD2_CPP_

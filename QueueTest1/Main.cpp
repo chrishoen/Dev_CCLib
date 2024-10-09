@@ -8,7 +8,7 @@
 #include "someQueueParms.h"
 #include "someQueueReaderThread1.h"
 #include "someQueueWriterThread.h"
-#include "someMonitorThread.h"
+#include "someQueueMonitorThread.h"
 
 //******************************************************************************
 //******************************************************************************
@@ -40,8 +40,8 @@ int main(int argc,char** argv)
    }
    if (true)
    {
-      Some::gMonitorThread = new Some::MonitorThread;
-      Some::gMonitorThread->launchThread();
+      Some::gQueueMonitorThread = new Some::QueueMonitorThread;
+      Some::gQueueMonitorThread->launchThread();
    }
 
    //***************************************************************************
@@ -52,7 +52,7 @@ int main(int argc,char** argv)
    Ris::Threads::showCurrentThreadInfo();
    if (Some::gQueueReaderThread1) Some::gQueueReaderThread1->showThreadInfo();
    if (Some::gQueueWriterThread) Some::gQueueWriterThread->showThreadInfo();
-   if (Some::gMonitorThread) Some::gMonitorThread->showThreadInfo();
+   if (Some::gQueueMonitorThread) Some::gQueueMonitorThread->showThreadInfo();
 
 
    //***************************************************************************
@@ -69,11 +69,11 @@ int main(int argc,char** argv)
    //***************************************************************************
    // Shutdown program Threads.
 
-   if (Some::gMonitorThread)
+   if (Some::gQueueMonitorThread)
    {
-      Some::gMonitorThread->shutdownThread();
-      delete Some::gMonitorThread;
-      Some::gMonitorThread = 0;
+      Some::gQueueMonitorThread->shutdownThread();
+      delete Some::gQueueMonitorThread;
+      Some::gQueueMonitorThread = 0;
    }
    if (Some::gQueueWriterThread)
    {

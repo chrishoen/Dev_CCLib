@@ -12,7 +12,7 @@ Description:
 #include "someStateSX.h"
 #include "smShare.h"
 
-#include "someTester.h"
+#include "someQueueTester.h"
 
 namespace Some
 {

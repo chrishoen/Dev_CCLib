@@ -17,7 +17,7 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 
-class MonitorThread : public Ris::Threads::BaseTimerThread
+class QueueMonitorThread : public Ris::Threads::BaseTimerThread
 {
 public:
    typedef Ris::Threads::BaseTimerThread BaseClass;
@@ -45,7 +45,7 @@ public:
    // Methods.
 
    // Constructor.
-   MonitorThread();
+   QueueMonitorThread();
 
    // Update monitor variables.
    void update();
@@ -59,10 +59,10 @@ public:
 //******************************************************************************
 // Global instance
 
-#ifdef _SOMEMONITORTHREAD1_CPP_
-          MonitorThread* gMonitorThread = 0;
+#ifdef _SOMEQUEUEMONITORTHREAD1_CPP_
+          QueueMonitorThread* gQueueMonitorThread = 0;
 #else
-   extern MonitorThread* gMonitorThread;
+   extern QueueMonitorThread* gQueueMonitorThread;
 #endif
 
 //******************************************************************************
