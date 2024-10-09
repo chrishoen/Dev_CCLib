@@ -8,8 +8,6 @@ Shared memory region.
 //******************************************************************************
 //******************************************************************************
 
-#include <atomic>
-
 #include "ccSRSWValueQueue.h"
 #include "ccSRSWObjectQueue.h"
 #include "someClass1.h"
@@ -25,13 +23,15 @@ namespace SM
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// The following rules are for shared memory regions that are shared between
-// different processes (who therefore have different address spaces):
-// 
+// ALSO, DON'T FORGET:
+// The following rules are for shared memory, regions that are shared between
+// different processes(who therefore have different address spaces) :
+//
 // 1) No constructors.
 // 2) No pointers.
 // 3) No dynamic memory, this means no std::vector, ...
 // 4) No vtables, this means no virtual functions.
+// 5) Be careful with your loads and stores.
 //
 //******************************************************************************
 //******************************************************************************
