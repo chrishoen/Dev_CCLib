@@ -31,14 +31,14 @@ public:
    int mQueueSelect;
 
    // Test variables.
-   int mWriteCount;
-   int mWritePassCount;
-   int mWriteFullCount;
+   long long mWriteCount;
+   long long mWritePassCount;
+   long long mWriteFullCount;
 
-   int mReadCount;
-   int mReadPassCount;
-   int mReadEmptyCount;
-   int mReadErrorCount;
+   long long mReadCount;
+   long long mReadPassCount;
+   long long mReadEmptyCount;
+   long long mReadErrorCount;
 
    //***************************************************************************
    //***************************************************************************

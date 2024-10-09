@@ -68,23 +68,23 @@ void MonitorThread::executeOnTimer(int aTimeCount)
 
    if (mShowCode == 1)
    {
-      Prn::print(Prn::Show1, "Size                     %-10d", tSize);
+      Prn::print(Prn::Show1, "Size                     %-10lld", tSize);
       Prn::print(Prn::Show1, "WriteCount               %-10lld  %lld",
          mMon_WriteCount.mValue, mMon_WriteCount.mDelta);
-      Prn::print(Prn::Show1, "WritePassCount           %-10d", SM::gShare->mSX.mWritePassCount);
-      Prn::print(Prn::Show1, "WriteFullCount           %-10d", SM::gShare->mSX.mWriteFullCount);
+      Prn::print(Prn::Show1, "WritePassCount           %-10lld", SM::gShare->mSX.mWritePassCount);
+      Prn::print(Prn::Show1, "WriteFullCount           %-10lld", SM::gShare->mSX.mWriteFullCount);
 
       Prn::print(Prn::Show1, "ReadCount                %-10lld  %lld",
          mMon_ReadCount.mValue, mMon_ReadCount.mDelta);
-      Prn::print(Prn::Show1, "ReadPassCount            %-10d", SM::gShare->mSX.mReadPassCount);
-      Prn::print(Prn::Show1, "ReadEmptyCount           %-10d", SM::gShare->mSX.mReadEmptyCount);
-      Prn::print(Prn::Show1, "ReadErrorCount           %-10d", SM::gShare->mSX.mReadErrorCount);
+      Prn::print(Prn::Show1, "ReadPassCount            %-10lld", SM::gShare->mSX.mReadPassCount);
+      Prn::print(Prn::Show1, "ReadEmptyCount           %-10lld", SM::gShare->mSX.mReadEmptyCount);
+      Prn::print(Prn::Show1, "ReadErrorCount           %-10lld", SM::gShare->mSX.mReadErrorCount);
       Prn::print(Prn::Show1, "");
    }
 
    if (mShowCode == 2)
    {
-      Prn::print(Prn::Show1, "%1d %3d $   WR %5d %5d %5d RD %5d %5d %5d ERR %d",
+      Prn::print(Prn::Show1, "%1d %3d $   WR %5lld %5lld %5lld RD %5lld %5lld %5lld ERR %lld",
          tProcNum, tSize,
          SM::gShare->mSX.mWriteCount,
          SM::gShare->mSX.mWritePassCount,

@@ -36,8 +36,8 @@ public:
    // Members. Monitor variables.
 
    // Queue buffer indices.
-   Ris::Monitor<int> mMon_WriteCount;
-   Ris::Monitor<int> mMon_ReadCount;
+   Ris::Monitor<long long> mMon_WriteCount;
+   Ris::Monitor<long long> mMon_ReadCount;
 
    //***************************************************************************
    //***************************************************************************
