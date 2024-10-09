@@ -42,11 +42,11 @@ public:
    // Element access indices. They vary as 0..NumElements-1. These
    // are the next element to write to and the next element to read
    // from.
-   int mWriteIndex;
-   int mReadIndex;
+   volatile int mWriteIndex;
+   volatile int mReadIndex;
 
    // Array of elements.
-   Element mElement[NumElements];
+   volatile Element mElement[NumElements];
 
    //***************************************************************************
    //***************************************************************************
