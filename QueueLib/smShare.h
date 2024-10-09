@@ -59,8 +59,8 @@ public:
    // Members.
 
    // Queues
-   CC::SRSWValueQueue<int, 100> mValueQueue;
-   CC::SRSWObjectQueue<Some::Class1, 100> mObjectQueue;
+   CC::SRSWValueQueue<int, 101> mValueQueue;
+   CC::SRSWObjectQueue<Some::Class1, 101> mObjectQueue;
 
    // State.
    Some::State mSX;
