@@ -31,15 +31,18 @@ static inline long long saferead_i64(volatile long long* aValuePtr)
 
 static inline void memory_barrier()
 {
+// asm volatile ("dsb sy" ::: "memory");
    asm volatile ("dsb sy" ::: "memory");
 }
 
 static inline void load_barrier()
 {
-   asm volatile ("dsb ld" ::: "memory");
+// asm volatile ("dsb ld" ::: "memory");
+   asm volatile ("dsb sy" ::: "memory");
 }
 
 static inline void store_barrier()
 {
-   asm volatile ("dsb st" ::: "memory");
+// asm volatile ("dsb st" ::: "memory");
+   asm volatile ("dsb sy" ::: "memory");
 }
