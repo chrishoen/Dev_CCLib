@@ -63,6 +63,7 @@ bool doReadTest()
    // Read from the object queue.
    if (gQueueParms.mSelect == 2)
    {
+      SM::gShare->mSX.mReadCount++;
       if (Some::Class1* tClass1 = SM::gShare->mObjectQueue.startRead())
       {
          SM::gShare->mSX.mReadPassCount++;
@@ -101,6 +102,7 @@ bool doWriteTest()
    // Write to the object queue.
    if (gQueueParms.mSelect == 2)
    {
+      SM::gShare->mSX.mWriteCount++;
       Some::Class1* tClass1 = SM::gShare->mObjectQueue.startWrite();
       if (tClass1)
       {
