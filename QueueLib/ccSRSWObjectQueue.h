@@ -9,14 +9,14 @@ It is lock free and non blocking.
 It is shared memory safe.
 
 ALSO, DON'T FORGET:
-The following rules are for shared memory, regions that are shared between
-different processes (who therefore have different address spaces):
+The following rules apply to using shared memory:
 
 1) No constructors.
 2) No pointers.
 3) No dynamic memory, this means no std::vector, ...
 4) No vtables, this means no virtual functions.
 5) Be careful with your loads and stores.
+6) alignas(16) for classes and long long.
 
 ==============================================================================*/
 //******************************************************************************
@@ -35,7 +35,7 @@ namespace CC
 //******************************************************************************
 
 template <class Element,int NumElements>
-class SRSWObjectQueue
+class alignas(16) SRSWObjectQueue
 {
 public:
 
@@ -51,7 +51,7 @@ public:
    volatile int mReadIndex;
 
    // Array of elements.
-   Element mElement[NumElements];
+   alignas(16) Element mElement[NumElements];
 
    //***************************************************************************
    //***************************************************************************

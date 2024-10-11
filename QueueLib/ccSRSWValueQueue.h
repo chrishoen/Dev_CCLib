@@ -17,6 +17,8 @@ different processes (who therefore have different address spaces):
 3) No dynamic memory, this means no std::vector, ...
 4) No vtables, this means no virtual functions.
 5) Be careful with your loads and stores.
+6) alignas(16) for classes and long long.
+
 ==============================================================================*/
 
 #include "ccIntrinsics.h" 
@@ -33,7 +35,7 @@ namespace CC
 //******************************************************************************
 
 template <class Element,int NumElements>
-class SRSWValueQueue
+class alignas(16) SRSWValueQueue
 {
 public:
 
@@ -49,7 +51,7 @@ public:
    volatile int mReadIndex;
 
    // Array of elements.
-   volatile Element mElement[NumElements];
+   alignas(16) Element mElement[NumElements];
 
    //***************************************************************************
    //***************************************************************************
