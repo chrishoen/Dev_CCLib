@@ -82,6 +82,76 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
+   // Try to write an object to the queue. If the queue is full then
+   // return false. If the queue is not full then copy the element
+   // to the queue array at the write index, increment the write index,
+   // and return true. 
+   // 
+   // The queue is full when it has NumElements-1 occupied elements. The
+   // queue only stores at most NumElements-1 elements. It reserves one
+   // element to act as a buffer between puts and gets, so that concurrent
+   // writes and reads on the same element are avoided.
+
+   bool tryWrite(Element* aElement)
+   {
+      // Get local indices.
+      int tWriteIndex = mWriteIndex;
+      int tReadIndex = mReadIndex;
+
+      // Test if the queue is full.
+      int tOccupied = tWriteIndex - tReadIndex;
+      if (tOccupied < 0) tOccupied = NumElements + tOccupied;
+      if (tOccupied == NumElements - 1) return false;
+
+      // Copy the queue array element at the write index.
+      mElement[tWriteIndex] = *aElement;
+      store_barrier();
+
+      // Advance the write index.
+      if (++tWriteIndex == NumElements) tWriteIndex = 0;
+      mWriteIndex = tWriteIndex;
+
+      // Success.
+      return true;
+   }
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
+   // Try to read an object from the queue. If the queue is empty then
+   // return false. If the queue is not empty then copy the element
+   // from the queue array at the read index, increment the read index,
+   // and return true. 
+   // 
+   // The queue is not empty if the write index is not equal to the read
+   // index. In other words, the queue is not empty when the number of
+   // occupied elements is greater than zero.
+
+   bool tryRead(Element* aValue)
+   {
+      // Get local indices.
+      int tWriteIndex = mWriteIndex;
+      int tReadIndex = mReadIndex;
+
+      // Test if the queue is empty.
+      int tOccupied = tWriteIndex - tReadIndex;
+      if (tOccupied < 0) tOccupied = NumElements + tOccupied;
+      if (tOccupied == 0) return false;
+
+      // Copy the queue array element at the read index.
+      load_barrier();
+      *aValue = mElement[tReadIndex];
+      // Advance the read index.
+      if (++tReadIndex == NumElements) tReadIndex = 0;
+      mReadIndex = tReadIndex;
+
+      // Success.
+      return true;
+   }
+
+   //***************************************************************************
+   //***************************************************************************
+   //***************************************************************************
    // Try to write a value to the queue. If the queue is full then
    // return false. If the queue is not full then copy the element
    // to the queue array at the write index, increment the write index,

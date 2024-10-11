@@ -37,7 +37,9 @@ public:
 
    // Queue buffer indices.
    Ris::Monitor<long long> mMon_WriteCount;
+   Ris::Monitor<long long> mMon_WritePassCount;
    Ris::Monitor<long long> mMon_ReadCount;
+   Ris::Monitor<long long> mMon_ReadPassCount;
 
    //***************************************************************************
    //***************************************************************************
