@@ -134,10 +134,10 @@ public:
    alignas(16) long long mNumElements;
 
    // Size of each element in the ring buffer.
-   alignas(16) size_t mElementSize;
+   int mElementSize;
 
    // Read gap.
-   alignas(16) long long mReadGap;
+   int mReadGap;
 
    // The index of the next element to write to. If this is equal to
    // zero then no writes have occured and the ring buffer is empty.
