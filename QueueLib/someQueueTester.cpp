@@ -43,7 +43,7 @@ bool doReadTest()
       if (SM::gShare->mValueQueue.tryRead(&tValue))
       {
          SM::gShare->mSX.mReadPassCount++;
-         if (tValue)
+         if (tValue != 0 && tValue != -2147483648)
          {
             // If this is not the first read then check
             // the value. It should be one greater than
@@ -52,8 +52,8 @@ bool doReadTest()
             {
                SM::gShare->mSX.mReadErrorCount++;
             }
-            gLastReadValue = tValue;
          }
+         gLastReadValue = tValue;
          return true;
       }
       else
@@ -62,6 +62,7 @@ bool doReadTest()
          return false;
       }
    }
+
    //***************************************************************************
    // Read from the object queue.
 
@@ -75,7 +76,7 @@ bool doReadTest()
       {
          tValue = tClass1.mCode1;
          SM::gShare->mSX.mReadPassCount++;
-         if (tValue)
+         if (tValue != 0 && tValue != -2147483648)
          {
             // If this is not the first read then check
             // the value. It should be one greater than
@@ -84,8 +85,8 @@ bool doReadTest()
             {
                SM::gShare->mSX.mReadErrorCount++;
             }
-            gLastReadValue = tValue;
          }
+         gLastReadValue = tValue;
          return true;
       }
       else
@@ -94,6 +95,7 @@ bool doReadTest()
          return false;
       }
    }
+
    //***************************************************************************
    // Read from the object queue.
 
@@ -105,7 +107,7 @@ bool doReadTest()
       {
          tValue = tClass1->mCode1;
          SM::gShare->mSX.mReadPassCount++;
-         if (tValue)
+         if (tValue != 0 && tValue != -2147483648)
          {
             // If this is not the first read then check
             // the value. It should be one greater than
@@ -114,8 +116,8 @@ bool doReadTest()
             {
                SM::gShare->mSX.mReadErrorCount++;
             }
-            gLastReadValue = tValue;
          }
+         gLastReadValue = tValue;
          SM::gShare->mObjectQueue.finishRead();
          return true;
       }
