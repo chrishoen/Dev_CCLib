@@ -25,7 +25,7 @@ namespace Some
 //******************************************************************************
 // Test ring buffer.
 
-class TestRing : public CC::MemoryRingBuffer<TestRecord, 100, 20>
+class alignas(16) TestRing : public CC::MemoryRingBuffer<TestRecord, 100, 20>
 {
 public:
 };
