@@ -112,13 +112,6 @@ different processes (who therefore have different address spaces):
 //******************************************************************************
 //******************************************************************************
 
-#include <stddef.h>
-#include <atomic>
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
 namespace CC
 {
 
@@ -128,7 +121,7 @@ namespace CC
 // Ring buffer. This contains variables that describe a ring buffer
 // and its state. This class is shared memory safe.
 
-class RingBufferState
+class alignas(16) RingBufferState
 {
 public:
 
@@ -138,13 +131,13 @@ public:
    // Members.
 
    // Number of elements in the ring buffer.
-   long long mNumElements;
+   alignas(16) long long mNumElements;
 
    // Size of each element in the ring buffer.
-   size_t mElementSize;
+   int mElementSize;
 
    // Read gap.
-   long long mReadGap;
+   int mReadGap;
 
    // The index of the next element to write to. If this is equal to
    // zero then no writes have occured and the ring buffer is empty.
@@ -155,7 +148,7 @@ public:
    // so that it is on a separate cache line.
 
    long long mPadding1[8];
-   std::atomic<long long> mNextWriteIndex;
+   alignas(16) volatile long long mNextWriteIndex;
    long long mPadding2[8];
 
    //***************************************************************************
