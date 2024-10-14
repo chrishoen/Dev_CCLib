@@ -10,7 +10,7 @@ my_add_pch (${project})
 
 target_include_directories(${project} PUBLIC ${PROJECT_SOURCE_DIR})
 
-my_inc_import_CCLib(${project})
+#my_inc_import_CCLib(${project})
 my_inc_import_RisLib(${project})
 
 
