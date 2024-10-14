@@ -44,6 +44,9 @@ RingWriterThread::RingWriterThread()
    // Set member variables.
    mTPFlag = false;
 
+   // Special.
+   mRingWriter.mWriteTestMode = gRingParms.mWriteTestMode;
+
    // Seed random generator and random sleep.
    std::random_device tRandomDevice;
    mRandomGenerator.seed(tRandomDevice());
@@ -66,6 +69,9 @@ void RingWriterThread::threadInitFunction()
    mRingWriter.initialize(
       &SM::gShare->mTestRing, 
       &SM::gShare->mTestRing.mElementArrayMemory);
+
+   // Special parameter.
+   mRingWriter.mWriteTestMode = gRingParms.mWriteTestMode;
 }
 
 //******************************************************************************

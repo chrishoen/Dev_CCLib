@@ -34,6 +34,7 @@ void TestRingWriter::resetTest()
    BaseClass::mTestFlag = true;
    mFirstWriteFlag = true;
    mFirstWriteIndex = 0;
+   mWriteTestMode = 0;
 }
 
 void TestRingWriter::doTest(long long aWriteIndex, void* aElement)
@@ -47,7 +48,7 @@ void TestRingWriter::doTest(long long aWriteIndex, void* aElement)
 
    // For test3, do not set the record values. It will be set
    // explicitly by the thread.
-   if (gRingParms.mWriteTestMode == 3) return;
+   if (mWriteTestMode == 3) return;
 
    // Set the record value.
    TestRecord* tRecord = (TestRecord*)aElement;
