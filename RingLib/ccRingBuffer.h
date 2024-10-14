@@ -131,7 +131,7 @@ public:
    // Members.
 
    // Number of elements in the ring buffer.
-   alignas(16) long long mNumElements;
+   int mNumElements;
 
    // Size of each element in the ring buffer.
    int mElementSize;
@@ -147,9 +147,9 @@ public:
    // modulo the number of elements. This variable is surrounded by padding
    // so that it is on a separate cache line.
 
-   long long mPadding1[8];
+   alignas(16) long long mPadding1[8];
    alignas(16) volatile long long mNextWriteIndex;
-   long long mPadding2[8];
+   alignas(16) long long mPadding2[8];
 
    //***************************************************************************
    //***************************************************************************
@@ -184,13 +184,13 @@ public:
    void* mElementArrayMemory;
 
    // Number of elements in the ring buffer.
-   long long mNumElements;
+   int mNumElements;
 
    // Size of each element in the ring buffer.
-   size_t mElementSize;
+   int mElementSize;
 
    // Read gap.
-   long long mReadGap;
+   int mReadGap;
 
    //***************************************************************************
    //***************************************************************************
@@ -283,13 +283,13 @@ public:
    void* mElementArrayMemory;
 
    // Number of elements in the ring buffer.
-   long long mNumElements;
+   int mNumElements;
 
    // Size of each element in the ring buffer.
-   size_t mElementSize;
+   int mElementSize;
 
    // Read gap.
-   long long mReadGap;
+   int mReadGap;
 
    //***************************************************************************
    //***************************************************************************
