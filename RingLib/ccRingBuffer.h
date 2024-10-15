@@ -234,14 +234,14 @@ public:
 
    // Return a pointer to an element, based on an index modulo the number
    // of elements.
-   Element* elementAt(long long aIndex)
+   inline Element* elementAt(long long aIndex)
    {
       aIndex %= NumElements;
       return &mElementArrayMemory[aIndex];
    }
 
    // Return the index of the next element to write to.
-   long long getNextWriteIndex()
+   inline long long getNextWriteIndex()
    {
       // Return the index of the next element to write to.
       return mRB->mNextWriteIndex;
@@ -456,7 +456,7 @@ public:
 
    // Return a pointer to an element, based on an index modulo the number
    // of elements.
-   Element* elementAt(long long aIndex)
+   inline Element* elementAt(long long aIndex)
    {
       aIndex %= NumElements;
       return &mElementArrayMemory[aIndex];
