@@ -73,9 +73,9 @@ void MonitorThread2::executeOnTimer(int aTimeCount)
       Prn::print(Prn::Show1, "NotReadyCount1           %-10d", tReader->mNotReadyCount1);
       Prn::print(Prn::Show1, "NotReadyCount2           %-10d", tReader->mNotReadyCount2);
       Prn::print(Prn::Show1, "NotReadyCount3           %-10d", tReader->mNotReadyCount3);
-      Prn::print(Prn::Show1, "DropCount                %-10d", tReader->mDropCount);
-      Prn::print(Prn::Show1, "MaxDeltaRead             %-10d", tReader->mMaxDeltaRead);
+      Prn::print(Prn::Show1, "MissCount                %-10d", tReader->mMissCount);
       Prn::print(Prn::Show1, "OverwriteCount           %-10d", tReader->mOverwriteCount);
+      Prn::print(Prn::Show1, "MaxDeltaRead             %-10d", tReader->mMaxDeltaRead);
       Prn::print(Prn::Show1, "TestPassCount            %-10d", tReader->mTestPassCount);
       Prn::print(Prn::Show1, "TestFailCount            %-10d", tReader->mTestFailCount);
       Prn::print(Prn::Show1, "");
@@ -91,7 +91,7 @@ void MonitorThread2::executeOnTimer(int aTimeCount)
          gRingReaderThread2->mRingReader.mNotReadyCount1,
          gRingReaderThread2->mRingReader.mNotReadyCount2,
          gRingReaderThread2->mRingReader.mNotReadyCount3,
-         gRingReaderThread2->mRingReader.mDropCount,
+         gRingReaderThread2->mRingReader.mMissCount,
          gRingReaderThread2->mRingReader.mMaxDeltaRead,
          gRingReaderThread2->mRingReader.mOverwriteCount,
          gRingReaderThread2->mRingReader.mTestPassCount,

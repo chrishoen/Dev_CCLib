@@ -12,7 +12,7 @@ This accomodates a single writer and multiple indepenent readers. The writer
 writes to the buffer with no knowledge of the readers and the readers can read
 from the buffer independantly from each other. There is no locking of the
 buffer. Each reader maintains its own state and manages its own logic for
-keeping track of buffer indices and dropping of elements and testing for
+keeping track of buffer indices and missing elements and testing for
 overwrites.
 
 The ring buffer is based on the idea of an infinite memory of contiguous
@@ -388,8 +388,8 @@ public:
    int mNotReadyCount2;
    int mNotReadyCount3;
 
-   // The number of elements that were dropped.
-   int mDropCount;
+   // The number of elements that were missed.
+   int mMissCount;
 
    // The number of overwrites that occurred.
    int mOverwriteCount;
@@ -432,7 +432,7 @@ public:
       mNotReadyCount2 = 0;
       mNotReadyCount3 = 0;
       mErrorCount = 0;
-      mDropCount = 0;
+      mMissCount = 0;
       mMaxDeltaRead = 0;
       mOverwriteCount = 0;
       mNotReadyFlag = false;
@@ -616,12 +616,13 @@ public:
 
       // If, during the read, the ring buffer was written to asynchronously
       // by the writer, then test if the read was possibly or actually
-      // overwritten. If it was then drop the read.
+      // overwritten. If it was then miss the read.
 
       // Get the final write index. If a write occurred during the read then
       // this will be different than the write index at the beginning of the
       // read. If the read element was less than the final min available
-      // element then the read was or could have been overwritten, so drop it.
+      // element then the read was or could have been overwritten, so ignore
+      // it.
       load_barrier();
       tNextWriteIndex = saferead_i64(&mRB->mNextWriteIndex);
       load_barrier();
@@ -641,13 +642,13 @@ public:
          doTest(tNextReadIndex, aElement);
       }
 
-      // Increment the drop count. If none were dropped then the read index
+      // Increment the miss count. If none were missed then the read index
       // should be the index of the last succesful read plus one.
       if (mLastReadIndex > 0)
       {
          int tDeltaRead = (int)(tNextReadIndex - mLastReadIndex);
          if (tDeltaRead > mMaxDeltaRead) mMaxDeltaRead = tDeltaRead;
-         mDropCount += tDeltaRead - 1;
+         mMissCount += tDeltaRead - 1;
       }
 
       // Save the index for the last successful read. This is used to 
