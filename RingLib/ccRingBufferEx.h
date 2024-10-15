@@ -23,6 +23,7 @@ namespace CC
 // Heap ring buffer. This provides a ring buffer that has memory for an
 // element array on the heap. This class is not shared memory safe.
 
+template <class Element, int NumElements>
 class HeapRingBuffer : public RingBufferState
 {
 public:
@@ -35,18 +36,43 @@ public:
     
    // Memory for the ring buffer element array. This is created on the heap at 
    // initialization.
-   void* mElementArrayMemory;
+   Element* mElementArrayMemory;
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Methods.
-
    // Constructor.
-   HeapRingBuffer();
-   ~HeapRingBuffer();
-   void initialize(int aNumElements, size_t aElementSize, int aReadGap);
-   void finalize();
+
+   HeapRingBuffer::HeapRingBuffer()
+   {
+      mElementArrayMemory = 0;
+   }
+
+   HeapRingBuffer::~HeapRingBuffer()
+   {
+      finalize();
+   }
+
+   void HeapRingBuffer::initialize()
+   {
+#if 0
+      finalize();
+      BaseClass::initialize();
+      mElementArrayMemory = (Element*)malloc(NumElements * sizeof(ElementSize));
+#endif
+   }
+
+   void HeapRingBuffer::finalize()
+   {
+#if 0
+      if (mElementArrayMemory)
+      {
+         free(mElementArrayMemory);
+         mElementArrayMemory = 0;
+      }
+#endif
+   }
+
 };
 
 //******************************************************************************
@@ -56,7 +82,7 @@ public:
 // for an element array. This class is shared memory safe as long as
 // the indivual elements are shared memory safe. 
 
-template <class Element, int NumElements, int ReadGap>
+template <class Element, int NumElements>
 class MemoryRingBuffer : public RingBufferState
 {
 public:
@@ -78,7 +104,7 @@ public:
    // No constructor.
    void initialize()
    {
-      BaseClass::initialize(NumElements, sizeof(Element), ReadGap);
+      BaseClass::initialize();
    }
 };
 

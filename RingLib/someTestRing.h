@@ -21,9 +21,17 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+// Constants.
+
+   const int cTestRing_NumElements = 100;
+   const int cTestRing_ReadGap = 20;
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 // Test ring buffer.
 
-class alignas(16) TestRing : public CC::MemoryRingBuffer<TestRecord, 100, 20>
+class alignas(16) TestRing : public CC::MemoryRingBuffer<TestRecord, cTestRing_NumElements>
 {
 public:
 };
@@ -33,10 +41,10 @@ public:
 //******************************************************************************
 // Test ring buffer writer.
 
-class TestRingWriter : public CC::RingBufferWriter
+class TestRingWriter : public CC::RingBufferWriter<TestRecord, cTestRing_NumElements>
 {
 private:
-   typedef CC::RingBufferWriter BaseClass;
+   typedef CC::RingBufferWriter<TestRecord, cTestRing_NumElements> BaseClass;
 public:
 
    //***************************************************************************
@@ -59,7 +67,7 @@ public:
 
    // Test methods.
    void resetTest() override;
-   void doTest(long long aWriteIndex, void* aElement) override;
+   void doTest(long long aWriteIndex, TestRecord* aElement) override;
 };
 
 //******************************************************************************
@@ -67,10 +75,10 @@ public:
 //******************************************************************************
 // Test ring buffer writer.
 
-class TestRingReader : public CC::RingBufferReader
+class TestRingReader : public CC::RingBufferReader<TestRecord, cTestRing_NumElements, cTestRing_ReadGap>
 {
 private:
-   typedef CC::RingBufferReader BaseClass;
+   typedef CC::RingBufferReader<TestRecord, cTestRing_NumElements, cTestRing_ReadGap> BaseClass;
 public:
 
    //***************************************************************************
@@ -96,7 +104,7 @@ public:
 
    // Test methods.
    void resetTest() override;
-   void doTest(long long aReadIndex, void* aElement) override;
+   void doTest(long long aReadIndex, TestRecord* aElement) override;
 };
 
 //******************************************************************************
