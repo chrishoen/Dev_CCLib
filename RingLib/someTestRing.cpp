@@ -31,7 +31,7 @@ TestRingWriter::TestRingWriter()
 
 void TestRingWriter::resetTest()
 {
-   BaseClass::mTestFlag = true;
+   BaseClass::mTestFlag = cTestRing_TestFlag;
    mFirstWriteFlag = true;
    mFirstWriteIndex = 0;
    mWriteTestMode = 0;
@@ -76,7 +76,7 @@ TestRingReader::TestRingReader()
 
 void TestRingReader::resetTest()
 {
-   BaseClass::mTestFlag = true;
+   BaseClass::mTestFlag = cTestRing_TestFlag;
    mFirstReadFlag = true;
    mFirstReadIndex = 0;
    mTestPassCount = 0;

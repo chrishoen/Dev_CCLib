@@ -25,6 +25,7 @@ namespace Some
 
    const int cTestRing_NumElements = 100;
    const int cTestRing_ReadGap = 20;
+   const bool cTestRing_TestFlag = true;
 
 //******************************************************************************
 //******************************************************************************
