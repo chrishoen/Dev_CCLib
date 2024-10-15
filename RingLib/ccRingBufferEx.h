@@ -94,7 +94,7 @@ public:
    // Members.
 
    // Memory for the ring buffer element array.
-   Element mElementArrayMemory[NumElements];
+   alignas(16) Element mElementArrayMemory[NumElements];
 
    //***************************************************************************
    //***************************************************************************

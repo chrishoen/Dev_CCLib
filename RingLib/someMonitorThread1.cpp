@@ -81,7 +81,7 @@ void MonitorThread1::executeOnTimer(int aTimeCount)
 
    if (mShowCode == 2)
    {
-      Prn::print(Prn::Show1, "%1d$   %3lld %3lld  %3d NRDY %d %d %d DROP %d %d OVER %d TEST %d %d",
+      Prn::print(Prn::Show1, "%1d$   %3lld %3lld  %3d NRDY %d %d %d MISS %d OVER %d MAX %d TEST %d %d",
          gRingReaderThread1->mThreadCurrentProcessor,
          SM::gShare->mTestRing.mNextWriteIndex,
          gRingReaderThread1->mRingReader.mLastReadIndex,
@@ -90,8 +90,8 @@ void MonitorThread1::executeOnTimer(int aTimeCount)
          gRingReaderThread1->mRingReader.mNotReadyCount2,
          gRingReaderThread1->mRingReader.mNotReadyCount3,
          gRingReaderThread1->mRingReader.mMissCount,
-         gRingReaderThread1->mRingReader.mMaxDeltaRead,
          gRingReaderThread1->mRingReader.mOverwriteCount,
+         gRingReaderThread1->mRingReader.mMaxDeltaRead,
          gRingReaderThread1->mRingReader.mTestPassCount,
          gRingReaderThread1->mRingReader.mTestFailCount);
    }
