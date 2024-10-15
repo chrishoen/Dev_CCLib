@@ -550,7 +550,7 @@ public:
       // available yet, so exit. This can happen with a nonzero read gap.
       if (tMaxReadIndex < 0)
       {
-         // Set the read for the behind the maximum available element.
+         // Set the read for one behind the maximum available element.
          mLastReadIndex = tMaxReadIndex - 1;
          mNotReadyCount2++;
          mNotReadyFlag = true;
