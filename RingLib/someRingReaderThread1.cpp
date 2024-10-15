@@ -59,7 +59,7 @@ void RingReaderThread1::threadInitFunction()
    // Initialize the reader.
    mRingReader.initialize(
       &SM::gShare->mTestRing,
-      &SM::gShare->mTestRing.mElementArrayMemory);
+      &SM::gShare->mTestRing.mElementArrayMemory[0]);
 
    //mRingReader.doRestartAtMin();
 }
@@ -86,7 +86,7 @@ void RingReaderThread1::executeOnTimer(int aTimerCount)
 
    // Read a test record to the ring buffer.
    Some::TestRecord tRecord;
-   mRingReader.doRead((void*)&tRecord);
+   mRingReader.doRead(&tRecord);
 }
 
 //******************************************************************************

@@ -43,17 +43,17 @@ public:
    //***************************************************************************
    // Constructor.
 
-   HeapRingBuffer::HeapRingBuffer()
+   HeapRingBuffer()
    {
       mElementArrayMemory = 0;
    }
 
-   HeapRingBuffer::~HeapRingBuffer()
+   ~HeapRingBuffer()
    {
       finalize();
    }
 
-   void HeapRingBuffer::initialize()
+   void initialize()
    {
 #if 0
       finalize();
@@ -62,7 +62,7 @@ public:
 #endif
    }
 
-   void HeapRingBuffer::finalize()
+   void finalize()
    {
 #if 0
       if (mElementArrayMemory)

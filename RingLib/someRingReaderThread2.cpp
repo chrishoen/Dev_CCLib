@@ -60,7 +60,7 @@ void RingReaderThread2::threadInitFunction()
    // Initialize the reader.
    mRingReader.initialize(
       &SM::gShare->mTestRing,
-      &SM::gShare->mTestRing.mElementArrayMemory);
+      &SM::gShare->mTestRing.mElementArrayMemory[0]);
 }
 
 //******************************************************************************
@@ -132,7 +132,7 @@ void RingReaderThread2::doTest1()
 
       // Read a record.
       Some::TestRecord tRecord;
-      mRingReader.doRead((void*)&tRecord);
+      mRingReader.doRead(&tRecord);
       if (mRingReader.mNotReadyFlag) Ris::sleepUs(gRingParms.mSleepAfterNotReadyUs);
       if (mRingReader.mOverwriteFlag) Ris::sleepUs(gRingParms.mSleepAfterOverwriteUs);
       tCount++;
@@ -169,7 +169,7 @@ void RingReaderThread2::doTest2()
 
       // Read a record.
       Some::TestRecord tRecord;
-      mRingReader.doRead((void*)&tRecord);
+      mRingReader.doRead(&tRecord);
       if (mRingReader.mNotReadyFlag) Ris::sleepUs(gRingParms.mSleepAfterNotReadyUs);
       if (mRingReader.mOverwriteFlag) Ris::sleepUs(gRingParms.mSleepAfterOverwriteUs);
       tCount++;

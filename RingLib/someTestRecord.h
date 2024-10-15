@@ -41,6 +41,9 @@ public:
    //***************************************************************************
    // Methods.
 
+   // No constructor.
+   void reset();
+
    // Set.
    void doSet(long long aCode);
 

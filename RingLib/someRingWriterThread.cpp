@@ -68,7 +68,7 @@ void RingWriterThread::threadInitFunction()
    // Initialize the writer.
    mRingWriter.initialize(
       &SM::gShare->mTestRing, 
-      &SM::gShare->mTestRing.mElementArrayMemory);
+      &SM::gShare->mTestRing.mElementArrayMemory[0]);
 
    // Special parameter.
    mRingWriter.mWriteTestMode = gRingParms.mWriteTestMode;
@@ -119,7 +119,8 @@ void RingWriterThread::doTest1()
    for (int i = 0; i < gRingParms.mNumWrites; i++)
    {
       Some::TestRecord tRecord;
-      mRingWriter.doWrite((void*)&tRecord);
+      tRecord.reset();
+      mRingWriter.doWrite(&tRecord);
    }
 }
 
@@ -143,7 +144,8 @@ void RingWriterThread::doTest2()
       }
 
       Some::TestRecord tRecord;
-      mRingWriter.doWrite((void*)&tRecord);
+      tRecord.reset();
+      mRingWriter.doWrite(&tRecord);
    }
 }
 
@@ -161,18 +163,18 @@ void RingWriterThread::doTest3()
    for (int i = 0; i < gRingParms.mNumWrites; i++)
    {
       // Start a write and set the next record to a dummy value.
-      Some::TestRecord* tPtr = (Some::TestRecord*)mRingWriter.startWrite();
+      Some::TestRecord* tPtr = mRingWriter.startWrite();
       tPtr->doSet(102);
 
       // Get the write index of the element that lags behind the write index 
       // by the read gap. This is  the last element that can safely be written to.
-      long long tLaggingWriteIndex = mRingWriter.getNextWriteIndex() - mRingWriter.mReadGap;
+      long long tLaggingWriteIndex = mRingWriter.getNextWriteIndex() - cTestRing_ReadGap;
 
       // Test that the entire read gap has been written to. 
       if (tLaggingWriteIndex >= 0)
       {
          // Get the corresponding element pointer.
-         Some::TestRecord* tLaggingPtr = (Some::TestRecord*)mRingWriter.elementAt(tLaggingWriteIndex);
+         Some::TestRecord* tLaggingPtr = mRingWriter.elementAt(tLaggingWriteIndex);
 
          // Set the value for test3, for which the value is not automatically set 
          // by the test function.

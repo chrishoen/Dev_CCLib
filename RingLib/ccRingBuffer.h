@@ -155,7 +155,7 @@ public:
    // No constructor.
    virtual ~RingBufferState() {}
 
-   void RingBufferState::initialize()
+   void initialize()
    {
       store_barrier();
       mNextWriteIndex = 0;
@@ -203,7 +203,7 @@ public:
    // Constructor.
 
    // Constructor.
-   RingBufferWriter::RingBufferWriter()
+   RingBufferWriter()
    {
       mRB = 0;
       mElementArrayMemory = 0;
@@ -213,14 +213,14 @@ public:
    virtual ~RingBufferWriter() {};
 
    // Reset variables.
-   void RingBufferWriter::resetVars()
+   void resetVars()
    {
       resetTest();
    }
    virtual void resetTest() {}
 
    // Initialize.
-   void RingBufferWriter::initialize(RingBufferState* aRingBufferState, Element* aElementArrayMemory)
+   void initialize(RingBufferState* aRingBufferState, Element* aElementArrayMemory)
    {
       resetVars();
       mRB = aRingBufferState;
@@ -234,14 +234,14 @@ public:
 
    // Return a pointer to an element, based on an index modulo the number
    // of elements.
-   Element* RingBufferWriter::elementAt(long long aIndex)
+   Element* elementAt(long long aIndex)
    {
       aIndex %= NumElements;
       return &mElementArrayMemory[aIndex];
    }
 
    // Return the index of the next element to write to.
-   long long RingBufferWriter::getNextWriteIndex()
+   long long getNextWriteIndex()
    {
       // Return the index of the next element to write to.
       return mRB->mNextWriteIndex;
@@ -255,7 +255,7 @@ public:
    // Write an element to the array at the write index, copying it from
    // the function argument. Increment the write index state variable so 
    // that it contains the index of the next element to write to.
-   void RingBufferWriter::doWrite(Element* aElement)
+   void doWrite(Element* aElement)
    {
       // Get the index of the next element to write to.
       long long tWriteIndex = mRB->mNextWriteIndex;
@@ -287,7 +287,7 @@ public:
    // Return a pointer to the next element to write to, which is the element
    // at the write index. Do not increment the  write index state. The caller
    // can then execute its own write operation.
-   Element* RingBufferWriter::startWrite()
+   Element* startWrite()
    {
       // Get the index of the next element to write to.
       long long tWriteIndex = mRB->mNextWriteIndex;
@@ -301,7 +301,7 @@ public:
 
    // Increment the write index state variable after a started write is
    // finished so that it contains the index of the last element written to.
-   void RingBufferWriter::finishWrite()
+   void finishWrite()
    {
       if (mTestFlag)
       {
@@ -414,7 +414,7 @@ public:
    //***************************************************************************
    // Constructor.
 
-   RingBufferReader::RingBufferReader()
+   RingBufferReader()
    {
       mRB = 0;
       mElementArrayMemory = 0;
@@ -423,7 +423,7 @@ public:
    }
    virtual ~RingBufferReader() {};
 
-   void RingBufferReader::resetVars()
+   void resetVars()
    {
       mFirstFlag = true;
       mRestartAtMax = true;
@@ -442,7 +442,7 @@ public:
    }
    virtual void resetTest() {}
 
-   void RingBufferReader::initialize(RingBufferState* aRingBufferState, Element* aElementArrayMemory)
+   void initialize(RingBufferState* aRingBufferState, Element* aElementArrayMemory)
    {
       resetVars();
       mRB = aRingBufferState;
@@ -456,14 +456,14 @@ public:
 
    // Return a pointer to an element, based on an index modulo the number
    // of elements.
-   Element* RingBufferReader::elementAt(long long aIndex)
+   Element* elementAt(long long aIndex)
    {
       aIndex %= NumElements;
       return &mElementArrayMemory[aIndex];
    }
 
    // Return the number of elements that are available to be read.
-   int RingBufferReader::available()
+   int available()
    {
       long long tMaxReadIndex = saferead_i64(&mRB->mNextWriteIndex) - 1 - ReadGap;
       long long tDiff = tMaxReadIndex - mLastReadIndex;
@@ -479,7 +479,7 @@ public:
    // Restart read operations. This sets the first flag true so that
    // the next read will start at the last element that was written,
    // which is the max available.
-   void RingBufferReader::doRestartAtMax()
+   void doRestartAtMax()
    {
       mFirstFlag = true;
       mRestartAtMax = true;
@@ -487,7 +487,7 @@ public:
 
    // Restart read operations. This sets the first flag true so that
    // the next read will start at the minimum available.
-   void RingBufferReader::doRestartAtMin()
+   void doRestartAtMin()
    {
       mFirstFlag = true;
       mRestartAtMax = false;
@@ -514,7 +514,7 @@ public:
    // 130 2  yyyy  NextWriteIndex - 1
    // 131 3  zzzz  NextWriteIndex is the next element to write to
 
-   bool RingBufferReader::doRead(Element* aElement)
+   bool doRead(Element* aElement)
    {
       // Do this first.
       mNotReadyFlag = false;
@@ -668,7 +668,7 @@ public:
    // Undo the last read operation. This sets the last read index to 
    // the saved last read index.
 
-   void RingBufferReader::doUndoLastRead()
+   void doUndoLastRead()
    {
       mLastReadIndex = mSaveLastReadIndex;
    }

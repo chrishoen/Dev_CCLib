@@ -18,6 +18,12 @@ namespace Some
 //******************************************************************************
 // Set and test.
 
+// No constructor.
+void TestRecord::reset()
+{
+   for (int i = 0; i < cNumCodes; i++) mCode[i] = 0;
+}
+
 // Set.
 void TestRecord::doSet(long long aCode)
 {
