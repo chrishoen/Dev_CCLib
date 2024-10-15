@@ -24,7 +24,7 @@ namespace Some
 // Constants.
 
    const int cTestRing_NumElements = 100;
-   const int cTestRing_ReadGap = 20;
+   const int cTestRing_ReadGap = 0;
    const bool cTestRing_TestFlag = true;
 
 //******************************************************************************
