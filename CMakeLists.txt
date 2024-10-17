@@ -15,10 +15,10 @@ my_append_compile_flags()
 my_show_cmake_vars()
 
 
-add_subdirectory ("CCLib")
-add_subdirectory ("RingLib")
-add_subdirectory ("RingTest1")
-add_subdirectory ("RingTest2")
+add_subdirectory ("CommonLib")
+add_subdirectory ("ShareLib")
+add_subdirectory ("RingTest")
+add_subdirectory ("QueueTest")
 return()
 
 add_subdirectory ("RingLib")

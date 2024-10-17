@@ -18,15 +18,15 @@ endfunction()
 #*******************************************************************************
 #*******************************************************************************
 
-function(my_lib_import_RingLib _target)
+function(my_lib_import_ShareLib _target)
 
-   target_link_libraries(${_target} RingLib)
+   target_link_libraries(${_target} ShareLib)
 
 endfunction()
 
-function(my_inc_import_RingLib _target)
+function(my_inc_import_ShareLib _target)
 
-   target_include_directories(${_target} PRIVATE $<TARGET_PROPERTY:RingLib,INTERFACE_INCLUDE_DIRECTORIES>)
+   target_include_directories(${_target} PRIVATE $<TARGET_PROPERTY:ShareLib,INTERFACE_INCLUDE_DIRECTORIES>)
 
 endfunction()
 
@@ -34,15 +34,15 @@ endfunction()
 #*******************************************************************************
 #*******************************************************************************
 
-function(my_lib_import_QueueLib _target)
+function(my_lib_import_CommonLib _target)
 
-   target_link_libraries(${_target} QueueLib)
+   target_link_libraries(${_target} CommonLib)
 
 endfunction()
 
-function(my_inc_import_QueueLib _target)
+function(my_inc_import_CommonLib _target)
 
-   target_include_directories(${_target} PRIVATE $<TARGET_PROPERTY:QueueLib,INTERFACE_INCLUDE_DIRECTORIES>)
+   target_include_directories(${_target} PRIVATE $<TARGET_PROPERTY:CommonLib,INTERFACE_INCLUDE_DIRECTORIES>)
 
 endfunction()
 
