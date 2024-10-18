@@ -3,7 +3,6 @@
 
 #include "CmdLineExec.h"
 
-#include "someMemoryParms.h"
 #include "someRingParms.h"
 #include "someRingReaderThread.h"
 #include "someRingWriterThread.h"
@@ -87,7 +86,6 @@ void CmdLineExec::executeGo3 (Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeParms(Ris::CmdLineCmd* aCmd)
 {
-   Some::gMemoryParms.show();
    Some::gRingParms.show();
 }
 

@@ -2,7 +2,6 @@
 
 #include "risThreadsProcess.h"
 #include "risBaseDir.h"
-#include "someMemoryParms.h"
 #include "someQueueParms.h"
 #include "smShare.h"
 
@@ -30,10 +29,6 @@ void main_initialize(int argc,char** argv)
    //***************************************************************************
    //***************************************************************************
    // Read parameters files.
-
-   // Read parameters files.
-   Some::gMemoryParms.reset();
-   Some::gMemoryParms.readSection("Default");
 
    // Read parameters files.
    Some::gQueueParms.reset();
