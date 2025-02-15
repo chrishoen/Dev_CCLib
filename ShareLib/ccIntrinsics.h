@@ -1,5 +1,9 @@
 #pragma once
 
+#if defined(WIN32)
+#include <intrin.h>
+#endif
+
 /*==============================================================================
 Intrinsics for memory barriers and safe memory accesses.
 ==============================================================================*/
@@ -29,6 +33,7 @@ static inline long long saferead_i64(volatile long long* aValuePtr)
 //******************************************************************************
 // Memory barriers.
 
+#if 0
 #if defined(WIN32) || defined(__x86_64) // If x86_64
 #define memory_barrier(x)   asm volatile ("mfence" ::: "memory");
 #define load_barrier(x)     asm volatile ("mfence" ::: "memory");
@@ -38,13 +43,30 @@ static inline long long saferead_i64(volatile long long* aValuePtr)
 #define load_barrier(x)     asm volatile ("dsb sy" ::: "memory");
 #define store_barrier(x)    asm volatile ("dsb sy" ::: "memory");
 #endif
+#endif
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 // Memory barriers.
 
-#if 0
+#if defined(WIN32)
+static inline void memory_barrier()
+{
+   __faststorefence();
+}
+
+static inline void load_barrier()
+{
+   __faststorefence();
+}
+
+static inline void store_barrier()
+{
+   __faststorefence();
+}
+
+#else // Else armv7 or armv8
 static inline void memory_barrier()
 {
 // asm volatile ("dsb sy" ::: "memory");
