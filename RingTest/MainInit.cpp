@@ -2,6 +2,8 @@
 
 #include "risThreadsProcess.h"
 #include "risBaseDir.h"
+#include "cmnPaths.h"
+#include "smShareParms.h"
 #include "someRingParms.h"
 #include "smShare.h"
 
@@ -22,13 +24,21 @@ void main_initialize(int argc,char** argv)
    // Enter process.
    Ris::Threads::enterProcessHigh();
 
-   // Set the base directory to the current directory.
-   Ris::setBaseDirectoryToCurrent();
+   // Set the program current working directory and the base 
+   // directory to the program bin directory.
+   Ris::chdirBaseDirectoryToBin();
+
+   // Initialize file paths.
+   Cmn::initialize_paths();
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Read parameters files.
+
+   // Read parameters files.
+   SM::gShareParms.reset();
+   SM::gShareParms.readSection("default");
 
    // Read parameters files.
    Some::gRingParms.reset();

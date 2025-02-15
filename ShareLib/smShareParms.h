@@ -14,7 +14,7 @@ Parameters class whose values are read from a command file.
 //******************************************************************************
 //******************************************************************************
 
-namespace Some
+namespace SM
 {
 
 //******************************************************************************
@@ -46,7 +46,7 @@ namespace Some
 // structure. If so, then this class is the root.
 // 
 
-class RingParms : public Ris::BaseCmdLineParms
+class ShareParms : public Ris::BaseCmdLineParms
 {
 public:
 
@@ -62,43 +62,13 @@ public:
    //***************************************************************************
    // Members.
 
-   //***************************************************************************
-   //***************************************************************************
-   //***************************************************************************
-   // Members. git test
-
    // Scope 1,2. cpu,rpu
    int mScope;
 
-   // Monitor variables.
-   int mMonitorThreadPeriod;
-   int mStatPeriod;
-   bool mPollProcessor;
-
-   // Thread variables.
-   int mWriterThreadProcessor;
-   int mWriterThreadPriority;
-   int mWriterThreadMeanMs;
-   int mWriterThreadRandomUs;
-
-   // Thread variables.
-   int mReaderThreadProcessor;
-   int mReaderThreadPriority;
-
-   // Test mode.
-   int mWriteTestMode;
-   int mReadTestMode;
-   int mNumWrites;
-
-   // Read sleep times.
-   int mReadSleepMeanMs;
-   int mReadSleepRandomUs;
-
-   // Suspend test variables.
-   int mWriteSuspendRandom;
-   int mReadSuspendRandom;
-   int mSuspendSleepMeanMs;
-   int mSuspendSleepRandomMs;
+   // Addresses.
+   unsigned mAddress1;
+   int mNumPages1;
+   unsigned mOffset1;
 
    //***************************************************************************
    //***************************************************************************
@@ -108,12 +78,12 @@ public:
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Infrastucture.
+   // Methods.
 
    // Constructor,
    typedef Ris::BaseCmdLineParms BaseClass;
-   RingParms();
-   void reset();
+   ShareParms();
+   void reset() override;
    void resetVars();
    void show();
 
@@ -132,10 +102,10 @@ public:
 //******************************************************************************
 // Global instance.
 
-#ifdef _SOMERINGPARMS_CPP_
-   RingParms gRingParms;
+#ifdef _SMSHAREPARMS_CPP_
+   ShareParms gShareParms;
 #else
-   extern RingParms gRingParms;
+   extern ShareParms gShareParms;
 #endif
 
 //******************************************************************************

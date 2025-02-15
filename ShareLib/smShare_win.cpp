@@ -7,32 +7,14 @@ Description:
 //******************************************************************************
 #include "stdafx.h"
 
-#include "risSharedMemory.h"
+#include <stdio.h>
 
-#define  _SMSHARE_CPP_
+#include "smShareParms.h"
+
 #include "smShare.h"
 
 namespace SM
 {
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Shared memory object for the global instance.
-
-Ris::SharedMemory gSharedMemory;
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Initialize, there's no constructor. This is called by the process who
-// first creates the shared memory.
-
-void Share::initialize()
-{
-   printf("Share::initialize *************************************\n");
-   mTestRing.initialize();
-}
 
 //******************************************************************************
 //******************************************************************************
@@ -43,21 +25,34 @@ void Share::initialize()
 // instance. Otherwise, do not initialize it, because the first process
 // already did.
 
-void initializeShare(bool aInitFlag)
+void initializeShare(bool aInitVars)
 {
-   // Create or open the shared memory.
-   bool tFirstFlag = gSharedMemory.initialize("AAAASHARE2", 1024*1024);
+   printf("initializeShare BEGIN\n");
+   // Allocate heap memory.
+   int tNumPages = SM::gShareParms.mNumPages1;
+   size_t tSize = tNumPages*4096;
+   void* tVirtualAddress1 = malloc(tSize);
 
-   // Create the global instance.
-// gShare = new (gSharedMemory.mMemory) Share;
-   gShare = (Share*)gSharedMemory.mMemory ;
+   // Constructor new on the virtual address.
+   // gShare = (Share*)tVirtualAddress1;
+   gShare = new(tVirtualAddress1)Share;
 
-   // If this the first time that the shared memory was created then
-   // initialize it.
-   if (tFirstFlag)
+   printf("Share size               %d\n", (int)sizeof(Share));
+   printf("Share ResourceCount      %d\n", gShare->mResourceCount);
+
+   // Initialize sync codes.
+   gShare->mCpuSync1 = 101;
+   gShare->mCpuSync2 = 102;
+
+   // For cpu scope, always initialize members. For rpu scope, 
+   // the rpu will initialize, so it must always run first.
+   if (aInitVars)
    {
+
+      // Initialize members.
       gShare->initialize();
    }
+   printf("initializeShare END\n");
 }
 
 //******************************************************************************
@@ -67,8 +62,8 @@ void initializeShare(bool aInitFlag)
 
 void finalizeShare()
 {
-   // Finalize.
-   gSharedMemory.finalize();
+   free(gShare);
+   printf("finalizeShare\n");
 }
 
 //******************************************************************************

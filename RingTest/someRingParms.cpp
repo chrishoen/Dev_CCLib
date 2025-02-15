@@ -5,6 +5,7 @@
 #include "stdafx.h"
 
 #include "risCmdLineFile.h"
+#include "cmnPaths.h"
 
 #define  _SOMERINGPARMS_CPP_
 #include "someRingParms.h"
@@ -23,21 +24,18 @@ namespace Some
 
 RingParms::RingParms()
 {
-   reset();
+   resetVars();
 }
 
 void RingParms::reset()
 {
    BaseClass::reset();
-   if (Ris::portableIsWindows())
-   {
-      BaseClass::setFilePath("c:/aaa_prime/files/Ring_Parms.txt");
-   }
-   else
-   {
-      BaseClass::setFilePath_RelativeToBaseDir("files/Ring_Parms.txt");
-   }
+   BaseClass::setFilePath(Cmn::get_files_filepath("Ring_Parms.txt"));
+   resetVars();
+}
 
+void RingParms::resetVars()
+{
    mScope = 1;
    mMonitorThreadPeriod = 0;
    mStatPeriod = 0;

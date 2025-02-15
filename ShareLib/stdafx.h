@@ -1,4 +1,5 @@
-#if 0
+#include <stdio.h>
+#include <string.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdarg.h>
@@ -6,14 +7,12 @@
 #include <math.h>
 #include <random>
 
-#include <vector>
-#include <string>
 #include <iostream>
-#include <fstream>
-#include <algorithm>
+#include <vector>
+#include <iterator>
 
-#include "my_functions.h"
 #include "prnPrint.h"
+#include "trcTrace.h"
+#include "my_functions.h"
 #include "risPortableCalls.h"
-#endif
-#include <string.h>
+
