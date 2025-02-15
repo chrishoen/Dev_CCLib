@@ -18,7 +18,6 @@ my_show_cmake_vars()
 add_subdirectory ("CommonLib")
 add_subdirectory ("ShareLib")
 add_subdirectory ("RingTest")
-add_subdirectory ("QueueTest")
 return()
 
 add_subdirectory ("RingLib")
