@@ -1,7 +1,7 @@
 #pragma once
 
 /*==============================================================================
-Ring buffer writer thread.
+Ring buffer reader thread.
 ==============================================================================*/
 
 //******************************************************************************
@@ -11,7 +11,6 @@ Ring buffer writer thread.
 #include <random>
 #include "risSleep.h"
 #include "risThreadsThreads.h"
-
 #include "someTestRing.h"
 
 //******************************************************************************
@@ -24,23 +23,24 @@ namespace Some
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// This is a thread that writes records to a ring buffer. It executes
-// semi-periodically according to a random time interval specified by
-// a mean and a variation. Upon execution, it writes a record to the 
-// ring buffer.
+// This is a thread that read records from a ring buffer. It runs a loop
+// that attempts to read a record from the ring buffer. If the read is
+// successful then it processes the record. If the read is not successful
+// then it sleeps for a random time.
 
-class RingWriterThread : public Ris::Threads::BaseThread
+class RingReaderThread : public Ris::Threads::BaseThread
 {
-public:
+private:
    typedef Ris::Threads::BaseThread BaseClass;
+public:
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
    // Members.
 
-   // Ring buffer writer.
-   TestRingWriter mRingWriter;
+   // Ring buffer reader.
+   TestRingReader mRingReader;
 
    // If true then perform timer processing.
    bool mTPFlag;
@@ -55,7 +55,7 @@ public:
    std::uniform_int_distribution<> mRandomDistribution;
 
    // Random sleep.
-   Ris::RandomSleepMs mWriteSleep;
+   Ris::RandomSleepMs mReadSleep;
    Ris::RandomSleepMs mSuspendSleep;
 
    //***************************************************************************
@@ -64,28 +64,29 @@ public:
    // Methods.
 
    // Constructor.
-   RingWriterThread();
+   RingReaderThread();
 
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************
-   // Thread base class overloads.
+   // Methods. Base class overloads.
 
    // Thread init function. This is called by the base class immediately
-   // after the thread starts running. It initializes the the ring writer,
+   // after the thread starts running. It initializes the the ring reader,
    // attaching it to the ring buffer.
    void threadInitFunction() override;
 
    // Thread run function. This is called by the base class immediately
-   // after the thread init function. It runs a loop that writes a record
-   // to the ring buffer and sleeps for a semi-random time./ The loop
-   // terminates on the terminate flag.
+   // after the thread init function. It runs a loop that attempts to
+   // read a record from the ring buffer. If success, then the record is
+   // processed, else a random sleep. The loop terminates on the terminate
+   // flag.
    void threadRunFunction() override;
 
-   // Thread exit function. This is called by the base class immedidately
+   // Thread exit function. This is called by the base class immediately
    // before the thread is terminated.
    void threadExitFunction() override;
-   
+
    // Thread shutdown function. This is called out of the context of
    // this thread. It sets the termination flag and waits for the
    // thread to terminate after execution of the thread exit function.
@@ -97,25 +98,23 @@ public:
    // Methods.
 
    // Tests.
-   void doTest1();
-   void doTest2();
-   void doTest3();
+   void doTestLoop1();
+   void doTestLoop2();
 };
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Global instance
+// Global instance.
 
-#ifdef _SOMERINGWRITERTHREAD_CPP_
-          RingWriterThread* gRingWriterThread = 0;
+#ifdef _SOMERINGREADERTHREAD_CPP_
+RingReaderThread* gRingReaderThread = 0;
 #else
-   extern RingWriterThread* gRingWriterThread;
+extern  RingReaderThread* gRingReaderThread;
 #endif
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 }//namespace
-
 

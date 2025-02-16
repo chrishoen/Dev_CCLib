@@ -10,7 +10,7 @@ Ring buffer writer thread.
 
 #include <random>
 #include "risSleep.h"
-#include "risThreadsThreads.h"
+#include "risThreadsRandomThread.h"
 
 #include "someTestRing.h"
 
@@ -29,10 +29,10 @@ namespace Some
 // a mean and a variation. Upon execution, it writes a record to the 
 // ring buffer.
 
-class RingWriterThread : public Ris::Threads::BaseThread
+class RingWriterThread : public Ris::Threads::BaseRandomThread
 {
 public:
-   typedef Ris::Threads::BaseThread BaseClass;
+   typedef Ris::Threads::BaseRandomThread BaseClass;
 
    //***************************************************************************
    //***************************************************************************
@@ -55,7 +55,6 @@ public:
    std::uniform_int_distribution<> mRandomDistribution;
 
    // Random sleep.
-   Ris::RandomSleepMs mWriteSleep;
    Ris::RandomSleepMs mSuspendSleep;
 
    //***************************************************************************
@@ -76,20 +75,13 @@ public:
    // attaching it to the ring buffer.
    void threadInitFunction() override;
 
-   // Thread run function. This is called by the base class immediately
-   // after the thread init function. It runs a loop that writes a record
-   // to the ring buffer and sleeps for a semi-random time./ The loop
-   // terminates on the terminate flag.
-   void threadRunFunction() override;
-
    // Thread exit function. This is called by the base class immedidately
    // before the thread is terminated.
    void threadExitFunction() override;
-   
-   // Thread shutdown function. This is called out of the context of
-   // this thread. It sets the termination flag and waits for the
-   // thread to terminate after execution of the thread exit function.
-   void shutdownThread() override;
+
+   // Execute periodically. This is called by the base class timer. It writes
+   // a record to the ring buffer.
+   void executeOnTimer(int aTimerCount) override;
 
    //***************************************************************************
    //***************************************************************************

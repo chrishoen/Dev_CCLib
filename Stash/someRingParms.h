@@ -70,9 +70,16 @@ public:
    // Scope 1,2. cpu,rpu
    int mScope;
 
+   // Monitor variables.
+   int mMonitorThreadPeriod;
+   int mStatPeriod;
+   bool mPollProcessor;
+
    // Thread variables.
    int mWriterThreadProcessor;
    int mWriterThreadPriority;
+   int mWriterThreadMeanMs;
+   int mWriterThreadRandomUs;
 
    // Thread variables.
    int mReaderThreadProcessor;
@@ -83,9 +90,7 @@ public:
    int mReadTestMode;
    int mNumWrites;
 
-   // Sleep times.
-   int mWriteSleepMeanMs;
-   int mWriteSleepRandomUs;
+   // Read sleep times.
    int mReadSleepMeanMs;
    int mReadSleepRandomUs;
 

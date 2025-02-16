@@ -31,6 +31,15 @@ RingWriterThread::RingWriterThread()
    // Set base class variables.
    BaseClass::setThreadName("Writer");
    BaseClass::setThreadPriority(Ris::Threads::gPriorities.mTimerTest);
+   BaseClass::setThreadPriority(
+      Ris::Threads::Priority(
+         gRingParms.mWriterThreadProcessor,
+         gRingParms.mWriterThreadPriority));
+
+   BaseClass::mPollProcessor = gRingParms.mPollProcessor;
+   BaseClass::mStatPeriod = gRingParms.mStatPeriod;
+   BaseClass::mIntervalMeanMs = gRingParms.mWriterThreadMeanMs;
+   BaseClass::mIntervalRandomUs = gRingParms.mWriterThreadRandomUs;
 
    // Set member variables.
    mTPFlag = false;
@@ -41,7 +50,6 @@ RingWriterThread::RingWriterThread()
    mRandomDistribution = std::uniform_int_distribution<>(0, gRingParms.mWriteSuspendRandom);
 
    // Random sleep.
-   mWriteSleep.initialize(gRingParms.mWriteSleepMeanMs, gRingParms.mWriteSleepRandomUs);
    mSuspendSleep.initialize(gRingParms.mSuspendSleepMeanMs, gRingParms.mSuspendSleepRandomMs * 1000);
 }
 
@@ -84,42 +92,15 @@ void RingWriterThread::threadExitFunction()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
-// Thread shutdown function. This is called out of the context of
-// this thread. It sets the termination flag and waits for the
-// thread to terminate after execution of the thread exit function.
+// Execute periodically. This is called by the base class timer.
 
-void RingWriterThread::shutdownThread()
+void RingWriterThread::executeOnTimer(int aTimerCount)
 {
-   printf("someRingWriterThread::shutdownThread\n");
-   // Wait for thread to terminate.
-   BaseClass::shutdownThread();
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-// Thread run function. This is called by the base class immediately
-// after the thread init function. It runs a loop that writes a record
-// to the ring buffer and sleeps for a semi-random time./ The loop
-// terminates on the terminate flag.
-
-void RingWriterThread::threadRunFunction()
-{
-   // Loop until thread termination.
-   while (!BaseThread::mTerminateFlag)
+   switch (gRingParms.mWriteTestMode)
    {
-      // Execute test.
-      if (mTPFlag)
-      {
-         switch (gRingParms.mWriteTestMode)
-         {
-         case 1: doTest1(); break;
-         case 2: doTest2(); break;
-         case 3: doTest3(); break;
-         }
-      }
-      // Semi-random sleep.
-      mWriteSleep.doSleep();
+   case 1: doTest1(); break;
+   case 2: doTest2(); break;
+   case 3: doTest3(); break;
    }
 }
 
