@@ -34,6 +34,9 @@ Priorities::Priorities()
    mStrobe            = Ris::Threads::Priority(-1, 98);
    mSend              = Ris::Threads::Priority(-1, 97);
    mRecv              = Ris::Threads::Priority(-1, 98);
+
+   mRingWriter        = Ris::Threads::Priority(-1, 81);
+   mRingReader        = Ris::Threads::Priority(-1, 80);
 }
 
 //******************************************************************************

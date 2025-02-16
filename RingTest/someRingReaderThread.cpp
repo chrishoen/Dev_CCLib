@@ -7,7 +7,7 @@
 #include "stdafx.h"
 
 #include "risProgramTime.h"
-#include "risThreadsPriorities.h"
+#include "cmnPriorities.h"
 
 #include "someRingParms.h"
 #include "smShare.h"
@@ -31,10 +31,7 @@ RingReaderThread::RingReaderThread()
 {
    // Set base class variables.
    BaseClass::setThreadName("Reader");
-   BaseClass::setThreadPriority(
-      Ris::Threads::Priority(
-         gRingParms.mReaderThreadProcessor,
-         gRingParms.mReaderThreadPriority));
+   BaseClass::setThreadPriority(Cmn::gPriorities.mRingReader);
 
    // Set member variables.
    mTPFlag = true;

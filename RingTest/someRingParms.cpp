@@ -38,12 +38,6 @@ void RingParms::resetVars()
 {
    mScope = 1;
 
-   mWriterThreadProcessor = -1;
-   mWriterThreadPriority = 80;
-
-   mReaderThreadProcessor = -1;
-   mReaderThreadPriority = 80;
-
    mWriteTestMode = 0;
    mReadTestMode = 0;
    mNumWrites = 1;
@@ -73,12 +67,6 @@ void RingParms::show()
    printf("Scope                        %-10d\n", mScope);
 
    printf("\n");
-   printf("WriterThreadProcessor        %-10d\n", mWriterThreadProcessor);
-   printf("WriterThreadPriority         %-10d\n", mWriterThreadPriority);
-   printf("\n");
-   printf("ReaderThreadProcessor        %-10d\n", mReaderThreadProcessor);
-   printf("ReaderThreadPriority         %-10d\n", mReaderThreadPriority);
-   printf("\n");
    printf("WriteTestMode                %-10d\n", mWriteTestMode);
    printf("ReadTestMode                 %-10d\n", mReadTestMode);
    printf("NumWrites                    %-10d\n", mNumWrites);
@@ -107,12 +95,6 @@ void RingParms::execute(Ris::CmdLineCmd* aCmd)
    if (!isTargetSection(aCmd)) return;
 
    if (aCmd->isCmd("Scope"))                   mScope = aCmd->argInt(1);
-
-   if (aCmd->isCmd("WriterThreadProcessor"))   mWriterThreadProcessor = aCmd->argInt(1);
-   if (aCmd->isCmd("WriterThreadPriority"))    mWriterThreadPriority = aCmd->argInt(1);
-
-   if (aCmd->isCmd("ReaderThreadProcessor"))   mReaderThreadProcessor = aCmd->argInt(1);
-   if (aCmd->isCmd("ReaderThreadPriority"))    mReaderThreadPriority = aCmd->argInt(1);
 
    if (aCmd->isCmd("WriteTestMode"))           mWriteTestMode = aCmd->argInt(1);
    if (aCmd->isCmd("ReadTestMode"))            mReadTestMode = aCmd->argInt(1);

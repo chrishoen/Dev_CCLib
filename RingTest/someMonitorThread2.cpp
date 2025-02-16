@@ -10,7 +10,7 @@ Description:
 #include <time.h>
 
 #include "risProgramTime.h"
-#include "risThreadsPriorities.h"
+#include "cmnPriorities.h"
 
 #include "smShare.h"
 
@@ -31,7 +31,7 @@ MonitorThread2::MonitorThread2()
 {
    // Set base class variables.
    BaseClass::setThreadName("Monitor");
-   BaseClass::setThreadPriority(Ris::Threads::gPriorities.mMonitor);
+   BaseClass::setThreadPriority(Cmn::gPriorities.mMonitor);
    BaseClass::mTimerPeriod = 1000;
 
    // Set member variables.

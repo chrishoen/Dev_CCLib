@@ -45,6 +45,9 @@ Priorities::Priorities()
    mProc              = Ris::Threads::Priority(-1, THREAD_PRIORITY_ABOVE_NORMAL);
    mSerial            = Ris::Threads::Priority(-1, THREAD_PRIORITY_HIGHEST);
    mMonitor           = Ris::Threads::Priority(-1, THREAD_PRIORITY_NORMAL);
+
+   mRingWriter        = Ris::Threads::Priority(-1, THREAD_PRIORITY_HIGHEST);
+   mRingReader        = Ris::Threads::Priority(-1, THREAD_PRIORITY_ABOVE_NORMAL);
 }
 
 //******************************************************************************

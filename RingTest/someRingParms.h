@@ -70,14 +70,6 @@ public:
    // Scope 1,2. cpu,rpu
    int mScope;
 
-   // Thread variables.
-   int mWriterThreadProcessor;
-   int mWriterThreadPriority;
-
-   // Thread variables.
-   int mReaderThreadProcessor;
-   int mReaderThreadPriority;
-
    // Test mode.
    int mWriteTestMode;
    int mReadTestMode;

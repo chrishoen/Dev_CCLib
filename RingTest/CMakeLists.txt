@@ -1,7 +1,4 @@
 ﻿cmake_minimum_required(VERSION 3.10)
-if (MSVC)
-   return()
-endif()
 set (project "RingTest")
 project(${project} CXX)
 my_find_src_files (src_files ${project})

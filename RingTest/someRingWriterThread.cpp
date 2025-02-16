@@ -10,7 +10,7 @@ Description:
 #include <time.h>
 
 #include "risProgramTime.h"
-#include "risThreadsPriorities.h"
+#include "cmnPriorities.h"
 
 #include "someRingParms.h"
 #include "smShare.h"
@@ -30,7 +30,7 @@ RingWriterThread::RingWriterThread()
 {
    // Set base class variables.
    BaseClass::setThreadName("Writer");
-   BaseClass::setThreadPriority(Ris::Threads::gPriorities.mTimerTest);
+   BaseClass::setThreadPriority(Cmn::gPriorities.mRingWriter);
 
    // Set member variables.
    mTPFlag = false;
