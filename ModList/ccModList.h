@@ -169,6 +169,23 @@ public:
       return true;
    }
 
+   bool tryPeekTail(int aIndex, Element* aValue)
+   {
+      // Test if the list is empty.
+      int tOccupied = mTailIndex - mHeadIndex;
+      if (tOccupied < 0) tOccupied = NumElements + tOccupied;
+      if (tOccupied == 0) return false;
+
+      // Peek index forward.
+      int tPeekIndex = mTailIndex - aIndex - 1;
+      if(tPeekIndex < 0) tPeekIndex += NumElements;
+      // Copy the list array element at the peed index.
+      *aValue = mElement[tPeekIndex];
+
+      // Success.
+      return true;
+   }
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************

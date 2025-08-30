@@ -40,11 +40,10 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeWriteTail(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0, "WriteTail %d", mList.size());
    int tValue = aCmd->argInt(1);
    if (mList.tryWriteTail(tValue))
    {
-      Prn::print(0, "WriteTail done %d", mList.size());
+      Prn::print(0, "WriteTail pass %d", mList.size());
    }
    else
    {
@@ -54,11 +53,10 @@ void CmdLineExec::executeWriteTail(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeReadHead(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0, "ReadHead %d", mList.size());
    int tValue = 0;
    if (mList.tryReadHead(&tValue))
    {
-      Prn::print(0, "ReadHead done %d : %d", mList.size(), tValue);
+      Prn::print(0, "ReadHead pass %d : %d", mList.size(), tValue);
    }
    else
    {
@@ -69,11 +67,10 @@ void CmdLineExec::executeReadHead(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeWriteHead(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0, "WriteHead %d", mList.size());
    int tValue = aCmd->argInt(1);
    if (mList.tryWriteHead(tValue))
    {
-      Prn::print(0, "WriteHead done %d", mList.size());
+      Prn::print(0, "WriteHead pass %d", mList.size());
    }
    else
    {
@@ -83,11 +80,10 @@ void CmdLineExec::executeWriteHead(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executeReadTail(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0, "ReadTail %d", mList.size());
    int tValue = 0;
    if (mList.tryReadTail(&tValue))
    {
-      Prn::print(0, "ReadTail done %d : %d", mList.size(), tValue);
+      Prn::print(0, "ReadTail pass %d : %d", mList.size(), tValue);
    }
    else
    {
@@ -98,13 +94,13 @@ void CmdLineExec::executeReadTail(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executePeekHead(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0, "ReadTail %d", mList.size());
+   Prn::print(0, "PeekHead %d", mList.size());
    int tValue = 0;
    for (int i = 0; i < mList.size(); i++)
    {
       if (mList.tryPeekHead(i, &tValue))
       {
-         Prn::print(0, "PeekHead done %d %d : %d", i, mList.size(), tValue);
+         Prn::print(0, "PeekHead pass %d %d : %d", i, mList.size(), tValue);
       }
       else
       {
@@ -115,17 +111,17 @@ void CmdLineExec::executePeekHead(Ris::CmdLineCmd* aCmd)
 
 void CmdLineExec::executePeekTail(Ris::CmdLineCmd* aCmd)
 {
-   Prn::print(0, "ReadTail %d", mList.size());
+   Prn::print(0, "PeekTail %d", mList.size());
    int tValue = 0;
    for (int i = 0; i < mList.size(); i++)
    {
-      if (mList.tryPeekHead(i, &tValue))
+      if (mList.tryPeekTail(i, &tValue))
       {
-         Prn::print(0, "PeekHead done %d %d : %d", i, mList.size(), tValue);
+         Prn::print(0, "PeekTail pass %d %d : %d", i, mList.size(), tValue);
       }
       else
       {
-         Prn::print(0, "PeekHead fail %d %d", mList.size());
+         Prn::print(0, "PeekTail fail %d %d", mList.size());
       }
    }
 }
