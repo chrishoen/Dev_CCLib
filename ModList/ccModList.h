@@ -124,6 +124,23 @@ public:
       return true;
    }
 
+   bool tryPeekHead(int aIndex, Element* aValue)
+   {
+      // Test if the list is empty.
+      int tOccupied = mTailIndex - mHeadIndex;
+      if (tOccupied < 0) tOccupied = NumElements + tOccupied;
+      if (tOccupied == 0) return false;
+
+      // Peek index forward.
+      int tPeekIndex = mHeadIndex + aIndex;
+      if(tPeekIndex >= NumElements) tPeekIndex -= NumElements;
+      // Copy the list array element at the peed index.
+      *aValue = mElement[tPeekIndex];
+
+      // Success.
+      return true;
+   }
+
    //***************************************************************************
    //***************************************************************************
    //***************************************************************************

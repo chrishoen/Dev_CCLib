@@ -23,6 +23,9 @@ public:
    void executeWriteHead(Ris::CmdLineCmd* aCmd);
    void executeReadTail(Ris::CmdLineCmd* aCmd);
 
+   void executePeekHead(Ris::CmdLineCmd* aCmd);
+   void executePeekTail(Ris::CmdLineCmd* aCmd);
+
    void executeGo1(Ris::CmdLineCmd* aCmd);
    void executeGo2(Ris::CmdLineCmd* aCmd);
    void executeGo3(Ris::CmdLineCmd* aCmd);
