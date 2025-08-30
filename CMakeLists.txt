@@ -15,6 +15,9 @@ my_append_compile_flags()
 my_show_cmake_vars()
 
 
+add_subdirectory ("ModList")
+return()
+
 add_subdirectory ("CommonLib")
 add_subdirectory ("ShareLib")
 add_subdirectory ("RingTest")
