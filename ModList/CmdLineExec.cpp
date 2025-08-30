@@ -22,6 +22,8 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
    if(aCmd->isCmd("RESET"  ))  reset();
    if(aCmd->isCmd("WT"     ))  executeWriteTail(aCmd);
    if(aCmd->isCmd("RH"     ))  executeReadHead(aCmd);
+   if(aCmd->isCmd("WH"     ))  executeWriteHead(aCmd);
+   if(aCmd->isCmd("RT"     ))  executeReadTail(aCmd);
    if(aCmd->isCmd("GO1"    ))  executeGo1(aCmd);
    if(aCmd->isCmd("GO2"    ))  executeGo2(aCmd);
    if(aCmd->isCmd("GO3"    ))  executeGo3(aCmd);
@@ -58,6 +60,35 @@ void CmdLineExec::executeReadHead(Ris::CmdLineCmd* aCmd)
    else
    {
       Prn::print(0, "ReadHead fail %d", mList.size());
+   }
+
+}
+
+void CmdLineExec::executeWriteHead(Ris::CmdLineCmd* aCmd)
+{
+   Prn::print(0, "WriteHead %d", mList.size());
+   int tValue = aCmd->argInt(1);
+   if (mList.tryWriteHead(tValue))
+   {
+      Prn::print(0, "WriteHead done %d", mList.size());
+   }
+   else
+   {
+      Prn::print(0, "WriteHead fail %d", mList.size());
+   }
+}
+
+void CmdLineExec::executeReadTail(Ris::CmdLineCmd* aCmd)
+{
+   Prn::print(0, "ReadTail %d", mList.size());
+   int tValue = 0;
+   if (mList.tryReadTail(&tValue))
+   {
+      Prn::print(0, "ReadTail done %d : %d", mList.size(), tValue);
+   }
+   else
+   {
+      Prn::print(0, "ReadTail fail %d", mList.size());
    }
 
 }
