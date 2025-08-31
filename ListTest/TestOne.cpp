@@ -28,9 +28,48 @@ void TestOne::reset()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+void TestOne::doInitialize()
+{
+   mFreeList.reset();
+   mHead = 0;
+   MyListNode* tNode = 0;
+
+   if ((tNode = mFreeList.doAllocate()) == 0) return;
+   tNode->mValue = 101;
+   DL_APPEND(mHead, tNode);
+
+   if ((tNode = mFreeList.doAllocate()) == 0) return;
+   tNode->mValue = 102;
+   DL_APPEND(mHead, tNode);
+
+   if ((tNode = mFreeList.doAllocate()) == 0) return;
+   tNode->mValue = 103;
+   DL_APPEND(mHead, tNode);
+
+   if ((tNode = mFreeList.doAllocate()) == 0) return;
+   tNode->mValue = 104;
+   DL_APPEND(mHead, tNode);
+}
+
+void TestOne::doShow()
+{
+   printf("FreeList %d\n", mFreeList.mStackIndex);
+   MyListNode* tNode = 0;
+   DL_FOREACH(mHead, tNode)
+   {
+      printf("%d\n", tNode->mValue);
+   }     
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
 
 void TestOne::doRun1()
 {
+   printf("TestOne::doRun1 ****************\n");
+   doInitialize();
+   doShow();
 }
 
 //******************************************************************************
@@ -39,6 +78,21 @@ void TestOne::doRun1()
 
 void TestOne::doRun2()
 {
+   printf("TestOne::doRun2 ****************\n");
+   doInitialize();
+   doShow();
+
+   MyListNode* tNode = 0;
+   MyListNode* tTemp = 0;
+   DL_FOREACH_SAFE(mHead, tNode, tTemp)
+   {
+      if (tNode->mValue == 103)
+      {
+         DL_DELETE(mHead, tNode);
+         mFreeList.doFree(tNode);
+      }
+   }     
+   doShow();
 }
 
 //******************************************************************************

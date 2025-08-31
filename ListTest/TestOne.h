@@ -15,8 +15,9 @@ class MyListNode
 {
 public:
    int mValue;
-   int prev;
-   int next;
+   // Needed by utlist linked list.
+   MyListNode* prev;
+   MyListNode* next;
 
    void reset()
    {
@@ -40,7 +41,10 @@ public:
    // Methods.
    TestOne::TestOne();
    void reset();
-   
+
+   // Methods.
+   void doInitialize();
+   void doShow();
 
    // Methods.
    void doRun1();
