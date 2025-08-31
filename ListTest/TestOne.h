@@ -15,7 +15,7 @@ class MyListNode
 {
 public:
    int mValue;
-   // Needed by utlist linked list.
+   // Used by utlist linked list. Do not touch.
    MyListNode* prev;
    MyListNode* next;
 

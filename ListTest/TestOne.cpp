@@ -14,6 +14,7 @@ Description:
 //******************************************************************************
 //******************************************************************************
 // Constructor.
+
 TestOne::TestOne()
 {
    reset();
@@ -28,6 +29,7 @@ void TestOne::reset()
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
+
 void TestOne::doInitialize()
 {
    mFreeList.reset();
@@ -53,7 +55,7 @@ void TestOne::doInitialize()
 
 void TestOne::doShow()
 {
-   printf("FreeList %d\n", mFreeList.mStackIndex);
+   printf("FreeList %d\n", mFreeList.allocated());
    MyListNode* tNode = 0;
    DL_FOREACH(mHead, tNode)
    {
@@ -101,5 +103,33 @@ void TestOne::doRun2()
 
 void TestOne::doRun3()
 {
+   printf("TestOne::doRun3 ****************\n");
+   doInitialize();
+   doShow();
+
+   printf("TestOne::doRun3 delete 103\n");
+   MyListNode* tNode = 0;
+   MyListNode* tTemp = 0;
+   DL_FOREACH_SAFE(mHead, tNode, tTemp)
+   {
+      if (tNode->mValue == 103)
+      {
+         DL_DELETE(mHead, tNode);
+         mFreeList.doFree(tNode);
+      }
+   }     
+   doShow();
+
+   printf("TestOne::doRun3 append 203 after 102\n");
+   DL_FOREACH_SAFE(mHead, tNode, tTemp)
+   {
+      if (tNode->mValue == 102)
+      {
+         if ((tTemp = mFreeList.doAllocate()) == 0) return;
+         tTemp->mValue = 203;
+         DL_APPEND_ELEM(mHead, tNode, tTemp);
+      }
+   }     
+   doShow();
 }
 
