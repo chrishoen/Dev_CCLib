@@ -51,13 +51,19 @@ public:
 
    // Methods.
    void doInitialize0();
-   void doInitialize4();
+   void doInitializeFromTail4();
+   void doInitializeFromHead4();
    void doShow();
 
    // Methods.
    void doRun(int aSelect);
+
    void doRun11();
    void doRun12();
    void doRun13();
    void doRun14();
+
+   void doRun21();
+   void doRun22();
+   void doRun23();
 };
