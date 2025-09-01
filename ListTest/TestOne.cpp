@@ -29,6 +29,68 @@ void TestOne::reset()
 //******************************************************************************
 //******************************************************************************
 
+void TestOne::doPutHead(int aValue)
+{
+   MyListNode* tNode = 0;
+   if ((tNode = mFreeList.doAllocate()) == 0)
+   {
+      printf("doPutHead FAIL free list %d\n", aValue);
+      return;
+   }
+
+   tNode->mValue = aValue;
+   if (!mList.tryWriteHead(tNode))
+   {
+      printf("doPutHead FAIL write %d\n", aValue);
+      return;
+   }
+}
+
+void TestOne::doPutTail(int aValue)
+{
+   MyListNode* tNode = 0;
+   if ((tNode = mFreeList.doAllocate()) == 0)
+   {
+      printf("doPutTail FAIL free list %d\n", aValue);
+      return;
+   }
+
+   tNode->mValue = aValue;
+   if (!mList.tryWriteTail(tNode))
+   {
+      printf("doPutTail FAIL write %d\n", aValue);
+      return;
+   }
+}
+
+void TestOne::doGetHead()
+{
+   MyListNode* tNode = 0;
+   if (!mList.tryReadHead(&tNode))
+   {
+      printf("doGetHead FAIL read head\n");
+      return;
+   }
+   printf("doGetHead %d\n", tNode->mValue);
+   mFreeList.doFree(tNode);
+}
+
+void TestOne::doGetTail()
+{
+   MyListNode* tNode = 0;
+   if (!mList.tryReadTail(&tNode))
+   {
+      printf("doGetTail FAIL read tail\n");
+      return;
+   }
+   printf("doGetTail %d\n", tNode->mValue);
+   mFreeList.doFree(tNode);
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
 void TestOne::doRun(int aSelect)
 {
    switch(aSelect)
@@ -36,6 +98,7 @@ void TestOne::doRun(int aSelect)
       case 11: doRun11(); break;
       case 12: doRun12(); break;
       case 13: doRun13(); break;
+      case 14: doRun14(); break;
    }
 }
 
@@ -59,21 +122,10 @@ void TestOne::doInitialize4()
    mList.reset();
    MyListNode* tNode = 0;
 
-   if ((tNode = mFreeList.doAllocate()) == 0) return;
-   tNode->mValue = 101;
-   if (!mList.tryWriteTail(tNode)) return;
-
-   if ((tNode = mFreeList.doAllocate()) == 0) return;
-   tNode->mValue = 102;
-   if (!mList.tryWriteTail(tNode)) return;
-
-   if ((tNode = mFreeList.doAllocate()) == 0) return;
-   tNode->mValue = 103;
-   if (!mList.tryWriteTail(tNode)) return;
-
-   if ((tNode = mFreeList.doAllocate()) == 0) return;
-   tNode->mValue = 104;
-   if (!mList.tryWriteTail(tNode)) return;
+   doPutTail(101);
+   doPutTail(102);
+   doPutTail(103);
+   doPutTail(104);
 }
 
 void TestOne::doShow()
@@ -110,10 +162,8 @@ void TestOne::doRun12()
    doShow();
 
    MyListNode* tNode = 0;
-   if (!mList.tryReadHead(&tNode)) return;
-   printf("ReadHead %d\n", tNode->mValue);
-   if (!mList.tryReadHead(&tNode)) return;
-   printf("ReadHead %d\n", tNode->mValue);
+   doGetHead();
+   doGetHead();
    doShow();
 }
 
@@ -130,30 +180,24 @@ void TestOne::doRun13()
 
    for (int i = 0; i < 8; i++)
    {
-      if ((tNode = mFreeList.doAllocate()) == 0) return;
-      tNode->mValue = 101 + i;
-      if (!mList.tryWriteTail(tNode)) return;
+      doPutTail(101 + i);
    }
-
-   if ((tNode = mFreeList.doAllocate()) == 0) return;
-   tNode->mValue = 201;
-   if (!mList.tryWriteTail(tNode))
-   {
-      printf("tryWriteFail %d\n", tNode->mValue);
-      mFreeList.doFree(tNode);
-   }
-
-   if (!mList.tryReadHead(&tNode)) return;
-   printf("ReadHead %d\n", tNode->mValue);
-
-   if ((tNode = mFreeList.doAllocate()) == 0) return;
-   tNode->mValue = 301;
-   if (!mList.tryWriteTail(tNode))
-   {
-      printf("tryWriteFail %d\n", tNode->mValue);
-      mFreeList.doFree(tNode);
-   }
-
+   doPutTail(201);
+   doGetHead();
+   doPutTail(301);
    doShow();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void TestOne::doRun14()
+{
+   printf("TestOne::doRun4 ****************\n");
+   doInitialize0();
+   doShow();
+   doGetHead();
+   doGetTail();
 }
 

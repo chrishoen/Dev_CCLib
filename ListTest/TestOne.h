@@ -44,6 +44,12 @@ public:
    void reset();
 
    // Methods.
+   void doPutHead(int aValue);
+   void doPutTail(int aValue);
+   void doGetHead();
+   void doGetTail();
+
+   // Methods.
    void doInitialize0();
    void doInitialize4();
    void doShow();
@@ -53,4 +59,5 @@ public:
    void doRun11();
    void doRun12();
    void doRun13();
+   void doRun14();
 };
