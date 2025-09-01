@@ -7,6 +7,7 @@ Description:
 //******************************************************************************
 #include "stdafx.h"
 
+#include "utlist.h"
 #include "TestOne.h"
 
 //******************************************************************************
@@ -22,58 +23,42 @@ TestOne::TestOne()
 void TestOne::reset()
 {
    mFreeList.reset();
-   mList.reset();
+   mHead = 0;
 }
 
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
 
-void TestOne::doRun(int aSelect)
-{
-   switch(aSelect)
-   {
-      case 11: doRun11(); break;
-      case 12: doRun12(); break;
-      case 13: doRun13(); break;
-   }
-}
-
-//******************************************************************************
-//******************************************************************************
-//******************************************************************************
-
-void TestOne::doInitialize1()
+void TestOne::doInitialize()
 {
    mFreeList.reset();
-   mList.reset();
+   mHead = 0;
    MyListNode* tNode = 0;
 
    if ((tNode = mFreeList.doAllocate()) == 0) return;
    tNode->mValue = 101;
-   if (!mList.tryWriteTail(tNode)) return;
+   DL_APPEND(mHead, tNode);
 
    if ((tNode = mFreeList.doAllocate()) == 0) return;
    tNode->mValue = 102;
-   if (!mList.tryWriteTail(tNode)) return;
+   DL_APPEND(mHead, tNode);
 
    if ((tNode = mFreeList.doAllocate()) == 0) return;
    tNode->mValue = 103;
-   if (!mList.tryWriteTail(tNode)) return;
+   DL_APPEND(mHead, tNode);
 
    if ((tNode = mFreeList.doAllocate()) == 0) return;
    tNode->mValue = 104;
-   if (!mList.tryWriteTail(tNode)) return;
+   DL_APPEND(mHead, tNode);
 }
 
 void TestOne::doShow()
 {
-   printf("Sizes %d  %d\n", mFreeList.allocated(), mList.size());
+   printf("FreeList %d\n", mFreeList.allocated());
    MyListNode* tNode = 0;
-   for(int i = 0; i < mList.size(); i++)
+   DL_FOREACH(mHead, tNode)
    {
-      MyListNode* tNode = 0;
-      if (!mList.tryPeekHead(i, &tNode)) break;
       printf("%d\n", tNode->mValue);
    }     
 }
@@ -82,10 +67,10 @@ void TestOne::doShow()
 //******************************************************************************
 //******************************************************************************
 
-void TestOne::doRun11()
+void TestOne::doRun1()
 {
    printf("TestOne::doRun1 ****************\n");
-   doInitialize1();
+   doInitialize();
    doShow();
 }
 
@@ -93,17 +78,22 @@ void TestOne::doRun11()
 //******************************************************************************
 //******************************************************************************
 
-void TestOne::doRun12()
+void TestOne::doRun2()
 {
    printf("TestOne::doRun2 ****************\n");
-   doInitialize1();
+   doInitialize();
    doShow();
 
    MyListNode* tNode = 0;
-   if (!mList.tryReadHead(&tNode)) return;
-   printf("ReadHead %d\n", tNode->mValue);
-   if (!mList.tryReadHead(&tNode)) return;
-   printf("ReadHead %d\n", tNode->mValue);
+   MyListNode* tTemp = 0;
+   DL_FOREACH_SAFE(mHead, tNode, tTemp)
+   {
+      if (tNode->mValue == 103)
+      {
+         DL_DELETE(mHead, tNode);
+         mFreeList.doFree(tNode);
+      }
+   }     
    doShow();
 }
 
@@ -111,7 +101,35 @@ void TestOne::doRun12()
 //******************************************************************************
 //******************************************************************************
 
-void TestOne::doRun13()
+void TestOne::doRun3()
 {
+   printf("TestOne::doRun3 ****************\n");
+   doInitialize();
+   doShow();
+
+   printf("TestOne::doRun3 delete 103\n");
+   MyListNode* tNode = 0;
+   MyListNode* tTemp = 0;
+   DL_FOREACH_SAFE(mHead, tNode, tTemp)
+   {
+      if (tNode->mValue == 103)
+      {
+         DL_DELETE(mHead, tNode);
+         mFreeList.doFree(tNode);
+      }
+   }     
+   doShow();
+
+   printf("TestOne::doRun3 append 203 after 102\n");
+   DL_FOREACH_SAFE(mHead, tNode, tTemp)
+   {
+      if (tNode->mValue == 102)
+      {
+         if ((tTemp = mFreeList.doAllocate()) == 0) return;
+         tTemp->mValue = 203;
+         DL_APPEND_ELEM(mHead, tNode, tTemp);
+      }
+   }     
+   doShow();
 }
 

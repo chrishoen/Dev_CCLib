@@ -23,7 +23,9 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 {
    if (aCmd->isCmd("RESET")) reset();
 
-   if (aCmd->isCmd("RUN"))   executeRun(aCmd);
+   if (aCmd->isCmd("TEST1"))    executeTest1(aCmd);
+   if (aCmd->isCmd("TEST2"))    executeTest2(aCmd);
+   if (aCmd->isCmd("TEST3"))    executeTest3(aCmd);
 
    if (aCmd->isCmd("GO1"))   executeGo1(aCmd);
    if (aCmd->isCmd("GO2"))   executeGo2(aCmd);
@@ -36,10 +38,30 @@ void CmdLineExec::execute(Ris::CmdLineCmd* aCmd)
 //******************************************************************************
 //******************************************************************************
 
-void CmdLineExec::executeRun(Ris::CmdLineCmd* aCmd)
+void CmdLineExec::executeTest1(Ris::CmdLineCmd* aCmd)
 {
    TestOne tTestOne;
-   tTestOne.doRun(aCmd->argInt(1));
+   tTestOne.doRun1();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeTest2(Ris::CmdLineCmd* aCmd)
+{
+   TestOne tTestOne;
+   tTestOne.doRun2();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void CmdLineExec::executeTest3(Ris::CmdLineCmd* aCmd)
+{
+   TestOne tTestOne;
+   tTestOne.doRun3();
 }
 
 //******************************************************************************

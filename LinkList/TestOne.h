@@ -7,7 +7,6 @@
 //******************************************************************************
 //******************************************************************************
 #include "ccFreeList.h"
-#include "ccValueList.h"
 //******************************************************************************
 //******************************************************************************
 //******************************************************************************
@@ -37,19 +36,18 @@ class TestOne
 public:
    // Members.
    CC::FreeList<MyListNode, 8> mFreeList;
-   CC::ValueList<MyListNode*, 8> mList;
+   MyListNode* mHead;
 
    // Methods.
    TestOne::TestOne();
    void reset();
 
    // Methods.
-   void doInitialize1();
+   void doInitialize();
    void doShow();
 
    // Methods.
-   void doRun(int aSelect);
-   void doRun11();
-   void doRun12();
-   void doRun13();
+   void doRun1();
+   void doRun2();
+   void doRun3();
 };

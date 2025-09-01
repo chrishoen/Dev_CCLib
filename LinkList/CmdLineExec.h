@@ -54,7 +54,9 @@ public:
    void executeGo4(Ris::CmdLineCmd* aCmd);
    void executeGo5(Ris::CmdLineCmd* aCmd);
 
-   void executeRun(Ris::CmdLineCmd* aCmd);
+   void executeTest1   (Ris::CmdLineCmd* aCmd);
+   void executeTest2   (Ris::CmdLineCmd* aCmd);
+   void executeTest3   (Ris::CmdLineCmd* aCmd);
 };
 
 //******************************************************************************
