@@ -153,6 +153,8 @@ void TestOne::doRun(int aSelect)
       case 21: doRun21(); break;
       case 22: doRun22(); break;
       case 23: doRun23(); break;
+      case 31: doRun31(); break;
+      case 32: doRun32(); break;
    }
 }
 
@@ -262,6 +264,54 @@ void TestOne::doRun23()
    doPutHead(201);
    doGetTail();
    doPutHead(301);
+   doShow();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void TestOne::doRun31()
+{
+   printf("TestOne::doRun31 ****************\n");
+   doInitialize0();
+   doShow();
+   MyListNode* tNode = 0;
+
+   for (int i = 0; i < 8; i++)
+   {
+      doPutTail(101 + i);
+   }
+
+   for (int i = 0; i < 8; i++)
+   {
+      doGetTail();
+   }
+   doGetTail();
+   doShow();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void TestOne::doRun32()
+{
+   printf("TestOne::doRun32 ****************\n");
+   doInitialize0();
+   doShow();
+   MyListNode* tNode = 0;
+
+   for (int i = 0; i < 8; i++)
+   {
+      doPutHead(101 + i);
+   }
+
+   for (int i = 0; i < 8; i++)
+   {
+      doGetHead();
+   }
+   doGetHead();
    doShow();
 }
 
