@@ -33,7 +33,9 @@ public:
    volatile int mTailIndex;
    volatile int mHeadIndex;
 
-   // Array of elements.
+   // Array of elements. The list uses an extra element, so allocate
+   // one more element than is needed. For example, for a list of four,
+   // allocate five.
    Element mElement[NumElements];
 
    //***************************************************************************

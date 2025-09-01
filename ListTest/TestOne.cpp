@@ -43,7 +43,17 @@ void TestOne::doRun(int aSelect)
 //******************************************************************************
 //******************************************************************************
 
-void TestOne::doInitialize1()
+void TestOne::doInitialize0()
+{
+   mFreeList.reset();
+   mList.reset();
+   MyListNode* tNode = 0;
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+void TestOne::doInitialize4()
 {
    mFreeList.reset();
    mList.reset();
@@ -85,7 +95,7 @@ void TestOne::doShow()
 void TestOne::doRun11()
 {
    printf("TestOne::doRun1 ****************\n");
-   doInitialize1();
+   doInitialize4();
    doShow();
 }
 
@@ -96,7 +106,7 @@ void TestOne::doRun11()
 void TestOne::doRun12()
 {
    printf("TestOne::doRun2 ****************\n");
-   doInitialize1();
+   doInitialize4();
    doShow();
 
    MyListNode* tNode = 0;
@@ -113,5 +123,37 @@ void TestOne::doRun12()
 
 void TestOne::doRun13()
 {
+   printf("TestOne::doRun3 ****************\n");
+   doInitialize0();
+   doShow();
+   MyListNode* tNode = 0;
+
+   for (int i = 0; i < 8; i++)
+   {
+      if ((tNode = mFreeList.doAllocate()) == 0) return;
+      tNode->mValue = 101 + i;
+      if (!mList.tryWriteTail(tNode)) return;
+   }
+
+   if ((tNode = mFreeList.doAllocate()) == 0) return;
+   tNode->mValue = 201;
+   if (!mList.tryWriteTail(tNode))
+   {
+      printf("tryWriteFail %d\n", tNode->mValue);
+      mFreeList.doFree(tNode);
+   }
+
+   if (!mList.tryReadHead(&tNode)) return;
+   printf("ReadHead %d\n", tNode->mValue);
+
+   if ((tNode = mFreeList.doAllocate()) == 0) return;
+   tNode->mValue = 301;
+   if (!mList.tryWriteTail(tNode))
+   {
+      printf("tryWriteFail %d\n", tNode->mValue);
+      mFreeList.doFree(tNode);
+   }
+
+   doShow();
 }
 

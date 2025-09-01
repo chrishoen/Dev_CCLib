@@ -36,15 +36,16 @@ class TestOne
 {
 public:
    // Members.
-   CC::FreeList<MyListNode, 8> mFreeList;
-   CC::ValueList<MyListNode*, 8> mList;
+   CC::FreeList<MyListNode, 20> mFreeList;
+   CC::ValueList<MyListNode*, 9> mList;
 
    // Methods.
    TestOne::TestOne();
    void reset();
 
    // Methods.
-   void doInitialize1();
+   void doInitialize0();
+   void doInitialize4();
    void doShow();
 
    // Methods.
