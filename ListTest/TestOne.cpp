@@ -132,9 +132,7 @@ void TestOne::doShow()
    MyListNode* tNode = 0;
    for(int i = 0; i < mList.size(); i++)
    {
-      MyListNode* tNode = 0;
-      if (!mList.tryPeekHead(i, &tNode)) break;
-      printf("%d\n", tNode->mValue);
+      printf("%d\n", mList.atHead(i)->mValue);
    }     
 }
 

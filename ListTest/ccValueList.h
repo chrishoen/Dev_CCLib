@@ -126,21 +126,14 @@ public:
       return true;
    }
 
-   bool tryPeekHead(int aIndex, Element* aValue)
+   // Return a reference to an element relative to the head index.
+   Element& atHead(int aIndex)
    {
-      // Test if the list is empty.
-      int tOccupied = mTailIndex - mHeadIndex;
-      if (tOccupied < 0) tOccupied = NumElements + tOccupied;
-      if (tOccupied == 0) return false;
-
       // Peek index forward.
       int tPeekIndex = mHeadIndex + aIndex;
       if(tPeekIndex >= NumElements) tPeekIndex -= NumElements;
-      // Copy the list array element at the peed index.
-      *aValue = mElement[tPeekIndex];
-
-      // Success.
-      return true;
+      // Return a reference to the list array element at the peek index.
+      return mElement[tPeekIndex];
    }
 
    //***************************************************************************
@@ -171,21 +164,14 @@ public:
       return true;
    }
 
-   bool tryPeekTail(int aIndex, Element* aValue)
+   // Return a reference to an element relative to the tail index.
+   Element& atTail(int aIndex)
    {
-      // Test if the list is empty.
-      int tOccupied = mTailIndex - mHeadIndex;
-      if (tOccupied < 0) tOccupied = NumElements + tOccupied;
-      if (tOccupied == 0) return false;
-
-      // Peek index forward.
+      // Peek index backward.
       int tPeekIndex = mTailIndex - aIndex - 1;
       if(tPeekIndex < 0) tPeekIndex += NumElements;
-      // Copy the list array element at the peed index.
-      *aValue = mElement[tPeekIndex];
-
-      // Success.
-      return true;
+      // Return a reference to the list array element at the peek index.
+      return mElement[tPeekIndex];
    }
 
    //***************************************************************************
