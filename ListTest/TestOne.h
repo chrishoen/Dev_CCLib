@@ -69,4 +69,6 @@ public:
 
    void doRun31();
    void doRun32();
+
+   void doRun41();
 };

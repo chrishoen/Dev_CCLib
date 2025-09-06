@@ -153,6 +153,7 @@ void TestOne::doRun(int aSelect)
       case 23: doRun23(); break;
       case 31: doRun31(); break;
       case 32: doRun32(); break;
+      case 41: doRun41(); break;
    }
 }
 
@@ -311,5 +312,53 @@ void TestOne::doRun32()
    }
    doGetHead();
    doShow();
+}
+
+//******************************************************************************
+//******************************************************************************
+//******************************************************************************
+
+void TestOne::doRun41()
+{
+   printf("TestOne::doRun41 ****************\n");
+   doInitialize0();
+   doShow();
+   MyListNode* tNode = 0;
+
+   for (int i = 0; i < 8; i++)
+   {
+      doPutTail(101 + i);
+   }
+
+   doShow();
+   printf("Tail 0: %d\n", mList.atTail(0)->mValue);
+   printf("Tail 1: %d\n", mList.atTail(1)->mValue);
+
+   doGetHead();
+   doGetHead();
+   doGetHead();
+   doGetHead();
+   doGetHead();
+   doGetHead();
+   doShow();
+   printf("Tail 0: %d\n", mList.atTail(0)->mValue);
+   printf("Tail 1: %d\n", mList.atTail(1)->mValue);
+   doPutTail(201);
+   doShow();
+   printf("Tail 0: %d\n", mList.atTail(0)->mValue);
+   printf("Tail 1: %d\n", mList.atTail(1)->mValue);
+   doGetHead();
+   doGetHead();
+   doGetHead();
+   doGetHead();
+   doGetHead();
+   doGetHead();
+   doPutTail(301);
+   doPutTail(302);
+   doShow();
+   printf("Tail 0: %d\n", mList.atTail(0)->mValue);
+   printf("Tail 1: %d\n", mList.atTail(1)->mValue);
+   doGetHead();
+   printf("Tail 0: %d\n", mList.atTail(0)->mValue);
 }
 
